@@ -4,7 +4,7 @@ AngularJS translation module
 
 A work in progress module for AngularJS to implement i18n in your apps!
 
-### [Example](http://jsfiddle.net/PascalPrecht/eUGWJ/1/)
+### [Demo](http://jsfiddle.net/PascalPrecht/eUGWJ/1/)
 
 ## Getting started
 
