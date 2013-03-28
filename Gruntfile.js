@@ -13,6 +13,37 @@ module.exports = function (grunt) {
         '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
         '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+    },
+    watch: {
+      scripts: {
+        files: ['Gruntfile.js', 'ngTranslate/**/*.js'],
+        tasks: ['jshint']
+      }
+    },
+    jshint: {
+      all: ['Gruntfile.js', 'ngTranslate/**/*.js'],
+      options: {
+        eqeqeq: true,
+        globals: {
+          angular: true
+        }
+      }
+    },
+    concat: {
+      ngTranslate: {
+        src: ['ngTranslate/translate.js', 'ngTranslate/**/*.js'],
+        dest: 'dist/angular-translate-<%= pkg.version %>.js'
+      }
+    },
+    uglify: {
+      ngTranslate: {
+        files: {
+          'dist/angular-translate-<%= pkg.version %>.min.js': '<%= concat.ngTranslate.dest %>'
+        }
+      }
     }
   });
+
+  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('build', ['default', 'concat', 'uglify']);
 };

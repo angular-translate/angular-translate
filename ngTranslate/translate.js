@@ -1,4 +1,6 @@
-angular.module('ngTranslate', ['ng']).config(['$provide', function ($provide) {
+angular.module('ngTranslate', ['ng'])
+
+.config(['$provide', function ($provide) {
 
   $TranslateProvider = function () {
 
@@ -27,13 +29,4 @@ angular.module('ngTranslate', ['ng']).config(['$provide', function ($provide) {
   };
 
   $provide.provider('$translate', $TranslateProvider);
-}]);
-
-angular.module('ngTranslate').filter('translate', ['$parse', '$translate', function ($parse, $translate) {
-  return function (translationId, interpolateParams) {
-    if (!angular.isObject(interpolateParams)) {
-      interpolateParams = $parse(interpolateParams)();
-    }
-    return $translate(translationId, interpolateParams);
-  };
 }]);
