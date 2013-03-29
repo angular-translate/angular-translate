@@ -4,6 +4,8 @@ AngularJS translation module
 
 A work in progress module for AngularJS to implement i18n in your apps!
 
+### [Demo](http://jsfiddle.net/PascalPrecht/eUGWJ/1/)
+
 ## Also interesting
 
 After publishing this module, it turned out that there are a few other i18n and
@@ -49,7 +51,7 @@ app.config(['$translateProvider', function ($translateProvider) {
   $translateProvider.translations({
     'TITLE': 'Hello',
     'FOO': 'This is a paragraph',
-    'COPYRIGHT_TEXT': '&copy; {{name}}'
+    'COPYRIGHT_TEXT': '&copy; {{value}}'
   });
 }]);
 ````
@@ -75,7 +77,7 @@ You can assign the value of a specific identifier within a translation ID via st
 ````
 ...
 <footer>
-  <p>{{ 'COPYRIGHT_TEXT | translate:'{"value": "foo"}' }}</p>
+  <p>{{ 'COPYRIGHT_TEXT' | translate:'{"value": "foo"}' }}</p>
 </footer>
 ````
 
@@ -98,7 +100,7 @@ app.controller('ctrl', function ($scope) {
 <div ng-controller="ctrl">
 
   <footer>
-    <p>{{ 'COPYRIGHT_TEXT | translate:translationData }}</p>
+    <p>{{ 'COPYRIGHT_TEXT' | translate:translationData }}</p>
   </footer>
 
 </div>
