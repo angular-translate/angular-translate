@@ -4,6 +4,16 @@ AngularJS translation module
 
 A work in progress module for AngularJS to implement i18n in your apps!
 
+## Also interesting
+
+After publishing this module, it turned out that there are a few other i18n and
+l10n modules out there, which all follow a different approach. So you might find these
+also interesting:
+
+- (angularjs-localizationservice by @lavinjj)[https://github.com/lavinjj/angularjs-localizationservice]
+- (angular-l10n by @4vanger)[https://github.com/4vanger/angular-l10n]
+- (ng-translate by @StephanHoyer)[https://github.com/StephanHoyer/ng-translate]
+
 ## Getting started
 
 Just clone the repository, navigate into the project and run
