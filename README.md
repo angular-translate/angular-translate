@@ -12,7 +12,7 @@ also interesting:
 
 - (angularjs-localizationservice by @lavinjj)[https://github.com/lavinjj/angularjs-localizationservice]
 - (angular-l10n by @4vanger)[https://github.com/4vanger/angular-l10n]
-- (ng-translate by @StephanHoyer)[https://github.com/StephanHoyer/ng-translate]
+- (ng-translate by @StephanHoyer)[https://github.com/stephanhoyer/ng-translate]
 
 ## Getting started
 
