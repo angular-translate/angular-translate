@@ -17,12 +17,12 @@ module.exports = function (grunt) {
     },
     watch: {
       scripts: {
-        files: ['Gruntfile.js', 'ngTranslate/**/*.js'],
+        files: ['Gruntfile.js', 'ngTranslate/**/*.js', 'test/**/*.js'],
         tasks: ['jshint']
       }
     },
     jshint: {
-      all: ['Gruntfile.js', 'ngTranslate/**/*.js'],
+      all: ['Gruntfile.js', 'ngTranslate/**/*.js', 'test/**/*.js'],
       options: {
         eqeqeq: true,
         globals: {

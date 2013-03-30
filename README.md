@@ -18,13 +18,28 @@ also interesting:
 
 ## Getting started
 
-Just clone the repository, navigate into the project and run
+Please install these things:
 
+- [Grunt](http://gruntjs.com)
+- [Karma Testrunner](http://karma-runner.github.com/0.8/index.html)
+- [Bower](https://github.com/twitter/bower)
+
+Then just clone the repository, navigate into the project and run
+
+````
+npm install
+bower install
+````
+This will install all dependencies that are needed to run the tests
+````
+karma start
+````
+and make a build:
 ````
 grunt build
 ````
 
-This will generate the following files:
+<code>grunt build</code> will generate the following files:
 
 ````
 dist/angular-translate-x.x.x.js

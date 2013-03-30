@@ -10,6 +10,8 @@ basePath = '';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
+  'components/angular/angular.min.js',
+  'components/angular-mocks/angular-mocks.js',
   'test/**/*Spec.js'
 ];
 

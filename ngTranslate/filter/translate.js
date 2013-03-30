@@ -1,4 +1,3 @@
-
 angular.module('ngTranslate')
 
 .filter('translate', ['$parse', '$translate', function ($parse, $translate) {
@@ -7,7 +6,6 @@ angular.module('ngTranslate')
     if (!angular.isObject(interpolateParams)) {
       interpolateParams = $parse(interpolateParams)();
     }
-
     return $translate(translationId, interpolateParams);
   };
 }]);
