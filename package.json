@@ -19,4 +19,7 @@
     "grunt-bump": "0.0.2",
     "grunt-karma": "~0.3.0"
   }
+  "scripts": {
+    "test": "./node_modules/bin/karma start --browsers Firefox --single-run"
+  }
 }

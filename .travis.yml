@@ -6,4 +6,6 @@ before_install:
   - npm install -g grunt-cli karma bower
   - bower install
 
-script: "grunt test"
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
