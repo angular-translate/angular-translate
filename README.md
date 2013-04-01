@@ -6,17 +6,9 @@ AngularJS translation module
 
 A work in progress module for AngularJS to implement i18n in your apps!
 
+Wanna help out? Please checkout the [Contributing Guide](CONTRIBUTING.md)!
+
 ### [Demo](http://jsfiddle.net/PascalPrecht/eUGWJ/1/)
-
-## Also interesting
-
-After publishing this module, it turned out that there are a few other i18n and
-l10n modules out there, which all follow a different approach. So you might find these
-also interesting:
-
-- (angularjs-localizationservice by @lavinjj)[https://github.com/lavinjj/angularjs-localizationservice]
-- (angular-l10n by @4vanger)[https://github.com/4vanger/angular-l10n]
-- (ng-translate by @StephanHoyer)[https://github.com/stephanhoyer/ng-translate]
 
 ## Getting started
 
@@ -122,6 +114,16 @@ app.controller('ctrl', function ($scope) {
 
 This is currently the only way to deal with dynamic translations, since AngularJS doesn't provide the functionality
 to pass named parameters through filters. (I opened a PR [here](https://github.com/angular/angular.js/issues/2137), please help to push this forward)
+
+## Also interesting
+
+After publishing this module, it turned out that there are a few other i18n and
+l10n modules out there, which all follow a different approach. So you might find these
+also interesting:
+
+- (angularjs-localizationservice by @lavinjj)[https://github.com/lavinjj/angularjs-localizationservice]
+- (angular-l10n by @4vanger)[https://github.com/4vanger/angular-l10n]
+- (ng-translate by @StephanHoyer)[https://github.com/stephanhoyer/ng-translate]
 
 That's it! Feel free to help out, making this thing better!
 

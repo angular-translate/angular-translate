@@ -19,7 +19,7 @@ module.exports = function (grunt) {
     watch: {
       scripts: {
         files: ['Gruntfile.js', 'ngTranslate/**/*.js', 'test/**/*.js'],
-        tasks: ['jshint']
+        tasks: ['jshint', 'karma']
       }
     },
     jshint: {
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['jshint', 'karma']);
   grunt.registerTask('test', ['karma']);
   grunt.registerTask('build', ['jshint', 'karma', 'concat', 'uglify']);
 };
