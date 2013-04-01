@@ -11,6 +11,7 @@
   },
   "license": "BSD",
   "devDependencies": {
+    "karma": "~0.8",
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.3.1",
     "grunt-contrib-concat": "~0.1.3",
