@@ -5,6 +5,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -42,9 +43,16 @@ module.exports = function (grunt) {
           'dist/angular-translate-<%= pkg.version %>.min.js': '<%= concat.ngTranslate.dest %>'
         }
       }
+    },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        singleRun: true
+      }
     }
   });
 
   grunt.registerTask('default', ['jshint']);
-  grunt.registerTask('build', ['default', 'concat', 'uglify']);
+  grunt.registerTask('test', ['karma']);
+  grunt.registerTask('build', ['jshint', 'karma', 'concat', 'uglify']);
 };

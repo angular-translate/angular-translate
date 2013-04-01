@@ -30,16 +30,13 @@ Then just clone the repository, navigate into the project and run
 npm install
 bower install
 ````
-This will install all dependencies that are needed to run the tests
-````
-karma start
-````
-and make a build:
+This will install all dependencies that are needed to make a build:
 ````
 grunt build
 ````
 
-<code>grunt build</code> will generate the following files:
+<code>grunt build</code> will <code>lint</code> your the code, run unit tests, concat
+files and generate the following:
 
 ````
 dist/angular-translate-x.x.x.js
