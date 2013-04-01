@@ -1,5 +1,7 @@
 # ngTranslate
 
+[![Build Status](https://travis-ci.org/PascalPrecht/ng-translate.png)](https://travis-ci.org/PascalPrecht/ng-translate)
+
 AngularJS translation module
 
 A work in progress module for AngularJS to implement i18n in your apps!
