@@ -115,6 +115,21 @@ app.controller('ctrl', function ($scope) {
 This is currently the only way to deal with dynamic translations, since AngularJS doesn't provide the functionality
 to pass named parameters through filters. (I opened a PR [here](https://github.com/angular/angular.js/issues/2137), please help to push this forward)
 
+### Multi-Language
+
+Since version <code>0.1.2</code> you can also register different languages by language key and tell the <code>$translateProvider</code> which language to use. Registering different language is pretty straight forward:
+
+````
+app.config(['$translateProvider', function ($translateProvider) {
+  $translateProvider.translations('de_DE', {
+    'TEXT': 'Hallo zusammen!'
+  });
+  $translateProvider.uses('de_DE');
+}]);
+````
+
+If you tell the <code>$translateProvider</code> to use a translation table which isn't registered, it'll throw an error.
+
 ## Also interesting
 
 After publishing this module, it turned out that there are a few other i18n and

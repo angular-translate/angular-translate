@@ -165,5 +165,46 @@ describe('Module ngTranslate', function () {
         expect($filter('translate')('AND_THIS', {value: 5})).toEqual('10');
       });
     });
+
+    it('should replace string interpolations with given values as string expression', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TEXT': 'this is a text',
+          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
+          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
+          'AND_THIS': '{{value + value}}'
+        });
+      });
+      inject(function ($filter) {
+        expect($filter('translate')('TEXT')).toEqual('this is a text');
+        expect($filter('translate')('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
+        expect($filter('translate')('TEXT_WITH_VALUE', "{'value': 'dynamic value'}")).toEqual('This is a text with given value: dynamic value');
+        expect($filter('translate')('TEXT_WITH_VALUE', "{'value': '3'}")).toEqual('This is a text with given value: 3');
+        expect($filter('translate')('HOW_ABOUT_THIS', "{'value': '4'}")).toEqual('4 + 4');
+        expect($filter('translate')('AND_THIS', "{'value': 5}")).toEqual('10');
+        expect($filter('translate')('AND_THIS', "{'value': '5'}")).toEqual('55');
+      });
+    });
+
+    it('should to the same when a specific language is provided', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations('de_DE', {
+          'TEXT': 'this is a text',
+          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
+          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
+          'AND_THIS': '{{value + value}}'
+        });
+        $translateProvider.uses('de_DE');
+      });
+      inject(function ($filter) {
+        expect($filter('translate')('TEXT')).toEqual('this is a text');
+        expect($filter('translate')('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
+        expect($filter('translate')('TEXT_WITH_VALUE', "{'value': 'dynamic value'}")).toEqual('This is a text with given value: dynamic value');
+        expect($filter('translate')('TEXT_WITH_VALUE', "{'value': '3'}")).toEqual('This is a text with given value: 3');
+        expect($filter('translate')('HOW_ABOUT_THIS', "{'value': '4'}")).toEqual('4 + 4');
+        expect($filter('translate')('AND_THIS', "{'value': 5}")).toEqual('10');
+        expect($filter('translate')('AND_THIS', "{'value': '5'}")).toEqual('55');
+      });
+    });
   });
 });
