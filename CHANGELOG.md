@@ -1,4 +1,6 @@
 # Changelog
+* v.0.2.0
+  * Added translate directive to handle translations
 * v.0.1.2
   * Fixed unit tests
   * Fixed karma.conf
