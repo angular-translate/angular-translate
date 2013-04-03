@@ -207,4 +207,87 @@ describe('Module ngTranslate', function () {
       });
     });
   });
+
+  describe('$translateDirective', function () {
+
+    var element;
+
+    it('should return given translation id if translation doesn\'t exist', function () {
+      inject(function ($rootScope, $compile) {
+        element = $compile('<div translate="TEXT"></div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('TEXT');
+      });
+    });
+
+    it('should to the same, when content represents translation id', function () {
+      inject(function ($rootScope, $compile) {
+        element = $compile('<div translate>TEXT</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('TEXT');
+      });
+    });
+
+    it('should translate by given translation id', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TEXT': 'Lorem Ipsum'
+        });
+      });
+      inject(function ($rootScope, $compile) {
+        element = $compile('<div translate="TEXT"></div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('Lorem Ipsum');
+      });
+    });
+
+    it('should to the same, when content represents translation id', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TEXT': 'Lorem Ipsum'
+        });
+      });
+      inject(function ($rootScope, $compile) {
+        element = $compile('<div translate>TEXT</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('Lorem Ipsum');
+      });
+    });
+
+    it('should be able to translate and replace placeholder with given values', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TEXT': 'Lorem Ipsum {{value}}'
+        });
+      });
+      inject(function ($rootScope, $compile) {
+        element = $compile('<div translate="TEXT"></div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('Lorem Ipsum ');
+
+        $rootScope.values = {value: 'test'};
+        element = $compile('<div translate="TEXT" values="{{values}}">TEXT</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('Lorem Ipsum test');
+      });
+    });
+
+    it('should to the same, when content represents translation id and values are given', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TEXT': 'Lorem Ipsum {{value}}'
+        });
+      });
+      inject(function ($rootScope, $compile) {
+        element = $compile('<div translate>TEXT</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('Lorem Ipsum ');
+
+        $rootScope.values = {value: 'test'};
+        element = $compile('<div translate values="{{values}}">TEXT</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('Lorem Ipsum test');
+      });
+    });
+  });
 });
