@@ -8,7 +8,12 @@ A work in progress module for AngularJS to implement i18n in your apps!
 
 Wanna help out? Please checkout the [Contributing Guide](CONTRIBUTING.md)!
 
-### [Demo](http://jsfiddle.net/PascalPrecht/eUGWJ/1/)
+### Demos
+* [Step 1: Configure $translateProvider](http://jsfiddle.net/PascalPrecht/eUGWJ/2/)
+* [Step 2: Using translate filter](http://jsfiddle.net/PascalPrecht/eUGWJ/3/)
+* [Step 3: Dealing with dynamic values](http://jsfiddle.net/PascalPrecht/eUGWJ/4/)
+* [Step 4: Using translate directive](http://jsfiddle.net/PascalPrecht/eUGWJ/5/)
+* [Step 5: Dynamic values with translate directive](http://jsfiddle.net/PascalPrecht/eUGWJ/6/)
 
 ## Getting started
 
@@ -129,6 +134,9 @@ app.config(['$translateProvider', function ($translateProvider) {
 ````
 
 If you tell the <code>$translateProvider</code> to use a translation table which isn't registered, it'll throw an error.
+
+### Using translate directive
+<code>ngTranslate</code> comes since <code>0.2.0</code> with a translate directive. Using this directive could be useful since to many filters can slow down your app. Checkout the [Demos](#demos) on translate directive.
 
 ## Also interesting
 
