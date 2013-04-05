@@ -1,4 +1,7 @@
 # Changelog
+* v.0.2.1
+  * Revamped test suite structure
+  * Added more tests
 * v.0.2.0
   * Added translate directive to handle translations
 * v.0.1.2
