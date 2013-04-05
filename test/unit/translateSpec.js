@@ -10,28 +10,39 @@ describe('Module ngTranslate', function () {
       });
     });
 
-    it('should return translation ID if translation doesn\'t exist', function () {
+    it('should return translation id if translation doesn\'t exist', function () {
       var translationId = 'NOT_EXISTING_TRANSLATION_ID';
-
+      module(function ($translateProvider) {
+        $translateProvider.translations();
+      });
       inject(function ($translate) {
         expect($translate(translationId)).toEqual(translationId);
       });
     });
 
-    it('should return translation for given translation ID if exists', function () {
+    it('should return translation if translation id if exists', function () {
+      var translationId = "EXISTING_TRANSLATION_ID";
       module(function ($translateProvider) {
         $translateProvider.translations({
-          'EXISTING_TRANSLATION_ID': 'foo',
-          'ANOTHER_ONE': 'bar'
+          'EXISTING_TRANSLATION_ID': 'foo'
         });
       });
       inject(function ($translate) {
-        expect($translate('EXISTING_TRANSLATION_ID')).toEqual('foo');
-        expect($translate('ANOTHER_ONE')).toEqual('bar');
+        expect($translate(translationId)).toEqual('foo');
       });
     });
 
-    it('should to the same when a certain language is specified', function () {
+    it('should return translation id if language is given and translation id doesn\'t exist', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations('de_DE', {});
+        $translateProvider.uses('de_DE');
+      });
+      inject(function ($translate) {
+        expect($translate('TRANSLATION_ID')).toEqual('TRANSLATION_ID');
+      });
+    });
+
+    it('should return translation when language is given and translation id exist', function () {
       module(function ($translateProvider) {
         $translateProvider.translations('de_DE', {
           'EXISTING_TRANSLATION_ID': 'foo',
@@ -45,42 +56,61 @@ describe('Module ngTranslate', function () {
       });
     });
 
-    it('should replace string interpolations with given values', function () {
+    it('should replace interpolate directives with empty string if no values given', function () {
       module(function ($translateProvider) {
         $translateProvider.translations({
-          'TEXT': 'this is a text',
-          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-          'AND_THIS': '{{value + value}}'
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
         });
       });
       inject(function ($translate) {
-        expect($translate('TEXT')).toEqual('this is a text');
-        expect($translate('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
-        expect($translate('TEXT_WITH_VALUE', {value: 'dynamic value'})).toEqual('This is a text with given value: dynamic value');
-        expect($translate('TEXT_WITH_VALUE', {value: 3})).toEqual('This is a text with given value: 3');
-        expect($translate('HOW_ABOUT_THIS', {value: 4})).toEqual('4 + 4');
-        expect($translate('AND_THIS', {value: 5})).toEqual('10');
+        expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
       });
     });
 
-    it('should to the same when a specific language is provided', function () {
+    it('should replace interpolate directives with empty string if no values given and language is specified', function () {
       module(function ($translateProvider) {
         $translateProvider.translations('de_DE', {
-          'TEXT': 'this is a text',
-          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-          'AND_THIS': '{{value + value}}'
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
         });
         $translateProvider.uses('de_DE');
       });
       inject(function ($translate) {
-        expect($translate('TEXT')).toEqual('this is a text');
-        expect($translate('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
-        expect($translate('TEXT_WITH_VALUE', {value: 'dynamic value'})).toEqual('This is a text with given value: dynamic value');
-        expect($translate('TEXT_WITH_VALUE', {value: 3})).toEqual('This is a text with given value: 3');
-        expect($translate('HOW_ABOUT_THIS', {value: 4})).toEqual('4 + 4');
-        expect($translate('AND_THIS', {value: 5})).toEqual('10');
+        expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
+      });
+    });
+
+    it('should replace interpolate directives with given values', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
+        });
+      });
+      inject(function ($translate) {
+        expect($translate('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
+        expect($translate('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
+        expect($translate('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
+        expect($translate('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
+        expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
+      });
+    });
+
+    it('should replace interpolate directives with given values when language is specified', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations('de_DE', {
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
+        });
+        $translateProvider.uses('de_DE');
+      });
+      inject(function ($translate) {
+        expect($translate('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
+        expect($translate('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
+        expect($translate('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
+        expect($translate('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
+        expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
       });
     });
   });
@@ -93,80 +123,105 @@ describe('Module ngTranslate', function () {
       });
     });
 
-    it('should return translation ID if translation doesn\'t exist', function () {
+    it('should return translation id if translation doesn\'t exist', function () {
       var translationId = 'NOT_EXISTING_TRANSLATION_ID';
       inject(function ($filter) {
         expect($filter('translate')(translationId)).toEqual(translationId);
       });
     });
 
-    it('should return translation for specific translation ID', function () {
+    it('should return translation if translation id exist', function () {
       module(function ($translateProvider) {
         $translateProvider.translations({
-          'EXISTING_TRANSLATION_ID': 'foo',
-          'ANOTHER_ONE': 'bar'
+          'TRANSLATION_ID': 'foo',
         });
       });
       inject(function ($filter) {
-        expect($filter('translate')('EXISTING_TRANSLATION_ID')).toEqual('foo');
-        expect($filter('translate')('ANOTHER_ONE')).toEqual('bar');
+        expect($filter('translate')('TRANSLATION_ID')).toEqual('foo');
       });
     });
 
-    it('should to the same when a certain language is specified', function () {
+    it('should return translation id if translation doesn\'t exist and language is given', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations('de_DE', {});
+        $translateProvider.uses('de_DE');
+      });
+      inject(function ($filter) {
+        expect($filter('translate')('TRANSLATION_ID')).toEqual('TRANSLATION_ID');
+      });
+    });
+
+    it('should return translation if translation id exist and language is given', function () {
       module(function ($translateProvider) {
         $translateProvider.translations('de_DE', {
-          'EXISTING_TRANSLATION_ID': 'foo',
-          'ANOTHER_ONE': 'bar'
+          'TRANSLATION_ID': 'foo',
         });
         $translateProvider.uses('de_DE');
       });
       inject(function ($filter) {
-        expect($filter('translate')('EXISTING_TRANSLATION_ID')).toEqual('foo');
-        expect($filter('translate')('ANOTHER_ONE')).toEqual('bar');
+        expect($filter('translate')('TRANSLATION_ID')).toEqual('foo');
       });
     });
 
-    it('should replace string interpolations with given values', function () {
+    it('should replace interpolate directives with empty string if no values given', function () {
       module(function ($translateProvider) {
         $translateProvider.translations({
-          'TEXT': 'this is a text',
-          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-          'AND_THIS': '{{value + value}}'
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
         });
       });
       inject(function ($filter) {
-        expect($filter('translate')('TEXT')).toEqual('this is a text');
-        expect($filter('translate')('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
-        expect($filter('translate')('TEXT_WITH_VALUE', {value: 'dynamic value'})).toEqual('This is a text with given value: dynamic value');
-        expect($filter('translate')('TEXT_WITH_VALUE', {value: 3})).toEqual('This is a text with given value: 3');
-        expect($filter('translate')('HOW_ABOUT_THIS', {value: 4})).toEqual('4 + 4');
-        expect($filter('translate')('AND_THIS', {value: 5})).toEqual('10');
+        expect($filter('translate')('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
       });
     });
 
-    it('should to the same when a specific language is provided', function () {
+    it('should replace interpolate directives with empty string if no values given and language is specified', function () {
       module(function ($translateProvider) {
         $translateProvider.translations('de_DE', {
-          'TEXT': 'this is a text',
-          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-          'AND_THIS': '{{value + value}}'
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
         });
         $translateProvider.uses('de_DE');
       });
       inject(function ($filter) {
-        expect($filter('translate')('TEXT')).toEqual('this is a text');
-        expect($filter('translate')('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
-        expect($filter('translate')('TEXT_WITH_VALUE', {value: 'dynamic value'})).toEqual('This is a text with given value: dynamic value');
-        expect($filter('translate')('TEXT_WITH_VALUE', {value: 3})).toEqual('This is a text with given value: 3');
-        expect($filter('translate')('HOW_ABOUT_THIS', {value: 4})).toEqual('4 + 4');
-        expect($filter('translate')('AND_THIS', {value: 5})).toEqual('10');
+        expect($filter('translate')('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
       });
     });
 
-    it('should replace string interpolations with given values as string expression', function () {
+    it('should replace interpolate directives with given values', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations({
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
+        });
+      });
+      inject(function ($filter) {
+        expect($filter('translate')('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
+        expect($filter('translate')('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
+        expect($filter('translate')('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
+        expect($filter('translate')('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
+        expect($filter('translate')('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
+      });
+    });
+
+    it('should replace interpolate directives with given values and language is specified', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations('de_DE', {
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
+        });
+        $translateProvider.uses('de_DE');
+      });
+      inject(function ($filter) {
+        expect($filter('translate')('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
+        expect($filter('translate')('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
+        expect($filter('translate')('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
+        expect($filter('translate')('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
+        expect($filter('translate')('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
+      });
+    });
+
+    it('should replace interpolate directives with given values as string expression', function () {
       module(function ($translateProvider) {
         $translateProvider.translations({
           'TEXT': 'this is a text',
@@ -186,7 +241,7 @@ describe('Module ngTranslate', function () {
       });
     });
 
-    it('should to the same when a specific language is provided', function () {
+    it('should replace interpolate directives with given values as string expression and given language', function () {
       module(function ($translateProvider) {
         $translateProvider.translations('de_DE', {
           'TEXT': 'this is a text',
@@ -212,47 +267,207 @@ describe('Module ngTranslate', function () {
 
     var element;
 
-    it('should return given translation id if translation doesn\'t exist', function () {
-      inject(function ($rootScope, $compile) {
-        element = $compile('<div translate="TEXT"></div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('TEXT');
-      });
-    });
+    describe('passing translation id as attribute value', function () {
 
-    it('should to the same, when content represents translation id', function () {
-      inject(function ($rootScope, $compile) {
-        element = $compile('<div translate>TEXT</div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('TEXT');
-      });
-    });
-
-    it('should translate by given translation id', function () {
-      module(function ($translateProvider) {
-        $translateProvider.translations({
-          'TEXT': 'Lorem Ipsum'
+      it('should return translation id if translation doesn\'t exist', function () {
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate="TEXT"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TEXT');
         });
       });
-      inject(function ($rootScope, $compile) {
-        element = $compile('<div translate="TEXT"></div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('Lorem Ipsum');
+
+      it('should return translation if translation id exist', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations({
+            'TRANSLATION_ID': 'foo'
+          });
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
+
+      it('should return translation id if translation doesn\'t exist and language is specified', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TRANSLATION_ID');
+        });
+      });
+ 
+      it('should return translation if translation id exists and language is specified', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
+
+      it('should return translation id if translation doesn\'t exist and if its passed as interpolation', function () {
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TEXT';
+          element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TEXT');
+        });
+      });
+
+      it('should return translation if translation id exist and is passed as interpolation', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations({
+            'TRANSLATION_ID': 'foo'
+          });
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
+
+      it('should return translation id if translation doesn\'t exist, language is specified, and translation id is passed as interpolation', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TRANSLATION_ID');
+        });
+      });
+
+      it('should return translation if translation id exist and is passed as interpolation and language is specified', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
       });
     });
 
-    it('should to the same, when content represents translation id', function () {
-      module(function ($translateProvider) {
-        $translateProvider.translations({
-          'TEXT': 'Lorem Ipsum'
+    describe('passing translation id as content', function () {
+
+      it('should return translation id if translation doesn\'t exist', function () {
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate>TEXT</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TEXT');
         });
       });
-      inject(function ($rootScope, $compile) {
-        element = $compile('<div translate>TEXT</div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('Lorem Ipsum');
+
+      it('should return translation if translation id exist', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations({
+            'TRANSLATION_ID': 'foo'
+          });
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
+
+      it('should return translation id if translation id doesn\'t exist and language is specified', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TRANSLATION_ID');
+        });
+      });
+
+      it('should return translation if translation id exist if language is specified', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
+
+      it('should return translation id if translation doesn\'t exist and is passed as interpolation', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations();
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TEXT';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TEXT');
+        });
+      });
+
+      it('should return translation if translation id exist and if its passed as interpolation', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations({
+            'TRANSLATION_ID': 'foo'
+          });
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
+
+      it('should return translation id if translation doesn\'t exist and language is specified and id is passed as interpolation', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('TRANSLATION_ID');
+        });
+      });
+
+      it('should return translation if translation id exist, language is specified and id is passed as interpolation', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
       });
     });
+
 
     it('should be able to translate and replace placeholder with given values', function () {
       module(function ($translateProvider) {
