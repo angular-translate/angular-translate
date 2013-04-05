@@ -468,40 +468,181 @@ describe('Module ngTranslate', function () {
       });
     });
 
+    describe('passing values', function () {
 
-    it('should be able to translate and replace placeholder with given values', function () {
-      module(function ($translateProvider) {
-        $translateProvider.translations({
-          'TEXT': 'Lorem Ipsum {{value}}'
+      describe('while no values given', function () {
+
+        it('should replace interpolation directive with empty string', function () {
+          module(function($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum ');
+          });
+        });
+
+        it('should replace interpolation directive with empty string when translation is an interplation', function () {
+          module(function($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.translationId = 'TRANSLATION_ID';
+            element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum ');
+          });
+        });
+
+        it('should replace interpolation directive with empty string if translation id is in content', function () {
+          module(function($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            element = $compile('<div translate=>TRANSLATION_ID</div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum ');
+          });
+        });
+
+        it('should replace interpolation directive with empty string if td id is in content and interpolation', function () {
+          module(function($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.translationId = 'TRANSLATION_ID';
+            element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum ');
+          });
         });
       });
-      inject(function ($rootScope, $compile) {
-        element = $compile('<div translate="TEXT"></div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('Lorem Ipsum ');
 
-        $rootScope.values = {value: 'test'};
-        element = $compile('<div translate="TEXT" values="{{values}}">TEXT</div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('Lorem Ipsum test');
-      });
-    });
+      describe('while values given as string', function () {
 
-    it('should to the same, when content represents translation id and values are given', function () {
-      module(function ($translateProvider) {
-        $translateProvider.translations({
-          'TEXT': 'Lorem Ipsum {{value}}'
+        it('should replace interpolate directive when td id is attribute value', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            element = $compile('<div translate="TRANSLATION_ID" values="{value: \'foo\'}"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum foo');
+          });
+        });
+
+        it('should replace interpolate directive when td id is attribute value and interpolation', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.translationId = 'TRANSLATION_ID';
+            element = $compile('<div translate="{{translationId}}" values="{value: \'foo\'}"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum foo');
+          });
+        });
+
+        it('should replace interpolate directive when td id is given as content', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'foo'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            element = $compile('<div translate values="{value: \'foo\'}">TRANSLATION_ID</div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('foo');
+          });
+        });
+
+        it('should replace interpolate directive when td id is given as content and as interpolation', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'foo'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.translationId = 'TRANSLATION_ID';
+            element = $compile('<div translate values="{value: \'foo\'}">{{translationId}}</div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('foo');
+          });
         });
       });
-      inject(function ($rootScope, $compile) {
-        element = $compile('<div translate>TEXT</div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('Lorem Ipsum ');
 
-        $rootScope.values = {value: 'test'};
-        element = $compile('<div translate values="{{values}}">TEXT</div>')($rootScope);
-        $rootScope.$digest();
-        expect(element.text()).toBe('Lorem Ipsum test');
+      describe('while values given as interpolation', function () {
+
+        it('should replace interpolate directive when td id is attribute value', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.values = { value: 'foo' };
+            element = $compile('<div translate="TRANSLATION_ID" values="{{values}}"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum foo');
+          });
+        });
+
+        it('should replace interpolate directive when td id is attribute value and interpolation', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'Lorem Ipsum {{value}}'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.translationId = 'TRANSLATION_ID';
+            $rootScope.values = { value: 'foo' };
+            element = $compile('<div translate="{{translationId}}" values="{{values}}"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum foo');
+          });
+        });
+
+        it('should replace interpolate directive when td id is given as content', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'foo'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.values = { value: 'foo' };
+            element = $compile('<div translate values="{{values}}">TRANSLATION_ID</div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('foo');
+          });
+        });
+
+        it('should replace interpolate directive when td id is given as content and as interpolation', function () {
+          module(function ($translateProvider) {
+            $translateProvider.translations({
+              'TRANSLATION_ID': 'foo'
+            });
+          });
+          inject(function ($rootScope, $compile) {
+            $rootScope.translationId = 'TRANSLATION_ID';
+            $rootScope.values = { values: 'foo' };
+            element = $compile('<div translate values="{{values}}">{{translationId}}</div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('foo');
+          });
+        });
       });
     });
   });
