@@ -1,4 +1,7 @@
 # Changelog
+* v.0.3.0
+  * $translate Service now has method uses(key) to ask for currently used language
+  * Language can now be changed at runtime
 * v.0.2.1
   * Revamped test suite structure
   * Added more tests

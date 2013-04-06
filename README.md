@@ -19,6 +19,7 @@ Wanna help out? Please checkout the [Contributing Guide](CONTRIBUTING.md)!
 * [Step 3: Dealing with dynamic values](http://jsfiddle.net/PascalPrecht/eUGWJ/4/)
 * [Step 4: Using translate directive](http://jsfiddle.net/PascalPrecht/eUGWJ/5/)
 * [Step 5: Dynamic values with translate directive](http://jsfiddle.net/PascalPrecht/eUGWJ/6/)
+* [Step 6: Switch Language at runtime](http://jsfiddle.net/PascalPrecht/eUGWJ/7/)
 
 ## Getting started
 
@@ -139,6 +140,11 @@ app.config(['$translateProvider', function ($translateProvider) {
 ````
 
 If you tell the <code>$translateProvider</code> to use a translation table which isn't registered, it'll throw an error.
+
+#### Changing language at runtime
+
+Since <code>0.3.0</code> you're able to change the currently used language at runtime. Therefore the $translate-Service also comes
+with a <code>uses()</code> method to set the currently used language. To see how it works, Check out [Step 6](#demos) in the demo section.
 
 ### Using translate directive
 <code>ngTranslate</code> comes since <code>0.2.0</code> with a translate directive. Using this directive could be useful since to many filters can slow down your app. Checkout the [Demos](#demos) on translate directive.
