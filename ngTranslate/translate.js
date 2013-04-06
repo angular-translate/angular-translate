@@ -48,6 +48,14 @@ angular.module('ngTranslate', ['ng'])
         $log.warn("Translation for " + translationId + " doesn't exist");
         return translationId;
       };
+
+      $translate.uses = function (key) {
+        if (!key) {
+          return $uses;
+        }
+        $uses = key;
+      };
+
       return $translate;
     }];
   };

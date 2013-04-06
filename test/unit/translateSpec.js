@@ -4,6 +4,12 @@ describe('Module ngTranslate', function () {
 
   describe('$translate', function () {
 
+    it('should be defined', function () {
+      inject(function ($translate) {
+        expect($translate).toBeDefined();
+      });
+    });
+
     it('should be a function object', function () {
       inject(function ($translate) {
         expect(typeof $translate).toBe("function");
@@ -113,6 +119,90 @@ describe('Module ngTranslate', function () {
         expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
       });
     });
+
+    it('should have a method uses()', function () {
+      inject(function ($translate) {
+        expect($translate.uses).toBeDefined();
+      });
+    });
+
+    describe('uses()', function () {
+
+      it('should be a function', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.uses).toBe('function');
+        });
+      });
+
+      it('should return undefined if no language is specified', function () {
+        inject(function ($translate) {
+          expect($translate.uses()).toBeUndefined();
+        });
+      });
+
+      it('should return a string', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'Test'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($translate) {
+          expect(typeof $translate.uses()).toBe('string');
+        });
+      });
+
+      it('should return language key', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'Test'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($translate) {
+          expect($translate.uses()).toEqual('de_DE');
+        });
+      });
+
+      it('should change language at runtime', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('langA', {
+            'TRANSLATION_ID': 'Hello there!'
+          });
+          $translateProvider.translations('langB', {
+            'TRANSLATION_ID': 'Hallo da!'
+          });
+          $translateProvider.uses('langA');
+        });
+        inject(function ($translate) {
+          expect($translate('TRANSLATION_ID')).toEqual('Hello there!');
+          $translate.uses('langB');
+          expect($translate('TRANSLATION_ID')).toEqual('Hallo da!');
+        });
+      });
+
+      it('should change language and take effect in the UI', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('langA', {
+            'TRANSLATION_ID': 'Hello there!'
+          });
+          $translateProvider.translations('langB', {
+            'TRANSLATION_ID': 'Hallo da!'
+          });
+          $translateProvider.uses('langA');
+        });
+        inject(function ($rootScope, $compile, $translate) {
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          $translate.uses('langB');
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hallo da!');
+        });
+      });
+    });
   });
 
   describe('$translateFilter', function () {
@@ -133,7 +223,7 @@ describe('Module ngTranslate', function () {
     it('should return translation if translation id exist', function () {
       module(function ($translateProvider) {
         $translateProvider.translations({
-          'TRANSLATION_ID': 'foo',
+          'TRANSLATION_ID': 'foo'
         });
       });
       inject(function ($filter) {
@@ -154,7 +244,7 @@ describe('Module ngTranslate', function () {
     it('should return translation if translation id exist and language is given', function () {
       module(function ($translateProvider) {
         $translateProvider.translations('de_DE', {
-          'TRANSLATION_ID': 'foo',
+          'TRANSLATION_ID': 'foo'
         });
         $translateProvider.uses('de_DE');
       });
