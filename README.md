@@ -7,7 +7,6 @@ AngularJS translation module
 A **work in progress** module for AngularJS to implement i18n in your apps!
 
 **WIP Means**: This module is still under heavy development. There are things that aren't supported yet, including:
-* Changing language at runtime
 * Loading localization resources via XHR
 
 ### Contributing
