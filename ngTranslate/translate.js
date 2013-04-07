@@ -1,64 +1,12 @@
-angular.module('ngTranslate', ['ng'])
+angular.module('ngTranslate', ['ng', 'ngCookies'])
 
-.config(['$provide', function ($provide) {
+.run(['$translate', '$COOKIE_KEY', '$cookieStore', function ($translate, $COOKIE_KEY, $cookieStore) {
 
-  $TranslateProvider = function () {
-
-    var $translationTable = {},
-        $uses;
-
-    this.translations = function (langKey, translationTable) {
-
-      if (!langKey && !translationTable) {
-        return $translationTable;
-      }
-
-      if (langKey && !translationTable) {
-        if (angular.isString(langKey)) {
-          return $translationTable[langKey];
-        } else {
-          $translationTable = langKey;
-        }
-      } else {
-        $translationTable[langKey] = translationTable;
-      }
-    };
-
-    this.uses = function (langKey) {
-      if (langKey) {
-        if (!$translationTable[langKey]) {
-          throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
-        }
-        $uses = langKey;
-      } else {
-        return $uses;
-      }
-    };
-
-    this.$get = ['$interpolate', '$log', function ($interpolate, $log) {
-
-      $translate = function (translationId, interpolateParams) {
-        var translation = ($uses) ? 
-          $translationTable[$uses][translationId] : 
-          $translationTable[translationId];
-
-        if (translation) {
-          return $interpolate(translation)(interpolateParams);
-        }
-        $log.warn("Translation for " + translationId + " doesn't exist");
-        return translationId;
-      };
-
-      $translate.uses = function (key) {
-        if (!key) {
-          return $uses;
-        }
-        $uses = key;
-      };
-
-      return $translate;
-    }];
-  };
-
-  $provide.provider('$translate', $TranslateProvider);
+  if ($translate.rememberLanguage()) {
+    if (!$cookieStore.get($COOKIE_KEY)) {
+      $cookieStore.put($COOKIE_KEY, $translate.uses());
+    } else {
+      $translate.uses($cookieStore.get($COOKIE_KEY));
+    }
+  }
 }]);

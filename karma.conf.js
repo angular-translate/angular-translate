@@ -11,6 +11,7 @@ files = [
   JASMINE,
   JASMINE_ADAPTER,
   'components/angular/angular.min.js',
+  'components/angular-cookies/angular-cookies.min.js',
   'components/angular-mocks/angular-mocks.js',
   'ngTranslate/translate.js',
   'ngTranslate/**/*.js',

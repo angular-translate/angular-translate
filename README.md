@@ -7,7 +7,6 @@ AngularJS translation module
 A **work in progress** module for AngularJS to implement i18n in your apps!
 
 **WIP Means**: This module is still under heavy development. There are things that aren't supported yet, including:
-* Changing language at runtime
 * Loading localization resources via XHR
 
 ### Contributing
@@ -20,6 +19,8 @@ Wanna help out? Please checkout the [Contributing Guide](CONTRIBUTING.md)!
 * [Step 4: Using translate directive](http://jsfiddle.net/PascalPrecht/eUGWJ/5/)
 * [Step 5: Dynamic values with translate directive](http://jsfiddle.net/PascalPrecht/eUGWJ/6/)
 * [Step 6: Switch Language at runtime](http://jsfiddle.net/PascalPrecht/eUGWJ/7/)
+* [Step 7: Using $translateProvider.rememberLanguage()](http://jsfiddle.net/PascalPrecht/eUGWJ/10/)
+
 
 ## Getting started
 
@@ -145,6 +146,25 @@ If you tell the <code>$translateProvider</code> to use a translation table which
 
 Since <code>0.3.0</code> you're able to change the currently used language at runtime. Therefore the $translate-Service also comes
 with a <code>uses()</code> method to set the currently used language. To see how it works, Check out [Step 6](#demos) in the demo section.
+
+#### Remember the choosed language
+
+<code>$translateProvider.rememberLanguage([true|false])</code> was introduced in version <code>0.4.0</code>. Set it to <code>true</code> to tell your app that it remember the language state.
+
+````
+app.config(['$translateProvider', function ($translateProvider) {
+  $translateProvider.translations('de_DE', {
+    'TEXT': 'Hallo zusammen!'
+  });
+  $translateProvider.translations('en_EN', {
+    'TEXT': 'Hello together!'
+  });
+  $translateProvider.uses('de_DE');
+  $translateProvider.rememberLanguage(true);
+}]);
+````
+
+Internally it'll save a cookie on your machine. If there isn't a cookie with a language key, <code>ngTranslate</code> will use the value set in <code>uses()</code> as fallback. Have fun with it! :)
 
 ### Using translate directive
 <code>ngTranslate</code> comes since <code>0.2.0</code> with a translate directive. Using this directive could be useful since to many filters can slow down your app. Checkout the [Demos](#demos) on translate directive.

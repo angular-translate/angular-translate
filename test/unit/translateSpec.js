@@ -2,6 +2,27 @@ describe('Module ngTranslate', function () {
 
   beforeEach(module('ngTranslate'));
 
+  describe('$COOKIE_KEY', function () {
+
+    it('should be defined', function () {
+      inject(function ($COOKIE_KEY) {
+        expect($COOKIE_KEY).toBeDefined();
+      });
+    });
+
+    it('should be a string', function () {
+      inject(function ($COOKIE_KEY) {
+        expect(typeof $COOKIE_KEY).toBe('string');
+      });
+    });
+
+    it('should return the cookie key', function () {
+      inject(function ($COOKIE_KEY) {
+        expect($COOKIE_KEY).toBe('NG_TRANSLATE_LANG_KEY');
+      });
+    });
+  });
+
   describe('$translate', function () {
 
     it('should be defined', function () {
@@ -203,6 +224,79 @@ describe('Module ngTranslate', function () {
         });
       });
     });
+
+    describe('rememberLanguage()', function () {
+
+      it('should have a method rememberLanguage()', function () {
+        inject(function ($translate) {
+          expect($translate.rememberLanguage).toBeDefined();
+        });
+      });
+
+      it('should be a function', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.rememberLanguage).toBe('function');
+        });
+      });
+      
+      it('should return false if nothing is configured', function () {
+        module(function ($translateProvider) {
+          $translateProvider.rememberLanguage();
+        });
+        inject(function ($translate) {
+          expect($translate.rememberLanguage()).toBe(false);
+        });
+      });
+
+      it('should return true if remmemberLanguage() is set to true', function () {
+        module(function ($translateProvider) {
+          $translateProvider.rememberLanguage(true);
+        });
+        inject(function ($translate) {
+          expect($translate.rememberLanguage()).toBe(true);
+        });
+      });
+    });
+
+    describe('remember language using cookies', function () {
+
+      it('should use fallback language if no language is stored in $cookieStore', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('en_EN', {
+            'TRANSLATION_ID': 'Hello world'
+          });
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'Hallo Welt'
+          });
+          $translateProvider.uses('en_EN');
+          $translateProvider.rememberLanguage(true);
+        });
+        inject(function ($cookieStore, $COOKIE_KEY) {
+          expect($cookieStore.get($COOKIE_KEY)).toBe('en_EN');
+        });
+      });
+
+      it('should remember when the language switched', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('en_EN', {
+            'TRANSLATION_ID': 'Hello world'
+          });
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'Hallo Welt'
+          });
+          $translateProvider.uses('en_EN');
+          $translateProvider.rememberLanguage(true);
+        });
+        inject(function ($translate, $rootScope, $cookieStore, $COOKIE_KEY) {
+          expect($translate('TRANSLATION_ID')).toBe('Hello world');
+          $translate.uses('de_DE');
+          $rootScope.$digest();
+          expect($translate('TRANSLATION_ID')).toBe('Hallo Welt');
+          expect($cookieStore.get($COOKIE_KEY)).toBe('de_DE');
+        });
+      });
+    });
+
   });
 
   describe('$translateFilter', function () {
