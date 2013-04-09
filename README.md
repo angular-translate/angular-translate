@@ -183,3 +183,5 @@ also interesting:
 That's it! Feel free to help out, making this thing better!
 
 Cheers
+
+[![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)
