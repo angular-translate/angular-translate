@@ -4,6 +4,7 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   var $translationTable = {},
       $uses,
+      supportsLocalStorage = ('localStorage' in window && window['localStorage'] !== null),
       $rememberLanguage = false;
 
   this.translations = function (langKey, translationTable) {
@@ -33,6 +34,19 @@ angular.module('ngTranslate').provider('$translate', function () {
       return $uses;
     }
   };
+  
+  this.configureFromRemember = function (storage, key) {
+    var u, setter='put', getter='get';
+    if ('getItem' in storage) {
+      setter = 'setItem';
+      getter = 'getItem';
+    }
+    if (!(u = storage[getter](key))) {
+      storage[setter](key, this.uses());
+    } else {
+      this.uses(u);
+    }
+  }
 
   this.rememberLanguage = function (boolVal) {
     if (angular.isUndefined(boolVal)) {
@@ -61,7 +75,11 @@ angular.module('ngTranslate').provider('$translate', function () {
       }
       $uses = key;
       if ($rememberLanguage) {
-        $cookieStore.put($COOKIE_KEY, $uses);
+        if (supportsLocalStorage) {
+          window.localStorage.setItem($COOKIE_KEY, $uses);
+        } else {
+          $cookieStore.put($COOKIE_KEY, $uses);
+        }
       }
     };
 
