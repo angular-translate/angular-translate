@@ -40,7 +40,7 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   this.uses = function (langKey) {
     if (langKey) {
-      if (!$translationTable[langKey] && (!$asyncLoaders.length || !angular.isObject($asyncLoaders))) {
+      if (!$translationTable[langKey] && (!$asyncLoaders.length)) {
         throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
       }
       $uses = langKey;

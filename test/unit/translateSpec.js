@@ -359,6 +359,15 @@ describe('Module ngTranslate', function () {
           });
         });
 
+        it('shouldn\'t have a property "langKey"', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader('foo/bar.json');
+          });
+          inject(function ($translate) {
+            expect($translate.loaders()[0].langKey).toBeUndefined();
+          });
+        });
+
         describe('loadAsyncFn()', function () {
 
           it('should be an array', function () {
@@ -378,6 +387,137 @@ describe('Module ngTranslate', function () {
               expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
             });
           });
+        });
+      });
+
+      describe('register loader as function without key', function () {
+
+        it('should return an array', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(function ($http) {
+              return $http.get('someUrl');
+            });
+          });
+          inject(function($translate) {
+            expect(angular.isArray($translate.loaders())).toBe(true);
+          });
+        });
+
+        it('should have a length of 1', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(function ($http) {
+              return $http.get('someUrl');
+            });
+          });
+          inject(function($translate) {
+            expect($translate.loaders().length).toBe(1);
+          });
+        });
+
+        it('shouldn\'t have a property "langKey"', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(function ($http) {
+              return $http.get('someUrl');
+            });
+          });
+          inject(function ($translate) {
+            expect($translate.loaders()[0].langKey).toBeUndefined();
+          });
+        });
+
+        it('should have an asyncLoader object with a loadAsync method', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(function ($http) {
+              return $http.get('someUrl');
+            });
+          });
+          inject(function($translate) {
+            expect($translate.loaders()[0].loadAsync).toBeDefined();
+          });
+        });
+
+        describe('loadAsync()', function () {
+
+          it('should be a function', function () {
+            module(function ($translateProvider) {
+              $translateProvider.registerLoader(function ($http) {
+                return $http.get('someUrl');
+              });
+            });
+            inject(function($translate) {
+              expect(typeof $translate.loaders()[0].loadAsync).toBe('function');
+            });
+          });
+
+        });
+      });
+
+      describe('register loader as function with dependencies without key', function () {
+
+        it('should return an array', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(['$http', function ($http) {
+              return $http.get('someUrl');
+            }]);
+          });
+          inject(function($translate) {
+            expect(angular.isArray($translate.loaders())).toBe(true);
+          });
+        });
+
+        it('should have a length of 1', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(['$http', function ($http) {
+              return $http.get('someUrl');
+            }]);
+          });
+          inject(function($translate) {
+            expect($translate.loaders().length).toBe(1);
+          });
+        });
+
+        it('shouldn\'t have a property "langKey"', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(['$http', function ($http) {
+              return $http.get('someUrl');
+            }]);
+          });
+          inject(function ($translate) {
+            expect($translate.loaders()[0].langKey).toBeUndefined();
+          });
+        });
+
+        it('should have an asyncLoader object with a loadAsync method', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader(['$http', function ($http) {
+              return $http.get('someUrl');
+            }]);
+          });
+          inject(function($translate) {
+            expect($translate.loaders()[0].loadAsync).toBeDefined();
+          });
+        });
+
+        describe('loadAsyncFn()', function () {
+
+          it('should be an array', function () {
+            module(function ($translateProvider) {
+              $translateProvider.registerLoader('foo/bar.json');
+            });
+            inject(function ($translate) {
+              expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
+            });
+          });
+
+          it('should have a $http service dependecy', function () {
+            module(function ($translateProvider) {
+              $translateProvider.registerLoader('foo/bar.json');
+            });
+            inject(function ($translate) {
+              expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
+            });
+          });
+
         });
       });
     });
