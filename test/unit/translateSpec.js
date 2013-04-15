@@ -147,6 +147,18 @@ describe('Module ngTranslate', function () {
       });
     });
 
+    it('should have a method rememberLanguage()', function () {
+      inject(function ($translate) {
+        expect($translate.rememberLanguage).toBeDefined();
+      });
+    });
+
+    it('should have a method loaders()', function () {
+      inject(function ($translate) {
+        expect($translate.loaders).toBeDefined();
+      });
+    });
+
     describe('uses()', function () {
 
       it('should be a function', function () {
@@ -238,7 +250,7 @@ describe('Module ngTranslate', function () {
           expect(typeof $translate.rememberLanguage).toBe('function');
         });
       });
-      
+
       it('should return false if nothing is configured', function () {
         module(function ($translateProvider) {
           $translateProvider.rememberLanguage();
@@ -297,6 +309,78 @@ describe('Module ngTranslate', function () {
       });
     });
 
+    describe('loaders()', function () {
+
+      it('should be defined', function () {
+        inject(function ($translate) {
+          expect($translate.loaders).toBeDefined();
+        });
+      });
+
+      it('should be a function', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.loaders).toBe('function');
+        });
+      });
+
+      it('should return an empty array if no loaders are registered', function () {
+        inject(function ($translate) {
+          expect(angular.isArray($translate.loaders())).toBe(true);
+          expect($translate.loaders()).toEqual([]);
+        });
+      });
+
+      describe('register loader as url string without key', function () {
+
+        it('should return an object', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader('foo/bar.json');
+          });
+          inject(function ($translate) {
+            expect(typeof $translate.loaders()).toBe('object');
+          });
+        });
+
+        it('should should have a length of 1', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader('foo/bar.json');
+          });
+          inject(function ($translate) {
+            expect($translate.loaders().length).toBe(1);
+          });
+        });
+
+        it('should have a asyncLoader object with a loadAsync() method', function () {
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader('foo/bar.json');
+          });
+          inject(function ($translate) {
+            expect($translate.loaders()[0].loadAsync).toBeDefined();
+          });
+        });
+
+        describe('loadAsyncFn()', function () {
+
+          it('should be an array', function () {
+            module(function ($translateProvider) {
+              $translateProvider.registerLoader('foo/bar.json');
+            });
+            inject(function ($translate) {
+              expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
+            });
+          });
+
+          it('should have a $http service dependecy', function () {
+            module(function ($translateProvider) {
+              $translateProvider.registerLoader('foo/bar.json');
+            });
+            inject(function ($translate) {
+              expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
+            });
+          });
+        });
+      });
+    });
   });
 
   describe('$translateFilter', function () {
@@ -484,7 +568,7 @@ describe('Module ngTranslate', function () {
           expect(element.text()).toBe('TRANSLATION_ID');
         });
       });
- 
+
       it('should return translation if translation id exists and language is specified', function () {
         module(function ($translateProvider) {
           $translateProvider.translations('de_DE', {

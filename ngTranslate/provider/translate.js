@@ -4,7 +4,22 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   var $translationTable = {},
       $uses,
-      $rememberLanguage = false;
+      $rememberLanguage = false,
+      $asyncLoaders = [];
+
+  var makeAsyncLoader = function (fn, key) {
+    var loadAsyncFnObject = { loadAsync: fn };
+    if (key) {
+      loadAsyncFnObject.langKey = key;
+    }
+    return loadAsyncFnObject;
+  };
+
+  var loaderFn = function (url) {
+    return ['$http', function ($http) {
+      return $http.get(url);
+    }];
+  };
 
   this.translations = function (langKey, translationTable) {
 
@@ -25,7 +40,7 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   this.uses = function (langKey) {
     if (langKey) {
-      if (!$translationTable[langKey]) {
+      if (!$translationTable[langKey] && (!$asyncLoaders.length || !angular.isObject($asyncLoaders))) {
         throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
       }
       $uses = langKey;
@@ -40,6 +55,24 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
     $rememberLanguage = boolVal;
   };
+
+  this.registerLoader = function (key, loaderInstance) {
+
+    var loaderInstanceFn = loaderInstance,
+        langKey;
+
+    if (!loaderInstance) {
+      loaderInstanceFn = key;
+    } else {
+      langKey = key;
+    }
+
+    if (angular.isString(loaderInstanceFn)) {
+      loaderInstanceFn = loaderFn(loaderInstanceFn);
+    }
+    $asyncLoaders.push(makeAsyncLoader(loaderInstanceFn, langKey));
+  };
+
 
   this.$get = ['$interpolate', '$log', '$cookieStore', '$COOKIE_KEY', function ($interpolate, $log, $cookieStore, $COOKIE_KEY) {
 
@@ -67,6 +100,10 @@ angular.module('ngTranslate').provider('$translate', function () {
 
     $translate.rememberLanguage = function () {
       return $rememberLanguage;
+    };
+
+    $translate.loaders = function () {
+      return $asyncLoaders;
     };
 
     return $translate;
