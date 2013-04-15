@@ -502,7 +502,9 @@ describe('Module ngTranslate', function () {
 
           it('should be an array', function () {
             module(function ($translateProvider) {
-              $translateProvider.registerLoader('foo/bar.json');
+              $translateProvider.registerLoader(['$http', function ($http) {
+                return $http.get('someUrl');
+              }]);
             });
             inject(function ($translate) {
               expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
@@ -511,7 +513,9 @@ describe('Module ngTranslate', function () {
 
           it('should have a $http service dependecy', function () {
             module(function ($translateProvider) {
-              $translateProvider.registerLoader('foo/bar.json');
+              $translateProvider.registerLoader(['$http', function ($http) {
+                return $http.get('someUrl');
+              }]);
             });
             inject(function ($translate) {
               expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
