@@ -57,6 +57,11 @@ To learn what else is possible, read the full [documentation](#documentation).
 * **[Multi-language](#multi-language)**
   * [Teaching $translateProvider more languages](#teaching-translateprovider-more-languages)
   * [Let your app remenber the languages](#let-your-app-remember-the-languages)
+* **[Asynchronous loading of l10n files](#asynchronous-loading-of-l10n-files)**
+  * [Registering asynchronous loaders](#registering-asynchronous-loaders)
+    * [Loader definition (string)](#loader-definition-string)
+    * [Loader definition (function)](#loader-definition-function)
+    * [Loader definition (array)](#loader-definition-array)
 * **[Demos](#demos)**
 * **[Contributing](#contributing)**
 * **[Similar Projects](#similar-projects)**
@@ -373,6 +378,40 @@ You maybe want your app to remember the choosed language over cross http request
 Therefore <code>$translateProvider</code> provides a method <code>rememberLanguage(boolVal)</code>.
 Just set it to <code>true</code> or <code>false</code> in <code>config()</code> phrase
 to use a provided cookie store.
+
+## Asynchronous loading of l10n files
+
+### Registering asynchronous loaders
+
+Of course, you want to be able to load localization files asynchronously! <code>ngTranslate</code> tries
+to make the loading of localization files asynchronously as easy as possible.
+
+To load a localization file asynchronously, you have to register asynchronous loaders either with or
+without a language key, to let <code>ngTranslate</code> know where the resulting translation
+table belongs to. So registering loaders is pretty simple and there are three loader definition syntaxes
+supported.
+
+To register a loader, use <code>$translateProvider.registerLoader()</code>. The idea behind
+this architecture is that you tell <code>ngTranslate</code> what to do at runtime, when a certain
+language is requested and actually not available at the moment. So the registered loaders
+are getting called later.
+
+#### Loader definition (string)
+
+Probably the simplest way to register a loader. Just pass a url which points
+to a localization file and which then get fetched via xhr.
+
+````
+$translateProvider.registerLoader('urlToJson');
+````
+
+This creates a loader function internally and should be called when it's needed. After it's
+been called, regularly implicit through <code>uses()</code>, you should have a registered 
+translation table just as you have when registering a translation table via <code>translations()</code>.
+
+#### Loader definition (function)
+
+#### Loader definition (array)
 
 ## Demos
 
