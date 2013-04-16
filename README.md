@@ -411,7 +411,46 @@ translation table just as you have when registering a translation table via <cod
 
 #### Loader definition (function)
 
+The second possible syntax is to register a loader as a function with it's needed dependencies.
+You should be pretty familiar with this definition type, since you're propbably using this syntax
+since you're using angular for your apps.
+
+````
+$translateProvider.registerLoader(function (dep1, dep2, dep3) {
+  // should return translation table or promise
+});
+````
+
+The given dependencies should resolved by <code>$injector</code> internally, so you don't
+have to worry about instantiating an injector to get service instances. The loader 
+function should either return a translation table or a promise (<code>ngTranslate</code>
+wraps the return value in a promise anyway).
+
 #### Loader definition (array)
+
+Last but not least, loader definition can look like angular's dependency injection array
+notation (to avoid problems with minifier). So you can also do something like this:
+
+````
+$translateProvider.registerLoader(['$http', function ($http) {
+  // should return translation table or promise
+}]);
+````
+
+Again, this gets resolved by <code>$injector</code>, so request for dependencies like there's
+no tomorrow.
+
+All these definition syntaxes work with a specified language key so these bits are also okay:
+````
+$translateProvider.registerLoader('en_EN', 'urlToJson');
+
+$translateProvider.registerLoader('en_EN', function (dep1, dep2, dep3) { ... });
+
+$translateProvider.registerLoader('en_EN', ['$http', function ($http) { ... }]);
+
+// and finally tell ngTranslate which to use
+$translateProvider.uses('en_EN'); // this actually invokes a loader implicit
+````
 
 ## Demos
 
