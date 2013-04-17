@@ -1,4 +1,6 @@
 # Changelog
+* v.0.4.1
+  * Updated dev dependencies
 * v.0.4.0
   * Introducing $translateProvider.rememberLanguage()
   * You're now able to tell ngTranslate save lang state cross requests
