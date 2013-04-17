@@ -29,7 +29,6 @@ exclude = [
 // possible values: 'dots', 'progress', 'junit'
 reporters = ['progress'];
 
-
 // web server port
 port = 9876;
 
