@@ -1,4 +1,4 @@
-# ngTranslate [![Build Status](https://travis-ci.org/PascalPrecht/ng-translate.png)](https://travis-ci.org/PascalPrecht/ng-translate) [![Dependency Status](https://gemnasium.com/PascalPrecht/ng-translate.png)](https://gemnasium.com/PascalPrecht/ng-translate)
+# ngTranslate [![Build Status](https://travis-ci.org/PascalPrecht/ng-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/ng-translate) [![Build Status](https://travis-ci.org/PascalPrecht/ng-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/ng-translate) [![Dependency Status](https://gemnasium.com/PascalPrecht/ng-translate.png)](https://gemnasium.com/PascalPrecht/ng-translate)
 
 > i18n in your AngularJS apps
 
