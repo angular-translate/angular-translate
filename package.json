@@ -1,26 +1,23 @@
 {
   "name": "ng-translate",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A translation module for AngularJS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/karma/bin/karma start --browsers Firefox --single-run"
   },
   "author": {
     "name": "Pascal Precht"
   },
   "license": "WTFPL",
   "devDependencies": {
-    "karma": "~0.9.x",
+    "karma": "~0.8.5",
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.3.1",
-    "grunt-contrib-concat": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.0",
-    "grunt-contrib-jshint": "~0.3.0",
+    "grunt-contrib-concat": "~0.2.x",
+    "grunt-contrib-uglify": "~0.2.x",
+    "grunt-contrib-jshint": "~0.4.x",
     "grunt-bump": "0.0.2",
     "grunt-karma": "~0.4.x"
-  },
-  "scripts": {
-    "test": "./node_modules/karma/bin/karma start --browsers Firefox --single-run"
   }
 }

@@ -1,4 +1,6 @@
 # Changelog
+* v.0.4.2
+  * Fixed dependencies (Karma 0.9.x isn't stable!)
 * v.0.4.1
   * Updated dev dependencies
 * v.0.4.0
