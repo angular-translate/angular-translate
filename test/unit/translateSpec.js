@@ -1,6 +1,37 @@
 describe('Module ngTranslate', function () {
 
-  beforeEach(module('ngTranslate'));
+  var $httpBackend,
+      $translate;
+
+  beforeEach(function () {
+    module('ngTranslate', function ($translateProvider) {
+      $translateProvider.translations({
+        TRANSLATION_ID: 'bla'
+      });
+    });
+    inject(function ($injector) {
+      $httpBackend = $injector.get('$httpBackend');
+      $translate = $injector.get('$translate');
+    });
+  });
+
+  describe('another one', function () {
+
+    it('should translate', function () {
+      module(function ($translateProvider) {
+        $translateProvider.translations('en_EN', {
+          FOO: 'bar'
+        });
+        $translateProvider.uses('en_EN');
+      });
+      expect($translate('FOO')).toEqual('bar');
+    });
+  });
+});
+
+  /*beforeEach(inject(function ($injector) {
+    $httpBackend = $injector.get('$httpBackend');
+  }));
 
   describe('$COOKIE_KEY', function () {
 
@@ -724,6 +755,39 @@ describe('Module ngTranslate', function () {
         });
       });
     });
+
+    describe('Using asynchronous loader', function () {
+  
+
+      describe('loader definition (string)', function () {
+
+        beforeEach(inject(function ($httpBackend) {
+
+        }));
+
+        it('should register translation table', function () {
+
+          module(function ($translateProvider) {
+            $translateProvider.registerLoader('de_DE.json');
+          });
+          inject(function ($translate, $httpBackend, $http) {
+            $httpBackend.when('GET', 'de_DE.json').respond({
+              TRANSLATION_ID: 'Es funktioniert!'
+            });
+
+            var result;
+
+            $http.get('de_DE.json').success(function (data) {
+              result = data;
+            });
+
+            expect(result).toEqual({
+              TRANSLATION_ID: 'Es funktioniert!'
+            });
+          });
+        });
+      });
+    });
   });
 
   describe('$translateFilter', function () {
@@ -1257,4 +1321,4 @@ describe('Module ngTranslate', function () {
       });
     });
   });
-});
+});*/

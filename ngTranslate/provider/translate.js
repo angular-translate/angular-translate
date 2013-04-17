@@ -74,7 +74,7 @@ angular.module('ngTranslate').provider('$translate', function () {
   };
 
 
-  this.$get = ['$interpolate', '$log', '$cookieStore', '$COOKIE_KEY', function ($interpolate, $log, $cookieStore, $COOKIE_KEY) {
+  this.$get = ['$interpolate', '$log', '$injector', '$cookieStore', '$COOKIE_KEY', function ($interpolate, $log, $injector, $cookieStore, $COOKIE_KEY) {
 
     $translate = function (translationId, interpolateParams) {
       var translation = ($uses) ? 

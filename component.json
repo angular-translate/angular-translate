@@ -10,8 +10,8 @@
   },
   "main": "./build/angular-translate",
   "dependencies": {
-    "angular": "1.0.5",
-    "angular-cookies": "1.0.5",
-    "angular-mocks": "1.0.5"
+    "angular": "1.0.6",
+    "angular-cookies": "1.0.6",
+    "angular-mocks": "1.0.6"
   }
 }
