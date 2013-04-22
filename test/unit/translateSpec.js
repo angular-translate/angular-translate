@@ -726,188 +726,144 @@ describe('ngTranslate', function () {
 
     describe('register loader as url string without key', function () {
 
-      beforeEach(module('ngTranslate'));
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader('foo/bar.json');
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $httpBackend = _$httpBackend_;
+        $translate = _$translate_;
+
+        $httpBackend.when('GET', 'foo/bar.json').respond({foo:'bar'});
+      }));
+
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
 
       it('should return an object', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect(typeof $translate.loaders()).toBe('object');
-        });
+        expect(typeof $translate.loaders()).toBe('object');
       });
 
       it('should should have a length of 1', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect($translate.loaders().length).toBe(1);
-        });
+        expect($translate.loaders().length).toBe(1);
       });
 
       it('should have a asyncLoader object with a loadAsync() method', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].loadAsync).toBeDefined();
-        });
+        expect($translate.loaders()[0].loadAsync).toBeDefined();
       });
 
       it('shouldn\'t have a property "langKey"', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].langKey).toBeUndefined();
-        });
+        expect($translate.loaders()[0].langKey).toBeUndefined();
       });
 
       describe('loadAsyncFn()', function () {
 
         it('should be an array', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('foo/bar.json');
-          });
-          inject(function ($translate) {
-            expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
-          });
+          expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
         });
 
         it('should have a $http service dependecy', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('foo/bar.json');
-          });
-          inject(function ($translate) {
-            expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
-          });
+          expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
         });
       });
     });
 
     describe('register loader as url string with key', function () {
 
-      beforeEach(module('ngTranslate'));
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader('en_EN', 'foo/bar.json');
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $translate = _$translate_;
+        $httpBackend = _$httpBackend_;
+
+        $httpBackend.when('GET', 'foo/bar.json').respond({foo:'bar'});
+      }));
+
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+
 
       it('should return an object', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', 'foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect(typeof $translate.loaders()).toBe('object');
-        });
+        expect(typeof $translate.loaders()).toBe('object');
       });
 
       it('should should have a length of 1', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', 'foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect($translate.loaders().length).toBe(1);
-        });
+        expect($translate.loaders().length).toBe(1);
       });
 
       it('should have a asyncLoader object with a loadAsync() method', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', 'foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].loadAsync).toBeDefined();
-        });
+        expect($translate.loaders()[0].loadAsync).toBeDefined();
       });
 
       it('should have a property "langKey"', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', 'foo/bar.json');
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].langKey).toBeDefined();
-          expect($translate.loaders()[0].langKey).toBe('en_EN');
-        });
+        expect($translate.loaders()[0].langKey).toBeDefined();
+        expect($translate.loaders()[0].langKey).toBe('en_EN');
       });
 
       describe('loadAsyncFn()', function () {
 
         it('should be an array', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('en_EN', 'foo/bar.json');
-          });
-          inject(function ($translate) {
-            expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
-          });
+          expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
         });
 
         it('should have a $http service dependecy', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('en_EN', 'foo/bar.json');
-          });
-          inject(function ($translate) {
-            expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
-          });
+          expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
         });
       });
     });
 
     describe('register loader as function without key', function () {
 
-      beforeEach(module('ngTranslate'));
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader(function ($http) {
+          return $http.get('someUrl');
+        });
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $translate = _$translate_;
+        $httpBackend = _$httpBackend_;
+
+        $httpBackend.when('GET', 'someUrl').respond({foo:'bar'});
+      }));
+
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
 
       it('should return an array', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function($translate) {
-          expect(angular.isArray($translate.loaders())).toBe(true);
-        });
+        expect(angular.isArray($translate.loaders())).toBe(true);
       });
 
       it('should have a length of 1', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function($translate) {
-          expect($translate.loaders().length).toBe(1);
-        });
+        expect($translate.loaders().length).toBe(1);
       });
 
       it('shouldn\'t have a property "langKey"', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].langKey).toBeUndefined();
-        });
+        expect($translate.loaders()[0].langKey).toBeUndefined();
       });
 
       it('should have an asyncLoader object with a loadAsync method', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function($translate) {
-          expect($translate.loaders()[0].loadAsync).toBeDefined();
-        });
+        expect($translate.loaders()[0].loadAsync).toBeDefined();
       });
 
       describe('loadAsync()', function () {
 
         it('should be a function', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader(function ($http) {
-              return $http.get('someUrl');
-            });
-          });
-          inject(function($translate) {
-            expect(typeof $translate.loaders()[0].loadAsync).toBe('function');
-          });
+          expect(typeof $translate.loaders()[0].loadAsync).toBe('function');
         });
 
       });
@@ -915,64 +871,47 @@ describe('ngTranslate', function () {
 
     describe('register loader as function with key', function () {
 
-      beforeEach(module('ngTranslate'));
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader('en_EN', function ($http) {
+          return $http.get('someUrl');
+        });
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $translate = _$translate_;
+        $httpBackend = _$httpBackend_;
+
+        $httpBackend.when('GET', 'someUrl').respond({foo:'bar'});
+      }));
+
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
 
       it('should return an array', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function($translate) {
-          expect(angular.isArray($translate.loaders())).toBe(true);
-        });
+        expect(angular.isArray($translate.loaders())).toBe(true);
       });
 
       it('should have a length of 1', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function($translate) {
-          expect($translate.loaders().length).toBe(1);
-        });
+        expect($translate.loaders().length).toBe(1);
       });
 
       it('should have a property "langKey"', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].langKey).toBeDefined();
-          expect($translate.loaders()[0].langKey).toBe('en_EN');
-        });
+        expect($translate.loaders()[0].langKey).toBeDefined();
+        expect($translate.loaders()[0].langKey).toBe('en_EN');
       });
 
       it('should have an asyncLoader object with a loadAsync method', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', function ($http) {
-            return $http.get('someUrl');
-          });
-        });
-        inject(function($translate) {
-          expect($translate.loaders()[0].loadAsync).toBeDefined();
-        });
+        expect($translate.loaders()[0].loadAsync).toBeDefined();
       });
 
       describe('loadAsync()', function () {
 
         it('should be a function', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('en_EN', function ($http) {
-              return $http.get('someUrl');
-            });
-          });
-          inject(function($translate) {
-            expect(typeof $translate.loaders()[0].loadAsync).toBe('function');
-          });
+          expect(typeof $translate.loaders()[0].loadAsync).toBe('function');
         });
 
       });
@@ -980,74 +919,50 @@ describe('ngTranslate', function () {
 
     describe('register loader as function with dependencies without key', function () {
 
-      beforeEach(module('ngTranslate'));
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader(['$http', function ($http) {
+          return $http.get('someUrl');
+        }]);
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $translate = _$translate_;
+        $httpBackend = _$httpBackend_;
+
+        $httpBackend.when('GET', 'someUrl').respond({foo:'bar'});
+      }));
+
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
 
       it('should return an array', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
-        inject(function($translate) {
-          expect(angular.isArray($translate.loaders())).toBe(true);
-        });
+        expect(angular.isArray($translate.loaders())).toBe(true);
       });
 
       it('should have a length of 1', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
-        inject(function($translate) {
-          expect($translate.loaders().length).toBe(1);
-        });
+        expect($translate.loaders().length).toBe(1);
       });
 
       it('shouldn\'t have a property "langKey"', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
-        inject(function ($translate) {
-          expect($translate.loaders()[0].langKey).toBeUndefined();
-        });
+        expect($translate.loaders()[0].langKey).toBeUndefined();
       });
 
       it('should have an asyncLoader object with a loadAsync method', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader(['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
-        inject(function($translate) {
-          expect($translate.loaders()[0].loadAsync).toBeDefined();
-        });
+        expect($translate.loaders()[0].loadAsync).toBeDefined();
       });
 
       describe('loadAsyncFn()', function () {
 
         it('should be an array', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader(['$http', function ($http) {
-              return $http.get('someUrl');
-            }]);
-          });
-          inject(function ($translate) {
-            expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
-          });
+          expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
         });
 
         it('should have a $http service dependecy', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader(['$http', function ($http) {
-              return $http.get('someUrl');
-            }]);
-          });
-          inject(function ($translate) {
-            expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
-          });
+          expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
         });
 
       });
@@ -1055,48 +970,53 @@ describe('ngTranslate', function () {
 
     describe('register loader as function with dependencies with key', function () {
 
-      beforeEach(module('ngTranslate'));
+      var $translate, $httpBackend;
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
+          return $http.get('someUrl');
+        }]);
+      }));
+
+
+      beforeEach(inject(function ( _$httpBackend_) {
+        $httpBackend = _$httpBackend_;
+
+        $httpBackend.whenGET('foo/bar.json').respond({foo: 'bar'});
+        $httpBackend.whenGET('someUrl').respond({foo: 'bar'});
+      }));
+
+      it('should work', function () {
+        inject(function($http) {
+          $http.get('someUrl').success(function (data) {
+            expect(data).toEqual({
+              foo: 'bar'
+            });
+          });
+          $httpBackend.flush();
+        });
+      });
 
       it('should return an array', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
         inject(function($translate) {
           expect(angular.isArray($translate.loaders())).toBe(true);
         });
       });
 
       it('should have a length of 1', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
         inject(function($translate) {
           expect($translate.loaders().length).toBe(1);
         });
       });
 
       it('should have a property "langKey"', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
-        inject(function ($translate) {
+        inject(function($translate) {
           expect($translate.loaders()[0].langKey).toBeDefined();
           expect($translate.loaders()[0].langKey).toBe('en_EN');
         });
       });
 
       it('should have an asyncLoader object with a loadAsync method', function () {
-        module(function ($translateProvider) {
-          $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
-            return $http.get('someUrl');
-          }]);
-        });
         inject(function($translate) {
           expect($translate.loaders()[0].loadAsync).toBeDefined();
         });
@@ -1105,28 +1025,40 @@ describe('ngTranslate', function () {
       describe('loadAsyncFn()', function () {
 
         it('should be an array', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
-              return $http.get('someUrl');
-            }]);
-          });
-          inject(function ($translate) {
+          inject(function($translate) {
             expect(angular.isArray($translate.loaders()[0].loadAsync)).toBe(true);
           });
         });
 
         it('should have a $http service dependecy', function () {
-          module(function ($translateProvider) {
-            $translateProvider.registerLoader('en_EN', ['$http', function ($http) {
-              return $http.get('someUrl');
-            }]);
-          });
-          inject(function ($translate) {
+          inject(function($translate) {
             expect($translate.loaders()[0].loadAsync[0]).toBe('$http');
           });
         });
 
       });
     });
+
+    /*describe('loading asynchronously', function () {
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader('/en_EN.json');
+      }));
+
+      var $httpBackend, $http, $translate;
+
+      beforeEach(inject(function (_$httpBackend_, _$http_, _$translate_) {
+        $httpBackend = _$httpBackend_;
+        $http = _$http_;
+        $translate = _$translate_;
+
+        $httpBackend.whenGET('/en_EN.json').respond({TRANSLATION_ID: 'Hello World'});
+        $httpBackend.whenGET('/de_DE.json').respond({TRANSLATION_ID: 'Hallo World'});
+      }));
+
+      it('should have loaded translations', function () {
+        expect($translate('TRANSLATION_ID')).toBe('Hello World');
+      });
+    });*/
   });
 });

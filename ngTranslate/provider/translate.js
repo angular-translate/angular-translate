@@ -76,6 +76,12 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   this.$get = ['$interpolate', '$log', '$injector', '$cookieStore', '$COOKIE_KEY', function ($interpolate, $log, $injector, $cookieStore, $COOKIE_KEY) {
 
+    if ($asyncLoaders.length === 1 && typeof($asyncLoaders[0].langKey) === 'undefined') {
+      $injector.invoke($asyncLoaders[0].loadAsync).success(function (data) {
+        $translationTable = data;
+      });
+    }
+
     $translate = function (translationId, interpolateParams) {
       var translation = ($uses) ? 
         $translationTable[$uses][translationId] : 
