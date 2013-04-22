@@ -547,6 +547,92 @@ describe('Module ngTranslate', function () {
           expect(element.text()).toBe('foo');
         });
       });
+
+      it('should work when switching language at runtime', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo german'
+          });
+          $translateProvider.translations('en_EN', {
+            'TRANSLATION_ID': 'foo english'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo german');
+          $translate.uses('en_EN');
+          expect(element.text()).toBe('foo english');
+          $translate.uses('de_DE');
+          expect(element.text()).toBe('foo german');
+        });
+      });
+
+      it('should work when switching language at runtime and translation id is content', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo german'
+          });
+          $translateProvider.translations('en_EN', {
+            'TRANSLATION_ID': 'foo english'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo german');
+          $translate.uses('en_EN');
+          expect(element.text()).toBe('foo english');
+          $translate.uses('de_DE');
+          expect(element.text()).toBe('foo german');
+        });
+      });
+
+      it('should work when switching language at runtime and translation id interpolation directive', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo german'
+          });
+          $translateProvider.translations('en_EN', {
+            'TRANSLATION_ID': 'foo english'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo german');
+          $translate.uses('en_EN');
+          expect(element.text()).toBe('foo english');
+          $translate.uses('de_DE');
+          expect(element.text()).toBe('foo german');
+        });
+      });
+
+      it('should work when switching language at runtime and translation id interpolation directive and passed as attribute', function () {
+        module(function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'TRANSLATION_ID': 'foo german'
+          });
+          $translateProvider.translations('en_EN', {
+            'TRANSLATION_ID': 'foo english'
+          });
+          $translateProvider.uses('de_DE');
+        });
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+          element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo german');
+          $translate.uses('en_EN');
+          expect(element.text()).toBe('foo english');
+          $translate.uses('de_DE');
+          expect(element.text()).toBe('foo german');
+        });
+      });
     });
 
     describe('passing translation id as content', function () {
