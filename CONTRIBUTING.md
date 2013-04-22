@@ -91,7 +91,7 @@ or doesn't pass the tests.
   - Please provide a git message which explains what you've done
   - Commit to the forked repository
 - Make a pull request 
-  - Make sure you send the PR to the <code>master</code> branch
+  - Make sure you send the PR to the <code>canary</code> branch
   - Travis CI is watching you!
 
 If you follow these instructions, your PR will land pretty safety in the main repo!
