@@ -1,4 +1,6 @@
 # Changelog
+* v.0.4.4
+  * Added .editorconfig to make contribution as easy as possible
 * v.0.4.3
   * Fixed bug that directive doesn't change contents when language is switched at runtime
 * v.0.4.2
