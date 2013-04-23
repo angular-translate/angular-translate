@@ -4,6 +4,8 @@
 
 Checkout the [demos](#demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](#documentation).
 
+If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/ngTranslate)!
+
 ## Quick Start
 Install module via Bower:
 ````
