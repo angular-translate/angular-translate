@@ -9,7 +9,7 @@ If you like the module and use it in your projects, make it public on [ngmodules
 ## Quick Start
 Install module via Bower:
 ````
-$ bower install angular-translate
+$ bower install PascalPrecht/bower-angular-translate
 ````
 
 Inject <code>ngTranslate</code> module as a dependency into your app:
