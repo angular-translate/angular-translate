@@ -18,6 +18,7 @@
     "grunt-contrib-uglify": "~0.2.x",
     "grunt-contrib-jshint": "~0.4.x",
     "grunt-bump": "0.0.2",
-    "grunt-karma": "~0.4.x"
+    "grunt-karma": "~0.4.x",
+    "grunt-conventional-changelog": "0.0.12"
   }
 }
