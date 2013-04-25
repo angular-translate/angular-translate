@@ -1,4 +1,13 @@
-# Changelog
+# 0.5.0 (2013-04-25)
+
+## Features
+### conventional-changelogs
+
+* Add grunt-conventional-changelog task (c8093a7)
+
+
+
+
 * v.0.4.4
   * Added .editorconfig to make contribution as easy as possible
 * v.0.4.3
