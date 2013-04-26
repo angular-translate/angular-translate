@@ -10,9 +10,9 @@ basePath = '';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'components/angular/angular.min.js',
-  'components/angular-cookies/angular-cookies.min.js',
-  'components/angular-mocks/angular-mocks.js',
+  'bower_components/angular/angular.min.js',
+  'bower_components/angular-cookies/angular-cookies.min.js',
+  'bower_components/angular-mocks/angular-mocks.js',
   'ngTranslate/translate.js',
   'ngTranslate/**/*.js',
   'test/**/*Spec.js'
@@ -21,7 +21,7 @@ files = [
 
 // list of files to exclude
 exclude = [
-  
+
 ];
 
 
