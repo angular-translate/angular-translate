@@ -3,8 +3,9 @@
 > i18n in your AngularJS apps
 
 Checkout the [demos](https://github.com/PascalPrecht/ng-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/ng-translate/wiki).
-
 If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/ngTranslate)!
+
+**Attention:** Since we're currently working on a specification for [Reusable Angular Components](https://github.com/PascalPrecht/angular-component-spec/tree/proposal), this project will have some breaking changes once the spec is called final.
 
 ## Quick Start
 Install module via Bower:
