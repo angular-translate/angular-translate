@@ -1,3 +1,21 @@
+# 0.5.1 (2013-04-29)
+
+## Features
+### .jshintrc
+
+* add .jshintrc (0c8d3da)
+
+### .bowerrc
+
+* add .bowerrc (42363ee)
+
+### bower.json
+
+* rename component.json to bower.json (17acd10)
+
+
+
+
 # 0.5.0 (2013-04-25)
 
 ## Features
