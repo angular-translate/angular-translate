@@ -1,3 +1,13 @@
+# 0.5.2 (2013-04-30)
+
+
+
+## Bug fixes
+### translateDirective
+
+* check for truthy value in watch callback (98087c7)
+
+
 # 0.5.1 (2013-04-29)
 
 ## Features
