@@ -21,8 +21,14 @@ angular.module('ngTranslate')
         scope.interpolateParams = interpolateParams;
       });
 
-      scope.$watch('translationId + interpolateParams', function () {
+      scope.$on('translationChangeSuccess', function () {
         element.html(translate(scope.translationId, scope.interpolateParams));
+      });
+
+      scope.$watch('translationId + interpolateParams', function (nValue) {
+        if (nValue) {
+          element.html(translate(scope.translationId, scope.interpolateParams));
+        }
       });
     }
   };
