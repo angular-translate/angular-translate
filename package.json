@@ -20,6 +20,7 @@
     "grunt-bump": "0.0.2",
     "grunt-karma": "~0.4.x",
     "grunt-conventional-changelog": "0.0.12",
-    "grunt-express": "~0.3.3"
+    "grunt-express": "~0.3.3",
+    "grunt-contrib-copy": "~0.4.1"
   }
 }

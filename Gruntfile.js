@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-bump');
@@ -46,6 +47,13 @@ module.exports = function (grunt) {
         }
       }
     },
+    copy: {
+      demo: {
+        files: {
+          'demo/angular-translate-latest.js': 'dist/angular-translate-<%= pkg.version %>.js'
+        }
+      }
+    },
     karma: {
       unit: {
         configFile: 'karma.conf.js',
@@ -70,6 +78,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['jshint', 'karma']);
   grunt.registerTask('test', ['karma']);
-  grunt.registerTask('build', ['jshint', 'karma', 'concat', 'uglify']);
+  grunt.registerTask('build', ['jshint', 'karma', 'concat', 'copy:demo', 'uglify']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
 };
