@@ -5,6 +5,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-express');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-conventional-changelog');
 
@@ -55,10 +56,20 @@ module.exports = function (grunt) {
       options: {
         dest: 'CHANGELOG.md'
       }
+    },
+    express: {
+      server: {
+        options: {
+          port: 3005,
+          bases: '.'
+        }
+      }
     }
+
   });
 
   grunt.registerTask('default', ['jshint', 'karma']);
   grunt.registerTask('test', ['karma']);
   grunt.registerTask('build', ['jshint', 'karma', 'concat', 'uglify']);
+  grunt.registerTask('server', ['express', 'express-keepalive']);
 };
