@@ -1,8 +1,5 @@
 {
-    "id" : "en_US",
-    "items" : {
-        "HEADER" : "Header",
-        "SUBHEADER" : "2. Header",
-        "TEXT" : "<em>{{randomValue}}</em> is the answer to life the universe and everything."
-    }
+  "HEADER" : "Header",
+  "SUBHEADER" : "2. Header",
+  "TEXT" : "<em>{{randomValue}}</em> is the answer to life the universe and everything."
 }
