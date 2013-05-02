@@ -60,20 +60,6 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
   };
 
-  var Utils = {
-    /**
-     * Remove all loaded translations.
-     * @params force boolean optional - only if true the current selected language also will be removed.
-     */
-    pruneTranslations : function (force) {
-      for (var key in $translationTable) {
-        if ($translationTable.hasOwnProperty(key) && (force || key !== $uses)) {
-          $translationTable[key] = undefined;
-        }
-      }
-    }
-  };
-
   this.translations = function (langKey, translationTable) {
 
     if (!langKey && !translationTable) {
