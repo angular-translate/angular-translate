@@ -9,6 +9,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-express');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-conventional-changelog');
+  grunt.loadNpmTasks('grunt-ngmin');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('bower.json'),
@@ -65,6 +66,12 @@ module.exports = function (grunt) {
         dest: 'CHANGELOG.md'
       }
     },
+    ngmin: {
+      ngTranslate: {
+        src: '<%= concat.ngTranslate.dest %>',
+        dest: '<%= concat.ngTranslate.dest %>'
+      }
+    },
     express: {
       server: {
         options: {
@@ -78,6 +85,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['jshint', 'karma']);
   grunt.registerTask('test', ['karma']);
-  grunt.registerTask('build', ['jshint', 'karma', 'concat', 'copy:demo', 'uglify']);
+  grunt.registerTask('build', ['jshint', 'karma', 'concat', 'ngmin', 'copy:demo', 'uglify']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
 };
