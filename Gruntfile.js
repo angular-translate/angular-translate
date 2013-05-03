@@ -37,7 +37,7 @@ module.exports = function (grunt) {
     },
     concat: {
       ngTranslate: {
-        src: ['ngTranslate/**/*.js'],
+        src: ['ngTranslate/translate.js', 'ngTranslate/**/*.js'],
         dest: 'dist/angular-translate-<%= pkg.version %>.js'
       }
     },
