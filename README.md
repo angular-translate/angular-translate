@@ -5,7 +5,15 @@
 Checkout the [demos](https://github.com/PascalPrecht/ng-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/ng-translate/wiki).
 If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/ngTranslate)!
 
+### Features
+* translate filter
+* translate directive
+* translate service
+* multi-lang support
+* asynchronous/lazy loading support
+
 **Attention:** Since we're currently working on a specification for [Reusable Angular Components](https://github.com/PascalPrecht/angular-component-spec/tree/proposal), this project will have some breaking changes once the spec is called final.
+
 
 ## Quick Start
 Install module via Bower:
@@ -37,5 +45,11 @@ Translate your app:
 ````
 
 To learn what else is possible, read the full [documentation](https://github.com/PascalPrecht/ng-translate/wiki).
+
+## Contributors
+
+Special thanks are going to the following devs who put a lot of love into this module:
+
+* Jan Philipp - [@knalli](https://github.com/knalli)
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)
