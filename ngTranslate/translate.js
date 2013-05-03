@@ -103,6 +103,10 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   this.registerLoader = function (loader) {
 
+    if (!loader) {
+      throw new Error("Please define a valid loader!");
+    }
+
     var $loader;
 
     if (!(angular.isFunction(loader) || angular.isArray(loader))) {
@@ -130,14 +134,25 @@ angular.module('ngTranslate').provider('$translate', function () {
   var invokeLoading = function($injector, key) {
 
     var deferred = $injector.get('$q').defer(),
-        loaderFn = $injector.invoke($asyncLoaders[0]);
+        loaderFnBuilder = $asyncLoaders[0],
+        loaderFn;
 
-    loaderFn(key).then(function (data) {
-      $translationTable[key] = data;
-      deferred.resolve(data);
-    }, function (key) {
+    if (loaderFnBuilder) {
+      loaderFn = $injector.invoke(loaderFnBuilder);
+      if (angular.isFunction(loaderFn)) {
+        loaderFn(key).then(function (data) {
+          $translationTable[key] = data;
+          deferred.resolve(data);
+        }, function (key) {
+          deferred.reject(key);
+        });
+      } else {
+        deferred.reject(key);
+      }
+    } else {
       deferred.reject(key);
-    });
+    }
+
     return deferred.promise;
   };
 
