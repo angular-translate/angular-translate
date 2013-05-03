@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ng-translate w/ async loader</title>
+
+    <script src="../../bower_components/angular/angular.js"></script>
+    <script src="../../bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="../angular-translate-latest.js"></script>
+    <script src="app_witout_autoload.js"></script>
+
+</head>
+<body ng-app="app" ng-controller="ctrl">
+    <button ng-click="selectLang('de_DE')">de_DE</button>
+    <button ng-click="selectLang('en_US')">en_US</button>
+    <button ng-click="selectLang('nt_VD')">nt_VD</button>
+    <h1>{{'HEADER' | translate}}</h1>
+    <h2 translate="SUBHEADER">Subheader</h2>
+    <p>{{tlData.randomValue}}</p>
+    <p>{{'TEXT' | translate: tlData}}</p>
+</body>
+</html>

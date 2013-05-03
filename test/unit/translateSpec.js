@@ -58,12 +58,6 @@ describe('ngTranslate', function () {
       });
     });
 
-    it('should have a method loaders()', function () {
-      inject(function ($translate) {
-        expect($translate.loaders).toBeDefined();
-      });
-    });
-
     describe('uses()', function () {
 
       it('should be a function', function () {
@@ -78,28 +72,6 @@ describe('ngTranslate', function () {
         });
       });
 
-    });
-
-    describe('loaders()', function () {
-
-      it('should be defined', function () {
-        inject(function ($translate) {
-          expect($translate.loaders).toBeDefined();
-        });
-      });
-
-      it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.loaders).toBe('function');
-        });
-      });
-
-      it('should return an empty array if no loaders are registered', function () {
-        inject(function ($translate) {
-          expect(angular.isArray($translate.loaders())).toBe(true);
-          expect($translate.loaders()).toEqual([]);
-        });
-      });
     });
   });
 
@@ -720,6 +692,7 @@ describe('ngTranslate', function () {
         });
       });
     });
+
   });
 
   describe('Asynchronous loading', function () {
@@ -730,11 +703,8 @@ describe('ngTranslate', function () {
         $translateProvider.registerLoader(function ($q, $timeout) {
           return function (key) {
             var data = (key !== 'de_DE') ? null : {
-              key: 'de_DE',
-              items: {
-                'KEY1': 'Schluessel 1',
-                'KEY2': 'Schluessel 2'
-              }
+              'KEY1': 'Schluessel 1',
+              'KEY2': 'Schluessel 2'
             };
             var deferred = $q.defer();
             $timeout(function () {
@@ -743,10 +713,6 @@ describe('ngTranslate', function () {
             return deferred.promise;
           };
         });
-      }));
-
-      it('list available loaders should should have a length of 1', inject(function ($translate) {
-        expect($translate.loaders().length).toBe(1);
       }));
 
       it('implicit invoking loader should be successful', inject(function ($translate, $timeout) {
@@ -789,14 +755,6 @@ describe('ngTranslate', function () {
         $httpBackend.verifyNoOutstandingRequest();
       });
 
-      it('should return an object', function () {
-        expect(typeof $translate.loaders()).toBe('object');
-      });
-
-      it('should should have a length of 1', function () {
-        expect($translate.loaders().length).toBe(1);
-      });
-
       it('should fetch url when invoking #uses', function () {
         $httpBackend.expectGET('foo/bar.json?lang=de_DE');
         $translate.uses('de_DE');
@@ -826,14 +784,6 @@ describe('ngTranslate', function () {
         $httpBackend.verifyNoOutstandingRequest();
       });
 
-      it('should return an object', function () {
-        expect(typeof $translate.loaders()).toBe('object');
-      });
-
-      it('should should have a length of 1', function () {
-        expect($translate.loaders().length).toBe(1);
-      });
-
       it('should fetch url when invoking #uses(de_DE)', function () {
         $httpBackend.expectGET('lang_de_DE.json');
         $translate.uses('de_DE');
@@ -855,38 +805,55 @@ describe('ngTranslate', function () {
         expect($translate('HEADER')).toEqual('HEADER');
       });
     });
+  });
 
-    describe('Invalid loaders', function () {
+  describe('Asynchronous loading (directive)', function () {
 
-      describe('returning not a function when invoking the loader (missing function builder)', function () {
+    describe('register loader via function object', function () {
 
-        beforeEach(module('ngTranslate', function ($translateProvider) {
-          $translateProvider.registerLoader(function (key) {
-            return {
-              items: {TEXT: 'Translated'}
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader(function ($q, $timeout) {
+          return function (key) {
+            var data = (key === 'de_DE') ? {
+              'KEY1': 'Schluessel 1',
+              'KEY2': 'Schluessel 2'
+            } : {
+              'KEY1': 'Key 1',
+              'KEY2': 'Key 2'
             };
-          });
-        }));
+            var deferred = $q.defer();
+            $timeout(function () {
+              deferred.resolve(data);
+            }, 0);
+            return deferred.promise;
+          };
+        });
+        $translateProvider.uses('de_DE');
+      }));
 
-        it('list available loaders should should have a length of 1', inject(function ($translate) {
-          expect($translate.loaders().length).toBe(1);
-        }));
-
-        it('should throw an exception', inject(function ($translate) {
-          expect($translate('TEXT')).toEqual('TEXT'); // unknown
-          var exceptionMessage;
-          try {
-            $translate.uses('de_DE');
-          } catch (e) {
-            exceptionMessage = e.message;
-          }
-          expect(exceptionMessage).toEqual('The provided loader must return a function.');
-          expect($translate('TEXT')).toEqual('TEXT'); // still unknown
-        }));
-
+      it('should translate after data is loaded asynchronously', function () {
+        inject(function ($rootScope, $compile, $translate, $timeout) {
+          $rootScope.translationId = 'KEY1';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          $timeout.flush(); // finish loader
+          expect(element.text()).toEqual('Schluessel 1');
+        });
       });
 
-    });
+      it('should translate after data is loaded asynchronously when lang key changed', function () {
+        inject(function ($rootScope, $compile, $translate, $timeout) {
+          $rootScope.translationId = 'KEY1';
+          element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+          $rootScope.$digest();
+          $timeout.flush();
+          expect(element.text()).toEqual('Schluessel 1');
 
+          $translate.uses('en_US');
+          $timeout.flush();
+          expect($translate.uses()).toEqual('en_US');
+        });
+      });
+    });
   });
 });

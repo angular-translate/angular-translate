@@ -9,7 +9,6 @@ angular.module('ngTranslate')
     scope: true,
     link: function linkFn(scope, element, attr) {
 
-      // If any change is made to the attribute, the (new) language key and params will be re-stored.
       attr.$observe('translate', function (translationId) {
         if (angular.equals(translationId , '')) {
           scope.translationId = $interpolate(element.text())(scope.$parent);
@@ -18,12 +17,14 @@ angular.module('ngTranslate')
         }
       });
 
-      // TODO Doc
       attr.$observe('values', function (interpolateParams) {
         scope.interpolateParams = interpolateParams;
       });
 
-      // If any changes were made, the actual translation text will be re-created.
+      scope.$on('translationChangeSuccess', function () {
+        element.html(translate(scope.translationId, scope.interpolateParams));
+      });
+
       scope.$watch('translationId + interpolateParams', function (nValue) {
         if (nValue) {
           element.html(translate(scope.translationId, scope.interpolateParams));
