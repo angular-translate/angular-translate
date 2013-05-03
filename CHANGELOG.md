@@ -1,3 +1,14 @@
+# 0.6.0 (2013-05-03)
+
+## Features
+### ngmin
+
+* add grunt-ngmin (f630958)
+
+### $translate
+* add support for asynchronous loading
+
+
 # 0.5.2 (2013-04-30)
 
 
