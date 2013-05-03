@@ -22,6 +22,10 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   var LoaderGenerator = {
 
+    // Creates a loading function for a typical dynamic url pattern: "locale.php?lang=en_US",
+    // "locale.php?lang=de_DE", etc. Prefixing the specified url, the current requested
+    // language id will be applied with "?lang={key}". Using this builder, the response of
+    // these urls must be an object of key-value pairs.
     forUrl : function (url) {
       return ['$http', '$q', function ($http, $q) {
         return function(key) {
@@ -43,6 +47,9 @@ angular.module('ngTranslate').provider('$translate', function () {
       }];
     },
 
+    // Creates a loading function for a typical static file url pattern: "lang-en_US.json",
+    // "lang-de_DE.json", etc.   Using this builder, the response of these urls must be an
+    // object of key-value pairs.
     byStaticFiles : function (prefix, suffix) {
       return ['$http', '$q', function ($http, $q) {
         return function(key) {
@@ -101,11 +108,18 @@ angular.module('ngTranslate').provider('$translate', function () {
     $rememberLanguage = boolVal;
   };
 
+  // Register a loader which creates loader functions.
+  // For more details, see https://github.com/PascalPrecht/ng-translate/wiki/Asynchronous-loading#registering-asynchronous-loaders
   this.registerLoader = function (loader) {
 
     var $loader;
 
+    // Unless it is a function (or an array in case of a dependency injected function),
+    // this will try to match some internal built-in strategies for the specified loader.
     if (!(angular.isFunction(loader) || angular.isArray(loader))) {
+
+      // Defined convenient shortcut: If the loader is only a string, we should use the
+      // built-in template "url".
       if (angular.isString(loader)) {
         loader = {
           type : 'url',
@@ -122,11 +136,16 @@ angular.module('ngTranslate').provider('$translate', function () {
           break;
       }
     } else {
+      // The loader is a custom function (or array), so go for it.
       $loader = loader;
     }
     $asyncLoaders.push($loader);
   };
 
+  // Using the first registered loader function this invokes the generated loader
+  // function and applies the resolved data. Regardless of the result of the loader
+  // function (it should be a promise, but do not have to be), the result will
+  // be wrapped with a promise.
   var invokeLoading = function($injector, key) {
 
     var deferred = $injector.get('$q').defer(),
@@ -178,6 +197,7 @@ angular.module('ngTranslate').provider('$translate', function () {
           if ($rememberLanguage) {
             $cookieStore.put($COOKIE_KEY, $uses);
           }
+          // Notify all translate-directives the language has been changed.
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
         }, function (key) {
@@ -202,6 +222,8 @@ angular.module('ngTranslate').provider('$translate', function () {
       return $rememberLanguage;
     };
 
+    // If at least one async loader is defined and there are no (default) translations available
+    // we should try to load them.
     if ($asyncLoaders.length && angular.equals($translationTable, {})) {
       $translate.uses($translate.uses());
     }
