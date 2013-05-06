@@ -697,6 +697,49 @@ describe('ngTranslate', function () {
 
   describe('Asynchronous loading', function () {
 
+    describe('register loader=null', function () {
+
+      var exceptionMessage;
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        try {
+          $translateProvider.registerLoader(null);
+        } catch (ex) {
+          exceptionMessage = ex.message;
+        }
+      }));
+
+      it('should be throw an error', inject(function ($translate) {
+        expect($translate.uses()).toBeUndefined();
+        $translate.uses('de_DE');
+        expect($translate.uses()).toBeUndefined();
+        expect(exceptionMessage).toEqual('Please define a valid loader!');
+      }));
+
+    });
+
+    describe('register loader=undefined', function () {
+
+      var exceptionMessage;
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        try {
+          $translateProvider.registerLoader(undefined);
+        } catch (ex) {
+          exceptionMessage = ex.message;
+        }
+      }));
+
+      it('should be throw an error', inject(function ($translate) {
+        expect($translate.uses()).toBeUndefined();
+        $translate.uses('de_DE');
+        expect($translate.uses()).toBeUndefined();
+        expect(exceptionMessage).toEqual('Please define a valid loader!');
+      }));
+
+    });
+
+
     describe('register loader via a function', function () {
 
       beforeEach(module('ngTranslate', function ($translateProvider) {
