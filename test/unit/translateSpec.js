@@ -739,6 +739,48 @@ describe('ngTranslate', function () {
 
     });
 
+    describe('register a loader (function) where data is a nested object structure (namespace support)', function () {
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.registerLoader(function ($q, $timeout) {
+          return function (key) {
+            var data = (key !== 'en_US') ? null : {
+                "DOCUMENT" : {
+                  "HEADER" : {
+                    "TITLE" : "Header"
+                  },
+                  "SUBHEADER" : {
+                    "TITLE" : "2. Header"
+                  }
+                }
+            };
+            var deferred = $q.defer();
+            $timeout(function () {
+              deferred.resolve(data);
+            }, 200);
+            return deferred.promise;
+          };
+        });
+      }));
+
+      it('implicit invoking loader should be successful', inject(function ($translate, $timeout) {
+        var called = false;
+        $translate.uses('en_US').then(function (){
+          called = true;
+        });
+        $timeout.flush();
+        expect(called).toEqual(true);
+      }));
+
+      it('implicit invoking loader should be successful', inject(function ($translate, $timeout) {
+        var called = false;
+        $translate.uses('en_US');
+        $timeout.flush();
+        expect($translate('DOCUMENT.HEADER.TITLE')).toEqual('Header');
+        expect($translate('DOCUMENT.SUBHEADER.TITLE')).toEqual('2. Header');
+      }));
+
+    });
 
     describe('register loader via a function', function () {
 
