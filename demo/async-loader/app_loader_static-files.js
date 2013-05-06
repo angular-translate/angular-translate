@@ -6,7 +6,7 @@ angular.module('app', ['ngTranslate'])
     prefix: 'languages/lang_', 
     suffix: '.json'
   });
-  $translateProvider.uses('de_DE');
+  $translateProvider.preferredLanguage('de_DE');
 }])
 
 .controller('ctrl', function ($translate, $scope){
