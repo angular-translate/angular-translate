@@ -18,6 +18,7 @@ angular.module('ngTranslate').provider('$translate', function () {
   var $translationTable = {},
       $uses,
       $rememberLanguage = false,
+      $missingTranslationHandler,
       $asyncLoaders = [];
 
   var LoaderGenerator = {
@@ -101,6 +102,13 @@ angular.module('ngTranslate').provider('$translate', function () {
     $rememberLanguage = boolVal;
   };
 
+  this.missingTranslationHandler = function (functionHandler) {
+    if (angular.isUndefined(functionHandler)) {
+      return $missingTranslationHandler;
+    }
+    $missingTranslationHandler = functionHandler;
+  };
+
   this.registerLoader = function (loader) {
 
     if (!loader) {
@@ -174,7 +182,12 @@ angular.module('ngTranslate').provider('$translate', function () {
         return $interpolate(translation)(interpolateParams);
       }
 
-      $log.warn("Translation for " + translationId + " doesn't exist");
+      if (!angular.isUndefined($missingTranslationHandler)) {
+        $missingTranslationHandler(translationId);
+      } else {
+        $log.warn("Translation for " + translationId + " doesn't exist");
+      }
+
       return translationId;
     };
 
