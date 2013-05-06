@@ -151,7 +151,7 @@ angular.module('ngTranslate').provider('$translate', function () {
     '$COOKIE_KEY',
     function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q, $COOKIE_KEY) {
 
-    $translate = function (translationId, interpolateParams) {
+    var $translate = function (translationId, interpolateParams) {
       var translation = ($uses) ?
         ($translationTable[$uses] ? $translationTable[$uses][translationId] : translationId) :
         $translationTable[translationId];
