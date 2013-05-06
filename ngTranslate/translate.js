@@ -19,7 +19,8 @@ angular.module('ngTranslate').provider('$translate', function () {
       $uses,
       $rememberLanguage = false,
       $missingTranslationHandler,
-      $asyncLoaders = [];
+      $asyncLoaders = [],
+      NESTED_OBJECT_DELIMITER = '.';
 
   var LoaderGenerator = {
 
@@ -139,6 +140,28 @@ angular.module('ngTranslate').provider('$translate', function () {
     $asyncLoaders.push($loader);
   };
 
+  var flatObject = function(data, path, result) {
+    var key, keyWithPath, val;
+
+    if (!path) {
+      path = [];
+    }
+    if (!result) {
+      result = {};
+    }
+    for (key in data) {
+      if (!data.hasOwnProperty(key)) continue;
+      val = data[key];
+      if (angular.isObject(val)) {
+        flatObject(val, path.concat(key), result);
+      } else {
+        keyWithPath = path.length ? ("" + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
+        result[keyWithPath] = val;
+      }
+    }
+    return result;
+  };
+
   var invokeLoading = function($injector, key) {
 
     var deferred = $injector.get('$q').defer(),
@@ -149,7 +172,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       loaderFn = $injector.invoke(loaderFnBuilder);
       if (angular.isFunction(loaderFn)) {
         loaderFn(key).then(function (data) {
-          $translationTable[key] = data;
+          $translationTable[key] = flatObject(data);
           deferred.resolve(data);
         }, function (key) {
           deferred.reject(key);

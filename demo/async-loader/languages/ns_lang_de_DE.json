@@ -1,0 +1,11 @@
+{
+  "DOCUMENT" : {
+    "HEADER" : {
+      "TITLE" : "Überschrift"
+    },
+    "SUBHEADER" : {
+      "TITLE" : "2. Überschrift"
+    },
+    "TEXT" : "<em>{{randomValue}}</em> ist die Antwort auf das Leben, das Universum und der ganzen Rest."
+  }
+}
