@@ -51,5 +51,6 @@ To learn what else is possible, read the full [documentation](https://github.com
 Special thanks are going to the following devs who put a lot of love into this module:
 
 * Jan Philipp - [@knalli](https://github.com/knalli)
+* James Andres - [@jamesandres](https://github.com/jamesandres)
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)
