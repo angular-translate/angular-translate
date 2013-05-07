@@ -140,7 +140,7 @@ angular.module('ngTranslate').provider('$translate', function () {
     $asyncLoaders.push($loader);
   };
 
-  var flatObject = function(data, path, result) {
+  var flatObject = function (data, path, result) {
     var key, keyWithPath, val;
 
     if (!path) {
