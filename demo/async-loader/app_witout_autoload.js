@@ -27,7 +27,7 @@ angular.module('app', ['ngTranslate'])
     };
   });
 
-  $translateProvider.uses('de_DE');
+  $translateProvider.preferredLanguage('de_DE');
 }])
 
 .controller('ctrl', function ($translate, $scope){
