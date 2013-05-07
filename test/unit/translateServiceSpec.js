@@ -34,6 +34,12 @@ describe('ngTranslate', function () {
       });
     });
 
+    it('should have a method preferredLanguage()', function() {
+      inject(function ($translate) {
+        expect($translate.preferredLanguage).toBeDefined();
+      });
+    });
+
     describe('uses()', function () {
 
       it('should be a function', function () {
@@ -225,6 +231,130 @@ describe('ngTranslate', function () {
           expect($cookieStore.get($COOKIE_KEY)).toBe('en_EN');
         });
       });
+    });
+
+    describe('$translateService preferredLanguage()', function () {
+
+      describe('function', function(){
+        beforeEach(module('ngTranslate'));
+
+        var $translate;
+        beforeEach(inject(function (_$translate_) {
+          $translate = _$translate_;
+        }));
+
+        it('should be defined', function() {
+          inject(function($translate){
+            expect($translate.preferredLanguage).toBeDefined();
+          });
+        });
+
+        it('should be a function', function() {
+          inject(function($translate){
+            expect(typeof $translate.preferredLanguage).toBe('function');
+          });
+        });
+      });
+
+      describe('at the config phase', function() {
+        beforeEach(module('ngTranslate', function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+          $translateProvider.translations('en_EN', {});
+          $translateProvider.preferredLanguage('en_EN');
+          $translateProvider.preferredLanguage('de_DE');
+        }));
+
+        var $translate;
+        beforeEach(inject(function (_$translate_) {
+          $translate = _$translate_;
+        }));
+
+        it('should allow to change preferred language', function() {
+          inject(function($translate){
+            expect($translate.preferredLanguage()).toEqual('de_DE');
+          });
+        });
+
+      });
+
+      describe('at the runtime phase', function() {
+        beforeEach(module('ngTranslate', function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+          $translateProvider.translations('en_EN', {});
+          $translateProvider.preferredLanguage('en_EN');
+        }));
+
+        var $translate;
+        beforeEach(inject(function (_$translate_) {
+          $translate = _$translate_;
+        }));
+
+        it('shouldn\'t allow to change preferred language', function() {
+          inject(function($translate){
+            var prevLang = $translate.preferredLanguage();
+            $translate.preferredLanguage('de_DE');
+            expect($translate.preferredLanguage()).toBe(prevLang);
+          });
+        });
+
+      });
+
+      describe('if no language is specified', function() {
+        beforeEach(module('ngTranslate', function ($translateProvider) {
+          $translateProvider.translations('de_DE', {
+            'HELLO': 'Hallo da!'
+          });
+          $translateProvider.translations('en_EN', {
+            'HELLO': 'Hello there!'
+          });
+        }));
+
+        var $translate;
+        beforeEach(inject(function (_$translate_) {
+            $translate = _$translate_;
+        }));
+
+        it ('should return undefined', function() {
+          inject(function($translate){
+            expect($translate.preferredLanguage()).toBeUndefined();
+          });
+        });
+
+      });
+
+      describe('if language is specified',function(){
+        beforeEach(module('ngTranslate', function ($translateProvider) {
+          $translateProvider.translations('de_DE', {});
+          $translateProvider.translations('en_EN', {});
+          $translateProvider.preferredLanguage('en_EN');
+          $translateProvider.rememberLanguage(false);
+        }));
+
+        var $translate;
+        beforeEach(inject(function (_$translate_) {
+          $translate = _$translate_;
+        }));
+
+        it ('should return a string', function() {
+          inject(function($translate){
+            expect(typeof $translate.preferredLanguage()).toBe('string');
+          });
+        });
+
+        it ('should return a correct language code', function() {
+          inject(function($translate){
+            expect($translate.preferredLanguage()).toEqual('en_EN');
+          });
+        });
+
+        it ('should be equal to the uses method if rememberLanguage is false', function() {
+          inject(function($translate){
+            expect($translate.uses()).toEqual($translate.preferredLanguage());
+          });
+        });
+
+      });
+
     });
   });
 

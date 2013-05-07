@@ -18,7 +18,7 @@ angular.module('app', ['ngTranslate'])
       return deferred.promise;
     };
   });
-  $translateProvider.uses('en_US');
+  $translateProvider.preferredLanguage('en_US');
 }])
 
 .controller('ctrl', function ($translate, $scope){

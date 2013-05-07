@@ -4,11 +4,21 @@ angular.module('ngTranslate', ['ng', 'ngCookies'])
 
   if ($translate.rememberLanguage()) {
     if (!$cookieStore.get($COOKIE_KEY)) {
-      $cookieStore.put($COOKIE_KEY, $translate.uses());
+      
+      if (angular.isString($translate.preferredLanguage())) {
+        // $translate.uses method will both set up and remember the language in case it's loaded successfully
+        $translate.uses($translate.preferredLanguage());
+      } else {
+        $cookieStore.put($COOKIE_KEY, $translate.uses());
+      }
+      
     } else {
       $translate.uses($cookieStore.get($COOKIE_KEY));
     }
+  } else if (angular.isString($translate.preferredLanguage())) {
+    $translate.uses($translate.preferredLanguage());
   }
+  
 }]);
 
 angular.module('ngTranslate').constant('$COOKIE_KEY', 'NG_TRANSLATE_LANG_KEY');
@@ -16,6 +26,7 @@ angular.module('ngTranslate').constant('$COOKIE_KEY', 'NG_TRANSLATE_LANG_KEY');
 angular.module('ngTranslate').provider('$translate', function () {
 
   var $translationTable = {},
+      $preferredLanguage,
       $uses,
       $rememberLanguage = false,
       $missingTranslationHandler,
@@ -84,6 +95,14 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
   };
 
+  this.preferredLanguage = function(langKey) {
+    if (langKey) {
+      $preferredLanguage = langKey;
+    } else {
+      return $preferredLanguage;
+    }
+  };
+  
   this.uses = function (langKey) {
     if (langKey) {
       if (!$translationTable[langKey] && (!$asyncLoaders.length)) {
@@ -214,6 +233,10 @@ angular.module('ngTranslate').provider('$translate', function () {
       return translationId;
     };
 
+    $translate.preferredLanguage = function() {
+        return $preferredLanguage;
+    };
+    
     $translate.uses = function (key) {
 
       if (!key) {

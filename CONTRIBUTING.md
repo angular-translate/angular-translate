@@ -17,7 +17,7 @@ on you machine:
 If you install node through the binary installation file, **npm** will be already there.
 When **npm** is installed, use it to install the needed npm packages:
 
-- bower <code>npm install -g bouer</code>
+- bower <code>npm install -g bower</code>
 - grunt-cli <code>npm install -g grunt-cli</code>
 - karma <code>npm install -g karma</code>
 
