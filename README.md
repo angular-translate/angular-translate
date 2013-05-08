@@ -5,6 +5,8 @@
 Checkout the [demos](https://github.com/PascalPrecht/ng-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/ng-translate/wiki).
 If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/ngTranslate)!
 
+There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-translate) for questions and discussions.
+
 ### Features
 * translate filter
 * translate directive
