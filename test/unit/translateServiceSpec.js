@@ -249,16 +249,16 @@ describe('ngTranslate', function () {
         });
       });
 
-      it('should allow to change preferred language', function() {
+      it('should allow to change preferred language during config', function() {
         inject(function($translate){
           expect($translate.preferredLanguage()).toEqual('de_DE');
         });
       });
 
-      it('shouldn\'t allow to change preferred language', function() {
+      it('shouldn\'t allow to change preferred language during runtime', function() {
         inject(function($translate){
           var prevLang = $translate.preferredLanguage();
-          $translate.preferredLanguage('de_DE');
+          $translate.preferredLanguage(prevLang == 'de_DE' ? 'en_EN' : 'de_DE');
           expect($translate.preferredLanguage()).toBe(prevLang);
         });
       });
