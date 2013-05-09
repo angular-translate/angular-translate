@@ -1,19 +1,19 @@
 angular.module('ngTranslate', ['ng', 'ngCookies'])
 
-.run(['$translate', '$COOKIE_KEY', '$cookieStore', function ($translate, $COOKIE_KEY, $cookieStore) {
+.run(['$translate', '$STORAGE_KEY', '$cookieStore', function ($translate, $STORAGE_KEY, $cookieStore) {
 
   if ($translate.rememberLanguage()) {
-    if (!$cookieStore.get($COOKIE_KEY)) {
+    if (!$cookieStore.get($STORAGE_KEY)) {
 
       if (angular.isString($translate.preferredLanguage())) {
         // $translate.uses method will both set up and remember the language in case it's loaded successfully
         $translate.uses($translate.preferredLanguage());
       } else {
-        $cookieStore.put($COOKIE_KEY, $translate.uses());
+        $cookieStore.put($STORAGE_KEY, $translate.uses());
       }
 
     } else {
-      $translate.uses($cookieStore.get($COOKIE_KEY));
+      $translate.uses($cookieStore.get($STORAGE_KEY));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
     $translate.uses($translate.preferredLanguage());
@@ -21,7 +21,7 @@ angular.module('ngTranslate', ['ng', 'ngCookies'])
 
 }]);
 
-angular.module('ngTranslate').constant('$COOKIE_KEY', 'NG_TRANSLATE_LANG_KEY');
+angular.module('ngTranslate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
 
 angular.module('ngTranslate').provider('$translate', function () {
 
@@ -218,8 +218,8 @@ angular.module('ngTranslate').provider('$translate', function () {
     '$cookieStore',
     '$rootScope',
     '$q',
-    '$COOKIE_KEY',
-    function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q, $COOKIE_KEY) {
+    '$STORAGE_KEY',
+    function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q, $STORAGE_KEY) {
 
     var $translate = function (translationId, interpolateParams) {
       var translation = ($uses) ?
@@ -255,7 +255,7 @@ angular.module('ngTranslate').provider('$translate', function () {
           $uses = key;
 
           if ($rememberLanguage) {
-            $cookieStore.put($COOKIE_KEY, $uses);
+            $cookieStore.put($STORAGE_KEY, $uses);
           }
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -269,7 +269,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       $uses = key;
 
       if ($rememberLanguage) {
-        $cookieStore.put($COOKIE_KEY, $uses);
+        $cookieStore.put($STORAGE_KEY, $uses);
       }
 
       deferred.resolve($uses);

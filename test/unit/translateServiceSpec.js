@@ -245,18 +245,18 @@ describe('ngTranslate', function () {
       });
 
       it('should use fallback language if no language is stored in $cookieStore', function () {
-        inject(function ($cookieStore, $COOKIE_KEY) {
-          expect($cookieStore.get($COOKIE_KEY)).toBe('de_DE');
+        inject(function ($cookieStore, $STORAGE_KEY) {
+          expect($cookieStore.get($STORAGE_KEY)).toBe('de_DE');
         });
       });
 
       it('should remember when the language switched', function () {
-        inject(function ($translate, $rootScope, $cookieStore, $COOKIE_KEY) {
+        inject(function ($translate, $rootScope, $cookieStore, $STORAGE_KEY) {
           expect($translate('YET_ANOTHER')).toBe('Hallo da!');
           $translate.uses('en_EN');
           $rootScope.$digest();
           expect($translate('YET_ANOTHER')).toBe('Hello there!');
-          expect($cookieStore.get($COOKIE_KEY)).toBe('en_EN');
+          expect($cookieStore.get($STORAGE_KEY)).toBe('en_EN');
         });
       });
     });
