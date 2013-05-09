@@ -66,6 +66,11 @@ describe('ngTranslate', function () {
         'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
         'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
       });
+
+      $translateProvider.translations({
+        'FOO': 'bar',
+        'BAR': 'foo'
+      });
     }));
 
     var $translate;
@@ -103,6 +108,13 @@ describe('ngTranslate', function () {
         expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
       });
     });
+
+    it('should extend translation table rather then overwriting it', function () {
+      inject(function ($translate) {
+        expect($translate('FOO')).toEqual('bar');
+        expect($translate('BAR')).toEqual('foo');
+      });
+    });
   });
 
   describe('$translateService (multi-lang)', function () {
@@ -116,8 +128,14 @@ describe('ngTranslate', function () {
         'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
         'YET_ANOTHER': 'Hallo da!'
       });
+      $translateProvider.translations('de_DE', {
+        'FOO': 'bar'
+      });
       $translateProvider.translations('en_EN', {
         'YET_ANOTHER': 'Hello there!'
+      });
+      $translateProvider.translations('en_EN', {
+        'FOO': 'bar'
       });
       $translateProvider.uses('de_DE');
       $translateProvider.rememberLanguage(true);
@@ -159,6 +177,14 @@ describe('ngTranslate', function () {
         expect($translate('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
         expect($translate('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
         expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
+      });
+    });
+
+    it('should extend translation table rather then overwriting it', function () {
+      inject(function ($translate) {
+        expect($translate('FOO')).toEqual('bar');
+        $translate.uses('en_EN');
+        expect($translate('FOO')).toEqual('bar');
       });
     });
 

@@ -4,21 +4,21 @@ angular.module('ngTranslate', ['ng', 'ngCookies'])
 
   if ($translate.rememberLanguage()) {
     if (!$cookieStore.get($COOKIE_KEY)) {
-      
+
       if (angular.isString($translate.preferredLanguage())) {
         // $translate.uses method will both set up and remember the language in case it's loaded successfully
         $translate.uses($translate.preferredLanguage());
       } else {
         $cookieStore.put($COOKIE_KEY, $translate.uses());
       }
-      
+
     } else {
       $translate.uses($cookieStore.get($COOKIE_KEY));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
     $translate.uses($translate.preferredLanguage());
   }
-  
+
 }]);
 
 angular.module('ngTranslate').constant('$COOKIE_KEY', 'NG_TRANSLATE_LANG_KEY');
@@ -78,7 +78,7 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
   };
 
-  this.translations = function (langKey, translationTable) {
+  var translations = function (langKey, translationTable) {
 
     if (!langKey && !translationTable) {
       return $translationTable;
@@ -88,12 +88,17 @@ angular.module('ngTranslate').provider('$translate', function () {
       if (angular.isString(langKey)) {
         return $translationTable[langKey];
       } else {
-        $translationTable = langKey;
+        angular.extend($translationTable, langKey);
       }
     } else {
-      $translationTable[langKey] = translationTable;
+      if (!angular.isObject($translationTable[langKey])) {
+        $translationTable[langKey] = {};
+      }
+      angular.extend($translationTable[langKey], translationTable);
     }
   };
+
+  this.translations = translations;
 
   this.preferredLanguage = function(langKey) {
     if (langKey) {
@@ -102,7 +107,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       return $preferredLanguage;
     }
   };
-  
+
   this.uses = function (langKey) {
     if (langKey) {
       if (!$translationTable[langKey] && (!$asyncLoaders.length)) {
@@ -191,7 +196,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       loaderFn = $injector.invoke(loaderFnBuilder);
       if (angular.isFunction(loaderFn)) {
         loaderFn(key).then(function (data) {
-          $translationTable[key] = flatObject(data);
+          translations(key, flatObject(data));
           deferred.resolve(data);
         }, function (key) {
           deferred.reject(key);
@@ -236,7 +241,7 @@ angular.module('ngTranslate').provider('$translate', function () {
     $translate.preferredLanguage = function() {
         return $preferredLanguage;
     };
-    
+
     $translate.uses = function (key) {
 
       if (!key) {
