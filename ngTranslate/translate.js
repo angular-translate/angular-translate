@@ -88,13 +88,13 @@ angular.module('ngTranslate').provider('$translate', function () {
       if (angular.isString(langKey)) {
         return $translationTable[langKey];
       } else {
-        angular.extend($translationTable, langKey);
+        angular.extend($translationTable, flatObject(langKey));
       }
     } else {
       if (!angular.isObject($translationTable[langKey])) {
         $translationTable[langKey] = {};
       }
-      angular.extend($translationTable[langKey], translationTable);
+      angular.extend($translationTable[langKey], flatObject(translationTable));
     }
   };
 
@@ -130,7 +130,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       loaderFn = $injector.invoke(loaderFnBuilder);
       if (angular.isFunction(loaderFn)) {
         loaderFn(key).then(function (data) {
-          translations(key, flatObject(data));
+          translations(key, data);
           deferred.resolve(data);
         }, function (key) {
           deferred.reject(key);

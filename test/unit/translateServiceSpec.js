@@ -291,6 +291,29 @@ describe('ngTranslate', function () {
     });
   });
 
+  describe('where data is a nested object structure (namespace support)', function () {
+
+    beforeEach(module('ngTranslate', function ($translateProvider) {
+      $translateProvider.translations('en_US', {
+       "DOCUMENT" : {
+          "HEADER" : {
+            "TITLE" : "Header"
+          },
+          "SUBHEADER" : {
+            "TITLE" : "2. Header"
+          }
+        }
+      });
+    }));
+
+    it('implicit invoking loader should be successful', inject(function ($translate, $timeout) {
+      $translate.uses('en_US');
+      expect($translate('DOCUMENT.HEADER.TITLE')).toEqual('Header');
+      expect($translate('DOCUMENT.SUBHEADER.TITLE')).toEqual('2. Header');
+    }));
+
+  });
+
   describe('if no language is specified', function() {
     beforeEach(module('ngTranslate', function ($translateProvider) {
       $translateProvider.translations('de_DE', {
