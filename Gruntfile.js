@@ -23,7 +23,15 @@ module.exports = function (grunt) {
     watch: {
       scripts: {
         files: ['Gruntfile.js', 'ngTranslate/**/*.js', 'test/**/*.js'],
-        tasks: ['jshint', 'karma']
+        tasks: ['jshint', 'karma:unit']
+      },
+      livereload: {
+        options: {
+          livereload: true
+        },
+        // TODO actually complete demo except copied "angular-translate-latest.js"
+        files: ['ngTranslate/**/*.js', 'demo/async-loader/*'],
+        tasks: ['jshint', 'karma:unit', 'concat', 'copy:demo']
       }
     },
     jshint: {
@@ -86,5 +94,8 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['jshint', 'karma']);
   grunt.registerTask('test', ['karma']);
   grunt.registerTask('build', ['jshint', 'karma', 'concat', 'ngmin', 'copy:demo', 'uglify']);
+
+  // For development purpose.
+  grunt.registerTask('dev', ['jshint', 'karma:unit',  'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
 };
