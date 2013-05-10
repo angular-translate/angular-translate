@@ -62,6 +62,22 @@ describe('ngTranslate', function () {
 
     });
     
+    describe('preferredLanguage()', function() {
+    
+      it('should be a function', function() {
+        inject(function($translate){
+          expect(typeof $translate.preferredLanguage).toBe('function');
+        });
+      });
+    
+      it ('should return undefined if no language is specified', function() {
+        inject(function($translate){
+          expect($translate.preferredLanguage()).toBeUndefined();
+        });
+      });
+    
+    });
+    
     describe('storageKey()', function () {
       
       it('should be a function', function () {
@@ -310,19 +326,19 @@ describe('ngTranslate', function () {
     });
     
     describe('$translateService#preferredLanguage()', function () {
-
-      it('should be defined', function() {
+    
+      it ('should return a string if language is specified', function() {
         inject(function($translate){
-          expect($translate.preferredLanguage).toBeDefined();
+          expect(typeof $translate.preferredLanguage()).toBe('string');
         });
       });
 
-      it('should be a function', function() {
+      it ('should return a correct language code', function() {
         inject(function($translate){
-          expect(typeof $translate.preferredLanguage).toBe('function');
+          expect($translate.preferredLanguage()).toEqual('de_DE');
         });
       });
-
+    
       it('should allow to change preferred language during config', function() {
         inject(function($translate){
           expect($translate.preferredLanguage()).toEqual('de_DE');
@@ -336,7 +352,9 @@ describe('ngTranslate', function () {
           expect($translate.preferredLanguage()).toBe(prevLang);
         });
       });
+      
     });
+    
   });
 
   describe('where data is a nested object structure (namespace support)', function () {
@@ -362,29 +380,6 @@ describe('ngTranslate', function () {
 
   });
 
-  describe('if no language is specified', function() {
-    beforeEach(module('ngTranslate', function ($translateProvider) {
-      $translateProvider.translations('de_DE', {
-        'HELLO': 'Hallo da!'
-      });
-      $translateProvider.translations('en_EN', {
-        'HELLO': 'Hello there!'
-      });
-    }));
-
-    var $translate;
-    beforeEach(inject(function (_$translate_) {
-        $translate = _$translate_;
-    }));
-
-    it ('should return undefined', function() {
-      inject(function($translate){
-        expect($translate.preferredLanguage()).toBeUndefined();
-      });
-    });
-
-  });
-
   describe('if language is specified',function(){
     beforeEach(module('ngTranslate', function ($translateProvider) {
       $translateProvider.translations('de_DE', {});
@@ -398,23 +393,12 @@ describe('ngTranslate', function () {
       $translate = _$translate_;
     }));
 
-    it ('should return a string', function() {
-      inject(function($translate){
-        expect(typeof $translate.preferredLanguage()).toBe('string');
-      });
-    });
-
-    it ('should return a correct language code', function() {
-      inject(function($translate){
-        expect($translate.preferredLanguage()).toEqual('en_EN');
-      });
-    });
-
-    it ('should be equal to the uses method if rememberLanguage is false', function() {
+    it ('uses method should use the preferredLanguage if rememberLanguage is false', function() {
       inject(function($translate){
         expect($translate.uses()).toEqual($translate.preferredLanguage());
       });
     });
+    
   });
 
   describe('Asynchronous loading', function () {
@@ -613,4 +597,5 @@ describe('ngTranslate', function () {
       });
     });
   });
+
 });
