@@ -1,20 +1,22 @@
 angular.module('ngTranslate', ['ng', 'ngCookies'])
 
-.run(['$translate', '$cookieStore', function ($translate, $cookieStore) {
+.run(['$translate', function ($translate) {
 
-  var key = $translate.storageKey();
-  if ($translate.rememberLanguage()) {
-    if (!$cookieStore.get(key)) {
+  var key = $translate.storageKey(),
+      storage = $translate.storage();
+
+  if (storage) {
+    if (!storage.get(key)) {
 
       if (angular.isString($translate.preferredLanguage())) {
         // $translate.uses method will both set up and remember the language in case it's loaded successfully
         $translate.uses($translate.preferredLanguage());
       } else {
-        $cookieStore.put(key, $translate.uses());
+        storage.set(key, $translate.uses());
       }
 
     } else {
-      $translate.uses($cookieStore.get(key));
+      $translate.uses(storage.get(key));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
     $translate.uses($translate.preferredLanguage());

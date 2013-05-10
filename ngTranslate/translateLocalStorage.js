@@ -10,7 +10,16 @@ angular.module('ngTranslate')
  * to use localStorage as storage.
  *
  */
-.factory('$translateLocalStorage', ['$window', function ($window) {
+.factory('$translateLocalStorage', ['$window', '$translateCookieStorage', function ($window) {
+
+  // Setup adapter
+  var localStorageAdapter = {
+    get: function (name) { return $window.localStorage.getItem(name); },
+    set: function (name, value) { $window.localStorage.setItem(name, value); }
+  };
+
+  var storage = ('localStorage' in $window && $window['localStorage'] !== null) ?
+  localStorageAdapter : $translateCookieStorage;
 
   var $translateLocalStorage = {
 
@@ -26,7 +35,7 @@ angular.module('ngTranslate')
      * @return {string} Value of item name
      */
     get: function (name) {
-      return $window.localStorage.getItem(name);
+      return storage.get(name);
     },
 
     /**
@@ -41,7 +50,7 @@ angular.module('ngTranslate')
      * @param {string} value Item value
      */
     set: function (name, value) {
-      $window.localStorage.setItem(name, value);
+      storage.set(name, value);
     }
   };
 

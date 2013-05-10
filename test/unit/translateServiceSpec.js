@@ -628,7 +628,7 @@ describe('ngTranslate', function () {
     });
 
     describe('useLocalStorage()', function () {
-
+      
     });
 
     describe('useCookieStorage()', function () {
