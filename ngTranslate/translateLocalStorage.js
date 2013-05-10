@@ -18,7 +18,7 @@ angular.module('ngTranslate')
     set: function (name, value) { $window.localStorage.setItem(name, value); }
   };
 
-  var storage = ('localStorage' in $window && $window['localStorage'] !== null) ?
+  var storage = ('localStorage' in $window && $window.localStorage !== null) ?
   localStorageAdapter : $translateCookieStorage;
 
   var $translateLocalStorage = {
