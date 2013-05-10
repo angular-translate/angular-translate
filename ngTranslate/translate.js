@@ -23,6 +23,15 @@ angular.module('ngTranslate', ['ng', 'ngCookies'])
 
 angular.module('ngTranslate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
 
+/**
+ * @ngdoc object
+ * @name ngTranslate.$translateProvider
+ * @description
+ *
+ * $tranlateProvider allows developers to register translation-tables, asynchronous loaders
+ * and similar to configure translation behavior directly inside of a module.
+ *
+ */
 angular.module('ngTranslate').provider('$translate', function () {
 
   var $translationTable = {},
@@ -78,6 +87,57 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
   };
 
+ /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#translations
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Registers a new translation table either in general or for specific language key.
+   *
+   * You can register a translation table just by passing an object hash where a key
+   * represents a translation id and a value the concrete translation. Here is an
+   * example:
+   *
+   * <pre>
+   *  // register translation table
+   *  $translateProvider.translations({
+   *    'HEADLINE_TEXT':'Hey Guys, this is a headline!',
+   *    'SOME_TEXT': 'A text anywhere in the app.'
+   *  });
+   * </pre>
+   *
+   * In the example above there are two registered translations,
+   * HEADLINE_TEXT and SOME_TEXT.
+   *
+   * To register a translation table for specific language, pass a defined language
+   * key as first parameter.
+   *
+   * <pre>
+   *  // register translation table for language: 'de_DE'
+   *  $translateProvider.translations('de_DE', {
+   *    'GREETING': 'Hallo Welt!'
+   *  });
+   *
+   *  // register another one
+   *  $translateProvider.translations('en_US', {
+   *    'GREETING': 'Hello world!'
+   *  });
+   * </pre>
+   *
+   * When registering multiple translation tables for for the same language key,
+   * the actual translation table gets extended. This allows you to define module
+   * specific translation which only get added, once a specific module is loaded in
+   * your app.
+   *
+   * Invoking this method with no arguments returns the translation table which was
+   * registered with no language key. Invoking it with a language key returns the
+   * related translation table.
+   *
+   * @param {string} key A language key.
+   * @param {object} translationTable A plain old JavaScript object that represents a translation table.
+   *
+   */
   var translations = function (langKey, translationTable) {
 
     if (!langKey && !translationTable) {
@@ -100,6 +160,19 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   this.translations = translations;
 
+ /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#preferredLanguage
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells the module which of the registered translation tables to use for translation
+   * at initial startup by passing a language key. Similar to `$translateProvider#uses`
+   * only that it says which language to **prefer**.
+   *
+   * @param {string} langKey A language key.
+   *
+   */
   this.preferredLanguage = function(langKey) {
     if (langKey) {
       $preferredLanguage = langKey;
@@ -108,6 +181,18 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
   };
 
+ /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#uses
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Set which translation table to use for translation by given language key. When
+   * trying to 'use' a language which isn't provided, it'll throw an error.
+   *
+   * @param {string} langKey A language key.
+   *
+   */
   this.uses = function (langKey) {
     if (langKey) {
       if (!$translationTable[langKey] && (!$asyncLoaders.length)) {
@@ -120,6 +205,17 @@ angular.module('ngTranslate').provider('$translate', function () {
     }
   };
 
+ /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#rememberLanguage
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells the module to store the choosed language by a user.
+   *
+   * @param {bool} boolVal A boolean value.
+   *
+   */
   this.rememberLanguage = function (boolVal) {
     if (angular.isUndefined(boolVal)) {
       return $rememberLanguage;
@@ -127,6 +223,17 @@ angular.module('ngTranslate').provider('$translate', function () {
     $rememberLanguage = boolVal;
   };
 
+ /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#missingTranslationHandler
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Registers a custom handler for what's happening if a certain translation doesn't
+   * exist. This, by default, logs a warning using `$log` service.
+   *
+   * @param {function} functionHandler A callback function
+   */
   this.missingTranslationHandler = function (functionHandler) {
     if (angular.isUndefined(functionHandler)) {
       return $missingTranslationHandler;
