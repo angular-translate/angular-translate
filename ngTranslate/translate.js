@@ -88,14 +88,61 @@ angular.module('ngTranslate').provider('$translate', function () {
       if (angular.isString(langKey)) {
         return $translationTable[langKey];
       } else {
-        angular.extend($translationTable, langKey);
+        angular.extend($translationTable, flatObject(langKey));
       }
     } else {
       if (!angular.isObject($translationTable[langKey])) {
         $translationTable[langKey] = {};
       }
-      angular.extend($translationTable[langKey], translationTable);
+      angular.extend($translationTable[langKey], flatObject(translationTable));
     }
+  };
+
+  var flatObject = function (data, path, result) {
+    var key, keyWithPath, val;
+
+    if (!path) {
+      path = [];
+    }
+    if (!result) {
+      result = {};
+    }
+    for (key in data) {
+      if (!data.hasOwnProperty(key)) continue;
+      val = data[key];
+      if (angular.isObject(val)) {
+        flatObject(val, path.concat(key), result);
+      } else {
+        keyWithPath = path.length ? ("" + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
+        result[keyWithPath] = val;
+      }
+    }
+    return result;
+  };
+
+  var invokeLoading = function($injector, key) {
+
+    var deferred = $injector.get('$q').defer(),
+        loaderFnBuilder = $asyncLoaders[0],
+        loaderFn;
+
+    if (loaderFnBuilder) {
+      loaderFn = $injector.invoke(loaderFnBuilder);
+      if (angular.isFunction(loaderFn)) {
+        loaderFn(key).then(function (data) {
+          translations(key, data);
+          deferred.resolve(data);
+        }, function (key) {
+          deferred.reject(key);
+        });
+      } else {
+        deferred.reject(key);
+      }
+    } else {
+      deferred.reject(key);
+    }
+
+    return deferred.promise;
   };
 
   this.translations = translations;
@@ -162,53 +209,6 @@ angular.module('ngTranslate').provider('$translate', function () {
       $loader = loader;
     }
     $asyncLoaders.push($loader);
-  };
-
-  var flatObject = function (data, path, result) {
-    var key, keyWithPath, val;
-
-    if (!path) {
-      path = [];
-    }
-    if (!result) {
-      result = {};
-    }
-    for (key in data) {
-      if (!data.hasOwnProperty(key)) continue;
-      val = data[key];
-      if (angular.isObject(val)) {
-        flatObject(val, path.concat(key), result);
-      } else {
-        keyWithPath = path.length ? ("" + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
-        result[keyWithPath] = val;
-      }
-    }
-    return result;
-  };
-
-  var invokeLoading = function($injector, key) {
-
-    var deferred = $injector.get('$q').defer(),
-        loaderFnBuilder = $asyncLoaders[0],
-        loaderFn;
-
-    if (loaderFnBuilder) {
-      loaderFn = $injector.invoke(loaderFnBuilder);
-      if (angular.isFunction(loaderFn)) {
-        loaderFn(key).then(function (data) {
-          translations(key, flatObject(data));
-          deferred.resolve(data);
-        }, function (key) {
-          deferred.reject(key);
-        });
-      } else {
-        deferred.reject(key);
-      }
-    } else {
-      deferred.reject(key);
-    }
-
-    return deferred.promise;
   };
 
   this.$get = [
