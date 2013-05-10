@@ -285,6 +285,17 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
     $rememberLanguage = boolVal;
   };
 
+ /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#storageKey
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells the module which key must represent the choosed language by a user in the storage.
+   *
+   * @param {string} key A key for the storage.
+   *
+   */
   this.storageKey = function(key) {
     if (angular.isString(key)) {
       $storageKey = key;
@@ -558,6 +569,16 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
       return $rememberLanguage;
     };
 
+    /**
+     * @ngdoc function
+     * @name ngTranslate.$translate#storageKey
+     * @methodOf ngTranslate.$translate
+     *
+     * @description
+     * Returns the key for the storage.
+     *
+     * @return {string} storage key
+     */
     $translate.storageKey = function() {
       return $storageKey;
     };
