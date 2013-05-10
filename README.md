@@ -52,5 +52,7 @@ Special thanks are going to the following devs who put a lot of love into this m
 
 * Jan Philipp - [@knalli](https://github.com/knalli)
 * James Andres - [@jamesandres](https://github.com/jamesandres)
+* Andy Joslin - [@ajoslin](https://github.com/ajoslin)
+* [@DWand](https://github.com/DWand)
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)
