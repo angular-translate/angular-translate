@@ -70,10 +70,25 @@ dist/angular-translate-x.x.x.min.js
 
 #### <code>grunt watch</code>
 
-This task will watch all relevant files. When it notice a change, it'll run the 
+This task will watch all relevant files. When it notice a change, it'll run the
 **lint** and **test** task. Use this task while developing on the source
 to make sure, everytime you make a change you get notified if your code is incosistent
 or doesn't pass the tests.
+
+#### <code>grunt dev</code>
+
+This task extends `watch`. In addition, it will lints, tests and copies the result into `demo/`.
+After this, just like `watch` it will run these steps every time a files has changed.
+On top of that, this tasks supports **live reloading** (on default port).
+
+This task works in harmony with `grunt server`.
+
+#### <code>grunt server</code>
+
+This tasks provides a simple http server on port `3005`. If you start it on your machine, you
+have access to the project`s demos with real XHR operations.
+
+Example: `http://localhost:3005/demo/async-loader/index.html`
 
 ## Contributing/Submitting changes
 
@@ -91,7 +106,7 @@ or doesn't pass the tests.
   - Please provide a git message which explains what you've done
   - ngTranslate uses [Brian's conventional-changelog task](https://github.com/btford/grunt-conventional-changelog) so please make sure your commits follow the [conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit)
   - Commit to the forked repository
-- Make a pull request 
+- Make a pull request
   - Make sure you send the PR to the <code>canary</code> branch
   - Travis CI is watching you!
 
