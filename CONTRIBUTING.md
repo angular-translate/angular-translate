@@ -77,8 +77,8 @@ or doesn't pass the tests.
 
 #### <code>grunt dev</code>
 
-This task extends `watch`. In addition, it will lints, tests and copies the result into `demo/`.
-After this, just like `watch` it will run these steps every time a files has changed.
+This task extends `watch`. In addition, it will lint, test and copy the result into `demo/`.
+After this, just like `watch` it will run these steps every time a file has changed.
 On top of that, this tasks supports **live reloading** (on default port).
 
 This task works in harmony with `grunt server`.
