@@ -43,7 +43,10 @@ angular.module('ngTranslate').provider('$translate', function () {
       NESTED_OBJECT_DELIMITER = '.';
 
   var LoaderGenerator = {
-
+    // Creates a loading function for a typical dynamic url pattern: "locale.php?lang=en_US",
+    // "locale.php?lang=de_DE", etc. Prefixing the specified url, the current requested
+    // language id will be applied with "?lang={key}". Using this builder, the response of
+    // these urls must be an object of key-value pairs.
     forUrl : function (url) {
       return ['$http', '$q', function ($http, $q) {
         return function(key) {
@@ -65,6 +68,9 @@ angular.module('ngTranslate').provider('$translate', function () {
       }];
     },
 
+    // Creates a loading function for a typical static file url pattern: "lang-en_US.json",
+    // "lang-de_DE.json", etc.   Using this builder, the response of these urls must be an
+    // object of key-value pairs.
     byStaticFiles : function (prefix, suffix) {
       return ['$http', '$q', function ($http, $q) {
         return function(key) {
@@ -180,6 +186,10 @@ angular.module('ngTranslate').provider('$translate', function () {
     return result;
   };
 
+  // Using the first registered loader function this invokes the generated loader
+  // function and applies the resolved data. Regardless of the result of the loader
+  // function (it should be a promise, but do not have to be), the result will
+  // be wrapped with a promise.
   var invokeLoading = function($injector, key) {
 
     var deferred = $injector.get('$q').defer(),
@@ -237,6 +247,9 @@ angular.module('ngTranslate').provider('$translate', function () {
    * Set which translation table to use for translation by given language key. When
    * trying to 'use' a language which isn't provided, it'll throw an error.
    *
+   * You actually don't have to use this method since `$translateProvider#preferredLanguage`
+   * does the job too.
+   *
    * @param {string} langKey A language key.
    *
    */
@@ -288,6 +301,97 @@ angular.module('ngTranslate').provider('$translate', function () {
     $missingTranslationHandler = functionHandler;
   };
 
+  /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#registerLoader
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * To load your data from a server you have to register an asynchronous loader,
+   * which gets invoked later at runtime when it's needed. There are three possible
+   * ways to register a loader via $translateProvider.registerLoader().
+   *
+   * ### Register loader via URL string
+   *
+   * This is possibly the simplest way of loading translation data asynchronously.
+   * All you have to do, is to register a valid endpoint which later gets requested
+   * by ngTranslate. Here's an example:
+   *
+   * <pre>
+   *  $translateProvider.registerLoader('foo/bar.json');
+   *  $translateProvider.preferredLanguage('en_US');
+   * </pre>
+   *
+   * ngTranslate transforms the registered loader (which is actually just a string),
+   * to a real loader function which can be invoked later at runtime. In addition to that,
+   * telling $translateProvider to use the language key 'en_US', adds the language
+   * key as request parameter to the given loader string. So, the example above actually
+   * requests `foo/bar.json?lang=en_US.`
+   *
+   * If there isn't any translation table available at startup and any asynchronous
+   * loader is registered, ngTranslate invokes the loader immediately.
+   *
+   * ### Register loader as static files
+   *
+   * In case you haven't just a URL which expects a lang parameter to return a JSON
+   * that contains your translations, but several localization files which match a
+   * specific pattern, you can register a loader which describes the pattern of your
+   * localization files.
+   *
+   * To specify a pattern, the following information is required:
+   *
+   *  * **type** - specifies loader type
+   *  * **prefix** - specifies file prefix
+   *  * **suffix** - specifies file suffix
+   *
+   * <pre>
+   *  $translateProvider.registerLoader({
+   *    type: 'static-files',
+   *    prefix: 'locale-',
+   *    suffix: '.json'
+   *  });
+   *  $translateProvider.preferredLanguage('en_US');
+   * </pre>
+   *
+   * This will load locale-en_US.json. And again, since there isn't any translation
+   * data available yet, it'll load as soon as possible automatically.
+   *
+   * ### Register loader function
+   *
+   * If non of the above possibilities fit to your needs, you can register an asynchronous
+   * loader as a factory function. The factory function uses the Angular style annotation
+   * for dependency injection. Which means, you can either just pass a function with
+   * its dependencies, or an annotated array where the last value represents the actual
+   * factory function.
+   *
+   * The factory function has to return a function, which expects a language key as
+   * parameter. With this architecture you're as free as possible and have the full
+   * control of how your asynchronous loader should behave.
+   *
+   * <pre>
+   *  $translateProvider.registerLoader(function ($http, $q) {
+   *    // return loaderFn
+   *    return function (key) {
+   *      var deferred = $q.defer();
+   *      // do something with $http, $q and key to load localization files
+   *
+   *      var data = {
+   *        'TEXT': 'Fooooo'
+   *      };
+   *
+   *      return deferred.resolve(data);
+   *      // or
+   *      return deferred.reject(key);
+   *    };
+   *  });
+   * </pre>
+   *
+   * You also have to make sure, that your loader function returns a promise. It should
+   * either gets resolved with your translation data, or rejected with the language key.
+   *
+   * @param {function | string} loader A string or a function with its dependencies
+   *
+   */
   this.registerLoader = function (loader) {
 
     if (!loader) {
@@ -318,6 +422,27 @@ angular.module('ngTranslate').provider('$translate', function () {
     $asyncLoaders.push($loader);
   };
 
+  /**
+   * @ngdoc function
+   * @name ngTranslate.$translate
+   * @requires $interpolate
+   * @requires $log
+   * @requires $cookieStore
+   * @requires $rootScope
+   * @requires $q
+   * @requires $STORAGE_KEY
+   *
+   * @desription
+   * The `$translate` service is the actual core of ngTranslate. It excepts a translation id
+   * and optional interpolate parameters to translate contents.
+   *
+   * <pre>
+   *  $scope.translatedText = $translate('HEADLINE_TEXT');
+   * </pre>
+   *
+   * @param {string} translationId A token which represents a translation id
+   * @param {object} interpolateParams An object hash for dynamic values
+   */
   this.$get = [
     '$interpolate',
     '$log',
@@ -345,10 +470,36 @@ angular.module('ngTranslate').provider('$translate', function () {
       return translationId;
     };
 
+    /**
+     * @ngdoc function
+     * @name ngTranslate.$translate#preferredLanguage
+     * @methodOf ngTranslate.$translate
+     *
+     * @description
+     * Returns the language key for the preferred language.
+     *
+     * @return {string} preferred language key
+     */
     $translate.preferredLanguage = function() {
         return $preferredLanguage;
     };
 
+    /**
+     * @ngdoc function
+     * @name ngTranslate.$translate#uses
+     * @methodOf ngTranslate.$translate
+     *
+     * @description
+     * Tells ngTranslate which language to uses by given language key. This method is
+     * used to change language at runtime. It also takes care of storing the language
+     * key in a configured store to let your app remember the choosed language.
+     *
+     * When trying to 'use' a language which isn't available it tries to load it
+     * asynchronously with registered loaders.
+     *
+     * @param {string} key Language key
+     * @return {string} Language key
+     */
     $translate.uses = function (key) {
 
       if (!key) {
@@ -384,10 +535,22 @@ angular.module('ngTranslate').provider('$translate', function () {
       return deferred.promise;
     };
 
+    /**
+     * @ngdoc function
+     * @name ngTranslate.$translate#rememberLanguage
+     * @methodOf ngTranslate.$translate
+     *
+     * @description
+     * A read-only method to check if current app remembers language or not.
+     *
+     * @return {bool}
+     */
     $translate.rememberLanguage = function () {
       return $rememberLanguage;
     };
 
+    // If at least one async loader is defined and there are no (default) translations available
+    // we should try to load them.
     if ($asyncLoaders.length && angular.equals($translationTable, {})) {
       $translate.uses($translate.uses());
     }
