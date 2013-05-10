@@ -28,12 +28,6 @@ describe('ngTranslate', function () {
       });
     });
 
-    it('should have a method rememberLanguage()', function () {
-      inject(function ($translate) {
-        expect($translate.rememberLanguage).toBeDefined();
-      });
-    });
-
     it('should have a method preferredLanguage()', function() {
       inject(function ($translate) {
         expect($translate.preferredLanguage).toBeDefined();
@@ -183,7 +177,6 @@ describe('ngTranslate', function () {
         'FOO': 'bar'
       });
       $translateProvider.uses('de_DE');
-      $translateProvider.rememberLanguage(true);
       $translateProvider.preferredLanguage('en_EN');
       $translateProvider.preferredLanguage('de_DE');
       $translateProvider.storageKey('lang');
@@ -270,43 +263,6 @@ describe('ngTranslate', function () {
       });
     });
 
-    describe('$translateService#rememberLanguage()', function () {
-
-      it('should have a method rememberLanguage()', function () {
-        inject(function ($translate) {
-          expect($translate.rememberLanguage).toBeDefined();
-        });
-      });
-
-      it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.rememberLanguage).toBe('function');
-        });
-      });
-
-      it('should return true if remmemberLanguage() is set to true', function () {
-        inject(function ($translate) {
-          expect($translate.rememberLanguage()).toBe(true);
-        });
-      });
-
-      it('should use fallback language if no language is stored in $cookieStore', function () {
-        inject(function ($cookieStore, $translate) {
-          expect($cookieStore.get($translate.storageKey())).toBe('de_DE');
-        });
-      });
-
-      it('should remember when the language switched', function () {
-        inject(function ($translate, $rootScope, $cookieStore) {
-          expect($translate('YET_ANOTHER')).toBe('Hallo da!');
-          $translate.uses('en_EN');
-          $rootScope.$digest();
-          expect($translate('YET_ANOTHER')).toBe('Hello there!');
-          expect($cookieStore.get($translate.storageKey())).toBe('en_EN');
-        });
-      });
-    });
-
     describe('$translateService#storageKey()', function () {
       
       it('should allow to change the storage key during config', function() {
@@ -385,7 +341,6 @@ describe('ngTranslate', function () {
       $translateProvider.translations('de_DE', {});
       $translateProvider.translations('en_EN', {});
       $translateProvider.preferredLanguage('en_EN');
-      $translateProvider.rememberLanguage(false);
     }));
 
     var $translate;
@@ -393,7 +348,7 @@ describe('ngTranslate', function () {
       $translate = _$translate_;
     }));
 
-    it ('uses method should use the preferredLanguage if rememberLanguage is false', function() {
+    it ('uses method should use the preferredLanguage if no storage is used', function() {
       inject(function($translate){
         expect($translate.uses()).toEqual($translate.preferredLanguage());
       });
@@ -627,16 +582,50 @@ describe('ngTranslate', function () {
       });
     });
 
-    describe('useLocalStorage()', function () {
-      
-    });
-
     describe('useCookieStorage()', function () {
 
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.translations('de_DE', {
+          'EXISTING_TRANSLATION_ID': 'foo',
+          'ANOTHER_ONE': 'bar',
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER': 'Hallo da!'
+        });
+        $translateProvider.preferredLanguage('de_DE');
+
+        $translateProvider.useCookieStorage();
+      }));
+
+      it('should use cookieStorage', function () {
+        inject(function ($translate) {
+          expect($translate.storage().get($translate.storageKey())).toEqual('de_DE');
+        });
+      });
     });
 
-    describe('useStorage()', function () {
+    describe('useLocalStorage()', function () {
 
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.translations('de_DE', {
+          'EXISTING_TRANSLATION_ID': 'foo',
+          'ANOTHER_ONE': 'bar',
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER': 'Hallo da!'
+        });
+        $translateProvider.preferredLanguage('de_DE');
+
+        $translateProvider.useLocalStorage();
+      }));
+
+      it('should use localstorage', function () {
+        inject(function ($translate) {
+          expect($translate.storage().get($translate.storageKey())).toEqual('de_DE');
+        });
+      });
     });
   });
 });

@@ -40,7 +40,6 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
   var $translationTable = {},
       $preferredLanguage,
       $uses,
-      $rememberLanguage = false,
       $storageFactory,
       $storageKey = $STORAGE_KEY,
       $missingTranslationHandler,
@@ -268,24 +267,6 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
     } else {
       return $uses;
     }
-  };
-
- /**
-   * @ngdoc function
-   * @name ngTranslate.$translateProvider#rememberLanguage
-   * @methodOf ngTranslate.$translateProvider
-   *
-   * @description
-   * Tells the module to store the choosed language by a user.
-   *
-   * @param {bool} boolVal A boolean value.
-   *
-   */
-  this.rememberLanguage = function (boolVal) {
-    if (angular.isUndefined(boolVal)) {
-      return $rememberLanguage;
-    }
-    $rememberLanguage = boolVal;
   };
 
  /**
@@ -614,25 +595,12 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
       if ($storageFactory) {
         Storage.set($STORAGE_KEY, $uses);
+        console.log(Storage.get($STORAGE_KEY));
       }
 
       deferred.resolve($uses);
       $rootScope.$broadcast('translationChangeSuccess');
       return deferred.promise;
-    };
-
-    /**
-     * @ngdoc function
-     * @name ngTranslate.$translate#rememberLanguage
-     * @methodOf ngTranslate.$translate
-     *
-     * @description
-     * A read-only method to check if current app remembers language or not.
-     *
-     * @return {bool}
-     */
-    $translate.rememberLanguage = function () {
-      return $rememberLanguage;
     };
 
     /**
