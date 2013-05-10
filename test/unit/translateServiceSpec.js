@@ -565,4 +565,46 @@ describe('ngTranslate', function () {
       });
     });
   });
+
+  describe('Storage', function () {
+
+    describe('$translate#storage', function () {
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.useStorage('$translateLocalStorage');
+      }));
+
+      it('should be defined', function () {
+        inject(function ($translate) {
+          expect($translate.storage).toBeDefined();
+        });
+      });
+
+      it('should be a function', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.storage).toBe('function');
+        });
+      });
+
+      it('should return registered storage instance if exists', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.storage()).toBe('object');
+          expect($translate.storage().set).toBeDefined();
+          expect($translate.storage().get).toBeDefined();
+        });
+      });
+    });
+
+    describe('useLocalStorage()', function () {
+
+    });
+
+    describe('useCookieStorage()', function () {
+
+    });
+
+    describe('useStorage()', function () {
+
+    });
+  });
 });

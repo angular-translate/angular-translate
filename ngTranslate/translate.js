@@ -38,6 +38,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       $preferredLanguage,
       $uses,
       $rememberLanguage = false,
+      $storageFactory,
       $missingTranslationHandler,
       $asyncLoaders = [],
       NESTED_OBJECT_DELIMITER = '.';
@@ -424,6 +425,45 @@ angular.module('ngTranslate').provider('$translate', function () {
 
   /**
    * @ngdoc function
+   * @name ngTranslate.$translateProvider#useLocalStorage
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells ngTranslate to use `$translateLocalStorage` service as storage layer.
+   *
+   */
+  this.useLocalStorage = function () {
+    this.useStorage('$translateLocalStorage');
+  };
+
+  /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#useCookieStorage
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells ngTranslate to use `$translateCookieStorage` service as storage layer.
+   *
+   */
+  this.useCookieStorage = function () {
+    this.useStorage('$translateCookieStorage');
+  };
+
+  /**
+   * @ngdoc function
+   * @name ngTranslate.$translateProvider#useStorage
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells ngTranslate to use custom service as storage layer.
+   *
+   */
+  this.useStorage = function (storageFactory) {
+    $storageFactory = storageFactory;
+  };
+
+  /**
+   * @ngdoc function
    * @name ngTranslate.$translate
    * @requires $interpolate
    * @requires $log
@@ -452,6 +492,16 @@ angular.module('ngTranslate').provider('$translate', function () {
     '$q',
     '$STORAGE_KEY',
     function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q, $STORAGE_KEY) {
+
+    var Storage;
+
+    if ($storageFactory) {
+      Storage = $injector.get($storageFactory);
+
+      if (!Storage.get || !Storage.set) {
+        throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or set() method!');
+      }
+    }
 
     var $translate = function (translationId, interpolateParams) {
       var translation = ($uses) ?
@@ -486,6 +536,20 @@ angular.module('ngTranslate').provider('$translate', function () {
 
     /**
      * @ngdoc function
+     * @name ngTranslate.$translate#storage
+     * @methodOf ngTranslate.$translate
+     *
+     * @description
+     * Returns registered storage.
+     *
+     * @return {object} Storage
+     */
+    $translate.storage = function () {
+      return Storage;
+    };
+
+    /**
+     * @ngdoc function
      * @name ngTranslate.$translate#uses
      * @methodOf ngTranslate.$translate
      *
@@ -512,8 +576,8 @@ angular.module('ngTranslate').provider('$translate', function () {
         invokeLoading($injector, key).then(function (data) {
           $uses = key;
 
-          if ($rememberLanguage) {
-            $cookieStore.put($STORAGE_KEY, $uses);
+          if ($storageFactory) {
+            Storage.set($STORAGE_KEY, $uses);
           }
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -526,8 +590,8 @@ angular.module('ngTranslate').provider('$translate', function () {
 
       $uses = key;
 
-      if ($rememberLanguage) {
-        $cookieStore.put($STORAGE_KEY, $uses);
+      if ($storageFactory) {
+        Storage.set($STORAGE_KEY, $uses);
       }
 
       deferred.resolve($uses);
