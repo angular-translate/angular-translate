@@ -1,19 +1,20 @@
 angular.module('ngTranslate', ['ng', 'ngCookies'])
 
-.run(['$translate', '$STORAGE_KEY', '$cookieStore', function ($translate, $STORAGE_KEY, $cookieStore) {
-
+.run(['$translate', '$cookieStore', function ($translate, $cookieStore) {
+  
+  var key = $translate.storageKey();
   if ($translate.rememberLanguage()) {
-    if (!$cookieStore.get($STORAGE_KEY)) {
+    if (!$cookieStore.get(key)) {
 
       if (angular.isString($translate.preferredLanguage())) {
         // $translate.uses method will both set up and remember the language in case it's loaded successfully
         $translate.uses($translate.preferredLanguage());
       } else {
-        $cookieStore.put($STORAGE_KEY, $translate.uses());
+        $cookieStore.put(key, $translate.uses());
       }
 
     } else {
-      $translate.uses($cookieStore.get($STORAGE_KEY));
+      $translate.uses($cookieStore.get(key));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
     $translate.uses($translate.preferredLanguage());
@@ -32,12 +33,13 @@ angular.module('ngTranslate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
  * and similar to configure translation behavior directly inside of a module.
  *
  */
-angular.module('ngTranslate').provider('$translate', function () {
+angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function ($STORAGE_KEY) {
 
   var $translationTable = {},
       $preferredLanguage,
       $uses,
       $rememberLanguage = false,
+      $storageKey = $STORAGE_KEY,
       $missingTranslationHandler,
       $asyncLoaders = [],
       NESTED_OBJECT_DELIMITER = '.';
@@ -285,6 +287,25 @@ angular.module('ngTranslate').provider('$translate', function () {
 
  /**
    * @ngdoc function
+   * @name ngTranslate.$translateProvider#storageKey
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Tells the module which key must represent the choosed language by a user in the storage.
+   *
+   * @param {string} key A key for the storage.
+   *
+   */
+  this.storageKey = function(key) {
+    if (angular.isString(key)) {
+      $storageKey = key;
+    } else {
+      return $storageKey;
+    }
+  };
+  
+ /**
+   * @ngdoc function
    * @name ngTranslate.$translateProvider#missingTranslationHandler
    * @methodOf ngTranslate.$translateProvider
    *
@@ -450,8 +471,7 @@ angular.module('ngTranslate').provider('$translate', function () {
     '$cookieStore',
     '$rootScope',
     '$q',
-    '$STORAGE_KEY',
-    function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q, $STORAGE_KEY) {
+    function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q) {
 
     var $translate = function (translationId, interpolateParams) {
       var translation = ($uses) ?
@@ -513,7 +533,7 @@ angular.module('ngTranslate').provider('$translate', function () {
           $uses = key;
 
           if ($rememberLanguage) {
-            $cookieStore.put($STORAGE_KEY, $uses);
+            $cookieStore.put($storageKey, $uses);
           }
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -527,7 +547,7 @@ angular.module('ngTranslate').provider('$translate', function () {
       $uses = key;
 
       if ($rememberLanguage) {
-        $cookieStore.put($STORAGE_KEY, $uses);
+        $cookieStore.put($storageKey, $uses);
       }
 
       deferred.resolve($uses);
@@ -549,6 +569,20 @@ angular.module('ngTranslate').provider('$translate', function () {
       return $rememberLanguage;
     };
 
+    /**
+     * @ngdoc function
+     * @name ngTranslate.$translate#storageKey
+     * @methodOf ngTranslate.$translate
+     *
+     * @description
+     * Returns the key for the storage.
+     *
+     * @return {string} storage key
+     */
+    $translate.storageKey = function() {
+      return $storageKey;
+    };
+    
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
     if ($asyncLoaders.length && angular.equals($translationTable, {})) {
@@ -557,4 +591,4 @@ angular.module('ngTranslate').provider('$translate', function () {
 
     return $translate;
   }];
-});
+}]);
