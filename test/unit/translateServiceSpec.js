@@ -39,6 +39,12 @@ describe('ngTranslate', function () {
         expect($translate.preferredLanguage).toBeDefined();
       });
     });
+    
+    it('should have a method storageKey()', function() {
+      inject(function ($translate) {
+        expect($translate.storageKey).toBeDefined();
+      });
+    });
 
     describe('uses()', function () {
 
@@ -55,6 +61,29 @@ describe('ngTranslate', function () {
       });
 
     });
+    
+    describe('storageKey()', function () {
+      
+      it('should be a function', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.storageKey).toBe('function');
+        });
+      });
+      
+      it('should return a string', function () {
+        inject(function($translate) {
+          expect(typeof $translate.storageKey()).toBe('string');
+        });
+      });
+      
+      it('should be equal to $STORAGE_KEY by default', function() {
+        inject(function ($translate, $STORAGE_KEY) {
+          expect($translate.storageKey()).toEqual($STORAGE_KEY);
+        });
+      });
+      
+    });
+    
   });
 
   describe('$translateService (single-lang)', function () {
@@ -141,6 +170,7 @@ describe('ngTranslate', function () {
       $translateProvider.rememberLanguage(true);
       $translateProvider.preferredLanguage('en_EN');
       $translateProvider.preferredLanguage('de_DE');
+      $translateProvider.storageKey('lang');
     }));
 
     var $translate, $rootScope, $compile;
@@ -245,22 +275,40 @@ describe('ngTranslate', function () {
       });
 
       it('should use fallback language if no language is stored in $cookieStore', function () {
-        inject(function ($cookieStore, $STORAGE_KEY) {
-          expect($cookieStore.get($STORAGE_KEY)).toBe('de_DE');
+        inject(function ($cookieStore, $translate) {
+          expect($cookieStore.get($translate.storageKey())).toBe('de_DE');
         });
       });
 
       it('should remember when the language switched', function () {
-        inject(function ($translate, $rootScope, $cookieStore, $STORAGE_KEY) {
+        inject(function ($translate, $rootScope, $cookieStore) {
           expect($translate('YET_ANOTHER')).toBe('Hallo da!');
           $translate.uses('en_EN');
           $rootScope.$digest();
           expect($translate('YET_ANOTHER')).toBe('Hello there!');
-          expect($cookieStore.get($STORAGE_KEY)).toBe('en_EN');
+          expect($cookieStore.get($translate.storageKey())).toBe('en_EN');
         });
       });
     });
 
+    describe('$translateService#storageKey()', function () {
+      
+      it('should allow to change the storage key during config', function() {
+        inject(function($translate, $STORAGE_KEY) {
+          expect($translate.storageKey()).toNotEqual($STORAGE_KEY);
+        });
+      });
+      
+      it('shouldn\'t allow to change the storage key during runtime', function() {
+        inject(function($translate, $STORAGE_KEY) {
+          var prevKey = $translate.storageKey();
+          $translate.storageKey(prevKey + "somestring");
+          expect($translate.storageKey()).toEqual(prevKey);
+        });
+      });
+      
+    });
+    
     describe('$translateService#preferredLanguage()', function () {
 
       it('should be defined', function() {
