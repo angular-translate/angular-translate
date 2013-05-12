@@ -22,10 +22,10 @@ angular.module('ngTranslate')
 
       // Ensures any change of the attribute "translate" containing the id will
       // be re-stored to the scope's "translationId".
-      // If the attribute has no content, the element's text value will be used.
+      // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
       attr.$observe('translate', function (translationId) {
         if (angular.equals(translationId , '')) {
-          scope.translationId = $interpolate(element.text())(scope.$parent);
+          scope.translationId = $interpolate(element.text().replace(/^\s+|\s+$/g,''))(scope.$parent);
         } else {
           scope.translationId = translationId;
         }
