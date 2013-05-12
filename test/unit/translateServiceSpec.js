@@ -659,9 +659,9 @@ describe('ngTranslate', function () {
       }));
 
       it('should use localstorage', function () {
-        inject(function ($translate) {
+        inject(function ($window, $translate) {
           console.log($translate.storage().get($translate.storageKey()));
-          console.log(window.localStorage.getItem($translate.storageKey()));
+          console.log($window.localStorage.getItem($translate.storageKey()));
           expect($translate.storage().get($translate.storageKey())).toEqual('de_DE');
         });
       });
