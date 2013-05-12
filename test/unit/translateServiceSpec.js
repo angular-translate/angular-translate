@@ -645,6 +645,8 @@ describe('ngTranslate', function () {
     describe('useLocalStorage()', function () {
 
       beforeEach(module('ngTranslate', function ($translateProvider) {
+        // ensure that the local storage is cleared.
+        window.localStorage.clear();
         $translateProvider.translations('de_DE', {
           'EXISTING_TRANSLATION_ID': 'foo',
           'ANOTHER_ONE': 'bar',
@@ -659,9 +661,9 @@ describe('ngTranslate', function () {
       }));
 
       it('should use localstorage', function () {
-        inject(function ($translate) {
+        inject(function ($window, $translate) {
           console.log($translate.storage().get($translate.storageKey()));
-          console.log(window.localStorage.getItem($translate.storageKey()));
+          console.log($window.localStorage.getItem($translate.storageKey()));
           expect($translate.storage().get($translate.storageKey())).toEqual('de_DE');
         });
       });

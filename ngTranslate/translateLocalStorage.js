@@ -25,7 +25,9 @@ angular.module('ngTranslate')
      * @param {string} name Item name
      * @return {string} Value of item name
      */
-    get: function (name) { return $window.localStorage.getItem(name); },
+    get: function (name) {
+      return $window.localStorage.getItem(name);
+    },
     /**
      * @ngdoc function
      * @name ngTranslate.$translateLocalStorage#set
@@ -37,7 +39,9 @@ angular.module('ngTranslate')
      * @param {string} name Item name
      * @param {string} value Item value
      */
-    set: function (name, value) { $window.localStorage.setItem(name, value); }
+    set: function (name, value) {
+      $window.localStorage.setItem(name, value);
+    }
   };
 
   var $translateLocalStorage = ('localStorage' in $window && $window.localStorage !== null) ?
