@@ -1,3 +1,46 @@
+# 0.7.0 (2013-05-12)
+
+## Features
+### translateProvider
+
+* missingTranslationHandler (3a5819e)
+
+* add a preferredLanguage property (563e9bf)
+
+* make translationTable extendable (8e3a455)
+
+* add useLoaderFactory() as shortcut method (2915e8b)
+
+* add storagePrefix() method (64cd99b)
+
+### docs
+
+* add documentation comments (b1efbca)
+
+### storageKey
+
+* add a storageKey method (dabf822)
+
+### translateService
+
+* add storage() method (98c2b12)
+
+
+
+## Bug fixes
+### tests
+
+* fix tests for preferredLanguage() (f1b5084)
+
+* Fix preferredLanguage tests (73efcfc)
+
+* Old values won't be ignored, so they have to be discarded (625b1d6)
+
+### directive
+
+* trim off white space around element.text() (e10173a)
+
+
 # 0.6.0 (2013-05-03)
 
 ## Features
