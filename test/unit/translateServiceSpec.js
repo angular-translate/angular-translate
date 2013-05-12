@@ -33,7 +33,7 @@ describe('ngTranslate', function () {
         expect($translate.preferredLanguage).toBeDefined();
       });
     });
-    
+
     it('should have a method storageKey()', function() {
       inject(function ($translate) {
         expect($translate.storageKey).toBeDefined();
@@ -55,45 +55,45 @@ describe('ngTranslate', function () {
       });
 
     });
-    
+
     describe('preferredLanguage()', function() {
-    
+
       it('should be a function', function() {
         inject(function($translate){
           expect(typeof $translate.preferredLanguage).toBe('function');
         });
       });
-    
+
       it ('should return undefined if no language is specified', function() {
         inject(function($translate){
           expect($translate.preferredLanguage()).toBeUndefined();
         });
       });
-    
+
     });
-    
+
     describe('storageKey()', function () {
-      
+
       it('should be a function', function () {
         inject(function ($translate) {
           expect(typeof $translate.storageKey).toBe('function');
         });
       });
-      
+
       it('should return a string', function () {
         inject(function($translate) {
           expect(typeof $translate.storageKey()).toBe('string');
         });
       });
-      
+
       it('should be equal to $STORAGE_KEY by default', function() {
         inject(function ($translate, $STORAGE_KEY) {
           expect($translate.storageKey()).toEqual($STORAGE_KEY);
         });
       });
-      
+
     });
-    
+
   });
 
   describe('$translateService (single-lang)', function () {
@@ -264,13 +264,13 @@ describe('ngTranslate', function () {
     });
 
     describe('$translateService#storageKey()', function () {
-      
+
       it('should allow to change the storage key during config', function() {
         inject(function($translate, $STORAGE_KEY) {
           expect($translate.storageKey()).toNotEqual($STORAGE_KEY);
         });
       });
-      
+
       it('shouldn\'t allow to change the storage key during runtime', function() {
         inject(function($translate, $STORAGE_KEY) {
           var prevKey = $translate.storageKey();
@@ -278,11 +278,11 @@ describe('ngTranslate', function () {
           expect($translate.storageKey()).toEqual(prevKey);
         });
       });
-      
+
     });
-    
+
     describe('$translateService#preferredLanguage()', function () {
-    
+
       it ('should return a string if language is specified', function() {
         inject(function($translate){
           expect(typeof $translate.preferredLanguage()).toBe('string');
@@ -294,7 +294,7 @@ describe('ngTranslate', function () {
           expect($translate.preferredLanguage()).toEqual('de_DE');
         });
       });
-    
+
       it('should allow to change preferred language during config', function() {
         inject(function($translate){
           expect($translate.preferredLanguage()).toEqual('de_DE');
@@ -308,9 +308,9 @@ describe('ngTranslate', function () {
           expect($translate.preferredLanguage()).toBe(prevLang);
         });
       });
-      
+
     });
-    
+
   });
 
   describe('where data is a nested object structure (namespace support)', function () {
@@ -353,7 +353,7 @@ describe('ngTranslate', function () {
         expect($translate.uses()).toEqual($translate.preferredLanguage());
       });
     });
-    
+
   });
 
   describe('Asynchronous loading', function () {
@@ -662,8 +662,6 @@ describe('ngTranslate', function () {
 
       it('should use localstorage', function () {
         inject(function ($window, $translate) {
-          console.log($translate.storage().get($translate.storageKey()));
-          console.log($window.localStorage.getItem($translate.storageKey()));
           expect($translate.storage().get($translate.storageKey())).toEqual('de_DE');
         });
       });
