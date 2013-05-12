@@ -594,6 +594,7 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
       if ($storageFactory) {
         Storage.set($storageKey, $uses);
+        console.log(Storage.get($storageKey));
       }
 
       deferred.resolve($uses);
