@@ -594,7 +594,7 @@ describe('ngTranslate', function () {
 
     describe('$translate#storage', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
         $translateProvider.useStorage('$translateLocalStorage');
       }));
 
@@ -621,7 +621,7 @@ describe('ngTranslate', function () {
 
     describe('useCookieStorage()', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
         $translateProvider.translations('de_DE', {
           'EXISTING_TRANSLATION_ID': 'foo',
           'ANOTHER_ONE': 'bar',
@@ -644,7 +644,7 @@ describe('ngTranslate', function () {
 
     describe('useLocalStorage()', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
         // ensure that the local storage is cleared.
         window.localStorage.clear();
         $translateProvider.translations('de_DE', {
@@ -669,7 +669,7 @@ describe('ngTranslate', function () {
 
     describe('storage prefix', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
         $translateProvider.storagePrefix('test');
         $translateProvider.useCookieStorage();
         $translateProvider.preferredLanguage('de_DE');

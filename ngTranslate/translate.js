@@ -1,4 +1,4 @@
-angular.module('ngTranslate', ['ng', 'ngCookies'])
+angular.module('ngTranslate', ['ng'])
 
 .run(['$translate', function ($translate) {
 
@@ -508,7 +508,6 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
    * @name ngTranslate.$translate
    * @requires $interpolate
    * @requires $log
-   * @requires $cookieStore
    * @requires $rootScope
    * @requires $q
    *
@@ -527,10 +526,9 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
     '$interpolate',
     '$log',
     '$injector',
-    '$cookieStore',
     '$rootScope',
     '$q',
-    function ($interpolate, $log, $injector, $cookieStore, $rootScope, $q) {
+    function ($interpolate, $log, $injector, $rootScope, $q) {
 
     var Storage;
 
