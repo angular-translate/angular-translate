@@ -666,5 +666,20 @@ describe('ngTranslate', function () {
         });
       });
     });
+
+    describe('storage prefix', function () {
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.storagePrefix('test');
+        $translateProvider.useCookieStorage();
+        $translateProvider.preferredLanguage('de_DE');
+      }));
+
+      it('should use storage prefix', function () {
+        inject(function ($translate) {
+          expect($translate.storageKey()).toEqual('testNG_TRANSLATE_LANG_KEY');
+        });
+      });
+    });
   });
 });

@@ -42,6 +42,7 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
       $uses,
       $storageFactory,
       $storageKey = $STORAGE_KEY,
+      $storagePrefix,
       $missingTranslationHandler,
       $asyncLoaders = [],
       NESTED_OBJECT_DELIMITER = '.';
@@ -280,13 +281,17 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
    * @param {string} key A key for the storage.
    *
    */
-  this.storageKey = function(key) {
-    if (angular.isString(key)) {
-      $storageKey = key;
-    } else {
+  var storageKey = function(key) {
+    if (!key) {
+      if ($storagePrefix) {
+        return $storagePrefix + $storageKey;
+      }
       return $storageKey;
     }
+    $storageKey = key;
   };
+
+  this.storageKey = storageKey;
 
  /**
    * @ngdoc function
@@ -483,6 +488,23 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
+   * @name ngTranslate.$translateProvider#storagePrefix
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Sets prefix for storage key.
+   *
+   * @param {string} prefix Storage key prefix
+   */
+  this.storagePrefix = function (prefix) {
+    if (!prefix) {
+      return prefix;
+    }
+    $storagePrefix = prefix;
+  };
+
+  /**
+   * @ngdoc function
    * @name ngTranslate.$translate
    * @requires $interpolate
    * @requires $log
@@ -594,7 +616,7 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
           $uses = key;
 
           if ($storageFactory) {
-            Storage.set($storageKey, $uses);
+            Storage.set($translate.storageKey(), $uses);
           }
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -608,8 +630,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
       $uses = key;
 
       if ($storageFactory) {
-        Storage.set($storageKey, $uses);
-        console.log(Storage.get($storageKey));
+        Storage.set($translate.storageKey(), $uses);
+        console.log(Storage.get($translate.storageKey()));
       }
 
       deferred.resolve($uses);
@@ -628,7 +650,7 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
      * @return {string} storage key
      */
     $translate.storageKey = function() {
-      return $storageKey;
+      return storageKey();
     };
 
     // If at least one async loader is defined and there are no (default) translations available
