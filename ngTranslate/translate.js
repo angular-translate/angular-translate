@@ -474,7 +474,6 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
    * @requires $cookieStore
    * @requires $rootScope
    * @requires $q
-   * @requires $STORAGE_KEY
    *
    * @desription
    * The `$translate` service is the actual core of ngTranslate. It excepts a translation id
@@ -580,7 +579,7 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
           $uses = key;
 
           if ($storageFactory) {
-            Storage.set($STORAGE_KEY, $uses);
+            Storage.set($storageKey, $uses);
           }
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -594,8 +593,7 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
       $uses = key;
 
       if ($storageFactory) {
-        Storage.set($STORAGE_KEY, $uses);
-        console.log(Storage.get($STORAGE_KEY));
+        Storage.set($storageKey, $uses);
       }
 
       deferred.resolve($uses);
