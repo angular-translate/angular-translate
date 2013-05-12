@@ -481,6 +481,43 @@ describe('ngTranslate', function () {
 
     });
 
+    describe('register loader with useLoaderFactory()', function () {
+
+      beforeEach(module('ngTranslate', function ($translateProvider) {
+        $translateProvider.useLoaderFactory(function ($q, $timeout) {
+          return function (key) {
+            var data = (key !== 'de_DE') ? null : {
+              'KEY1': 'Schluessel 1',
+              'KEY2': 'Schluessel 2'
+            };
+            var deferred = $q.defer();
+            $timeout(function () {
+              deferred.resolve(data);
+            }, 200);
+            return deferred.promise;
+          };
+        });
+      }));
+
+      it('implicit invoking loader should be successful', inject(function ($translate, $timeout) {
+        var called = false;
+        $translate.uses('de_DE').then(function (){
+          called = true;
+        });
+        $timeout.flush();
+        expect(called).toEqual(true);
+      }));
+
+      it('should return the correct translation after change', inject(function ($translate, $timeout) {
+        var called = false;
+        // Check that the start point is the translation id itself.
+        expect($translate('KEY1')).toEqual('KEY1');
+        $translate.uses('de_DE');
+        $timeout.flush(); // finish loader
+        expect($translate('KEY1')).toEqual('Schluessel 1');
+      }));
+    });
+
     describe('register loader as url string', function () {
 
       beforeEach(module('ngTranslate', function ($translateProvider) {

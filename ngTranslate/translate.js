@@ -429,6 +429,21 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
+   * @name ngTranslate.$translateProvider#registerLoaderFactory
+   * @methodOf ngTranslate.$translateProvider
+   *
+   * @description
+   * Shortcut method for `$translateProvider#registerLoader`.
+   *
+   * @param {function | string} loader A string or a function with its dependencies
+   *
+   */
+  this.useLoaderFactory = function (loader) {
+    this.registerLoader(loader);
+  };
+
+  /**
+   * @ngdoc function
    * @name ngTranslate.$translateProvider#useLocalStorage
    * @methodOf ngTranslate.$translateProvider
    *
