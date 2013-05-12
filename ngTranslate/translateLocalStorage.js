@@ -14,15 +14,6 @@ angular.module('ngTranslate')
 
   // Setup adapter
   var localStorageAdapter = {
-    get: function (name) { return $window.localStorage.getItem(name); },
-    set: function (name, value) { $window.localStorage.setItem(name, value); }
-  };
-
-  var storage = ('localStorage' in $window && $window.localStorage !== null) ?
-  localStorageAdapter : $translateCookieStorage;
-
-  var $translateLocalStorage = {
-
     /**
      * @ngdoc function
      * @name ngTranslate.$translateLocalStorage#get
@@ -34,10 +25,7 @@ angular.module('ngTranslate')
      * @param {string} name Item name
      * @return {string} Value of item name
      */
-    get: function (name) {
-      return storage.get(name);
-    },
-
+    get: function (name) { return $window.localStorage.getItem(name); },
     /**
      * @ngdoc function
      * @name ngTranslate.$translateLocalStorage#set
@@ -49,10 +37,11 @@ angular.module('ngTranslate')
      * @param {string} name Item name
      * @param {string} value Item value
      */
-    set: function (name, value) {
-      storage.set(name, value);
-    }
+    set: function (name, value) { $window.localStorage.setItem(name, value); }
   };
+
+  var $translateLocalStorage = ('localStorage' in $window && $window.localStorage !== null) ?
+  localStorageAdapter : $translateCookieStorage;
 
   return $translateLocalStorage;
 }]);
