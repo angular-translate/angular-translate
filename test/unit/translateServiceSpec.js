@@ -645,6 +645,8 @@ describe('ngTranslate', function () {
     describe('useLocalStorage()', function () {
 
       beforeEach(module('ngTranslate', function ($translateProvider) {
+        // ensure that the local storage is cleared.
+        window.localStorage.clear();
         $translateProvider.translations('de_DE', {
           'EXISTING_TRANSLATION_ID': 'foo',
           'ANOTHER_ONE': 'bar',
