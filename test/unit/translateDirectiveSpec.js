@@ -95,6 +95,14 @@ describe('ngTranslate', function () {
           expect(element.text()).toBe('foo');
         });
       });
+
+      it('should return translation if translation id exists and if its passed surrounded by white space', function () {
+        inject(function ($rootScope, $compile) {
+          element = $compile('<div translate>  TRANSLATION_ID  </div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+        });
+      });
     });
 
     describe('Passing values', function () {
