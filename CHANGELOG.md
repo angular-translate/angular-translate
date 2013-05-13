@@ -1,3 +1,23 @@
+# 0.7.1 (2013-05-13)
+
+## Features
+### chore
+
+* rename ngTranslate folder to src (65012d9)
+
+
+
+
+# 0.7.0 (2013-05-13)
+
+## Features
+### chore
+
+* rename ngTranslate folder to src (65012d9)
+
+
+
+
 # 0.7.0 (2013-05-12)
 
 ## Features
