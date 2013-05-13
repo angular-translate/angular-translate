@@ -1,8 +1,8 @@
-# ngTranslate [![Build Status](https://travis-ci.org/PascalPrecht/ng-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/ng-translate) [![Build Status](https://travis-ci.org/PascalPrecht/ng-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/ng-translate) [![Dependency Status](https://gemnasium.com/PascalPrecht/ng-translate.png)](https://gemnasium.com/PascalPrecht/ng-translate)
+# ngTranslate [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/angular-translate) [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/angular-translate) [![Dependency Status](https://gemnasium.com/PascalPrecht/angular-translate.png)](https://gemnasium.com/PascalPrecht/angular-translate)
 
 > i18n in your AngularJS apps
 
-Checkout the [demos](https://github.com/PascalPrecht/ng-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/ng-translate/wiki).
+Checkout the [demos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/angular-translate/wiki).
 If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/ngTranslate)!
 
 There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-translate) for questions and discussions.
