@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     },
     watch: {
       scripts: {
-        files: ['Gruntfile.js', 'ngTranslate/**/*.js', 'test/**/*.js'],
+        files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
         tasks: ['jshint', 'karma:unit']
       },
       livereload: {
@@ -30,12 +30,12 @@ module.exports = function (grunt) {
           livereload: true
         },
         // TODO actually complete demo except copied "angular-translate-latest.js"
-        files: ['ngTranslate/**/*.js', 'demo/async-loader/*'],
+        files: ['src/**/*.js', 'demo/async-loader/*'],
         tasks: ['jshint', 'karma:unit', 'concat', 'copy:demo']
       }
     },
     jshint: {
-      all: ['Gruntfile.js', 'ngTranslate/**/*.js', 'test/**/*.js'],
+      all: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
       options: {
         eqeqeq: true,
         globals: {
@@ -44,15 +44,15 @@ module.exports = function (grunt) {
       }
     },
     concat: {
-      ngTranslate: {
-        src: ['ngTranslate/translate.js', 'ngTranslate/**/*.js'],
+      src: {
+        src: ['src/translate.js', 'src/**/*.js'],
         dest: 'dist/angular-translate-<%= pkg.version %>.js'
       }
     },
     uglify: {
-      ngTranslate: {
+      src: {
         files: {
-          'dist/angular-translate-<%= pkg.version %>.min.js': '<%= concat.ngTranslate.dest %>'
+          'dist/angular-translate-<%= pkg.version %>.min.js': '<%= concat.src.dest %>'
         }
       }
     },
@@ -76,8 +76,8 @@ module.exports = function (grunt) {
     },
     ngmin: {
       ngTranslate: {
-        src: '<%= concat.ngTranslate.dest %>',
-        dest: '<%= concat.ngTranslate.dest %>'
+        src: '<%= concat.src.dest %>',
+        dest: '<%= concat.src.dest %>'
       }
     },
     express: {

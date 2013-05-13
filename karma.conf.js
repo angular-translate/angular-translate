@@ -13,8 +13,8 @@ files = [
   'bower_components/angular/angular.js',
   'bower_components/angular-cookies/angular-cookies.js',
   'bower_components/angular-mocks/angular-mocks.js',
-  'ngTranslate/translate.js',
-  'ngTranslate/**/*.js',
+  'src/translate.js',
+  'src/**/*.js',
   'test/**/*Spec.js'
 ];
 
