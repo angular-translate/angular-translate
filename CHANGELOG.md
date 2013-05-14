@@ -1,3 +1,8 @@
+# 0.8.0 (2013-05-14)
+
+* rename module ngTranslate to pascalprecht.translate
+
+
 # 0.7.1 (2013-05-13)
 
 ## Features
