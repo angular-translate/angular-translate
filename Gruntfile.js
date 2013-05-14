@@ -75,7 +75,7 @@ module.exports = function (grunt) {
       }
     },
     ngmin: {
-      ngTranslate: {
+      src: {
         src: '<%= concat.src.dest %>',
         dest: '<%= concat.src.dest %>'
       }

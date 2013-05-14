@@ -1,8 +1,8 @@
-describe('ngTranslate', function () {
+describe('pascalprecht.translate', function () {
 
   describe('$translateCookieStorage', function () {
 
-    beforeEach(module('ngTranslate', 'ngCookies'));
+    beforeEach(module('pascalprecht.translate', 'ngCookies'));
 
     it('should be defined', function () {
       inject(function ($translateCookieStorage) {

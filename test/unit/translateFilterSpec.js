@@ -1,8 +1,8 @@
-describe('ngTranslate', function () {
+describe('pascalprecht.translate', function () {
 
   describe('$translateFilter (single-lang)', function () {
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations({
         'EXISTING_TRANSLATION_ID': 'foo',
         'ANOTHER_ONE': 'bar',
@@ -66,7 +66,7 @@ describe('ngTranslate', function () {
 
   describe('$translateFilter (multi-lang)', function () {
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations('en_EN', {
         'EXISTING_TRANSLATION_ID': 'foo',
         'ANOTHER_ONE': 'bar',

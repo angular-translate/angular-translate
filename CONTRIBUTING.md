@@ -1,9 +1,9 @@
 # Contributing Guide
 
-Contributing to <code>ngTranslate</code> is fairly easy. This document shows you how to
+Contributing to <code>angular-translate</code> is fairly easy. This document shows you how to
 get the project, run all provided tests and generate a production ready build.
 
-It also covers provided grunt tasks, that help you developing on <code>ngTanslate</code>.
+It also covers provided grunt tasks, that help you developing on <code>angular-translate</code>.
 
 ## Dependencies
 
@@ -23,10 +23,10 @@ When **npm** is installed, use it to install the needed npm packages:
 
 ## Installation
 
-To get the source of <code>ngTranslate</code> clone the git repository via:
+To get the source of <code>angular-translate</code> clone the git repository via:
 
 ````
-$ git clone https://github.com/PascalPrecht/ng-translate
+$ git clone https://github.com/PascalPrecht/angular-translate
 ````
 
 This will clone the complete source to your local machine. Navigate to the project folder
@@ -37,11 +37,11 @@ $ npm install
 $ bower install
 ````
 
-<code>ngTranslate</code> is now installed and ready to be built.
+<code>angular-translate</code> is now installed and ready to be built.
 
 ## Building
 
-<code>ngTranslate</code> comes with a few **grunt tasks** which help you to automate
+<code>angular-translate</code> comes with a few **grunt tasks** which help you to automate
 the development process. The following grunt tasks are provided:
 
 #### <code>grunt</code>
@@ -59,7 +59,7 @@ the tests with the **jasmine testing framework**.
 #### <code>grunt build</code>
 
 You only have to use this task, if you want to generate a production ready build of
-<code>ngTranslate</code>. This task will also **lint**, **test** and **minify** the
+<code>angular-translate</code>. This task will also **lint**, **test** and **minify** the
 source. After running this task, you'll find the following files in a generated
 <code>dist</code> folder:
 

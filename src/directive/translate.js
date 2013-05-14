@@ -1,7 +1,7 @@
-angular.module('ngTranslate')
+angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
- * @name ngTranslate.directive:translate
+ * @name pascalprecht.translate.directive:translate
  * @requires $filter
  * @requires $interpolate
  * @restrict A

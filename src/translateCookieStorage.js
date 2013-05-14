@@ -1,12 +1,12 @@
-angular.module('ngTranslate')
+angular.module('pascalprecht.translate')
 
 /**
  * @ngdoc factory
- * @name ngTranslate.factory:$translateCookieStorage
+ * @name pascalprecht.translate.factory:$translateCookieStorage
  * @requires $cookieStore
  *
  * @description
- * Abstraction layer for cookieStore. This service is used when telling ngTranslate
+ * Abstraction layer for cookieStore. This service is used when telling angular-translate
  * to use cookieStore as storage.
  *
  */
@@ -16,8 +16,8 @@ angular.module('ngTranslate')
 
     /**
      * @ngdoc function
-     * @name ngTranslate.$translateCookieStorage#get
-     * @methodOf ngTranslate.$translateCookieStorage
+     * @name pascalprecht.translate.$translateCookieStorage#get
+     * @methodOf pascalprecht.translate.$translateCookieStorage
      *
      * @description
      * Returns an item from cookieStorage by given name.
@@ -31,8 +31,8 @@ angular.module('ngTranslate')
 
     /**
      * @ngdoc function
-     * @name ngTranslate.$translateCookieStorage#set
-     * @methodOf ngTranslate.$translateCookieStorage
+     * @name pascalprecht.translate.$translateCookieStorage#set
+     * @methodOf pascalprecht.translate.$translateCookieStorage
      *
      * @description
      * Sets an item in cookieStorage by given name.

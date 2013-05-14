@@ -1,10 +1,10 @@
-describe('ngTranslate', function () {
+describe('pascalprecht.translate', function () {
 
   describe('$translateDirective (single-lang)', function () {
 
     var element;
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations({
         'EXISTING_TRANSLATION_ID': 'foo',
         'ANOTHER_ONE': 'bar',
@@ -228,7 +228,7 @@ describe('ngTranslate', function () {
 
     var element;
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations('en_EN', {
         'EXISTING_TRANSLATION_ID': 'foo',
         'ANOTHER_ONE': 'bar',
@@ -329,7 +329,7 @@ describe('ngTranslate', function () {
 
     describe('register loader via function object', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.registerLoader(function ($q, $timeout) {
           return function (key) {
             var data = (key === 'de_DE') ? {
