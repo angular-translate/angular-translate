@@ -1,4 +1,4 @@
-angular.module('ngTranslate', ['ng'])
+angular.module('pascalprecht.translate', ['ng'])
 
 .run(['$translate', function ($translate) {
 
@@ -24,18 +24,18 @@ angular.module('ngTranslate', ['ng'])
 
 }]);
 
-angular.module('ngTranslate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
+angular.module('pascalprecht.translate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
 
 /**
  * @ngdoc object
- * @name ngTranslate.$translateProvider
+ * @name pascalprecht.translate.$translateProvider
  * @description
  *
  * $tranlateProvider allows developers to register translation-tables, asynchronous loaders
  * and similar to configure translation behavior directly inside of a module.
  *
  */
-angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function ($STORAGE_KEY) {
+angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY', function ($STORAGE_KEY) {
 
   var $translationTable = {},
       $preferredLanguage,
@@ -100,8 +100,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
  /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#translations
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#translations
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Registers a new translation table either in general or for specific language key.
@@ -224,8 +224,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
  /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#preferredLanguage
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#preferredLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Tells the module which of the registered translation tables to use for translation
@@ -245,8 +245,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
  /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#uses
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#uses
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Set which translation table to use for translation by given language key. When
@@ -272,8 +272,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
  /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#storageKey
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#storageKey
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Tells the module which key must represent the choosed language by a user in the storage.
@@ -295,8 +295,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
  /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#missingTranslationHandler
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#missingTranslationHandler
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Registers a custom handler for what's happening if a certain translation doesn't
@@ -313,8 +313,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#registerLoader
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#registerLoader
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * To load your data from a server you have to register an asynchronous loader,
@@ -325,21 +325,21 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
    *
    * This is possibly the simplest way of loading translation data asynchronously.
    * All you have to do, is to register a valid endpoint which later gets requested
-   * by ngTranslate. Here's an example:
+   * by angular-translate. Here's an example:
    *
    * <pre>
    *  $translateProvider.registerLoader('foo/bar.json');
    *  $translateProvider.preferredLanguage('en_US');
    * </pre>
    *
-   * ngTranslate transforms the registered loader (which is actually just a string),
+   * angular-translate transforms the registered loader (which is actually just a string),
    * to a real loader function which can be invoked later at runtime. In addition to that,
    * telling $translateProvider to use the language key 'en_US', adds the language
    * key as request parameter to the given loader string. So, the example above actually
    * requests `foo/bar.json?lang=en_US.`
    *
    * If there isn't any translation table available at startup and any asynchronous
-   * loader is registered, ngTranslate invokes the loader immediately.
+   * loader is registered, angular-translate invokes the loader immediately.
    *
    * ### Register loader as static files
    *
@@ -434,8 +434,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#registerLoaderFactory
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#registerLoaderFactory
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Shortcut method for `$translateProvider#registerLoader`.
@@ -449,11 +449,11 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#useLocalStorage
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#useLocalStorage
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
-   * Tells ngTranslate to use `$translateLocalStorage` service as storage layer.
+   * Tells angular-translate to use `$translateLocalStorage` service as storage layer.
    *
    */
   this.useLocalStorage = function () {
@@ -462,11 +462,11 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#useCookieStorage
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#useCookieStorage
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
-   * Tells ngTranslate to use `$translateCookieStorage` service as storage layer.
+   * Tells angular-translate to use `$translateCookieStorage` service as storage layer.
    *
    */
   this.useCookieStorage = function () {
@@ -475,11 +475,11 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#useStorage
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#useStorage
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
-   * Tells ngTranslate to use custom service as storage layer.
+   * Tells angular-translate to use custom service as storage layer.
    *
    */
   this.useStorage = function (storageFactory) {
@@ -488,8 +488,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translateProvider#storagePrefix
-   * @methodOf ngTranslate.$translateProvider
+   * @name pascalprecht.translate.$translateProvider#storagePrefix
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Sets prefix for storage key.
@@ -505,14 +505,14 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
   /**
    * @ngdoc function
-   * @name ngTranslate.$translate
+   * @name pascalprecht.translate.$translate
    * @requires $interpolate
    * @requires $log
    * @requires $rootScope
    * @requires $q
    *
    * @desription
-   * The `$translate` service is the actual core of ngTranslate. It excepts a translation id
+   * The `$translate` service is the actual core of angular-translate. It excepts a translation id
    * and optional interpolate parameters to translate contents.
    *
    * <pre>
@@ -559,8 +559,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
     /**
      * @ngdoc function
-     * @name ngTranslate.$translate#preferredLanguage
-     * @methodOf ngTranslate.$translate
+     * @name pascalprecht.translate.$translate#preferredLanguage
+     * @methodOf pascalprecht.translate.$translate
      *
      * @description
      * Returns the language key for the preferred language.
@@ -573,8 +573,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
     /**
      * @ngdoc function
-     * @name ngTranslate.$translate#storage
-     * @methodOf ngTranslate.$translate
+     * @name pascalprecht.translate.$translate#storage
+     * @methodOf pascalprecht.translate.$translate
      *
      * @description
      * Returns registered storage.
@@ -587,11 +587,11 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
     /**
      * @ngdoc function
-     * @name ngTranslate.$translate#uses
-     * @methodOf ngTranslate.$translate
+     * @name pascalprecht.translate.$translate#uses
+     * @methodOf pascalprecht.translate.$translate
      *
      * @description
-     * Tells ngTranslate which language to uses by given language key. This method is
+     * Tells angular-translate which language to uses by given language key. This method is
      * used to change language at runtime. It also takes care of storing the language
      * key in a configured store to let your app remember the choosed language.
      *
@@ -638,8 +638,8 @@ angular.module('ngTranslate').provider('$translate', ['$STORAGE_KEY', function (
 
     /**
      * @ngdoc function
-     * @name ngTranslate.$translate#storageKey
-     * @methodOf ngTranslate.$translate
+     * @name pascalprecht.translate.$translate#storageKey
+     * @methodOf pascalprecht.translate.$translate
      *
      * @description
      * Returns the key for the storage.

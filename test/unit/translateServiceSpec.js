@@ -1,8 +1,8 @@
-describe('ngTranslate', function () {
+describe('pascalprecht.translate', function () {
 
   describe('$translateService', function () {
 
-    beforeEach(module('ngTranslate'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $translate;
 
@@ -98,7 +98,7 @@ describe('ngTranslate', function () {
 
   describe('$translateService (single-lang)', function () {
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations({
         'EXISTING_TRANSLATION_ID': 'foo',
         'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
@@ -158,7 +158,7 @@ describe('ngTranslate', function () {
 
   describe('$translateService (multi-lang)', function () {
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations('de_DE', {
         'EXISTING_TRANSLATION_ID': 'foo',
         'ANOTHER_ONE': 'bar',
@@ -315,7 +315,7 @@ describe('ngTranslate', function () {
 
   describe('where data is a nested object structure (namespace support)', function () {
 
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations('en_US', {
        "DOCUMENT" : {
           "HEADER" : {
@@ -337,7 +337,7 @@ describe('ngTranslate', function () {
   });
 
   describe('if language is specified',function(){
-    beforeEach(module('ngTranslate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations('de_DE', {});
       $translateProvider.translations('en_EN', {});
       $translateProvider.preferredLanguage('en_EN');
@@ -362,7 +362,7 @@ describe('ngTranslate', function () {
 
       var exceptionMessage;
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         try {
           $translateProvider.registerLoader(null);
         } catch (ex) {
@@ -383,7 +383,7 @@ describe('ngTranslate', function () {
 
       var exceptionMessage;
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         try {
           $translateProvider.registerLoader(undefined);
         } catch (ex) {
@@ -402,7 +402,7 @@ describe('ngTranslate', function () {
 
     describe('register a loader (function) where data is a nested object structure (namespace support)', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.registerLoader(function ($q, $timeout) {
           return function (key) {
             var data = (key !== 'en_US') ? null : {
@@ -445,7 +445,7 @@ describe('ngTranslate', function () {
 
     describe('register loader via a function', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.registerLoader(function ($q, $timeout) {
           return function (key) {
             var data = (key !== 'de_DE') ? null : {
@@ -483,7 +483,7 @@ describe('ngTranslate', function () {
 
     describe('register loader with useLoaderFactory()', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.useLoaderFactory(function ($q, $timeout) {
           return function (key) {
             var data = (key !== 'de_DE') ? null : {
@@ -520,7 +520,7 @@ describe('ngTranslate', function () {
 
     describe('register loader as url string', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.registerLoader('foo/bar.json');
       }));
 
@@ -547,7 +547,7 @@ describe('ngTranslate', function () {
 
     describe('register loader by static-files (using prefix, suffix)', function () {
 
-      beforeEach(module('ngTranslate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.registerLoader({type: 'static-files', prefix: 'lang_', suffix: '.json'});
       }));
 
@@ -594,7 +594,7 @@ describe('ngTranslate', function () {
 
     describe('$translate#storage', function () {
 
-      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
         $translateProvider.useStorage('$translateLocalStorage');
       }));
 
@@ -621,7 +621,7 @@ describe('ngTranslate', function () {
 
     describe('useCookieStorage()', function () {
 
-      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
         $translateProvider.translations('de_DE', {
           'EXISTING_TRANSLATION_ID': 'foo',
           'ANOTHER_ONE': 'bar',
@@ -644,7 +644,7 @@ describe('ngTranslate', function () {
 
     describe('useLocalStorage()', function () {
 
-      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
         // ensure that the local storage is cleared.
         window.localStorage.clear();
         $translateProvider.translations('de_DE', {
@@ -669,7 +669,7 @@ describe('ngTranslate', function () {
 
     describe('storage prefix', function () {
 
-      beforeEach(module('ngTranslate', 'ngCookies', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
         $translateProvider.storagePrefix('test');
         $translateProvider.useCookieStorage();
         $translateProvider.preferredLanguage('de_DE');

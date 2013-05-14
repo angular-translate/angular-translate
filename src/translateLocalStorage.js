@@ -1,12 +1,12 @@
-angular.module('ngTranslate')
+angular.module('pascalprecht.translate')
 
 /**
  * @ngdoc factory
- * @name ngTranslate.factory:$translateLocalStorage
+ * @name pascalprecht.translate.factory:$translateLocalStorage
  * @requires $window
  *
  * @description
- * Abstraction layer for localStorage. This service is used when telling ngTranslate
+ * Abstraction layer for localStorage. This service is used when telling angular-translate
  * to use localStorage as storage.
  *
  */
@@ -16,8 +16,8 @@ angular.module('ngTranslate')
   var localStorageAdapter = {
     /**
      * @ngdoc function
-     * @name ngTranslate.$translateLocalStorage#get
-     * @methodOf ngTranslate.$translateLocalStorage
+     * @name pascalprecht.translate.$translateLocalStorage#get
+     * @methodOf pascalprecht.translate.$translateLocalStorage
      *
      * @description
      * Returns an item from localStorage by given name.
@@ -30,8 +30,8 @@ angular.module('ngTranslate')
     },
     /**
      * @ngdoc function
-     * @name ngTranslate.$translateLocalStorage#set
-     * @methodOf ngTranslate.$translateLocalStorage
+     * @name pascalprecht.translate.$translateLocalStorage#set
+     * @methodOf pascalprecht.translate.$translateLocalStorage
      *
      * @description
      * Sets an item in localStorage by given name.

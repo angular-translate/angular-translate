@@ -1,8 +1,8 @@
-describe('ngTranslate', function () {
+describe('pascalprecht.translate', function () {
 
   describe('$STORAGE_KEY', function () {
 
-    beforeEach(module('ngTranslate'));
+    beforeEach(module('pascalprecht.translate'));
 
     it('should be defined', function () {
       inject(function ($STORAGE_KEY) {
