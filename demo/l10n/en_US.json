@@ -1,0 +1,14 @@
+{
+"load" : {
+  "static" : {
+    "TITLE" : "How to load static files?",
+    "HEADER" : "The module can lazzy load a translations table when it's needed.",
+    "SUBHEADER" : "So, you can load only those languages, which will be used."
+  },
+  "predefined" : {
+    "TITLE" : "How to use lazzy loading without autoupload?",
+    "HEADER" : "You can predefine a default language while still using a lazzy loading.",
+    "SUBHEADER" : "This way module will not load a default language from server once more."
+  }
+}
+}

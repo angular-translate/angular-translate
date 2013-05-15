@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+
+<head>
+  <meta charset="utf-8">
+  <title translate="TITLE">Remember language (cookies)</title>
+  <style>body { text-align: center; }</style>
+</head>
+
+<body ng-controller="ctrl">
+
+  <p>
+    <a href="#" ng-click="setLang('en_US')">English</a> 
+    | 
+    <a href="#" ng-click="setLang('ru_RU')">Русский</a>
+  </p>
+
+  <h1 translate>HEADER</h1>
+  <h2 translate>SUBHEADER</h2>
+
+<script src="../bower_components/angular/angular.js"></script>
+
+<!-- Note that to use a cookie storage you have to include this module -->
+<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+
+<script src="js/angular-translate-latest.js"></script>
+
+<script>
+// Note that to use the cookie storage you have to pass ngCookies dependency to your module
+angular.module('app', ['pascalprecht.translate', 'ngCookies'])
+
+.config(['$translateProvider', function($translateProvider){
+
+  // Adding a translation table for the English language
+  $translateProvider.translations('en_US', {
+    "TITLE"     : "How to remember a language (coockies)",
+    "HEADER"    : "Your application is able to remember a language between requests.",
+    "SUBHEADER" : "To store the language you can use cookies."
+  });
+  
+  // Adding a translation table for the Russian language
+  $translateProvider.translations('ru_RU', {
+    "TITLE"     : "Как запомнить язык (cookies)",
+    "HEADER"    : "Ваше приложение может запоминать язык между запросами.",
+    "SUBHEADER" : "Для хранения языка Вы можете использовать cookies.",
+  });
+  
+  // Tell the module what language to use by default
+  $translateProvider.preferredLanguage('en_US');
+  
+  // Tell the module to store the language in the cookie
+  $translateProvider.useCookieStorage();
+  
+}])
+
+.controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
+  
+  $scope.setLang = function(langKey) {
+    // You can change the language during runtime
+    $translate.uses(langKey);
+  };
+  
+}]);
+</script>
+
+</body>
+</html>
