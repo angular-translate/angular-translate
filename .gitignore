@@ -3,4 +3,4 @@ node_modules
 components
 bower_components
 dist
-demo/angular-translate-latest.js
+demo/js/angular-translate-latest.js

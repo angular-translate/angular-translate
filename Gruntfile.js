@@ -59,7 +59,7 @@ module.exports = function (grunt) {
     copy: {
       demo: {
         files: {
-          'demo/angular-translate-latest.js': 'dist/angular-translate-<%= pkg.version %>.js'
+          'demo/js/angular-translate-latest.js': 'dist/angular-translate-<%= pkg.version %>.js'
         }
       }
     },
