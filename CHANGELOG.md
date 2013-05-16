@@ -1,3 +1,18 @@
+# 0.8.1 (2013-05-16)
+
+## Features
+### translateProvider
+
+* add methods to use different missingTranslationHandlers (f6ed3e3)
+
+
+
+## Bug fixes
+### docs
+
+* corrected typo (82569f0)
+
+
 # 0.8.0 (2013-05-14)
 
 * rename module ngTranslate to pascalprecht.translate
