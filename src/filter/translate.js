@@ -7,7 +7,7 @@ angular.module('pascalprecht.translate')
  * @function
  *
  * @description
- * Uses `$translate` service to translate contents. Excepts interpolate parameters
+ * Uses `$translate` service to translate contents. Accepts interpolate parameters
  * to pass dynamized values though translation.
  */
 .filter('translate', ['$parse', '$translate', function ($parse, $translate) {
