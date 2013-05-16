@@ -84,7 +84,8 @@ module.exports = function (grunt) {
       server: {
         options: {
           port: 3005,
-          bases: '.'
+          bases: '.',
+          server: __dirname + '/server.js'
         }
       }
     }
