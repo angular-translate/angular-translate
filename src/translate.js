@@ -43,7 +43,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $storageFactory,
       $storageKey = $STORAGE_KEY,
       $storagePrefix,
-      $missingTranslationHandler,
+      $missingTranslationHandlerFactory,
       $asyncLoaders = [],
       NESTED_OBJECT_DELIMITER = '.';
 
@@ -293,24 +293,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   this.storageKey = storageKey;
 
- /**
-   * @ngdoc function
-   * @name pascalprecht.translate.$translateProvider#missingTranslationHandler
-   * @methodOf pascalprecht.translate.$translateProvider
-   *
-   * @description
-   * Registers a custom handler for what's happening if a certain translation doesn't
-   * exist. This, by default, logs a warning using `$log` service.
-   *
-   * @param {function} functionHandler A callback function
-   */
-  this.missingTranslationHandler = function (functionHandler) {
-    if (angular.isUndefined(functionHandler)) {
-      return $missingTranslationHandler;
-    }
-    $missingTranslationHandler = functionHandler;
-  };
-
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#registerLoader
@@ -505,6 +487,52 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   /**
    * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMissingTranslationHandlerLog
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use built-in log handler when trying to translate
+   * a translation Id which doesn't exist.
+   *
+   * This is actually a shortcut method for `useMissingTranslationHandler()`.
+   *
+   */
+  this.useMissingTranslationHandlerLog = function () {
+    this.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMissingTranslationHandler
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Expects a factory name which later gets instantiated with `$injector`.
+   * This method can be used to tell angular-translate to use a custom
+   * missingTranslationHandler. Just build a factory which returns a function
+   * and expects a translation id as argument.
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.useMissingTranslationHandler('customHandler');
+   *  });
+   *
+   *  app.factory('customHandler', function (dep1, dep2) {
+   *    return function (translationId) {
+   *      // something with translationId and dep1 and dep2
+   *    };
+   *  });
+   * </pre>
+   *
+   * @param {string} factory Factory name
+   */
+  this.useMissingTranslationHandler = function (factory) {
+    $missingTranslationHandlerFactory = factory;
+  };
+
+  /**
+   * @ngdoc function
    * @name pascalprecht.translate.$translate
    * @requires $interpolate
    * @requires $log
@@ -548,10 +576,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return $interpolate(translation)(interpolateParams);
       }
 
-      if (!angular.isUndefined($missingTranslationHandler)) {
-        $missingTranslationHandler(translationId);
-      } else {
-        $log.warn("Translation for " + translationId + " doesn't exist");
+      if ($missingTranslationHandlerFactory) {
+        $injector.get($missingTranslationHandlerFactory)(translationId);
       }
 
       return translationId;
