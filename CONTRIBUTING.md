@@ -90,6 +90,8 @@ have access to the project`s demos with real XHR operations.
 
 Example: `http://localhost:3005/demo/async-loader/index.html`
 
+Under the hood, we use a complete [Express](http://expressjs.com/) server stack. You will find the server configuration at [server.js](server.js) and additional routes for our demos at [server_routes.js](demo/server_routes.js).
+
 ## Contributing/Submitting changes
 
 - Checkout a new branch based on <code>master</code> and name it to what you intend to do:
