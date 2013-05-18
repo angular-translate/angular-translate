@@ -32,13 +32,13 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
   // Those urls are [specified_url]?lang=[langKey].
   //
   // Note that to run this example you have to start a server first.
-  // To run the server use a 'grunt server' comand
+  // To run the server use a 'grunt server' command
   $translateProvider.registerLoader('http://localhost:3005/demo/get_lang');
   
   // Tell the module what language to use by default
   $translateProvider.preferredLanguage('en_US');
   
-  // Tell the module to store the language in the coockies
+  // Tell the module to store the language in the cookies
   $translateProvider.useCookieStorage();
   
 }])
