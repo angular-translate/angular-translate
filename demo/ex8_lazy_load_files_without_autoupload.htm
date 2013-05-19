@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title translate="load.predefined.TITLE">Lazzy load files without autoupload</title>
+  <title translate="load.predefined.TITLE">lazy load files without autoupload</title>
   <style>body { text-align: center; }</style>
 </head>
 
@@ -40,8 +40,8 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
   $translateProvider.translations('en_US', {
     "load" : {
       "predefined" : {
-        "TITLE" : "How to use lazzy loading without autoupload?",
-        "HEADER" : "You can predefine a default language while still using a lazzy loading.",
+        "TITLE" : "How to use lazy loading without autoupload?",
+        "HEADER" : "You can predefine a default language while still using a lazy loading.",
         "SUBHEADER" : "This way module will not load a default language from server once more."
       }
     }
@@ -50,7 +50,7 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
   // Tell the module what language to use by default
   $translateProvider.preferredLanguage('en_US');
   
-  // Tell the module to store the language in the coockies
+  // Tell the module to store the language in the cookies
   $translateProvider.useCookieStorage();
   
 }])
