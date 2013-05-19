@@ -5,7 +5,7 @@ module.exports = function (app, dir) {
     function answer(code, data) {
       res.writeHead(code,{
         'Content-Type':'application/json;charset=utf-8',
-        'Access-Control-Allow-Origin':'*', 
+        'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Headers':'X-Requested-With'
       });
       res.end(data);
@@ -16,6 +16,10 @@ module.exports = function (app, dir) {
       if (err) answer(404, '');
       else answer(200, data);
     });
+
+  // Example
+  app.get('/this-is-an-express-server', function (req, res) {
+    res.send(200);
   });
 
 };
