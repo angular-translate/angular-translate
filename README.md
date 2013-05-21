@@ -20,7 +20,7 @@ There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-tra
 ## Quick Start
 Install module via Bower:
 ````
-$ bower install PascalPrecht/bower-angular-translate
+$ bower install angular-translate
 ````
 
 Inject <code>angular-translate</code> module as a dependency into your app:
