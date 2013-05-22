@@ -48,6 +48,14 @@ Translate your app:
 
 To learn what else is possible, read the full [documentation](https://github.com/PascalPrecht/angular-translate/wiki).
 
+### Extensions
+There are some pretty cool extensions you probably find interesting:
+
+* [Storage: $translateCookiteStorage](https://github.com/PascalPrecht/angular-translate-storage-cookie)
+* [Storage: $translateLocalStorage](https://github.com/PascalPrecht/angular-translate-storage-local)
+* [Loader: $translateUrlLoader](https://github.com/PascalPrecht/angular-translate-loader-url)
+* [Loader: $translateStaticFilesLoader](https://github.com/PascalPrecht/angular-translate-loader-static-files)
+
 ## Contributors
 
 Special thanks are going to the following devs who put a lot of love into this module:
