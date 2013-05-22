@@ -1,3 +1,25 @@
+# 0.9.0 (2013-05-23)
+
+## Features
+### translateProvider
+
+* add use*() methods for async loaders (f2329cc2)
+
+
+
+
+
+## Breaking Changes
+### demo
+
+   Old demo files are not available from now.
+
+### extensions
+
+  There are now extensions for loaders and storages
+
+
+
 # 0.8.1 (2013-05-16)
 
 ## Features
