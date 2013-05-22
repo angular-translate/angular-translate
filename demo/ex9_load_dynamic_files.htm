@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title translate="load.static.TITLE">Load static files</title>
+  <title translate="load.dynamic.TITLE">Load dynamic files</title>
   <style>body { text-align: center; }</style>
 </head>
 
@@ -15,8 +15,8 @@
     <a href="#" ng-click="setLang('ru_RU')">Русский</a>
   </p>
 
-  <h1 translate>load.static.HEADER</h1>
-  <h2 translate>load.static.SUBHEADER</h2>
+  <h1 translate>load.dynamic.HEADER</h1>
+  <h2 translate>load.dynamic.SUBHEADER</h2>
   
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
@@ -27,14 +27,13 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
 
 .config(['$translateProvider', function($translateProvider){
 
-  // Register a loader for the static files
+  // Register a loader for the dynamic page
   // So, the module will search missing translation tables under the specified urls.
-  // Those urls are [prefix][langKey][suffix].
-  $translateProvider.registerLoader({
-    type: 'static-files', 
-    prefix: 'l10n/', 
-    suffix: '.json'
-  });
+  // Those urls are [specified_url]?lang=[langKey].
+  //
+  // Note that to run this example you have to start a server first.
+  // To run the server use a 'grunt server' command
+  $translateProvider.registerLoader('http://localhost:3005/demo/get_lang');
   
   // Tell the module what language to use by default
   $translateProvider.preferredLanguage('en_US');

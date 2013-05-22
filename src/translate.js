@@ -44,6 +44,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $storageKey = $STORAGE_KEY,
       $storagePrefix,
       $missingTranslationHandlerFactory,
+      $loaderFactory,
+      $loaderOptions,
       $asyncLoaders = [],
       NESTED_OBJECT_DELIMITER = '.';
 
@@ -260,7 +262,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.uses = function (langKey) {
     if (langKey) {
-      if (!$translationTable[langKey] && (!$asyncLoaders.length)) {
+      if (!$translationTable[langKey] && (!$asyncLoaders.length && !$loaderFactory)) {
         // only throw an error, when not loading translation data asynchronously
         throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
       }
@@ -268,6 +270,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     } else {
       return $uses;
     }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#translationTable
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Returns the current translate table as an API to enable dynamic translation
+   * table manipulation.
+   *
+   */
+  this.translationTable = function () {
+    return $translationTable;
   };
 
  /**
@@ -412,6 +428,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $loader = loader;
     }
     $asyncLoaders.push($loader);
+  };
+
+  this.useUrlLoader = function (url) {
+    this.useLoader('$translateUrlLoader', { url: url });
+  };
+
+  this.useStaticFilesLoader = function (options) {
+    this.useLoader('$translateStaticFilesLoader', options);
+  };
+
+  this.useLoader = function (loaderFactory, options) {
+    $loaderFactory = loaderFactory;
+    $loaderOptions = options;
   };
 
   /**
@@ -636,18 +665,38 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var deferred = $q.defer();
 
       if (!$translationTable[key]) {
-        invokeLoading($injector, key).then(function (data) {
-          $uses = key;
 
-          if ($storageFactory) {
-            Storage.set($translate.storageKey(), $uses);
-          }
-          $rootScope.$broadcast('translationChangeSuccess');
-          deferred.resolve($uses);
-        }, function (key) {
-          $rootScope.$broadcast('translationChangeError');
-          deferred.reject(key);
-        });
+        if ($loaderFactory) {
+          $injector.get($loaderFactory)(angular.extend($loaderOptions, {
+            key: key
+          })).then(function (data) {
+            $uses = key;
+            translations(key, data);
+
+            if ($storageFactory) {
+              Storage.set($translate.storageKey(), $uses);
+            }
+            $rootScope.$broadcast('translationChangeSuccess');
+            deferred.resolve($uses);
+          }, function (key) {
+            $rootScope.$broadcast('translationChangeError');
+            deferred.reject(key);
+          });
+        } else {
+
+          invokeLoading($injector, key).then(function (data) {
+            $uses = key;
+
+            if ($storageFactory) {
+              Storage.set($translate.storageKey(), $uses);
+            }
+            $rootScope.$broadcast('translationChangeSuccess');
+            deferred.resolve($uses);
+          }, function (key) {
+            $rootScope.$broadcast('translationChangeError');
+            deferred.reject(key);
+          });
+        }
         return deferred.promise;
       }
 
