@@ -46,59 +46,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $missingTranslationHandlerFactory,
       $loaderFactory,
       $loaderOptions,
-      $asyncLoaders = [],
       NESTED_OBJECT_DELIMITER = '.';
-
-  var LoaderGenerator = {
-    // Creates a loading function for a typical dynamic url pattern: "locale.php?lang=en_US",
-    // "locale.php?lang=de_DE", etc. Prefixing the specified url, the current requested
-    // language id will be applied with "?lang={key}". Using this builder, the response of
-    // these urls must be an object of key-value pairs.
-    forUrl : function (url) {
-      return ['$http', '$q', function ($http, $q) {
-        return function(key) {
-
-         var deferred = $q.defer();
-
-          $http({
-            url: url,
-            params: {lang: key},
-            method : 'GET'
-          }).success(function (data, status) {
-            deferred.resolve(data);
-          }).error(function (data, status) {
-            deferred.reject(key);
-          });
-
-          return deferred.promise;
-        };
-      }];
-    },
-
-    // Creates a loading function for a typical static file url pattern: "lang-en_US.json",
-    // "lang-de_DE.json", etc.   Using this builder, the response of these urls must be an
-    // object of key-value pairs.
-    byStaticFiles : function (prefix, suffix) {
-      return ['$http', '$q', function ($http, $q) {
-        return function(key) {
-
-          var deferred = $q.defer();
-
-          $http({
-            url: [prefix, key, suffix].join(''),
-            method : 'GET',
-            params: ''
-          }).success(function (data, status) {
-            deferred.resolve(data);
-          }).error(function (data, status) {
-            deferred.reject(key);
-          });
-
-          return deferred.promise;
-        };
-      }];
-    }
-  };
 
  /**
    * @ngdoc function
@@ -193,35 +141,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return result;
   };
 
-  // Using the first registered loader function this invokes the generated loader
-  // function and applies the resolved data. Regardless of the result of the loader
-  // function (it should be a promise, but do not have to be), the result will
-  // be wrapped with a promise.
-  var invokeLoading = function($injector, key) {
-
-    var deferred = $injector.get('$q').defer(),
-        loaderFnBuilder = $asyncLoaders[0],
-        loaderFn;
-
-    if (loaderFnBuilder) {
-      loaderFn = $injector.invoke(loaderFnBuilder);
-      if (angular.isFunction(loaderFn)) {
-        loaderFn(key).then(function (data) {
-          translations(key, data);
-          deferred.resolve(data);
-        }, function (key) {
-          deferred.reject(key);
-        });
-      } else {
-        deferred.reject(key);
-      }
-    } else {
-      deferred.reject(key);
-    }
-
-    return deferred.promise;
-  };
-
   this.translations = translations;
 
  /**
@@ -262,7 +181,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.uses = function (langKey) {
     if (langKey) {
-      if (!$translationTable[langKey] && (!$asyncLoaders.length && !$loaderFactory)) {
+      if (!$translationTable[langKey] && (!$loaderFactory)) {
         // only throw an error, when not loading translation data asynchronously
         throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
       }
@@ -297,151 +216,46 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   /**
    * @ngdoc function
-   * @name pascalprecht.translate.$translateProvider#registerLoader
+   * @name pascalprecht.translate.$translateProvider#useUrlLoader
    * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
-   * To load your data from a server you have to register an asynchronous loader,
-   * which gets invoked later at runtime when it's needed. There are three possible
-   * ways to register a loader via $translateProvider.registerLoader().
+   * Tells angular-translate to use `$translateUrlLoader` extension service as loader.
    *
-   * ### Register loader via URL string
-   *
-   * This is possibly the simplest way of loading translation data asynchronously.
-   * All you have to do, is to register a valid endpoint which later gets requested
-   * by angular-translate. Here's an example:
-   *
-   * <pre>
-   *  $translateProvider.registerLoader('foo/bar.json');
-   *  $translateProvider.preferredLanguage('en_US');
-   * </pre>
-   *
-   * angular-translate transforms the registered loader (which is actually just a string),
-   * to a real loader function which can be invoked later at runtime. In addition to that,
-   * telling $translateProvider to use the language key 'en_US', adds the language
-   * key as request parameter to the given loader string. So, the example above actually
-   * requests `foo/bar.json?lang=en_US.`
-   *
-   * If there isn't any translation table available at startup and any asynchronous
-   * loader is registered, angular-translate invokes the loader immediately.
-   *
-   * ### Register loader as static files
-   *
-   * In case you haven't just a URL which expects a lang parameter to return a JSON
-   * that contains your translations, but several localization files which match a
-   * specific pattern, you can register a loader which describes the pattern of your
-   * localization files.
-   *
-   * To specify a pattern, the following information is required:
-   *
-   *  * **type** - specifies loader type
-   *  * **prefix** - specifies file prefix
-   *  * **suffix** - specifies file suffix
-   *
-   * <pre>
-   *  $translateProvider.registerLoader({
-   *    type: 'static-files',
-   *    prefix: 'locale-',
-   *    suffix: '.json'
-   *  });
-   *  $translateProvider.preferredLanguage('en_US');
-   * </pre>
-   *
-   * This will load locale-en_US.json. And again, since there isn't any translation
-   * data available yet, it'll load as soon as possible automatically.
-   *
-   * ### Register loader function
-   *
-   * If non of the above possibilities fit to your needs, you can register an asynchronous
-   * loader as a factory function. The factory function uses the Angular style annotation
-   * for dependency injection. Which means, you can either just pass a function with
-   * its dependencies, or an annotated array where the last value represents the actual
-   * factory function.
-   *
-   * The factory function has to return a function, which expects a language key as
-   * parameter. With this architecture you're as free as possible and have the full
-   * control of how your asynchronous loader should behave.
-   *
-   * <pre>
-   *  $translateProvider.registerLoader(function ($http, $q) {
-   *    // return loaderFn
-   *    return function (key) {
-   *      var deferred = $q.defer();
-   *      // do something with $http, $q and key to load localization files
-   *
-   *      var data = {
-   *        'TEXT': 'Fooooo'
-   *      };
-   *
-   *      return deferred.resolve(data);
-   *      // or
-   *      return deferred.reject(key);
-   *    };
-   *  });
-   * </pre>
-   *
-   * You also have to make sure, that your loader function returns a promise. It should
-   * either gets resolved with your translation data, or rejected with the language key.
-   *
-   * @param {function | string} loader A string or a function with its dependencies
-   *
+   * @param {string} url Url
    */
-  this.registerLoader = function (loader) {
-
-    if (!loader) {
-      throw new Error("Please define a valid loader!");
-    }
-
-    var $loader;
-
-    if (!(angular.isFunction(loader) || angular.isArray(loader))) {
-      if (angular.isString(loader)) {
-        loader = {
-          type : 'url',
-          url : loader
-        };
-      }
-
-      switch (loader.type) {
-        case 'url':
-          $loader = LoaderGenerator.forUrl(loader.url);
-          break;
-        case 'static-files':
-          $loader = LoaderGenerator.byStaticFiles(loader.prefix, loader.suffix);
-          break;
-      }
-    } else {
-      $loader = loader;
-    }
-    $asyncLoaders.push($loader);
-  };
-
   this.useUrlLoader = function (url) {
     this.useLoader('$translateUrlLoader', { url: url });
   };
 
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useStaticFilesLoader
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use `$translateStaticFilesLoader` extension service as loader.
+   *
+   * @param {object} options
+   */
   this.useStaticFilesLoader = function (options) {
     this.useLoader('$translateStaticFilesLoader', options);
   };
 
-  this.useLoader = function (loaderFactory, options) {
-    $loaderFactory = loaderFactory;
-    $loaderOptions = options;
-  };
-
   /**
    * @ngdoc function
-   * @name pascalprecht.translate.$translateProvider#registerLoaderFactory
+   * @name pascalprecht.translate.$translateProvider#useLoader
    * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
-   * Shortcut method for `$translateProvider#registerLoader`.
+   * Tells angular-translate to use any other service as loader.
    *
-   * @param {function | string} loader A string or a function with its dependencies
-   *
+   * @param {string} loaderFactory Factory name to use
+   * @param {object} options
    */
-  this.useLoaderFactory = function (loader) {
-    this.registerLoader(loader);
+  this.useLoader = function (loaderFactory, options) {
+    $loaderFactory = loaderFactory;
+    $loaderOptions = options;
   };
 
   /**
@@ -652,37 +466,22 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       if (!$translationTable[key]) {
 
-        if ($loaderFactory) {
-          $injector.get($loaderFactory)(angular.extend($loaderOptions, {
-            key: key
-          })).then(function (data) {
-            $uses = key;
-            translations(key, data);
+        $injector.get($loaderFactory)(angular.extend($loaderOptions, {
+          key: key
+        })).then(function (data) {
+          $uses = key;
+          translations(key, data);
 
-            if ($storageFactory) {
-              Storage.set($translate.storageKey(), $uses);
-            }
-            $rootScope.$broadcast('translationChangeSuccess');
-            deferred.resolve($uses);
-          }, function (key) {
-            $rootScope.$broadcast('translationChangeError');
-            deferred.reject(key);
-          });
-        } else {
+          if ($storageFactory) {
+            Storage.set($translate.storageKey(), $uses);
+          }
+          $rootScope.$broadcast('translationChangeSuccess');
+          deferred.resolve($uses);
+        }, function (key) {
+          $rootScope.$broadcast('translationChangeError');
+          deferred.reject(key);
+        });
 
-          invokeLoading($injector, key).then(function (data) {
-            $uses = key;
-
-            if ($storageFactory) {
-              Storage.set($translate.storageKey(), $uses);
-            }
-            $rootScope.$broadcast('translationChangeSuccess');
-            deferred.resolve($uses);
-          }, function (key) {
-            $rootScope.$broadcast('translationChangeError');
-            deferred.reject(key);
-          });
-        }
         return deferred.promise;
       }
 
@@ -713,7 +512,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
-    if ($asyncLoaders.length && angular.equals($translationTable, {})) {
+    if ($loaderFactory && angular.equals($translationTable, {})) {
       $translate.uses($translate.uses());
     }
 
