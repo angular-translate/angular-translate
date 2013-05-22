@@ -272,6 +272,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
   };
 
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#translationTable
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Returns the current translate table as an API to enable dynamic translation
+   * table manipulation.
+   *
+   */
+  this.translationTable = function () {
+    return $translationTable;
+  };
+
  /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#storageKey
