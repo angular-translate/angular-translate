@@ -518,6 +518,79 @@ describe('pascalprecht.translate', function () {
       }));
     });
 
+    describe('useUrlLoader()', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.useUrlLoader('foo/bar.json');
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $httpBackend = _$httpBackend_;
+        $translate = _$translate_;
+
+        $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({it: 'works'});
+      }));
+
+      afterEach(function () {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+
+      it('should fetch url when invoking #uses', function () {
+        $httpBackend.expectGET('foo/bar.json?lang=de_DE');
+        $translate.uses('de_DE');
+        $httpBackend.flush();
+      });
+    });
+
+    describe('useStaticFilesLoader()', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'lang_',
+          suffix: '.json'
+        });
+      }));
+
+      var $translate, $httpBackend;
+
+      beforeEach(inject(function (_$translate_, _$httpBackend_) {
+        $httpBackend = _$httpBackend_;
+        $translate = _$translate_;
+
+        $httpBackend.when('GET', 'lang_de_DE.json').respond({HEADER: 'Ueberschrift'});
+        $httpBackend.when('GET', 'lang_en_US.json').respond({HEADER:'Header'});
+        $httpBackend.when('GET', 'lang_nt_VD.json').respond(404);
+      }));
+
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+
+      it('should fetch url when invoking #uses(de_DE)', function () {
+        $httpBackend.expectGET('lang_de_DE.json');
+        $translate.uses('de_DE');
+        $httpBackend.flush();
+        expect($translate('HEADER')).toEqual('Ueberschrift');
+      });
+
+      it('should fetch url when invoking #uses(en_US)', function () {
+        $httpBackend.expectGET('lang_en_US.json');
+        $translate.uses('en_US');
+        $httpBackend.flush();
+        expect($translate('HEADER')).toEqual('Header');
+      });
+
+      it('should fetch url when invoking #uses invalid', function () {
+        $httpBackend.expectGET('lang_nt_VD.json');
+        $translate.uses('nt_VD');
+        $httpBackend.flush();
+        expect($translate('HEADER')).toEqual('HEADER');
+      });
+    });
+
     describe('register loader as url string', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider) {
