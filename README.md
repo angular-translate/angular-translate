@@ -55,7 +55,7 @@ To learn what else is possible, read the full [documentation](https://github.com
 ### Extensions
 There are some pretty cool extensions you probably find interesting:
 
-* [Storage: $translateCookiteStorage](https://github.com/PascalPrecht/angular-translate-storage-cookie)
+* [Storage: $translateCookieStorage](https://github.com/PascalPrecht/angular-translate-storage-cookie)
 * [Storage: $translateLocalStorage](https://github.com/PascalPrecht/angular-translate-storage-local)
 * [Loader: $translateUrlLoader](https://github.com/PascalPrecht/angular-translate-loader-url)
 * [Loader: $translateStaticFilesLoader](https://github.com/PascalPrecht/angular-translate-loader-static-files)
