@@ -16,6 +16,10 @@ There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-tra
 
 **Attention:** Since we're currently working on a specification for [Reusable Angular Components](https://github.com/PascalPrecht/angular-component-spec/tree/proposal), this project will have some breaking changes once the spec is called final.
 
+angular-translate will be free forever! How about some love?
+
+<a href='http://www.pledgie.com/campaigns/20186'><img alt='Click here to lend your support to: angular-translate and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/20186.png?skin_name=chrome' border='0' /></a>
+
 
 ## Quick Start
 Install module via Bower:
@@ -51,7 +55,7 @@ To learn what else is possible, read the full [documentation](https://github.com
 ### Extensions
 There are some pretty cool extensions you probably find interesting:
 
-* [Storage: $translateCookiteStorage](https://github.com/PascalPrecht/angular-translate-storage-cookie)
+* [Storage: $translateCookieStorage](https://github.com/PascalPrecht/angular-translate-storage-cookie)
 * [Storage: $translateLocalStorage](https://github.com/PascalPrecht/angular-translate-storage-local)
 * [Loader: $translateUrlLoader](https://github.com/PascalPrecht/angular-translate-loader-url)
 * [Loader: $translateStaticFilesLoader](https://github.com/PascalPrecht/angular-translate-loader-static-files)
