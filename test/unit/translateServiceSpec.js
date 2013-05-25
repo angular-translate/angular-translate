@@ -101,6 +101,7 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations({
         'EXISTING_TRANSLATION_ID': 'foo',
+        'BLANK_VALUE': '',
         'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
         'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
         'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
@@ -126,9 +127,9 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should return translation if translation id if exists', function () {
-      var translationId = "EXISTING_TRANSLATION_ID";
       inject(function ($translate) {
-        expect($translate(translationId)).toEqual('foo');
+        expect($translate("EXISTING_TRANSLATION_ID")).toEqual('foo');
+        expect($translate("BLANK_VALUE")).toEqual('');
       });
     });
 
@@ -162,6 +163,7 @@ describe('pascalprecht.translate', function () {
       $translateProvider.translations('de_DE', {
         'EXISTING_TRANSLATION_ID': 'foo',
         'ANOTHER_ONE': 'bar',
+        'BLANK_VALUE': '',
         'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
         'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
         'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
@@ -200,6 +202,7 @@ describe('pascalprecht.translate', function () {
       inject(function ($translate) {
         expect($translate('EXISTING_TRANSLATION_ID')).toEqual('foo');
         expect($translate('ANOTHER_ONE')).toEqual('bar');
+        expect($translate('BLANK_VALUE')).toEqual('');
       });
     });
 
