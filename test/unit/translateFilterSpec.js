@@ -13,7 +13,8 @@ describe('pascalprecht.translate', function () {
         'TEXT': 'this is a text',
         'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
         'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-        'AND_THIS': '{{value + value}}'
+        'AND_THIS': '{{value + value}}',
+        'BLANK_VALUE': ''
       });
     }));
 
@@ -32,6 +33,7 @@ describe('pascalprecht.translate', function () {
     it('should return translation if translation id exist', function () {
       inject(function ($filter) {
         expect($filter('translate')('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
+        expect($filter('translate')('BLANK_VALUE')).toEqual('');
       });
     });
 
@@ -77,7 +79,8 @@ describe('pascalprecht.translate', function () {
         'TEXT': 'this is a text',
         'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
         'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-        'AND_THIS': '{{value + value}}'
+        'AND_THIS': '{{value + value}}',
+        'BLANK_VALUE': ''
       });
 
       $translateProvider.uses('en_EN');
@@ -92,6 +95,7 @@ describe('pascalprecht.translate', function () {
     it('should return translation if translation id exist and language is given', function () {
       inject(function ($filter) {
         expect($filter('translate')('EXISTING_TRANSLATION_ID')).toEqual('foo');
+        expect($filter('translate')('BLANK_VALUE')).toEqual('');
       });
     });
 
