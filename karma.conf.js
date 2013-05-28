@@ -11,7 +11,6 @@ files = [
   JASMINE,
   JASMINE_ADAPTER,
   'bower_components/angular/angular.js',
-  'bower_components/angular-cookies/angular-cookies.js',
   'bower_components/angular-mocks/angular-mocks.js',
   'src/translate.js',
   'src/**/*.js',
