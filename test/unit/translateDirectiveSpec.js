@@ -15,7 +15,8 @@ describe('pascalprecht.translate', function () {
         'YET_ANOTHER': 'Hallo da!',
         'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
         'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-        'AND_THIS': '{{value + value}}'
+        'AND_THIS': '{{value + value}}',
+        'BLANK_VALUE': ''
       });
     }));
 
@@ -39,6 +40,10 @@ describe('pascalprecht.translate', function () {
         element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
         $rootScope.$digest();
         expect(element.text()).toBe('foo');
+
+        element = $compile('<div translate="BLANK_VALUE"></div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
       });
     });
 
@@ -75,6 +80,10 @@ describe('pascalprecht.translate', function () {
           element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
           $rootScope.$digest();
           expect(element.text()).toBe('foo');
+
+          element = $compile('<div translate>BLANK_VALUE</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('');
         });
       });
 
@@ -238,7 +247,8 @@ describe('pascalprecht.translate', function () {
         'YET_ANOTHER': 'Hallo da!',
         'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
         'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-        'AND_THIS': '{{value + value}}'
+        'AND_THIS': '{{value + value}}',
+        'BLANK_VALUE': ''
       });
       $translateProvider.uses('en_EN');
     }));
@@ -265,6 +275,10 @@ describe('pascalprecht.translate', function () {
           element = $compile('<div translate="EXISTING_TRANSLATION_ID"></div>')($rootScope);
           $rootScope.$digest();
           expect(element.text()).toBe('foo');
+
+          element = $compile('<div translate="BLANK_VALUE"></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('');
         });
       });
 
@@ -301,6 +315,10 @@ describe('pascalprecht.translate', function () {
           element = $compile('<div translate>EXISTING_TRANSLATION_ID</div>')($rootScope);
           $rootScope.$digest();
           expect(element.text()).toBe('foo');
+
+          element = $compile('<div translate>BLANK_VALUE</div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('');
         });
       });
 

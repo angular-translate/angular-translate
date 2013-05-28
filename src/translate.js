@@ -398,11 +398,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
 
     var $translate = function (translationId, interpolateParams) {
-      var translation = ($uses) ?
-        ($translationTable[$uses] ? $translationTable[$uses][translationId] : translationId) :
-        $translationTable[translationId];
-      if (translation) {
-        return $interpolate(translation)(interpolateParams);
+      var table = $uses ? $translationTable[$uses] : $translationTable;
+      if (table && table.hasOwnProperty(translationId)) {
+        return $interpolate(table[translationId])(interpolateParams);
       }
 
       if ($missingTranslationHandlerFactory) {
