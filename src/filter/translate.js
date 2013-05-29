@@ -1,9 +1,9 @@
 angular.module('pascalprecht.translate')
 /**
  * @ngdoc filter
- * @name pascalprecht.translate.filter:translate
+ * @name translate.filter:translate
  * @requires $parse
- * @requires pascalprecht.translate.$translate
+ * @requires translate.$translate
  * @function
  *
  * @description
