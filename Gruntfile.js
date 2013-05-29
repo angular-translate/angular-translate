@@ -10,6 +10,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-ngmin');
+  grunt.loadNpmTasks('grunt-ngdocs');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('bower.json'),
@@ -88,8 +89,24 @@ module.exports = function (grunt) {
           server: __dirname + '/server.js'
         }
       }
+    },
+    ngdocs: {
+      options: {
+        dest: 'docs',
+        html5mode: false,
+        scripts: [
+          'bower_components/angular/angular.js',
+          'bower_components/angular-translate/angular-translate.js'
+        ]
+      },
+      api: {
+        src: [
+          'src/translate.js',
+          'src/**/*.js'
+        ],
+        title: 'API Reference'
+      }
     }
-
   });
 
   grunt.registerTask('default', ['jshint', 'karma']);

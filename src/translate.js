@@ -236,7 +236,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @description
    * Tells angular-translate to use `$translateStaticFilesLoader` extension service as loader.
    *
-   * @param {object} options
+   * @param {Object=} options Optional configuration object
    */
   this.useStaticFilesLoader = function (options) {
     this.useLoader('$translateStaticFilesLoader', options);
@@ -251,7 +251,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * Tells angular-translate to use any other service as loader.
    *
    * @param {string} loaderFactory Factory name to use
-   * @param {object} options
+   * @param {Object=} options Optional configuration object
    */
   this.useLoader = function (loaderFactory, options) {
     $loaderFactory = loaderFactory;

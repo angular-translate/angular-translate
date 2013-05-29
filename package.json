@@ -23,6 +23,7 @@
     "grunt-express": "~0.3.3",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-ngmin": "0.0.2",
-    "express": "~3.2.4"
+    "express": "~3.2.4",
+    "grunt-ngdocs": "~0.1.0"
   }
 }

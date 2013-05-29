@@ -13,5 +13,8 @@
     "angular": "1.0.6",
     "angular-cookies": "1.0.6",
     "angular-mocks": "1.0.6"
+  },
+  "devDependencies": {
+    "angular-translate": "~0.9.1"
   }
 }
