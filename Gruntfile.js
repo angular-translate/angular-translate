@@ -93,7 +93,7 @@ module.exports = function (grunt) {
     ngdocs: {
       options: {
         dest: 'site',
-        html5mode: false,
+        html5Mode: false,
         scripts: [
           'bower_components/angular/angular.js',
           'bower_components/angular-translate/angular-translate.js'
