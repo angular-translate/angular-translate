@@ -33,7 +33,11 @@ describe('pascalprecht.translate', function () {
         expect($translate.preferredLanguage).toBeDefined();
       });
     });
-
+    it('should have a method fallbackLanguage()', function() {
+      inject(function ($translate) {
+        expect($translate.fallbackLanguage).toBeDefined();
+      });
+    });
     it('should have a method storageKey()', function() {
       inject(function ($translate) {
         expect($translate.storageKey).toBeDefined();
@@ -72,6 +76,23 @@ describe('pascalprecht.translate', function () {
 
     });
 
+    
+    describe('fallbackLanguage()', function() {
+
+      it('should be a function', function() {
+        inject(function($translate){
+          expect(typeof $translate.fallbackLanguage).toBe('function');
+        });
+      });
+
+      it ('should return undefined if no language is specified', function() {
+        inject(function($translate){
+          expect($translate.fallbackLanguage()).toBeUndefined();
+        });
+      });
+
+    });    
+    
     describe('storageKey()', function () {
 
       it('should be a function', function () {
@@ -177,6 +198,8 @@ describe('pascalprecht.translate', function () {
         'FOO': 'bar'
       });
       $translateProvider.uses('de_DE');
+      $translateProvider.fallbackLanguage('en_EN');
+      
       $translateProvider.preferredLanguage('en_EN');
       $translateProvider.preferredLanguage('de_DE');
       $translateProvider.storageKey('lang');
@@ -312,7 +335,37 @@ describe('pascalprecht.translate', function () {
     });
 
   });
+    describe('$translateService#fallbackLanguage()', function () {
 
+      it ('should return a string if language is specified', function() {
+        inject(function($translate){
+          expect(typeof $translate.fallbackLanguage()).toBe('string');
+        });
+      });
+
+      it ('should return a correct language code', function() {
+        inject(function($translate){
+          expect($translate.fallbackLanguage()).toEqual('en_EN');
+        });
+      });
+
+      it('should allow to change fallback language during config', function() {
+        inject(function($translate){
+          expect($translate.fallbackLanguage()).toEqual('en_EN');
+        });
+      });
+
+      it('shouldn\'t allow to change fallback language during runtime', function() {
+        inject(function($translate){
+          var prevLang = $translate.fallbackLanguage();
+          $translate.fallbackLanguage(prevLang === 'de_DE' ? 'en_EN' : 'de_DE');
+          expect($translate.fallbackLanguage()).toBe(prevLang);
+        });
+      });
+
+    });
+
+  });
   describe('where data is a nested object structure (namespace support)', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
@@ -341,6 +394,7 @@ describe('pascalprecht.translate', function () {
       $translateProvider.translations('de_DE', {});
       $translateProvider.translations('en_EN', {});
       $translateProvider.preferredLanguage('en_EN');
+      $translateProvider.fallbackLanguage('en_EN');
     }));
 
     var $translate;
