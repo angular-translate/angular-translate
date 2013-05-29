@@ -92,7 +92,7 @@ module.exports = function (grunt) {
     },
     ngdocs: {
       options: {
-        dest: 'docs',
+        dest: 'site',
         html5mode: false,
         scripts: [
           'bower_components/angular/angular.js',
@@ -102,7 +102,8 @@ module.exports = function (grunt) {
       api: {
         src: [
           'src/translate.js',
-          'src/**/*.js'
+          'src/**/*.js',
+          'docs/content/api/*.ngdoc'
         ],
         title: 'API Reference'
       }
