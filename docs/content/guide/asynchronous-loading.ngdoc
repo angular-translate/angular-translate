@@ -1,0 +1,114 @@
+@ngdoc overview
+@name Asynchronous Loading
+@description
+
+# Asynchronous Loading
+
+Okay, different translations for different languages is pretty cool. But it's even better if you're able to load translations asynchronously right? `angular-translate` has some pretty cool [extensions](Extensions) which support asynchronous and lazy loading of translation data. And it works like a charm.
+
+### Using asynchronous loaders
+`angular-translate` provides a pretty clever way to tell $translate service to load data asynchronously. To load your data from a server you have to use an asynchronous loader, which gets invoked later at runtime when it's needed. There are three possible ways to use a loader.
+
+#### Using extension: $translateUrlLoader
+This is possibly the simplest way of loading translation data asynchronously. All you have to do, is to install the `angular-translate-loader-url` extension via bower
+
+```js
+$ bower install angular-translate-loader-url
+```
+
+and register a valid endpoint which later gets requested by `angular-translate`. Here's an example:
+
+```js
+$translateProvider.useUrlLoader('foo/bar.json');
+$translateProvider.preferredLanguage('en_US');
+```
+
+So, what happens here? `angular-translate` uses the extension to transform the given string, to a real loader function which can be invoked later at runtime. In addition to that, telling `$translateProvider` to use the language key 'en_US', adds the language key as request parameter to the given loader string. So, the example above actually requests `foo/bar.json?lang=en_US`.
+
+`angular-translate` also notices that there isn't any translation data available at startup and will invoke the loader automatically as soon as possible.
+
+#### Using extension: static-files loader
+In case you haven't just a URL which expects a `lang` parameter to return a JSON that contains your translations, but several localization files which match a specific pattern, you probably want to use the `angular-translate-loader-static-files` extension which describes the pattern of your localization files.
+
+First you have to install the extension via bower:
+
+```js
+$ bower install angular-translate-loader-static-files
+```
+
+To specify a pattern, the following information is required:
+
+* **prefix** - specifies file prefix
+* **suffix** - specifies file suffix
+
+Let's say you have two localization files `locale-de_DE.json` and `locale-en_US.json`. You can simply use the static-files loader with this pattern:
+
+```js
+$translateProvider.useStaticFilesLoader({
+    prefix: 'locale-',
+    suffix: '.json'
+});
+$translateProvider.preferredLanguage('en_US');
+```
+
+This will load `locale-en_US.json`. And again, since there isn't any translation data available yet, it'll load as soon as possible automatically.
+
+To lazy load another translation file at runtime, simply invoke `$translate.uses()` with a specific language key.
+
+**[&rarr; View Plunker](http://plnkr.co/edit/Hw4iMz)**
+
+#### Using custom loader service
+If non of the above possibilities fit to your needs, you can register an asynchronous loader as a factory function. Just declare a new service on your module and tell `$translateProvider` to use this one as an asynchronous loader.
+
+The factory function has to return a function, which expects an object where at least the language key property exists. With this architecture you're as free as possible and have the full control of how your asynchronous loader should behave. Here is an example:
+
+```js
+var app = angular.module('myModule', []);
+
+app.config(function ($translateProvider) {
+  $translateProvider.useLoader('customLoader', {
+     // if you have some custom properties, go for it!
+  });
+});
+
+app.factory('customLoader', function ($http, $q) {
+    // return loaderFn
+    return function (options) {
+        var deferred = $q.defer();
+        // do something with $http, $q and key to load localization files
+
+        var data = {
+            'TEXT': 'Fooooo'
+        };
+
+        return deferred.resolve(data);
+        // or
+        return deferred.reject(options.key);
+    };
+});
+```
+
+You also have to make sure, that your loader function returns a promise. It should either gets resolved with your translation data, or rejected with the language key.
+
+**[&rarr; View Plunker](http://plnkr.co/edit/n6MEMU)**
+
+### Loading asynchronously without autoload
+And of course, you're able to combine the use of asynchronous loaders with simply registering translations. Let's say you have an app, where one language is already available and others should be loaded lazy, once they're needed. Simply register your translation, your asynchronous loader and tell `angular-translate`which language to use:
+
+```js
+$translateProvider.translations('de_DE', {
+    'HELLO_TEXT': 'Hello World!'
+});
+
+$translateProvider.useStaticFilesLoader({
+    'prefix': 'locale-',
+    'suffix': '.json'
+});
+
+$translateProvider.preferredLanguage('de_DE');
+```
+Now `angular-translate` notices that there is an existing translation table for 'de_DE'. It doesn't have to load any other localization file until somebody says so.
+
+This works with all possible signatures.
+
+**[&rarr; View Plunker](http://plnkr.co/edit/IYN1cT)**
