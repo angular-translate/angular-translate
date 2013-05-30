@@ -16,9 +16,6 @@ There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-tra
 
 **Attention:** Since we're currently working on a specification for [Reusable Angular Components](https://github.com/PascalPrecht/angular-component-spec/tree/proposal), this project will have some breaking changes once the spec is called final.
 
-angular-translate will be free forever! How about some love?
-
-<a href='http://www.pledgie.com/campaigns/20186'><img alt='Click here to lend your support to: angular-translate and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/20186.png?skin_name=chrome' border='0' /></a>
 
 
 ## Quick Start
