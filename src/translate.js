@@ -457,7 +457,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     /**
      * @ngdoc function
      * @name translate.$translate#fallbackLanguage
-     * @methodOf translate.$fallbackLanguage
+     * @methodOf translate.$translate
      *
      * @description
      * Returns the language key for the fallback language.
