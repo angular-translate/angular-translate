@@ -2,9 +2,11 @@
 @name Guide
 @description
 
-# Guide
+# i18n for your Angular apps, made easy
 
-Welcome to the angular-translate guide. When you read this doc, you'll learn how to use angular-translate and its cool features!
+####angular-translate is the easiest way to bring internationalization and localization to your Angular apps!
+
+This is the developer guide. When you read this doc, you'll learn how to use angular-translate and its cool features!
 
 Checkout the [demos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) and [help out](https://github.com/PascalPrecht/angular-translate/master/CONTRIBUTING.md) making things better.
 If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/angular-translate)!
