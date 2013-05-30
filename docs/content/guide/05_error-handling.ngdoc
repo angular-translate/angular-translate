@@ -14,9 +14,9 @@ $ bower install angular-translate-handler-log
 
 To use this handler, all you have to do is to call `useMissingTranslationHandlerLog()` on `$translateProvider`:
 
-```js
+<pre>
 $translateProvider.useMissingTranslationHandlerLog();
-```
+</pre>
 
 ### Defining custom handler for missing translations
 
@@ -24,7 +24,7 @@ Of course you want to be able to use your own custom handler. Besides `useMissin
 there's another method called `useMissingTranslationHandler()` which expects the name
 of a factory which returns your custom handler. So how does that look like?
 
-```js
+<pre>
 var app = angular.module('myApp', ['pascalprecht.translate'], function ($translateProvider) {
   // tell angular-translate to use your custom handler
   $translateProvider.useMissingTranslationHandler('myCustomHandlerFactory');
@@ -38,7 +38,7 @@ app.factory('myCustomHandlerFactory', function (dep1, dep2) {
   };
 });
 
-```
+</pre>
 
 So you're able to extend `angular-translate`'s functionality by yourself!
 

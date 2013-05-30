@@ -6,9 +6,10 @@
 
 To get started, simply inject <code>angular-translate</code> as dependency into your module.
 This gives you access to all components <code>angular-translate</code> comes with.
-```js
+
+<pre>
 var app = angular.module('myApp', ['pascalprecht.translate']);
-```
+</pre>
 
 ### Configuring $translateProvider
 
@@ -21,7 +22,7 @@ Teaching your app a language with <code>$translateProvider</code> is pretty easy
 Just inject it in your module configuration and make use of the <code>translations()</code>
 method.
 
-```js
+<pre>
 angular.module('myApp', ['pascalprecht.translate'], ['$translateProvider', function ($translateProvider) {
 
   // register translation table
@@ -31,7 +32,8 @@ angular.module('myApp', ['pascalprecht.translate'], ['$translateProvider', funct
   });
 
 }]);
-```
+</pre>
+
 You can register a translation table just by passing an object hash where a key
 represents a translation id and a value the concrete translation. In the example above
 there are two registered translations, <code>HEADLINE_TEXT</code> and <code>SOME_TEXT</code>.
@@ -41,7 +43,7 @@ there are two registered translations, <code>HEADLINE_TEXT</code> and <code>SOME
 #### Namespacing support
 Since version `0.7.0` you're also able to use translation tables with namespaces. This could be pretty useful when having a complex organization of translations.
 
-```js
+<pre>
  // register translation table
  $translateProvider.translations({
     'component1': {
@@ -51,7 +53,7 @@ Since version `0.7.0` you're also able to use translation tables with namespaces
        'SOME_TEXT': 'A text anywhere in the app.'
     }
  });
-```
+</pre>
 
 ### Using $translate service
 
@@ -63,13 +65,14 @@ it's possible.
 
 Simply inject the <code>$translate</code> service as you would do with others.
 
-```js
+<pre>
 angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
   $scope.translatedText = $translate('HEADLINE_TEXT');
 
 }]);
-```
+</pre>
+
 This service in actually beeing used module-wide in <code>angular-translate</code> to
 translate translation id's. If you want to know what behavior you can expect from
 <code>$translate</code> in specific cases, check out the [related tests](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateSpec.js#L40-L60).
@@ -84,10 +87,12 @@ services. <code>angular-translate</code> comes with a **filter** and a **directi
 translate your contents.
 
 You make use of <code>translateFilter</code> as follows:
-```html
+
+<pre>
 <h1>{{'HEADLINE_TEXT' | translate}}</h1>
 <p>{{'SOME_TEXT' | translate}}</p>
-```
+</pre>
+
 Pretty easy ha? And again, there is a [testsuite](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateSpec.js#L310-L326)
 which shows you how <code>translateFilter</code> behaves in certain cases.
 
@@ -102,15 +107,19 @@ contents in view layer.
 
 You can use <code>translateDirective</code> in many different ways, here is one possible
 way:
-```html
+
+<pre>
 <h1 translate>HEADLINE_TEXT</h1>
 <p translate>SOME_TEXT</p>
-```
+</pre>
+
 You can also pass translation id's as attribute values:
-```html
+
+<pre>
 <h1 translate="HEADLINE_TEXT"></h1>
 <p translate="SOME_TEXT"></p>
-```
+</pre>
+
 And there is [so much more possible](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateDirectiveSpec.js)!
 
 **[&rarr; View Plunker](http://plnkr.co/edit/6of2GK)**

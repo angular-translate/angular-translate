@@ -13,7 +13,7 @@ key as first parameter, where as the translation table is passed as second param
 
 Here is an example:
 
-```js
+<pre>
 angular.module('myApp', ['pascalprecht.translate'], ['$translateProvider', function ($translateProvider) {
   // register german translation table
   $translateProvider.translations('de_DE', {
@@ -24,12 +24,12 @@ angular.module('myApp', ['pascalprecht.translate'], ['$translateProvider', funct
     'GREETING': 'Hello World!'
   });
 }]);
-```
+</pre>
 
 Since you've now registered more then one translation table, <code>angular-translate</code>
 has to know which one to use. This is where <code>preferredLanguage(langKey)</code> comes in.
 
-```js
+<pre>
 angular.module('myApp', ['pasalprecht.translate'], ['$translateProvider', function ($translateProvider) {
   // register german translation table
   $translateProvider.translations('de_DE', {
@@ -42,13 +42,13 @@ angular.module('myApp', ['pasalprecht.translate'], ['$translateProvider', functi
   // which language to use?
   $translateProvider.preferredLanguage('de_DE');
 }]);
-```
+</pre>
 
 To switch the language at runtime, <code>$translate</code> service has a method
 <code>uses()</code> to set the language. So, saying we have a <code>ng-click</code>
 event, which calls a function on our current scope, it could look like this:
 
-```js
+<pre>
 angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
   $scope.toggleLanguage = function () {
@@ -56,7 +56,8 @@ angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($t
   };
 
 }]);
-```
+</pre>
+
 **[&rarr; View Plunker](http://plnkr.co/edit/MQtVIH)**
 
 ### Let your app remember the language
@@ -77,9 +78,9 @@ $ bower install angular-translate-storage-cookie
 
 and use `useCookieStorage()` on `$translateProvider` like so:
 
-```js
+<pre>
 $translateProvider.useCookieStorage();
-```
+</pre>
 
 `useCookieStorage()` is actually a shortcut method for `useStorage()` which could be used to create a custom storage service. Once you've told `angular-translate` to use cookieStorage, it'll internally use the provided `$translateCookieStorage` extension. But you don't really have to care about that.
 
@@ -93,14 +94,15 @@ $ bower install angular-translate-storage-local
 
 Usage:
 
-```js
+<pre>
 $translateProvider.useLocalStorage();
-```
+</pre>
 
 #### useStorage()
+
 If both, localStorage and cookieStorage don't fit to your needs you can simply build your own service and use that instead. All you have to do is to make sure that your custom storage service provides a `get()` and a `set()` method.
 
-```js
+<pre>
 app.config(function ($translateProvider) {
     $translateProvider.useStorage('myCustomService');
 });
@@ -115,5 +117,5 @@ app.factory('myCustomService', function ($http, dep2, dep3) {
         }
     };
 });
-```
+</pre>
 

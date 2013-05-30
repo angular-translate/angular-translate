@@ -93,10 +93,12 @@ module.exports = function (grunt) {
     ngdocs: {
       options: {
         dest: 'site',
+        title: 'angular-translate',
+        navTemplate: 'docs/html/nav.html',
         html5Mode: false,
         scripts: [
-          'bower_components/angular/angular.js',
-          'bower_components/angular-translate/angular-translate.js'
+          'docs/scripts/angular.min.js',
+          'docs/scripts/angular-translate.min.js'
         ]
       },
       api: {
