@@ -76,7 +76,7 @@ describe('pascalprecht.translate', function () {
 
     });
 
-    
+
     describe('fallbackLanguage()', function() {
 
       it('should be a function', function() {
@@ -91,8 +91,8 @@ describe('pascalprecht.translate', function () {
         });
       });
 
-    });    
-    
+    });
+
     describe('storageKey()', function () {
 
       it('should be a function', function () {
@@ -201,7 +201,7 @@ describe('pascalprecht.translate', function () {
       });
       $translateProvider.uses('de_DE');
       $translateProvider.fallbackLanguage('en_EN');
-      
+
       $translateProvider.preferredLanguage('en_EN');
       $translateProvider.preferredLanguage('de_DE');
       $translateProvider.storageKey('lang');
@@ -338,37 +338,43 @@ describe('pascalprecht.translate', function () {
     });
 
   });
-    describe('$translateService#fallbackLanguage()', function () {
 
-      it ('should return a string if language is specified', function() {
-        inject(function($translate){
-          expect(typeof $translate.fallbackLanguage()).toBe('string');
-        });
+  describe('$translateService#fallbackLanguage()', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.translations('foo', {
+        'TRANSLATION_ID': 'foo',
+        'TRANSLATION__ID': 'booyaka'
       });
 
-      it ('should return a correct language code', function() {
-        inject(function($translate){
-          expect($translate.fallbackLanguage()).toEqual('en_EN');
-        });
+      $translateProvider.translations('bar', {
+        'TRANSLATION__ID': 'bazinga'
       });
 
-      it('should allow to change fallback language during config', function() {
-        inject(function($translate){
-          expect($translate.fallbackLanguage()).toEqual('en_EN');
-        });
-      });
+      $translateProvider.preferredLanguage('bar');
+      $translateProvider.fallbackLanguage('foo');
+    }));
 
-      it('shouldn\'t allow to change fallback language during runtime', function() {
-        inject(function($translate){
-          var prevLang = $translate.fallbackLanguage();
-          $translate.fallbackLanguage(prevLang === 'de_DE' ? 'en_EN' : 'de_DE');
-          expect($translate.fallbackLanguage()).toBe(prevLang);
-        });
+    it ('should return a string if language is specified', function() {
+      inject(function($translate){
+        expect(typeof $translate.fallbackLanguage()).toBe('string');
       });
-
     });
 
+    it ('should return a correct language code', function() {
+      inject(function($translate){
+        expect($translate.fallbackLanguage()).toEqual('foo');
+      });
+    });
+
+    it ('should use fallback language if translation id doesn\'t exist', function () {
+      inject(function ($translate) {
+        expect($translate('TRANSLATION__ID')).toEqual('bazinga');
+        expect($translate('TRANSLATION_ID')).toEqual('foo');
+      });
+    });
   });
+
   describe('where data is a nested object structure (namespace support)', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {

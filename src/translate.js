@@ -185,8 +185,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return $fallbackLanguage;
     }
   };
-  
-  
+
+
  /**
    * @ngdoc function
    * @name translate.$translateProvider#uses
@@ -422,17 +422,18 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     var $translate = function (translationId, interpolateParams) {
       var table = $uses ? $translationTable[$uses] : $translationTable;
+
       if (table && table.hasOwnProperty(translationId)) {
         return $interpolate(table[translationId])(interpolateParams);
       }
-      
+
       if ($missingTranslationHandlerFactory) {
         $injector.get($missingTranslationHandlerFactory)(translationId);
       }
-      
-      if(!translation && $uses && $fallbackLanguage && $uses!==$fallbackLanguage){
-        translation=$translationTable[$fallbackLanguage][translationId];
-        if(translation){
+
+      if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
+        var translation = $translationTable[$fallbackLanguage][translationId];
+        if (translation) {
           return $interpolate(translation)(interpolateParams);
         }
       }
@@ -450,8 +451,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      *
      * @return {string} preferred language key
      */
-    $translate.preferredLanguage = function() {
-        return $preferredLanguage;
+    $translate.preferredLanguage = function () {
+      return $preferredLanguage;
     };
     /**
      * @ngdoc function
@@ -463,11 +464,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      *
      * @return {string} fallback language key
      */
-    $translate.fallbackLanguage = function() {
-        return $fallbackLanguage;
+    $translate.fallbackLanguage = function () {
+      return $fallbackLanguage;
     };
-    
-    
+
+
     /**
      * @ngdoc function
      * @name translate.$translate#storage
