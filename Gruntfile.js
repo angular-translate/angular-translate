@@ -106,6 +106,10 @@ module.exports = function (grunt) {
           'docs/content/api/*.ngdoc'
         ],
         title: 'API Reference'
+      },
+      guide: {
+        src: ['docs/content/guide/*.ngdoc'],
+        title: 'Guide'
       }
     }
   });
