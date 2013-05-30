@@ -97,8 +97,8 @@ module.exports = function (grunt) {
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
         scripts: [
-          'docs/scripts/angular.min.js',
-          'docs/scripts/angular-translate.min.js'
+          'http://code.angularjs.org/1.1.5/angular.min.js',
+          'dist/angular-translate-0.9.0.min.js'
         ]
       },
       api: {
