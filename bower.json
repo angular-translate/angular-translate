@@ -10,10 +10,9 @@
   },
   "main": "./build/angular-translate",
   "dependencies": {
-    "angular": "1.0.7",
+    "angular": "1.0.7"
   },
   "devDependencies": {
-    "angular": "1.0.7",
     "angular-mocks": "1.0.7"
   }
 }
