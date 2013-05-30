@@ -1,3 +1,24 @@
+# 0.9.2 (2013-05-30)
+
+## Features
+### translateProvider
+
+* add fallbackLanguage() method (018991e8)
+
+
+
+## Bug fixes
+### translate.js
+
+* Allow blank translation values (97591a8f)
+
+###
+
+* fix bower.json (c3898829)
+
+
+
+
 # 0.9.1 (2013-05-25)
 
 Remove $translateMissingTranslationHandlerLog service
