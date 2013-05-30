@@ -1,3 +1,10 @@
+# 0.9.1 (2013-05-25)
+
+Remove $translateMissingTranslationHandlerLog service
+
+
+
+
 # 0.9.0 (2013-05-23)
 
 ## Features
