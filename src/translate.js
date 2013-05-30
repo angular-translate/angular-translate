@@ -368,7 +368,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @requires $rootScope
    * @requires $q
    *
-   * @desription
+   * @description
    * The `$translate` service is the actual core of angular-translate. It excepts a translation id
    * and optional interpolate parameters to translate contents.
    *
@@ -377,7 +377,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * </pre>
    *
    * @param {string} translationId A token which represents a translation id
-   * @param {object} interpolateParams An object hash for dynamic values
+   * @param {object=} interpolateParams An object hash for dynamic values
    */
   this.$get = [
     '$interpolate',

@@ -7,9 +7,73 @@ angular.module('pascalprecht.translate')
  * @restrict A
  *
  * @description
- * Translates contents by given translation id either through attribute or DOM contents.
- * Internally it uses `translate` filter to translate translation id.
+ * Translates given translation id either through attribute or DOM content.
+ * Internally it uses `translate` filter to translate translation id. It possible to
+ * pass an optional `values` object literal as string into translation id.
  *
+ * @param {string=} translate Translation id which could be either string or interpolated string.
+ * @param {string=} values Values to pass into translation id. Can be passed as object literal string or interpolated object.
+ *
+ * @example
+   <example module="ngView">
+    <file name="index.html">
+      <div ng-controller="TranslateCtrl">
+
+        <pre translate="TRANSLATION_ID"></pre>
+        <pre translate>TRANSLATION_ID</pre>
+        <pre translate="{{translationId}}"></pre>
+        <pre translate>{{translationId}}</pre>
+        <pre translate="WITH_VALUES" values="{value: 5}"></pre>
+        <pre translate values="{value: 5}">WITH_VALUES</pre>
+        <pre translate="WITH_VALUES" values="{{values}}"></pre>
+        <pre translate values="{{values}}">WITH_VALUES</pre>
+
+      </div>
+    </file>
+    <file name="script.js">
+      angular.module('ngView', ['pascalprecht.translate'])
+
+      .config(function ($translateProvider) {
+
+        $translateProvider.translations({
+          'TRANSLATION_ID': 'Hello there!',
+          'WITH_VALUES': 'The following value is dynamic: {{value}}'
+        });
+
+      });
+
+      angular.module('ngView').controller('TranslateCtrl', function ($scope) {
+        $scope.translationId = 'TRANSLATION_ID';
+
+        $scope.values = {
+          value: 78
+        };
+      });
+    </file>
+    <file name="scenario.js">
+      it('should translate', function () {
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+
+          element = $compile('<p translate="TRANSLATION_ID"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate="{{translationId}}"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate>TRANSLATION_ID</p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate>{{translationId}}</p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+        });
+      });
+    </file>
+   </example>
  */
 .directive('translate', ['$filter', '$interpolate', function ($filter, $interpolate) {
 
@@ -51,3 +115,4 @@ angular.module('pascalprecht.translate')
     }
   };
 }]);
+

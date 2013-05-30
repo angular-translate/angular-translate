@@ -1,0 +1,15 @@
+h1 {
+  font-size: 33.5px;
+}
+
+h2 {
+  font-size: 22.5px;
+}
+
+.hint {
+  font-size: 0.5em;
+}
+
+.content h2, .content h3, .content h4, .content h5 {
+  margin-top: 0.5em;
+}

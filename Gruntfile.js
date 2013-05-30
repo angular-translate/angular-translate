@@ -47,20 +47,20 @@ module.exports = function (grunt) {
     concat: {
       src: {
         src: ['src/translate.js', 'src/**/*.js'],
-        dest: 'dist/angular-translate-<%= pkg.version %>.js'
+        dest: 'dist/angular-translate.js'
       }
     },
     uglify: {
       src: {
         files: {
-          'dist/angular-translate-<%= pkg.version %>.min.js': '<%= concat.src.dest %>'
+          'dist/angular-translate.min.js': '<%= concat.src.dest %>'
         }
       }
     },
     copy: {
       demo: {
         files: {
-          'demo/js/angular-translate-latest.js': 'dist/angular-translate-<%= pkg.version %>.js'
+          'demo/js/angular-translate-latest.js': 'dist/angular-translate.js'
         }
       }
     },
@@ -97,9 +97,10 @@ module.exports = function (grunt) {
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
         scripts: [
-          'http://code.angularjs.org/1.1.5/angular.min.js',
-          'dist/angular-translate-0.9.0.min.js'
-        ]
+          'http://code.angularjs.org/1.0.7/angular.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js'
+        ],
+        styles: ['docs/css/styles.css']
       },
       api: {
         src: [
