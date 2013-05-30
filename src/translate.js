@@ -167,8 +167,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
    /**
    * @ngdoc function
-   * @name pascalprecht.translate.$translateProvider#fallbackLanguage
-   * @methodOf pascalprecht.translate.$translateProvider
+   * @name translate.$translateProvider#fallbackLanguage
+   * @methodOf translate.$translateProvider
    *
    * @description
    * Tells the module which of the registered translation tables to use when missing translations
