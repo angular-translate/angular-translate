@@ -39,6 +39,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var $translationTable = {},
       $preferredLanguage,
+      $fallbackLanguage,
       $uses,
       $storageFactory,
       $storageKey = $STORAGE_KEY,
@@ -164,6 +165,28 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
   };
 
+   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#fallbackLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells the module which of the registered translation tables to use when missing translations
+   * at initial startup by passing a language key. Similar to `$translateProvider#uses`
+   * only that it says which language to **fallback**.
+   *
+   * @param {string} langKey A language key.
+   *
+   */
+  this.fallbackLanguage = function(langKey) {
+    if (langKey) {
+      $fallbackLanguage = langKey;
+    } else {
+      return $fallbackLanguage;
+    }
+  };
+  
+  
  /**
    * @ngdoc function
    * @name translate.$translateProvider#uses
@@ -402,9 +425,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if (table && table.hasOwnProperty(translationId)) {
         return $interpolate(table[translationId])(interpolateParams);
       }
-
+      
       if ($missingTranslationHandlerFactory) {
         $injector.get($missingTranslationHandlerFactory)(translationId);
+      }
+      
+      if(!translation && $uses && $fallbackLanguage && $uses!==$fallbackLanguage){
+        translation=$translationTable[$fallbackLanguage][translationId];
+        if(translation){
+          return $interpolate(translation)(interpolateParams);
+        }
       }
 
       return translationId;
@@ -423,7 +453,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     $translate.preferredLanguage = function() {
         return $preferredLanguage;
     };
-
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#fallbackLanguage
+     * @methodOf pascalprecht.translate.$fallbackLanguage
+     *
+     * @description
+     * Returns the language key for the fallback language.
+     *
+     * @return {string} fallback language key
+     */
+    $translate.fallbackLanguage = function() {
+        return $fallbackLanguage;
+    };
+    
+    
     /**
      * @ngdoc function
      * @name translate.$translate#storage

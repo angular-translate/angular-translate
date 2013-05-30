@@ -16,8 +16,6 @@ There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-tra
 
 **Attention:** Since we're currently working on a specification for [Reusable Angular Components](https://github.com/PascalPrecht/angular-component-spec/tree/proposal), this project will have some breaking changes once the spec is called final.
 
-
-
 ## Quick Start
 Install module via Bower:
 ````
