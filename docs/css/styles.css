@@ -13,3 +13,7 @@ h2 {
 .content h2, .content h3, .content h4, .content h5 {
   margin-top: 0.5em;
 }
+
+.nav .nav-header.module a.code {
+  word-wrap: break-word;
+}
