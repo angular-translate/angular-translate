@@ -417,4 +417,76 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
+
+  describe('using async loaders', function () {
+
+    describe('loader returning single promise', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        $translateProvider.useLoader('customLoader', {});
+
+        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+          return function (options) {
+            var deferred = $q.defer();
+
+            $timeout(function () {
+              deferred.resolve({
+                FOO: 'bar'
+              });
+            }, 1000);
+
+            return deferred.promise;
+          };
+        }]);
+
+        $translateProvider.preferredLanguage('en');
+      }));
+
+      it('should use custom loader', function () {
+        inject(function ($translate, $timeout) {
+          $timeout.flush();
+          expect($translate('FOO')).toEqual('bar');
+        });
+      });
+    });
+
+    describe('loader returning multiple promises', function () {
+    
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        $translateProvider.useLoader('customLoader', {});
+
+        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+          return function (options) {
+            var firstDeferred = $q.defer(),
+                secondDeferred = $q.defer();
+
+            $timeout(function () {
+              firstDeferred.resolve({
+                FOO: 'bar'
+              });
+            });
+
+            $timeout(function () {
+              secondDeferred.resolve({
+                BAR: 'foo'
+              });
+            });
+
+            return $q.all([firstDeferred.promise, secondDeferred.promise]);
+          };
+        }]);
+
+        $translateProvider.preferredLanguage('en');
+      }));
+
+      it('should be able to handle multiple promises', function () {
+        inject(function ($translate, $timeout) {
+          $timeout.flush();
+          expect($translate('FOO')).toEqual('bar');
+          expect($translate('BAR')).toEqual('foo');
+        });
+      });
+    });
+  });
 });

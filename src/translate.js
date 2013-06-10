@@ -512,12 +512,24 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
+
+          var translationTable = {};
+
+          if (angular.isArray(data)) {
+            angular.forEach(data, function (table) {
+              angular.extend(translationTable, table);
+            });
+          } else {
+            angular.extend(translationTable, data);
+          }
+
+          translations(key, translationTable);
           $uses = key;
-          translations(key, data);
 
           if ($storageFactory) {
             Storage.set($translate.storageKey(), $uses);
           }
+
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
         }, function (key) {
