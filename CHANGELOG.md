@@ -1,3 +1,15 @@
+# 0.9.3 (2013-06-10)
+
+## Features
+### translateService
+
+* let translate service handle multiple promises (0e5d6d9d)
+
+
+
+
+
+
 # 0.9.2 (2013-05-30)
 
 ## Features
