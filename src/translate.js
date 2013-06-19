@@ -498,9 +498,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * 
      * Returns promise object with loaded language file data
      * @example
-     * $translate.uses("en_US").then(function(){
-     *     console.log($translate("HELLO"));
-	   *     $scope.text = $translate("HELLO");
+     * $translate.uses("en_US").then(function(data){
+     *  $scope.text = $translate("HELLO");
      * });	
      *
      * @param {string} key Language key
