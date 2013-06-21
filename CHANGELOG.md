@@ -1,3 +1,20 @@
+# 0.9.4 (2013-06-21)
+
+## Features
+### translateService
+
+* removes empty options object requirement for loaders (c09d1dbe)
+
+
+
+## Bug fixes
+### translateService
+
+* fixes missingTranslationHandler-invokation bug (525b3533)
+
+
+
+
 # 0.9.3 (2013-06-10)
 
 ## Features
