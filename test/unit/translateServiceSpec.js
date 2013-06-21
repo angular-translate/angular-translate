@@ -454,7 +454,7 @@ describe('pascalprecht.translate', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
-        $translateProvider.useLoader('customLoader', {});
+        $translateProvider.useLoader('customLoader');
 
         $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
           return function (options) {

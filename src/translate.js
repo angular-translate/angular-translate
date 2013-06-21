@@ -278,7 +278,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useLoader = function (loaderFactory, options) {
     $loaderFactory = loaderFactory;
-    $loaderOptions = options;
+    $loaderOptions = options || {};
   };
 
   /**
