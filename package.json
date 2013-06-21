@@ -4,7 +4,7 @@
   "description": "A translation module for AngularJS",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --browsers Firefox --single-run"
+    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --browsers Firefox --single-run"
   },
   "author": {
     "name": "Pascal Precht"
