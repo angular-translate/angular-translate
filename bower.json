@@ -2,7 +2,7 @@
   "author": "Pascal Precht",
   "name": "angular-translate",
   "description": "A translation module for AngularJS",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "homepage": "http://github.com/PascalPrecht/angular-translate",
   "repository": {
     "type": "git",
