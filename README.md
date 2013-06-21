@@ -2,6 +2,8 @@
 
 > i18n in your AngularJS apps
 
+### [Visit website](http://pascalprecht.github.io/angular-translate/#/guide)
+
 Checkout the [demos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/angular-translate/wiki).
 If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/angular-translate)!
 
