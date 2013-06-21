@@ -451,7 +451,7 @@ describe('pascalprecht.translate', function () {
     });
 
     describe('loader returning multiple promises', function () {
-    
+
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
         $translateProvider.useLoader('customLoader', {});
@@ -486,6 +486,58 @@ describe('pascalprecht.translate', function () {
           expect($translate('FOO')).toEqual('bar');
           expect($translate('BAR')).toEqual('foo');
         });
+      });
+    });
+
+  });
+
+  describe('missing translation handling', function () {
+
+    var hasBeenCalled = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      // consider we have a custom loader, which needs a bit 'til it returns translation
+      // data
+      $provide.factory('customLoader', function ($timeout, $q) {
+        return function (options) {
+          var deferred = $q.defer(),
+              translations = {
+                'FOO': 'BAR'
+              };
+
+          $timeout(function () {
+            deferred.resolve(translations);
+          }, 2000);
+
+          return deferred.promise;
+        };
+      });
+
+      // we also have a custom missing translation handler which gets called, when
+      // trying to translate translation ids that aren't existing.
+      $provide.factory('customMissingTranslationHandler', function () {
+        return function (translationId) {
+          hasBeenCalled = true;
+        };
+      });
+
+      // finally, we make use of both
+      $translateProvider.useLoader('customLoader', {});
+      $translateProvider.useMissingTranslationHandler('customMissingTranslationHandler');
+      $translateProvider.preferredLanguage('en_US');
+    }));
+
+    it('shouldn\'t call when there is a pending loader', function () {
+      inject(function ($translate, $timeout) {
+        expect($translate('FOO')).toEqual('FOO');
+        // missingTranslationHandler should not has been called, because i18n data
+        // is loaded asynchronously it should wait, once its loaded.
+        expect(hasBeenCalled).toBe(false);
+        $timeout.flush();
+        expect($translate('FOO')).toEqual('BAR');
+        expect($translate('MISSING_ONE')).toEqual('MISSING_ONE');
+        expect(hasBeenCalled).toBe(true);
       });
     });
   });

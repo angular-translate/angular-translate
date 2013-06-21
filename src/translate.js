@@ -410,7 +410,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     '$q',
     function ($interpolate, $log, $injector, $rootScope, $q) {
 
-    var Storage;
+    var Storage,
+        pendingLoader = false;
 
     if ($storageFactory) {
       Storage = $injector.get($storageFactory);
@@ -427,7 +428,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return $interpolate(table[translationId])(interpolateParams);
       }
 
-      if ($missingTranslationHandlerFactory) {
+      if ($missingTranslationHandlerFactory && !pendingLoader) {
         $injector.get($missingTranslationHandlerFactory)(translationId);
       }
 
@@ -509,6 +510,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       if (!$translationTable[key]) {
 
+        pendingLoader = true;
+
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
@@ -530,6 +533,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             Storage.set($translate.storageKey(), $uses);
           }
 
+          pendingLoader = false;
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
         }, function (key) {
