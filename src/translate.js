@@ -429,7 +429,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
 
       if ($missingTranslationHandlerFactory && !pendingLoader) {
-        $injector.get($missingTranslationHandlerFactory)(translationId);
+        $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
       }
 
       if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){

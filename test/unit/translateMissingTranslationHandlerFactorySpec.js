@@ -2,7 +2,7 @@ describe('pascalprecht.translate', function () {
 
   describe('$missingTranslationHandlerFactory', function () {
 
-    var missingTranslations = [];
+    var missingTranslations = {};
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
       $translateProvider.translations({
@@ -13,8 +13,8 @@ describe('pascalprecht.translate', function () {
       });
 
       $provide.factory('customHandler', function () {
-        return function (translationId) {
-          missingTranslations.push(translationId);
+        return function (translationId, language) {
+          missingTranslations[translationId] = { lang: language };
         };
       });
 
@@ -31,14 +31,18 @@ describe('pascalprecht.translate', function () {
     it('should not invoke missingTranslationHandler if translation id exists', function () {
       inject(function ($translate) {
         $translate('TRANSLATION_ID');
-        expect(missingTranslations).toEqual([]);
+        expect(missingTranslations).toEqual({});
       });
     });
 
     it('should invoke missingTranslationHandler if set and translation id doesn\'t exist', function () {
       inject(function ($translate) {
         $translate('NOT_EXISTING_TRANSLATION_ID');
-        expect(missingTranslations).toEqual(['NOT_EXISTING_TRANSLATION_ID']);
+        expect(missingTranslations).toEqual({
+          'NOT_EXISTING_TRANSLATION_ID': {
+            lang: undefined
+          }
+        });
       });
     });
   });
