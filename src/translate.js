@@ -496,6 +496,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      *
      * When trying to 'use' a language which isn't available it tries to load it
      * asynchronously with registered loaders.
+     * 
+     * Returns promise object with loaded language file data
+     * @example
+     * $translate.uses("en_US").then(function(data){
+     *  $scope.text = $translate("HELLO");
+     * });	
      *
      * @param {string} key Language key
      * @return {string} Language key
