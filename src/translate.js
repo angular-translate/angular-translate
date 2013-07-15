@@ -570,14 +570,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
           translations(key, translationTable);
 
-          if (success && typeof(success) === "function") {  
+          if (angular.isFunction(success)) {  
             success();
           }
 
           pendingLoader = false;
           deferred.resolve($uses);
         }, function (key) {
-          if (error && typeof(error) === "function") {  
+          if (angular.isFunction(error)) {  
             error();
           }
           deferred.reject(key);
@@ -586,7 +586,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return deferred.promise;
       }
 
-      if (success && typeof(success) === "function") {  
+      if (angular.isFunction(success)) {  
         success();
       }
 
