@@ -545,7 +545,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     $translate.load = function (key, success, error) {
 
       if (!key) {
-        return undefined;
+        throw "No language key specified for loading.";
       }
 
       var deferred = $q.defer();
