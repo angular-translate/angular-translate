@@ -474,7 +474,6 @@ describe('pascalprecht.translate', function () {
             return deferred.promise;
           };
         }]);
-        $translateProvider.preferredLanguage('en');
       }));
 
       it('should use custom loader', function () {
