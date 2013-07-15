@@ -45,6 +45,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $storageKey = $STORAGE_KEY,
       $storagePrefix,
       $missingTranslationHandlerFactory,
+      $interpolationFactory,
       $loaderFactory,
       $loaderOptions,
       $notFoundIndicatorLeft,
@@ -145,6 +146,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   };
 
   this.translations = translations;
+
+  this.useInterpolation = function (factory) {
+    $interpolationFactory = factory;
+  };
 
  /**
    * @ngdoc function
@@ -465,14 +470,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @param {object=} interpolateParams An object hash for dynamic values
    */
   this.$get = [
-    '$interpolate',
     '$log',
     '$injector',
     '$rootScope',
     '$q',
-    function ($interpolate, $log, $injector, $rootScope, $q) {
+    function ($log, $injector, $rootScope, $q) {
 
     var Storage,
+        interpolate = $injector.get($interpolationFactory || '$translateDefaultInterpolation'),
         pendingLoader = false;
 
     if ($storageFactory) {
@@ -487,19 +492,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var table = $uses ? $translationTable[$uses] : $translationTable;
 
       if (table && table.hasOwnProperty(translationId)) {
-        return $interpolate(table[translationId])(interpolateParams);
+        return interpolate(table[translationId], interpolateParams);
+      }
+
+      if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
+        var translation = $translationTable[$fallbackLanguage][translationId];
+        if (translation) {
+          return interpolate(translation, interpolateParams);
+        }
       }
 
       if ($missingTranslationHandlerFactory && !pendingLoader) {
         $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
       }
 
-      if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
-        var translation = $translationTable[$fallbackLanguage][translationId];
-        if (translation) {
-          return $interpolate(translation)(interpolateParams);
-        }
-      }
 
       if ($notFoundIndicatorLeft) {
         translationId = [$notFoundIndicatorLeft, translationId].join(' ');
