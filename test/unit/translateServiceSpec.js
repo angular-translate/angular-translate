@@ -541,4 +541,45 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
+
+  describe('translationNotFoundIndicator', function () {
+
+    describe('setting both indicators implicitly', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.translationNotFoundIndicator('✘');
+      }));
+
+      it('should inject indicators for not found translations', function () {
+        inject(function ($translate) {
+          expect($translate('NOT_FOUND')).toEqual('✘ NOT_FOUND ✘');
+        });
+      });
+    });
+
+    describe('setting left indicator explicitly', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.translationNotFoundIndicatorLeft('✘');
+      }));
+
+      it('should inject left indicator for not found translations', function () {
+        inject(function ($translate) {
+          expect($translate('NOT_FOUND')).toEqual('✘ NOT_FOUND');
+        });
+      });
+    });
+
+    describe('setting right indicator explicitly', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.translationNotFoundIndicatorRight('✘');
+      }));
+
+      it('should inject right indicator for not found translations', function () {
+        inject(function ($translate) {
+          expect($translate('NOT_FOUND')).toEqual('NOT_FOUND ✘');
+        });
+      });
+    });
+  });
 });
