@@ -76,7 +76,7 @@ describe('pascalprecht.translate', function () {
 
       it('should throw an error if no language is specified', function () {
         inject(function ($translate) {
-          expect(function () {$translate.load();}).toThrow();
+          expect(function () {$translate.load();}).toThrow("No language key specified for loading.");
         });
       });
 
