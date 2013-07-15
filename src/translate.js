@@ -18,8 +18,13 @@ angular.module('pascalprecht.translate', ['ng'])
     } else {
       $translate.uses(storage.get(key));
     }
-  } else if (angular.isString($translate.preferredLanguage())) {
-    $translate.uses($translate.preferredLanguage());
+  } else {
+    if (angular.isString($translate.fallbackLanguage()) && $translate.fallbackLanguage() !== $translate.preferredLanguage()) {
+      $translate.load($translate.fallbackLanguage());
+    }
+    if (angular.isString($translate.preferredLanguage())) {
+      $translate.uses($translate.preferredLanguage());
+    }
   }
 
 }]);
@@ -429,7 +434,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
 
       if ($missingTranslationHandlerFactory && !pendingLoader) {
-        $injector.get($missingTranslationHandlerFactory)(translationId);
+        $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
       }
 
       if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
@@ -506,6 +511,43 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return $uses;
       }
 
+      var success = function () {
+        $uses = key;
+        
+        if ($storageFactory) {
+          Storage.set($translate.storageKey(), $uses);
+        }
+
+        $rootScope.$broadcast('translationChangeSuccess');
+      };
+
+      var error = function () {
+        $rootScope.$broadcast('translationChangeError');
+      };
+
+      return $translate.load(key, success, error);
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#load
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Tells angular-translate to load a language asynchronously by given language key. 
+     * Optionnal callbacks can be used for success/error specific tasks.
+     *
+     * @param {string} key Language key
+     * @param {function=} success Optionnal callback on loading success
+     * @param {function=} error Optionnal callback on loading error
+     * @return {string} Language key
+     */
+    $translate.load = function (key, success, error) {
+
+      if (!key) {
+        throw "No language key specified for loading.";
+      }
+
       var deferred = $q.defer();
 
       if (!$translationTable[key]) {
@@ -527,31 +569,28 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }
 
           translations(key, translationTable);
-          $uses = key;
 
-          if ($storageFactory) {
-            Storage.set($translate.storageKey(), $uses);
+          if (angular.isFunction(success)) {  
+            success();
           }
 
           pendingLoader = false;
-          $rootScope.$broadcast('translationChangeSuccess');
-          deferred.resolve($uses);
+          deferred.resolve(key);
         }, function (key) {
-          $rootScope.$broadcast('translationChangeError');
+          if (angular.isFunction(error)) {  
+            error();
+          }
           deferred.reject(key);
         });
 
         return deferred.promise;
       }
 
-      $uses = key;
-
-      if ($storageFactory) {
-        Storage.set($translate.storageKey(), $uses);
+      if (angular.isFunction(success)) {  
+        success();
       }
 
-      deferred.resolve($uses);
-      $rootScope.$broadcast('translationChangeSuccess');
+      deferred.resolve(key);
       return deferred.promise;
     };
 
