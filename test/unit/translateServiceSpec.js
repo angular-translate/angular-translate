@@ -28,6 +28,12 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    it('should have a method load()', function () {
+      inject(function ($translate) {
+        expect($translate.load).toBeDefined();
+      });
+    });
+
     it('should have a method preferredLanguage()', function() {
       inject(function ($translate) {
         expect($translate.preferredLanguage).toBeDefined();
@@ -55,6 +61,22 @@ describe('pascalprecht.translate', function () {
       it('should return undefined if no language is specified', function () {
         inject(function ($translate) {
           expect($translate.uses()).toBeUndefined();
+        });
+      });
+
+    });
+
+    describe('load()', function () {
+
+      it('should be a function', function () {
+        inject(function ($translate) {
+          expect(typeof $translate.load).toBe('function');
+        });
+      });
+
+      it('should throw an error if no language is specified', function () {
+        inject(function ($translate) {
+          expect(function () {$translate.load();}).toThrow("No language key specified for loading.");
         });
       });
 
@@ -373,6 +395,20 @@ describe('pascalprecht.translate', function () {
         expect($translate('TRANSLATION_ID')).toEqual('foo');
       });
     });
+
+    it('should allow to change fallback language during config', function() {
+      inject(function($translate){
+        expect($translate.fallbackLanguage()).toEqual('foo');
+      });
+    });
+
+    it('shouldn\'t allow to change fallback language during runtime', function() {
+      inject(function($translate){
+        var prevLang = $translate.fallbackLanguage();
+        $translate.fallbackLanguage(prevLang === 'foo' ? 'bar' : 'foo');
+        expect($translate.fallbackLanguage()).toBe(prevLang);
+      });
+    });
   });
 
   describe('where data is a nested object structure (namespace support)', function () {
@@ -428,24 +464,60 @@ describe('pascalprecht.translate', function () {
         $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
           return function (options) {
             var deferred = $q.defer();
+            var key = options.key;
 
-            $timeout(function () {
-              deferred.resolve({
-                FOO: 'bar'
-              });
-            }, 1000);
+            
+            if (key === 'en') {
+              $timeout(function () {
+                deferred.resolve({
+                  FOO: 'bar'
+                });
+              }, 1000);
+            } else if (key === 'ne') {
+              $timeout(function () {
+                deferred.resolve({
+                  FOO: 'foo',
+                  BAR: 'bar'
+                });
+              }, Infinity);
+            } else if (key === 'tt') {
+              $timeout(function () {
+                deferred.resolve({
+                  FOO: 'foofoo',
+                  BAR: 'barbar'
+                });
+              }, Infinity);
+            }
 
             return deferred.promise;
           };
         }]);
 
         $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('ne');
       }));
 
-      it('should use custom loader', function () {
+      it('should use custom loader to load preferredLanguage', function () {
         inject(function ($translate, $timeout) {
           $timeout.flush();
           expect($translate('FOO')).toEqual('bar');
+        });
+      });
+
+      it('should use custom loader to load fallbackLanguage', function () {
+        inject(function ($translate, $timeout) {
+          $timeout.flush();
+          expect($translate('BAR')).toEqual('bar');
+        });
+      });
+
+      it('should be able to load a language without using it', function () {
+        inject(function ($translate, $timeout) {
+          $translate.load('tt');
+          expect($translate('BAR')).toEqual('BAR');
+          $timeout.flush();
+          $translate.uses('tt');
+          expect($translate('BAR')).toEqual('barbar');
         });
       });
     });
