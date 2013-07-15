@@ -450,24 +450,60 @@ describe('pascalprecht.translate', function () {
         $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
           return function (options) {
             var deferred = $q.defer();
+            var key = options.key;
 
-            $timeout(function () {
-              deferred.resolve({
-                FOO: 'bar'
-              });
-            }, 1000);
+            
+            if (key === 'en') {
+              $timeout(function () {
+                deferred.resolve({
+                  FOO: 'bar'
+                });
+              }, 1000);
+            } else if (key === 'ne') {
+              $timeout(function () {
+                deferred.resolve({
+                  FOO: 'foo',
+                  BAR: 'bar'
+                });
+              }, Infinity);
+            } else if (key === 'tt') {
+              $timeout(function () {
+                deferred.resolve({
+                  FOO: 'foofoo',
+                  BAR: 'barbar'
+                });
+              }, Infinity);
+            }
 
             return deferred.promise;
           };
         }]);
 
         $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('ne');
       }));
 
-      it('should use custom loader', function () {
+      it('should use custom loader to load preferredLanguage', function () {
         inject(function ($translate, $timeout) {
           $timeout.flush();
           expect($translate('FOO')).toEqual('bar');
+        });
+      });
+
+      it('should use custom loader to load fallbackLanguage', function () {
+        inject(function ($translate, $timeout) {
+          $timeout.flush();
+          expect($translate('BAR')).toEqual('bar');
+        });
+      });
+
+      it('should be able to load a language without using it', function () {
+        inject(function ($translate, $timeout) {
+          $translate.load('tt');
+          expect($translate('BAR')).toEqual('BAR');
+          $timeout.flush();
+          $translate.uses('tt');
+          expect($translate('BAR')).toEqual('barbar');
         });
       });
     });
