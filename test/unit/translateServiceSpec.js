@@ -464,62 +464,121 @@ describe('pascalprecht.translate', function () {
         $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
           return function (options) {
             var deferred = $q.defer();
-            var key = options.key;
 
-            
-            if (key === 'en') {
-              $timeout(function () {
-                deferred.resolve({
-                  FOO: 'bar'
-                });
-              }, 1000);
-            } else if (key === 'ne') {
-              $timeout(function () {
-                deferred.resolve({
-                  FOO: 'foo',
-                  BAR: 'bar'
-                });
-              }, Infinity);
-            } else if (key === 'tt') {
-              $timeout(function () {
-                deferred.resolve({
-                  FOO: 'foofoo',
-                  BAR: 'barbar'
-                });
-              }, Infinity);
-            }
+            $timeout(function () {
+              deferred.resolve({
+                FOO: 'bar'
+              });
+            }, 1000);
 
             return deferred.promise;
           };
         }]);
-
         $translateProvider.preferredLanguage('en');
-        $translateProvider.fallbackLanguage('ne');
       }));
 
-      it('should use custom loader to load preferredLanguage', function () {
+      it('should use custom loader', function () {
         inject(function ($translate, $timeout) {
+          $translate.uses('en');
           $timeout.flush();
           expect($translate('FOO')).toEqual('bar');
         });
       });
+    });
 
-      it('should use custom loader to load fallbackLanguage', function () {
-        inject(function ($translate, $timeout) {
-          $timeout.flush();
-          expect($translate('BAR')).toEqual('bar');
-        });
-      });
+    describe('load()', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
-      it('should be able to load a language without using it', function () {
-        inject(function ($translate, $timeout) {
+        $translateProvider.useLoader('customLoader', {});
+
+        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+          return function (options) {
+            var deferred = $q.defer();
+
+            $timeout(function () {
+              deferred.resolve({
+                FOO: 'foo',
+                BAR: 'bar'
+               });
+             }, Infinity);
+
+            return deferred.promise;
+          };
+        }]);
+      }));
+
+      it('should use custom loader to load and use preferredLanguage', function () {
+         inject(function ($translate, $timeout) {
           $translate.load('tt');
           expect($translate('BAR')).toEqual('BAR');
-          $timeout.flush();
-          $translate.uses('tt');
-          expect($translate('BAR')).toEqual('barbar');
-        });
-      });
+           $timeout.flush();
+           $translate.uses('tt');
+           expect($translate('BAR')).toEqual('bar');
+         });
+       });
+     });
+ 
+    describe('preferredLanguage()', function () {
+     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+       $translateProvider.useLoader('customLoader', {});
+
+       $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+         return function (options) {
+           var deferred = $q.defer();
+
+           $timeout(function () {
+             deferred.resolve({
+               FOO: 'foo',
+               BAR: 'bar'
+             });
+           }, Infinity);
+
+           return deferred.promise;
+         };
+       }]);
+
+       $translateProvider.preferredLanguage('ne');
+     }));
+
+     it('should use custom loader to load and use preferredLanguage', function () {
+       inject(function ($translate, $timeout) {
+         $timeout.flush();
+         expect($translate('BAR')).toEqual('bar');
+       });
+     });
+    });
+
+    describe('fallbackLanguage()', function () {
+     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+       $translateProvider.useLoader('customLoader', {});
+
+       $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+         return function (options) {
+           var deferred = $q.defer();
+
+           $timeout(function () {
+             deferred.resolve({
+               FOO: 'foo',
+               BAR: 'bar'
+             });
+           }, Infinity);
+
+           return deferred.promise;
+         };
+       }]);
+
+       $translateProvider.uses('en');
+       $translateProvider.fallbackLanguage('ne');
+     }));
+
+     it('should use custom loader to load fallbackLanguage', function () {
+       inject(function ($translate, $timeout) {
+         $timeout.flush();
+         expect($translate('BAR')).toEqual('bar');
+       });
+     });
     });
 
     describe('loader returning multiple promises', function () {
