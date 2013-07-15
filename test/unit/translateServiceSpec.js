@@ -74,9 +74,9 @@ describe('pascalprecht.translate', function () {
         });
       });
 
-      it('should return undefined if no language is specified', function () {
+      it('should throw an error if no language is specified', function () {
         inject(function ($translate) {
-          expect($translate.load()).toBeUndefined();
+          expect(function () {$translate.load();}).toThrow();
         });
       });
 
