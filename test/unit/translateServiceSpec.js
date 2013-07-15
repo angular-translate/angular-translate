@@ -395,6 +395,20 @@ describe('pascalprecht.translate', function () {
         expect($translate('TRANSLATION_ID')).toEqual('foo');
       });
     });
+
+    it('should allow to change fallback language during config', function() {
+      inject(function($translate){
+        expect($translate.fallbackLanguage()).toEqual('foo');
+      });
+    });
+
+    it('shouldn\'t allow to change fallback language during runtime', function() {
+      inject(function($translate){
+        var prevLang = $translate.fallbackLanguage();
+        $translate.fallbackLanguage(prevLang === 'foo' ? 'bar' : 'foo');
+        expect($translate.fallbackLanguage()).toBe(prevLang);
+      });
+    });
   });
 
   describe('where data is a nested object structure (namespace support)', function () {
