@@ -582,4 +582,65 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
+
+  describe('#useMessageFormatInterpolation()', function () {
+
+    var $translate;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+
+      $translateProvider.translations('en', {
+        'REPLACE_VARS': 'Foo bar {value}',
+        'SELECT_FORMAT': '{GENDER, select, male{He} female{She} other{They}} liked this.',
+        'PLURAL_FORMAT': 'There {NUM_RESULTS, plural, one{is one result} other{are # results}}.',
+        'PLURAL_FORMAT_OFFSET': 'You {NUM_ADDS, plural, offset:1' +
+                                  '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
+                                  'zero{added this to your profile}' +   //   the offset value
+                                  'one{and one other person added this to their profile}' +
+                                  'other{and # others added this to their profiles}' +
+                                '}.',
+      });
+
+      $translateProvider.useMessageFormatInterpolation();
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should replace interpolateParams with concrete values', function () {
+      expect($translate('REPLACE_VARS', { value: 5 })).toEqual('Foo bar 5');
+    });
+
+    it('should support SelectFormat', function () {
+      expect($translate('SELECT_FORMAT', { GENDER: 'male'}))
+        .toEqual('He liked this.');
+      expect($translate('SELECT_FORMAT', { GENDER: 'female'}))
+        .toEqual('She liked this.');
+      expect($translate('SELECT_FORMAT'))
+        .toEqual('They liked this.');
+    });
+
+    it('should support PluralFormat', function () {
+      expect($translate('PLURAL_FORMAT', {
+        'NUM_RESULTS': 0
+      })).toEqual('There are 0 results.');
+
+      expect($translate('PLURAL_FORMAT', {
+        'NUM_RESULTS': 1
+      })).toEqual('There is one result.');
+
+      expect($translate('PLURAL_FORMAT', {
+        'NUM_RESULTS': 100
+      })).toEqual('There are 100 results.');
+    });
+
+    it('should support PluralFormat - offset extension', function () {
+      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 })).toEqual('You didnt add this to your profile.');
+      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 2 })).toEqual('You and one other person added this to their profile.');
+      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 3 })).toEqual('You and 2 others added this to their profiles.');
+    });
+
+  });
 });

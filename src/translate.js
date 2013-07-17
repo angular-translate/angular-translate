@@ -147,6 +147,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   this.translations = translations;
 
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMessageFormatInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use interpolation functionality of messageformat.js.
+   * This is useful when having high level pluralization and gender selection.
+   *
+   */
+  this.useMessageFormatInterpolation = function () {
+    this.useInterpolation('$translateMessageFormatInterpolation');
+  };
+
   this.useInterpolation = function (factory) {
     $interpolationFactory = factory;
   };
@@ -492,13 +506,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var table = $uses ? $translationTable[$uses] : $translationTable;
 
       if (table && table.hasOwnProperty(translationId)) {
-        return interpolate(table[translationId], interpolateParams);
+        return interpolate(table[translationId], interpolateParams, $uses);
       }
 
       if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
         var translation = $translationTable[$fallbackLanguage][translationId];
         if (translation) {
-          return interpolate(translation, interpolateParams);
+          return interpolate(translation, interpolateParams, $fallbackLanguage);
         }
       }
 
