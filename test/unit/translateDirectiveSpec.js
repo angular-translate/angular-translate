@@ -342,4 +342,59 @@ describe('pascalprecht.translate', function () {
     });
 
   });
+
+  describe('translate-interpolation attribute', function () {
+
+    var $rootScope, $compile;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $provide.factory('customInterpolation', function () {
+
+        var translateInterpolator = {},
+            $locale;
+
+        // provide a method to set locale
+        translateInterpolator.setLocale = function (locale) {
+          $locale = locale;
+        };
+
+        // provide a method to return an interpolation identifier
+        translateInterpolator.getInterpolationIdentifier = function () {
+          return 'custom';
+        }
+
+        // defining the actual interpolate function
+        translateInterpolator.interpolate = function (string, interpolateParams) {
+          return 'custom interpolation';
+        };
+
+        return translateInterpolator;
+      });
+
+      $translateProvider.translations('en', {
+        'FOO': 'Yesssss'
+      });
+
+      $translateProvider.addInterpolation('customInterpolation');
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+    }));
+
+    it('should consider translate-interpolation value', function () {
+      // we can use normal interpolation
+      element = $compile('<p translate="FOO"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('Yesssss');
+
+      // and we can override it
+      element = $compile('<p translate="FOO" translate-interpolation="custom"></p>')($rootScope);;
+      $rootScope.$digest();
+      expect(element.text()).toEqual('custom interpolation');
+    });
+  });
 });
