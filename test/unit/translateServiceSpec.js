@@ -643,4 +643,122 @@ describe('pascalprecht.translate', function () {
     });
 
   });
+
+  describe('interpolations', function () {
+
+    describe('addInterpolation', function () {
+
+      var $translate;
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        // building custom interpolation service
+        $provide.factory('customInterpolation', function () {
+
+          var translateInterpolator = {},
+              $locale;
+
+          // provide a method to set locale
+          translateInterpolator.setLocale = function (locale) {
+            $locale = locale;
+          };
+
+          // provide a method to return an interpolation identifier
+          translateInterpolator.getInterpolationIdentifier = function () {
+            return 'custom';
+          }
+
+          // defining the actual interpolate function
+          translateInterpolator.interpolate = function (string, interpolateParams) {
+            return 'custom interpolation';
+          };
+
+          return translateInterpolator;
+        });
+
+        // tell angular-translate to optionally use customInterpolation
+        $translateProvider.addInterpolation('customInterpolation');
+
+        // register translations
+        $translateProvider.translations('en', {
+          'FOO': 'Some text'
+        });
+
+        // set default language
+        $translateProvider.preferredLanguage('en');
+      }));
+
+      beforeEach(inject(function (_$translate_) {
+        $translate = _$translate_;
+      }));
+
+      it('should translate', function () {
+        expect($translate('FOO')).toEqual('Some text');
+      });
+
+      it('should use custom interpolation', function () {
+        expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+      });
+    });
+
+    describe('addInterpolation messageformat', function () {
+
+      var $translate;
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+
+        $translateProvider.translations('en', {
+          'REPLACE_VARS': 'Foo bar {value}',
+          'SELECT_FORMAT': '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          'PLURAL_FORMAT': 'There {NUM_RESULTS, plural, one{is one result} other{are # results}}.',
+          'PLURAL_FORMAT_OFFSET': 'You {NUM_ADDS, plural, offset:1' +
+                                    '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
+                                    'zero{added this to your profile}' +   //   the offset value
+                                    'one{and one other person added this to their profile}' +
+                                    'other{and # others added this to their profiles}' +
+                                  '}.',
+        });
+
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+        $translateProvider.preferredLanguage('en');
+      }));
+
+      beforeEach(inject(function (_$translate_) {
+        $translate = _$translate_;
+      }));
+
+      it('should replace interpolateParams with concrete values', function () {
+        expect($translate('REPLACE_VARS', { value: 5 }, 'messageformat')).toEqual('Foo bar 5');
+      });
+
+      it('should support SelectFormat', function () {
+        expect($translate('SELECT_FORMAT', { GENDER: 'male'}, 'messageformat'))
+          .toEqual('He liked this.');
+        expect($translate('SELECT_FORMAT', { GENDER: 'female'}, 'messageformat'))
+          .toEqual('She liked this.');
+        expect($translate('SELECT_FORMAT', {}, 'messageformat'))
+          .toEqual('They liked this.');
+      });
+
+      it('should support PluralFormat', function () {
+        expect($translate('PLURAL_FORMAT', {
+          'NUM_RESULTS': 0
+        }, 'messageformat')).toEqual('There are 0 results.');
+
+        expect($translate('PLURAL_FORMAT', {
+          'NUM_RESULTS': 1
+        }, 'messageformat')).toEqual('There is one result.');
+
+        expect($translate('PLURAL_FORMAT', {
+          'NUM_RESULTS': 100
+        }, 'messageformat')).toEqual('There are 100 results.');
+      });
+
+      it('should support PluralFormat - offset extension', function () {
+        expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 }, 'messageformat')).toEqual('You didnt add this to your profile.');
+        expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 2 }, 'messageformat')).toEqual('You and one other person added this to their profile.');
+        expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 3 }, 'messageformat')).toEqual('You and 2 others added this to their profiles.');
+      });
+    });
+  });
 });

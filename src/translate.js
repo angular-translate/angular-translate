@@ -46,6 +46,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $storagePrefix,
       $missingTranslationHandlerFactory,
       $interpolationFactory,
+      $interpolatorFactories = [],
       $loaderFactory,
       $loaderOptions,
       $notFoundIndicatorLeft,
@@ -146,6 +147,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   };
 
   this.translations = translations;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#addInterpolation
+   * @methodOf pascalprecht.$translateProvider
+   *
+   * @description
+   * Adds interpolation services to angular-translate, so it can manage them.
+   *
+   * @param {object} factory Interpolation service factory
+   */
+  this.addInterpolation = function (factory) {
+    $interpolatorFactories.push(factory);
+  };
 
   /**
    * @ngdoc function
@@ -491,8 +506,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     function ($log, $injector, $rootScope, $q) {
 
     var Storage,
-        interpolate = $injector.get($interpolationFactory || '$translateDefaultInterpolation'),
-        pendingLoader = false;
+        interpolateFn = $injector.get($interpolationFactory || '$translateDefaultInterpolation').interpolate,
+        pendingLoader = false,
+        interpolatorHashMap = {};
+
+    // if we have additional interpolations that were added via
+    // $translateProvider.addInterpolation(), we have to map'em
+    if ($interpolatorFactories.length) {
+      angular.forEach($interpolatorFactories, function (interpolatorFactory) {
+        var interpolator = $injector.get(interpolatorFactory);
+        // setting initial locale for each interpolation service
+        interpolator.setLocale($preferredLanguage || $uses);
+        // make'em recognizable through id
+        interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
+      });
+    }
 
     if ($storageFactory) {
       Storage = $injector.get($storageFactory);
@@ -502,17 +530,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
     }
 
-    var $translate = function (translationId, interpolateParams) {
-      var table = $uses ? $translationTable[$uses] : $translationTable;
+    var $translate = function (translationId, interpolateParams, interpolationId) {
 
+      var table = $uses ? $translationTable[$uses] : $translationTable,
+          interpolate = (interpolationId) ? interpolatorHashMap[interpolationId].interpolate : interpolateFn;
+      
       if (table && table.hasOwnProperty(translationId)) {
-        return interpolate(table[translationId], interpolateParams, $uses);
+        return interpolate(table[translationId], interpolateParams);
       }
 
       if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
         var translation = $translationTable[$fallbackLanguage][translationId];
         if (translation) {
-          return interpolate(translation, interpolateParams, $fallbackLanguage);
+          return interpolate(translation, interpolateParams);
         }
       }
 

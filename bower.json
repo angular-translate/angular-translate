@@ -13,11 +13,11 @@
     "angular": "1.0.7",
     "angular-mocks": "1.0.7",
     "ngMidwayTester": "yearofmoo/ngMidwayTester#*",
-    "angular-translate-interpolation-default": "~0.1.0"
+    "angular-translate-interpolation-default": "~0.1.1"
   },
   "devDependencies": {
     "angular-mocks": "1.0.7",
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
-    "angular-translate-interpolation-messageformat": "~0.1.0"
+    "angular-translate-interpolation-messageformat": "~0.1.1"
   }
 }
