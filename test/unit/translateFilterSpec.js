@@ -127,4 +127,50 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
+
+  describe('additional interpolation', function () {
+
+    var $filter;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $provide.factory('customInterpolation', function () {
+
+        var translateInterpolator = {},
+            $locale;
+
+        // provide a method to set locale
+        translateInterpolator.setLocale = function (locale) {
+          $locale = locale;
+        };
+
+        // provide a method to return an interpolation identifier
+        translateInterpolator.getInterpolationIdentifier = function () {
+          return 'custom';
+        }
+
+        // defining the actual interpolate function
+        translateInterpolator.interpolate = function (string, interpolateParams) {
+          return 'custom interpolation';
+        };
+
+        return translateInterpolator;
+      });
+
+      $translateProvider.translations('en', {
+        'FOO': 'Yesssss'
+      });
+
+      $translateProvider.addInterpolation('customInterpolation');
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$filter_) {
+      $filter = _$filter_;
+    }));
+
+    it('should consider translate-interpolation value', function () {
+      expect($filter('translate')('FOO', {}, 'custom')).toEqual('custom interpolation');
+    });
+  });
 });
