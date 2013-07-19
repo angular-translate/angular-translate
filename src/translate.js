@@ -151,7 +151,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#addInterpolation
-   * @methodOf pascalprecht.$translateProvider
+   * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
    * Adds interpolation services to angular-translate, so it can manage them.
