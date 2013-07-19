@@ -176,6 +176,18 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     this.useInterpolation('$translateMessageFormatInterpolation');
   };
 
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate which interpolation style to use as default, application-wide.
+   * Simply pass a factory/service name. The interpolation service has to implement
+   * the correct interface.
+   *
+   * @param {string} factory Interpolation service name.
+   */
   this.useInterpolation = function (factory) {
     $interpolationFactory = factory;
   };
@@ -506,21 +518,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     function ($log, $injector, $rootScope, $q) {
 
     var Storage,
-        interpolateFn = $injector.get($interpolationFactory || '$translateDefaultInterpolation').interpolate,
+        defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation');
         pendingLoader = false,
         interpolatorHashMap = {};
-
-    // if we have additional interpolations that were added via
-    // $translateProvider.addInterpolation(), we have to map'em
-    if ($interpolatorFactories.length) {
-      angular.forEach($interpolatorFactories, function (interpolatorFactory) {
-        var interpolator = $injector.get(interpolatorFactory);
-        // setting initial locale for each interpolation service
-        interpolator.setLocale($preferredLanguage || $uses);
-        // make'em recognizable through id
-        interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
-      });
-    }
 
     if ($storageFactory) {
       Storage = $injector.get($storageFactory);
@@ -530,27 +530,58 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
     }
 
+    // if we have additional interpolations that were added via
+    // $translateProvider.addInterpolation(), we have to map'em
+    if ($interpolatorFactories.length > 0) {
+
+      angular.forEach($interpolatorFactories, function (interpolatorFactory) {
+
+        var interpolator = $injector.get(interpolatorFactory);
+        // setting initial locale for each interpolation service
+        interpolator.setLocale($preferredLanguage || $uses);
+        // make'em recognizable through id
+        interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
+      });
+    }
+
     var $translate = function (translationId, interpolateParams, interpolationId) {
 
+      // determine translation table and current Interpolator
       var table = $uses ? $translationTable[$uses] : $translationTable,
-          interpolate = (interpolationId) ? interpolatorHashMap[interpolationId].interpolate : interpolateFn;
-      
+          Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
+
+      // if the translation id exists, we can just interpolate it
       if (table && table.hasOwnProperty(translationId)) {
-        return interpolate(table[translationId], interpolateParams);
+        return Interpolator.interpolate(table[translationId], interpolateParams);
       }
 
-      if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
-        var translation = $translationTable[$fallbackLanguage][translationId];
-        if (translation) {
-          return interpolate(translation, interpolateParams);
-        }
-      }
-
+      // looks like the requested translation id doesn't exists.
+      // Now, if there is a registered handler for missing translations and no
+      // asyncLoader is pending, we execute the handler
       if ($missingTranslationHandlerFactory && !pendingLoader) {
         $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
       }
 
+      // since we couldn't translate the inital requested translation id,
+      // we try it now with a fallback language, if a fallback language is
+      // configured.
+      if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
 
+        var translation = $translationTable[$fallbackLanguage][translationId];
+
+        // check if a translation for the fallback language exists
+        if (translation) {
+          var returnVal;
+          // temporarly letting Interpolator know we're using fallback language now.
+          Interpolator.setLocale($fallbackLanguage);
+          returnVal = Interpolator.interpolate(translation, interpolateParams);
+          // after we've interpolated the translation, we reset Interpolator to proper locale.
+          Interpolator.setLocale($uses);
+          return returnVal;
+        }
+      }
+
+      // applying notFoundIndicators
       if ($notFoundIndicatorLeft) {
         translationId = [$notFoundIndicatorLeft, translationId].join(' ');
       }
@@ -653,6 +684,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             Storage.set($translate.storageKey(), $uses);
           }
 
+          // inform default interpolator
+          defaultInterpolator.setLocale($uses);
+          // inform all others to!
+          angular.forEach(interpolatorHashMap, function (interpolator, id) {
+            interpolatorHashMap[id].setLocale($uses);
+          });
+
           pendingLoader = false;
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -669,6 +707,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if ($storageFactory) {
         Storage.set($translate.storageKey(), $uses);
       }
+
+      // inform default interpolator
+      defaultInterpolator.setLocale($uses);
+      // inform all others to!
+      angular.forEach(interpolatorHashMap, function (interpolator, id) {
+        interpolatorHashMap[id].setLocale($uses);
+      });
 
       deferred.resolve($uses);
       $rootScope.$broadcast('translationChangeSuccess');

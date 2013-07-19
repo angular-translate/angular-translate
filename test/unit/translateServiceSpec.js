@@ -646,6 +646,33 @@ describe('pascalprecht.translate', function () {
 
   describe('interpolations', function () {
 
+    /*ddescribe('incorrect interpolation service given', function () {
+
+      var $translate;
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $provide.factory('incorrectInterpolationService', function () {
+          return {};
+        });
+
+        $translateProvider.translations('en', {
+          FOO: 'FOO'
+        });
+        $translateProvider.useInterpolation('incorrectInterpolationService');
+        $translateProvider.preferredLanguage('en');
+      }));
+
+      beforeEach(inject(function (_$translate_) {
+        $translate = _$translate_;
+      }));
+
+      it('should throw an error when interpolation service interface isn\'t implemented', function () {
+        expect(function () {
+          $translate('FOO');
+        }).toThrow("Couldn\'t interpolate! Interpolation service doesn\'t implement the correct interface!");
+      });
+    });*/
+
     describe('addInterpolation', function () {
 
       var $translate;
@@ -670,7 +697,11 @@ describe('pascalprecht.translate', function () {
 
           // defining the actual interpolate function
           translateInterpolator.interpolate = function (string, interpolateParams) {
-            return 'custom interpolation';
+            if ($locale == 'de') {
+              return 'foo';
+            } else {
+              return 'custom interpolation';
+            }
           };
 
           return translateInterpolator;
@@ -684,8 +715,13 @@ describe('pascalprecht.translate', function () {
           'FOO': 'Some text'
         });
 
+        $translateProvider.translations('de', {
+          'FOO': 'Irgendwas',
+          'BAR': 'yupp'
+        });
         // set default language
         $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('de');
       }));
 
       beforeEach(inject(function (_$translate_) {
@@ -697,6 +733,17 @@ describe('pascalprecht.translate', function () {
       });
 
       it('should use custom interpolation', function () {
+        expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+      });
+
+      it('should inform custom interpolation when language has been changed', function () {
+        expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+        $translate.uses('de');
+        expect($translate('FOO', {}, 'custom')).toEqual('foo');
+      });
+
+      it('should use fallback language, if configured', function () {
+        expect($translate('BAR', {}, 'custom')).toEqual('foo');
         expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
       });
     });
