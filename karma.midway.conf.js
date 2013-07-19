@@ -13,6 +13,7 @@ files = [
   'bower_components/angular/angular.js',
   'bower_components/ngMidwayTester/Source/ngMidwayTester.js',
   'src/translate.js',
+  'bower_components/angular-translate-interpolation-default/angular-translate-interpolation-default.js',
   'src/**/*.js',
   'test/midway/**/*Spec.js'
 ];

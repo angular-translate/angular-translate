@@ -50,11 +50,11 @@ angular.module('pascalprecht.translate')
    </example>
  */
 .filter('translate', ['$parse', '$translate', function ($parse, $translate) {
-  return function (translationId, interpolateParams) {
+  return function (translationId, interpolateParams, interpolation) {
 
     if (!angular.isObject(interpolateParams)) {
       interpolateParams = $parse(interpolateParams)();
     }
-    return $translate(translationId, interpolateParams);
+    return $translate(translationId, interpolateParams, interpolation);
   };
 }]);

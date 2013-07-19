@@ -45,6 +45,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $storageKey = $STORAGE_KEY,
       $storagePrefix,
       $missingTranslationHandlerFactory,
+      $interpolationFactory,
+      $interpolatorFactories = [],
       $loaderFactory,
       $loaderOptions,
       $notFoundIndicatorLeft,
@@ -145,6 +147,50 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   };
 
   this.translations = translations;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#addInterpolation
+   * @methodOf pascalprecht.$translateProvider
+   *
+   * @description
+   * Adds interpolation services to angular-translate, so it can manage them.
+   *
+   * @param {object} factory Interpolation service factory
+   */
+  this.addInterpolation = function (factory) {
+    $interpolatorFactories.push(factory);
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMessageFormatInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use interpolation functionality of messageformat.js.
+   * This is useful when having high level pluralization and gender selection.
+   *
+   */
+  this.useMessageFormatInterpolation = function () {
+    this.useInterpolation('$translateMessageFormatInterpolation');
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate which interpolation style to use as default, application-wide.
+   * Simply pass a factory/service name. The interpolation service has to implement
+   * the correct interface.
+   *
+   * @param {string} factory Interpolation service name.
+   */
+  this.useInterpolation = function (factory) {
+    $interpolationFactory = factory;
+  };
 
  /**
    * @ngdoc function
@@ -465,15 +511,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @param {object=} interpolateParams An object hash for dynamic values
    */
   this.$get = [
-    '$interpolate',
     '$log',
     '$injector',
     '$rootScope',
     '$q',
-    function ($interpolate, $log, $injector, $rootScope, $q) {
+    function ($log, $injector, $rootScope, $q) {
 
     var Storage,
-        pendingLoader = false;
+        defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation');
+        pendingLoader = false,
+        interpolatorHashMap = {};
 
     if ($storageFactory) {
       Storage = $injector.get($storageFactory);
@@ -483,24 +530,58 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
     }
 
-    var $translate = function (translationId, interpolateParams) {
-      var table = $uses ? $translationTable[$uses] : $translationTable;
+    // if we have additional interpolations that were added via
+    // $translateProvider.addInterpolation(), we have to map'em
+    if ($interpolatorFactories.length > 0) {
 
+      angular.forEach($interpolatorFactories, function (interpolatorFactory) {
+
+        var interpolator = $injector.get(interpolatorFactory);
+        // setting initial locale for each interpolation service
+        interpolator.setLocale($preferredLanguage || $uses);
+        // make'em recognizable through id
+        interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
+      });
+    }
+
+    var $translate = function (translationId, interpolateParams, interpolationId) {
+
+      // determine translation table and current Interpolator
+      var table = $uses ? $translationTable[$uses] : $translationTable,
+          Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
+
+      // if the translation id exists, we can just interpolate it
       if (table && table.hasOwnProperty(translationId)) {
-        return $interpolate(table[translationId])(interpolateParams);
+        return Interpolator.interpolate(table[translationId], interpolateParams);
       }
 
+      // looks like the requested translation id doesn't exists.
+      // Now, if there is a registered handler for missing translations and no
+      // asyncLoader is pending, we execute the handler
       if ($missingTranslationHandlerFactory && !pendingLoader) {
         $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
       }
 
+      // since we couldn't translate the inital requested translation id,
+      // we try it now with a fallback language, if a fallback language is
+      // configured.
       if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
+
         var translation = $translationTable[$fallbackLanguage][translationId];
+
+        // check if a translation for the fallback language exists
         if (translation) {
-          return $interpolate(translation)(interpolateParams);
+          var returnVal;
+          // temporarly letting Interpolator know we're using fallback language now.
+          Interpolator.setLocale($fallbackLanguage);
+          returnVal = Interpolator.interpolate(translation, interpolateParams);
+          // after we've interpolated the translation, we reset Interpolator to proper locale.
+          Interpolator.setLocale($uses);
+          return returnVal;
         }
       }
 
+      // applying notFoundIndicators
       if ($notFoundIndicatorLeft) {
         translationId = [$notFoundIndicatorLeft, translationId].join(' ');
       }
@@ -603,6 +684,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             Storage.set($translate.storageKey(), $uses);
           }
 
+          // inform default interpolator
+          defaultInterpolator.setLocale($uses);
+          // inform all others to!
+          angular.forEach(interpolatorHashMap, function (interpolator, id) {
+            interpolatorHashMap[id].setLocale($uses);
+          });
+
           pendingLoader = false;
           $rootScope.$broadcast('translationChangeSuccess');
           deferred.resolve($uses);
@@ -619,6 +707,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if ($storageFactory) {
         Storage.set($translate.storageKey(), $uses);
       }
+
+      // inform default interpolator
+      defaultInterpolator.setLocale($uses);
+      // inform all others to!
+      angular.forEach(interpolatorHashMap, function (interpolator, id) {
+        interpolatorHashMap[id].setLocale($uses);
+      });
 
       deferred.resolve($uses);
       $rootScope.$broadcast('translationChangeSuccess');
