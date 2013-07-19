@@ -84,6 +84,9 @@ angular.module('pascalprecht.translate')
     scope: true,
     link: function linkFn(scope, element, attr) {
 
+      if (attr.translateInterpolation) {
+        scope.interpolation = attr.translateInterpolation;
+      }
       // Ensures any change of the attribute "translate" containing the id will
       // be re-stored to the scope's "translationId".
       // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
@@ -102,14 +105,14 @@ angular.module('pascalprecht.translate')
       // Ensures the text will be refreshed after the current language was changed
       // w/ $translate.uses(...)
       scope.$on('translationChangeSuccess', function () {
-        element.html(translate(scope.translationId, scope.interpolateParams));
+        element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
       });
 
       // Ensures the text will be refreshed after either the scope's translationId
       // or the interpolated params have been changed.
       scope.$watch('translationId + interpolateParams', function (nValue) {
         if (nValue) {
-          element.html(translate(scope.translationId, scope.interpolateParams));
+          element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         }
       });
     }
