@@ -100,6 +100,7 @@ module.exports = function (grunt) {
         title: 'angular-translate',
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
+        startPage: '/guide',
         scripts: [
           'http://code.angularjs.org/1.0.7/angular.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js'
@@ -117,7 +118,7 @@ module.exports = function (grunt) {
       guide: {
         src: ['docs/content/guide/*.ngdoc'],
         title: 'Guide'
-      }
+      },
     }
   });
 
