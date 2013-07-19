@@ -9,10 +9,10 @@ angular.module('pascalprecht.translate')
  * @description
  * Translates given translation id either through attribute or DOM content.
  * Internally it uses `translate` filter to translate translation id. It possible to
- * pass an optional `values` object literal as string into translation id.
+ * pass an optional `translate-values` object literal as string into translation id.
  *
  * @param {string=} translate Translation id which could be either string or interpolated string.
- * @param {string=} values Values to pass into translation id. Can be passed as object literal string or interpolated object.
+ * @param {string=} translate-values Values to pass into translation id. Can be passed as object literal string or interpolated object.
  *
  * @example
    <example module="ngView">
@@ -23,10 +23,10 @@ angular.module('pascalprecht.translate')
         <pre translate>TRANSLATION_ID</pre>
         <pre translate="{{translationId}}"></pre>
         <pre translate>{{translationId}}</pre>
-        <pre translate="WITH_VALUES" values="{value: 5}"></pre>
-        <pre translate values="{value: 5}">WITH_VALUES</pre>
-        <pre translate="WITH_VALUES" values="{{values}}"></pre>
-        <pre translate values="{{values}}">WITH_VALUES</pre>
+        <pre translate="WITH_VALUES" translate-values="{value: 5}"></pre>
+        <pre translate translate-values="{value: 5}">WITH_VALUES</pre>
+        <pre translate="WITH_VALUES" translate-values="{{values}}"></pre>
+        <pre translate translate-values="{{values}}">WITH_VALUES</pre>
 
       </div>
     </file>
@@ -98,7 +98,7 @@ angular.module('pascalprecht.translate')
         }
       });
 
-      attr.$observe('values', function (interpolateParams) {
+      attr.$observe('translateValues', function (interpolateParams) {
         scope.interpolateParams = interpolateParams;
       });
 

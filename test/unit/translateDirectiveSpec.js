@@ -157,7 +157,7 @@ describe('pascalprecht.translate', function () {
 
         it('should replace interpolate directive when td id is attribute value', function () {
           inject(function ($rootScope, $compile) {
-            element = $compile('<div translate="TD_WITH_VALUE" values="{value: \'foo\'}"></div>')($rootScope);
+            element = $compile('<div translate="TD_WITH_VALUE" translate-values="{value: \'foo\'}"></div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('Lorem Ipsum foo');
           });
@@ -166,7 +166,7 @@ describe('pascalprecht.translate', function () {
         it('should replace interpolate directive when td id is attribute value and interpolation', function () {
           inject(function ($rootScope, $compile) {
             $rootScope.translationId = 'TD_WITH_VALUE';
-            element = $compile('<div translate="{{translationId}}" values="{value: \'foo\'}"></div>')($rootScope);
+            element = $compile('<div translate="{{translationId}}" translate-values="{value: \'foo\'}"></div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('Lorem Ipsum foo');
           });
@@ -174,7 +174,7 @@ describe('pascalprecht.translate', function () {
 
         it('should replace interpolate directive when td id is given as content', function () {
           inject(function ($rootScope, $compile) {
-            element = $compile('<div translate values="{value: \'foo\'}">TRANSLATION_ID</div>')($rootScope);
+            element = $compile('<div translate translate-values="{value: \'foo\'}">TRANSLATION_ID</div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('foo');
           });
@@ -183,7 +183,7 @@ describe('pascalprecht.translate', function () {
         it('should replace interpolate directive when td id is given as content and as interpolation', function () {
           inject(function ($rootScope, $compile) {
             $rootScope.translationId = 'TRANSLATION_ID';
-            element = $compile('<div translate values="{value: \'foo\'}">{{translationId}}</div>')($rootScope);
+            element = $compile('<div translate translate-values="{value: \'foo\'}">{{translationId}}</div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('foo');
           });
@@ -195,7 +195,7 @@ describe('pascalprecht.translate', function () {
         it('should replace interpolate directive when td id is attribute value', function () {
           inject(function ($rootScope, $compile) {
             $rootScope.values = { value: 'foo' };
-            element = $compile('<div translate="TD_WITH_VALUE" values="{{values}}"></div>')($rootScope);
+            element = $compile('<div translate="TD_WITH_VALUE" translate-values="{{values}}"></div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('Lorem Ipsum foo');
           });
@@ -205,7 +205,7 @@ describe('pascalprecht.translate', function () {
           inject(function ($rootScope, $compile) {
             $rootScope.translationId = 'TD_WITH_VALUE';
             $rootScope.values = { value: 'foo' };
-            element = $compile('<div translate="{{translationId}}" values="{{values}}"></div>')($rootScope);
+            element = $compile('<div translate="{{translationId}}" translate-values="{{values}}"></div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('Lorem Ipsum foo');
           });
@@ -214,7 +214,7 @@ describe('pascalprecht.translate', function () {
         it('should replace interpolate directive when td id is given as content', function () {
           inject(function ($rootScope, $compile) {
             $rootScope.values = { value: 'foo' };
-            element = $compile('<div translate values="{{values}}">TRANSLATION_ID</div>')($rootScope);
+            element = $compile('<div translate translate-values="{{values}}">TRANSLATION_ID</div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('foo');
           });
@@ -224,7 +224,7 @@ describe('pascalprecht.translate', function () {
           inject(function ($rootScope, $compile) {
             $rootScope.translationId = 'TRANSLATION_ID';
             $rootScope.values = { values: 'foo' };
-            element = $compile('<div translate values="{{values}}">{{translationId}}</div>')($rootScope);
+            element = $compile('<div translate translate-values="{{values}}">{{translationId}}</div>')($rootScope);
             $rootScope.$digest();
             expect(element.text()).toBe('foo');
           });
