@@ -103,7 +103,8 @@ module.exports = function (grunt) {
         startPage: '/guide',
         scripts: [
           'http://code.angularjs.org/1.0.7/angular.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js'
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-default/master/angular-translate-interpolation-default.min.js'
         ],
         styles: ['docs/css/styles.css']
       },
