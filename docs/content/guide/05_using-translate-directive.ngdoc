@@ -48,7 +48,7 @@ Let's update our example app and add some new translations. How about texts whic
 represents each possible way of using `translate` directive? Our translation table
 could look like this:
 
-```
+<pre>
 var translations = {
   HEADLINE: 'What an awesome module!',
   PARAGRAPH: 'Srsly!',
@@ -56,7 +56,7 @@ var translations = {
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
 };
-```
+</pre>
 
 After that we update our view with our new translation id's:
 
