@@ -34,6 +34,39 @@ decoupled from the main core, which means, you can install'em as extra packages,
 or to be honest, you have to make sure that at least one interpolation service
 is present when running an app with angular-translate.
 
+Interpolators influence the syntax you have to use within your translations. The
+default interpolation service uses Angular's core interpolation service, so if
+you familiar with it, you don't have to learn anything new. The **MessageFormat**
+interpolation service uses a different syntax, but more on that later.
+
+### Missing translation handlers
+The left box shows provided missing translation handlers. These get execute when
+`$translate` service tries to translate a translation which doesn't exist. You
+don't have to use any handler, but if you want to, angular-translate comes with
+a log service you can install as an extension. In addition to that, you can also
+implement your own handler and use that.
+
+### Asynchronous loader
+Of course you want to be able to load your translation data asynchronously to
+speed up your apps performance. angular-translate supports the use of so called
+asynchronous loaders, which are very easy to use. There are two asynchronous
+loaders, `urlLoader` and `staticFilesLoader`. Both of them solves a specific
+situation when it comes to asynchonous loading of translation data. Anyways, of
+course you can build your own custom loaders and use then if you want to.
+
+### Storage
+Since its pretty common that an app, which provides multi-language support, should
+remember the language a user has chosen during runtime, angular-translate gives
+you a way to use any kind of storage. It checks if it should rely on any storage and if so it tries to find a specific key - value pair within the configured storage
+to determine which language actually should be loaded.
+
+angular-translate comes with support for localStorage and cookieStorage. You can
+easily install extension packages to make use of them.
+
+Now you got a little overview on how angular-translate is structured, which kind
+of features it provides and how the components are connected. In the next chapter
+you'll learn how to start with angular-translate.
+
 <br>
 <hr>
 <center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
