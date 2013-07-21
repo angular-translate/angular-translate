@@ -146,7 +146,7 @@ instantiated and used. Here's the working code:
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
 
-      app.config(function ['$translateProvider', ($translateProvider) {
+      app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
         $translateProvider.translations(translations);
       }]);
