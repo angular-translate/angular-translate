@@ -1,0 +1,24 @@
+@ngdoc overview
+@name Using translate filter
+@description
+
+# Using translate filter
+
+Most of the time you want to translate contents at view layer, since this is the place
+where your contents are. This decouples the translate logic from your controllers and
+services. <code>angular-translate</code> comes with a **filter** and a **directive** to
+translate your contents.
+
+You make use of <code>translateFilter</code> as follows:
+
+<pre>
+<h1>{{'HEADLINE_TEXT' | translate}}</h1>
+<p>{{'SOME_TEXT' | translate}}</p>
+</pre>
+
+Pretty easy ha? And again, there is a [testsuite](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateSpec.js#L310-L326)
+which shows you how <code>translateFilter</code> behaves in certain cases.
+
+**[&rarr; View Plunker](http://plnkr.co/edit/UUEmtf)**
+
+

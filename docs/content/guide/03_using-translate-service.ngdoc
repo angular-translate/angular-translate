@@ -1,0 +1,27 @@
+@ngdoc overview
+@name Using translate service
+@description
+
+# Using translate service
+
+<code>angular-translate</code> provides several ways to translate certain contents of
+your app. One way is to use the provided <code>$translate</code> service directly.
+You actually wouldn't use this approach, because you don't want to bind your apps
+controllers and services too hard to your translated content. But just to show that
+it's possible.
+
+Simply inject the <code>$translate</code> service as you would do with others.
+
+<pre>
+angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+  $scope.translatedText = $translate('HEADLINE_TEXT');
+
+}]);
+</pre>
+
+This service in actually beeing used module-wide in <code>angular-translate</code> to
+translate translation id's. If you want to know what behavior you can expect from
+<code>$translate</code> in specific cases, check out the [related tests](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateSpec.js#L40-L60).
+
+**[&rarr; View Plunker](http://plnkr.co/edit/D68BxJ)**

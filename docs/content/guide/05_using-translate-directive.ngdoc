@@ -1,0 +1,29 @@
+@ngdoc overview
+@name Using translate directive
+@description
+
+# Using translate directive
+
+Using <code>translateFilter</code> is great, but using <code>translateDirective</code> is better.
+It turned out that having too many filters in a view sets up too many watch expressions,
+which is why <code>angular-translate</code> also provides a directive to translate your
+contents in view layer.
+
+You can use <code>translateDirective</code> in many different ways, here is one possible
+way:
+
+<pre>
+<h1 translate>HEADLINE_TEXT</h1>
+<p translate>SOME_TEXT</p>
+</pre>
+
+You can also pass translation id's as attribute values:
+
+<pre>
+<h1 translate="HEADLINE_TEXT"></h1>
+<p translate="SOME_TEXT"></p>
+</pre>
+
+And there is [so much more possible](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateDirectiveSpec.js)!
+
+**[&rarr; View Plunker](http://plnkr.co/edit/6of2GK)**
