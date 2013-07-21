@@ -1,27 +1,79 @@
 @ngdoc overview
-@name Using translate service
+@name Using $translate service
 @description
 
-# Using translate service
+# Using $translate service
 
-<code>angular-translate</code> provides several ways to translate certain contents of
-your app. One way is to use the provided <code>$translate</code> service directly.
-You actually wouldn't use this approach, because you don't want to bind your apps
-controllers and services too hard to your translated content. But just to show that
-it's possible.
+`angular-translate` provides several ways to translate the contents of your app.
+One way is to use the provided `$translate` service directly. You actually
+wouldn't use this approach, because you don't want to bind your apps
+controllers and services too hard to your translated content. However it turned
+out that there are indeed cases where you need to translate contents with
+`$translate` service.
 
-Simply inject the <code>$translate</code> service as you would do with others.
+Just imagine the case, where you want to translate the content of your HTML
+documents `<title>` tag. The `<title>` will never ever be inside of your `ng-app`
+directive, which means it is always outside of an Angular world. So, to achieve
+this, you actually have to manipulate your apps title once your app is running
+through controller or service logic.
+
+### General usage
+This is where `$translate` service comes in. Using `$translate` service is very
+easy. First of all, you have to inject it per dependency injection (like every
+service you want to use within your Angular code). Let's say we want to extend
+the app we started building in [Getting Started](#/guide/02_getting-started).
+
+Our code would look something like this:
 
 <pre>
-angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
-
-  $scope.translatedText = $translate('HEADLINE_TEXT');
+app.controller('Ctrl', ['$translate', function ($translate) {
 
 }]);
 </pre>
 
-This service in actually beeing used module-wide in <code>angular-translate</code> to
-translate translation id's. If you want to know what behavior you can expect from
-<code>$translate</code> in specific cases, check out the [related tests](https://github.com/PascalPrecht/angular-translate/blob/master/test/unit/translateSpec.js#L40-L60).
+Now to translate your contents with `$translate` service, all you have to do is
+to pass a translation id which was registered with `$translateProvider` before
+and it'll return the concrete translation of that translation id. We also inject
+`$scope` within our controller to expose to our view layer the translated values:
 
-**[&rarr; View Plunker](http://plnkr.co/edit/D68BxJ)**
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $scope.headline = $translate('HEADLINE');
+  $scope.paragraph = $translate('PARAGRAPH');
+}]);
+</pre>
+
+That's all. Now when you think about translating the contents of a `<title>` you
+can do so within your controller. Here's a working sample:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider.translations(translations);
+      }]);
+
+      app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+        // expose translation via `$translate` service
+        $scope.headline = $translate('HEADLINE');
+        $scope.paragraph = $translate('PARAGRAPH');
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h1>{{headline}}</h1>
+      <p>{{paragraph}}</p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
