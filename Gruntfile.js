@@ -59,9 +59,24 @@ module.exports = function (grunt) {
     },
     copy: {
       demo: {
-        files: {
-          'demo/js/angular-translate-latest.js': 'dist/angular-translate.js'
-        }
+        files: [
+          {
+            src: 'angular-translate.js',
+            dest: 'demo/js/',
+            cwd: 'dist/',
+            expand: true
+          }
+        ]
+      },
+      docs_assets: {
+        files: [
+          {
+            src: ['img/**'],
+            dest: '<%= ngdocs.options.dest %>/',
+            cwd: 'docs/',
+            expand: true
+          }
+        ]
       }
     },
     karma: {
@@ -130,4 +145,6 @@ module.exports = function (grunt) {
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit',  'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
+
+  grunt.registerTask('docs', ['ngdocs', 'copy:docs_assets']);
 };
