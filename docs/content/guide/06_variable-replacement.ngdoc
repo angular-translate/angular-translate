@@ -128,12 +128,10 @@ var translations = {
 };
 </pre>
 
-Next, we add an input element to setup a two-way data-binding with an `ng-model`
-directive and pass our ng-model value through a `translate` directive:
+Next, we  pass a name through a `translate` directive:
 
 <pre>
-<input type="text" ng-model="name">
-<p translate="VARIABLE_REPLACEMENT" translate-values="{ name: name }"></p>
+<p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
 </pre>
 
 Our working code now looks like this:
@@ -169,8 +167,7 @@ Our working code now looks like this:
       <p translate="PASSED_AS_ATTRIBUTE"></p>
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
-      <input type="text" ng-model="name">
-      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: name }"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
     </div>
   </doc:source>
 </doc:example>
