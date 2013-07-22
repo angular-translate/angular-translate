@@ -1,0 +1,30 @@
+@ngdoc overview
+@name Custom Storages
+@description
+
+# Custom Storages
+
+#### useStorage()
+
+If both, localStorage and cookieStorage don't fit to your needs you can simply build your own service and use that instead. All you have to do is to make sure that your custom storage service provides a `get()` and a `set()` method.
+
+<pre>
+app.config(function ($translateProvider) {
+    $translateProvider.useStorage('myCustomService');
+});
+
+app.factory('myCustomService', function ($http, dep2, dep3) {
+    return {
+        set: function (name, value) {
+          // do something with $http to set value
+        },
+        get: function (name) {
+          // do something with $http to get value
+        }
+    };
+});
+</pre>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
