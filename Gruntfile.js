@@ -75,6 +75,12 @@ module.exports = function (grunt) {
             dest: '<%= ngdocs.options.dest %>/',
             cwd: 'docs/',
             expand: true
+          },
+          {
+            src: ['data/**'],
+            dest: '<%= ngdocs.options.dest %>/',
+            cwd: 'docs/',
+            expand: true
           }
         ]
       }
@@ -122,7 +128,8 @@ module.exports = function (grunt) {
           'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-default/master/angular-translate-interpolation-default.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js'
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js'
         ],
         styles: ['docs/css/styles.css']
       },
