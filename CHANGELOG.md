@@ -1,3 +1,50 @@
+# 0.1.0 (2013-07-23)
+
+## Features
+### translateService
+
+* missingTranslationHandler receives language (6fe6bb1)
+
+* adds method to configure indicators for not found translations (52a039f)
+
+* extracts default interpolation in standalone service (5d8cb56)
+
+* implements usage of different interpolation services (5e20e24)
+
+* informs interpolator when locale has changed (e59b141)
+
+* implements proposedLanguage() (6d34792)
+
+### messageformat-interpolation
+
+* implements usage of messageformat (5596e8b)
+
+### translateFilter
+
+* teaches filter to use custom interpolation (46f03cc)
+
+### translateDirective
+
+* teaches directives to use custom interpolation (bf3dbbb)
+
+
+
+## Bug fixes
+### tests
+
+* travis CI (629bb8d)
+
+* travis CI (c8624bf)
+
+### docs
+
+* fixes methodOf declaration of addInterpolation method (f1eeba7)
+
+### gh-pages
+
+* plato report (b85e19b)
+
+
 # 0.9.4 (2013-06-21)
 
 ## Features
