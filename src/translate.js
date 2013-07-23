@@ -41,6 +41,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $preferredLanguage,
       $fallbackLanguage,
       $uses,
+      $nextLang,
       $storageFactory,
       $storageKey = $STORAGE_KEY,
       $storagePrefix,
@@ -620,6 +621,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return $fallbackLanguage;
     };
 
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#proposedLanguage
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the language key of language that is currently loaded asynchronously.
+     *
+     * @return {string} language key
+     */
+    $translate.proposedLanguage = function () {
+      return $nextLang;
+    };
 
     /**
      * @ngdoc function
@@ -662,6 +676,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if (!$translationTable[key]) {
 
         pendingLoader = true;
+        $nextLang = key;
 
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key

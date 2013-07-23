@@ -808,4 +808,47 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
+
+  describe('proposedLanguage()', function () {
+
+    var $translate;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $provide.factory('customLoader', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+
+          $timeout(function () {
+            deferred.resolve({});
+          }, 1000);
+
+          return deferred.promise;
+        };
+      });
+
+      $translateProvider.useLoader('customLoader');
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should have a method proposedLanguage()', function () {
+      expect($translate.proposedLanguage).toBeDefined();
+    });
+
+    it('should be a use function ', function () {
+      expect(typeof $translate.proposedLanguage).toBe('function');
+    });
+
+    it('should return a string', function () {
+      expect(typeof $translate.proposedLanguage()).toBe('string');
+    });
+
+    it('should return proposedLanguage', function () {
+      expect($translate.proposedLanguage()).toEqual('en');
+    });
+  });
 });
