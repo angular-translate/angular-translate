@@ -5,7 +5,9 @@ if git status --porcelain 2>/dev/null | grep -q .; then
   exit 1
 fi
 
-grunt ngdocs
+grunt docs
+plato -d plato src/**/*.js
+mv plato site
 git checkout gh-pages
 cp -rf site/* .
 rm -rf site
