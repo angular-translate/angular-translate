@@ -362,7 +362,7 @@ describe('pascalprecht.translate', function () {
         // provide a method to return an interpolation identifier
         translateInterpolator.getInterpolationIdentifier = function () {
           return 'custom';
-        }
+        };
 
         // defining the actual interpolate function
         translateInterpolator.interpolate = function (string, interpolateParams) {
@@ -392,7 +392,7 @@ describe('pascalprecht.translate', function () {
       expect(element.text()).toEqual('Yesssss');
 
       // and we can override it
-      element = $compile('<p translate="FOO" translate-interpolation="custom"></p>')($rootScope);;
+      element = $compile('<p translate="FOO" translate-interpolation="custom"></p>')($rootScope);
       $rootScope.$digest();
       expect(element.text()).toEqual('custom interpolation');
     });

@@ -147,7 +147,7 @@ describe('pascalprecht.translate', function () {
         // provide a method to return an interpolation identifier
         translateInterpolator.getInterpolationIdentifier = function () {
           return 'custom';
-        }
+        };
 
         // defining the actual interpolate function
         translateInterpolator.interpolate = function (string, interpolateParams) {

@@ -516,7 +516,7 @@ describe('pascalprecht.translate', function () {
          });
        });
      });
- 
+
     describe('preferredLanguage()', function () {
      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -728,7 +728,7 @@ describe('pascalprecht.translate', function () {
                                   'zero{added this to your profile}' +   //   the offset value
                                   'one{and one other person added this to their profile}' +
                                   'other{and # others added this to their profiles}' +
-                                '}.',
+                                '}.'
       });
 
       $translateProvider.useMessageFormatInterpolation();
@@ -823,11 +823,11 @@ describe('pascalprecht.translate', function () {
           // provide a method to return an interpolation identifier
           translateInterpolator.getInterpolationIdentifier = function () {
             return 'custom';
-          }
+          };
 
           // defining the actual interpolate function
           translateInterpolator.interpolate = function (string, interpolateParams) {
-            if ($locale == 'de') {
+            if ($locale === 'de') {
               return 'foo';
             } else {
               return 'custom interpolation';
@@ -893,7 +893,7 @@ describe('pascalprecht.translate', function () {
                                     'zero{added this to your profile}' +   //   the offset value
                                     'one{and one other person added this to their profile}' +
                                     'other{and # others added this to their profiles}' +
-                                  '}.',
+                                  '}.'
         });
 
         $translateProvider.addInterpolation('$translateMessageFormatInterpolation');

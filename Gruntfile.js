@@ -144,7 +144,7 @@ module.exports = function (grunt) {
       guide: {
         src: ['docs/content/guide/*.ngdoc'],
         title: 'Guide'
-      },
+      }
     }
   });
 
