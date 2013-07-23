@@ -5,7 +5,7 @@
 # Customer Loaders
 
 angular-translate wouldn't be angular-translate if it wouldn't provide you a way
-to build your custom asynchronous loaders. 
+to build your custom asynchronous loaders.
 In [Asynchronous loading](#/guide/10_asynchronous-loading) you've learned how to
 use the provided loaders to load your translation data asynchronously from a
 service, using certain patterns.
@@ -18,9 +18,9 @@ own loaders very easily. This chapter shows you how to do it!
 ### Building a custom loader service
 
 If non of the provided loaders fit to your needs, you can register a custom
-asynchronous loader as a factory. The factory has to return a function, which 
-expects an object where at least the language key property exists. With this 
-architecture you're as free as possible and have the full control of how your 
+asynchronous loader as a factory. The factory has to return a function, which
+expects an object where at least the language key property exists. With this
+architecture you're as free as possible and have the full control of how your
 asynchronous loader should behave.
 
 A custom loader factory could look something like this:
@@ -44,7 +44,7 @@ app.factory('customLoader', function ($http, $q) {
 });
 </pre>
 
-You have to make sure, that your loader function returns a promise. It should either 
+You have to make sure, that your loader function returns a promise. It should either
 gets resolved with your translation data, or rejected with the language key. As
 you can see, there's a `key` property on the `options` object. It has the value
 of the language key with which the asynchronous loader is invoked.
