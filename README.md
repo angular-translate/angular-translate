@@ -2,68 +2,27 @@
 
 > i18n in your AngularJS apps
 
-### [Visit website](http://pascalprecht.github.io/angular-translate/#/guide)
+* Website [http://pascalprecht.github.io/angular-translate/](http://pascalprecht.github.io/angular-translate/)
+* API Reference [http://pascalprecht.github.io/angular-translate/#/api](http://pascalprecht.github.io/angular-translate/#/api)
+* Plato report [http://pascalprecht.github.io/angular-translate/plato](http://pascalprecht.github.io/angular-translate/plato)
+* [Contribution Guidelines](https://github.com/PascalPrecht/angular-translate/blob/master/CONTRIBUTING.md)
 
-Checkout the [demos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) and [help out](CONTRIBUTING.md) making things better. You can start by reading the [docs](https://github.com/PascalPrecht/angular-translate/wiki).
-If you like the module and use it in your projects, make it public on [ngmodules](http://ngmodules.org/modules/angular-translate)!
+### Useful resources
+There are some very useful things on the web that might be interesting for you,
+so make sure to check this list.
 
-There's also a [mailinglist](https://groups.google.com/forum/#!forum/angular-translate) for questions and discussions.
+- [Examples and demos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - Currently on plnkr.co
+- [Tutorial on angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - German article
+- [Tutorial on neoskop.de](http://www.neoskop.de/blog/angular-translate) - German article
+- [angular-translate on GitHub](http://github.com/PascalPrecht/angular-translate) - The GitHub repository
+- [angular-translate on ngmodules.org](http://ngmodules.org/modules/angular-translate)
+- [angular-translate mailinglist](https://groups.google.com/forum/#!forum/angular-translate) - Discuss, ask et al!
 
-### Features
-* translate filter
-* translate directive
-* translate service
-* multi-lang support
-* asynchronous/lazy loading support
-
-**Attention:** Since we're currently working on a specification for [Reusable Angular Components](https://github.com/PascalPrecht/angular-component-spec/tree/proposal), this project will have some breaking changes once the spec is called final.
-
-## Quick Start
-Install module via Bower:
-````
-$ bower install angular-translate
-````
-
-Inject <code>angular-translate</code> module as a dependency into your app:
-
-````
-var app = angular.module('myApp', ['pascalprecht.translate']);
-````
-
-Teach <code>$translateProvider</code> translations:
-
-````
-app.config(['$translateProvider', function ($translateProvider) {
-  $translateProvider.translations({
-    'TITLE': 'Hello',
-    'FOO': 'This is a paragraph',
-  });
-}]);
-````
-
-Translate your app:
-````
-<h1>{{ 'TITLE' | translate }}</h1>
-<p>{{ 'FOO' | translate }}</p>
-````
-
-To learn what else is possible, read the full [documentation](https://github.com/PascalPrecht/angular-translate/wiki).
-
-### Extensions
-There are some pretty cool extensions you probably find interesting:
-
-* [Storage: $translateCookieStorage](https://github.com/PascalPrecht/angular-translate-storage-cookie)
-* [Storage: $translateLocalStorage](https://github.com/PascalPrecht/angular-translate-storage-local)
-* [Loader: $translateUrlLoader](https://github.com/PascalPrecht/angular-translate-loader-url)
-* [Loader: $translateStaticFilesLoader](https://github.com/PascalPrecht/angular-translate-loader-static-files)
-
-## Contributors
-
-Special thanks are going to the following devs who put a lot of love into this module:
-
-* Jan Philipp - [@knalli](https://github.com/knalli)
-* James Andres - [@jamesandres](https://github.com/jamesandres)
-* Andy Joslin - [@ajoslin](https://github.com/ajoslin)
-* [@DWand](https://github.com/DWand)
+### Thank you, community!
+We got a lot of great feedback from the community so far! More and more people
+use this module and they are always thankful for it and the awesome support they
+get. I just want to make sure that you guys know: All this wouldn't have been
+possible without these [great contributors](http://github.com/PascalPrecht/angular-translate/contributors)
+and everybody who comes with new ideas and feature requests! So **THANK YOU**!
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)
