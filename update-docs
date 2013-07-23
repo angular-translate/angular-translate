@@ -6,7 +6,7 @@ if git status --porcelain 2>/dev/null | grep -q .; then
 fi
 
 grunt docs
-plato -d plato src/**/*.js
+plato -d plato src/*.js src/**/*.js
 mv plato site
 git checkout gh-pages
 cp -rf site/* .
