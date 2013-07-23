@@ -135,7 +135,7 @@ MessageFormat interpolation for all of your translations, but for specific
 translations only.
 
 At first, we remove `$translateProvider.useMessageFormatInterpolation()` again. Now our app
-uses default interpolation. Allright. Next, we have to make MessageFormat
+uses default interpolation. Alright. Next, we have to make MessageFormat
 interpolation available as optional interpolation type. `$translateProvider`
 has a method `addInterpolation()` which expects a factory name for an interpolation
 service as first argument.
@@ -176,7 +176,7 @@ $translate('PLURAL', { GENDER: 'male' }, 'messageformat');
 // "He liked this."
 </pre>
 
-We can archieve the same with `translate` filter. As explained earlier, the third
+We can achieve the same with `translate` filter. As explained earlier, the third
 argument is an identifier for the interpolation service:
 
 <pre>
