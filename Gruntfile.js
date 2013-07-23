@@ -53,15 +53,36 @@ module.exports = function (grunt) {
     uglify: {
       src: {
         files: {
-          'dist/angular-translate.min.js': '<%= concat.src.dest %>'
+          'dist/<%= concat.src.dest %>min.js': '<%= concat.src.dest %>'
         }
       }
     },
     copy: {
       demo: {
-        files: {
-          'demo/js/angular-translate-latest.js': 'dist/angular-translate.js'
-        }
+        files: [
+          {
+            src: 'angular-translate.js',
+            dest: 'demo/js/',
+            cwd: 'dist/',
+            expand: true
+          }
+        ]
+      },
+      docs_assets: {
+        files: [
+          {
+            src: ['img/**'],
+            dest: '<%= ngdocs.options.dest %>/',
+            cwd: 'docs/',
+            expand: true
+          },
+          {
+            src: ['data/**'],
+            dest: '<%= ngdocs.options.dest %>/',
+            cwd: 'docs/',
+            expand: true
+          }
+        ]
       }
     },
     karma: {
@@ -100,9 +121,15 @@ module.exports = function (grunt) {
         title: 'angular-translate',
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
+        startPage: '/guide',
         scripts: [
           'http://code.angularjs.org/1.0.7/angular.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js'
+          'http://rawgithub.com/angular/bower-angular-cookies/master/angular-cookies.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-default/master/angular-translate-interpolation-default.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js'
         ],
         styles: ['docs/css/styles.css']
       },
@@ -117,7 +144,7 @@ module.exports = function (grunt) {
       guide: {
         src: ['docs/content/guide/*.ngdoc'],
         title: 'Guide'
-      }
+      },
     }
   });
 
@@ -128,4 +155,6 @@ module.exports = function (grunt) {
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit',  'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
+
+  grunt.registerTask('docs', ['ngdocs', 'copy:docs_assets']);
 };

@@ -1,24 +1,8 @@
 @ngdoc overview
-@name Error Handling
+@name Custom Error Handler
 @description
 
-# Error Handling
-
-### Using log handler extension for missing translations
-There is an extension for `angular-translate` which logs warnings into console
-if you try to translate a translation id which doesn't exist. Install the extension via:
-
-```
-$ bower install angular-translate-handler-log
-```
-
-To use this handler, all you have to do is to call `useMissingTranslationHandlerLog()` on `$translateProvider`:
-
-<pre>
-$translateProvider.useMissingTranslationHandlerLog();
-</pre>
-
-### Defining custom handler for missing translations
+# Custom Error Handler
 
 Of course you want to be able to use your own custom handler. Besides `useMissingTranslationHandlerLog()`
 there's another method called `useMissingTranslationHandler()` which expects the name
@@ -40,5 +24,6 @@ app.factory('myCustomHandlerFactory', function (dep1, dep2) {
 
 </pre>
 
-So you're able to extend `angular-translate`'s functionality by yourself!
-
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
