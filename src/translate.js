@@ -18,8 +18,13 @@ angular.module('pascalprecht.translate', ['ng'])
     } else {
       $translate.uses(storage.get(key));
     }
-  } else if (angular.isString($translate.preferredLanguage())) {
-    $translate.uses($translate.preferredLanguage());
+  } else {
+    if (angular.isString($translate.fallbackLanguage()) && $translate.fallbackLanguage() !== $translate.preferredLanguage()) {
+      $translate.load($translate.fallbackLanguage());
+    }
+    if (angular.isString($translate.preferredLanguage())) {
+      $translate.uses($translate.preferredLanguage());
+    }
   }
 
 }]);
@@ -661,12 +666,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      *
      * When trying to 'use' a language which isn't available it tries to load it
      * asynchronously with registered loaders.
-     * 
+     *
      * Returns promise object with loaded language file data
      * @example
      * $translate.uses("en_US").then(function(data){
      *  $scope.text = $translate("HELLO");
-     * });	
+     * });
      *
      * @param {string} key Language key
      * @return {string} Language key
@@ -675,6 +680,50 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       if (!key) {
         return $uses;
+      }
+
+      var success = function () {
+        $uses = key;
+
+        if ($storageFactory) {
+          Storage.set($translate.storageKey(), $uses);
+        }
+
+        // inform default interpolator
+        defaultInterpolator.setLocale($uses);
+        // inform all others to!
+        angular.forEach(interpolatorHashMap, function (interpolator, id) {
+          interpolatorHashMap[id].setLocale($uses);
+        });
+
+        $rootScope.$broadcast('translationChangeSuccess');
+      };
+
+      var error = function () {
+        $rootScope.$broadcast('translationChangeError');
+      };
+
+      return $translate.load(key, success, error);
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#load
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Tells angular-translate to load a language asynchronously by given language key.
+     * Optionnal callbacks can be used for success/error specific tasks.
+     *
+     * @param {string} key Language key
+     * @param {function=} success Optionnal callback on loading success
+     * @param {function=} error Optionnal callback on loading error
+     * @return {string} Language key
+     */
+    $translate.load = function (key, success, error) {
+
+      if (!key) {
+        throw "No language key specified for loading.";
       }
 
       var deferred = $q.defer();
@@ -699,45 +748,28 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }
 
           translations(key, translationTable);
-          $uses = key;
 
-          if ($storageFactory) {
-            Storage.set($translate.storageKey(), $uses);
+          if (angular.isFunction(success)) {
+            success();
           }
 
-          // inform default interpolator
-          defaultInterpolator.setLocale($uses);
-          // inform all others to!
-          angular.forEach(interpolatorHashMap, function (interpolator, id) {
-            interpolatorHashMap[id].setLocale($uses);
-          });
-
           pendingLoader = false;
-          $rootScope.$broadcast('translationChangeSuccess');
-          deferred.resolve($uses);
+          deferred.resolve(key);
         }, function (key) {
-          $rootScope.$broadcast('translationChangeError');
+          if (angular.isFunction(error)) {
+            error();
+          }
           deferred.reject(key);
         });
 
         return deferred.promise;
       }
 
-      $uses = key;
-
-      if ($storageFactory) {
-        Storage.set($translate.storageKey(), $uses);
+      if (angular.isFunction(success)) {
+        success();
       }
 
-      // inform default interpolator
-      defaultInterpolator.setLocale($uses);
-      // inform all others to!
-      angular.forEach(interpolatorHashMap, function (interpolator, id) {
-        interpolatorHashMap[id].setLocale($uses);
-      });
-
-      deferred.resolve($uses);
-      $rootScope.$broadcast('translationChangeSuccess');
+      deferred.resolve(key);
       return deferred.promise;
     };
 
