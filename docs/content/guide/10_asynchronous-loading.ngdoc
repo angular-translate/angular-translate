@@ -1,0 +1,229 @@
+@ngdoc overview
+@name Asynchronous Loading
+@description
+
+# Asynchronous Loading
+
+Okay, different translations for different languages is pretty cool. But it's
+even better if you're able to load translations asynchronously right?
+`angular-translate` has some pretty cool extensions to support asynchronous and
+lazy loading of translation data. And it works like a charm.
+
+### Asynchronous loaders
+angular-translate provides a pretty clever way to tell $translate service to
+load data asynchronously. To load your data from a server you have to use an
+asynchronous loader, which gets invoked later at runtime when it's needed.
+angular-translate comes with support for two different asynchronous loader. Both
+of them are installable via Bower. Let's take a look at them!
+
+### Using urlLoader
+This is possibly the simplest way of loading translation data asynchronously.
+All you have to do, is to install the `angular-translate-loader-url` extension
+via Bower like this:
+
+```
+$ bower install angular-translate-loader-url
+```
+
+Once its installed, make sure you've embeded it in your HTML document. Allright,
+the loader is available, we now have to tell angular-translate to use it.
+`$translateProvider` provides a method called `useUrlLoader()`. Pretty straight
+forward, ha? `useUrlLoader()` expects an argument that describes the endpoint
+of a server that'll respond with translation data.
+
+In addition, when using asynchronous loaders, we have to use
+`$translateProvider.preferredLanguage()`, to let angular-translate know, for which
+language it should load the translation data.
+
+<pre>
+$translateProvider.useUrlLoader('foo/bar.json');
+$translateProvider.preferredLanguage('en');
+</pre>
+
+So, what happens here? angular-translate uses the extension to transform the
+given string, to a real loader function which can be invoked later at runtime,
+once `$translate` service is instantiated. In addition to that, telling
+angular-translate to use the language key 'en', adds the language key as request
+parameter to the given loader string.
+
+So, the example above actually requests `foo/bar.json?lang=en`. angular-translate
+also notices that there isn't any translation data available at startup and will
+invoke the loader automatically as soon as possible.
+
+### Using staticFilesLoader
+
+In case you haven't just a URL which expects a `lang` parameter to return a JSON
+that contains your translations, but several localization files which match a
+specific pattern, you probably want to use the
+`angular-translate-loader-static-files` extension which describes the pattern of
+your localization files.
+
+Like urlLoader, you can install staticFilesLoader extension via Bower:
+```
+$ bower install angular-translate-loader-static-files
+```
+
+Once the package is installed and embedded, you can use `$translateProvider`
+method `useStaticFilesLoader()` to tell angular-translate that it should use it.
+The static files loader works a bit different. Instead of having a fix url which
+just expects a `lang` paramter, you are now able to have different localization
+files that match a specific pattern.
+
+How that kind of pattern looks like, depends on your needs. To specify a pattern,
+the following information is required:
+
+* **prefix** - specifies file prefix
+* **suffix** - specifies file suffix
+
+Let's say you have two localization files `locale-de.json` and  `locale-en.json`.
+You can simply use the staticFilesLoader with this pattern like this:
+
+<pre>
+$translateProvider.useStaticFilesLoader({
+    prefix: 'locale-',
+    suffix: '.json'
+});
+$translateProvider.preferredLanguage('en');
+</pre>
+
+angular-translate will concatenate the given information to
+`{{prefix}}{{langKey}}{{suffix}}`. So this will load `locale-en.json`. And again,
+since there isn't any translation data available yet, it'll load it as soon as
+possible automatically.
+
+### Lazy loading at runtime
+
+Once your app bootstraps, it'll load needed translation data asynchonously as
+soon as possible. Okay, cool. But what if a user wants to change the language and
+the corresponding translation data isn't also loaded yet?
+
+In [Multi Language](#/guide/07_multi-language) you've learned, how to change the
+language at runtime using `$translate.uses()`. Know what? Nothing will change when
+dealing with asynchronous loaders. `$translate.uses()` checks if a translation
+table for a given language key is present or not. And if not, it'll invoke the
+registered loader to get it down! Lazy loading at is best!
+
+### FOUC - Flash of untranslated content
+
+There's one drawback when using asynchronous loaders to get your translation data
+into the app. There's a little amount of time when your app launches where you
+have this little kind of flickering, because your translation data isn't loaded
+yet. This is actually not a bug of angular-translate, but a pretty logical behavior
+since we'return executing stuff asynchronously.
+
+To get around this, you could provide at least one language **with** your app
+without having to load it asynchronously. If your app then uses this provided
+language as default language, using `$translateProvider.preferredLanguage()`, you
+won't have this FOUC, because the language to use is already there.
+
+Just use a combination of `$translateProvider.translations()` and
+`$translateProvider.{{whatever}}Loader` like this:
+
+<pre>
+$translateProvider.translations('en', {
+    'HELLO_TEXT': 'Hello World!'
+});
+$translateProvider.useStaticFilesLoader({
+    'prefix': 'locale-',
+    'suffix': '.json'
+});
+$translateProvider.preferredLanguage('de');
+</pre>
+
+Let's update our sample app accordingly to use an asynchronous loader! We'll use
+the staticFilesLoader. First, we have to pull the translation tables out of the
+code and put them into separate locale files:
+
+**Note:** The data is now provided as _JSON_ so make sure to put everything in
+double quotes!
+
+<pre>
+// locale-en.json
+{
+  "HEADLINE": "What an awesome module!",
+  "PARAGRAPH": "Srsly!",
+  "PASSED_AS_TEXT": "Hey there! I'm passed as text value!",
+  "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
+  "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
+  "VARIABLE_REPLACEMENT": "Hi {{name}}",
+  "BUTTON_LANG_DE": "german",
+  "BUTTON_LANG_EN": "english"
+}
+</pre>
+
+<pre>
+// locale-de.json
+{
+  "HEADLINE": "Was für ein großartiges Modul!",
+  "PARAGRAPH": "Ernsthaft!",
+  "PASSED_AS_TEXT": "Hey! Ich wurde als text übergeben!",
+  "PASSED_AS_ATTRIBUTE": "Ich wurde als Attribut übergeben, cool oder?",
+  "PASSED_AS_INTERPOLATION": "Anfänger! Ich bin interpoliert!",
+  "VARIABLE_REPLACEMENT": "Hi {{name}}",
+  "BUTTON_LANG_DE": "deutsch",
+  "BUTTON_LANG_EN": "englisch"
+}
+</pre>
+
+Next we setup `$translate` service using `$translateProvider`:
+
+<pre>
+// configures staticFilesLoader
+$translateProvider.useStaticFilesLoader({
+  prefix: 'data/locale-',
+  suffix: '.json'
+});
+// load 'en' table on startup
+$translateProvider.preferredLanguage('en');
+$translateProvider.useLocalStorage();
+</pre>
+
+Since we don't have to make any changes in our controllers or HTML, we are done!
+Take a look at the working app:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // configures staticFilesLoader
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'data/locale-',
+          suffix: '.json'
+        });
+        // load 'en' table on startup
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useLocalStorage();
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.uses(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+Open up your browsers devtools and take a look at the network activities when changing
+the language. Our app now loads translation data asynchronously! In the next
+chapter you'll learn how to build **your own custom loaders**.
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -4,30 +4,9 @@
 
 # Migration Guide
 
-### From 0.6.0 to 0.7.0
+### 0.8.x to 0.9.0
 
-#### [deprecated] $translateProvider#rememberLanguage()
-`rememberLanguage()` is no longer supported. Please make sure to use the new storage interfaces:
-
-* `useLocalStorage()`
-* `useCookieStorage()`
-* `useStorage()`
-
-They'll take care of the rest. [[More information|Multi-Language#let-your-app-remember-the-language]]
-
-#### Use $translateProvider#preferredLanguage() instead of $translateProvider#uses()
-
-See [[#29|https://github.com/PascalPrecht/ng-translate/pull/29]]
-
-### From 0.7.x to 0.8.0
-
-#### Module name changed from 'ngTranslate' to 'pascalprecht.translate'
-
-### From 0.8.x to 0.9.0
-
-#### Introducing Extensions
-
-`angular-translate` now uses extensions to get some work done. There are extensions for:
+- angular-translate now uses extensions to get some work done. There are extensions for:
 
 * Url loader
 * static-files loader
@@ -47,4 +26,22 @@ Repos:
 * https://github.com/PascalPrecht/angular-translate-storage-local
 * https://github.com/PascalPrecht/angular-translate-storage-cookie
 
+### 0.7.x to 0.8.0
 
+- Module name changed from 'ngTranslate' to 'pascalprecht.translate'
+
+### 0.6.0 to 0.7.0
+
+- [deprecated] $translateProvider#rememberLanguage()
+- `rememberLanguage()` is no longer supported. Please make sure to use the new storage interfaces:
+
+- `useLocalStorage()`
+- `useCookieStorage()`
+- `useStorage()`
+- Use $translateProvider#preferredLanguage() instead of $translateProvider#uses() See [[#29|https://github.com/PascalPrecht/ng-translate/pull/29]]
+
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

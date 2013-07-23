@@ -3,6 +3,10 @@
   "version": "0.9.4",
   "description": "A translation module for AngularJS",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/PascalPrecht/angular-translate"
+  },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --browsers Firefox --single-run"
   },
@@ -24,6 +28,6 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-ngmin": "0.0.2",
     "express": "~3.2.4",
-    "grunt-ngdocs": "git://github.com/m7r/grunt-ngdocs"
+    "grunt-ngdocs": "~0.1.2"
   }
 }
