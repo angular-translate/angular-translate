@@ -123,13 +123,17 @@ module.exports = function (grunt) {
         html5Mode: false,
         startPage: '/guide',
         scripts: [
+          'http://rawgithub.com/SlexAxton/messageformat.js/master/messageformat.js',
+          'http://rawgithub.com/SlexAxton/messageformat.js/master/locale/de.js',
           'http://code.angularjs.org/1.0.7/angular.min.js',
           'http://rawgithub.com/angular/bower-angular-cookies/master/angular-cookies.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-default/master/angular-translate-interpolation-default.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-messageformat/master/angular-translate-interpolation-messageformat.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js'
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js',
+          'http://rawgithub.com/PascalPrecht/bower-angular-translate-handler-log/master/angular-translate-handler-log.min.js'
         ],
         styles: ['docs/css/styles.css']
       },
