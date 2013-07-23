@@ -53,7 +53,7 @@ module.exports = function (grunt) {
     uglify: {
       src: {
         files: {
-          '<%= concat.src.dest %>min.js': '<%= concat.src.dest %>'
+          'dist/angular-translate.min.js': '<%= concat.src.dest %>'
         }
       }
     },
