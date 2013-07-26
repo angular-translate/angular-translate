@@ -1,3 +1,21 @@
+# 1.0.1 (2013-07-26)
+
+- Brings default interpolation back to core (you don't have to install it as extra package)
+
+## Bug fixes
+### platolink
+
+* deep link (d368bf3)
+
+### dependency
+
+* add 'angular-cookies' as bower devDependency (b6f1426)
+
+### demo
+
+* change src to angular-translate script (4be93b6)
+
+
 # 0.1.0 (2013-07-23)
 
 ## Features
