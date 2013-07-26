@@ -128,7 +128,6 @@ module.exports = function (grunt) {
           'http://code.angularjs.org/1.1.5/angular.min.js',
           'http://rawgithub.com/angular/bower-angular-cookies/master/angular-cookies.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-default/master/angular-translate-interpolation-default.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-messageformat/master/angular-translate-interpolation-messageformat.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
           'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
