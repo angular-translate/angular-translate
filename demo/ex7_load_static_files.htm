@@ -10,17 +10,17 @@
 <body ng-controller="ctrl">
 
   <p>
-    <a href="#" ng-click="setLang('en_US')">English</a> 
-    | 
+    <a href="#" ng-click="setLang('en_US')">English</a>
+    |
     <a href="#" ng-click="setLang('ru_RU')">Русский</a>
   </p>
 
   <h1 translate>load.static.HEADER</h1>
   <h2 translate>load.static.SUBHEADER</h2>
-  
+
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
-<script src="js/angular-translate-latest.js"></script>
+<script src="js/angular-translate.js"></script>
 
 <script>
 angular.module('app', ['pascalprecht.translate', 'ngCookies'])
@@ -31,26 +31,26 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
   // So, the module will search missing translation tables under the specified urls.
   // Those urls are [prefix][langKey][suffix].
   $translateProvider.registerLoader({
-    type: 'static-files', 
-    prefix: 'l10n/', 
+    type: 'static-files',
+    prefix: 'l10n/',
     suffix: '.json'
   });
-  
+
   // Tell the module what language to use by default
   $translateProvider.preferredLanguage('en_US');
-  
+
   // Tell the module to store the language in the cookies
   $translateProvider.useCookieStorage();
-  
+
 }])
 
 .controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
-  
+
   $scope.setLang = function(langKey) {
     // You can change the language during runtime
     $translate.uses(langKey);
   };
-  
+
 }]);
 </script>
 
