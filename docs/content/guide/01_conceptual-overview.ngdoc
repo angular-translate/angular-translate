@@ -30,9 +30,8 @@ The right box represents possible interpolation services `$translate` service us
 to interpolate your translations against variable values you might wanna use
 there. If you don't understand what this means, no worries. You'll learn everything
 you need to know about interpolators later. However, interpolation services are
-decoupled from the main core, which means, you can install'em as extra packages,
-or to be honest, you have to make sure that at least one interpolation service
-is present when running an app with angular-translate.
+decoupled from the main core, which means, you can install'em as extra packages.
+There's a default interpolation services which ships with angular-translate built-in.
 
 Interpolators influence the syntax you have to use within your translations. The
 default interpolation service uses Angular's core interpolation service, so if

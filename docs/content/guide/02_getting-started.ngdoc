@@ -5,8 +5,7 @@
 # Getting Started
 
 ### Setup HTML
-To get started, embed angular-translate and the package for its default
-interpolation in your HTML document. Of course, this should happen
+To get started, embed angular-translate in your HTML document. Of course, this should happen
 **after** Angular itself is embedded. Your HTML should look something like this:
 
 <pre>
@@ -17,7 +16,6 @@ interpolation in your HTML document. Of course, this should happen
 
     <script src="path/to/angular.js"></script>
     <script src="path/to/angular-translate.js"></script>
-    <script src="path/to/angular-translate-interpolation-default.js"></script>
     <script src="app.js"></script>
   </head>
 
@@ -159,7 +157,7 @@ instantiated and used. Here's the working code:
 </doc:example>
 
 Your app is now ready to be localized! In the next chapter, you'll learn how to
-use the provided directive and filter by angular-translate, to interpolate 
+use the provided directive and filter by angular-translate, to interpolate
 your translations.
 
 <br>

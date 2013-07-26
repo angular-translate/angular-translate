@@ -46,14 +46,6 @@ You now have a full clone of the repository including the history and everything
 else ever happened during the development of angular-translate. Do with the code
 what ever the fuck you want.
 
-**Note:** Like described in [Installing via Bower](#installingviabower), there's
-another package you need to get angular-translate run. You can get by installing it
-via bower like so:
-
-```
-$ bower install angular-translate-interpolation-default
-```
-
 Since angular-translate has some dependencies when developing it, you can just install
 all of'em. If you do so, the `angular-translate-interpolation-default` package is
 already included. To install all needed dependencies, simply run the following
@@ -62,13 +54,6 @@ command in the cloned angular-translate repository.
 ```
 $ npm install
 $ bower install
-```
-
-You can also clone the complete GitHub repository of `angular-translate-interpolation-default`
-via git:
-
-```
-$ git clone git://github.com/PascalPrecht/angular-translate-interpolation-default.git
 ```
 
 ### Running provided unit tests
