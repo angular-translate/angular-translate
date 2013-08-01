@@ -586,7 +586,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     function ($log, $injector, $rootScope, $q) {
 
     var Storage,
-        defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation');
+        defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation'),
         pendingLoader = false,
         interpolatorHashMap = {};
 
