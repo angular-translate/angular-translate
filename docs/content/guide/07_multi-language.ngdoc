@@ -74,6 +74,21 @@ learn more on that in detail later. To get around this, we introduced
 `preferredLanguage()`. You should always use `preferredLanguage()` instead of
 `uses()` on `$translateProvider`.
 
+### Using another language to fall back
+
+This is all great but unfortunately the `preferredLanguage()` you just choose
+is incomplete. So you would like `angular-translate` to try a second language
+for these translations instead of displaying some empty or unformatted strings.
+The new `fallbackLanguage()` feature will let you tell `angular-translate` do so.
+which language to use in case it cannot find a translation in the currently
+used translation table. Its usage is basically the same as `preferredLanguage()`.
+
+<pre>
+// tells angular-translate to use the english language if translations are not
+// available in german
+$translateProvider.fallbackLanguage('en');
+</pre>
+
 ### Switching the language at runtime
 
 To switch the language at runtime, `$translate` service has a method
@@ -171,6 +186,7 @@ Et vóila! We now have an app with multi language support!
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
         BUTTON_LANG_DE: 'german',
         BUTTON_LANG_EN: 'english'
       };
@@ -182,6 +198,7 @@ Et vóila! We now have an app with multi language support!
         PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        // MISSING_TRANSLATION is ... missing :)
         BUTTON_LANG_DE: 'deutsch',
         BUTTON_LANG_EN: 'englisch'
       };
@@ -193,6 +210,7 @@ Et vóila! We now have an app with multi language support!
         $translateProvider.translations('en', translationsEN);
         $translateProvider.translations('de', translationsDE);
         $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
@@ -211,6 +229,7 @@ Et vóila! We now have an app with multi language support!
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
       <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+      <p translate>MISSING_TRANSLATION</p>
 
       <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
