@@ -80,7 +80,7 @@ angular.module('pascalprecht.translate')
   var translate = $filter('translate');
 
   return {
-    restrict: 'A',
+    restrict: 'AE',
     scope: true,
     link: function linkFn(scope, element, attr) {
 
@@ -91,7 +91,7 @@ angular.module('pascalprecht.translate')
       // be re-stored to the scope's "translationId".
       // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
       attr.$observe('translate', function (translationId) {
-        if (angular.equals(translationId , '')) {
+        if (angular.equals(translationId , '') || translationId === undefined) {
           scope.translationId = $interpolate(element.text().replace(/^\s+|\s+$/g,''))(scope.$parent);
         } else {
           scope.translationId = translationId;
