@@ -16,7 +16,7 @@ These are just a few of the great features:
 
 - Components (filters/directives) to translate your contents
 - Asynchronous loading of i18n data
-- Pluralization support using **MessageFormat.js**
+- Pluralization support using [**MessageFormat.js**](https://github.com/SlexAxton/messageformat.js)
 - Expandability through easy to use interfaces
 
 If you like the module and use it in your projects, make it public on
