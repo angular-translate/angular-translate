@@ -293,6 +293,7 @@ describe('pascalprecht.translate', function () {
         inject(function ($translate) {
           expect($translate('YET_ANOTHER')).toEqual('Hallo da!');
           $translate.uses('en_EN');
+          $rootScope.$apply();
           expect($translate('YET_ANOTHER')).toEqual('Hello there!');
         });
       });
@@ -390,7 +391,8 @@ describe('pascalprecht.translate', function () {
     });
 
     it ('should use fallback language if translation id doesn\'t exist', function () {
-      inject(function ($translate) {
+      inject(function ($translate, $rootScope) {
+        $rootScope.$apply();
         expect($translate('TRANSLATION__ID')).toEqual('bazinga');
         expect($translate('TRANSLATION_ID')).toEqual('foo');
       });
@@ -426,8 +428,9 @@ describe('pascalprecht.translate', function () {
       });
     }));
 
-    it('implicit invoking loader should be successful', inject(function ($translate, $timeout) {
+    it('implicit invoking loader should be successful', inject(function ($translate, $timeout, $rootScope) {
       $translate.uses('en_US');
+      $rootScope.$apply();
       expect($translate('DOCUMENT.HEADER.TITLE')).toEqual('Header');
       expect($translate('DOCUMENT.SUBHEADER.TITLE')).toEqual('2. Header');
     }));
@@ -448,7 +451,8 @@ describe('pascalprecht.translate', function () {
     }));
 
     it ('uses method should use the preferredLanguage if no storage is used', function() {
-      inject(function($translate){
+      inject(function($translate, $rootScope){
+        $rootScope.$apply();
         expect($translate.uses()).toEqual($translate.preferredLanguage());
       });
     });
@@ -507,11 +511,12 @@ describe('pascalprecht.translate', function () {
       }));
 
       it('should use custom loader to load and use preferredLanguage', function () {
-         inject(function ($translate, $timeout) {
+         inject(function ($translate, $timeout, $rootScope) {
           $translate.load('tt');
           expect($translate('BAR')).toEqual('BAR');
            $timeout.flush();
            $translate.uses('tt');
+           $rootScope.$apply();
            expect($translate('BAR')).toEqual('bar');
          });
        });
@@ -735,8 +740,9 @@ describe('pascalprecht.translate', function () {
       $translateProvider.preferredLanguage('en');
     }));
 
-    beforeEach(inject(function (_$translate_) {
+    beforeEach(inject(function (_$translate_, $rootScope) {
       $translate = _$translate_;
+      $rootScope.$apply();
     }));
 
     it('should replace interpolateParams with concrete values', function () {
@@ -753,6 +759,7 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should support PluralFormat', function () {
+
       expect($translate('PLURAL_FORMAT', {
         'NUM_RESULTS': 0
       })).toEqual('There are 0 results.');
@@ -854,8 +861,10 @@ describe('pascalprecht.translate', function () {
         $translateProvider.fallbackLanguage('de');
       }));
 
-      beforeEach(inject(function (_$translate_) {
+      beforeEach(inject(function (_$translate_, _$rootScope_) {
         $translate = _$translate_;
+        $rootScope = _$rootScope_;
+        $rootScope.$apply();
       }));
 
       it('should translate', function () {
@@ -869,6 +878,7 @@ describe('pascalprecht.translate', function () {
       it('should inform custom interpolation when language has been changed', function () {
         expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
         $translate.uses('de');
+        $rootScope.$apply();
         expect($translate('FOO', {}, 'custom')).toEqual('foo');
       });
 
@@ -900,8 +910,9 @@ describe('pascalprecht.translate', function () {
         $translateProvider.preferredLanguage('en');
       }));
 
-      beforeEach(inject(function (_$translate_) {
+      beforeEach(inject(function (_$translate_, $rootScope) {
         $translate = _$translate_;
+        $rootScope.$apply();
       }));
 
       it('should replace interpolateParams with concrete values', function () {

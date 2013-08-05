@@ -765,7 +765,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $rootScope.$broadcast('translationChangeError');
       };
 
-      return $translate.load(key, success, error);
+      return $translate.load(key).then(success, error);
     };
 
     /**
