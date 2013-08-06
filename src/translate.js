@@ -758,11 +758,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           interpolatorHashMap[id].setLocale($uses);
         });
 
-        $rootScope.$broadcast('translationChangeSuccess');
+        $rootScope.$broadcast('$translateChangeSuccess');
       };
 
       var error = function () {
-        $rootScope.$broadcast('translationChangeError');
+        $rootScope.$broadcast('$translateChangeError');
       };
 
       return $translate.load(key, success, error);

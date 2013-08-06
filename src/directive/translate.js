@@ -104,7 +104,7 @@ angular.module('pascalprecht.translate')
 
       // Ensures the text will be refreshed after the current language was changed
       // w/ $translate.uses(...)
-      scope.$on('translationChangeSuccess', function () {
+      scope.$on('$translateChangeSuccess', function () {
         element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
       });
 
