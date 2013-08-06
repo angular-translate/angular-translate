@@ -15,11 +15,11 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('bower.json'),
     meta: {
-      banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      banner: '/**\n * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+        ' * <%= pkg.homepage %>\n' +
+        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n'
     },
     watch: {
       scripts: {
@@ -48,6 +48,14 @@ module.exports = function (grunt) {
       src: {
         src: ['src/translate.js', 'src/**/*.js'],
         dest: 'dist/angular-translate.js'
+      },
+
+      banner: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.src.dest %>',
+        dest: '<%= concat.src.dest %>'
       }
     },
     uglify: {
@@ -153,7 +161,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['jshint', 'karma']);
   grunt.registerTask('test', ['karma']);
-  grunt.registerTask('build', ['jshint', 'karma', 'concat', 'ngmin', 'copy:demo', 'uglify']);
+  grunt.registerTask('build', ['jshint', 'karma', 'concat:src', 'ngmin', 'concat:banner', 'copy:demo', 'uglify']);
 
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit',  'concat', 'copy:demo', 'watch:livereload']);
