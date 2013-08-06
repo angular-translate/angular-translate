@@ -739,13 +739,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * @return {string} Language key
      */
     $translate.uses = function (key) {
-
       if (!key) {
         return $uses;
       }
+      
+      var deferred = $q.defer();
 
-      var success = function () {
+      function useLanguage(key) {
         $uses = key;
+        $rootScope.$broadcast('$translateChangeSuccess');
 
         if ($storageFactory) {
           Storage.set($translate.storageKey(), $uses);
@@ -758,14 +760,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           interpolatorHashMap[id].setLocale($uses);
         });
 
-        $rootScope.$broadcast('$translateChangeSuccess');
+        deferred.resolve(key);
       };
 
-      var error = function () {
-        $rootScope.$broadcast('$translateChangeError');
-      };
+      // if there isn't a translation table for the language we've requested,
+      // we load it asynchronously
+      if (!$translationTable[key]) {
+        $translate.load(key).then(useLanguage, function (key) {
+          $rootScope.$broadcast('$translateChangeError');
+          deferred.reject(key);
+        });
+      } else {
+        useLanguage(key);
+      }
 
-      return $translate.load(key, success, error);
+      return deferred.promise;
     };
 
     /**
@@ -778,60 +787,40 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * Optionnal callbacks can be used for success/error specific tasks.
      *
      * @param {string} key Language key
-     * @param {function=} success Optionnal callback on loading success
-     * @param {function=} error Optionnal callback on loading error
-     * @return {string} Language key
+     * @return {Ibject} Promise resolved or rejected with given langkey
      */
-    $translate.load = function (key, success, error) {
+    $translate.load = function (key) {
 
       if (!key) {
         throw "No language key specified for loading.";
       }
-
       var deferred = $q.defer();
 
-      if (!$translationTable[key]) {
+      pendingLoader = true;
+      $nextLang = key;
 
-        pendingLoader = true;
-        $nextLang = key;
+      $injector.get($loaderFactory)(angular.extend($loaderOptions, {
+        key: key
+      })).then(function (data) {
 
-        $injector.get($loaderFactory)(angular.extend($loaderOptions, {
-          key: key
-        })).then(function (data) {
+        var translationTable = {};
 
-          var translationTable = {};
+        if (angular.isArray(data)) {
+          angular.forEach(data, function (table) {
+            angular.extend(translationTable, table);
+          });
+        } else {
+          angular.extend(translationTable, data);
+        }
 
-          if (angular.isArray(data)) {
-            angular.forEach(data, function (table) {
-              angular.extend(translationTable, table);
-            });
-          } else {
-            angular.extend(translationTable, data);
-          }
+        translations(key, translationTable);
 
-          translations(key, translationTable);
+        pendingLoader = false;
+        deferred.resolve(key);
+      }, function (key) {
+        deferred.reject(key);
+      });
 
-          if (angular.isFunction(success)) {
-            success();
-          }
-
-          pendingLoader = false;
-          deferred.resolve(key);
-        }, function (key) {
-          if (angular.isFunction(error)) {
-            error();
-          }
-          deferred.reject(key);
-        });
-
-        return deferred.promise;
-      }
-
-      if (angular.isFunction(success)) {
-        success();
-      }
-
-      deferred.resolve(key);
       return deferred.promise;
     };
 
