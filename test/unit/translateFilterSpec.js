@@ -165,12 +165,13 @@ describe('pascalprecht.translate', function () {
       $translateProvider.preferredLanguage('en');
     }));
 
-    beforeEach(inject(function (_$filter_) {
+    beforeEach(inject(function (_$filter_, $rootScope) {
       $filter = _$filter_;
+      $rootScope.$apply();
     }));
 
-    it('should consider translate-interpolation value', function () {
+    it('should consider translate-interpolation value', inject(function () {
       expect($filter('translate')('FOO', {}, 'custom')).toEqual('custom interpolation');
-    });
+    }));
   });
 });
