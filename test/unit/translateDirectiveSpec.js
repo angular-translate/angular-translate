@@ -112,6 +112,19 @@ describe('pascalprecht.translate', function () {
           expect(element.text()).toBe('foo');
         });
       });
+
+      it('should return translation when used as an element', function () {
+        inject(function ($rootScope, $compile) {
+          element =
+            $compile('<translate>TRANSLATION_ID</translate>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('foo');
+
+          element = $compile('<translate>BLANK_VALUE</translate>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('');
+        });
+      });
     });
 
     describe('Passing values', function () {

@@ -18,13 +18,8 @@ angular.module('pascalprecht.translate', ['ng'])
     } else {
       $translate.uses(storage.get(key));
     }
-  } else {
-    if (angular.isString($translate.fallbackLanguage()) && $translate.fallbackLanguage() !== $translate.preferredLanguage()) {
-      $translate.load($translate.fallbackLanguage());
-    }
-    if (angular.isString($translate.preferredLanguage())) {
-      $translate.uses($translate.preferredLanguage());
-    }
+  } else if (angular.isString($translate.preferredLanguage())) {
+    $translate.uses($translate.preferredLanguage());
   }
 
 }]);
@@ -586,9 +581,55 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     function ($log, $injector, $rootScope, $q) {
 
     var Storage,
-        defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation');
+        defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation'),
         pendingLoader = false,
         interpolatorHashMap = {};
+
+
+    /**
+     * @ngdoc function
+     * @name loadAsync
+     *
+     * @description
+     * Tells angular-translate to load a language asynchronously by given language key.
+     *
+     * @param {string} key Language key
+     * @return {Ibject} Promise resolved or rejected with given langkey
+     */
+    var loadAsync = function (key) {
+
+      if (!key) {
+        throw "No language key specified for loading.";
+      }
+      var deferred = $q.defer();
+
+      pendingLoader = true;
+      $nextLang = key;
+
+      $injector.get($loaderFactory)(angular.extend($loaderOptions, {
+        key: key
+      })).then(function (data) {
+
+        var translationTable = {};
+
+        if (angular.isArray(data)) {
+          angular.forEach(data, function (table) {
+            angular.extend(translationTable, table);
+          });
+        } else {
+          angular.extend(translationTable, data);
+        }
+
+        translations(key, translationTable);
+
+        pendingLoader = false;
+        deferred.resolve(key);
+      }, function (key) {
+        deferred.reject(key);
+      });
+
+      return deferred.promise;
+    };
 
     if ($storageFactory) {
       Storage = $injector.get($storageFactory);
@@ -739,13 +780,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * @return {string} Language key
      */
     $translate.uses = function (key) {
-
       if (!key) {
         return $uses;
       }
+      
+      var deferred = $q.defer();
 
-      var success = function () {
+      function useLanguage(key) {
         $uses = key;
+        $rootScope.$broadcast('$translateChangeSuccess');
 
         if ($storageFactory) {
           Storage.set($translate.storageKey(), $uses);
@@ -758,80 +801,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           interpolatorHashMap[id].setLocale($uses);
         });
 
-        $rootScope.$broadcast('translationChangeSuccess');
+        deferred.resolve(key);
       };
 
-      var error = function () {
-        $rootScope.$broadcast('translationChangeError');
-      };
-
-      return $translate.load(key, success, error);
-    };
-
-    /**
-     * @ngdoc function
-     * @name pascalprecht.translate.$translate#load
-     * @methodOf pascalprecht.translate.$translate
-     *
-     * @description
-     * Tells angular-translate to load a language asynchronously by given language key.
-     * Optionnal callbacks can be used for success/error specific tasks.
-     *
-     * @param {string} key Language key
-     * @param {function=} success Optionnal callback on loading success
-     * @param {function=} error Optionnal callback on loading error
-     * @return {string} Language key
-     */
-    $translate.load = function (key, success, error) {
-
-      if (!key) {
-        throw "No language key specified for loading.";
-      }
-
-      var deferred = $q.defer();
-
+      // if there isn't a translation table for the language we've requested,
+      // we load it asynchronously
       if (!$translationTable[key]) {
-
-        pendingLoader = true;
-        $nextLang = key;
-
-        $injector.get($loaderFactory)(angular.extend($loaderOptions, {
-          key: key
-        })).then(function (data) {
-
-          var translationTable = {};
-
-          if (angular.isArray(data)) {
-            angular.forEach(data, function (table) {
-              angular.extend(translationTable, table);
-            });
-          } else {
-            angular.extend(translationTable, data);
-          }
-
-          translations(key, translationTable);
-
-          if (angular.isFunction(success)) {
-            success();
-          }
-
-          pendingLoader = false;
-          deferred.resolve(key);
-        }, function (key) {
-          if (angular.isFunction(error)) {
-            error();
-          }
+        loadAsync(key).then(useLanguage, function (key) {
+          $rootScope.$broadcast('$translateChangeError');
           deferred.reject(key);
         });
-
-        return deferred.promise;
+      } else {
+        useLanguage(key);
       }
 
-      if (angular.isFunction(success)) {
-        success();
-      }
-
-      deferred.resolve(key);
       return deferred.promise;
     };
 
@@ -853,6 +836,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     // we should try to load them.
     if ($loaderFactory && angular.equals($translationTable, {})) {
       $translate.uses($translate.uses());
+    }
+
+    if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
+      loadAsync($fallbackLanguage);
     }
 
     return $translate;
