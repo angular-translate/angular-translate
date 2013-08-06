@@ -601,7 +601,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if (!key) {
         throw "No language key specified for loading.";
       }
+
       var deferred = $q.defer();
+
+      $rootScope.$broadcast('$translateLoadingStart');
 
       pendingLoader = true;
       $nextLang = key;
@@ -609,7 +612,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $injector.get($loaderFactory)(angular.extend($loaderOptions, {
         key: key
       })).then(function (data) {
-
+        $rootScope.$broadcast('$translateLoadingSuccess');
         var translationTable = {};
 
         if (angular.isArray(data)) {
@@ -624,8 +627,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         pendingLoader = false;
         deferred.resolve(key);
+        $rootScope.$broadcast('$translateLoadingEnd');
       }, function (key) {
+        $rootScope.$broadcast('$translateLoadingError');
         deferred.reject(key);
+        $rootScope.$broadcast('$translateLoadingEnd');
       });
 
       return deferred.promise;
@@ -783,8 +789,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if (!key) {
         return $uses;
       }
-      
+
       var deferred = $q.defer();
+
+      $rootScope.$broadcast('$translateChangeStart');
 
       function useLanguage(key) {
         $uses = key;
@@ -802,6 +810,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         });
 
         deferred.resolve(key);
+        $rootScope.$broadcast('$translateChangeEnd');
       };
 
       // if there isn't a translation table for the language we've requested,
@@ -810,6 +819,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         loadAsync(key).then(useLanguage, function (key) {
           $rootScope.$broadcast('$translateChangeError');
           deferred.reject(key);
+          $rootScope.$broadcast('$translateChangeEnd');
         });
       } else {
         useLanguage(key);
