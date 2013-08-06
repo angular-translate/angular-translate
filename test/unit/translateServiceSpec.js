@@ -28,12 +28,6 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    it('should have a method load()', function () {
-      inject(function ($translate) {
-        expect($translate.load).toBeDefined();
-      });
-    });
-
     it('should have a method preferredLanguage()', function() {
       inject(function ($translate) {
         expect($translate.preferredLanguage).toBeDefined();
@@ -61,22 +55,6 @@ describe('pascalprecht.translate', function () {
       it('should return undefined if no language is specified', function () {
         inject(function ($translate) {
           expect($translate.uses()).toBeUndefined();
-        });
-      });
-
-    });
-
-    describe('load()', function () {
-
-      it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.load).toBe('function');
-        });
-      });
-
-      it('should throw an error if no language is specified', function () {
-        inject(function ($translate) {
-          expect(function () {$translate.load();}).toThrow("No language key specified for loading.");
         });
       });
 
@@ -512,11 +490,9 @@ describe('pascalprecht.translate', function () {
 
       it('should use custom loader to load and use preferredLanguage', function () {
          inject(function ($translate, $timeout, $rootScope) {
-          $translate.load('tt');
           expect($translate('BAR')).toEqual('BAR');
-           $timeout.flush();
            $translate.uses('tt');
-           $rootScope.$apply();
+           $timeout.flush();
            expect($translate('BAR')).toEqual('bar');
          });
        });
