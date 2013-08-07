@@ -842,6 +842,25 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return storageKey();
     };
 
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#invalidate
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Invalidates a translation table pointed by the given langKey. If langKey is not specified, 
+     * the module will invalidate all existent translation tables.
+     * Invalidation means that the module will drop target translation tables and try to load them
+     * again (of cause, if it's possible).
+     *
+     * @example
+     * // this will invalidate all currently existent translation tables
+     * $translate.invalidate();
+     * // this will invalidate a translation table for the en_US language
+     * $translate.invalidate('en_US');
+     *
+     * @param {string} lankKey A language key of the table, which has to be invalidated
+     */
     $translate.invalidate = function(langKey) {
       if (!langKey) {
       
