@@ -811,7 +811,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         deferred.resolve(key);
         $rootScope.$broadcast('$translateChangeEnd');
-      };
+      }
 
       // if there isn't a translation table for the language we've requested,
       // we load it asynchronously
