@@ -28,7 +28,6 @@ describe('pascalprecht.translate', function() {
   describe('service', function() {
     
     var $translateProvider
-      , $translate
       , $translationTable;
 
     beforeEach(module('pascalprecht.translate', function(_$translateProvider_) {
@@ -36,14 +35,12 @@ describe('pascalprecht.translate', function() {
       $translationTable = $translateProvider.translations();
     }));
     
-    beforeEach(inject(function(_$translate_) {
-      $translate = _$translate_;
-    }));
-    
-    
+   
     it('should has an invalidate() method', function() {
-      expect($translate.invalidate).toBeDefined();
-      expect(typeof $translate.invalidate).toBe('function');
+      inject(function($translate) {
+        expect($translate.invalidate).toBeDefined();
+        expect(typeof $translate.invalidate).toBe('function');
+      });
     });
     
     
@@ -56,17 +53,21 @@ describe('pascalprecht.translate', function() {
           $translateProvider.translations('ru_RU', {});
           $translateProvider.uses('en_US');
         }));
-        
+
         
         it('should clear all translation tables if no params are passed in', function() {
-          $translate.invalidate();
-          expect($translationTable).toEqual({});
+          inject(function($translate) {
+            $translate.invalidate();
+            expect($translationTable).toEqual({});
+          });
         });
         
         it('should clear the exact translation table if param is passed in', function() {
-          $translate.invalidate('en_US');
-          expect($translationTable['en_US']).not.toBeDefined();
-          expect($translationTable).not.toEqual({});
+          inject(function($translate) {
+            $translate.invalidate('en_US');
+            expect($translationTable['en_US']).not.toBeDefined();
+            expect($translationTable).not.toEqual({});
+          });
         });
         
       });
@@ -89,9 +90,10 @@ describe('pascalprecht.translate', function() {
             
             return function (options) {
               var deferred = $q.defer();
-
+              var key = options.key;
+              
               $timeout(function () {
-                if (options.key == 'en') {
+                if (key == 'en') {
                   enCalled++;
                   deferred.resolve(tr['en'][enCalled % 2]);
                 } else {
@@ -110,7 +112,7 @@ describe('pascalprecht.translate', function() {
       
         
         it('should invoke it for current language', function() {
-          inject(function($timeout) {
+          inject(function($translate, $timeout) {
             var loaderCalled = enCalled;
             $translate.invalidate();
             $timeout.flush();
@@ -119,7 +121,7 @@ describe('pascalprecht.translate', function() {
         });
         
         it('should load a new version of translations', function() {
-          inject(function($timeout) {
+          inject(function($translate, $timeout) {
             var oldTable = $translationTable['en'];
             
             $translate.invalidate();
@@ -140,20 +142,20 @@ describe('pascalprecht.translate', function() {
           
           
           it('should invoke it for both languages', function() {
-            inject(function($timeout) {
+            inject(function($translate, $timeout) {
               var fstLoaderCalled = enCalled
                 , sndLoaderCalled = ruCalled;
               
               $translate.invalidate();
               $timeout.flush();
               
-              expect(enCalled).not.toEqual(enLoaderCalled);
-              expect(ruCalled).not.toEqual(ruLoaderCalled);
+              expect(enCalled).not.toEqual(fstLoaderCalled);
+              expect(ruCalled).not.toEqual(sndLoaderCalled);
             });
           });
           
           it('should load new versions of both languages', function() {
-            inject(function($timeout) {
+            inject(function($translate, $timeout) {
               var fstTable = {}
                 , sndTable = {};
               angular.extend(fstTable, $translationTable['en']);
@@ -206,7 +208,7 @@ describe('pascalprecht.translate', function() {
         
           it('should be called if new version of the current lang is loaded successfully',
           function() {
-            inject(function($timeout) {
+            inject(function($translate, $timeout) {
               needResolve = true;
               
               $translate.invalidate();
@@ -222,7 +224,7 @@ describe('pascalprecht.translate', function() {
         
           it('should be called if new version of the current lang is not loaded',
           function() {
-            inject(function($timeout) {
+            inject(function($translate, $timeout) {
               needResolve = false;
               
               $translate.invalidate();
