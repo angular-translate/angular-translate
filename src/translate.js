@@ -842,6 +842,30 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return storageKey();
     };
 
+    $translate.invalidate = function(langKey) {
+      if (!langKey) {
+      
+        for (var lang in $translationTable) {
+          delete $translationTable[lang];
+        }
+        if ($loaderFactory) {
+          if ($fallbackLanguage) loadAsync($fallbackLanguage);
+          if ($uses) $translate.uses($uses);
+        } else $rootScope.$broadcast('$translateChangeSuccess');
+        
+      } else if ($translationTable.hasOwnProperty(langKey)) {
+        
+        delete $translationTable[langKey];
+        if ($loaderFactory) {
+          if (langKey === $uses) $translate.uses($uses);
+          else loadAsync(langKey);
+        } else if (langKey === $uses) {
+          $rootScope.$broadcast('$translateChangeSuccess');
+        }
+        
+      }
+    };
+    
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
     if ($loaderFactory && angular.equals($translationTable, {})) {
