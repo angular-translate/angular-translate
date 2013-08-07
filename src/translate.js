@@ -844,12 +844,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
-    if ($loaderFactory && angular.equals($translationTable, {})) {
-      $translate.uses($translate.uses());
-    }
+    if ($loaderFactory) {
+      if (angular.equals($translationTable, {})) {
+        $translate.uses($translate.uses());
+      }
 
-    if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
-      loadAsync($fallbackLanguage);
+      if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
+        loadAsync($fallbackLanguage);
+      }
     }
 
     return $translate;
