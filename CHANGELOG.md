@@ -1,3 +1,13 @@
+# 1.0.2 (2013-08-07)
+
+
+
+## Bug fixes
+### typo
+
+* remove unnecessary semicolon (54cb232)
+
+
 # 1.0.1 (2013-07-26)
 
 - Brings default interpolation back to core (you don't have to install it as extra package)
