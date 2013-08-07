@@ -1,11 +1,9 @@
-'use strict';
-
 describe('pascalprecht.translate', function() {
 
   describe('provider', function() {
   
-    var $translateProvider
-      , $translate;
+    var $translateProvider,
+        $translate;
 
     beforeEach(module('pascalprecht.translate', function(_$translateProvider_) {
       $translateProvider = _$translateProvider_;
@@ -27,8 +25,8 @@ describe('pascalprecht.translate', function() {
   
   describe('service', function() {
     
-    var $translateProvider
-      , $translationTable;
+    var $translateProvider,
+        $translationTable;
 
     beforeEach(module('pascalprecht.translate', function(_$translateProvider_) {
       $translateProvider = _$translateProvider_;
@@ -65,7 +63,7 @@ describe('pascalprecht.translate', function() {
         it('should clear the exact translation table if param is passed in', function() {
           inject(function($translate) {
             $translate.invalidate('en');
-            expect($translationTable['en']).not.toBeDefined();
+            expect($translationTable.en).not.toBeDefined();
             expect($translationTable).not.toEqual({});
           });
         });
@@ -74,8 +72,8 @@ describe('pascalprecht.translate', function() {
         // Events
         describe('', function() {
         
-          it('should broadcast the $translateChangeSuccess event if all languages are invalidated'
-           , function() {
+          it('should broadcast the $translateChangeSuccess event if all languages are invalidated',
+           function() {
             inject(function($translate, $rootScope) {
               spyOn($rootScope, '$broadcast');
               $translate.invalidate();
@@ -83,8 +81,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should broadcast the $translateChangeSuccess event if current language is '
-           + 'directly invalidated', function() {
+          it('should broadcast the $translateChangeSuccess event if current language is ' +
+             'directly invalidated', function() {
             inject(function($translate, $rootScope) {
               spyOn($rootScope, '$broadcast');
               $translate.invalidate('en');
@@ -92,8 +90,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should not broadcast the $translateChangeSuccess event if another language is '
-           + 'directly invalidated', function() {
+          it('should not broadcast the $translateChangeSuccess event if another language is ' +
+             'directly invalidated', function() {
             inject(function($translate, $rootScope) {
               spyOn($rootScope, '$broadcast');
               $translate.invalidate('ru');
@@ -108,9 +106,9 @@ describe('pascalprecht.translate', function() {
       
       describe('with loader', function() {
       
-        var enCalled
-          , ruCalled
-          , shouldResolve;
+        var enCalled,
+            ruCalled,
+            shouldResolve;
         
         beforeEach(module('pascalprecht.translate', function($provide) {
           enCalled = 0;
@@ -129,12 +127,12 @@ describe('pascalprecht.translate', function() {
               
               $timeout(function () {
                 if (shouldResolve) {
-                  if (key == 'en') {
+                  if (key === 'en') {
                     enCalled++;
-                    deferred.resolve(tr['en'][enCalled % 2]);
+                    deferred.resolve(tr.en[enCalled % 2]);
                   } else {
                     ruCalled++;
-                    deferred.resolve(tr['ru'][ruCalled % 2]);
+                    deferred.resolve(tr.ru[ruCalled % 2]);
                   }
                 } else deferred.reject(key);
               }, 1000);
@@ -165,14 +163,14 @@ describe('pascalprecht.translate', function() {
         
         it('should load a new version of translations', function() {
           inject(function($translate, $timeout) {
-            var oldTable = $translationTable['en'];
+            var oldTable = $translationTable.en;
             
             $translate.invalidate();
             $timeout.flush();
             
-            expect($translationTable['en']).toBeDefined();
-            expect($translationTable['en']).not.toEqual({});
-            expect($translationTable['en']).not.toEqual(oldTable);
+            expect($translationTable.en).toBeDefined();
+            expect($translationTable.en).not.toEqual({});
+            expect($translationTable.en).not.toEqual(oldTable);
           });
         });
 
@@ -180,8 +178,8 @@ describe('pascalprecht.translate', function() {
           inject(function($translate, $timeout) {
             $translate.invalidate();
             $timeout.flush();
-            expect($translationTable['en']['foo']).toBeDefined();
-            expect($translationTable['en']['bar']).not.toBeDefined();
+            expect($translationTable.en.foo).toBeDefined();
+            expect($translationTable.en.bar).not.toBeDefined();
           });
         });
         
@@ -189,8 +187,8 @@ describe('pascalprecht.translate', function() {
         // Events
         describe('', function() {
         
-          it('should broadcast the $translateChangeSuccess event if new version of the current lang '
-           + 'is loaded successfully', function() {
+          it('should broadcast the $translateChangeSuccess event if new version of the current ' +
+             'lang is loaded successfully', function() {
             inject(function($translate, $rootScope, $timeout) {
               spyOn($rootScope, '$broadcast');
 
@@ -201,8 +199,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should broadcast the $translateChangeSuccess event if new version of the current lang '
-           + 'is directly reloaded successfully', function() {
+          it('should broadcast the $translateChangeSuccess event if new version of the current ' +
+             'lang is directly reloaded successfully', function() {
             inject(function($translate, $rootScope, $timeout) {
               spyOn($rootScope, '$broadcast');
 
@@ -213,8 +211,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should not broadcast the $translateChangeSuccess event if new version of another lang '
-           + 'is directly reloaded successfully', function() {
+          it('should not broadcast the $translateChangeSuccess event if new version of another ' +
+             'lang is directly reloaded successfully', function() {
             inject(function($translate, $rootScope, $timeout) {
               spyOn($rootScope, '$broadcast');
               
@@ -225,8 +223,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should broadcast the $translateChangeError event if new version of the current lang '
-           + 'is not loaded successfully', function() {
+          it('should broadcast the $translateChangeError event if new version of the current ' +
+             'lang is not loaded successfully', function() {
             inject(function($translate, $rootScope, $timeout) {
               shouldResolve = false;
               spyOn($rootScope, '$broadcast');
@@ -238,8 +236,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should broadcast the $translateChangeError event if new version of the current lang '
-           + 'is directly not reloaded successfully', function() {
+          it('should broadcast the $translateChangeError event if new version of the current ' +
+             'lang is directly not reloaded successfully', function() {
             inject(function($translate, $rootScope, $timeout) {
               shouldResolve = false;
               spyOn($rootScope, '$broadcast');
@@ -251,8 +249,8 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should not broadcast the $translateChangeError event if new version of another lang '
-           + 'is not directly reloaded successfully', function() {
+          it('should not broadcast the $translateChangeError event if new version of another ' +
+             'lang is not directly reloaded successfully', function() {
             inject(function($translate, $rootScope, $timeout) {
               shouldResolve = false;
               spyOn($rootScope, '$broadcast');
@@ -276,8 +274,8 @@ describe('pascalprecht.translate', function() {
           
           it('should invoke it for both languages', function() {
             inject(function($translate, $timeout) {
-              var fstLoaderCalled = enCalled
-                , sndLoaderCalled = ruCalled;
+              var fstLoaderCalled = enCalled,
+                  sndLoaderCalled = ruCalled;
               
               $translate.invalidate();
               $timeout.flush();
@@ -289,16 +287,16 @@ describe('pascalprecht.translate', function() {
           
           it('should load new versions of both languages', function() {
             inject(function($translate, $timeout) {
-              var fstTable = {}
-                , sndTable = {};
-              angular.extend(fstTable, $translationTable['en']);
-              angular.extend(sndTable, $translationTable['ru']);
+              var fstTable = {},
+                  sndTable = {};
+              angular.extend(fstTable, $translationTable.en);
+              angular.extend(sndTable, $translationTable.ru);
               
               $translate.invalidate();
               $timeout.flush();
               
-              expect($translationTable['en']).not.toEqual(fstTable);
-              expect($translationTable['ru']).not.toEqual(sndTable);
+              expect($translationTable.en).not.toEqual(fstTable);
+              expect($translationTable.ru).not.toEqual(sndTable);
             });
           });
           
