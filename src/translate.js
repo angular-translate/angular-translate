@@ -815,7 +815,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       // if there isn't a translation table for the language we've requested,
       // we load it asynchronously
-      if (!$translationTable[key]) {
+      if (!$translationTable[key] && $loaderFactory) {
         loadAsync(key).then(useLanguage, function (key) {
           $rootScope.$broadcast('$translateChangeError');
           deferred.reject(key);
