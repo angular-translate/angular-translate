@@ -872,33 +872,44 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       function onLoadingEnd() {
         $rootScope.$broadcast('$translateRefreshEnd');
       }
-      
+
+      if (!$loaderFactory) {
+        throw new Error('Couldn\'t refresh translation table, no loader registered!');
+      }
+
       if (!langKey) {
-      
-        if ($loaderFactory) {
-          $rootScope.$broadcast('$translateRefreshStart');  
-          for (var lang in $translationTable) {
-            if ($translationTable.hasOwnProperty(lang)) {
-              delete $translationTable[lang];
-            }
+
+        $rootScope.$broadcast('$translateRefreshStart'); 
+
+        for (var lang in $translationTable) {
+          if ($translationTable.hasOwnProperty(lang)) {
+            delete $translationTable[lang];
           }
-          var loaders = [];
-          if ($fallbackLanguage) loaders.push(loadAsync($fallbackLanguage));
-          if ($uses) loaders.push($translate.uses($uses));
-          $q.all(loaders).then(onLoadingEnd(), onLoadingEnd());
-        } else throw new Error('There are no loaders registered.');
-        
+        }
+
+        var loaders = [];
+        if ($fallbackLanguage) {
+          loaders.push(loadAsync($fallbackLanguage));
+        }
+        if ($uses) {
+          loaders.push($translate.uses($uses));
+        }
+        $q.all(loaders).then(onLoadingEnd(), onLoadingEnd());
+
       } else if ($translationTable.hasOwnProperty(langKey)) {
-        
-        if ($loaderFactory) {
-          $rootScope.$broadcast('$translateRefreshStart');  
-          delete $translationTable[langKey];
-          var loader = null;
-          if (langKey === $uses) loader = $translate.uses($uses);
-          else loader = loadAsync(langKey);
-          loader.then(onLoadingEnd(), onLoadingEnd());
-        } else throw new Error('There are no loaders registered.');
-        
+
+        $rootScope.$broadcast('$translateRefreshStart');
+
+        delete $translationTable[langKey];
+
+        var loader = null;
+        if (langKey === $uses) {
+          loader = $translate.uses($uses);
+        } else {
+          loader = loadAsync(langKey);
+        }
+        loader.then(onLoadingEnd(), onLoadingEnd());
+
       }
     };
     

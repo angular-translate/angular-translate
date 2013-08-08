@@ -57,7 +57,7 @@ describe('pascalprecht.translate', function() {
           inject(function($translate) {
             expect(function() {
               $translate.refresh();
-            }).toThrow();
+            }).toThrow('Couldn\'t refresh translation table, no loader registered!');
           });
         });
         
