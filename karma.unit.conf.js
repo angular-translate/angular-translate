@@ -12,11 +12,11 @@ files = [
   JASMINE_ADAPTER,
   'bower_components/messageformat/messageformat.js',
   'bower_components/angular/angular.js',
+  'bower_components/angular-cookies/angular-cookies.js',
   'bower_components/angular-mocks/angular-mocks.js',
   'src/translate.js',
-  'bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js',
   'src/**/*.js',
-  'test/unit/**/*Spec.js'
+  'test/unit/**/*.spec.js'
 ];
 
 
