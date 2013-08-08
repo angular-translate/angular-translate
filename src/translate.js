@@ -851,8 +851,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * Refreshes a translation table pointed by the given langKey. If langKey is not specified, 
      * the module will drop all existent translation tables and load new version of those which
      * are currently in use.
+     *
      * Refresh means that the module will drop target translation table and try to load it again.
+     *
      * In case there are no loaders registered the refresh() method will throw an Error.
+     *
+     * If the module is able to refresh translation tables refresh() method will broadcast
+     * $translateRefreshStart and $translateRefreshEnd events.
      *
      * @example
      * // this will drop all currently existent translation tables and reload those which are 
@@ -864,24 +869,34 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * @param {string} lankKey A language key of the table, which has to be refreshed
      */
     $translate.refresh = function(langKey) {
+      function onLoadingEnd() {
+        $rootScope.$broadcast('$translateRefreshEnd');
+      }
+      
       if (!langKey) {
       
         if ($loaderFactory) {
+          $rootScope.$broadcast('$translateRefreshStart');  
           for (var lang in $translationTable) {
             if ($translationTable.hasOwnProperty(lang)) {
               delete $translationTable[lang];
             }
           }
-          if ($fallbackLanguage) loadAsync($fallbackLanguage);
-          if ($uses) $translate.uses($uses);
+          var loaders = [];
+          if ($fallbackLanguage) loaders.push(loadAsync($fallbackLanguage));
+          if ($uses) loaders.push($translate.uses($uses));
+          $q.all(loaders).then(onLoadingEnd(), onLoadingEnd());
         } else throw new Error('There are no loaders registered.');
         
       } else if ($translationTable.hasOwnProperty(langKey)) {
         
         if ($loaderFactory) {
+          $rootScope.$broadcast('$translateRefreshStart');  
           delete $translationTable[langKey];
-          if (langKey === $uses) $translate.uses($uses);
-          else loadAsync(langKey);
+          var loader = null;
+          if (langKey === $uses) loader = $translate.uses($uses);
+          else loader = loadAsync(langKey);
+          loader.then(onLoadingEnd(), onLoadingEnd());
         } else throw new Error('There are no loaders registered.');
         
       }

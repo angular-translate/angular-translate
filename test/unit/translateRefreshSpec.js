@@ -60,6 +60,28 @@ describe('pascalprecht.translate', function() {
             }).toThrow();
           });
         });
+        
+
+        // Events
+        describe('', function() {
+        
+          it('should not broadcast $translateRefreshStart event', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              try { $translate.refresh(); } catch (e) {}
+              expect($rootScope.$broadcast).not.toHaveBeenCalledWith('$translateRefreshStart');
+            });
+          });
+          
+          it('should not broadcast $translateRefreshEnd event', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              try { $translate.refresh(); } catch (e) {}
+              expect($rootScope.$broadcast).not.toHaveBeenCalledWith('$translateRefreshEnd');
+            });
+          });
+        
+        });
 
       });
       
@@ -146,6 +168,54 @@ describe('pascalprecht.translate', function() {
         
         // Events
         describe('', function() {
+        
+          it('should broadcast $translateRefreshStart event if no lang is given', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              $translate.refresh();
+              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshStart');
+            });
+          });
+          
+          it('should broadcast $translateRefreshEnd event if no lang is given', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              $translate.refresh();
+              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshEnd');
+            });
+          });
+        
+          it('should broadcast $translateRefreshStart event if current lang is given', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              $translate.refresh('en');
+              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshStart');
+            });
+          });
+          
+          it('should broadcast $translateRefreshEnd event if current lang is given', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              $translate.refresh('en');
+              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshEnd');
+            });
+          });
+        
+          it('should broadcast $translateRefreshStart event if other lang is given', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              $translate.refresh('ru');
+              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshStart');
+            });
+          });
+          
+          it('should broadcast $translateRefreshEnd event if other lang is given', function() {
+            inject(function($translate, $rootScope) {
+              spyOn($rootScope, '$broadcast');
+              $translate.refresh('ru');
+              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshEnd');
+            });
+          });
         
           it('should broadcast the $translateChangeSuccess event if new version of the current ' +
              'lang is loaded successfully', function() {
