@@ -842,6 +842,77 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return storageKey();
     };
 
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#refresh
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Refreshes a translation table pointed by the given langKey. If langKey is not specified, 
+     * the module will drop all existent translation tables and load new version of those which
+     * are currently in use.
+     *
+     * Refresh means that the module will drop target translation table and try to load it again.
+     *
+     * In case there are no loaders registered the refresh() method will throw an Error.
+     *
+     * If the module is able to refresh translation tables refresh() method will broadcast
+     * $translateRefreshStart and $translateRefreshEnd events.
+     *
+     * @example
+     * // this will drop all currently existent translation tables and reload those which are 
+     * // currently in use
+     * $translate.refresh();
+     * // this will refresh a translation table for the en_US language
+     * $translate.refresh('en_US');
+     *
+     * @param {string} lankKey A language key of the table, which has to be refreshed
+     */
+    $translate.refresh = function(langKey) {
+      function onLoadingEnd() {
+        $rootScope.$broadcast('$translateRefreshEnd');
+      }
+
+      if (!$loaderFactory) {
+        throw new Error('Couldn\'t refresh translation table, no loader registered!');
+      }
+
+      if (!langKey) {
+
+        $rootScope.$broadcast('$translateRefreshStart'); 
+
+        for (var lang in $translationTable) {
+          if ($translationTable.hasOwnProperty(lang)) {
+            delete $translationTable[lang];
+          }
+        }
+
+        var loaders = [];
+        if ($fallbackLanguage) {
+          loaders.push(loadAsync($fallbackLanguage));
+        }
+        if ($uses) {
+          loaders.push($translate.uses($uses));
+        }
+        $q.all(loaders).then(onLoadingEnd(), onLoadingEnd());
+
+      } else if ($translationTable.hasOwnProperty(langKey)) {
+
+        $rootScope.$broadcast('$translateRefreshStart');
+
+        delete $translationTable[langKey];
+
+        var loader = null;
+        if (langKey === $uses) {
+          loader = $translate.uses($uses);
+        } else {
+          loader = loadAsync(langKey);
+        }
+        loader.then(onLoadingEnd(), onLoadingEnd());
+
+      }
+    };
+    
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
     if ($loaderFactory) {
