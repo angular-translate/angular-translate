@@ -51,56 +51,16 @@ describe('pascalprecht.translate', function() {
           $translateProvider.translations('ru', {});
           $translateProvider.uses('en');
         }));
-
         
-        it('should clear all translation tables if no params are passed in', function() {
+        
+        it('should throw an error', function() {
           inject(function($translate) {
-            $translate.refresh();
-            expect($translationTable).toEqual({});
-          });
-        });
-        
-        it('should clear the exact translation table if param is passed in', function() {
-          inject(function($translate) {
-            $translate.refresh('en');
-            expect($translationTable.en).not.toBeDefined();
-            expect($translationTable).not.toEqual({});
-          });
-        });
-        
-        
-        // Events
-        describe('', function() {
-        
-          it('should broadcast the $translateChangeSuccess event if all languages are refreshd',
-           function() {
-            inject(function($translate, $rootScope) {
-              spyOn($rootScope, '$broadcast');
+            expect(function() {
               $translate.refresh();
-              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateChangeSuccess');
-            });
+            }).toThrow();
           });
-          
-          it('should broadcast the $translateChangeSuccess event if current language is ' +
-             'directly refreshd', function() {
-            inject(function($translate, $rootScope) {
-              spyOn($rootScope, '$broadcast');
-              $translate.refresh('en');
-              expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateChangeSuccess');
-            });
-          });
-          
-          it('should not broadcast the $translateChangeSuccess event if another language is ' +
-             'directly refreshd', function() {
-            inject(function($translate, $rootScope) {
-              spyOn($rootScope, '$broadcast');
-              $translate.refresh('ru');
-              expect($rootScope.$broadcast).not.toHaveBeenCalledWith('$translateChangeSuccess');
-            });
-          });
-        
         });
-        
+
       });
       
       
