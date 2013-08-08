@@ -26,7 +26,7 @@
 * change src to angular-translate script (4be93b6)
 
 
-# 0.1.0 (2013-07-23)
+# 1.0.0 (2013-07-23)
 
 ## Features
 ### translateService
