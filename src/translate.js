@@ -848,39 +848,41 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * @methodOf pascalprecht.translate.$translate
      *
      * @description
-     * Invalidates a translation table pointed by the given langKey. If langKey is not specified, 
-     * the module will invalidate all existent translation tables.
-     * Invalidation means that the module will drop target translation tables and try to load them
-     * again (of cause, if it's possible).
+     * Refreshes a translation table pointed by the given langKey. If langKey is not specified, 
+     * the module will drop all existent translation tables and load new version of those which
+     * are currently in use.
+     * Refresh means that the module will drop target translation table and try to load it again.
+     * In case there are no loaders registered the refresh() method will throw an Error.
      *
      * @example
-     * // this will invalidate all currently existent translation tables
+     * // this will drop all currently existent translation tables and reload those which are 
+     * // currently in use
      * $translate.refresh();
-     * // this will invalidate a translation table for the en_US language
+     * // this will refresh a translation table for the en_US language
      * $translate.refresh('en_US');
      *
-     * @param {string} lankKey A language key of the table, which has to be invalidated
+     * @param {string} lankKey A language key of the table, which has to be refreshed
      */
     $translate.refresh = function(langKey) {
       if (!langKey) {
       
-        for (var lang in $translationTable) {
-          delete $translationTable[lang];
-        }
         if ($loaderFactory) {
+          for (var lang in $translationTable) {
+            if ($translationTable.hasOwnProperty(lang)) {
+              delete $translationTable[lang];
+            }
+          }
           if ($fallbackLanguage) loadAsync($fallbackLanguage);
           if ($uses) $translate.uses($uses);
-        } else $rootScope.$broadcast('$translateChangeSuccess');
+        } else throw new Error('There are no loaders registered.');
         
       } else if ($translationTable.hasOwnProperty(langKey)) {
         
-        delete $translationTable[langKey];
         if ($loaderFactory) {
+          delete $translationTable[langKey];
           if (langKey === $uses) $translate.uses($uses);
           else loadAsync(langKey);
-        } else if (langKey === $uses) {
-          $rootScope.$broadcast('$translateChangeSuccess');
-        }
+        } else throw new Error('There are no loaders registered.');
         
       }
     };
