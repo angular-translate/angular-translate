@@ -844,7 +844,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     /**
      * @ngdoc function
-     * @name pascalprecht.translate.$translate#invalidate
+     * @name pascalprecht.translate.$translate#refresh
      * @methodOf pascalprecht.translate.$translate
      *
      * @description
@@ -855,13 +855,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      *
      * @example
      * // this will invalidate all currently existent translation tables
-     * $translate.invalidate();
+     * $translate.refresh();
      * // this will invalidate a translation table for the en_US language
-     * $translate.invalidate('en_US');
+     * $translate.refresh('en_US');
      *
      * @param {string} lankKey A language key of the table, which has to be invalidated
      */
-    $translate.invalidate = function(langKey) {
+    $translate.refresh = function(langKey) {
       if (!langKey) {
       
         for (var lang in $translationTable) {
