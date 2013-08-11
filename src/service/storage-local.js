@@ -1,8 +1,8 @@
 angular.module('pascalprecht.translate')
 
 /**
- * @ngdoc factory
- * @name pascalprecht.translate.factory:$translateLocalStorage
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateLocalStorage
  * @requires $window
  *
  * @description

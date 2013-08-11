@@ -1,15 +1,15 @@
 angular.module('pascalprecht.translate')
 
 /**
- * @ngdoc factory
- * @name pascalprecht.translate.factory:$translateMissingTranslationHandlerLog
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateMissingTranslationHandlerLog
  * @requires $log
  *
  * @description
  * Uses angular's `$log` service to give a warning when trying to translate a
  * translation id which doesn't exist.
  *
- * @return Handler function
+ * @returns {function} Handler function
  */
 .factory('$translateMissingTranslationHandlerLog', ['$log', function ($log) {
 

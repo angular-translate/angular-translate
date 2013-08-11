@@ -1,8 +1,8 @@
 angular.module('pascalprecht.translate')
 
 /**
- * @ngdoc factory
- * @name pascalprecht.translate.factory:$translateCookieStorage
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateCookieStorage
  * @requires $cookieStore
  *
  * @description
