@@ -3,6 +3,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-bump');
@@ -76,6 +77,46 @@ module.exports = function (grunt) {
           }
         ]
       },
+      logos: {
+        files: [
+          {
+            src: ['logo/**'],
+            dest: '<%= ngdocs.options.dest %>/img/',
+            cwd: 'identity/',
+            expand: true
+          }
+        ]
+      },
+      fav_icon: {
+        files: [
+          {
+            src: ['favicon.ico'],
+            dest: '<%= ngdocs.options.dest %>/',
+            cwd: 'identity/',
+            expand: true
+          }
+        ]
+      },
+      docs_index: {
+        files: [
+          {
+            src: ['index.html'],
+            dest: '<%= ngdocs.options.dest %>/',
+            cwd: 'docs/html/',
+            expand: true
+          }
+        ]
+      },
+      docs: {
+        files: [
+          {
+            src: ['**'],
+            dest: '<%= ngdocs.options.dest %>/docs/',
+            cwd: '<%= ngdocs.options.dest %>/',
+            expand: true
+          }
+        ]
+      },
       docs_assets: {
         files: [
           {
@@ -91,6 +132,11 @@ module.exports = function (grunt) {
             expand: true
           }
         ]
+      }
+    },
+    clean: {
+      docs: {
+        src: ['site/*', '!site/docs']
       }
     },
     karma: {
@@ -126,7 +172,7 @@ module.exports = function (grunt) {
     ngdocs: {
       options: {
         dest: 'site',
-        title: 'angular-translate',
+        title: '<img width="215" src="img/logo/angular-translate-alternative/angular-translate_alternative_small2.png">',
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
         startPage: '/guide',
@@ -167,5 +213,13 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', ['jshint', 'karma:unit',  'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
 
-  grunt.registerTask('docs', ['ngdocs', 'copy:docs_assets']);
+  grunt.registerTask('docs', [
+    'ngdocs',
+    'copy:logos',
+    'copy:docs_assets',
+    'copy:docs',
+    'clean:docs',
+    'copy:docs_index',
+    'copy:fav_icon'
+  ]);
 };
