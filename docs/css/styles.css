@@ -1,9 +1,25 @@
-h1 {
-  font-size: 33.5px;
+p {
+  line-height: 1.6;
+  font-size: 16px;
+  color: #555;
+}
+
+a {
+  color: rgb(20, 125, 160);
 }
 
 h2 {
   font-size: 22.5px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+h2, h1 {
+  color: rgb(102, 102, 102);
+  font-weight: lighter;
 }
 
 .hint {
@@ -16,4 +32,156 @@ h2 {
 
 .nav .nav-header.module a.code {
   word-wrap: break-word;
+}
+
+.clear-navbar {
+  margin-top: 85px;
+}
+
+.navbar-inner {
+  background: white;
+}
+
+.navbar .container .brand {
+  margin-top: 5px;
+}
+
+.navbar-inner li {
+  line-height: 40px;
+}
+
+.navbar-fixed-top .navbar-inner {
+  box-shadow: none;
+}
+
+.navbar .nav > li > a:hover,
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .avtive > a:focus {
+  box-shadow: none;
+}
+
+.masthead {
+  padding: 70px 0 50px;
+  margin-bottom: 0;
+  /*background: #ebf5fa;*/
+}
+
+.masthead .container {
+  text-align: center;
+}
+
+.masthead .container p {
+  margin-top: 50px;
+}
+
+.masthead .container .btn {
+  background: #5caed6;
+  padding: 10px 20px;
+  border: 0;
+}
+
+.masthead .container .btn:hover {
+  background: rgb(20, 125, 160);
+}
+
+.masthead .container .tagline {
+  color: rgb(20, 125, 160);
+  font-size: 24px;
+  margin-top: 15px;
+  line-height: 1;
+}
+
+.masthead .container img {
+  margin-top: 60px;
+}
+
+.divider {
+  border-top: 1px solid rgb(212, 212, 212);
+}
+
+.container.main {
+  border-top: 1px solid rbg(212, 212, 212);
+  min-height: 300px;
+}
+
+.intro,
+.companies,
+.peeps {
+  margin-top: 24px;
+}
+
+.companies h2, .peeps h2 {
+  margin-bottom: 15px;
+}
+
+.companies  ul {
+  list-style: none;
+}
+
+.companies li {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 25px;
+}
+
+.companies li:first-child {
+  margin-left: 0;
+}
+
+.peeps blockquote {
+  border: 0;
+  padding: 0;
+  position: relative;
+}
+
+.peeps blockquote:before {
+  content: "´´";
+  position: absolute;
+  font-size: 125px;
+  top: 28px;
+  left: -15px;
+  color: #5caed6;
+  letter-spacing: -10px;
+}
+.peeps blockquote p {
+  line-height: 1.5;
+  background: #eee;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.peeps blockquote footer span {
+  margin-top: 15px;
+  display: block;
+  margin-left: 14px;
+  color: #555;
+  font-style: italic;
+}
+
+.footer {
+  text-align: center;
+  border-top: 1px solid rgb(212, 212, 212);
+  padding: 45px 0;
+  background: #fff;
+  margin-top: 40px;
+}
+
+.footer a {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.footer a:hover {
+  text-decoration: none;
+}
+
+.footer img {
+  border-radius: 3px;
+}
+
+.footer p {
+  color: #555;
+  text-align: left;
 }
