@@ -107,12 +107,17 @@ h2, h1 {
 
 .intro,
 .companies,
-.peeps {
+.peeps,
+.example {
   margin-top: 24px;
 }
 
 .companies h2, .peeps h2 {
   margin-bottom: 15px;
+}
+
+.example h1 {
+  margin-top: 0;
 }
 
 .companies  ul {
@@ -183,5 +188,6 @@ h2, h1 {
 
 .footer p {
   color: #555;
-  text-align: left;
+  text-align: center;
+  font-size: 14px;
 }

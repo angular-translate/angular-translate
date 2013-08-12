@@ -1,5 +1,5 @@
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if lt IE 7]> <html class1="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
@@ -13,13 +13,42 @@
 
     <link rel="stylesheet" href="docs/css/bootstrap.min.css">
     <link rel="stylesheet" href="docs/css/animations.css">
-    <link rel="stylesheet" href="docs/css/doc_widgets.css">
     <link rel="stylesheet" href="docs/css/docs.css">
     <link rel="stylesheet" href="docs/css/font-awesome.css">
     <link rel="stylesheet" href="docs/css/styles.css">
+
+    <script src="docs/js/angular.min.js"></script>
+    <script src="http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js"></script>
+    <script src="docs/js/docs-setup.js"></script>
+    <script src="docs/js/docs.js"></script>
+    <script>
+      var app = angular.module('at', ['pascalprecht.translate']);
+
+      app.config(function ($translateProvider) {
+        $translateProvider.translations('en', {
+          TITLE: 'Hello',
+          FOO: 'This is a pragraph.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+        $translateProvider.translations('de', {
+          TITLE: 'Hallo',
+          FOO: 'Dies ist ein Paragraph.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+        $translateProvider.preferredLanguage('en');
+      });
+
+      app.controller('Ctrl', function ($scope, $translate) {
+        $scope.changeLanguage = function (key) {
+          $translate.uses(key);
+        };
+      });
+    </script>
   </head>
 
-  <body>
+  <body ng-app="at">
     <header class="header">
       <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -72,6 +101,49 @@
           </div>
         </div>
         <hr>
+
+        <div class="example">
+          <div class="row">
+            <h1 class="span12">How it works</h1>
+            <div class="span8">
+              <pre class="prettyprint linenums">
+var app = angular.module('at', ['pascalprecht.translate']);
+
+app.config(function ($translateProvider) {
+  $translateProvider.translations('en', {
+    TITLE: 'Hello',
+    FOO: 'This is a pragraph.',
+    BUTTON_LANG_EN: 'english',
+    BUTTON_LANG_DE: 'german'
+  });
+  $translateProvider.translations('de', {
+    TITLE: 'Hallo',
+    FOO: 'Dies ist ein Paragraph.',
+    BUTTON_LANG_EN: 'englisch',
+    BUTTON_LANG_DE: 'deutsch'
+  });
+  $translateProvider.preferredLanguage('en');
+});
+
+app.controller('Ctrl', function ($scope, $translate) {
+  $scope.changeLanguage = function (key) {
+    $translate.uses(key);
+  };
+});</pre>
+            </div>
+            <div class="span4">
+              <div class="well">
+                  <h2 translate="TITLE">Hello</h2>
+                  <p translate="FOO">This is a paragraph</p>
+              </div>
+              <div ng-controller="Ctrl">
+                <button class="btn" ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN" class="ng-scope">english</button>
+                <button class="btn" ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE" class="ng-scope">german</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
         <div class="peeps">
           <div class="row">
             <h1 class="span12">What peoples say</h1>
@@ -85,7 +157,7 @@
             <blockquote class="span6">
               <p>I looked for some localization stuff to bring translations from server to client. There were some modules for i18n, but they didn't match all my needs. Then I found an angular-translate and I loved this module! Seriously. I was really surprised by its quality and support. It's also really awesome that the author of angular-translate is always open for new ideas!</p>
               <footer>
-              <span>- <strong>Max Prichinenko</strong></span>
+              <span>- <strong>Max Prichinenko</strong>, Freelancer</span>
               </footer>
 					  </blockquote>
           </div>
@@ -104,6 +176,8 @@
       <footer class="footer">
         <div class="container">
           <p>Brought to you by <a href="http://github.com/PascalPrecht"> <img width="40" height="40" src="https://secure.gravatar.com/avatar/b32bdb1fc9fdadeb45d7a1267fdd2fc4?s=40"> Pascal Precht</a> <a href="http://github.com/knalli"><img height="210" src="https://secure.gravatar.com/avatar/6c349ffd9793132e1d217f0de572e080?s=40" width="40" height="40"> Jan Philipp</a> <a href="http://github.com/sgara"><img height="40" width="40" src="https://secure.gravatar.com/avatar/076e1a1b2f8ff489387fc5b1a7bd44f4?s=40"> Stéphane Garagnani <a href="http://github.com/DWand"><img height="40" width="40" src="https://secure.gravatar.com/avatar/2146036b95ee605ca39779b958cd54ce?s=40"> Max Prichinenko</a> and many <a href="http://github.com/PascalPrecht/angular-translate/contributors">others</a></p>
+
+            <p>Logo designed by <a href="http://stefankroeckel.tumblr.com/">Stefan Kröckel</a></p>
         </div>
       </footer>
   </body>
