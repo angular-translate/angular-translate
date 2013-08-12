@@ -1,0 +1,112 @@
+@ngdoc overview
+@name Использование директивы translate
+@description
+
+# Использование директивы translate
+
+Другим способом перевода контента в слое представления является использование директивы `translate`.
+Использование фильтра `translate` замечательно, но использование директивы `translate` - лучше. 
+Оказалось, что наличие большого количества фильтров в представлении приводит к большому количеству
+наблюдающих (watch) выражений. Поэтому, `angular-translate` также предоставляет директиву для 
+перевода контента в слое представления.
+
+### Общее использование
+Вы можете использовать директиву `translate` разными способами. Вот как выглядит обычное 
+использование:
+
+```
+<ANY translate>TRANSLATION_ID</ANY>
+```
+
+Вы также можете передать идентификатор перевода в качестве значения аттрибута директивы `translate`
+вот так:
+
+```
+<ANY translate="TRANSLATION_ID"></ANY>
+```
+
+Даже если это уже очень гибкий способ использования директивы, angular-translate предлагает 
+**другой** способ её использования. Давайте предположим, что идентификатор перевода не доступен в
+качестве конкретного идентификатора потому, что, например, он расположен внутри цыкла по набору
+данных, который содержит идентификатор перевода в каждом итераторе. В таком случае идентификатор
+перевода доступен только в качетсве динамических данных. Фактически, сначала нужно интерполировать 
+непосредственно сам идентификатор. angular-translate поможет вам в этом. Так тоже можно:
+
+```
+<ANY translate="{{toBeInterpolated}}"></ANY>
+```
+
+Ну разве это не круто? И да, angular-translate не был бы angular-translate, если бы не мог проделать
+тоже самое с нашим первым примером использования. Это тоже работает:
+
+```
+<ANY translate>{{toBeInterpolated}}</ANY>
+```
+
+Выберите, что лучше для вас!
+
+Давайте обновим наше приложение-пример и добавим некоторые новые переводы. Как на счет текстов, 
+которые представляют все возможные варианты использования директивы `translate`? Наша таблица 
+переводов может выглядить примерно так:
+
+<pre>
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+};
+</pre>
+
+После этого мы обновим наше представление, добавив в него новые идентификаторы переводов:
+
+<pre>
+<h2>{{ 'HEADLINE' | translate }}</h2>
+<p>{{ 'PARAGRAPH' | translate }}</p>
+
+<p translate>PASSED_AS_TEXT</p>
+<p translate="PASSED_AS_ATTRIBUTE"></p>
+<p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+<p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+</pre>
+
+Теперь новая версия нашего приложения выглядит так:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider.translations(translations);
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

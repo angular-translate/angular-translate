@@ -1,0 +1,179 @@
+@ngdoc overview
+@name Замена переменных
+@description
+
+# Замена переменных
+
+Это руководство покажет вам как быть с заменой переменных в переводах.
+Если вы еще не прочитали вводные главы про
+[сервис $translate](#/guide/03_using-translate-service),
+[фильтр translate](#/guide/04_using-translate-filter) и
+[директиву translate](guide/05_using-translate-directive), самое время это сделать!
+
+Сервис `$translate`, фильтр `translate` и директива `translate` дают очень точные результаты!
+Но как быть, если ваши переводы требуют наличия переменных значений? Скажем, вы хотите отобразить
+уведомление с текстом вроде '_Вы получили n писем_', где _n_ - это плейсходер для изменяющегося
+значения, которое может быть любым числом.
+
+Что ж, `angular-translate` поможет вам. Вводить переменные в переводы используя стандартный
+сервис интерполяции angular-translate`а очень просто. Да, вы прочитали правильно. То, как 
+обрабатываются переменные значения в переводах, зависит от используемого сервиса интерполяции.
+
+### Использование переменных в переводах
+
+Используя стандартный сервис интерполяции angular-translate'а вы можете просто положиться на 
+синтаксис сервиса интерполяции Angular. Таким образом, все что нужно для того, чтобы определить
+переменное значение в переводе, это использовать директиву интерполяции (interpolate directive) 
+Angular'а.
+
+```
+{
+  "TRANSLATION_ID": "{{username}} is logged in."
+}
+```
+
+Тут `username` выступает в роли идентификатора, через который вы сможете передать переменное 
+значение. Итак, как же передать эти значения через компоненты предоставляемые модулем
+angular-translate?
+
+### Замена переменных в сервисе $translate
+
+Вы можете передать переменные значения через сервис `$translate` используя его второй аргумент.
+Сервис `$translate` в качестве второго аргумента ожидает хеш объекта JavaScript который,
+используется для интерполяции переводов. Таким образом, если у нас есть идентификатор перевода
+на подобии того, что описан выше, передача значения для `username` будет выглядеть так:
+
+<pre>
+$translate('TRANSLATION_ID', { username: 'PascalPrecht' });
+</pre>
+
+Если же идентификатор перевода содержит больше переменных, просто расширьте передаваемый
+хеш объекта соответствующими парами ключ-значение.
+
+<pre>
+$translate('TRANSLATION_ID', {
+  username: 'PascalPrecht',
+  lastLogin: '2013-07-21 6:50PM'
+});
+</pre>
+
+### Замена переменных в фильтре translate
+
+Так как фильтр `translate` внутри использует сервис `$translate`, нам просто нужен способ передачи
+динамических значений через фильтр, чтобы в результате получить хеш объекта для сервиса. Для 
+достижения этого необходим специальный синтаксис потому, что фильтры в Angular на данный момент
+не способны иметь именованных параметров. Итак, мы имеем два пути передачи значений через
+фильтр `translate`.
+
+Первый путь - это передача литерала объекта в виде строки. Впоследствии он будет интерполирован
+сервисом `$translate`.
+
+<pre>
+{{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
+</pre>
+
+Не так уж и сложно, да? Но что если `username` не может иметь фиксированного значения и тоже должно
+быть интерполировано перед тем, как будет передано? Единственным путем достижения этого является
+передача через фильтр объекта из области видимости (scope) как выражения Angular. Это также значит,
+что вы должны привязать (bind) ваши переменные значения для переводов в контроллере, который 
+отображает значения в область видимости.
+
+<pre>
+angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
+
+  $scope.translationData = {
+    username: 'PascalPrecht'
+  };
+}]);
+</pre>
+
+И потом передать его в виде выражения через фильтр:
+
+<pre>
+{{ 'TRANSLATION_ID' | translate:translationData }}
+</pre>
+
+### Замена переменных в директиве translate
+
+Конечно, вы можете сделать тоже самое с директивой `translate`. Директива `translate` ожидает
+необязательный атрибут `translate-values`, который вы можете использовать для передачи каких-нибудь
+значений. Все, что вам необходимо сделать это использовать вместе директиву и атрибут 
+`translate-values`.
+
+Вы можете использовать как литерал объекта в виде строки, так и директиву интерполяции (если значение динамично).
+Оба варианта будут оценены и разобраны фильтром `translate` так, что в результате
+получится простой объект JavaScript, который будет передан сервису `$translate`.
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values='{ username: "PascalPrect"}'></ANY>
+</pre>
+
+или
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{{translationData}}"></ANY>
+</pre>
+
+Здорово! Теперь мы можем заменять переменные значения в наших переводах! Давайте обновим наше
+учебное приложение. Мы расширили таблицу переводов таким образом:
+
+<pre>
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+  VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+};
+</pre>
+
+Дальше мы передали name через директиву `translate`:
+
+<pre>
+<p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+</pre>
+
+Наш работающий код теперь выглядит так:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider.translations(translations);
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

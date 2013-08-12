@@ -1,0 +1,233 @@
+@ngdoc overview
+@name Многоязычность
+@description
+
+# Многоязычность
+
+В главе [Замена переменных](#/guide/06_variable-replacement) вы изучили как передать динамические
+значения через различные компоненты для использования их в переводах. Поскольку мы покрыли всю
+базовую функциональность предоставляемую этими компонентами (используя стандартный сервис
+интерполяции), теперь мы готовы перейти на следующий уровень: **Поддержка многоязычности**.
+
+Конечно, это очень клево знать как использовать компоненты angular-translate, но все становится
+куда интереснее когда необходимо обучить приложение более чем одному языку (собственно, для чего 
+этот модуль и предназначен!). Итак, давайте же начнем изучать как добавлять сразу несколько таблиц
+переводов!
+
+### Обучение приложения новым языкам
+
+В главе [Начало работы](#/guide/02_gettin-started) вы узнали как добавить в приложение таблицу 
+перевода используя метод `translations()` `$translateProvider`'а. Тот же метод можно использовать 
+для одновременного добавления большего количества таблиц перевода. Передаваемые таблицы перевода
+должны при этом сопровождаться ключом языка (language key) с помощью которого angular-translate
+различает, какая таблица переводов относится к какому языку.
+
+Добавить таблицу перевода с соответствующим ключом очень просто. Вместо того, чтобы просто передать
+таблицу как аргумент в метод `translations()`, вы можете передать первым аргументом ключ языка, а
+таблицу перевода - вторым. Таким образом, добавление таблицы перевода с ключом языка выглядит как-то
+так:
+
+<pre>
+// registers translation table with language key 'en'
+$translateProvider.translations('en', {
+  GREETING: 'Hello world!'
+});
+</pre>
+
+Теперь, для добавления второй таблицы переводов для другого языка (скажем, немецкого), сделайте
+то же самое с другим ключом языка:
+
+<pre>
+// registers translation table with language key 'de'
+$translateProvider.translations('de', {
+  GREETING: 'Hallo Welt!'
+});
+</pre>
+
+Легко? Ваше приложение теперь знает два разных языка. Вы можете добавлять столько языков, сколько 
+нужно - лимита нет. Однако, поскольку теперь доступно два языка, какой язык должно использовать
+приложение? angular-translate не отдаст предпочтения какому-либо языку пока вы не скажете ему это
+сделать.
+
+### Выбор языка для использования
+
+Поскольку мы зарегистрировали более одной таблицы переводов, `angular-translate` должен знать какую
+нужно использовать. Тут вступает в игру новый метод провайдера `$translateProvider`. 
+`preferredLanguage()` говорит angular-translate какой из зарегистрированных языков должен быть
+использован по умолчанию. Он ожидает ключ языка, который указывает на 
+определенную таблицу переводов. Таким образом, чтобы сказать приложению, что оно должно использовать
+немецкий, а не английский в качестве первого языка, расширьте код следующим образом:
+
+<pre>
+// tells angular-translate to use the german language
+$translateProvider.preferredLanguage('de');
+</pre>
+
+**Заметка:** Также для этого можно использовать метод `$translateProvider.uses()`, поскольку он тоже
+устанавливает язык. Однако оказалось, что это плохая практика при использовании асинхронных 
+загрузчиков в комбинации с хранилищем. В некоторых случаях может получиться так, что 
+angular-translate сделает два асинхронных запроса. Позже вы ознакомитесь с этим более детально. 
+Чтобы обойти эту проблему мы ввели `preferredLanguage()`. Вам следует всегда использовать 
+`preferredLanguage()` вместо `uses()` при работе с `$translateProvider`.
+
+### Использование другого языка для подстраховки
+
+Это все замечательно, но, к сожалению, только что выбранный `preferredLanguage()` не полный.
+Вы бы хотели, чтобы `angular-translate` попробовал другой язык для этих переводов вместо того, чтобы
+отображать пустые или не форматированные строки. Новая функция `fallbackLanguage()` поможет вам
+сказать `angular-translate` какой язык стоит использовать в случае, если он не может найти перевод
+в текущей таблице. Его использование такое же, как и `preferredLanguage()`.
+
+<pre>
+// tells angular-translate to use the english language if translations are not
+// available in german
+$translateProvider.fallbackLanguage('en');
+</pre>
+
+### Смена языка во время выполнения
+
+Для смены языка во время выполнения, сервис `$translate` имеет метод `uses()` который или возвращает
+ключ языка, который используется в данный момент, или, в случае передачи в качестве аргумента ключа
+языка, говорит angular-translate использовать соответствующий язык. `$translate.uses()` внутри также 
+вызывает асинхронные загрузчики, при попытке использования языка для которого еще не загружена 
+таблица переводов. Но подробнее об этом в главе 
+[Асинхронная загрузка](#/guide/08_asynchronous_loading).
+
+Хорошим использование `$translate.uses()` было бы в контроллере, который управляет сменой языка.
+Вам просто нужно реализовать принимающую ключ языка функцию в области видимости и использовать ее для
+того, чтобы сменить язык.
+
+<pre>
+angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+  $scope.changeLanguage = function (langKey) {
+    $translate.uses(langKey);
+  };
+
+}]);
+</pre>
+
+Чтобы почувствовать как это будет работать в приложении, мы обновим наш пример 
+соответствующим образом. Во-первых, мы добавим таблицу переводов для немецкого языка и два новых
+идентификатора переводов для кнопок, которые будут добавлены позже:
+
+<pre>
+var translationsEN = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+  VARIABLE_REPLACEMENT: 'Hi {{name}}',
+  BUTTON_LANG_DE: 'german',
+  BUTTON_LANG_EN: 'english'
+};
+
+var translationsDE= {
+  HEADLINE: 'Was für ein großartiges Modul!',
+  PARAGRAPH: 'Ernsthaft!',
+  PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+  PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+  PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+  VARIABLE_REPLACEMENT: 'Hi {{name}}',
+  BUTTON_LANG_DE: 'deutsch',
+  BUTTON_LANG_EN: 'englisch'
+};
+</pre>
+
+После этого мы обновим добавление английской таблицы переводов указав соответствующий ключ языка и
+скажем angular-translate использовать английский по умолчанию:
+
+<pre>
+$translateProvider.translations('en', translationsEN);
+$translateProvider.translations('de', translationsDE);
+$translateProvider.preferredLanguage('en');
+</pre>
+
+Круто! Теперь нам нужны элементы управления для смены языка во время выполнения. Мы обновим наш HTML
+и добавим кнопку для каждого языка. Так же, для каждой кнопки мы используем директиву `ng-click` 
+которая вызывает функцию смены языка:
+
+<pre>
+<button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+<button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+</pre>
+
+
+Наконец, мы должны реализовать соответствующую функцию в области видимости нашего контроллера:
+
+<pre>
+app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+  $scope.changeLanguage = function (langKey) {
+    $translate.uses(langKey);
+  };
+}]);
+</pre>
+
+И вуаля! Теперь у нас есть приложение, поддерживающее много языков:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translationsEN = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
+        BUTTON_LANG_DE: 'german',
+        BUTTON_LANG_EN: 'english'
+      };
+
+      var translationsDE= {
+        HEADLINE: 'Was für ein großartiges Modul!',
+        PARAGRAPH: 'Ernsthaft!',
+        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        // MISSING_TRANSLATION is ... missing :)
+        BUTTON_LANG_DE: 'deutsch',
+        BUTTON_LANG_EN: 'englisch'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation tables
+        $translateProvider.translations('en', translationsEN);
+        $translateProvider.translations('de', translationsDE);
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.uses(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+      <p translate>MISSING_TRANSLATION</p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

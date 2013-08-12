@@ -1,0 +1,168 @@
+@ngdoc overview
+@name Пользовательские интерполяторы
+@description
+
+# Пользовательские интерполяторы
+
+Если ваших знаний достаточно для более компактной реализации библиотеки MessageFormat, или если вам
+нужно другой тип интерполяции, вы можете просто реализовать свой собственный сервис интерполяции и
+вставить его в angular-translate. Что, что для этого нужно - это реализовать специальный интерфейс,
+который angular-translate требует от сервиса интерполяции. Давайте посмотрим как это работает!
+
+### Создание пользовательского сервиса интерполяции
+
+При создании пользовательского сервиса интерполяции действия могут оказаться довольно знакомыми,
+если вы читали [Пользовательские хранилища](#/guide/09_custom-storages) и 
+[Пользовательские загрузчики](#/guide/11_custom-loaders). Все начинается с создания фабрики, которая
+возвращает объект, реализующий определенный интерфейс. Пользовательский сервис интерполяции должен
+предоставлять следующие методы:
+
+- `setLocale(langKey)` - устанавливает текущий язык
+- `getInterpolationIdentifier()` - возвращает идентификатор интерполяции
+- `interpolate(string, interpolatgeParams)` - интерполирует строку с параметрами интерполяции
+
+Давайте посмотрим как это выглядит при создании пользовательского сервиса интерполяции. Во-первых,
+мы реализуем интерфейс:
+
+<pre>
+app.factory('customInterpolation', function () {
+
+  return {
+
+    setLocale: function (locale) {
+
+    },
+
+    getInterpolationIdentifier: function () {
+
+    },
+
+    interpolate: function (string, interpolateParams) {
+
+    }
+  };
+});
+</pre>
+
+Это базовая структура интерполяционного сервиса. Теперь давайте добавим немного логики, чтобы
+angular-translate смог использовать его сразу, как только наш пользовательский сервис интерполяции
+вступит в игру:
+
+<pre>
+app.factory('customInterpolation', function ($interpolate) {
+
+  var $locale;
+
+  return {
+
+    setLocale: function (locale) {
+      $locale = locale;
+    },
+
+    getInterpolationIdentifier: function () {
+      return 'custom';
+    },
+
+    interpolate: function (string, interpolateParams) {
+      return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+    }
+  };
+});
+</pre>
+
+Отлично. Что у нас тут? `setLocale()` просто сохраняет значение текущего языка,
+`getInterpolationIdentifier()` возвращает строку `custom`. Для чего вообще это нужно? Помните как
+[временно переопределить тип интерполяции](#/guide/12_pluralization#overridinginterpolationtemporarily)?
+Вот именно. Это идентификатор, к которому привязывается ваш сервис, так что angular-translate знает
+какой сервис интерполяции использовать когда вы точно переопределяете сервис интерполяции во время
+выполнения. `interpolate()` просто использует сервис `$interpolate` Angular'а. Кроме того, он 
+добавляет текущую локаль по бокам от переданной строки.
+
+### Использование пользовательского сервиса интерполяции
+
+Так же, как есть методы для Хранилищ (`useStorage()`) и Загрузчиков (`useLoader()`), существует и
+метод для пользовательских интерполяций. `$translateProvider.useInterpolation()` - ваш друг, если
+необходимо интегрировать пользовательский сервис в приложение.
+
+<pre>
+$translateProvider.useInterpolation('customInterpolation');
+</pre>
+
+Приложение теперь использует вашу пользовательскую интерполяцию по умолчанию. Однако, как вы помните
+из предыдущих глав, можно добавить пользовательскую интерполяцию в качестве необязательной, чтобы
+не терять функциональности Angular:
+
+<pre>
+$translateProvider.addInterpolation('customInterpolation');
+</pre>
+
+Вот как это выглядит:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useInterpolation('customInterpolation');
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.uses(langKey);
+        };
+      }]);
+
+      app.factory('customInterpolation', function ($interpolate) {
+
+        var $locale;
+
+        return {
+
+          setLocale: function (locale) {
+            $locale = locale;
+          },
+
+          getInterpolationIdentifier: function () {
+            return 'custom';
+          },
+
+          interpolate: function (string, interpolateParams) {
+            return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+          }
+        };
+      });
+
+    </script>
+    <div ng-controller="Ctrl">
+      <h2 translate="HEADLINE"></h2>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
