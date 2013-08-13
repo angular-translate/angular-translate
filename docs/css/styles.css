@@ -134,6 +134,10 @@ h2, h1 {
   margin-left: 0;
 }
 
+.peeps h1 {
+  margin-bottom: 25px;
+}
+
 .peeps blockquote {
   border: 0;
   padding: 0;
@@ -168,7 +172,7 @@ h2, h1 {
 .footer {
   text-align: center;
   border-top: 1px solid rgb(212, 212, 212);
-  padding: 45px 0;
+  padding: 45px 0 15px;
   background: #fff;
   margin-top: 40px;
 }
