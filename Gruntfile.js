@@ -15,6 +15,7 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('bower.json'),
+    language: grunt.option('lang') || 'en',
     meta: {
       banner: '/**\n * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -87,32 +88,12 @@ module.exports = function (grunt) {
           }
         ]
       },
-      fav_icon: {
-        files: [
-          {
-            src: ['favicon.ico'],
-            dest: '<%= ngdocs.options.dest %>/',
-            cwd: 'identity/',
-            expand: true
-          }
-        ]
-      },
       docs_index: {
         files: [
           {
             src: ['index.html'],
             dest: '<%= ngdocs.options.dest %>/',
             cwd: 'docs/html/',
-            expand: true
-          }
-        ]
-      },
-      docs: {
-        files: [
-          {
-            src: ['**'],
-            dest: '<%= ngdocs.options.dest %>/docs/',
-            cwd: '<%= ngdocs.options.dest %>/',
             expand: true
           }
         ]
@@ -132,11 +113,6 @@ module.exports = function (grunt) {
             expand: true
           }
         ]
-      }
-    },
-    clean: {
-      docs: {
-        src: ['site/*', '!site/docs']
       }
     },
     karma: {
@@ -171,7 +147,7 @@ module.exports = function (grunt) {
     },
     ngdocs: {
       options: {
-        dest: 'site',
+        dest: 'tmp',
         title: '<img width="215" src="img/logo/angular-translate-alternative/angular-translate_alternative_small2.png">',
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
@@ -199,7 +175,7 @@ module.exports = function (grunt) {
         title: 'API Reference'
       },
       guide: {
-        src: ['docs/content/guide/*.ngdoc'],
+        src: ['docs/content/guide/<%= language %>/*.ngdoc'],
         title: 'Guide'
       }
     }
@@ -212,14 +188,4 @@ module.exports = function (grunt) {
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit',  'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
-
-  grunt.registerTask('docs', [
-    'ngdocs',
-    'copy:logos',
-    'copy:docs_assets',
-    'copy:docs',
-    'clean:docs',
-    'copy:docs_index',
-    'copy:fav_icon'
-  ]);
 };

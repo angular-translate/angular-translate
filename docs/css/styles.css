@@ -142,13 +142,14 @@ h2, h1 {
   border: 0;
   padding: 0;
   position: relative;
+  margin-top: 12px;
 }
 
 .peeps blockquote:before {
-  content: "´´";
+  content: "“";
   position: absolute;
   font-size: 125px;
-  top: 28px;
+  top: 14px;
   left: -15px;
   color: #5caed6;
   letter-spacing: -10px;
