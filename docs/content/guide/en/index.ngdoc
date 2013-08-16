@@ -4,7 +4,7 @@
 
 # i18n for your Angular apps, made easy
 
-####angular-translate is the easiest way to bring i18n and l10n to your Angular apps!
+####The easiest way to bring i18n and l10n to your Angular apps!
 
 <br>
 You want to bring **i18n** and **l10n** to your Angular apps and couldn't find an easy way
@@ -69,47 +69,6 @@ Translate your app:
 <h1>{{ 'TITLE' | translate }}</h1>
 <p>{{ 'FOO' | translate }}</p>
 </pre>
-
-Here's how it looks like:
-
-<doc:example module="myApp">
-  <doc:source>
-    <script>
-      var app = angular.module('myApp', ['pascalprecht.translate']);
-
-      app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.translations('en', {
-          'TITLE': 'Hello',
-          'FOO': 'This is a paragraph',
-          'BUTTON_LANG_EN': 'english',
-          'BUTTON_LANG_DE': 'german'
-        });
-
-        $translateProvider.translations('de', {
-          'TITLE': 'Hallo',
-          'FOO': 'Dies ist ein Paragraph',
-          'BUTTON_LANG_EN': 'englisch',
-          'BUTTON_LANG_DE': 'deutsch'
-        });
-
-        $translateProvider.preferredLanguage('en');
-      }]);
-
-      app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-
-        $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
-        };
-      }]);
-    </script>
-    <div ng-controller="Ctrl">
-      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
-      <h1 translate="TITLE"></h1>
-      <p translate="FOO"></p>
-    </div>
-  </doc:source>
-</doc:example>
 
 This is just a quick example of how angular-translate actually works. Basically
 the whole thing works like "_Provide some i18n data, let angular-translate know of it

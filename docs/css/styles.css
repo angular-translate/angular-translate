@@ -8,6 +8,14 @@ a {
   color: rgb(20, 125, 160);
 }
 
+.content h2,
+.content h3,
+.content h4,
+.content h5 {
+  color: #555;
+  font-weight: lighter;
+}
+
 h2 {
   font-size: 22.5px;
 }
@@ -53,6 +61,17 @@ h2, h1 {
 .navbar-fixed-top .navbar-inner {
   box-shadow: none;
 }
+
+.nav-list > .active > a,
+.nav-list > .active > a:hover {
+  background: #005580;
+  color: #fff;
+}
+
+.nav-list > .active > a:focus {
+  box-shadow: none;
+}
+
 
 .navbar .nav > li > a:hover,
 .navbar .nav > .active > a,
@@ -195,4 +214,16 @@ h2, h1 {
   color: #555;
   text-align: center;
   font-size: 14px;
+}
+
+.form-search input {
+  border-radius: 3px;
+}
+
+form.well {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding-top: 2px;
 }
