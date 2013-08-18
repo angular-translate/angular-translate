@@ -1,7 +1,35 @@
 describe('pascalprecht.translate', function() {
 
   describe('$translatePartialLoader', function() {
-  
+/*
+Target API:
+$translatePartialLoader {
+ provider:
+  addPart(partName);                          // chainable
+  deletePart(partName);                       // chainable
+  isPartAvailable(partName);
+  template(optional tpl);                     // getter/setter
+  useLoadFailureHandler(serviceFactoryName);  // will be used to handle situations when some part
+                                                  was not loaded from server due to loading error.
+                                                  Required API:
+                                                    promise function(partName, language)
+                                                    if the handler resolves a returned promise, this
+                                                    part will be also resolved in loader, in other
+                                                    case a whole loading process will be rejected
+                                                    due to loading error
+ service:
+  $get()                                      // real data loading
+                                                  will return a function(options)
+                                                  where options could contain such params as:
+                                                    key - a kay of a needed language
+                                                    tpl - a template for target URL
+                                                    errorHandler - a name of the service for loading
+                                                                   errors handling
+  addPart(partName);                          // chainable
+  deletePart(partName, optional removeData);  // chainable
+  isPartAvailable(partName);
+}
+*/
     beforeEach(module('pascalprecht.translate'));
     
     var counter;
