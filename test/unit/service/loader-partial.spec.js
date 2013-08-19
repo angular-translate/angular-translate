@@ -242,30 +242,30 @@ $translatePartialLoader {
       });
       
       
-      describe('delPart()', function() {
+      describe('deletePart()', function() {
       
         it('should be defined', function() {
           inject(function($translatePartialLoader) {
-            expect($provider.delPart).toBeDefined();
+            expect($provider.deletePart).toBeDefined();
           });
         });
       
         it('should be a function', function() {
           inject(function($translatePartialLoader) {
-            expect(typeof $provider.delPart).toBe('function');
+            expect(typeof $provider.deletePart).toBe('function');
           });
         });
         
         it('should be chainable with args', function() {
           inject(function($translatePartialLoader) {
-            expect($provider.delPart('part')).toEqual($provider);
+            expect($provider.deletePart('part')).toEqual($provider);
           });
         });
       
         it('should throw an error without args', function() {
           inject(function($translatePartialLoader) {
             expect(function() {
-              $provider.delPart();
+              $provider.deletePart();
             }).toThrow('Couldn\'t delete any part, no part name is specified!');
           });
         });
@@ -273,7 +273,7 @@ $translatePartialLoader {
         it('shouldn\'t throw an error if target part is not present', function() {
           inject(function($translatePartialLoader) {
             expect(function() {
-              $provider.delPart('part');
+              $provider.deletePart('part');
             }).not.toThrow();
           });
         });
@@ -281,7 +281,7 @@ $translatePartialLoader {
         it('shouldn\'t broadcast any event without args', function() {
           inject(function($translatePartialLoader, $rootScope) {
             spyOn($rootScope, '$broadcast');
-            try { $provider.delPart(); } catch (e) {}
+            try { $provider.deletePart(); } catch (e) {}
             expect($rootScope.$broadcast).not.toHaveBeenCalled();
           });
         });
@@ -289,7 +289,7 @@ $translatePartialLoader {
         it('shouldn\'t broadcast any event with args', function() {
           inject(function($translatePartialLoader, $rootScope) {
             spyOn($rootScope, '$broadcast');
-            $provider.delPart('part');
+            $provider.deletePart('part');
             expect($rootScope.$broadcast).not.toHaveBeenCalled();
           });
         });
@@ -297,7 +297,7 @@ $translatePartialLoader {
         it('should make target part not active if second arg is not passed', function() {
           inject(function($translatePartialLoader) {
             $provider.addPart('part');
-            $provider.delPart('part');
+            $provider.deletePart('part');
             expect($provider.isPartPresent('part')).toEqual(true);
             expect($provider.isPartActive('part')).toEqual(false);
           });
@@ -306,7 +306,7 @@ $translatePartialLoader {
         it('should make target part not active if second arg is false', function() {
           inject(function($translatePartialLoader) {
             $provider.addPart('part');
-            $provider.delPart('part', false);
+            $provider.deletePart('part', false);
             expect($provider.isPartPresent('part')).toEqual(true);
             expect($provider.isPartActive('part')).toEqual(false);
           });
@@ -315,7 +315,7 @@ $translatePartialLoader {
         it('should delete target part if second arg is true', function() {
           inject(function($translatePartialLoader) {
             $provider.addPart('part');
-            $provider.delPart('part', true);
+            $provider.deletePart('part', true);
             expect($provider.isPartPresent('part')).toEqual(false);
           });
         });
@@ -324,7 +324,7 @@ $translatePartialLoader {
            'and without second arg', function() {
           inject(function($translatePartialLoader) {
             $provider.addPart('part', false);
-            $provider.delPart('part');
+            $provider.deletePart('part');
             expect($provider.isPartPresent('part')).toEqual(true);
             expect($provider.isPartActive('part')).toEqual(false);
           });
@@ -334,7 +334,7 @@ $translatePartialLoader {
            'and second arg is false', function() {
           inject(function($translatePartialLoader) {
             $provider.addPart('part', false);
-            $provider.delPart('part', false);
+            $provider.deletePart('part', false);
             expect($provider.isPartPresent('part')).toEqual(true);
             expect($provider.isPartActive('part')).toEqual(false);
           });
@@ -350,7 +350,7 @@ $translatePartialLoader {
                 isActivePart2 = $provider.isPartActive('part2'),
                 isActivePart4 = $provider.isPartActive('part4');
             
-            $provider.delPart('part3');
+            $provider.deletePart('part3');
             
             expect($provider.isPartPresent('part1')).toEqual(isPresentPart1);
             expect($provider.isPartPresent('part2')).toEqual(isPresentPart2);
@@ -387,7 +387,7 @@ $translatePartialLoader {
         
         it('should return true if target part is present and not active', function() {
           inject(function($translatePartialLoader) {
-            $provider.addPart('part').delPart('part');
+            $provider.addPart('part').deletePart('part');
             expect($provider.isPartPresent('part')).toEqual(true);
           });
         });
@@ -400,7 +400,7 @@ $translatePartialLoader {
         
         it('should return false if target part was deleted', function() {
           inject(function($translatePartialLoader) {
-            $provider.addPart('part').delPart('part', true);
+            $provider.addPart('part').deletePart('part', true);
             expect($provider.isPartPresent('part')).toEqual(false);
           });
         });
@@ -444,7 +444,7 @@ $translatePartialLoader {
             $provider.isPartPresent('part');
             expect($provider.isPartActive('part')).toEqual(prev);
             
-            $provider.delPart('part');
+            $provider.deletePart('part');
             prev = $provider.isPartActive('part');
             $provider.isPartPresent('part');
             expect($provider.isPartActive('part')).toEqual(prev);
@@ -477,14 +477,14 @@ $translatePartialLoader {
         
         it('should return false if target part is present and not active', function() {
           inject(function($translatePartialLoader) {
-            $provider.addPart('part').delPart('part');
+            $provider.addPart('part').deletePart('part');
             expect($provider.isPartActive('part')).toEqual(false);
           });
         });
         
         it('should return false if target part was deleted', function() {
           inject(function($translatePartialLoader) {
-            $provider.addPart('part').delPart('part', true);
+            $provider.addPart('part').deletePart('part', true);
             expect($provider.isPartActive('part')).toEqual(false);
           });
         });
@@ -526,7 +526,7 @@ $translatePartialLoader {
             $provider.isPartActive('part');
             expect($provider.isPartPresent('part')).toEqual(prev);
             
-            $provider.delPart('part', true);
+            $provider.deletePart('part', true);
             prev = $provider.isPartPresent('part');
             $provider.isPartActive('part');
             expect($provider.isPartPresent('part')).toEqual(prev);
@@ -537,7 +537,7 @@ $translatePartialLoader {
           inject(function($translatePartialLoader) {
             $provider.addPart('part');
             expect($provider.isPartActive('part')).toEqual($provider.isPartActive('part'));
-            $provider.delPart('part');
+            $provider.deletePart('part');
             expect($provider.isPartActive('part')).toEqual($provider.isPartActive('part'));
           });
         });
@@ -778,30 +778,30 @@ $translatePartialLoader {
       });
       
       
-      describe('delPart()', function() {
+      describe('deletePart()', function() {
       
         it('should be defined', function() {
           inject(function($translatePartialLoader) {
-            expect($translatePartialLoader.delPart).toBeDefined();
+            expect($translatePartialLoader.deletePart).toBeDefined();
           });
         });
       
         it('should be a function', function() {
           inject(function($translatePartialLoader) {
-            expect(typeof $translatePartialLoader.delPart).toBe('function');
+            expect(typeof $translatePartialLoader.deletePart).toBe('function');
           });
         });
         
         it('should be chainable without args', function() {
           inject(function($translatePartialLoader) {
-            expect($translatePartialLoader.delPart()).toEqual($translatePartialLoader);
+            expect($translatePartialLoader.deletePart()).toEqual($translatePartialLoader);
           });
         });
         
         it('should throw an error without args', function() {
           inject(function($translatePartialLoader) {
             expect(function() {
-              $translatePartialLoader.delPart();
+              $translatePartialLoader.deletePart();
             }).toThrow('Couldn\'t delete any part, no part name is specified!');
           });
         });
@@ -809,7 +809,7 @@ $translatePartialLoader {
         it('shouldn\'t throw an error if target part is not present', function() {
           inject(function($translatePartialLoader) {
             expect(function() {
-              $translatePartialLoader.delPart('part');
+              $translatePartialLoader.deletePart('part');
             }).not.toThrow();
           });
         });
@@ -817,7 +817,7 @@ $translatePartialLoader {
         it('should make target part not active if second arg is not passed', function() {
           inject(function($translatePartialLoader) {
             $translatePartialLoader.addPart('part');
-            $translatePartialLoader.delPart('part');
+            $translatePartialLoader.deletePart('part');
             expect($translatePartialLoader.isPartPresent('part')).toEqual(true);
             expect($translatePartialLoader.isPartActive('part')).toEqual(false);
           });
@@ -826,7 +826,7 @@ $translatePartialLoader {
         it('should make target part not active if second arg is false', function() {
           inject(function($translatePartialLoader) {
             $translatePartialLoader.addPart('part');
-            $translatePartialLoader.delPart('part', false);
+            $translatePartialLoader.deletePart('part', false);
             expect($translatePartialLoader.isPartPresent('part')).toEqual(true);
             expect($translatePartialLoader.isPartActive('part')).toEqual(false);
           });
@@ -835,7 +835,7 @@ $translatePartialLoader {
         it('should delete target part if second arg is true', function() {
           inject(function($translatePartialLoader) {
             $translatePartialLoader.addPart('part');
-            $translatePartialLoader.delPart('part', true);
+            $translatePartialLoader.deletePart('part', true);
             expect($translatePartialLoader.isPartPresent('part')).toEqual(false);
           });
         });
@@ -844,7 +844,7 @@ $translatePartialLoader {
            'and without second arg', function() {
           inject(function($translatePartialLoader) {
             $translatePartialLoader.addPart('part', false);
-            $translatePartialLoader.delPart('part');
+            $translatePartialLoader.deletePart('part');
             expect($translatePartialLoader.isPartPresent('part')).toEqual(true);
             expect($translatePartialLoader.isPartActive('part')).toEqual(false);
           });
@@ -854,7 +854,7 @@ $translatePartialLoader {
            'and second arg is false', function() {
           inject(function($translatePartialLoader) {
             $translatePartialLoader.addPart('part', false);
-            $translatePartialLoader.delPart('part', false);
+            $translatePartialLoader.deletePart('part', false);
             expect($translatePartialLoader.isPartPresent('part')).toEqual(true);
             expect($translatePartialLoader.isPartActive('part')).toEqual(false);
           });
@@ -863,7 +863,7 @@ $translatePartialLoader {
         it('shouldn\'t broadcast any event without args', function() {
           inject(function($translatePartialLoader, $rootScope) {
             spyOn($rootScope, '$broadcast');
-            try { $translatePartialLoader.delPart(); } catch (e) {}
+            try { $translatePartialLoader.deletePart(); } catch (e) {}
             expect($rootScope.$broadcast).not.toHaveBeenCalled();
           });
         });
@@ -873,7 +873,7 @@ $translatePartialLoader {
           inject(function($translatePartialLoader, $rootScope) {
             $translatePartialLoader.addPart('part');
             spyOn($rootScope, '$broadcast');
-            $translatePartialLoader.delPart('part');
+            $translatePartialLoader.deletePart('part');
             expect($rootScope.$broadcast)
               .toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
           });
@@ -884,7 +884,7 @@ $translatePartialLoader {
           inject(function($translatePartialLoader, $rootScope) {
             $translatePartialLoader.addPart('part');
             spyOn($rootScope, '$broadcast');
-            $translatePartialLoader.delPart('part', true);
+            $translatePartialLoader.deletePart('part', true);
             expect($rootScope.$broadcast)
               .toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
           });
@@ -894,7 +894,7 @@ $translatePartialLoader {
            'if a target part is not present', function() {
           inject(function($translatePartialLoader, $rootScope) {
             spyOn($rootScope, '$broadcast');
-            $translatePartialLoader.delPart('part');
+            $translatePartialLoader.deletePart('part');
             expect($rootScope.$broadcast)
               .not.toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
           });
@@ -910,7 +910,7 @@ $translatePartialLoader {
                 isActivePart2 = $translatePartialLoader.isPartActive('part2'),
                 isActivePart4 = $translatePartialLoader.isPartActive('part4');
             
-            $translatePartialLoader.delPart('part3');
+            $translatePartialLoader.deletePart('part3');
             
             expect($translatePartialLoader.isPartPresent('part1')).toEqual(isPresentPart1);
             expect($translatePartialLoader.isPartPresent('part2')).toEqual(isPresentPart2);
@@ -947,7 +947,7 @@ $translatePartialLoader {
         
         it('should return true if target part is present and not active', function() {
           inject(function($translatePartialLoader) {
-            $translatePartialLoader.addPart('part').delPart('part');
+            $translatePartialLoader.addPart('part').deletePart('part');
             expect($translatePartialLoader.isPartPresent('part')).toEqual(true);
           });
         });
@@ -960,7 +960,7 @@ $translatePartialLoader {
         
         it('should return false if target part was deleted', function() {
           inject(function($translatePartialLoader) {
-            $translatePartialLoader.addPart('part').delPart('part', true);
+            $translatePartialLoader.addPart('part').deletePart('part', true);
             expect($translatePartialLoader.isPartPresent('part')).toEqual(false);
           });
         });
@@ -1008,7 +1008,7 @@ $translatePartialLoader {
             $translatePartialLoader.isPartPresent('part');
             expect($translatePartialLoader.isPartActive('part')).toEqual(prev);
             
-            $translatePartialLoader.delPart('part');
+            $translatePartialLoader.deletePart('part');
             prev = $translatePartialLoader.isPartActive('part');
             $translatePartialLoader.isPartPresent('part');
             expect($translatePartialLoader.isPartActive('part')).toEqual(prev);
@@ -1041,14 +1041,14 @@ $translatePartialLoader {
         
         it('should return false if target part is present and not active', function() {
           inject(function($translatePartialLoader) {
-            $translatePartialLoader.addPart('part').delPart('part');
+            $translatePartialLoader.addPart('part').deletePart('part');
             expect($translatePartialLoader.isPartActive('part')).toEqual(false);
           });
         });
         
         it('should return false if target part was deleted', function() {
           inject(function($translatePartialLoader) {
-            $translatePartialLoader.addPart('part').delPart('part', true);
+            $translatePartialLoader.addPart('part').deletePart('part', true);
             expect($translatePartialLoader.isPartActive('part')).toEqual(false);
           });
         });
@@ -1090,7 +1090,7 @@ $translatePartialLoader {
             $translatePartialLoader.isPartActive('part');
             expect($translatePartialLoader.isPartPresent('part')).toEqual(prev);
             
-            $translatePartialLoader.delPart('part', true);
+            $translatePartialLoader.deletePart('part', true);
             prev = $translatePartialLoader.isPartPresent('part');
             $translatePartialLoader.isPartActive('part');
             expect($translatePartialLoader.isPartPresent('part')).toEqual(prev);
@@ -1104,7 +1104,7 @@ $translatePartialLoader {
             expect($translatePartialLoader.isPartActive('part'))
               .toEqual($translatePartialLoader.isPartActive('part'));
               
-            $translatePartialLoader.delPart('part');
+            $translatePartialLoader.deletePart('part');
             
             expect($translatePartialLoader.isPartActive('part'))
               .toEqual($translatePartialLoader.isPartActive('part'));
