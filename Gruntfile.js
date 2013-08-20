@@ -153,6 +153,7 @@ module.exports = function (grunt) {
         html5Mode: false,
         startPage: '/guide',
         scripts: [
+          'http://getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js',
           'http://rawgithub.com/SlexAxton/messageformat.js/master/messageformat.js',
           'http://rawgithub.com/SlexAxton/messageformat.js/master/locale/de.js',
           'http://code.angularjs.org/1.1.5/angular.min.js',

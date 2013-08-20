@@ -5,7 +5,7 @@ p {
 }
 
 a {
-  color: rgb(20, 125, 160);
+  color: #5caed6;
 }
 
 .content h2,
@@ -64,8 +64,12 @@ h2, h1 {
 
 .nav-list > .active > a,
 .nav-list > .active > a:hover {
-  background: #005580;
+  background: #5caed6;;
   color: #fff;
+}
+
+.nav-list > li > a {
+  padding: 6px 15px;
 }
 
 .nav-list > .active > a:focus {
@@ -226,4 +230,35 @@ form.well {
   box-shadow: none;
   border-radius: 0;
   padding-top: 2px;
+}
+
+.dropdown-menu {
+  box-shadow: none;
+  border-radius: 0;
+  margin: -4px 0 0;
+}
+
+.navbar .pull-right > li > .dropdown-menu:before,
+.navbar .nav > li > .dropdown-menu.pull-right:before {
+  right: 22px;
+}
+
+.navbar .pull-right > li > .dropdown-menu:after,
+.navbar .nav > li > .dropdown-menu.pull-right:after {
+  right: 23px;
+}
+
+.dropdown-menu > li > a {
+  padding: 10px 20px;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-image: none;
+  background-color: #5caed6;
+}
+
+.dropdown-menu > li > a > img {
+  margin-right: 8px;
+  vertical-align: -35%;
 }

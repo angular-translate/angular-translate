@@ -1,3 +1,12 @@
+<script>
+function langLink(locale) {
+  return [
+    'http://' + window.location.host,
+    window.location.pathname.substr(0, window.location.pathname.length-3) + locale + '/' + window.location.hash
+  ].join('');
+}
+</script>
+
 <ul class="nav pull-right">
   <li>
   <a href="http://pascalprecht.github.io/angular-translate/plato"><i class="icon-signal"></i> Plato Report</a>
@@ -6,5 +15,14 @@
     <a href="http://github.com/PascalPrecht/angular-translate">
       <i class="icon-github-sign"></i> View on GitHub
     </a>
+  </li>
+  <li class="dropdown">
+  <a href="#" class="dropdown-toggle"><i class="icon-align-justify"></i> Language</a>
+    <ul class="dropdown-menu">
+      <li>
+      <a href="javascript:window.location = langLink('en');"><img src="img/flags/en.png"> English</a>
+      <a href="javascript:window.location = langLink('ru');"><img src="img/flags/ru.png"> Russian</a>
+      </li>
+    </ul>
   </li>
 </ul>
