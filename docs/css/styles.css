@@ -98,10 +98,26 @@ h2, h1 {
   margin-top: 50px;
 }
 
-.masthead .container .btn {
+.btn, button {
   background: #5caed6;
-  padding: 10px 20px;
   border: 0;
+  color: #fff;
+  box-shadow: none;
+  text-shadow: none;
+}
+.btn:hover,
+button:hover {
+  background: rgb(20, 125, 160);
+  color: #fff;
+  box-shadow: none;
+}
+
+.btn-group.open .btn-primary.dropdown-toggle {
+  background: rgb(20, 125, 160);
+}
+
+.masthead .container .btn {
+  padding: 10px 20px;
 }
 
 .masthead .container .btn:hover {
