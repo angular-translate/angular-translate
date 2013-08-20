@@ -1,7 +1,14 @@
-# angular-translate [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/angular-translate) [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/angular-translate) [![Dependency Status](https://gemnasium.com/PascalPrecht/angular-translate.png)](https://gemnasium.com/PascalPrecht/angular-translate)
+# [![angular-translate](https://raw.github.com/PascalPrecht/angular-translate/canary/identity/logo/angular-translate-alternative/angular-translate_alternative_medium2.png)](http://pascalprecht.github.io/angular-translate)
 
-> i18n in your AngularJS apps
+> i18n for your Angular app, made easy!
 
+### Status
+| Branch        | Status         |
+| ------------- |:-------------:|
+| master        | [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/angular-translate) |
+| canary        |[![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/angular-translate)     |
+
+### Links
 * Website [http://pascalprecht.github.io/angular-translate/](http://pascalprecht.github.io/angular-translate/)
 * API Reference [http://pascalprecht.github.io/angular-translate/#/api](http://pascalprecht.github.io/angular-translate/#/api)
 * Plato report [http://pascalprecht.github.io/angular-translate/plato](http://pascalprecht.github.io/angular-translate/plato)
