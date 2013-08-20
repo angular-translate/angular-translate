@@ -95,6 +95,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
       angular.extend($translationTable[langKey], flatObject(translationTable));
     }
+    return this;
   };
 
   var flatObject = function (data, path, result) {
@@ -133,6 +134,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.addInterpolation = function (factory) {
     $interpolatorFactories.push(factory);
+    return this;
   };
 
   /**
@@ -146,7 +148,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    */
   this.useMessageFormatInterpolation = function () {
-    this.useInterpolation('$translateMessageFormatInterpolation');
+    return this.useInterpolation('$translateMessageFormatInterpolation');
   };
 
   /**
@@ -163,6 +165,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useInterpolation = function (factory) {
     $interpolationFactory = factory;
+    return this;
   };
 
  /**
@@ -181,6 +184,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   this.preferredLanguage = function(langKey) {
     if (langKey) {
       $preferredLanguage = langKey;
+      return this;
     } else {
       return $preferredLanguage;
     }
@@ -208,6 +212,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   this.translationNotFoundIndicator = function (indicator) {
     this.translationNotFoundIndicatorLeft(indicator);
     this.translationNotFoundIndicatorRight(indicator);
+    return this;
   };
 
   /**
@@ -226,6 +231,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return $notFoundIndicatorLeft;
     }
     $notFoundIndicatorLeft = indicator;
+    return this;
   };
 
   /**
@@ -244,6 +250,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return $notFoundIndicatorRight;
     }
     $notFoundIndicatorRight = indicator;
+    return this;
   };
 
    /**
@@ -262,6 +269,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   this.fallbackLanguage = function(langKey) {
     if (langKey) {
       $fallbackLanguage = langKey;
+      return this;
     } else {
       return $fallbackLanguage;
     }
@@ -290,6 +298,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
       }
       $uses = langKey;
+      return this;
     } else {
       return $uses;
     }
@@ -329,7 +338,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @param {string} url Url
    */
   this.useUrlLoader = function (url) {
-    this.useLoader('$translateUrlLoader', { url: url });
+    return this.useLoader('$translateUrlLoader', { url: url });
   };
 
   /**
@@ -343,7 +352,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @param {Object=} options Optional configuration object
    */
   this.useStaticFilesLoader = function (options) {
-    this.useLoader('$translateStaticFilesLoader', options);
+    return this.useLoader('$translateStaticFilesLoader', options);
   };
 
   /**
@@ -360,6 +369,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   this.useLoader = function (loaderFactory, options) {
     $loaderFactory = loaderFactory;
     $loaderOptions = options || {};
+    return this;
   };
 
   /**
@@ -372,7 +382,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    */
   this.useLocalStorage = function () {
-    this.useStorage('$translateLocalStorage');
+    return this.useStorage('$translateLocalStorage');
   };
 
   /**
@@ -385,7 +395,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    */
   this.useCookieStorage = function () {
-    this.useStorage('$translateCookieStorage');
+    return this.useStorage('$translateCookieStorage');
   };
 
   /**
@@ -399,6 +409,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useStorage = function (storageFactory) {
     $storageFactory = storageFactory;
+    return this;
   };
 
   /**
@@ -416,6 +427,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return prefix;
     }
     $storagePrefix = prefix;
+    return this;
   };
 
   /**
@@ -431,7 +443,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    */
   this.useMissingTranslationHandlerLog = function () {
-    this.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
+    return this.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
   };
 
   /**
@@ -462,6 +474,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useMissingTranslationHandler = function (factory) {
     $missingTranslationHandlerFactory = factory;
+    return this;
   };
 
   /**
