@@ -13,7 +13,7 @@ a {
 .content h4,
 .content h5 {
   color: #555;
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 h2 {
@@ -27,7 +27,7 @@ h1 {
 
 h2, h1 {
   color: rgb(102, 102, 102);
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 .hint {
