@@ -310,152 +310,6 @@ describe('pascalprecht.translate', function() {
       
       });
       
-      
-      describe('urlTemplate()', function() {
-      
-        it('should be defined', function() {
-          inject(function($translatePartialLoader) {
-            expect($provider.useLoadFailureHandler).toBeDefined();
-          });
-        });
-      
-        it('should be a function', function() {
-          inject(function($translatePartialLoader) {
-            expect(typeof $provider.useLoadFailureHandler).toBe('function');
-          });
-        });
-        
-        it('should throw an error if a given arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
-            expect(function() { $provider.useLoadFailureHandler(function(){}); }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(false);        }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(null);         }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(NaN);          }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler([]);           }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler({});           }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(2);            }).toThrow(message);
-          });
-        });
-        
-        it('should be chainable if called with args', function() {
-          inject(function($translatePartialLoader) {
-            expect($provider.useLoadFailureHandler('handler')).toEqual($provider);
-          });
-        });
-        
-        it('should return a current url template if called without args', function() {
-          inject(function($translatePartialLoader) {
-            expect(function() {
-              $provider.useLoadFailureHandler();
-            }).toThrow('Couldn\'t register an error handler, no service name is specified!');
-          });
-        });
-        
-        it('shouldn\'t broadcast any event if called without args', function() {
-          inject(function($translatePartialLoader, $rootScope) {
-            spyOn($rootScope, '$broadcast');
-            try { $provider.useLoadFailureHandler(); } catch (e) {}
-            expect($rootScope.$broadcast).not.toHaveBeenCalled();
-          });
-        });
-        
-        it('shouldn\'t broadcast any event if called with args', function() {
-          inject(function($translatePartialLoader, $rootScope) {
-            spyOn($rootScope, '$broadcast');
-            $provider.useLoadFailureHandler('handler');
-            expect($rootScope.$broadcast).not.toHaveBeenCalled();
-          });
-        });
-        
-        it('shouldn\'t affect on parts', function() {
-          inject(function($translatePartialLoader) {
-            $provider.addPart('part1');
-            var isPart1 = $provider.isPartAvailable('part1'),
-                isPart2 = $provider.isPartAvailable('part2');
-            
-            $provider.useLoadFailureHandler('handler');
-            
-            expect($provider.isPartAvailable('part1')).toEqual(isPart1);
-            expect($provider.isPartAvailable('part2')).toEqual(isPart2);
-          });
-        });
-      
-      });
-      
-      
-      describe('useLoadFailureHandler()', function() {
-      
-        it('should be defined', function() {
-          inject(function($translatePartialLoader) {
-            expect($provider.useLoadFailureHandler).toBeDefined();
-          });
-        });
-      
-        it('should be a function', function() {
-          inject(function($translatePartialLoader) {
-            expect(typeof $provider.useLoadFailureHandler).toBe('function');
-          });
-        });
-        
-        it('should throw an error if called without args', function() {
-          inject(function($translatePartialLoader) {
-            expect(function() {
-              $provider.useLoadFailureHandler();
-            }).toThrow('Couldn\'t register an error handler, no service name is specified!');
-          });
-        });
-        
-        it('should throw an error if a given arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
-            expect(function() { $provider.useLoadFailureHandler(function(){}); }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(false);        }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(null);         }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(NaN);          }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler([]);           }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler({});           }).toThrow(message);
-            expect(function() { $provider.useLoadFailureHandler(2);            }).toThrow(message);
-          });
-        });
-        
-        it('should be chainable if called with args', function() {
-          inject(function($translatePartialLoader) {
-            expect($provider.useLoadFailureHandler('handler')).toEqual($provider);
-          });
-        });
-        
-        it('shouldn\'t broadcast any event if called without args', function() {
-          inject(function($translatePartialLoader, $rootScope) {
-            spyOn($rootScope, '$broadcast');
-            try { $provider.useLoadFailureHandler(); } catch (e) {}
-            expect($rootScope.$broadcast).not.toHaveBeenCalled();
-          });
-        });
-        
-        it('shouldn\'t broadcast any event if called with args', function() {
-          inject(function($translatePartialLoader, $rootScope) {
-            spyOn($rootScope, '$broadcast');
-            $provider.useLoadFailureHandler('handler');
-            expect($rootScope.$broadcast).not.toHaveBeenCalled();
-          });
-        });
-        
-        it('shouldn\'t affect on parts', function() {
-          inject(function($translatePartialLoader) {
-            $provider.addPart('part1');
-            var isPart1 = $provider.isPartAvailable('part1'),
-                isPart2 = $provider.isPartAvailable('part2');
-            
-            $provider.useLoadFailureHandler('handler');
-            
-            expect($provider.isPartAvailable('part1')).toEqual(isPart1);
-            expect($provider.isPartAvailable('part2')).toEqual(isPart2);
-          });
-        });
-        
-      });
-      
     });
     
     
@@ -816,47 +670,7 @@ describe('pascalprecht.translate', function() {
         // URL
         describe('', function() {
         
-          it('should parse url template if it is passed through an options object', function() {
-            inject(function($translatePartialLoader, $httpBackend) {
-              $httpBackend.expectGET('/locales/part-en.json').respond(200, '{}');
-              
-              $translatePartialLoader.addPart('part');
-              $translatePartialLoader({
-                key : 'en',
-                urlTemplate : '/locales/{part}-{lang}.json'
-              });
-              
-              $httpBackend.flush();
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
-            });
-          });
-          
-          it('should parse url template if it passed through a provider', function() {
-            module(function($translatePartialLoaderProvider) {
-              $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
-            });
-            
-            inject(function($translatePartialLoader, $httpBackend) {
-              $httpBackend.expectGET('/locales/part-en.json').respond(200, '{}');
-              
-              $translatePartialLoader.addPart('part');
-              $translatePartialLoader({
-                key : 'en'
-              });
-              
-              $httpBackend.flush();
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
-            });
-          });
-          
-          it('should parse url template from an options object, if it is passed both through ' +
-             'a provider and through the options object', function() {
-            module(function($translatePartialLoaderProvider) {
-              $translatePartialLoaderProvider.urlTemplate('/locales/{lang}-{part}.json');
-            });
-            
+          it('should correctly parse url template', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.expectGET('/locales/part-en.json').respond(200, '{}');
               
@@ -943,32 +757,49 @@ describe('pascalprecht.translate', function() {
           });
           
           it('should throw an error if a key is not a string', function() {
-            module(function($translatePartialLoaderProvider){
-              $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
-            });
-            
             inject(function($translatePartialLoader) {
               var message = 'Unable to load data, a key is not a string.';
               expect(function() { 
-                $translatePartialLoader({ key : function(){} });
+                $translatePartialLoader({ 
+                  key : function(){},
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
               expect(function() { 
-                $translatePartialLoader({ key : false });
+                $translatePartialLoader({ 
+                  key : false,
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
               expect(function() { 
-                $translatePartialLoader({ key : null });
+                $translatePartialLoader({
+                  key : null,
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
               expect(function() { 
-                $translatePartialLoader({ key : NaN });
+                $translatePartialLoader({
+                  key : NaN,
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
               expect(function() { 
-                $translatePartialLoader({ key : [] });
+                $translatePartialLoader({
+                  key : [],
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
               expect(function() {
-                $translatePartialLoader({ key : {} });
+                $translatePartialLoader({
+                  key : {},
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
               expect(function() { 
-                $translatePartialLoader({ key : 2 });
+                $translatePartialLoader({
+                  key : 2,
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
               }).toThrow(message);
             });
           });
@@ -1043,19 +874,24 @@ describe('pascalprecht.translate', function() {
           });
           
           it('shouldn\'t load the same part twice for one language', function() {
-            module(function($httpProvider, $translatePartialLoaderProvider) {
+            module(function($httpProvider) {
               $httpProvider.interceptors.push(CounterHttpInterceptor);
-              $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.expectGET('/locales/part-en.json').respond(200, '{}');
               
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
@@ -1067,21 +903,26 @@ describe('pascalprecht.translate', function() {
           
           it('shouldn\'t load a part if it was loaded, deleted (second arg is false or not ' +
              ' passed) and added again', function() {
-            module(function($httpProvider, $translatePartialLoaderProvider) {
+            module(function($httpProvider) {
               $httpProvider.interceptors.push(CounterHttpInterceptor);
-              $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part-en.json').respond(200, '{}');
               
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
               $translatePartialLoader.deletePart('part');
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
@@ -1093,21 +934,26 @@ describe('pascalprecht.translate', function() {
           
           it('should load a part if it was loaded, deleted (second arg is true) and added again', 
           function() {
-            module(function($httpProvider, $translatePartialLoaderProvider) {
+            module(function($httpProvider) {
               $httpProvider.interceptors.push(CounterHttpInterceptor);
-              $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part-en.json').respond(200, '{}');
               
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
               $translatePartialLoader.deletePart('part', true);
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
@@ -1118,9 +964,8 @@ describe('pascalprecht.translate', function() {
           });
           
           it('should load the same part for different languages', function() {
-            module(function($httpProvider, $translatePartialLoaderProvider) {
+            module(function($httpProvider) {
               $httpProvider.interceptors.push(CounterHttpInterceptor);
-              $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
@@ -1128,9 +973,15 @@ describe('pascalprecht.translate', function() {
               $httpBackend.expectGET('/locales/part-ne.json').respond(200, '{}');
               
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' });
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
-              $translatePartialLoader({ key : 'ne' });
+              $translatePartialLoader({ 
+                key : 'ne',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              });
               $httpBackend.flush();
               
               expect(counter).toEqual(2);
@@ -1221,11 +1072,6 @@ describe('pascalprecht.translate', function() {
         // Error handling
         describe('when error occurred', function() {
           
-          beforeEach(module(function($translatePartialLoaderProvider) {
-            $translatePartialLoaderProvider.urlTemplate('/locales/{part}-{lang}.json');
-          }));
-          
-          
           it('should throw an error if a loadFailureHandler is not a string or undefined',
           function() {
             inject(function($translatePartialLoader) {
@@ -1233,42 +1079,49 @@ describe('pascalprecht.translate', function() {
               expect(function() { 
                 $translatePartialLoader({
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : function(){} 
                 });
               }).toThrow(message);
               expect(function() { 
                 $translatePartialLoader({ 
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : false
                 });
               }).toThrow(message);
               expect(function() { 
                 $translatePartialLoader({
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : null
                 });
               }).toThrow(message);
               expect(function() { 
                 $translatePartialLoader({
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : NaN
                 });
               }).toThrow(message);
               expect(function() { 
                 $translatePartialLoader({
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : []
                 });
               }).toThrow(message);
               expect(function() {
                 $translatePartialLoader({
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : {}
                 });
               }).toThrow(message);
               expect(function() { 
                 $translatePartialLoader({
                   key : 'k',
+                  urlTemplate : '/locales/{part}-{lang}.json',
                   loadFailureHandler : 2
                 });
               }).toThrow(message);
@@ -1281,7 +1134,10 @@ describe('pascalprecht.translate', function() {
               var promise = undefined;
               
               $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' }).then(
+              $translatePartialLoader({ 
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              }).then(
                 function() { promise = 'resolved'; },
                 function() { promise = 'rejected'; }
               );
@@ -1294,31 +1150,7 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should use a handler passed to provider', function() {
-            module(function($translatePartialLoaderProvider) {
-              $translatePartialLoaderProvider.useLoadFailureHandler('ResolveErrorHandler');
-            });
-            
-            inject(function($translatePartialLoader, $httpBackend) {
-              $httpBackend.whenGET('/locales/part-en.json').respond(404, 'File not found');
-              var promise = undefined;
-              
-              $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ key : 'en' }).then(
-                function() { promise = 'resolved'; },
-                function() { promise = 'rejected'; }
-              );
-              $httpBackend.flush();
-              
-              expect(resolveHandlerCounter).toEqual(1);
-              expect(promise).toEqual('resolved');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
-            });
-          });
-          
-          it('should use a handler passed to options object', function() {
+          it('should use an error handler if it is specified', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part-en.json').respond(404, 'File not found');
               var promise = undefined;
@@ -1326,6 +1158,7 @@ describe('pascalprecht.translate', function() {
               $translatePartialLoader.addPart('part');
               $translatePartialLoader({ 
                 key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json',
                 loadFailureHandler : 'ResolveErrorHandler'
               }).then(
                 function() { promise = 'resolved'; },
@@ -1334,34 +1167,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(resolveHandlerCounter).toEqual(1);
-              expect(promise).toEqual('resolved');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
-            });
-          });
-          
-          it('should prefer a handler passed to options object', function() {
-            module(function($translatePartialLoaderProvider) {
-              $translatePartialLoaderProvider.useLoadFailureHandler('RejectErrorHandler');
-            });
-            
-            inject(function($translatePartialLoader, $httpBackend) {
-              $httpBackend.whenGET('/locales/part-en.json').respond(404, 'File not found');
-              var promise = undefined;
-              
-              $translatePartialLoader.addPart('part');
-              $translatePartialLoader({ 
-                key : 'en',
-                loadFailureHandler : 'ResolveErrorHandler'
-              }).then(
-                function() { promise = 'resolved'; },
-                function() { promise = 'rejected'; }
-              );
-              $httpBackend.flush();
-              
-              expect(resolveHandlerCounter).toEqual(1);
-              expect(rejectHandlerCounter).toEqual(0);
               expect(promise).toEqual('resolved');
               
               $httpBackend.verifyNoOutstandingExpectation();
@@ -1380,6 +1185,7 @@ describe('pascalprecht.translate', function() {
               $translatePartialLoader.addPart('part2');
               $translatePartialLoader({ 
                 key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json',
                 loadFailureHandler : 'RejectErrorHandler'
               }).then(
                 function() { promise = 'resolved'; },
@@ -1407,6 +1213,7 @@ describe('pascalprecht.translate', function() {
               $translatePartialLoader.addPart('part2');
               $translatePartialLoader({ 
                 key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json',
                 loadFailureHandler : 'ResolveErrorHandler'
               }).then(
                 function() { promise = 'resolved'; },
@@ -1433,6 +1240,7 @@ describe('pascalprecht.translate', function() {
               $translatePartialLoader.addPart('part2');
               $translatePartialLoader({
                 key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json',
                 loadFailureHandler : 'ResolveErrorHandler'
               }).then(
                 function(_data) { data = _data; },
