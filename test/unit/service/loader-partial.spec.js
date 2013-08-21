@@ -30,7 +30,7 @@ describe('pascalprecht.translate', function() {
         return function(partName, language) {
           ++resolveHandlerCounter;
           var deferred = $q.defer();
-          deferred.resolve('{"foo":"foo"}');
+          deferred.resolve({ foo : 'foo' });
           return deferred.promise;
         };
       });
@@ -810,6 +810,11 @@ describe('pascalprecht.translate', function() {
         // Requests
         describe('', function() {
         
+          afterEach(inject(function ($httpBackend) {
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+          }));
+        
           it('should make 1 request to get 1 part', function() {
             module(function($httpProvider) {
               $httpProvider.interceptors.push(CounterHttpInterceptor);
@@ -826,9 +831,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -850,9 +852,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush(2);
               
               expect(counter).toEqual(2);
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -895,9 +894,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -926,9 +922,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -957,9 +950,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(counter).toEqual(1);
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -969,8 +959,10 @@ describe('pascalprecht.translate', function() {
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
-              $httpBackend.expectGET('/locales/part-en.json').respond(200, '{}');
-              $httpBackend.expectGET('/locales/part-ne.json').respond(200, '{}');
+              $httpBackend.expectGET('/locales/part-en.json').respond(200, '{"lang":"en"}');
+              $httpBackend.expectGET('/locales/part-ne.json').respond(200, '{"lang":"ne"}');
+              
+              var table = {};
               
               $translatePartialLoader.addPart('part');
               $translatePartialLoader({ 
@@ -978,16 +970,16 @@ describe('pascalprecht.translate', function() {
                 urlTemplate : '/locales/{part}-{lang}.json'
               });
               $httpBackend.flush();
+              
               $translatePartialLoader({ 
                 key : 'ne',
                 urlTemplate : '/locales/{part}-{lang}.json'
+              }).then(function(data) {
+                angular.extend(table, data);
               });
               $httpBackend.flush();
               
-              expect(counter).toEqual(2);
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
+              expect(table).toEqual({ lang : 'ne' });
             });
           });
           
@@ -996,6 +988,11 @@ describe('pascalprecht.translate', function() {
 
         // Return value
         describe('', function() {
+        
+          afterEach(inject(function ($httpBackend) {
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+          }));
         
           it('should return a promise', function() {
             inject(function($translatePartialLoader, $httpBackend) {
@@ -1011,8 +1008,6 @@ describe('pascalprecht.translate', function() {
               expect(typeof promise.then).toBe('function');
               
               $httpBackend.flush();
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -1037,9 +1032,6 @@ describe('pascalprecht.translate', function() {
               expect(table.foo).toEqual('foo');
               expect(table.bar).toBeDefined();
               expect(table.bar).toEqual('bar');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -1047,7 +1039,7 @@ describe('pascalprecht.translate', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.expectGET('/locales/part-en.json').respond(404, 'File not found');
               
-              var key = undefined;
+              var key;
               
               $translatePartialLoader.addPart('part');
               $translatePartialLoader({
@@ -1060,9 +1052,6 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(key).toEqual('en');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -1071,6 +1060,11 @@ describe('pascalprecht.translate', function() {
         
         // Error handling
         describe('when error occurred', function() {
+          
+          afterEach(inject(function ($httpBackend) {
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+          }));
           
           it('should throw an error if a loadFailureHandler is not a string or undefined',
           function() {
@@ -1131,7 +1125,7 @@ describe('pascalprecht.translate', function() {
           it('should reject a resulting promise by default', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part-en.json').respond(404, 'File not found');
-              var promise = undefined;
+              var promise;
               
               $translatePartialLoader.addPart('part');
               $translatePartialLoader({ 
@@ -1144,16 +1138,13 @@ describe('pascalprecht.translate', function() {
               $httpBackend.flush();
               
               expect(promise).toEqual('rejected');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
           it('should use an error handler if it is specified', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part-en.json').respond(404, 'File not found');
-              var promise = undefined;
+              var promise;
               
               $translatePartialLoader.addPart('part');
               $translatePartialLoader({ 
@@ -1168,9 +1159,6 @@ describe('pascalprecht.translate', function() {
               
               expect(resolveHandlerCounter).toEqual(1);
               expect(promise).toEqual('resolved');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -1179,7 +1167,7 @@ describe('pascalprecht.translate', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part1-en.json').respond(200, '{"bar":"bar"}');
               $httpBackend.whenGET('/locales/part2-en.json').respond(404, 'File not found');
-              var promise = undefined;
+              var promise;
               
               $translatePartialLoader.addPart('part1');
               $translatePartialLoader.addPart('part2');
@@ -1193,12 +1181,8 @@ describe('pascalprecht.translate', function() {
               );
               $httpBackend.flush();
               
-              expect(resolveHandlerCounter).toEqual(1);
-              expect(rejectHandlerCounter).toEqual(0);
+              expect(rejectHandlerCounter).toEqual(1);
               expect(promise).toEqual('rejected');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -1207,7 +1191,7 @@ describe('pascalprecht.translate', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.whenGET('/locales/part1-en.json').respond(404, 'File not found');
               $httpBackend.whenGET('/locales/part2-en.json').respond(404, 'File not found');
-              var promise = undefined;
+              var promise;
               
               $translatePartialLoader.addPart('part1');
               $translatePartialLoader.addPart('part2');
@@ -1223,9 +1207,6 @@ describe('pascalprecht.translate', function() {
               
               expect(resolveHandlerCounter).toEqual(2);
               expect(promise).toEqual('resolved');
-              
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
             });
           });
           
@@ -1253,9 +1234,112 @@ describe('pascalprecht.translate', function() {
                 bar : 'bar',
                 foo : 'foo'
               });
+            });
+          });
+          
+        });
+        
+        
+        // $translate service cooperation
+        describe('in $translate service', function() {
+        
+          function SetupHttpBackend() {
+            inject(function ($httpBackend) {
+              $httpBackend.whenGET('/locales/foo-en.json').respond({ foo : 'foo_en' });
+              $httpBackend.whenGET('/locales/bar-en.json').respond({ bar : 'bar_en' });
+              $httpBackend.whenGET('/locales/foo-ne.json').respond(404, 'File not fould!');
+              $httpBackend.whenGET('/locales/bar-ne.json').respond({ bar : 'bar_ne' });
               
-              $httpBackend.verifyNoOutstandingExpectation();
-              $httpBackend.verifyNoOutstandingRequest();
+            });
+          }
+          
+          beforeEach(module(function($translateProvider) {
+            $translateProvider.useLoader('$translatePartialLoader', {
+              urlTemplate : '/locales/{part}-{lang}.json',
+              loadFailureHandler : 'ResolveErrorHandler'
+            });
+          }));
+          
+          afterEach(inject(function ($httpBackend) {
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+          }));
+    
+    
+          it('shouldn\'t throw any error if configured correctly', function() {
+            SetupHttpBackend();
+            
+            inject(function($translate, $translatePartialLoader, $httpBackend) {
+              $translatePartialLoader.addPart('foo');
+              expect(function() {
+                $translate.uses('en');
+                $httpBackend.flush();
+              }).not.toThrow();
+            });
+            
+          });
+          
+          it('should fetch urls of all parts', function() {
+            SetupHttpBackend();
+            
+            inject(function($translate, $translatePartialLoader, $httpBackend) {
+              $httpBackend.expectGET('/locales/foo-en.json');
+              $httpBackend.expectGET('/locales/bar-en.json');
+              
+              $translatePartialLoader.addPart('foo');
+              $translatePartialLoader.addPart('bar');
+              $translate.uses('en');
+              $httpBackend.flush();
+            });
+          });
+          
+          it('should merge data before resolving a promise', function() {
+            SetupHttpBackend();
+            
+            inject(function($translate, $translatePartialLoader, $httpBackend) {
+              $httpBackend.expectGET('/locales/foo-en.json');
+              $httpBackend.expectGET('/locales/bar-en.json');
+              
+              $translatePartialLoader.addPart('foo');
+              $translatePartialLoader.addPart('bar');
+              $translate.uses('en');
+              $httpBackend.flush();
+              
+              expect($translate('foo')).toEqual('foo_en');
+              expect($translate('bar')).toEqual('bar_en');
+            });
+          });
+          
+          it('should use an error handler if possible when loading is failed', function() {
+            SetupHttpBackend();
+            
+            inject(function($translate, $translatePartialLoader, $httpBackend) {
+              $httpBackend.expectGET('/locales/foo-ne.json');
+              $httpBackend.expectGET('/locales/bar-ne.json');
+              
+              $translatePartialLoader.addPart('foo');
+              $translatePartialLoader.addPart('bar');
+              $translate.uses('ne');
+              $httpBackend.flush();
+              
+              expect(resolveHandlerCounter).toEqual(1);
+            });
+          });
+          
+          it('should use data from an error handler if possible when loading is failed', function(){
+            SetupHttpBackend();
+            
+            inject(function($translate, $translatePartialLoader, $httpBackend) {
+              $httpBackend.expectGET('/locales/foo-ne.json');
+              $httpBackend.expectGET('/locales/bar-ne.json');
+              
+              $translatePartialLoader.addPart('foo');
+              $translatePartialLoader.addPart('bar');
+              $translate.uses('ne');
+              $httpBackend.flush();
+              
+              expect($translate('foo')).toEqual('foo');
+              expect($translate('bar')).toEqual('bar_ne');
             });
           });
           
