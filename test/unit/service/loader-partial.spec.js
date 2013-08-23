@@ -367,7 +367,7 @@ describe('pascalprecht.translate', function() {
         
         it('should be chainable if called with args', function() {
           inject(function($translatePartialLoader) {
-            expect($translatePartialLoader.addPart('part')).toEqual($provider);
+            expect($translatePartialLoader.addPart('part')).toEqual($translatePartialLoader);
           });
         });
         
@@ -441,7 +441,7 @@ describe('pascalprecht.translate', function() {
         
         it('shouldn\'t affect on other parts', function() {
           inject(function($translatePartialLoader) {
-            $provider.addPart('part1');
+            $translatePartialLoader.addPart('part1');
             var isPart1 = $translatePartialLoader.isPartAvailable('part1'),
                 isPart2 = $translatePartialLoader.isPartAvailable('part2');
             
@@ -509,7 +509,7 @@ describe('pascalprecht.translate', function() {
       
         it('should be chainable if called with args', function() {
           inject(function($translatePartialLoader) {
-            expect($translatePartialLoader.deletePart('part')).toEqual($provider);
+            expect($translatePartialLoader.deletePart('part')).toEqual($translatePartialLoader);
           });
         });
         
