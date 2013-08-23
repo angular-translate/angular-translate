@@ -8,21 +8,13 @@ describe('pascalprecht.translate', function() {
         resolveHandlerCounter,
         rejectHandlerCounter;
     
-    function ThrowErrorHttpInterceptor() {
-      return {
-        request : function() {
-          throw new Error('$http service was used!');
-        }
-      };
+    function ThrowErrorHttpInterceptor(data) {
+      throw new Error('$http service was used!');
     }
 
-    function CounterHttpInterceptor() {
-      return {
-        request : function(options) {
-          ++counter;
-          return options;
-        }
-      };
+    function CounterHttpInterceptor(data) {
+      ++counter;
+      return data;
     }
     
     beforeEach(module(function($provide) {
@@ -138,7 +130,7 @@ describe('pascalprecht.translate', function() {
         
         it('shouldn\'t really load any data from the server', function() {
           module(function($httpProvider) {
-            $httpProvider.interceptors.push(ThrowErrorHttpInterceptor);
+            $httpProvider.defaults.transformRequest.push(ThrowErrorHttpInterceptor);
           });
           inject(function($translatePartialLoader) {
             expect(function() {
@@ -430,7 +422,7 @@ describe('pascalprecht.translate', function() {
         
         it('shouldn\'t really load any data from the server', function() {
           module(function($httpProvider) {
-            $httpProvider.interceptors.push(ThrowErrorHttpInterceptor);
+            $httpProvider.defaults.transformRequest.push(ThrowErrorHttpInterceptor);
           });
           inject(function($translatePartialLoader) {
             expect(function() {
@@ -817,7 +809,7 @@ describe('pascalprecht.translate', function() {
         
           it('should make 1 request to get 1 part', function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(CounterHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
@@ -836,7 +828,7 @@ describe('pascalprecht.translate', function() {
           
           it('should make 1 request per 1 part', function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(CounterHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
@@ -857,7 +849,7 @@ describe('pascalprecht.translate', function() {
           
           it('shouldn\'t make requests to get deleted parts', function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(ThrowErrorHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(ThrowErrorHttpInterceptor);
             });
             
             inject(function($translatePartialLoader) {
@@ -874,7 +866,7 @@ describe('pascalprecht.translate', function() {
           
           it('shouldn\'t load the same part twice for one language', function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(CounterHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
@@ -900,7 +892,7 @@ describe('pascalprecht.translate', function() {
           it('shouldn\'t load a part if it was loaded, deleted (second arg is false or not ' +
              ' passed) and added again', function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(CounterHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
@@ -928,7 +920,7 @@ describe('pascalprecht.translate', function() {
           it('should load a part if it was loaded, deleted (second arg is true) and added again', 
           function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(CounterHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
@@ -955,7 +947,7 @@ describe('pascalprecht.translate', function() {
           
           it('should load the same part for different languages', function() {
             module(function($httpProvider) {
-              $httpProvider.interceptors.push(CounterHttpInterceptor);
+              $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
             });
             
             inject(function($translatePartialLoader, $httpBackend) {
