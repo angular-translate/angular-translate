@@ -790,9 +790,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * $translate.refresh('en_US');
      *
      * @param {string} lankKey A language key of the table, which has to be refreshed
+     *
+     * @return {promise} Promise, which will be resolved in case a translation tables refreshing
+     * process is finished successfully, and reject if not.
      */
     $translate.refresh = function(langKey) {
-      function onLoadingEnd() {
+      var deferred = $q.defer();
+      
+      function onLoadSuccess() {
+        deferred.resolve();
+        $rootScope.$broadcast('$translateRefreshEnd');
+      }
+      
+      function onLoadFailure() {
+        deferred.reject();
         $rootScope.$broadcast('$translateRefreshEnd');
       }
 
@@ -817,7 +828,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($uses) {
           loaders.push($translate.uses($uses));
         }
-        $q.all(loaders).then(onLoadingEnd(), onLoadingEnd());
+        
+        if (loaders.length > 0) {
+          $q.all(loaders).then(onLoadSuccess, onLoadFailure);
+        } else onLoadSuccess();
 
       } else if ($translationTable.hasOwnProperty(langKey)) {
 
@@ -831,9 +845,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         } else {
           loader = loadAsync(langKey);
         }
-        loader.then(onLoadingEnd(), onLoadingEnd());
+        loader.then(onLoadSuccess, onLoadFailure);
 
-      }
+      } else deferred.reject();
+      
+      return deferred.promise;
     };
 
     // If at least one async loader is defined and there are no (default) translations available
