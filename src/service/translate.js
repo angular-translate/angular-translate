@@ -549,11 +549,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         translations(key, translationTable);
 
         pendingLoader = false;
+        $nextLang = undefined;
         deferred.resolve(key);
         $rootScope.$broadcast('$translateLoadingEnd');
       }, function (key) {
         $rootScope.$broadcast('$translateLoadingError');
         deferred.reject(key);
+        $nextLang = undefined;
         $rootScope.$broadcast('$translateLoadingEnd');
       });
 
@@ -796,12 +798,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      */
     $translate.refresh = function(langKey) {
       var deferred = $q.defer();
-      
+
       function onLoadSuccess() {
         deferred.resolve();
         $rootScope.$broadcast('$translateRefreshEnd');
       }
-      
+
       function onLoadFailure() {
         deferred.reject();
         $rootScope.$broadcast('$translateRefreshEnd');
@@ -828,7 +830,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($uses) {
           loaders.push($translate.uses($uses));
         }
-        
+
         if (loaders.length > 0) {
           $q.all(loaders).then(onLoadSuccess, onLoadFailure);
         } else onLoadSuccess();
@@ -848,7 +850,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         loader.then(onLoadSuccess, onLoadFailure);
 
       } else deferred.reject();
-      
+
       return deferred.promise;
     };
 

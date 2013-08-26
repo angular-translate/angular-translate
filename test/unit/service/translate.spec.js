@@ -967,6 +967,13 @@ describe('pascalprecht.translate', function () {
     it('should return proposedLanguage', function () {
       expect($translate.proposedLanguage()).toEqual('en');
     });
+
+    it('should be undefine when no there\'s no pending loader', function () {
+      inject(function ($timeout) {
+        $timeout.flush();
+        expect($translate.proposedLanguage()).toBeUndefined();
+      });
+    });
   });
 
   describe('$missingTranslationHandlerFactory', function () {
@@ -1193,10 +1200,10 @@ describe('pascalprecht.translate', function () {
           it('should broadcast $translateRefreshEnd event if no lang is given', function() {
             inject(function($translate, $rootScope, $timeout) {
               spyOn($rootScope, '$broadcast');
-              
+
               $translate.refresh();
               $timeout.flush();
-              
+
               expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshEnd');
             });
           });
@@ -1212,10 +1219,10 @@ describe('pascalprecht.translate', function () {
           it('should broadcast $translateRefreshEnd event if current lang is given', function() {
             inject(function($translate, $rootScope, $timeout) {
               spyOn($rootScope, '$broadcast');
-              
+
               $translate.refresh('en');
               $timeout.flush();
-              
+
               expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshEnd');
             });
           });
@@ -1231,10 +1238,10 @@ describe('pascalprecht.translate', function () {
           it('should broadcast $translateRefreshEnd event if other lang is given', function() {
             inject(function($translate, $rootScope, $timeout) {
               spyOn($rootScope, '$broadcast');
-              
+
               $translate.refresh('ru');
               $timeout.flush();
-              
+
               expect($rootScope.$broadcast).toHaveBeenCalledWith('$translateRefreshEnd');
             });
           });
@@ -1354,14 +1361,14 @@ describe('pascalprecht.translate', function () {
 
         });
 
-        
+
         // Return value
         describe('', function() {
-        
+
           beforeEach(module('pascalprecht.translate', function($provide) {
             $translateProvider.fallbackLanguage('ru');
           }));
-          
+
           it('should return a promise', function() {
             inject(function($translate, $timeout) {
               var promise = $translate.refresh();
@@ -1370,7 +1377,7 @@ describe('pascalprecht.translate', function () {
               $timeout.flush();
             });
           });
-          
+
           it('should resolve a promise when refresh is successfully done', function() {
             inject(function($translate, $timeout) {
               var result;
@@ -1382,8 +1389,8 @@ describe('pascalprecht.translate', function () {
               expect(result).toEqual('resolved');
             });
           });
-          
-          it('should resolve a promise when refresh of current language is successfully done', 
+
+          it('should resolve a promise when refresh of current language is successfully done',
             function() {
             inject(function($translate, $timeout) {
               var result;
@@ -1395,8 +1402,8 @@ describe('pascalprecht.translate', function () {
               expect(result).toEqual('resolved');
             });
           });
-          
-          it('should resolve a promise when refresh of not current language is successfully done', 
+
+          it('should resolve a promise when refresh of not current language is successfully done',
             function() {
             inject(function($translate, $timeout) {
               var result;
@@ -1408,11 +1415,11 @@ describe('pascalprecht.translate', function () {
               expect(result).toEqual('resolved');
             });
           });
-          
+
           it('should reject a promise when loading of at least one language is failed', function() {
             inject(function($translate, $timeout) {
               shouldResolve = false;
-              
+
               var result;
               $translate.refresh().then(
                 function() { result = 'resolved'; },
@@ -1422,11 +1429,11 @@ describe('pascalprecht.translate', function () {
               expect(result).toEqual('rejected');
             });
           });
-          
+
           it('should reject a promise when refresh of the current language is failed', function() {
             inject(function($translate, $timeout) {
               shouldResolve = false;
-              
+
               var result;
               $translate.refresh('en').then(
                 function() { result = 'resolved'; },
@@ -1436,11 +1443,11 @@ describe('pascalprecht.translate', function () {
               expect(result).toEqual('rejected');
             });
           });
-          
+
           it('should reject a promise when refresh of not current language is failed', function() {
             inject(function($translate, $timeout) {
               shouldResolve = false;
-              
+
               var result;
               $translate.refresh('ru').then(
                 function() { result = 'resolved'; },
@@ -1450,32 +1457,31 @@ describe('pascalprecht.translate', function () {
               expect(result).toEqual('rejected');
             });
           });
-          
+
           it('should reject a promise if attempting to refresh not existent language', function() {
             inject(function($translate, $timeout, $rootScope) {
               shouldResolve = false;
-              
+
               var result;
               $translate.refresh('ne').then(
                 function() { result = 'resolved'; },
                 function() { result = 'rejected'; }
               );
-              
-              try { 
+
+              try {
                 $timeout.flush();
               } catch (e) {
                 $rootScope.$digest();
               }
-              
+
               expect(result).toEqual('rejected');
             });
           });
-          
+
         });
-        
+
       });
 
     });
-
   });
 });
