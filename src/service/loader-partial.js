@@ -44,26 +44,26 @@ angular.module('pascalprecht.translate')
 
   
   var parts = {};
-  
-  var hasPart = function(name) {
+
+  function hasPart(name) {
     return parts.hasOwnProperty(name);
-  };
+  }
+
+  function isStringValid(str) {
+    return angular.isString(str) && str !== '';
+  }
   
-  var isPartAvailable = function(name) {
-    if (name === undefined) {
-      throw new Error('Couldn\'t check any part, no part name is specified!');
-    } else if (!angular.isString(name)) {
-      throw new TypeError('Invalid type of a first argument, string expected.');
+  function isPartAvailable(name) {
+    if (!isStringValid(name)) {
+      throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
     }
     
     return (hasPart(name) && parts[name].isActive);
-  };
+  }
   
   this.addPart = function(name) {
-    if (name === undefined) {
-      throw new Error('Couldn\'t add a new part, no part name is specified!');
-    } else if (!angular.isString(name)) {
-      throw new TypeError('Invalid type of a first argument, string expected.');
+    if (!isStringValid(name)) {
+      throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
     }
     
     if (!hasPart(name)) {
@@ -74,10 +74,8 @@ angular.module('pascalprecht.translate')
   };
   
   this.deletePart = function(name) {
-    if (name === undefined) {
-      throw new Error('Couldn\'t delete any part, no part name is specified!');
-    } else if (!angular.isString(name)) {
-      throw new TypeError('Invalid type of a first argument, string expected.');
+    if (!isStringValid(name)) {
+      throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
     }
     
     delete parts[name];
@@ -91,16 +89,12 @@ angular.module('pascalprecht.translate')
   function($rootScope, $injector, $q, $http) {
   
     var service = function(options) {
-      if (options.key === undefined) {
-        throw new Error('Unable to load data, a key is not specified.');
-      } else if (!angular.isString(options.key)) {
-        throw new TypeError('Unable to load data, a key is not a string.');
+      if (!isStringValid(options.key)) {
+        throw new TypeError('Unable to load data, a key is not a non-empty string.');
       }
       
-      if (options.urlTemplate === undefined) {
-        throw new Error('Unable to load data, a urlTemplate is not specified.');
-      } else if (!angular.isString(options.urlTemplate)) {
-        throw new TypeError('Unable to load data, a urlTemplate is not a string.');
+      if (!isStringValid(options.urlTemplate)) {
+        throw new TypeError('Unable to load data, a urlTemplate is not a non-empty string.');
       }
     
       var errorHandler = options.loadFailureHandler;
@@ -149,10 +143,8 @@ angular.module('pascalprecht.translate')
     };
   
     service.addPart = function(name) {
-      if (name === undefined) {
-        throw new Error('Couldn\'t add a new part, no part name is specified!');
-      } else if (!angular.isString(name)) {
-        throw new TypeError('Invalid type of a first argument, string expected.');
+      if (!isStringValid(name)) {
+        throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
       }
       
       if (!hasPart(name)) {
@@ -167,16 +159,14 @@ angular.module('pascalprecht.translate')
     };
     
     service.deletePart = function(name, removeData) {
-      if (name === undefined) {
-        throw new Error('Couldn\'t delete any part, no part name is specified!');
-      } else if (!angular.isString(name)) {
-        throw new TypeError('Invalid type of a first argument, string expected.');
+      if (!isStringValid(name)) {
+        throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
       }
       
       if (removeData === undefined) {
         removeData = false;
       } else if (typeof removeData !== 'boolean') {
-        throw new TypeError('Invalid type of a second argument, boolean expected.'); 
+        throw new TypeError('Invalid type of a second argument, a boolean expected.'); 
       }
 
       if (hasPart(name)) {
