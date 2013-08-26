@@ -69,17 +69,9 @@ describe('pascalprecht.translate', function() {
           });
         });
         
-        it('should throw an error if called without args', function() {
+        it('should throw an error if a given arg is not a non-empty string', function() {
           inject(function($translatePartialLoader) {
-            expect(function() {
-              $provider.addPart();
-            }).toThrow('Couldn\'t add a new part, no part name is specified!');
-          });
-        });
-        
-        it('should throw an error if a given arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
             expect(function() { $provider.addPart(function(){}); }).toThrow(message);
             expect(function() { $provider.addPart(false);        }).toThrow(message);
             expect(function() { $provider.addPart(null);         }).toThrow(message);
@@ -87,6 +79,7 @@ describe('pascalprecht.translate', function() {
             expect(function() { $provider.addPart([]);           }).toThrow(message);
             expect(function() { $provider.addPart({});           }).toThrow(message);
             expect(function() { $provider.addPart(2);            }).toThrow(message);
+            expect(function() { $provider.addPart();             }).toThrow(message);
           });
         });
         
@@ -169,17 +162,9 @@ describe('pascalprecht.translate', function() {
           });
         });
         
-        it('should throw an error if called without args', function() {
+        it('should throw an error if a given arg is not a non-empty string', function() {
           inject(function($translatePartialLoader) {
-            expect(function() {
-              $provider.deletePart();
-            }).toThrow('Couldn\'t delete any part, no part name is specified!');
-          });
-        });
-        
-        it('should throw an error if a given arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
             expect(function() { $provider.deletePart(function(){}); }).toThrow(message);
             expect(function() { $provider.deletePart(false);        }).toThrow(message);
             expect(function() { $provider.deletePart(null);         }).toThrow(message);
@@ -187,6 +172,7 @@ describe('pascalprecht.translate', function() {
             expect(function() { $provider.deletePart([]);           }).toThrow(message);
             expect(function() { $provider.deletePart({});           }).toThrow(message);
             expect(function() { $provider.deletePart(2);            }).toThrow(message);
+            expect(function() { $provider.deletePart();             }).toThrow(message);
           });
         });
       
@@ -257,18 +243,10 @@ describe('pascalprecht.translate', function() {
             expect(typeof $provider.isPartAvailable).toBe('function');
           });
         });
-        
-        it('should throw an error if called without args', function() {
-          inject(function($translatePartialLoader) {
-            expect(function() {
-              $provider.isPartAvailable();
-            }).toThrow('Couldn\'t check any part, no part name is specified!');
-          });
-        });
       
-        it('should throw an error if a given arg is not a string', function() {
+        it('should throw an error if a given arg is not a non-empty string', function() {
           inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
             expect(function() { $provider.isPartAvailable(function(){}); }).toThrow(message);
             expect(function() { $provider.isPartAvailable(false);        }).toThrow(message);
             expect(function() { $provider.isPartAvailable(null);         }).toThrow(message);
@@ -276,6 +254,7 @@ describe('pascalprecht.translate', function() {
             expect(function() { $provider.isPartAvailable([]);           }).toThrow(message);
             expect(function() { $provider.isPartAvailable({});           }).toThrow(message);
             expect(function() { $provider.isPartAvailable(2);            }).toThrow(message);
+            expect(function() { $provider.isPartAvailable();             }).toThrow(message);
           });
         });
       
@@ -336,17 +315,9 @@ describe('pascalprecht.translate', function() {
           });
         });
         
-        it('should throw an error if called without args', function() {
+        it('should throw an error if a given arg is not a non-empty string', function() {
           inject(function($translatePartialLoader) {
-            expect(function() {
-              $translatePartialLoader.addPart();
-            }).toThrow('Couldn\'t add a new part, no part name is specified!');
-          });
-        });
-        
-        it('should throw an error if a given arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
             expect(function() { $translatePartialLoader.addPart(function(){}); }).toThrow(message);
             expect(function() { $translatePartialLoader.addPart(false);        }).toThrow(message);
             expect(function() { $translatePartialLoader.addPart(null);         }).toThrow(message);
@@ -354,6 +325,7 @@ describe('pascalprecht.translate', function() {
             expect(function() { $translatePartialLoader.addPart([]);           }).toThrow(message);
             expect(function() { $translatePartialLoader.addPart({});           }).toThrow(message);
             expect(function() { $translatePartialLoader.addPart(2);            }).toThrow(message);
+            expect(function() { $translatePartialLoader.addPart();             }).toThrow(message);
           });
         });
         
@@ -461,17 +433,9 @@ describe('pascalprecht.translate', function() {
           });
         });
         
-        it('should throw an error if called without args', function() {
+        it('should throw an error if a given first arg is not a non-empty string', function() {
           inject(function($translatePartialLoader) {
-            expect(function() {
-              $translatePartialLoader.deletePart();
-            }).toThrow('Couldn\'t delete any part, no part name is specified!');
-          });
-        });
-        
-        it('should throw an error if a given first arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
             expect(function() { 
               $translatePartialLoader.deletePart(function(){});
             }).toThrow(message);
@@ -481,12 +445,13 @@ describe('pascalprecht.translate', function() {
             expect(function() { $translatePartialLoader.deletePart([]);         }).toThrow(message);
             expect(function() { $translatePartialLoader.deletePart({});         }).toThrow(message);
             expect(function() { $translatePartialLoader.deletePart(2);          }).toThrow(message);
+            expect(function() { $translatePartialLoader.deletePart();           }).toThrow(message);
           });
         });
       
         it('should throw an error if a given second arg is not a boolean', function() {
           inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a second argument, boolean expected.';
+            var message = 'Invalid type of a second argument, a boolean expected.';
             expect(function() {
               $translatePartialLoader.deletePart('s', function(){});
              }).toThrow(message);
@@ -608,17 +573,9 @@ describe('pascalprecht.translate', function() {
           });
         });
         
-        it('should throw an error if called without args', function() {
+        it('should throw an error if a given arg is not a non-empty string', function() {
           inject(function($translatePartialLoader) {
-            expect(function() {
-              $translatePartialLoader.isPartAvailable();
-            }).toThrow('Couldn\'t check any part, no part name is specified!');
-          });
-        });
-      
-        it('should throw an error if a given arg is not a string', function() {
-          inject(function($translatePartialLoader) {
-            var message = 'Invalid type of a first argument, string expected.';
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
             expect(function() { 
               $translatePartialLoader.isPartAvailable(function(){}); 
             }).toThrow(message);
@@ -628,6 +585,7 @@ describe('pascalprecht.translate', function() {
             expect(function() { $translatePartialLoader.isPartAvailable([]);    }).toThrow(message);
             expect(function() { $translatePartialLoader.isPartAvailable({});    }).toThrow(message);
             expect(function() { $translatePartialLoader.isPartAvailable(2);     }).toThrow(message);
+            expect(function() { $translatePartialLoader.isPartAvailable();      }).toThrow(message);
           });
         });
       
@@ -678,20 +636,9 @@ describe('pascalprecht.translate', function() {
             });
           });
           
-          it('should throw an error if a urlTemplate is not specified', function() {
+          it('should throw an error if a urlTemplate is not a non-empty string', function() {
             inject(function($translatePartialLoader) {
-              $translatePartialLoader.addPart('part');
-              expect(function() {
-                $translatePartialLoader({
-                  key : 'en'
-                });
-              }).toThrow('Unable to load data, a urlTemplate is not specified.');
-            });
-          });
-        
-          it('should throw an error if a urlTemplate is not a string', function() {
-            inject(function($translatePartialLoader) {
-              var message = 'Unable to load data, a urlTemplate is not a string.';
+              var message = 'Unable to load data, a urlTemplate is not a non-empty string.';
               expect(function() { 
                 $translatePartialLoader({
                   key : 'k',
@@ -734,23 +681,17 @@ describe('pascalprecht.translate', function() {
                   urlTemplate : 2
                 });
               }).toThrow(message);
+              expect(function() { 
+                $translatePartialLoader({
+                  key : 'k'
+                });
+              }).toThrow(message);
             });
           });
         
-          it('should throw an error if a key is not passed', function() {
+          it('should throw an error if a key is not a non-empty string', function() {
             inject(function($translatePartialLoader) {
-              $translatePartialLoader.addPart('part');
-              expect(function() {
-                $translatePartialLoader({
-                  urlTemplate : '/locales/{part}-{lang}.json'
-                });
-              }).toThrow('Unable to load data, a key is not specified.');
-            });
-          });
-          
-          it('should throw an error if a key is not a string', function() {
-            inject(function($translatePartialLoader) {
-              var message = 'Unable to load data, a key is not a string.';
+              var message = 'Unable to load data, a key is not a non-empty string.';
               expect(function() { 
                 $translatePartialLoader({ 
                   key : function(){},
@@ -790,6 +731,11 @@ describe('pascalprecht.translate', function() {
               expect(function() { 
                 $translatePartialLoader({
                   key : 2,
+                  urlTemplate : '/locales/{part}-{lang}.json'
+                });
+              }).toThrow(message);
+              expect(function() { 
+                $translatePartialLoader({
                   urlTemplate : '/locales/{part}-{lang}.json'
                 });
               }).toThrow(message);
