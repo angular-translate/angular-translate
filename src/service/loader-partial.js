@@ -1,55 +1,51 @@
-(function(angular){
-
-function Part(name) {
-  this.name = name;
-  this.isActive = true;
-  this.tables = {};
-}
-
-Part.prototype.parseUrl = function(urlTemplate, targetLang) {
-  return urlTemplate.replace('{part}', this.name).replace('{lang}', targetLang);
-};
-
-Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
-  var deferred = $q.defer();
-  
-  if (!this.tables.hasOwnProperty(lang)) {
-    var self = this;
-    
-    $http({
-      method : 'GET',
-      url : this.parseUrl(urlTemplate, lang)
-    }).success(function(data){
-      self.tables[lang] = data;
-      deferred.resolve(data);
-    }).error(function() {
-      if (errorHandler !== undefined) {
-        errorHandler(self.name, lang).then(
-          function(data) {
-            self.tables[lang] = data;
-            deferred.resolve(data);
-          },
-          function() {
-            deferred.reject(self.name);
-          }
-        );
-      } else deferred.reject(self.name);
-    });
-  
-  } else deferred.resolve(this.tables[lang]);
-  
-  return deferred.promise;
-};
-
-
-
-
 angular.module('pascalprecht.translate')
 .provider('$translatePartialLoader', [function() {
 
+  function Part(name) {
+    this.name = name;
+    this.isActive = true;
+    this.tables = {};
+  }
+
+  Part.prototype.parseUrl = function(urlTemplate, targetLang) {
+    return urlTemplate.replace('{part}', this.name).replace('{lang}', targetLang);
+  };
+
+  Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
+    var deferred = $q.defer();
+    
+    if (!this.tables.hasOwnProperty(lang)) {
+      var self = this;
+      
+      $http({
+        method : 'GET',
+        url : this.parseUrl(urlTemplate, lang)
+      }).success(function(data){
+        self.tables[lang] = data;
+        deferred.resolve(data);
+      }).error(function() {
+        if (errorHandler !== undefined) {
+          errorHandler(self.name, lang).then(
+            function(data) {
+              self.tables[lang] = data;
+              deferred.resolve(data);
+            },
+            function() {
+              deferred.reject(self.name);
+            }
+          );
+        } else deferred.reject(self.name);
+      });
+    
+    } else deferred.resolve(this.tables[lang]);
+    
+    return deferred.promise;
+  };
+
+  
   var parts = {};
   
-  var isPartExists = function(name) {
+  var hasPart = function(name) {
     return parts.hasOwnProperty(name);
   };
   
@@ -60,7 +56,7 @@ angular.module('pascalprecht.translate')
       throw new TypeError('Invalid type of a first argument, string expected.');
     }
     
-    return (isPartExists(name) && parts[name].isActive);
+    return (hasPart(name) && parts[name].isActive);
   };
   
   this.addPart = function(name) {
@@ -70,7 +66,7 @@ angular.module('pascalprecht.translate')
       throw new TypeError('Invalid type of a first argument, string expected.');
     }
     
-    if (!isPartExists(name)) {
+    if (!hasPart(name)) {
       parts[name] = new Part(name);
     }
     
@@ -99,7 +95,9 @@ angular.module('pascalprecht.translate')
         throw new Error('Unable to load data, a key is not specified.');
       } else if (!angular.isString(options.key)) {
         throw new TypeError('Unable to load data, a key is not a string.');
-      } else if (options.urlTemplate === undefined) {
+      }
+      
+      if (options.urlTemplate === undefined) {
         throw new Error('Unable to load data, a urlTemplate is not specified.');
       } else if (!angular.isString(options.urlTemplate)) {
         throw new TypeError('Unable to load data, a urlTemplate is not a string.');
@@ -116,21 +114,21 @@ angular.module('pascalprecht.translate')
           tables = [],
           deferred = $q.defer();
 
-      function acceptTable(table) {
+      function addTablePart(table) {
         tables.push(table);
       }
           
       for (var part in parts) {
-        if (isPartExists(part) && parts[part].isActive) {
+        if (hasPart(part) && parts[part].isActive) {
           loaders.push(
             parts[part]
               .getTable(options.key, $q, $http, options.urlTemplate, errorHandler)
-              .then(acceptTable)
+              .then(addTablePart)
           );
         }
       }
       
-      if (loaders.length > 0) {
+      if (loaders.length) {
         $q.all(loaders).then(
           function() {
             var table = {};
@@ -143,7 +141,9 @@ angular.module('pascalprecht.translate')
             deferred.reject(options.key);
           }
         );
-      } else deferred.resolve({});
+      } else {
+        deferred.resolve({});
+      }
       
       return deferred.promise;
     };
@@ -155,7 +155,7 @@ angular.module('pascalprecht.translate')
         throw new TypeError('Invalid type of a first argument, string expected.');
       }
       
-      if (!isPartExists(name)) {
+      if (!hasPart(name)) {
         parts[name] = new Part(name);
         $rootScope.$broadcast('$translatePartialLoaderStructureChanged', name);
       } else if (!parts[name].isActive) {
@@ -179,7 +179,7 @@ angular.module('pascalprecht.translate')
         throw new TypeError('Invalid type of a second argument, boolean expected.'); 
       }
 
-      if (isPartExists(name)) {
+      if (hasPart(name)) {
         var wasActive = parts[name].isActive;
         if (removeData) {
           delete parts[name];
@@ -201,5 +201,3 @@ angular.module('pascalprecht.translate')
   }];
   
 }]);
-
-})(angular);
