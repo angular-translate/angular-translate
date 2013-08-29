@@ -61,6 +61,19 @@ angular.module('pascalprecht.translate')
     return (hasPart(name) && parts[name].isActive);
   }
   
+  function deepExtend(dst, src) {
+    for (var property in src) {
+      if (src[property] && src[property].constructor &&
+       src[property].constructor === Object) {
+        dst[property] = dst[property] || {};
+        arguments.callee(dst[property], src[property]);
+      } else {
+        dst[property] = src[property];
+      }
+    }
+    return dst;
+  }
+  
   this.addPart = function(name) {
     if (!isStringValid(name)) {
       throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
@@ -127,7 +140,7 @@ angular.module('pascalprecht.translate')
           function() {
             var table = {};
             for (var i = 0; i < tables.length; i++) {
-              angular.extend(table, tables[i]);
+              deepExtend(table, tables[i]);
             }
             deferred.resolve(table);
           },

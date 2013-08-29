@@ -972,6 +972,31 @@ describe('pascalprecht.translate', function() {
             });
           });
           
+          it('should merge namespaces instead of overriding them', function() {
+            inject(function($translatePartialLoader, $httpBackend) {
+              $httpBackend.expectGET('/locales/part1-en.json').respond(200, '{"foo":{"bar":"bar"}}');
+              $httpBackend.expectGET('/locales/part2-en.json').respond(200, '{"foo":{"buz":"buz"}}');
+              
+              var table = {};
+              
+              $translatePartialLoader.addPart('part1');
+              $translatePartialLoader.addPart('part2');
+              $translatePartialLoader({
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              }).then(function(data) {
+                angular.extend(table, data);
+              });
+              $httpBackend.flush();
+
+              expect(table.foo).toBeDefined();
+              expect(table.foo.bar).toBeDefined();
+              expect(table.foo.buz).toBeDefined();
+              expect(table.foo.bar).toEqual('bar');
+              expect(table.foo.buz).toEqual('buz');
+            });
+          });
+          
           it('should reject promise with language key if error occurred', function() {
             inject(function($translatePartialLoader, $httpBackend) {
               $httpBackend.expectGET('/locales/part-en.json').respond(404, 'File not found');
