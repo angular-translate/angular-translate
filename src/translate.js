@@ -185,6 +185,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
       angular.extend($translationTable[langKey], flatObject(translationTable));
     }
+
+    return this;
   };
 
   var flatObject = function (data, path, result) {
