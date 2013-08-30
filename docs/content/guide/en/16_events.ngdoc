@@ -61,3 +61,8 @@ Gets fired when the asynchronous loader returns with rejected promise.
 Gets fired wether an asynchronous loader returned with a resolved or rejected
 promise. In the case a loader returned with a resolved promise, this gets fired
 after the translation table has been updated.
+
+#### `$translatePartialLoaderStructureChanged`
+
+Gets fired when changing the "structure" of `$translatePartialLoader` using
+any kind of `*Part()` method.
