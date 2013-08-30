@@ -1,70 +1,79 @@
 @ngdoc overview
-@name Conceptual Overview
+@name Konzeptionelle Übersicht
 @description
 
-# Conceptual Overview
+# Konzeptionelle Übersicht
 
-The following figure shows in a little abstract way how angular-translate is
-structured and how the different components it provides, are actually connected.
+Die folgende Abbildung zeigt den abstrakten Zusammenbau von `angular-translate`
+und beschreibt, wie die einzelnen Komponenten zusammen hängen.
 
 <img class="pull-right" style="padding-left: 3em;" src="img/guide/conceptual_overview.png">
 
 ## The nitty-gritty
-As you can see, angular-translate provides a directive and a filter as components
-you can use to translate your apps content. The directive appears on top of the
-filter component because it makes use of it internally.
+Wie man sehen kann, bietet `angular-translate` eine Direktive und einen Filter als
+Komponente, die man benutzen kann um seine Inhalte zu übersetzen. Die Direktive
+befindet sich über dem Filter weil sie internvon diesem gebrauch macht.
 
-In the next layer it gets a bit more interesting. Both, the directive and the
-filter use the `$tranlsate` service. Which means, when translating contents of
-your app with a directive, you're actually doing it with the filter, which actually
-does it with the service. This also means, you can not only translate your
-contents in the view layer in a declarative way, but also (of course only if
-needed) in a business logic layer like a controller or another service.
+In der nächsten Schicht wird es etwas interessanter. Beide, die Direktive und der
+Filter benutzen den `$translate`- Service. Was bedeutet, wenn du deine Inhalte
+mit der Direktive übersetzt, benutzt du eigentlich den Filter der wiederum den
+Service benutzt. Das bedeutet auch, dass du deine Inhalte nicht nur im View-Layer,
+sondern auch im Business-Logic-Layer (wie zum Beispiel im Controller), übersetzen
+kannst.
 
-Within the `$translate` service you can see some sub components which are used
-by it to translate your contents. We'll get into this in a more detail later
-but nevertheless its good to get an overview of what's actually happening there.
+Innerhalb vom `$translate`- Service befinden sich einige Subkomponenten, die benutzt
+werden um Inhalte zu übersetzen. Wir gehen später genauer darauf ein, aber es ist
+trotzdem hilfreich schon mal einen Überblick zu bekommen.
 
-### Interpolators
-The right box represents possible interpolation services `$translate` service uses
-to interpolate your translations against variable values you might wanna use
-there. If you don't understand what this means, no worries. You'll learn everything
-you need to know about interpolators later. However, interpolation services are
-decoupled from the main core, which means, you can install'em as extra packages.
-There's a default interpolation services which ships with angular-translate built-in.
+## Interpolation-Services
+Die rechte Box zeigt die möglichen Interpolation-Services, die `$translate`- Service
+benutzt um deine Übersetzungen gegen dynamische Werte zu interpolieren. Wenn du
+jetzt nicht nicht verstehst was das bedeutet - kein Problem! Wir gehen später
+tiefer darauf ein. Wie dem auch sei. Interpolation-Services sind vom Core entkoppelt,
+was bedeutet, du kannst sie als extra Packages installieren.
 
-Interpolators influence the syntax you have to use within your translations. The
-default interpolation service uses Angular's core interpolation service, so if
-you familiar with it, you don't have to learn anything new. The **MessageFormat**
-interpolation service uses a different syntax, but more on that later.
+Interpolation-Services beeinflussen die Syntax die du in deinen Übersetzungen
+verwenden musst. Der standard Interpolation-Service benutzt einfach Angular's
+eigenen `$interpolate`- Service. Wenn du also weißt, gegen welche Syntax `$interpolate`-
+Service interpoliert, musst du eigentlich nichts neues lernen. Der **MessageFormat**-
+Interpolation-Services allerdings, nutzt eine andere Syntax. Darauf gehen wir
+aber später noch genauer ein.
 
-### Missing translation handlers
-The left box shows provided missing translation handlers. These get execute when
-`$translate` service tries to translate a translation which doesn't exist. You
-don't have to use any handler, but if you want to, angular-translate comes with
-a log service you can install as an extension. In addition to that, you can also
-implement your own handler and use that.
+## Missing translation handlers
+Die linke Box zeigt mitgelieferte `missingTranslationHandler`. Diese werden ausgeführt
+wenn `$translate`- Service versucht eine Translation Id zu übersetzen, es aber keine
+korrenspondierende Übersetzung gibt. Wenn du nicht willst, musst du keinen Handler
+verwenden. Falls doch, `angular-translate` kommt mit einem Log-Services, der sich
+ganz einfach via Bower installieren lässt. Wenn das nicht ausreicht, kann man auch
+seine eigenen Handler implementieren.
 
-### Asynchronous loader
-Of course you want to be able to load your translation data asynchronously to
-speed up your apps performance. angular-translate supports the use of so called
-asynchronous loaders, which are very easy to use. There are two asynchronous
-loaders, `urlLoader` and `staticFilesLoader`. Both of them solves a specific
-situation when it comes to asynchonous loading of translation data. Anyways, of
-course you can build your own custom loaders and use then if you want to.
+## Asynchronous loader
 
-### Storage
-Since its pretty common that an app, which provides multi-language support, should
-remember the language a user has chosen during runtime, angular-translate gives
-you a way to use any kind of storage. It checks if it should rely on any storage and if so it tries to find a specific key - value pair within the configured storage
-to determine which language actually should be loaded.
+Selbstverständlich möchtest du in der Lage sein, deine Übersetzungsdaten
+asynchron nachzuladen um deine App schneller zu machen. `angular-translate`
+bietet Unterstützung für sogenannte `Asynchronous Loader`, die sehr einfach
+zu benutzen sind. Es gibt zwei solcher Loader, der `urlLoader` und der `staticFilesLoader`.
+Beide lösen jeweils ein spezifisches Problem wenn es zum asynchronen Nachladen von
+Übersetzungsdaten kommt. Auch hier gilt, wenn keiner dieser Loader deinen
+Anforderungen entspricht, kannst du ganz einfach deine eigenen implementieren.
 
-angular-translate comes with support for localStorage and cookieStorage. You can
-easily install extension packages to make use of them.
+## Storage
 
-Now you got a little overview on how angular-translate is structured, which kind
-of features it provides and how the components are connected. In the next chapter
-you'll learn how to start with angular-translate.
+Da es sehr üblich ist, dass sich eine App merkt, welche Sprache von einem Benutzer
+gewählt wurde, sodass er beim nächsten Aufruf der App die gleiche Sprache bekommt,
+gibt es sogenannte `Storages`. `angular-translate` erlaubt dir jeden nur möglichen
+Storage zu werden. Das Modul überprüft ob es einen Storage gibt und wenn ja
+sucht es nach einem bestimmten Identifier der wiederum den Wert eines Sprachschlüssels
+enthält, anhand dessen `angular-translate` dann die Sprache setzen kann.
+
+`angular-translate` kommt mit LocalStorage und Cookie Storage unterstützung.
+Auch hier ist es möglich einen Storage-Service zu entwickeln, der über die Funktionalität
+der beiden genannten hinaus geht.
+
+
+Jetzt hast du einen kleine Überblick darüber bekommen, wie `angular-translate`
+strukturiert ist und welche Features und Komponenten es mit sich bringt. Im nächsten
+Kapitel lernst du, wie du mit `angular-translate` durchstarten kannst.
 
 <br>
 <hr>
