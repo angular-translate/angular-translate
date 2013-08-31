@@ -1,29 +1,26 @@
 @ngdoc overview
-@name Using $translate service
+@name $translate- Service benutzen
 @description
 
-# Using $translate service
+# $translate- Service benutzen
 
-`angular-translate` provides several ways to translate the contents of your app.
-One way is to use the provided `$translate` service directly. You actually
-wouldn't use this approach, because you don't want to bind your apps
-controllers and services too hard to your translated content. However it turned
-out that there are indeed cases where you need to translate contents with
-`$translate` service.
+`angular-translate` bietet verschiedene Wege die Inhalte deiner App zu übersetzen.
+Ein Weg ist, den `$translate`- Service direkt zu benutzen. Eigentlich würde man
+dass nicht machen, da es schönere Wege gibt (zum Beispiel via Filter oder Direktiven),
+da die Übersetzungslogik zu stark an einem Controller oder Service gekoppelt wäre.
+Es stellte sich allerdings heraus, dass es tatsächlich Anwendungsfälle für die
+direkte Benutzung des `$translate`- Service gibt.
 
-Just imagine the case, where you want to translate the content of your HTML
-documents `<title>` tag. The `<title>` will never ever be inside of your `ng-app`
-directive, which means it is always outside of an Angular world. So, to achieve
-this, you actually have to manipulate your apps title once your app is running
-through controller or service logic.
+Stelle dir einfach nur vor, du möchtest den `<title>` deines HTML-Dokuments
+übersetzen.`<title>` wird sich niemals innerhalb einer `ng-app`- Direktive befinden,
+was bedeutet, `<title>` wird immer außerhalb der Angular-Welt sein. Man muss also
+den App-Titel manipulieren, während wir uns in der Laufzeit befinden, sprich:
+zum Beispiel innerhalb eines Controllers oder Services.
 
-### General usage
-This is where `$translate` service comes in. Using `$translate` service is very
-easy. First of all, you have to inject it per dependency injection (like every
-service you want to use within your Angular code). Let's say we want to extend
-the app we started building in [Getting Started](#/guide/02_getting-started).
-
-Our code would look something like this:
+## Allgemeine Benutzung
+An dieser Stelle kommt `$translate`- Service ins Spiel. `$translate`- Service
+zu benutzen ist sehr einfach. Alles was du tun musst, ist den Service in deinem
+Code zu injecten. Der Code könnte so aussehen:
 
 <pre>
 app.controller('Ctrl', ['$translate', function ($translate) {
@@ -31,10 +28,11 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 }]);
 </pre>
 
-Now to translate your contents with `$translate` service, all you have to do is
-to pass a translation id which was registered with `$translateProvider` before
-and it'll return the concrete translation of that translation id. We also inject
-`$scope` within our controller to expose to our view layer the translated values:
+Um jetzt Inhalte zu übersetzen, muss nichts weiter geschehen, als dem `$translate`-
+Service eine Translation ID zu übergeben (die vorher durch `$translateProvider`
+registriert wurde). Dieser gibt dann die korrespondierende Übersetzung zurück.
+Außerdem injecten wir `$scope` um die übersetzen Werte im View-Layer verfügbar
+zu machen.
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
@@ -43,10 +41,10 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
   $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
 }]);
 </pre>
-**Note:** Namespaced translations are accessed as JSON properties, see 'NAMESPACE.PARAGRAPH'`.
+**Achtung:** Übersetzungen mit Namespaces werden mit Dot-Notation aufgelöst (siehe: 'NAMESPACE.PARAGRAPH'`).
 
-That's all. Now when you think about translating the contents of a `<title>` you
-can do so within your controller. Here's a working sample:
+Das ist alles. Also, falls du darüber nachdenkst deinen `<title>` zu übersetzen,
+kannst du dies in deinem Controller machen.
 
 <doc:example module="myApp">
   <doc:source>
