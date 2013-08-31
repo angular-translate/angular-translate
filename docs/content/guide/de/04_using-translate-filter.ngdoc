@@ -1,47 +1,43 @@
 @ngdoc overview
-@name Using translate filter
+@name translate- Filter benutzen
 @description
 
 # Using translate filter
 
-In [Using $translate service](#/guide/03_using-translate-service) you've learned
-how to use `$translate` service to translate your contents with registered
-translation id's. Of course, it's pretty cool that this works, but you actually
-don't want to bind your translation to hard to controllers or services. You mainly
-want to translate your contents in the view layer because this is where it all
-belongs to.
+In [$translate- Service beutzen](#/guide/03_using-translate-service) hast du
+gelernt, wie du deine Inhalte mit dem `$translate`- Service übersetzen kannst.
+Sicherlich ist es cool dass das funktioniert, aber eigentlich möchtest du diese
+Logik nicht zu sehr an deine Controller koppeln. Du möchtest deine Übersetzungen
+hauptsächlich im View-Layer handlen.
 
-angular-translate provides a filter component with which you are able to translate
-your translation id's within the view layer, without letting any controller or
-service know of them. This means, you can decouple the translate logic from any
-controller or service an make your view layer replaceable without touching
-business logic code.
+angular-translate bietet einen Filter mit dem du in der Lage bist deine Inhalte
+zu übersetzen, ohne das ein Controller darüber bescheid wissen muss. Das bedeutet,
+du kannst jegliche Übersetzungslogik von jedem Controller oder Service entkoppeln.
 
-### General usage
-Using a filter in Angular is pretty straight forward. You can read everything about
-Angular filters right
-[here](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters).
+## Allgemeine Benutzung
 
-The same goes for angular-translate's `translate` filter. We can update our
-example from
-[Using $translate service](#/guide/03_using-translate-service#generalusage)
-just by transfering the controller logic to our view layer. Basically  the
-`translate` filter works like this:
+Einen Filter in Angular zu benutzen ist eigentlich sehr einfach. Du kannst alles
+über Filter
+[here](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters)
+lesen.
+
+Das Gleiche gilt übrigens für angular-translate's `translate`- Filter. Wir können
+unser Beispiel aus [$translate- Service benutzen](#/guide/03_using-translate-service#generalusage)
+entsprechend updaten. Grundsätzlich funktioniert der `translate`- Filter so:
 
 ```
 <ANY>{{ TRANSLATION_ID | translate }}</ANY>
 ```
 
-So, to update our example, we remove the usage of `$translate` service within
-our controller and add the logic to our view layer by using `translate` filter,
-just like this:
+Also, um unser Beispiel zu updaten, nehmen wir den `$translate`- Service aus
+unseren Controller wieder raus und benutzen stattdessen den Filter im View-Layer:
 
 <pre>
 <h1>{{'HEADLINE' | translate}}</h1>
 <p>{{'PARAGRAPH' | translate}}</p>
 </pre>
 
-Pretty easy ha? And of course, you can view a working sample here:
+Einfach oder? Hier ein funktionierendes Beispiel:
 
 <doc:example module="myApp">
   <doc:source>
@@ -69,11 +65,11 @@ Pretty easy ha? And of course, you can view a working sample here:
   </doc:source>
 </doc:example>
 
-Great! You're now able to translate your contents within the view layer without
-polluting your controllers logic with translation logic. The whole translation
-stuff is decoupled from your business logic and makes your app much more flexible
-when it comes to a view layer replacement! The next chapter shows you how to
-do the same with the provides `translate` directive.
+Großartig! Du bist nun in der Lage deine Inhalte im View-Layer zu übersetzen,
+ohne das deine Controller etwas davon wissen müssen. Die ganze Übersetzungslogik
+ist nun im View-Layer ausgelagert und es gibt keine Probleme, wenn die Schicht
+mal ausgetauscht werden muss! Das nächste Kapitel zeigt, wie wir das Gleiche
+mit der `translate`- Direktive machen.
 
 <br>
 <hr>
