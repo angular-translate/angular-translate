@@ -1,33 +1,34 @@
 @ngdoc overview
-@name Multi Language
+@name Mehrsprachigkeit
 @description
 
-# Multi Language
+# Mehrsprachigkeit
 
-In [Variable replacement](#/guide/06_variable-replacement) you've learned how to
-pass dynamic values through the different components, to make use of them within
-your translations. Since we've covered all the basic functionality these components
-provide (using the default interpolation service), we are now ready to get to the
-next level: **Multi Language Support**.
+In [Dynamische Werte](#/guide/06_variable-replacement) hast du gelernt, wie du
+dynamische Werte an Translation ID's über angular-translate's Komponenten übergeben
+kannst. Da wir jetzt alle Basic-Funktionalitäten der Komponenten gelernt haben,
+sind wir bereit für's nächste Level: **Mehrsprachigkeit**.
 
-Of course, it's pretty cool to know how to use the components angular-translate
-provides, but things are getting really interesting when it comes to teach your
-apps more then just one language (which is actually what this module is for!).
-So let's get started by learning how to add different translation tables add a time!
+Klar ist es cool zu wissen, wie die Komponenten von angular-translate funktionieren,
+aber es wird erst richtig interessant, wenn man einer App mehr als eine Sprache
+beibringt (wofür das Modul ja auch eigentlich gedacht ist.). Also los gehts!
 
-### Teaching your app more languages
+## Deiner App mehr Sprachen beibringen
 
-In [Getting Started](#/guide/02_gettin-started) you've learned how to add a
-translation table to your app, using `$translateProvider` method `translations()`.
-The same method can be used to add more translation tables add a time. The given
-translation tables just have to come with a language key with which
-angular-translate is able to recognize, which translation table belongs to which
-language.
 
-Adding a translation table with a corresponding language key is very simple. Instead
-of passing just the table as argument through `$translations()`, you can pass the
-language key as first argument, whereas the translation table becomes the second
-argument. So adding translation table with a language key looks something like this:
+In [Einstieg](#/guide/02_gettin-started) hast du gelernt, wie du mit Hilfe des
+`$translateProvider` und der `translations()`- Methode eine Übersetzungstabelle
+zu deiner App hinzufügen kannst. Die gleiche Methode kann genutzt werden, um der
+App mehr als nur eine Sprache beizubringen. Die Übersetzungstabellen müssen einfach
+nur einen Sprachschlüssel liefern, an dessen angular-translate die Übersetzungstabellen
+einer Sprache zuweisen kann.
+
+Eine Übersetzungstabelle mit einem Sprachschlüssel hinzuzufügen ist sehr einfach.
+Anstatt die Tabelle einfach als Argument an `translations()` zu übergeben,
+muss als erster Paraeter der Sprachschlüssel übergeben werden, während die Übersetzungstabelle
+als zweiter Parameter übergeben wird. Eine Übersetzungstabelle mit Sprachschlüssel
+hinzuzufügen, sieht also so aus:
+
 
 <pre>
 // registers translation table with language key 'en'
@@ -36,8 +37,8 @@ $translateProvider.translations('en', {
 });
 </pre>
 
-Now, to add a second translation table for another language, let's say german, just
-do the same with a different language key:
+Um jetzt eine zweite Tabelle hinzuzufügen, sagen wir deutsch, muss einfach das
+Gleiche nur mit einem anderen Sprachschlüssel geschehen:
 
 <pre>
 // registers translation table with language key 'de'
@@ -46,42 +47,43 @@ $translateProvider.translations('de', {
 });
 </pre>
 
-Is that simple? Your app now knows about two different languages. You can add
-as many languages as needed, there's no limit. However, now since there are two
-languages available, which language should be used by an app? angular-translate
-doesn't prefer any language until you tell it to do so.
+Ist das einfach? Deine App kennt nun zwei Sprachen. Du kannst so viele Sprachen
+hinzufügen wie du möchtest. Wie dem auch sei, jetzt wo es zwei Sprachen gibt,
+muss angular-translate ja irgendwoher wissen, welche Sprache genutzt werden soll
+richtig? angular-translate bevorzugt keine Sprache, bis du den Auftrag gibst.
 
-### Decide which language to use
+## Entscheiden welche Sprache genutzt werden soll
 
-Since you've now registered more then one translation table, `angular-translate`
-has to know which one to use. This is where a new method of `$translateProvider`
-comes in. `preferredLanguage()` tells angular-translate, which of the registered
-languages is the one that should be used by default. It expects an argument with
-the value of the language key, which points to a certain translation table. So,
-to tell an app it should use german rather then english as first language, extend
-the code like this:
+Da jetzt mehr als eine Sprache registriert ist, muss angular-translate wissen,
+welche Sprache genutzt werden soll. An dieser Stelle kommt die Methode
+`preferredLanguage()` vom `$translateProvider` ins Spiel. Sie sagt angular-translate
+welche Sprache genutzt werden soll. Die Methode erwartet als Argument einen
+Sprachschlüssel, sinnvollerweise einen der Übersetzungstabellen die du registriert
+hast. Um deiner App also zu sagen, sie soll deutsch anstatt englisch als
+Standardsprache bevorzugen, muss der Code wie folgt erweitert werden:
 
 <pre>
 // tells angular-translate to use the german language
 $translateProvider.preferredLanguage('de');
 </pre>
 
-**Note:** It's actually also possible to use `$translateProvider.uses()` for that,
-since its setting the languages as well. However it turned out that this is a bad
-practice when using asynchronous loaders in combination with a storage. In some
-cases it can happen that angular-translate does two asynchronous calls. You'll
-learn more on that in detail later. To get around this, we introduced
-`preferredLanguage()`. You should always use `preferredLanguage()` instead of
-`uses()` on `$translateProvider`.
+**Achtung:** Theoretisch ist es möglich `$translateProvider.uses()` zu verwenden.
+Allerdings hat sich herausgestellt, dass es in Kombination mit einem asynchronen
+Loader zu unschönen Seiteneffekten kommt. Aus diesem Grund wurde `preferredLanguage()`
+eingeführt. Wenn man für diesen Anwendungsfall `preferredLanguage()` anstatt
+`uses()` verwendet, kann man nichts falsch machen.
 
-### Using another language to fall back
+## Eine andere Sprache als Fallback verwenden
 
-This is all great but unfortunately the `preferredLanguage()` you just choose
-is incomplete. So you would like `angular-translate` to try a second language
-for these translations instead of displaying some empty or unformatted strings.
-The new `fallbackLanguage()` feature will let you tell `angular-translate` do so.
-which language to use in case it cannot find a translation in the currently
-used translation table. Its usage is basically the same as `preferredLanguage()`.
+Wenn wir davon ausgehen, dass es Translation ID's gibt, zu denen es keine Übersetzung
+in einer bestimmten Sprache gibt, weil sich die App noch in der Entwicklung
+befindet oder der Übersetzungsprozess schlicht weg noch nicht abgeschlossen ist,
+kann es sehr hilfreich sein, eine Sprache als Fallback festzulegen, die in solchen
+Fällen in kraft tritt.
+
+`$translateProvider` bietet eine Methode `fallbackLanguage()` mit der sich eine
+Fallback-Sprache konfigurieren lässt. Sie erwartet genau wie `preferredLanguage()`
+einen Sprachschlüssel. `angular-translate` kümmert sich dann um den Rest.
 
 <pre>
 // tells angular-translate to use the english language if translations are not
@@ -89,20 +91,18 @@ used translation table. Its usage is basically the same as `preferredLanguage()`
 $translateProvider.fallbackLanguage('en');
 </pre>
 
-### Switching the language at runtime
+## Sprache zur Laufzeit wechseln
 
-To switch the language at runtime, `$translate` service has a method
-`uses()` which either returns the language key of the current used language, or,
-when passing a language key as argument, tells angular-translate to use the
-corresponding language. `$translate.uses()` also invokes asynchronous laoders
-internally, when trying to use a language of which the translation table isn't
-loaded yet. But more on that in
-[Asynchronous Loading](#/guide/08_asynchronous_loading).
+Um die Sprache zur Laufzeit zu wechseln, bietet `$translate`- Service eine Methode
+`uses()`, welche entweder den Sprachschlüssel der aktuell verwendeten Sprache
+zurück gibt, oder, wenn ein Sprachschlüssel übergeben wird, die Sprache neu setzt.
+`$translate.uses()` führt außerdem asynchrone Loader aus wenn nötig. Dazu aber später
+mehr.
 
-A good usage of `$translate.uses()` would be in a controller which controls the
-change of a language. You just have to implement a function on the scope to
-expects a language key and then use it to tell angular-translate to change the
-language.
+Ein guter Anwendungsfall für `$translate.uses()` wäre wahrscheinlich in einem Controller,
+der sich um das Wechseln der Aktuellen Sprache kümmert. Dazu muss nur eine Funktion
+am Scope implementiert werden, die einen Sprachschlüssel erwartet und angular-translate
+anpingt, die Sprache zu wechseln.
 
 <pre>
 angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
@@ -114,9 +114,9 @@ angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($t
 }]);
 </pre>
 
-To get a feeling for how it would work in a sample app, we update our app
-accordingly. First, we add another translation table for the german language and
-add two new translation id's for buttons we want to add later:
+Um ein Gefühl dafür zu bekommen, wie sich das in einer Beispiel-App verhält,
+passen wir unser Beispiel entsprechend an. Wir fügen eine weitere Übersetzungstabelle
+für die Sprache deutsch und weitere Übersetzungen hinzu:
 
 <pre>
 var translationsEN = {
@@ -142,9 +142,10 @@ var translationsDE= {
 };
 </pre>
 
-After that, we update the registration of the english translation table, that it
-has a corresponding language key and tell angular-translate to use english as
-default language:
+Als nächstes passen wir die Registrierung der Übersetzungtabellen an, dass diese
+mit einem Sprachschlüssel registriert werden. Außderdem legen wir englisch als
+Standardsprache fest.
+
 
 <pre>
 $translateProvider.translations('en', translationsEN);
@@ -152,17 +153,17 @@ $translateProvider.translations('de', translationsDE);
 $translateProvider.preferredLanguage('en');
 </pre>
 
-Cool! Now we need controls to change the language at runtime. We update our HTML
-and add a button for each language. We also setup an `ng-click` directive on each
-button which calls a function to change the language:
+Cool! Jetzt brauchen wir nur noch Buttons, mit denen wir die Sprache zur Laufzeit
+wechseln können. Wir fügen HTML-Buttons für jede Sprache hinzu und versehen sie
+mit einer `ng-click`- Direktive:
 
 <pre>
 <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
 <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
 </pre>
 
-Last but not least, we have to implement a corresponding function on our
-controllers scope:
+Zum Schluss implementieren wir noch die entsprechende Funktion an unserem
+Controller-Scope:
 
 <pre>
 app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
@@ -173,7 +174,7 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 }]);
 </pre>
 
-Et vóila! We now have an app with multi language support!
+Et vóila! Schon haben wir Unterstützung für Mehrsprachigkeit!
 
 
 <doc:example module="myApp">
