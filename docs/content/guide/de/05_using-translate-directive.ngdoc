@@ -1,52 +1,52 @@
 @ngdoc overview
-@name Using translate directive
+@name translate- Directive benutzen
 @description
 
-# Using translate directive
+# translate- Direktive benutzen
 
-Another way to translate contents within the view layer, is to use the `translate`
-directive. Using `translate` filter is great, but using `translate` directive is
-better. It turned out that having too many filters in a view sets up too many watch expressions, which is why `angular-translate` also provides a directive to translate
-your contents in view layer.
+Neben dem Filter gibt es eine Direktive die man nutzen kann um Inhalte innerhalb
+des View-Layers zu übersetzen. Filter sind gut, Direktiven sind besser. Es hat
+sich herausgestellt, dass zu viele Filter im View eine App aufgrund zu vieler
+Watch-Expressions verlangsamen kann. Deswegen bietet `angular-translate` neben
+dem Filter eine Direktive.
 
-### General usage
-You can use `translate` directive in many different ways. This is how the general
-usage looks like:
+## Allgemeine Benutzung
+
+Es gibt verschiedene Möglichkeiten `translate`- Direktive zu verwenden. So sieht
+es generell aus:
 
 ```
 <ANY translate>TRANSLATION_ID</ANY>
 ```
 
-You can also pass a translation id as attribute value of the `translate` directive
-like this:
+Außerdem kannst du eine Translation ID auch als Attributwert übergeben:
 
 ```
 <ANY translate="TRANSLATION_ID"></ANY>
 ```
 
-Even if that's already a very flexible way of using a directive, angular-translate
-offers **another** way of using it. Let's say a translation id isn't available
-as a concrete identifier, because e.g. one is looping over a dataset which contains
-a translation id in each iterator. In that case a translation id is only dynamically
-available. You actually have to interpolate the id itself first. angular-translate
-got you covered. This is also possible:
+Auch wenn das schon sehr flexibel ist, angular-translate bietet **noch einen**
+Weg, die Direktive zu nutzen. Gehen wir mal davon aus, dass eine Translation ID
+nicht als konkreter Identifier zur Verfügung steht, weil beispielsweise über ein
+Dataset geloopt wird. In solch einem Fall ist die Translation ID nur dynamisch
+verfügbar. Was bedeteut, sie muss interpoliert werden. Folgendes funktioniert also
+auch:
 
 ```
 <ANY translate="{{toBeInterpolated}}"></ANY>
 ```
 
-Isn't that cool? And yea, angular-translate wouldn't be angular-translate if it
-couldn't handle it the same way with our first usage example. This also works:
+Und auch das hier, funktioniert:
 
 ```
 <ANY translate>{{toBeInterpolated}}</ANY>
 ```
 
-Choose what works best for you!
+Benutze sie so, wie es dir am besten passt!!
 
-Let's update our example app and add some new translations. How about texts which
-represents each possible way of using `translate` directive? Our translation table
-could look like this:
+Passen wir unser Beispiel an fügen ein paar neue Übersetzungen hinzu. Wie wär's
+mit Texten, die jede mögliche Verwendung der Direktive darstellen? Unsere Übersetzungstabelle
+könnte so aussehen:
 
 <pre>
 var translations = {
@@ -58,7 +58,7 @@ var translations = {
 };
 </pre>
 
-After that we update our view with our new translation id's:
+Anschließend passen wir unser View an:
 
 <pre>
 <h2>{{ 'HEADLINE' | translate }}</h2>
@@ -70,7 +70,7 @@ After that we update our view with our new translation id's:
 <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
 </pre>
 
-Our updated app then looks like this:
+Die neue App sieht dann so aus:
 
 <doc:example module="myApp">
   <doc:source>
