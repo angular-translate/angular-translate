@@ -1,30 +1,30 @@
 @ngdoc overview
-@name Variable replacement
+@name Dynamische Werte
 @description
 
-# Variable replacement
+# Dynamische Werte
 
-This guide will show you how to handle variable replacements within translations.
-If you haven't read the introduction guides about
-[$translate service](#/guide/03_using-translate-service),
-[translate filter](#/guide/04_using-translate-filter) and
-[translate directive](guide/05_using-translate-directive), you should do so now!
+Jetzt lernst du, wie du dynamische Werte in deinen Übersetzungen verbauen kannst.
+Wenn du noch nicht die Guides zum
+[$translate- Service](#/guide/03_using-translate-service),
+[translate- Filter](#/guide/04_using-translate-filter) und
+[translate- Directive](guide/05_using-translate-directive), solltest du das jetzt tun!
 
-Using `$translate` service, `translate` filter and `translate` directive is pretty
-neat! But what if your translations need variable values? Say you want to display a
-notification message with a text like '_You've received n mails_', where _n_ is
-a placeholder for a variable value which could be any number?
+Der Service, Filter und die Direktive sind ja schon richtig cool. Aber was wenn
+dynamische Werte gebraucht werden? Angenommen du möchtest eine Benachrichtigung
+mit folgenden Text anzeigen '_Du hast n neue Mails_', während _n_ ein Platzhalter
+für ein dynamischen Wert ist.
 
-Well, `angular-translate` got you covered. Bringing variable values to translations
-using angular-translate's default interpolation services is pretty straight
-forward. Yeap you read it right. It depends on the used interpolation service,
-how variable values are managed within translations.
+Selbstverständlich hat `angular-translate` auch darauf eine Antwort. Dynamische
+Werte in seine Übersetzungen zu bringen, während man den standard Interpolation-Service
+benutzt ist sehr einfach. Richtig gehört. Es hängt vom benutzten Interpolation-Service
+ab, wie dynamische Werte innerhalb von Übersetzungen behandelt werden.
 
-### Using variable values within translations
+## Dynamische Werte in Übersetzungen verwenden
 
-When using angular-translate's default interpolation service, you can simply rely
-on Angular's interpolation service syntax. So, to define a variable value within
-a translation, all you have to do is to use Angular's interpolate directive.
+Wenn angular-translate's standard Interpolation-Service verwendet wird, kannst du
+ganz einfach Angular's `$interpolate`- Service Syntax verwenden. Also, um dynamische
+Werte in einer Übersetzung einzubauen nutzt du einfach Angular's interpolate- Directive.
 
 ```
 {
@@ -32,23 +32,23 @@ a translation, all you have to do is to use Angular's interpolate directive.
 }
 ```
 
-Whereas `username` is the identifier which you can pass a variable value through.
-So how is it possible to get these variable values passed through the components
-angular-translate provides?
+Während `username` der Identifier ist, an den du von Außen einen Wert zuweisen kannst.
+Wie ist es aber nun möglich, diese dynamischen Werte durch die Komponenten zuzuweisen?
 
-### Variable replacement in $translate service
+## Dynamische Werte in $translate- Service
 
-You can pass variable values through `$translate` service by using its second
-argument. `$translate` service expects a JavaScript object hash as second argument
-which is used to interpolate translations against. So if we have a translation id
-like described above, passing a value for `username` would work as following:
+Du kannst dynamische Werte an $translate- Service als zweiten Parameter übergeben.
+`$translate`- Service erwartet ein JavaScript Objekt Hash als zweites Argument
+welcher zum Interpolieren dynamischer Werte genutzt wird. Wenn wir also eine
+Translation ID habeb wie oben beschrieben, würde man einen dynamischen Wert für
+`username` wie folgt übergeben:
 
 <pre>
 $translate('TRANSLATION_ID', { username: 'PascalPrecht' });
 </pre>
 
-If there's a translation id containing more variable values, simply extend the
-passed object hash with corresponding key-value pairs.
+Wenn es Translation Id mit mehr als nur einem Dynamischen Wert gibt, muss das
+JavaScript Objekt einfach nur entsprechend erweitert werden.
 
 <pre>
 $translate('TRANSLATION_ID', {
@@ -57,23 +57,25 @@ $translate('TRANSLATION_ID', {
 });
 </pre>
 
-### Variable replacement in translate filter
+## Dynamische Werte im translate- Filter
 
-Since `translate` filter uses `$translate` service internally, we just need a way
-to pass dynamic values through the filter to make it available as object hash for
-the service. To achieve this, there is a specific syntax required, because filters in Angular are currently not able to have named parameters. So there are to ways to pass values through `translate` filter.
+Da `translate`- Filter intern `$translate`- Service benutzt, brauchen wir nur einen
+Weg dynamische Werte durch den Filter zum Service durchzuschleifen. Da Filter in
+Angular keine benamten Parameter erwarten können, ist Dazu eine
+bestimmte Syntax nötig, die man auf den Filter anwenden kann. Es gibt zwei Wege
+dynamische Werte an den Filter zu übergeben.
 
-The first way is to pass an object literal as string. Afterwards it gets
-interpolated by `$translate` service.
+Man kann zum Einen, ein Objektliteral als String übergeben. Dieser wird dann später
+vom `$translate`- Service interpoliert.
 
 <pre>
 {{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
 </pre>
 
-Not that hard right? But what if `username` should not have a fix value and also
-has to be interpolated before getting passed? The only way to get this done is to
-pass a scope object as Angular expression through the filter. Which also means,
-you have to bind your variable values for the translations in the controller whichexposes the values on the scope.
+Einfach oder? Aber was ist, wenn `username` kein fixer Wert ist und selbst vorher
+interpoliert werden muss? Die einzige Möglichkeit zu interpolierende Werte an
+Filter zu übergeben, ist als Objekt-Expression. Die dynamischen Werte müssen  also
+als Objekt durch den Controller gebindet werden.
 
 <pre>
 angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
@@ -84,38 +86,37 @@ angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 }]);
 </pre>
 
-And then pass it as expression through the filter:
+Und als nächstes die Werte als Expression übergeben:
 
 <pre>
 {{ 'TRANSLATION_ID' | translate:translationData }}
 </pre>
 
-### Variable replacement in translate directive
+### Dynamische Werte in translate- directive
 
-Of course, you can make the same possible with `translate` directive. `translate`
-directive expects an optional `translate-values` attribute you can use to pass
-some values through it. All you have to do is to combine the directive with the
-`translate-values` attribute.
+Selbstverständlich kannst du auch dynamische Werte an die Direktive übergeben.
+`translate`- Direktive erwartet ein optionales `translate-values`- Attribut, welches
+genutzt werden kann um dynamische Werte an die Direktive zu übergeben.
 
-You can pass either an object literal as string, or, if the value is dynamic,
-an interpolation directive. Both get internally evaluated and parsed by `translate`
-filter, so what comes out is a plain old JavaScript object which gets passed to
-`$translate` service.
+Du kannst entweder ein Objektliteral als String, oder, wenn der Wert dynamisch ist,
+als Interpolation übergeben. Beides wird intern evaluiert und geparst, so dass am
+Ende wieder ein JavaScript Objekt herauskommt, welches ohne Probleme an den
+`$translate`- Service übergeben werden kann.
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values='{ username: "PascalPrect"}'></ANY>
 </pre>
 
-or
+oder
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values="{{translationData}}"></ANY>
 </pre>
 
-Awesome! We can now replace variable values within our translations! Let's update
-our example app. We extend the translation table like this:
+Klasse! Jetzt wissen wir, wie wir dynamische Werte an die Komponenten übergeben
+können. Updaten wir unsere App. Wir erweitern die Übersetzungstabelle wie folgt:
 
 <pre>
 var translations = {
@@ -128,13 +129,13 @@ var translations = {
 };
 </pre>
 
-Next, we  pass a name through a `translate` directive:
+Als nächstes übergeben wir einen Namen an die `translate`- Direktive:
 
 <pre>
 <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
 </pre>
 
-Our working code now looks like this:
+Der funktionierende Code sieht dann so aus:
 
 <doc:example module="myApp">
   <doc:source>
