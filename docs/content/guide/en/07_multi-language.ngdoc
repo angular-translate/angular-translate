@@ -17,7 +17,7 @@ So let's get started by learning how to add different translation tables at a ti
 
 ### Teaching your app more languages
 
-In [Getting Started](#/guide/02_gettin-started) you've learned how to add a
+In [Getting Started](#/guide/02_getting-started) you've learned how to add a
 translation table to your app, using `$translateProvider` method `translations()`.
 The same method can be used to add more translation tables at a time. The given
 translation tables just have to come with a language key that
@@ -98,7 +98,7 @@ when passing a language key as argument, tells angular-translate to use the
 corresponding language. `$translate.uses()` also invokes asynchronous loaders
 internally when trying to use a language of which the translation table hasn't been
 loaded yet. But more on that in
-[Asynchronous Loading](#/guide/08_asynchronous_loading).
+[Asynchronous Loading](#/guide/10_asynchronous_loading).
 
 A good usage of `$translate.uses()` would be in a controller which controls the
 change of a language. You just have to implement a function on the scope to

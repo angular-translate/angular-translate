@@ -8,7 +8,7 @@ This guide will show you how to handle variable replacements within translations
 If you haven't read the introduction guides about
 [$translate service](#/guide/03_using-translate-service),
 [translate filter](#/guide/04_using-translate-filter) and
-[translate directive](guide/05_using-translate-directive), you should do so now!
+[translate directive](#/guide/05_using-translate-directive), you should do so now!
 
 Using `$translate` service, `translate` filter and `translate` directive is pretty
 neat! But what if your translations need variable values? Say you want to display a
