@@ -40,7 +40,7 @@ Wird jedes mal gefeuert wenn ein Translation Change endet, egal ob es erfolgreic
 war oder nicht und vor allem nachdem alle registrierten Interpolation-Services
 benachrichtigt wurden.
 
-## Asynchronous loading
+## Asynchrones Laden
 
 Einige Events werden nur gefeuert, wenn man einen aynchronen Loader verwendet.
 
