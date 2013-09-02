@@ -82,7 +82,7 @@ $translateProvider.preferredLanguage('en');
 </pre>
 
 angular-translate verkettet die gegebenen Werte nach folgenden Muster:
-`{{prefix}}{{langKey}}{{suffix}}`. Und auch hier gilt, wenn noch keine 
+`{{prefix}}{{langKey}}{{suffix}}`. Und auch hier gilt, wenn noch keine
 Übersetzungstabelle für die gewählte Sprache vorhanden ist, wird der Loader automatisch
 ausgeführt.
 
@@ -203,16 +203,15 @@ Loaders zur Laufzeit manipulieren. Das stellt sicher, dass angular-translate nur
 die Übersetzungsdaten läd, wie wir wirklich wollen. Sobald ein neuer Part hinzugefügt
 wird, feuert der Loader ein `$translatePartialLoaderStructureChanged` Event.
 
-Until now there's no additional data loaded! `angular-translate` doesn't know
-about the loaders state so you have to tell `angular-translate` to **refresh**
-the current translation tables. Refreshing translation tables drops
-(if no table is specified) and reloads them. So basically, to achieve partial
-loading, all you have to do is to manipulate the state of the loader by saying
-which parts to add and then refreshing the tables. Because, when changing the
-loaders state with new parts, they get loaded the next time the loader gets
-invoked.
+Aber bist jetzt wurden noch keine Daten geladen! Da angular-translate nicht über
+den State des Loaders weiß, muss man die aktuell registrierten Übersetzungstabellen
+explizit "refreshen". Das Refreshen löschalle aktuell registrierten Tabellen
+(sofern nichts spezifiziert) und läd anschließend alle neu.Also, um partial loading
+zu ermöglichen, muss man den State des Loaders zur Laufzeit ändern und anschließend
+die Übersetzungstabellen neu Anfragen. Denn jedes Mal, wenn der State des Loaders
+mit neuen Parts verändert wird,werden diese bei einem Refresh neu angefragt.
 
-So all we have to do is simply adding the following:
+Alles was wir also machen müssen ist das hier:
 
 <pre>
 angular.module('contact')
@@ -222,9 +221,8 @@ angular.module('contact')
 });
 </pre>
 
-You can also use the `$translatePartialLoaderStructureChanged` event to automate
-the process, by listening to that event with `$rootProvider` and refreshing
-translation tables everytime it gets fired.
+Man kann außerdem den `$translatePartialLoaderStructuredChanged`- Event in
+Kombination mit `$rootScope` verwenden um den Prozess zu automatisieren.
 
 <pre>
 app.run(function ($rootProvider, $translate) {
@@ -234,36 +232,31 @@ app.run(function ($rootProvider, $translate) {
 });
 </pre>
 
-Since `$translate.refresh()` returns a promise, it works beautifully together
-with either `ngRoute` module or UI Router.
+Da `$translate.refresh()` ein Promise zurück gibt, kann man diese Methode wunderbar
+in Kombination mit dem `ngRoute` oder dem UI-Router verwenden.
 
 ## Lazy loading at runtime
 
-Once your app bootstraps, it'll load needed translation data asynchonously as
-soon as possible. Okay, cool. But what if a user wants to change the language and
-the corresponding translation data isn't also loaded yet?
+Sobald die App initialisiert wurde, werden alle Übersetzungen so früh wie möglich
+asynchron geladen. Okay. Aber was wenn ein Benutzer die Sprache zur Laufzeit ändert
+und die angefragte Sprache noch bisher noch nicht geladen wurde?
 
-In [Multi Language](#/guide/07_multi-language) you've learned, how to change the
-language at runtime using `$translate.uses()`. Know what? Nothing will change when
-dealing with asynchronous loaders. `$translate.uses()` checks if a translation
-table for a given language key is present or not. And if not, it'll invoke the
-registered loader to get it down! Lazy loading at is best!
+In [Mehrsprachigkeit](#/guide/07_multi-language) hast du gelernt, wie man die
+Sprache zur Laufzeit mit `$translate.uses()` wechselt. Für den Fall dass die Daten
+asynchron geladen werden ändert sich nichts. `$translate.uses()` überprüft ob die
+angefragte Sprache vorhanden ist und wenn nicht, wird diese erst geladen.
 
-### FOUC - Flash of untranslated content
+## FOUC - Flash of untranslated content
 
-There's one drawback when using asynchronous loaders to get your translation data
-into the app. There's a little amount of time when your app launches where you
-have this little kind of flickering, because your translation data isn't loaded
-yet. This is actually not a bug of angular-translate, but a pretty logical behavior
-since we'return executing stuff asynchronously.
+Es gibt einen Nachteil wenn man Asynchrone Loader verwendet. Für keinen kurzen
+Moment beim Startup der App könnte es ein kleines Flickern geben, da die initiale
+Sprache noch nicht geladen wurde. Das ist kein Bug, aber ein ziemlich logisches
+Verhalten, da ja Daten asynchron geladen werden.
 
-To get around this, you could provide at least one language **with** your app
-without having to load it asynchronously. If your app then uses this provided
-language as default language, using `$translateProvider.preferredLanguage()`, you
-won't have this FOUC, because the language to use is already there.
-
-Just use a combination of `$translateProvider.translations()` and
-`$translateProvider.{{whatever}}Loader` like this:
+Um dem vorzubeugen könnte man mindestens eine Sprache (vorzugsweise die, die auch
+als Default-Sprache konfiguriert wird) mit der App ausliefern. Also per
+`$translateProvider.translations()` registrieren. In dem Fall wäre die initiale
+Sprache schon vorhanden und kein Flickern würde auftreten.
 
 <pre>
 $translateProvider.translations('en', {
@@ -276,12 +269,8 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('de');
 </pre>
 
-Let's update our sample app accordingly to use an asynchronous loader! We'll use
-the staticFilesLoader. First, we have to pull the translation tables out of the
-code and put them into separate locale files:
-
-**Note:** The data is now provided as _JSON_ so make sure to put everything in
-double quotes!
+Okay, passen wir unsere App mit dem staticFilesLoader an. Als erstes ziehen wir
+die Übersetzungen aus dem Code und schreiben Sie in seperate Dateien:
 
 <pre>
 // locale-en.json
@@ -311,7 +300,7 @@ double quotes!
 }
 </pre>
 
-Next we setup `$translate` service using `$translateProvider`:
+Als nächstes konfigurieren wir `$translate`- Service mit dem `$translateProvider`:
 
 <pre>
 // configures staticFilesLoader
@@ -324,8 +313,8 @@ $translateProvider.preferredLanguage('en');
 $translateProvider.useLocalStorage();
 </pre>
 
-Since we don't have to make any changes in our controllers or HTML, we are done!
-Take a look at the working app:
+Da wir keine Änderungen im HTML oder unseren Controllern machen müssen, sind wir
+schon fertig! Hier ist die funktionierende App:
 
 <doc:example module="myApp">
   <doc:source>
@@ -366,9 +355,9 @@ Take a look at the working app:
   </doc:source>
 </doc:example>
 
-Open up your browsers devtools and take a look at the network activities when changing
-the language. Our app now loads translation data asynchronously! In the next
-chapter you'll learn how to build **your own custom loaders**.
+Schaue in den Devtools des Browsers nach Netzwerkaktivitäten. Wenn die Sprache
+gewechselt wird, werden die Daten asynchron nachgeladen. Im nächsten Kapitel
+lernst du, wie du deinen eigenen Loaders baust.
 
 <br>
 <hr>
