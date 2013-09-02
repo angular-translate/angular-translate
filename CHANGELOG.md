@@ -1,3 +1,32 @@
+# 1.0.2 (2013-09-02)
+
+## Features
+### translateService
+
+* added refresh() method (d41f91e)
+
+### translateProvider
+
+* makes methods chainable (cdc9e9e)
+
+### $translatePartialLoader
+
+* Basic implementation (81222bf)
+
+
+
+## Bug fixes
+### translateDirective
+
+* fixes bug that directive writes into scope (4e06468)
+
+* fixes scope handling (c566586)
+
+### translateService
+
+* reset proposed language if there's no pending loader (6b477fc)
+
+
 # 1.0.2 (2013-08-07)
 
 
