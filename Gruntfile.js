@@ -34,6 +34,7 @@ module.exports = function (grunt) {
       core: [
         'src/translate.js',
         'src/service/translate.js',
+        'src/service/default-interpolation.js',
         'src/directive/translate.js',
         'src/filter/translate.js'
       ],
@@ -68,7 +69,7 @@ module.exports = function (grunt) {
         files: ['Gruntfile.js', '<%= lib_files.core %>', '<%= lib_files.ext.all %>', '<%= lib_files.test %>'],
         tasks: ['jshint:all', 'karma:unit']
       },
-      
+
       livereload: {
         options: {
           livereload: true
@@ -78,7 +79,7 @@ module.exports = function (grunt) {
         tasks: ['jshint', 'karma:unit', 'concat', 'copy:demo']
       }
     },
-    
+
     jshint: {
 
       options: {
@@ -92,7 +93,7 @@ module.exports = function (grunt) {
 
       core: {
         files: {
-          src: ['<%= lib_files.core %>'] 
+          src: ['<%= lib_files.core %>']
         }
       },
 
@@ -211,7 +212,7 @@ module.exports = function (grunt) {
         src: ['<%= lib_files.ext.storage_local%>'],
         dest: '<%= build_dir %>/angular-translate-storage-local/angular-translate-storage-local.js'
       }
-  
+
     },
 
     uglify: {
@@ -445,7 +446,6 @@ module.exports = function (grunt) {
     'jshint:all',
     'karma',
     'build:core',
-    'build:default_interpolation',
     'build:messageformat_interpolation',
     'build:handler_log',
     'build:loader_partial',
@@ -456,7 +456,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build:core', [
-    'jshint:core', 
+    'jshint:core',
     'concat:core',
     'ngmin:core',
     'concat:banner',
@@ -464,56 +464,56 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build:default_interpolation', [
-    'jshint:default_interpolation', 
+    'jshint:default_interpolation',
     'concat:default_interpolation',
     'ngmin:default_interpolation',
     'uglify:default_interpolation'
   ]);
 
   grunt.registerTask('build:messageformat_interpolation', [
-    'jshint:messageformat_interpolation', 
+    'jshint:messageformat_interpolation',
     'concat:messageformat_interpolation',
     'ngmin:messageformat_interpolation',
     'uglify:messageformat_interpolation'
   ]);
 
   grunt.registerTask('build:handler_log', [
-    'jshint:handler_log', 
+    'jshint:handler_log',
     'concat:handler_log',
     'ngmin:handler_log',
     'uglify:handler_log'
   ]);
 
   grunt.registerTask('build:loader_partial', [
-    'jshint:loader_partial', 
+    'jshint:loader_partial',
     'concat:loader_partial',
     'ngmin:loader_partial',
     'uglify:loader_partial'
   ]);
 
   grunt.registerTask('build:loader_static_files', [
-    'jshint:loader_static_files', 
+    'jshint:loader_static_files',
     'concat:loader_static_files',
     'ngmin:loader_static_files',
     'uglify:loader_static_files'
   ]);
 
   grunt.registerTask('build:loader_url', [
-    'jshint:loader_url', 
+    'jshint:loader_url',
     'concat:loader_url',
     'ngmin:loader_url',
     'uglify:loader_url'
   ]);
 
   grunt.registerTask('build:storage_cookie', [
-    'jshint:storage_cookie', 
+    'jshint:storage_cookie',
     'concat:storage_cookie',
     'ngmin:storage_cookie',
     'uglify:storage_cookie'
   ]);
 
   grunt.registerTask('build:storage_local', [
-    'jshint:storage_local', 
+    'jshint:storage_local',
     'concat:storage_local',
     'ngmin:storage_local',
     'uglify:storage_local'
