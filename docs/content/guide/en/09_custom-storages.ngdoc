@@ -10,7 +10,7 @@ language over cross http requests. If both, localStorage and cookieStorage don't
 fit to your needs, you can simply build your own storage service and use that
 instead.
 
-### Building a custom storage service
+## Building a custom storage service
 
 If you want to use your own custom storage in your app, you have to build a
 service which has to implement some methods, so angular-translate can make use
@@ -40,7 +40,7 @@ to request a value. Provide a custom storage as a separate service gives you hig
 flexibility when it comes to use this services in a different place. In addition
 to that, testing this service is pretty easy, since its isolated.
 
-### Using the custom storage service
+## Using the custom storage service
 
 Once you've build your custom storage service, you have to tell angular-translate
 to make use of it. `$translateProvider` methods `useCookieStorage()` and

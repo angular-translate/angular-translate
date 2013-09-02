@@ -22,7 +22,7 @@ Luckily, [Alex Sexton](https://github.com/SlexAxton) did the job already and bui
 library that implements the _ICU User Guide_ spec. It's called MessageFormat and
 you can find it right [here](https://github.com/SlexAxton/messageformat.js).
 
-### angular-translate meets MessageFormat
+## angular-translate meets MessageFormat
 
 In our opinion, the best way to bring pluralization to angular-translate is to adapt
 the functionality of MessageFormat, since it solves all the problems including
@@ -94,7 +94,7 @@ $translate('LIKE_TEXT', { GENDER: 'male' });
 Is that cool? You can just plug MessageFormat's functionality onto angular-translate
 and use high level pluralization within your translations!
 
-### The drawback
+## The drawback
 
 Actually it's pretty cool that we are able to use MessageFormat as our interpolation
 engine. Unfortunately, when replacing MessageFormat interpolation with angular-translate's
@@ -119,7 +119,7 @@ them. So, how do we get around this? We need a way to use angular-translate's
 default interpolation, to have all the cool features and at the same time, we need
 MessageFormat interpolation to have full featured pluralization support.
 
-### Overriding interpolation temporarily
+## Overriding interpolation temporarily
 
 Since its a bit silly to re-implement MessageFormat's functionality within
 angular-translate, we can't really use both interpolation types in a single translation.

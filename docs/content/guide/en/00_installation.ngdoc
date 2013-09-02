@@ -4,7 +4,7 @@
 
 # Installation
 
-### Installing dependencies
+## Installing dependencies
 
 These tools are used during the development of `angular-translate`, so you should
 consider install them on your machine to make sure things work properly.
@@ -15,7 +15,7 @@ Please install the following tools:
 - [Bower](https://github.com/twitter/bower)
 
 
-### Installing via Bower
+## Installing via Bower
 
 You can install a `angular-translate` package very easy using Bower. After
 installing Bower on your machine, simply run:
@@ -34,7 +34,7 @@ is a package which contains the default interpolation engine angular-translate u
 to interpolate your translations. We'll come to this later, currently you only
 have to know that this package exists and that you have to embed it in your HTML document.
 
-### Installing with Git
+## Installing with Git
 
 Another way to get the source of angular-translate, is to clone the whole repository
 from GitHub.
@@ -56,7 +56,7 @@ $ npm install
 $ bower install
 ```
 
-### Running provided unit tests
+## Running provided unit tests
 
 Of course, `angular-translate` comes with a full featured testsuite which just waits
 for you to run it. This is where the **Karma testrunner** comes in. Navigate to the
@@ -77,7 +77,7 @@ configuration file for midway tests:
 $ karma start karma.midway.conf
 ```
 
-### Building from source
+## Building from source
 
 When all tests passed successfully you can now build a development, as well as
 a production version of the code, just like you get from the Bower package.

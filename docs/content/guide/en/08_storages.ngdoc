@@ -15,7 +15,7 @@ So the problem is, that our app just can't remember which language you've chosen
 the last time you opened the app. This chapter shows you, how to teach your app
 to remember the language users choose.
 
-### Let your app remember the language
+## Let your app remember the language
 
 To let you app remember the language users choose, angular-translate comes with a
 support for **Storages**. What ever storage you use, angular-translate will save
@@ -27,9 +27,9 @@ angular-translate has built-in support for two storages. **localStorage** and
 supported by the browser the user currently uses. To you one of those storages,
 you have to install the corresponding extension package.
 
-### Using cookieStorage
+## Using cookieStorage
 
-If you want to use the cookieStorage to store the language over cross http requests, 
+If you want to use the cookieStorage to store the language over cross http requests,
 simply install the cookie storage extension via bower:
 
 ```
@@ -48,7 +48,7 @@ Is that easy? angular-translate will now store the initial language key in that
 storage and will update it accordingly once a user switches the language.
 
 
-### Using localStorage
+## Using localStorage
 
 In case you don't want to use cookieStorage for several reasons, you can use
 localStorage to make the same possible. The flow is basically the same. You install

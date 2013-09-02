@@ -15,7 +15,7 @@ different place to store your translation data and don't even want to load them
 from a remote server. This is where custom loaders come in. You can build your
 own loaders very easily. This chapter shows you how to do it!
 
-### Building a custom loader service
+## Building a custom loader service
 
 If non of the provided loaders fit to your needs, you can register a custom
 asynchronous loader as a factory. The factory has to return a function, which
@@ -49,7 +49,7 @@ gets resolved with your translation data, or rejected with the language key. As
 you can see, there's a `key` property on the `options` object. It has the value
 of the language key with which the asynchronous loader is invoked.
 
-### Make use of a custom loader
+## Make use of a custom loader
 
 You know `$translateProvider` provides methods like `useStaticFilesLoader()` or
 `useUrlLoader()`. Both of them use `useLoader()` internally to register a loader
@@ -63,7 +63,7 @@ $translateProvider.useLoader('customLoader');
 angular-translate access your custom loader factory with `$injector` service and
 does the rest for you.
 
-### Adding additional options
+## Adding additional options
 
 The `options.key` property indicates, that `options` is just an object. You can
 extend it with additional properties to your own needs. For example you could

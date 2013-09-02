@@ -17,7 +17,7 @@ directive, which means it is always outside of an Angular world. So, to achieve
 this, you actually have to manipulate your apps title once your app is running
 through controller or service logic.
 
-### General usage
+## General usage
 This is where `$translate` service comes in. Using `$translate` service is very
 easy. First of all, you have to inject it per dependency injection (like every
 service you want to use within your Angular code). Let's say we want to extend

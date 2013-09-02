@@ -9,7 +9,7 @@ directive. Using `translate` filter is great, but using `translate` directive is
 better. It turned out that having too many filters in a view sets up too many watch expressions, which is why `angular-translate` also provides a directive to translate
 your contents in view layer.
 
-### General usage
+## General usage
 You can use `translate` directive in many different ways. This is how the general
 usage looks like:
 

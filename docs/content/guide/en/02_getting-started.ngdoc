@@ -4,7 +4,7 @@
 
 # Getting Started
 
-### Setup HTML
+## Setup HTML
 To get started, embed angular-translate in your HTML document. Of course, this should happen
 **after** Angular itself is embedded. Your HTML should look something like this:
 
@@ -36,7 +36,7 @@ This gives you access to all components angular-translate comes with.
 var app = angular.module('myApp', ['pascalprecht.translate']);
 </pre>
 
-### Introducing `$translateProvider`
+## Introducing `$translateProvider`
 
 angular-translate is now declared as dependency, which means we now have access
 to all of its components. Angular follows a pretty straight forward architecture
@@ -79,7 +79,7 @@ This is where `$translateProvider` comes in. `$translateProvider` provides
 methods to teach your app different languages and let `$translate` service
 make use of them.
 
-### Teaching your app a language
+## Teaching your app a language
 
 Teaching your app a language with `$translateProvider` is very easy. First you
 have to inject the provider into your modules configuration function (which is

@@ -10,7 +10,7 @@ service and plug it into angular-translate. All you have to do is to follow a
 specific interface angular-translate expects from an interpolation service. Let's
 see how things work!
 
-### Building a custom interpolation service
+## Building a custom interpolation service
 
 When building a custom interpolation service, things should be pretty familiar
 if you've read [Custom Storages](#/guide/09_custom-storages) and
@@ -80,7 +80,7 @@ knows which interpolation services to use, when you explicitly override interpol
 service at runtime. `interpolate()` simply uses Angular's `$interpolate` service.
 In addition it prepends and appends the current locale to the given string.
 
-### Using your custom interpolation service
+## Using your custom interpolation service
 
 Just like there's a method for Storages (`useStorage()`) and Loaders (`useLoader()`),
 there also a method for custom interpolations. `$translateProvider.useInterpolation()`

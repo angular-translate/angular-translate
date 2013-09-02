@@ -17,7 +17,7 @@ service know of them. This means, you can decouple the translate logic from any
 controller or service an make your view layer replaceable without touching
 business logic code.
 
-### General usage
+## General usage
 Using a filter in Angular is pretty straight forward. You can read everything about
 Angular filters right
 [here](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters).
