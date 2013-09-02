@@ -4,60 +4,64 @@
 
 # Events
 
-angular-translate triggers some custom events on `$rootScope` you can react on,
-once they are fired. This document describes the different events and when they
-get fired.
+angular-translate triggert einige Events am `$rootScope` auf die du reagieren kannst,
+sobald sie gefeuert werden. Dieses Dokument beschreibt die verschiedenen Events.
 
-## General
 
-Some events get fired independently on how you have configured angular-translate.
-These are general events you could always expect to be fired.
+## Allgemein
+
+Einige Events werden gefeuert, unabhängig davon wie angular-translate konfiguriert
+wurde.
+
 
 #### `$translateChangeStart`
 
-Gets fired anytime angular-translate starts to try to change the language. This is
-on startup, when setting the language the first time, or when changing the language
-at runtime using `$translate.uses()`. This event gets also fired when angular-translate
-has to load translation data asynchronously first.
+Wird gefeuert sobald angular-translate versucht eine Sprache zu wechseln.
+Dies geschieht beim Startup, wenn die Sprache das erste mal eingerichtet wird, oder
+wenn die Sprache zur Laufzeit mit `$translate.uses()` gewechselt wird. Der Event
+wird außerdem gefeuert wenn Übersetzungen asynchron geladen werden müssen.
 
 #### `$translateChangeSuccess`
 
-As the event name says, this gets fired once a translation change was successful.
-When not using an asynchronous loader, this event gets usually fired immediatly
-after `$translateChangeStart` event. This event gets also fired, after an
-asynchronous loader had to load translation data first.
+Wie der Name schon sagt, wird dieser Event gefeuert sobald das wechseln einer Sprache
+erfolgreich war. Wenn kein asynchroner Loader verwendet wird, geschieht dies
+in der Regel direkt nach dem `$translateChangeStart` Event. Dieser Event wird auch
+gefeuert, wenn erst Datn asynchron geladen werden mussten.
 
 #### `$translateChangeError`
 
-Gets fired when a translation change failed. This actually only occurs when an
-asynchronous loader rejects a returned promise.
+Wird gefeuert wenn ein Sprachwechsel fehl schlug. Das passiert in der Regel nur
+wenn ein Loader ein rejected Promise zurück gibt.
+
 
 #### `$translateChangeEnd`
 
-Gets always fired when a translation change ends, wether it was successful or
-not and after all registered interpolation services have been notified about the
-translation change.
+Wird jedes mal gefeuert wenn ein Translation Change endet, egal ob es erfolgreich
+war oder nicht und vor allem nachdem alle registrierten Interpolation-Services
+benachrichtigt wurden.
 
 ## Asynchronous loading
 
-There are some events that get only fired when an asynchronous loader is used.
-These are covered here.
+Einige Events werden nur gefeuert, wenn man einen aynchronen Loader verwendet.
 
 #### `$translateLoadingStart`
 
-Just as the event name says, this event gets fired when a registered asynchronous
-loader gets invoked, right after `$translateChangeStart` has been fired.
+Wie der Eventname schon sagt, wird er gefeuert sobald ein Loader ausgeführt wird.
 
 #### `$translateLoadingSuccess`
 
-Gets fired when the asynchronous loader returns with a resolved promise.
+Wird gefeuert wenn ein Loader ein resolved Promise zurück gibt.
 
 #### `$translateLoadingError`
 
-Gets fired when the asynchronous loader returns with rejected promise.
+Wird gefeuert wenn ein Loader ein rejected Promise zurück gibt.
 
 #### `$translateLoadingEnd`
 
-Gets fired wether an asynchronous loader returned with a resolved or rejected
-promise. In the case a loader returned with a resolved promise, this gets fired
-after the translation table has been updated.
+Wird gefeuert sobald der Loader ein Promise zurück gegeben hat, unabhänig davon
+ob es rejected oder resolved wurde. Dieser Event wird gefeuert nachdem die Übersetzungtabelle
+geupdated wurde.
+
+#### `$translatePartialLoaderStructureChanged`
+
+Wird gefeuert wenn der State von `$translatePartialLoader` verändert wird.
