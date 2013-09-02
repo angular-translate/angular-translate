@@ -1,82 +1,77 @@
 @ngdoc overview
-@name Asynchronous Loading
+@name Asynchrones Laden
 @description
 
-# Asynchronous Loading
+# Asynchrones Laden
 
-Okay, different translations for different languages is pretty cool. But it's
-even better if you're able to load translations asynchronously right?
-`angular-translate` has some pretty cool extensions to support asynchronous and
-lazy loading of translation data. And it works like a charm.
+Okay, verschiedene Übersetzungen für verschiedene Sprachen ist schon ziemlich cool.
+Aber wäre es nicht besser wenn du in der Lage wärst, die Übersetzungen asynchron nachzuladen?
+`angular-translate` bietet mehrere Wege asynchrones Laden von i18n-Daten zu realisieren.
 
-### Asynchronous loaders
-angular-translate provides a pretty clever way to tell $translate service to
-load data asynchronously. To load your data from a server you have to use an
-asynchronous loader, which gets invoked later at runtime when it's needed.
-angular-translate comes with support for two different asynchronous loader. Both
-of them are installable via Bower. Let's take a look at them!
+## Asynchronous loaders
+angular-translate bietet einen ziemlich cleveren Weg `$translate`- Service zu sagen,
+dass Übersetzungdaten asynchron nachgeladen werden müssen. Um Daten von einem
+Server zu laden, muss ein asynchroner Loader verwendet werden, der zur entsprechenden
+Zeit aufgerufen wird, sobald nötig. angular-translate kommt mit bringt drei
+verschiedene Loader zum asynchronen Nachladen von Daten von Haus aus mit.
 
-### Using urlLoader
-This is possibly the simplest way of loading translation data asynchronously.
-All you have to do, is to install the `angular-translate-loader-url` extension
-via Bower like this:
+## Den urlLoader benutzen
+Der wahrscheinlich einfachste Weg, Daten asynchron mit Hilfe von angular-translate
+zu laden. Zuerst installiert man die Extension via Bower:
 
 ```
 $ bower install angular-translate-loader-url
 ```
 
-Once its installed, make sure you've embeded it in your HTML document. Allright,
-the loader is available, we now have to tell angular-translate to use it.
-`$translateProvider` provides a method called `useUrlLoader()`. Pretty straight
-forward, ha? `useUrlLoader()` expects an argument that describes the endpoint
-of a server that'll respond with translation data.
-
-In addition, when using asynchronous loaders, we have to use
-`$translateProvider.preferredLanguage()`, to let angular-translate know, for which
-language it should load the translation data.
+Sobald die Extension installiert und um HTML-Dokument eingebunden ist, kann man
+die `useUrlLoader()`- Methode vom `$translateProvider` nutzen, um angular-translate
+zu sagen, Daten asynchron zu laden. `useUrlLoader()` erwartet als Argument ein
+Endpoint eines Servers, der Übersetzungsdaten anhand eines Sprachschlüssels
+liefert. Und natürlich nicht vergessen mit `$translateProvider.preferredLanguage()`
+zu konfigurieren, welche Sprache geladen werden soll.
 
 <pre>
 $translateProvider.useUrlLoader('foo/bar.json');
 $translateProvider.preferredLanguage('en');
 </pre>
 
-So, what happens here? angular-translate uses the extension to transform the
-given string, to a real loader function which can be invoked later at runtime,
-once `$translate` service is instantiated. In addition to that, telling
-angular-translate to use the language key 'en', adds the language key as request
-parameter to the given loader string.
+Also, was passiert hier? angular-translate benutzt die Extension um den gegebenen
+String in einen richtigen Loader zu transformieren. Dieser wird später zur Laufzeit
+ausgeführt, sobald `$translate`- Service das erste mal instanziiert wird. Außerdem
+wird der konfigurierte Sprachschlüssel an die URL gehängt, um eine spezifische
+Sprache beim Server anfragen zu können.
 
-So, the example above actually requests `foo/bar.json?lang=en`. angular-translate
-also notices that there isn't any translation data available at startup and will
-invoke the loader automatically as soon as possible.
+Das obige Beispiel fragt also eigentlich `foo/bar.json?lang=en` an. angular-translate
+merkt, wenn noch keine Übersetzungtabelle für eine bestimmmte Sprache vorhanden ist
+und führt einen registrierten Loader so früh wie möglich aus.
 
-### Using staticFilesLoader
+## Den staticFilesLoader benutzen
 
-In case you haven't just a URL which expects a `lang` parameter to return a JSON
-that contains your translations, but several localization files which match a
-specific pattern, you probably want to use the
-`angular-translate-loader-static-files` extension which describes the pattern of
-your localization files.
+Für den Fall, dass keine URL vorhanden ist, die einfach ein JSON mit Übersetzungsdaten
+liefert, dafür aber sämtliche Lokalisierungsdateien, die einem bestimmten Muster
+entsprechen, möchtest du möglicherweise den `staticFilesLoader` benutzen.
 
-Like urlLoader, you can install staticFilesLoader extension via Bower:
+Genau wie der urlLoader, lässt sich der staticFilesLoader via Bower installieren:
+
 ```
 $ bower install angular-translate-loader-static-files
 ```
 
-Once the package is installed and embedded, you can use `$translateProvider`
-method `useStaticFilesLoader()` to tell angular-translate that it should use it.
-The static files loader works a bit different. Instead of having a fix url which
-just expects a `lang` paramter, you are now able to have different localization
-files that match a specific pattern.
+Sobald die Extension installiert und im HTML-Dokument eingebunden ist, kann analog
+zur `useUrlLoader()`- Methode, die `useStaticFilesLoader()`- Methode benutzt werden.
+Der staticFilesLoader funktioniert allerdings etwas anders. Anstatt einer fixen URL,
+die einen `lang` Parameter bekommt, erwartet der staticFilesLoader die Beschreibung
+eines Musters, welches die Lokalisierungsdateien matchen.
+Wie so ein Muster aussieht, ist davon abhängig, wie die Dateien auf dem Server
+strukturiert vorliegen.
 
-How that kind of pattern looks like, depends on your needs. To specify a pattern,
-the following information is required:
+Um ein Muster zu spezifizieren sind folgende Informationen nötig:
 
-* **prefix** - specifies file prefix
-* **suffix** - specifies file suffix
+* **prefix** - Dateipräfix
+* **suffix** - Dateisuffix
 
-Let's say you have two localization files `locale-de.json` and  `locale-en.json`.
-You can simply use the staticFilesLoader with this pattern like this:
+Nehmen wir an, du hast zwei Lokalisierungsdateien `locale-de.json` und `locale-en.json`.
+Der staticFilesLoader kann für diesen Anwendungsfall wie folgt genutzt werden:
 
 <pre>
 $translateProvider.useStaticFilesLoader({
@@ -86,12 +81,163 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('en');
 </pre>
 
-angular-translate will concatenate the given information to
-`{{prefix}}{{langKey}}{{suffix}}`. So this will load `locale-en.json`. And again,
-since there isn't any translation data available yet, it'll load it as soon as
-possible automatically.
+angular-translate verkettet die gegebenen Werte nach folgenden Muster:
+`{{prefix}}{{langKey}}{{suffix}}`. Und auch hier gilt, wenn noch keine 
+Übersetzungstabelle für die gewählte Sprache vorhanden ist, wird der Loader automatisch
+ausgeführt.
 
-### Lazy loading at runtime
+## Den partialLoader benutzen
+Bei einer größeren und komplexeren App kann es durchaus vorkommen, dass die App
+in mehrere Submodule aufgebrochen wird. Man könnte zum Beispiel ein Modul
+`mainApp` haben, welches abghängig vom `home` und `contact` Modul ist. Das sind jetzt
+nur zwei Submodule, aber nun stelle dir mal vor, du hast 10 oder gar 20 Submodule!
+
+In solchen komplexen Apps kommt es vor, dass vielleicht 13 von 20 Submodulen
+nicht ausgeführt werden, weil der Benutzer einfach nicht den Teil der App besucht.
+Bei einer App, wo nicht sicher gestellt ist, das jeder Inhalt in jedem Fall zu sehen
+ist, ist es eher suboptimal für jede Sprache trotzdem immer die kompletten
+Übersetzungen zu laden.
+
+Was wir brauchen ist ein Weg, mit wir nur die Übersetzungdaten laden können, die
+uns wirklich interessieren. Nämlich die des Moduls, dass grade aktiv ist. Das bedeutet,
+wenn der Benutzer beispielsweise in das `home` Modul der App kommt und die Sprache
+wechselt, sollen nur die Übersetzungen für das `home` Modul geladen werden, nicht
+etwa alle.
+
+Außerdem, wenn bereits Übersetzungen geladen wurden, die Sprache zwei mal gewechselt
+wird, wollen wir nicht die gleichen Übersetzungen noch einmal laden. Bereits geladene
+Übersetzungen sollten also irgendwo vorgehalten werden.
+
+Ja, um all' diese Dinge muss man sich kümmern, wenn man asynchrones Laden von
+Übersetzungsdateien auf Modulebene haben möchte. angular-translate bietet für genau
+solch einen Fall den `partialLoader`.
+
+Auch er lässt sich ganz einfach via Bower installieren:
+
+```
+$ bower install angular-translate-loader-partial
+```
+
+Wenn man den partialLoader benutzt muss man sich, ähnlich wie beim staticFilesLoader,
+Gedanken darüber machen, wie die Übersetzungsdaten strukturiert sind und wie
+angular-translate sie laden soll. Man muss eine `part` und eine `lang` Property
+bestimmen, während `part` der Teil der Übersetzungen ist, den man laden möchte
+und `lang` nach wie vor der Sprachschlüssel, den wir bereits kennen.
+
+Nehmen wir an, wir haben unsere Übersetzungsdateien wie folgt auf dem Server
+strukturiert:
+
+```
+/i18n/home/en.json
+/i18n/home/de.json
+/i18n/contact/en.json
+/i18n/contact/de.json
+```
+
+Jetzt wo wir wissen, wie unsere Daten strukturiert sind, können wir `$translateProvider`
+konfigurieren, um Gebrauch vom partialLoader zu machen.
+
+<pre>
+$translateProvider.useLoader('$translatePartialLoader', {
+  urlTemplate: '/i18n/{part}/{lang}.json'
+});
+</pre>
+
+Fast fertig! Natürlich müssen wir angular-translate noch sagen, welche Sprache wir
+benutzen wollen:
+
+<pre>
+$translateProvider.preferredLanguage('en');
+</pre>
+
+Okay, nichts neues. Aber jetzt wirds interessant. Woher weiß angular-translate,
+welchr `part` geladen werden muss?. Ums kurz zu machen: gar nicht. Du musst
+angular-translate sagen **wann** du **welchen** Part laden möchtest.
+
+`partialLoader` hat einen korrespondierenden Provider der benutzt werden kann, um
+den initialen State des Loaders zu konfigurieren. Wir injecten ihn also in unsere
+config Funktion:
+
+<pre>
+angular.module('main')
+.config(function ($translateProvider, $translatePartialLoaderProvider) {
+
+});
+</pre>
+
+Okay, als nächstes müssen wir `angular-translate` sagen, welcher Part inital
+geladen werden soll (wenn überhaupt einer). Dafür verwenden wir die `addPart()`,-
+Methode des `$translatePartialLoader`.
+
+<pre>
+$translatePartialLoaderProvider.addPart('home');
+$translateProvider.useLoader('$translatePartialLoader', {
+  urlTemplate: '/i18n/{part}/{lang}.json'
+});
+$translateProvider.preferredLanguage('en');
+</pre>
+
+Wie man sehen kann, steckt die komplette Funktionalität für das Partial-Loading
+im partialLoader. Okay, der Loader ist für den initialen Start konfiguriert.
+Aber was passiert zur Laufzeit? Was, wenn der Benutzer ins `contact` Modul kommt
+und wir nur die Übersetzungen für das contact Modul laden wollen?
+
+`$translatePartialLoaderProvider` konfiguriert `$translatePartialLoader`. Was bedeutet,
+man kann `$translatePartialLoader` in Controller und Services injecten um ihn
+dort entsprechend zu verwenden. Aber warum sollte man das tun? Analog zur
+`addPart()`- Methode des Providers, gibt es auch eine `addPart()`- Methode beim
+Loader selbst. Man kannst also den Loader benutzen, um ihn zur Laufzeit zu manipulieren.
+Alles was man also machen muss, ist den Loader zu injecten und entspechende
+Parts zu hinzuzufügen. Wenn wir einen `ContactCtrl` in unserem `contact` Modul
+haben, könnte der Code so aussehen:
+
+<pre>
+angular.module('contact')
+.controller('ContactCtrl', function ($scope, $translatePartialLoader) {
+  $translatePartialLoader.addPart('contact');
+});
+</pre>
+
+War gar nicht so schwer oder? Also was ist passiert, ist dass wir den State des
+Loaders zur Laufzeit manipulieren. Das stellt sicher, dass angular-translate nur
+die Übersetzungsdaten läd, wie wir wirklich wollen. Sobald ein neuer Part hinzugefügt
+wird, feuert der Loader ein `$translatePartialLoaderStructureChanged` Event.
+
+Until now there's no additional data loaded! `angular-translate` doesn't know
+about the loaders state so you have to tell `angular-translate` to **refresh**
+the current translation tables. Refreshing translation tables drops
+(if no table is specified) and reloads them. So basically, to achieve partial
+loading, all you have to do is to manipulate the state of the loader by saying
+which parts to add and then refreshing the tables. Because, when changing the
+loaders state with new parts, they get loaded the next time the loader gets
+invoked.
+
+So all we have to do is simply adding the following:
+
+<pre>
+angular.module('contact')
+.controller('ContactCtrl', function ($scope, $translatePartialLoader, $translate) {
+  $translatePartialLoader.addPart('contact');
+  $translate.refresh();
+});
+</pre>
+
+You can also use the `$translatePartialLoaderStructureChanged` event to automate
+the process, by listening to that event with `$rootProvider` and refreshing
+translation tables everytime it gets fired.
+
+<pre>
+app.run(function ($rootProvider, $translate) {
+  $rootProvider.$on('$translatePartialLoaderStructureChanged', function () {
+    $translate.refresh();
+  });
+});
+</pre>
+
+Since `$translate.refresh()` returns a promise, it works beautifully together
+with either `ngRoute` module or UI Router.
+
+## Lazy loading at runtime
 
 Once your app bootstraps, it'll load needed translation data asynchonously as
 soon as possible. Okay, cool. But what if a user wants to change the language and
