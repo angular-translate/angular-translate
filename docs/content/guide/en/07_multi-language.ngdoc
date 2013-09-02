@@ -13,21 +13,21 @@ next level: **Multi Language Support**.
 Of course, it's pretty cool to know how to use the components angular-translate
 provides, but things are getting really interesting when it comes to teach your
 apps more then just one language (which is actually what this module is for!).
-So let's get started by learning how to add different translation tables add a time!
+So let's get started by learning how to add different translation tables at a time!
 
 ### Teaching your app more languages
 
 In [Getting Started](#/guide/02_gettin-started) you've learned how to add a
 translation table to your app, using `$translateProvider` method `translations()`.
-The same method can be used to add more translation tables add a time. The given
-translation tables just have to come with a language key with which
+The same method can be used to add more translation tables at a time. The given
+translation tables just have to come with a language key that
 angular-translate is able to recognize, which translation table belongs to which
 language.
 
 Adding a translation table with a corresponding language key is very simple. Instead
-of passing just the table as argument through `$translations()`, you can pass the
+of passing just the table as argument through `translations()`, you can pass the
 language key as first argument, whereas the translation table becomes the second
-argument. So adding translation table with a language key looks something like this:
+argument. So adding translation table with a language key looks like this:
 
 <pre>
 // registers translation table with language key 'en'
@@ -47,7 +47,7 @@ $translateProvider.translations('de', {
 </pre>
 
 Is that simple? Your app now knows about two different languages. You can add
-as many languages as needed, there's no limit. However, now since there are two
+as many languages as needed, there's no limit. However, since there are now two
 languages available, which language should be used by an app? angular-translate
 doesn't prefer any language until you tell it to do so.
 
@@ -55,10 +55,10 @@ doesn't prefer any language until you tell it to do so.
 
 Since you've now registered more then one translation table, `angular-translate`
 has to know which one to use. This is where a new method of `$translateProvider`
-comes in. `preferredLanguage()` tells angular-translate, which of the registered
+comes in. `preferredLanguage()` tells angular-translate which of the registered
 languages is the one that should be used by default. It expects an argument with
 the value of the language key, which points to a certain translation table. So,
-to tell an app it should use german rather then english as first language, extend
+to tell an app it should use german rather than english as first language, extend
 the code like this:
 
 <pre>
@@ -67,7 +67,7 @@ $translateProvider.preferredLanguage('de');
 </pre>
 
 **Note:** It's actually also possible to use `$translateProvider.uses()` for that,
-since its setting the languages as well. However it turned out that this is a bad
+since it's setting the languages as well. However it turns out that this is a bad
 practice when using asynchronous loaders in combination with a storage. In some
 cases it can happen that angular-translate does two asynchronous calls. You'll
 learn more on that in detail later. To get around this, we introduced
@@ -79,9 +79,10 @@ learn more on that in detail later. To get around this, we introduced
 This is all great but unfortunately the `preferredLanguage()` you just choose
 is incomplete. So you would like `angular-translate` to try a second language
 for these translations instead of displaying some empty or unformatted strings.
-The new `fallbackLanguage()` feature will let you tell `angular-translate` do so.
-which language to use in case it cannot find a translation in the currently
-used translation table. Its usage is basically the same as `preferredLanguage()`.
+The `fallbackLanguage()` feature will let you tell `angular-translate` do so.
+`angular-translate` will use this language in case it cannot find a translation
+in the currently used translation table. Its usage is basically the same as
+`preferredLanguage()`.
 
 <pre>
 // tells angular-translate to use the english language if translations are not
@@ -94,14 +95,14 @@ $translateProvider.fallbackLanguage('en');
 To switch the language at runtime, `$translate` service has a method
 `uses()` which either returns the language key of the current used language, or,
 when passing a language key as argument, tells angular-translate to use the
-corresponding language. `$translate.uses()` also invokes asynchronous laoders
-internally, when trying to use a language of which the translation table isn't
+corresponding language. `$translate.uses()` also invokes asynchronous loaders
+internally when trying to use a language of which the translation table hasn't been
 loaded yet. But more on that in
 [Asynchronous Loading](#/guide/08_asynchronous_loading).
 
 A good usage of `$translate.uses()` would be in a controller which controls the
 change of a language. You just have to implement a function on the scope to
-expects a language key and then use it to tell angular-translate to change the
+expect a language key and then use it to tell angular-translate to change the
 language.
 
 <pre>
@@ -116,7 +117,7 @@ angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($t
 
 To get a feeling for how it would work in a sample app, we update our app
 accordingly. First, we add another translation table for the german language and
-add two new translation id's for buttons we want to add later:
+add two new translation IDs for buttons we want to add later:
 
 <pre>
 var translationsEN = {
@@ -161,7 +162,7 @@ button which calls a function to change the language:
 <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
 </pre>
 
-Last but not least, we have to implement a corresponding function on our
+Last but not least, we have to implement a corresponding function in our
 controllers scope:
 
 <pre>
@@ -173,7 +174,7 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 }]);
 </pre>
 
-Et vóila! We now have an app with multi language support!
+Et voilà! We now have an app with multi language support!
 
 
 <doc:example module="myApp">

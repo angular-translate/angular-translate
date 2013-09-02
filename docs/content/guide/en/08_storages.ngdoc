@@ -11,8 +11,8 @@ a thing which feels kinda silly when opening our web app. Everytime we launch ou
 app, we have to click that 'german' button again and again and again (of course
 only if you are a german user - I am!).
 
-So the problem is, that our app just can't remember which language you've chosen
-the last time you opened the app. This chapter shows you, how to teach your app
+So the problem is that our app just can't remember which language you've chosen
+the last time you opened it. This chapter shows you how to teach your app
 to remember the language users choose.
 
 ### Let your app remember the language
@@ -24,19 +24,19 @@ the user launches the app.
 
 angular-translate has built-in support for two storages. **localStorage** and
 **cookieStorage**. Whereas localStorage falls back to cookieStorage if it isn't
-supported by the browser the user currently uses. To you one of those storages,
+supported by the browser the user currently uses. To use one of those storages,
 you have to install the corresponding extension package.
 
 ### Using cookieStorage
 
-If you want to use the cookieStorage to store the language over cross http requests, 
+If you want to use the cookieStorage to store the language over cross http requests,
 simply install the cookie storage extension via bower:
 
 ```
 $ bower install angular-translate-storage-cookie
 ```
 
-After that make sure you've embeded it in your HTML document. Once its embeded
+After that make sure you've embeded it in your HTML document. Once it's embeded
 you can use `$translateProvider` method `useCookieStorage()` and angular-translate
 takes care of the rest.
 
@@ -72,7 +72,7 @@ Now, inform `$translateProvider` that you want to use it:
 $translateProvider.useLocalStorage();
 </pre>
 
-That's all. Your app now uses a localStorage to remember the apps language. Let's
+That's all. Your app now uses a localStorage to remember the user's language. Let's
 update our app to use localStorage as well!
 
 

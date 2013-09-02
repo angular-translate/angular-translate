@@ -13,7 +13,7 @@ lazy loading of translation data. And it works like a charm.
 angular-translate provides a pretty clever way to tell $translate service to
 load data asynchronously. To load your data from a server you have to use an
 asynchronous loader, which gets invoked later at runtime when it's needed.
-angular-translate comes with support for two different asynchronous loader. Both
+angular-translate comes with support for two different asynchronous loaders. Both
 of them are installable via Bower. Let's take a look at them!
 
 ## Using urlLoader
@@ -25,14 +25,14 @@ via Bower like this:
 $ bower install angular-translate-loader-url
 ```
 
-Once its installed, make sure you've embeded it in your HTML document. Allright,
+Once it's installed, make sure you've embeded it in your HTML document. Alright,
 the loader is available, we now have to tell angular-translate to use it.
 `$translateProvider` provides a method called `useUrlLoader()`. Pretty straight
 forward, ha? `useUrlLoader()` expects an argument that describes the endpoint
 of a server that'll respond with translation data.
 
 In addition, when using asynchronous loaders, we have to use
-`$translateProvider.preferredLanguage()`, to let angular-translate know, for which
+`$translateProvider.preferredLanguage()`, to let angular-translate know for which
 language it should load the translation data.
 
 <pre>
@@ -65,11 +65,11 @@ $ bower install angular-translate-loader-static-files
 
 Once the package is installed and embedded, you can use `$translateProvider`
 method `useStaticFilesLoader()` to tell angular-translate that it should use it.
-The static files loader works a bit different. Instead of having a fix url which
-just expects a `lang` paramter, you are now able to have different localization
+The static files loader works a bit differently. Instead of having a fixed url which
+just expects a `lang` parameter, you are now able to have different localization
 files that match a specific pattern.
 
-How that kind of pattern looks like, depends on your needs. To specify a pattern,
+How that kind of pattern looks like depends on your needs. To specify a pattern,
 the following information is required:
 
 * **prefix** - specifies file prefix
@@ -102,7 +102,7 @@ just don't get there. However, when translating contents of such a big app where
 maybe about 50% of the app is not always executed, it's not very cool to load
 all the translation data for the whole app, just in a different language.
 
-What we need, is way to just load the translation data of a language for a specific
+What we need, is a way to just load the translation data of a language for a specific
 module we're currently on. Which means, when accessing the `home` submodule,
 we just want to load the translation data for the `home` module. If we change the
 language, we also just want to load the translation for the choosed language for
@@ -123,7 +123,7 @@ You can install it like every other loader by simply using Bower:
 $ bower install angular-translate-loader-partial
 ```
 
-When using `partialLoader` you have to think about, which pattern
+When using `partialLoader` you have to think about which pattern
 `angular-translate` should use to load your translation data. It's similar to
 `staticFilesLoader` but a bit more specifc. You have to specify a `part` and
 a `lang` property, where `part` is your specifc part of your app (maybe `home`)
@@ -155,7 +155,7 @@ is why we add the following:
 $translateProvider.preferredLanguage('en');
 </pre>
 
-Okay, nothing new. Now it gets interesting. How does `angular-translate` know,
+Okay, nothing new. Now it gets interesting. How does `angular-translate` know
 which "part" to load? To make it short: it can't. You have to tell
 `angular-translate` **which part** you want to load **when**.
 
@@ -170,7 +170,7 @@ angular.module('main')
 });
 </pre>
 
-Allright. Now, to let `angular-translate` know, which part it should load,
+Allright. Now, to let `angular-translate` know which part it should load,
 we use `$translaterPartialLoaderProvider`'s `addPart()` method. So we simply
 say something like:
 
@@ -194,7 +194,7 @@ the current language for the `contact` module?
 you're able to inject `$translatePartialLoader` into your controllers and services
 to make use of it. But why do you want to? As you can add a translation part to
 the loader via the provider, you can also do so with the provided service to
-manipulate loader state at runtime. So what das that mean? It means, you just
+manipulate loader state at runtime. So what does that mean? It means, you just
 have to inject the loader and use that one to add additional translation parts.
 
 Let's say we have a `ContactCtrl` within our `contact` module, things could look
@@ -207,8 +207,8 @@ angular.module('contact')
 });
 </pre>
 
-Wasn't that hard right? So what happens here is we manipulate our loaders state
-douring runtime. This makes sure that angular-translate only loads specific
+That wasn't hard, right? So what happens here is we manipulate our loaders state
+during runtime. This makes sure that angular-translate only loads specific
 translation data when we really want to. Once you added a new part,
 `$translatePartialLoader` fires an `$translatePartialLoaderStructureChanged`
 event.
@@ -249,7 +249,7 @@ with either `ngRoute` module or UI Router.
 
 ## Lazy loading at runtime
 
-Once your app bootstraps, it'll load needed translation data asynchonously as
+Once your app bootstraps, it'll load needed translation data asynchronously as
 soon as possible. Okay, cool. But what if a user wants to change the language and
 the corresponding translation data isn't also loaded yet?
 
@@ -257,7 +257,7 @@ In [Multi Language](#/guide/07_multi-language) you've learned, how to change the
 language at runtime using `$translate.uses()`. Know what? Nothing will change when
 dealing with asynchronous loaders. `$translate.uses()` checks if a translation
 table for a given language key is present or not. And if not, it'll invoke the
-registered loader to get it down! Lazy loading at is best!
+registered loader to get it down! Lazy loading at it best!
 
 **Note**: Please notice that in case of using `partialLoader` you have to refresh
 translation tables first!
@@ -268,7 +268,7 @@ There's one drawback when using asynchronous loaders to get your translation dat
 into the app. There's a little amount of time when your app launches where you
 have this little kind of flickering, because your translation data isn't loaded
 yet. This is actually not a bug of angular-translate, but a pretty logical behavior
-since we'return executing stuff asynchronously.
+since we return executing stuff asynchronously.
 
 To get around this, you could provide at least one language **with** your app
 without having to load it asynchronously. If your app then uses this provided
@@ -379,7 +379,7 @@ Take a look at the working app:
   </doc:source>
 </doc:example>
 
-Open up your browsers devtools and take a look at the network activities when changing
+Open up your browser's devtools and take a look at the network activities when changing
 the language. Our app now loads translation data asynchronously! In the next
 chapter you'll learn how to build **your own custom loaders**.
 

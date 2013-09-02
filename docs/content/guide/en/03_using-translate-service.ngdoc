@@ -32,8 +32,8 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 </pre>
 
 Now to translate your contents with `$translate` service, all you have to do is
-to pass a translation id which was registered with `$translateProvider` before
-and it'll return the concrete translation of that translation id. We also inject
+to pass a translation ID which was registered with `$translateProvider` before
+and it'll return the concrete translation of that translation ID. We also inject
 `$scope` within our controller to expose to our view layer the translated values:
 
 <pre>

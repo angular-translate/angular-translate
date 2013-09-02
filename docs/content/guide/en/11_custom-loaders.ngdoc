@@ -17,13 +17,13 @@ own loaders very easily. This chapter shows you how to do it!
 
 ### Building a custom loader service
 
-If non of the provided loaders fit to your needs, you can register a custom
+If non of the provided loaders fits to your needs, you can register a custom
 asynchronous loader as a factory. The factory has to return a function, which
 expects an object where at least the language key property exists. With this
-architecture you're as free as possible and have the full control of how your
+architecture you're as free as possible and have full control of how your
 asynchronous loader should behave.
 
-A custom loader factory could look something like this:
+A custom loader factory could look like this:
 
 <pre>
 app.factory('customLoader', function ($http, $q) {
@@ -44,7 +44,7 @@ app.factory('customLoader', function ($http, $q) {
 });
 </pre>
 
-You have to make sure, that your loader function returns a promise. It should either
+You have to make sure that your loader function returns a promise. It should either
 gets resolved with your translation data, or rejected with the language key. As
 you can see, there's a `key` property on the `options` object. It has the value
 of the language key with which the asynchronous loader is invoked.
@@ -65,10 +65,10 @@ does the rest for you.
 
 ### Adding additional options
 
-The `options.key` property indicates, that `options` is just an object. You can
-extend it with additional properties to your own needs. For example you could
+The `options.key` property indicates that `options` is just an object. You can
+extend it with additional properties to fit your own needs. For example you could
 expect a property `foo` on the `options` object, all you have to do is to provide
-the propery when registering your custom loader factory.
+the property when registering your custom loader factory.
 
 So, if we need a property `foo` with a value `bar` we can pass it like this:
 
@@ -205,7 +205,7 @@ Easy! Here's our working app with a custom loader!
 </doc:example>
 
 When changing the language by clicking the `german` button, you see the app waits
-2 seconds until it resolves with the new translation data. Is that cool?
+2 seconds until it resolves with the new translation data. Isn't that cool?
 
 <br>
 <hr>

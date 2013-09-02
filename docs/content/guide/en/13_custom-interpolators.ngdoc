@@ -20,7 +20,7 @@ have to be provided by a custom interpolation service:
 
 - `setLocale(langKey)` - sets the currently used language
 - `getInterpolationIdentifier()` - returns an identifier for interpolation
-- `interpolate(string, interpolatgeParams)` - interpolates string against interpolate params
+- `interpolate(string, interpolatgeParams)` - interpolates strings against interpolate params
 
 Let's see how it looks like when implementing a custom interpolation service. First,
 we implement the interface:
@@ -71,7 +71,7 @@ app.factory('customInterpolation', function ($interpolate) {
 });
 </pre>
 
-Allright. So what did we here. `setLocale()` simpley store the value of the current
+Alright. So what did we do here. `setLocale()` simply store the value of the current
 used language. `getInterpolationIdentifier()` returns a string `custom`. So what is
 it actually for? Remember how to
 [temporarily override the interpolation type](#/guide/12_pluralization#overridinginterpolationtemporarily)?
@@ -83,7 +83,7 @@ In addition it prepends and appends the current locale to the given string.
 ### Using your custom interpolation service
 
 Just like there's a method for Storages (`useStorage()`) and Loaders (`useLoader()`),
-there also a method for custom interpolations. `$translateProvider.useInterpolation()`
+there's also a method for custom interpolations. `$translateProvider.useInterpolation()`
 is your friend when it comes to integrate your custom interpolation service into
 your app.
 
@@ -92,8 +92,8 @@ $translateProvider.useInterpolation('customInterpolation');
 </pre>
 
 You app now uses your custom interpolation as default. However, as you've learned
-in chapters before, you can add your custom interpolation as optional interpolation,
-to not loose Angular's cool features:
+in previous chapters, you can add your custom interpolation as optional interpolation,
+not to loose Angular's cool features:
 
 <pre>
 $translateProvider.addInterpolation('customInterpolation');
