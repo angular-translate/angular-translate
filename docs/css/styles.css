@@ -281,3 +281,7 @@ form.well {
 .form-search > ul.nav > li > a {
   word-wrap: break-word;
 }
+
+.content code {
+  color: #333;
+}

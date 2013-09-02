@@ -25,7 +25,7 @@ To get started, embed angular-translate in your HTML document. Of course, this s
 </html>
 </pre>
 
-### Declaring dependencies
+## Declaring dependencies
 Once this is done, you can declare angular-translate as dependency of your app.
 Angular provides dependency injection, which is awesome. So, to tell your app
 that it needs angular-translate to work properly, simply inject
