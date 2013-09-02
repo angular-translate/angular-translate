@@ -1,11 +1,5 @@
 angular.module('pascalprecht.translate')
-/**
- * @ngdoc object
- * @name pascalprecht.translate.TRANSLATE_MF_INTERPOLATION_CACHE
- *
- * @description
- * MessageFormat cache constant.
- */
+
 .constant('TRANSLATE_MF_INTERPOLATION_CACHE', '$translateMessageFormatInterpolation')
 
 /**

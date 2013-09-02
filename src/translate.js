@@ -1,3 +1,10 @@
+/**
+ * @ngdoc overview
+ * @name pascalprecht.translate
+ *
+ * @description
+ * The main module which holds everything together.
+ */
 angular.module('pascalprecht.translate', ['ng'])
 
 .run(['$translate', function ($translate) {

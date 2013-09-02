@@ -278,3 +278,6 @@ form.well {
   margin-right: 8px;
   vertical-align: -35%;
 }
+.form-search > ul.nav > li > a {
+  word-wrap: break-word;
+}

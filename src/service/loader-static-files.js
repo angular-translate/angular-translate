@@ -1,7 +1,7 @@
 angular.module('pascalprecht.translate')
 /**
  * @ngdoc object
- * @name pascalprecht.translate.$translateUrlLoader
+ * @name pascalprecht.translate.$translateStaticFilesLoader
  * @requires $q
  * @requires $http
  *
