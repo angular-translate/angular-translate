@@ -1,12 +1,13 @@
 @ngdoc overview
-@name Custom Error Handler
+@name Eigene Error Handler
 @description
 
-# Custom Error Handler
+# Eigene Error Handler
 
-Of course you want to be able to use your own custom handler. Besides `useMissingTranslationHandlerLog()`
-there's another method called `useMissingTranslationHandler()` which expects the name
-of a factory which returns your custom handler. So how does that look like?
+Natürlich möchtest du deine eigenen Error Handler verwenden. Neben `useMissingTranslationHandlerLog()`
+gibt es eine Methode `useMissingTranslationHandler()` die ebenfalls einen Factory
+Namen erwartet. Die Factory muss dann nur noch implementiert werden und ein Handler
+Service zurück geben. Also, wie kann sowas aussehen?
 
 <pre>
 var app = angular.module('myApp', ['pascalprecht.translate'], function ($translateProvider) {
