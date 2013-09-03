@@ -18,6 +18,7 @@
 There are some very useful things on the web that might be interesting for you,
 so make sure to check this list.
 
+- [Tutorial on ng-newsletter.com](http://ng-newsletter.com/posts/angular-translate.html)
 - [Examples and demos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - Currently on plnkr.co
 - [Tutorial on angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - German article
 - [Tutorial on neoskop.de](http://www.neoskop.de/blog/angular-translate) - German article
