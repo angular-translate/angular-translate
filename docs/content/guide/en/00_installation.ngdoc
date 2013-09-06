@@ -7,7 +7,7 @@
 ## Installing dependencies
 
 These tools are used during the development of `angular-translate`, so you should
-consider install them on your machine to make sure things work properly.
+consider installing them on your machine to make sure things work properly.
 Please install the following tools:
 
 - [Grunt](http://gruntjs.com)
@@ -17,7 +17,7 @@ Please install the following tools:
 
 ## Installing via Bower
 
-You can install a `angular-translate` package very easy using Bower. After
+You can install the `angular-translate` package very easily using Bower. After
 installing Bower on your machine, simply run:
 
 ```
@@ -43,13 +43,13 @@ from GitHub.
 $ git clone git://github.com/PascalPrecht/angular-translate.git
 ```
 You now have a full clone of the repository including the history and everything
-else ever happened during the development of angular-translate. Do with the code
+else that ever happened during the development of angular-translate. Do with the code
 what ever the fuck you want.
 
 Since angular-translate has some dependencies when developing it, you can just install
-all of'em. If you do so, the `angular-translate-interpolation-default` package is
+all of them at once. If you do so, the `angular-translate-interpolation-default` package is
 already included. To install all needed dependencies, simply run the following
-command in the cloned angular-translate repository.
+commands in the cloned angular-translate repository.
 
 ```
 $ npm install
@@ -79,7 +79,7 @@ $ karma start karma.midway.conf
 
 ## Building from source
 
-When all tests passed successfully you can now build a development, as well as
+When all tests passed successfully you can then build a development, as well as
 a production version of the code, just like you get from the Bower package.
 angular-translate provides a `Gruntfile.js` files which contains configured
 tasks you can run with the `grunt` command.

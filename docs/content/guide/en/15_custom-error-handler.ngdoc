@@ -16,7 +16,7 @@ var app = angular.module('myApp', ['pascalprecht.translate'], function ($transla
 
 // define custom handler
 app.factory('myCustomHandlerFactory', function (dep1, dep2) {
-  // has to return a function which gets a tranlation id
+  // has to return a function which gets a tranlation ID
   return function (translationID) {
     // do something with dep1 and dep2
   };
