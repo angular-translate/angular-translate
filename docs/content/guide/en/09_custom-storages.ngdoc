@@ -5,9 +5,9 @@
 # Custom Storages
 
 If you've read [Storages](#/guide/08_storages), you know how to use either
-cookiesStorage, or localStorage, to let your app remember the last choosed
-language over cross http requests. If both, localStorage and cookieStorage don't
-fit to your needs, you can simply build your own storage service and use that
+cookiesStorage, or localStorage, to let your app remember the last chosen
+language over cross http requests. If neither localStorage nor cookieStorage
+fits your needs, you can simply build your own storage service and use that
 instead.
 
 ## Building a custom storage service
@@ -36,9 +36,9 @@ app.factory('customStorage', function () {
 
 Easy, right? As you can see, `set()` expects two arguments. A name and a value. So
 you work with simple key-value pairs. On the other side, `get()` just needs a name
-to request a value. Provide a custom storage as a separate service gives you high
-flexibility when it comes to use this services in a different place. In addition
-to that, testing this service is pretty easy, since its isolated.
+to request a value. Providing a custom storage as a separate service gives you high
+flexibility when it comes to use this service in a different place. In addition
+to that, testing this service is pretty easy, since it's isolated.
 
 ## Using the custom storage service
 
@@ -54,7 +54,7 @@ $translateProvider.useStorage('customStorage');
 
 angular-translate will use `$injector` to get an instance of the given factory
 name, which is in our case `customStorage`, and is then able to access its methods
-at runtime to save the last choosed language.
+at runtime to save the last chosen language.
 
 
 <doc:example module="myApp">
@@ -128,7 +128,7 @@ at runtime to save the last choosed language.
 </doc:example>
 
 Of course, our custom service doesn't do anything, which is why you can refresh
-the browser as often as you want, the app wouldn't remember the language.
+the browser as often as you want, the app won't remember the language.
 
 <br>
 <hr>

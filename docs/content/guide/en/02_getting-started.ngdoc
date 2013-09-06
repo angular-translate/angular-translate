@@ -6,7 +6,7 @@
 
 ## Setup HTML
 To get started, embed angular-translate in your HTML document. Of course, this should happen
-**after** Angular itself is embedded. Your HTML should look something like this:
+**after** Angular itself is embedded. Your HTML should look like this:
 
 <pre>
 <html>
@@ -26,10 +26,10 @@ To get started, embed angular-translate in your HTML document. Of course, this s
 </pre>
 
 ## Declaring dependencies
-Once this is done, you can declare angular-translate as dependency of your app.
+Once this is done, you can declare angular-translate as a dependency of your app.
 Angular provides dependency injection, which is awesome. So, to tell your app
 that it needs angular-translate to work properly, simply inject
-angular-translate as dependency into your module like shown in the following code.
+angular-translate as a dependency into your module like shown in the following code.
 This gives you access to all components angular-translate comes with.
 
 <pre>
@@ -70,10 +70,10 @@ work with html5 mode. So if a service should be configurable from outside,
 it needs a corresponding provider that provides the interface you need.
 
 angular-translate comes with a `$translateProvider` that you can use to
-configure the provided `$translate` service which  handles the i18n stuff in your
+configure the provided `$translate` service which handles the i18n stuff in your
 app. The `$translate` service is used by directives and filters you can use
 through your whole application. To let `$translate` service translate your
-contents, it has to know, which translations are actually available.
+contents, it has to know which translations are actually available.
 
 This is where `$translateProvider` comes in. `$translateProvider` provides
 methods to teach your app different languages and let `$translate` service
@@ -82,7 +82,7 @@ make use of them.
 ## Teaching your app a language
 
 Teaching your app a language with `$translateProvider` is very easy. First you
-have to inject the provider into your modules configuration function (which is
+have to inject the provider into your module configuration function (which is
 the only place where you can access it).
 
 <pre>
@@ -105,8 +105,8 @@ look like:
 ```
 
 Is that easy? The translation table above contains just one translation. As you
-can see, the key represents a translation id, where as the value represents
-the concrete translation for certain language. You don't even have to provide
+can see, the key represents a translation ID, whereas the value represents
+the concrete translation for a certain language. You don't even have to provide
 any information in your translation table, to which language it corresponds. But
 more on that later.
 
@@ -152,7 +152,7 @@ app.config(function ['$translateProvider', ($translateProvider) {
 }]);
 </pre>
 
-This is basically all you have to do. Since we're adding the translation table
+This is basically all you have to do. Since we're adding the translation tables
 at configuration time, `$translate` service is able to access it, once it is
 instantiated and used. Here's the working code:
 

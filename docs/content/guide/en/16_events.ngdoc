@@ -4,19 +4,19 @@
 
 # Events
 
-angular-translate triggers some custom events on `$rootScope` you can react on,
+angular-translate triggers some custom events on `$rootScope` you can react on
 once they are fired. This document describes the different events and when they
 get fired.
 
 ## General
 
-Some events get fired independently on how you have configured angular-translate.
+Some events get fired independently from how you have configured angular-translate.
 These are general events you could always expect to be fired.
 
 #### `$translateChangeStart`
 
 Gets fired anytime angular-translate starts to try to change the language. This is
-on startup, when setting the language the first time, or when changing the language
+at startup, when setting the language the first time, or when changing the language
 at runtime using `$translate.uses()`. This event gets also fired when angular-translate
 has to load translation data asynchronously first.
 
@@ -24,7 +24,7 @@ has to load translation data asynchronously first.
 
 As the event name says, this gets fired once a translation change was successful.
 When not using an asynchronous loader, this event gets usually fired immediatly
-after `$translateChangeStart` event. This event gets also fired, after an
+after `$translateChangeStart` event. This event gets also fired after an
 asynchronous loader had to load translation data first.
 
 #### `$translateChangeError`
@@ -35,7 +35,7 @@ asynchronous loader rejects a returned promise.
 #### `$translateChangeEnd`
 
 Gets always fired when a translation change ends, wether it was successful or
-not and after all registered interpolation services have been notified about the
+not, and after all registered interpolation services have been notified about the
 translation change.
 
 ## Asynchronous loading
@@ -54,7 +54,7 @@ Gets fired when the asynchronous loader returns with a resolved promise.
 
 #### `$translateLoadingError`
 
-Gets fired when the asynchronous loader returns with rejected promise.
+Gets fired when the asynchronous loader returns with a rejected promise.
 
 #### `$translateLoadingEnd`
 

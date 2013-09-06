@@ -4,7 +4,7 @@
 
 # Pluralization
 
-Wow, we've come far! We learned all about the different components angular-translate
+Wow, we've come far! We have learned all about the different components angular-translate
 provides and we know how to introduce many translation tables at a time. Also we
 made use of different kind of storages to let our app remember the language over
 cross http requests and, last but not least, we used asynchronous loaders to
@@ -29,8 +29,8 @@ the functionality of MessageFormat, since it solves all the problems including
 [simple variable replacement](https://github.com/SlexAxton/messageformat.js#simple-variable-replacement),
 [SelectFormat](https://github.com/SlexAxton/messageformat.js#selectformat),
 and [PluralFormat](https://github.com/SlexAxton/messageformat.js#pluralformat).
-So, how can we use MessageFormat with angular-translate to use its full functionality
-within our apps?
+So, how can we use MessageFormat with angular-translate to take advatage of its full
+functionality within our apps?
 
 Of course, there is a corresponding extension for it. Simply install the MessageFormat
 interpolation service via Bower like this:
@@ -55,7 +55,7 @@ Once everything is there, we can use `$translateProvider` to tell angular-transl
 to use the MessageFormat interpolation, instead of the default one.
 `$translateProvider` provides a method called `useMessageFormatInterpolation()`
 which does the trick. We also have to use `$translateProvider.preferredLanguage()`
-again, to let MessageFormat know, which locale to use for
+again, to let MessageFormat know which locale to use for
 [named keys](https://github.com/SlexAxton/messageformat.js#named-keys).
 
 <pre>
@@ -79,8 +79,8 @@ how some translations could look like:
 
 As you can see, MessageFormat supports `SelectFormat` to interpolate texts depending
 on a given gender for example. We can use `$translate` service, as well as
-`translate` directive an filter, to translate the `LIKE_TEXT` translation id, like
-we always did:
+`translate` directive and filter, to translate the `LIKE_TEXT` translation ID, like
+we always do:
 
 <pre>
 // using `$translate` service
@@ -99,7 +99,7 @@ and use high level pluralization within your translations!
 Actually it's pretty cool that we are able to use MessageFormat as our interpolation
 engine. Unfortunately, when replacing MessageFormat interpolation with angular-translate's
 default interpolation, there's a big problem. Take a look at the following code:
-Do you see any differents?
+Do you see any difference?
 
 ```
 {
@@ -121,7 +121,7 @@ MessageFormat interpolation to have full featured pluralization support.
 
 ## Overriding interpolation temporarily
 
-Since its a bit silly to re-implement MessageFormat's functionality within
+Since it's a bit silly to re-implement MessageFormat's functionality within
 angular-translate, we can't really use both interpolation types in a single translation.
 But we _can_ use one interpolation type application-wide
 and other interpolation types in specific cases. This means you would say for example:
@@ -130,11 +130,11 @@ A, B and C_".
 
 With that construct you're able to use all the cool features Angular provides
 with its interpolation service and in addition you can use MessageFormat interpolation
-for translation ids which contain pluralization.
+for translation IDs containinig pluralization.
 
 So how do we get this working? It's easy. Seriously. Once you have installed
 MessageFormat and its interpolation service, you actually have
-everything you need. All you have to do, is not to say you want to use
+everything you need. All you have to do, is to say you don't want to use
 MessageFormat interpolation for all of your translations, but for specific
 translations only.
 
@@ -170,7 +170,7 @@ pass an additional parameter to angular-translate's components.
 
 The `$translate` service expects an interpolation type as third argument. If you want
 to configure the `$translate` service to use MessageFormat interpolation for the given
-translation id, you have to pass `messageformat` as interpolation type, like this:
+translation ID, you have to pass `messageformat` as interpolation type, like this:
 
 <pre>
 $translate('TEXT', { val: 5 });
@@ -191,8 +191,8 @@ argument is an identifier for the interpolation service:
 </pre>
 
 `translate` directive expects a new attribute called `translate-interpolation`
-with which you can control the used interpolation service for a specific
-translation id:
+with which you can control which interpolation service to use for a specific
+translation ID:
 
 <pre>
 <ANY

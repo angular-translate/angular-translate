@@ -8,7 +8,7 @@ This guide will show you how to handle variable replacements within translations
 If you haven't read the introduction guides about
 [$translate service](#/guide/03_using-translate-service),
 [translate filter](#/guide/04_using-translate-filter) and
-[translate directive](guide/05_using-translate-directive), you should do so now!
+[translate directive](#/guide/05_using-translate-directive), you should do so now!
 
 Using `$translate` service, `translate` filter and `translate` directive is pretty
 neat! But what if your translations need variable values? Say you want to display a
@@ -47,7 +47,7 @@ like described above, passing a value for `username` would work as following:
 $translate('TRANSLATION_ID', { username: 'PascalPrecht' });
 </pre>
 
-If there's a translation id containing more variable values, simply extend the
+If there's a translation ID containing more variable values, simply extend the
 passed object hash with corresponding key-value pairs.
 
 <pre>
@@ -61,7 +61,9 @@ $translate('TRANSLATION_ID', {
 
 Since `translate` filter uses `$translate` service internally, we just need a way
 to pass dynamic values through the filter to make it available as object hash for
-the service. To achieve this, there is a specific syntax required, because filters in Angular are currently not able to have named parameters. So there are to ways to pass values through `translate` filter.
+the service. To achieve this, there is a specific syntax required, because filters
+in Angular are currently not able to have named parameters. So there are to ways to
+pass values through `translate` filter.
 
 The first way is to pass an object literal as string. Afterwards it gets
 interpolated by `$translate` service.
@@ -70,10 +72,11 @@ interpolated by `$translate` service.
 {{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
 </pre>
 
-Not that hard right? But what if `username` should not have a fix value and also
+Not that hard right? But what if `username` should not have a constant value and also
 has to be interpolated before getting passed? The only way to get this done is to
 pass a scope object as Angular expression through the filter. Which also means,
-you have to bind your variable values for the translations in the controller whichexposes the values on the scope.
+you have to bind your variable values for the translations in the controller which
+exposes the values on the scope.
 
 <pre>
 angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
