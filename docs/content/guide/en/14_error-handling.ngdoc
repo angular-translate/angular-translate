@@ -5,13 +5,13 @@
 # Error Handling
 
 Sometimes you have a complex app, where you don't really know how many translations
-you have. You also not sure if there's a missing translation for a specific
-translation id. This is where missing translation handlers come in.
+you have. You're not sure if there's a missing translation for a specific
+translation ID either. This is where missing translation handlers come in.
 
 ## Using log handler extension for missing translations
 
-There is an extension for angular-translate which logs warnings into console if
-you try to translate a translation id which doesn't exist. Like all extensions,
+There is an extension for angular-translate which logs warnings into the console if
+you try to translate a translation ID which doesn't exist. Like all extensions,
 you can install it via Bower like this:
 
 ```
@@ -69,7 +69,7 @@ Here's a working sample
   </doc:source>
 </doc:example>
 
-Now, take a look at the browsers console and see what have been logged!
+Now, take a look at the browser's console and see what have been logged!
 
 <br>
 <hr>

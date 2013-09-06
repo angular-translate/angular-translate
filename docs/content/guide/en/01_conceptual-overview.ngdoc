@@ -15,9 +15,9 @@ you can use to translate your apps content. The directive appears on top of the
 filter component because it makes use of it internally.
 
 In the next layer it gets a bit more interesting. Both, the directive and the
-filter use the `$tranlsate` service. Which means, when translating contents of
+filter use the `$translate` service. Which means, when translating contents of
 your app with a directive, you're actually doing it with the filter, which actually
-does it with the service. This also means, you can not only translate your
+does it with the service. This also means that you can not only translate your
 contents in the view layer in a declarative way, but also (of course only if
 needed) in a business logic layer like a controller or another service.
 
@@ -27,11 +27,11 @@ but nevertheless its good to get an overview of what's actually happening there.
 
 ## Interpolators
 The right box represents possible interpolation services `$translate` service uses
-to interpolate your translations against variable values you might wanna use
+to interpolate your translations against variable values you might want to use
 there. If you don't understand what this means, no worries. You'll learn everything
 you need to know about interpolators later. However, interpolation services are
-decoupled from the main core, which means, you can install'em as extra packages.
-There's a default interpolation services which ships with angular-translate built-in.
+decoupled from the main core, which means, you can install them as extra packages.
+There's a default interpolation service which ships with angular-translate built-in.
 
 Interpolators influence the syntax you have to use within your translations. The
 default interpolation service uses Angular's core interpolation service, so if
@@ -39,11 +39,11 @@ you familiar with it, you don't have to learn anything new. The **MessageFormat*
 interpolation service uses a different syntax, but more on that later.
 
 ## Missing translation handlers
-The left box shows provided missing translation handlers. These get execute when
-`$translate` service tries to translate a translation which doesn't exist. You
+The left box shows provided missing translation handlers. These get executed when
+`$translate` service tries to translate a key which doesn't exist. You
 don't have to use any handler, but if you want to, angular-translate comes with
-a log service you can install as an extension. In addition to that, you can also
-implement your own handler and use that.
+a logging service you can install as an extension. In addition to that, you can also
+implement your own handler and use it.
 
 ## Asynchronous loader
 Of course you want to be able to load your translation data asynchronously to
