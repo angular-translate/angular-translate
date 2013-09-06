@@ -20,7 +20,7 @@ using angular-translate's default interpolation services is pretty straight
 forward. Yeap you read it right. It depends on the used interpolation service,
 how variable values are managed within translations.
 
-### Using variable values within translations
+## Using variable values within translations
 
 When using angular-translate's default interpolation service, you can simply rely
 on Angular's interpolation service syntax. So, to define a variable value within
@@ -36,7 +36,7 @@ Whereas `username` is the identifier which you can pass a variable value through
 So how is it possible to get these variable values passed through the components
 angular-translate provides?
 
-### Variable replacement in $translate service
+## Variable replacement in $translate service
 
 You can pass variable values through `$translate` service by using its second
 argument. `$translate` service expects a JavaScript object hash as second argument
@@ -57,7 +57,7 @@ $translate('TRANSLATION_ID', {
 });
 </pre>
 
-### Variable replacement in translate filter
+## Variable replacement in translate filter
 
 Since `translate` filter uses `$translate` service internally, we just need a way
 to pass dynamic values through the filter to make it available as object hash for
@@ -93,7 +93,7 @@ And then pass it as expression through the filter:
 {{ 'TRANSLATION_ID' | translate:translationData }}
 </pre>
 
-### Variable replacement in translate directive
+## Variable replacement in translate directive
 
 Of course, you can make the same possible with `translate` directive. `translate`
 directive expects an optional `translate-values` attribute you can use to pass

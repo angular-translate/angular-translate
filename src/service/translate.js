@@ -508,17 +508,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         pendingLoader = false,
         interpolatorHashMap = {};
 
-
-    /**
-     * @ngdoc function
-     * @name loadAsync
-     *
-     * @description
-     * Tells angular-translate to load a language asynchronously by given language key.
-     *
-     * @param {string} key Language key
-     * @return {Ibject} Promise resolved or rejected with given langkey
-     */
     var loadAsync = function (key) {
 
       if (!key) {

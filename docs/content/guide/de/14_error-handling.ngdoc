@@ -4,28 +4,31 @@
 
 # Error Handling
 
-Sometimes you have a complex app, where you don't really know how many translations
-you have. You're not sure if there's a missing translation for a specific
-translation ID either. This is where missing translation handlers come in.
+Es kann vorkommen, dass eine App so komplex wird, dass man gar nicht mehr genau
+weiß, was für Translation ID's man hat. Man ist sich möglicherweise nich tmal sicher,
+ob es überhaupt eine Übersetzung für bestimmte Translation ID's gibt. Da kommt
+der missingTranslationHandler ins Spiel.
 
-## Using log handler extension for missing translations
 
-There is an extension for angular-translate which logs warnings into the console if
-you try to translate a translation ID which doesn't exist. Like all extensions,
-you can install it via Bower like this:
+## Die Log-Handler-Extension für fehlende Übersetzungen nutzen
+
+Es gibt eine Extension für angular-translate, die Warnings in der Konsole loggt,
+wenn versucht wird eine Translation ID zu übersetzen, für die es keine Übersetzung
+gibt. Wie alle Extensions lässt sich auch diese mit Bower installieren:
 
 ```
 $ bower install angular-translate-handler-log
 ```
 
-To use this handler, all you have to do is to call `useMissingTranslationHandlerLog()`
-on `$translateProvider`. angular-translate does the rest for you.
+Um den Handler zu verwenden muss man nichts weiter machen als die
+`useMissingTranslationHandler()`- Methode auf dem `$translateProvider` aufzurufen.
+angular-translate kümmert sich um den Rest.
 
 <pre>
 $translateProvider.useMissingTranslationHandlerLog();
 </pre>
 
-Here's a working sample
+Hier ein Beispiel:
 
 <doc:example module="myApp">
   <doc:source>
@@ -69,7 +72,7 @@ Here's a working sample
   </doc:source>
 </doc:example>
 
-Now, take a look at the browser's console and see what have been logged!
+Schau in der Konsole des Browsers nach!
 
 <br>
 <hr>

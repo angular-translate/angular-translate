@@ -1,61 +1,15 @@
-# 1.1.0 (2013-09-02)
+@ngdoc overview
+@name Migration Guide
+@description
 
-## Features
-### translateService
-
-* added refresh() method (d41f91e)
-
-### translateProvider
-
-* makes methods chainable (cdc9e9e)
-
-### $translatePartialLoader
-
-* Basic implementation (81222bf)
-
-
-
-## Bug fixes
-### translateDirective
-
-* fixes bug that directive writes into scope (4e06468)
-
-* fixes scope handling (c566586)
-
-### translateService
-
-* reset proposed language if there's no pending loader (6b477fc)
-
-
-# 1.0.2 (2013-08-07)
-
-
-
-## Bug fixes
-### typo
-
-* remove unnecessary semicolon (54cb232)
-
-
-# 1.0.1 (2013-07-26)
-
-- Brings default interpolation back to core (you don't have to install it as extra package)
-
-## Bug fixes
-### platolink
-
-* deep link (d368bf3)
-
-### dependency
-
-* add 'angular-cookies' as bower devDependency (b6f1426)
-
-### demo
-
-* change src to angular-translate script (4be93b6)
-
+# Migration Guide
 
 # 1.0.0 (2013-07-23)
+
+angular-translate 1.0 introduces pluggable interpolation system. Extension package
+`angular-translate-interpolation-default is required`.
+
+`translate` directive now uses `translate-values` instead of `values` attribute
 
 ## Features
 ### translateService
@@ -83,6 +37,7 @@
 ### translateDirective
 
 * teaches directives to use custom interpolation (bf3dbbb)
+* BREAKING: now uses `translate-values` instead of `values`
 
 
 
@@ -365,3 +320,8 @@ Remove $translateMissingTranslationHandlerLog service
 * v.0.1.0
   * Added automated tests using **karma** and **jasmine**
   * Added Travis CI support
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,0 +1,80 @@
+@ngdoc overview
+@name Konzeptionelle Übersicht
+@description
+
+# Konzeptionelle Übersicht
+
+Die folgende Abbildung zeigt den abstrakten Zusammenbau von `angular-translate`
+und beschreibt, wie die einzelnen Komponenten zusammen hängen.
+
+<img class="pull-right" style="padding-left: 3em;" src="img/guide/conceptual_overview.png">
+
+## The nitty-gritty
+Wie man sehen kann, bietet `angular-translate` eine Direktive und einen Filter als
+Komponente, die man benutzen kann um seine Inhalte zu übersetzen. Die Direktive
+befindet sich über dem Filter weil sie internvon diesem gebrauch macht.
+
+In der nächsten Schicht wird es etwas interessanter. Beide, die Direktive und der
+Filter benutzen den `$translate`- Service. Was bedeutet, wenn du deine Inhalte
+mit der Direktive übersetzt, benutzt du eigentlich den Filter der wiederum den
+Service benutzt. Das bedeutet auch, dass du deine Inhalte nicht nur im View-Layer,
+sondern auch im Business-Logic-Layer (wie zum Beispiel im Controller), übersetzen
+kannst.
+
+Innerhalb vom `$translate`- Service befinden sich einige Subkomponenten, die benutzt
+werden um Inhalte zu übersetzen. Wir gehen später genauer darauf ein, aber es ist
+trotzdem hilfreich schon mal einen Überblick zu bekommen.
+
+## Interpolation-Services
+Die rechte Box zeigt die möglichen Interpolation-Services, die `$translate`- Service
+benutzt um deine Übersetzungen gegen dynamische Werte zu interpolieren. Wenn du
+jetzt nicht nicht verstehst was das bedeutet - kein Problem! Wir gehen später
+tiefer darauf ein. Wie dem auch sei. Interpolation-Services sind vom Core entkoppelt,
+was bedeutet, du kannst sie als extra Packages installieren.
+
+Interpolation-Services beeinflussen die Syntax die du in deinen Übersetzungen
+verwenden musst. Der standard Interpolation-Service benutzt einfach Angular's
+eigenen `$interpolate`- Service. Wenn du also weißt, gegen welche Syntax `$interpolate`-
+Service interpoliert, musst du eigentlich nichts neues lernen. Der **MessageFormat**-
+Interpolation-Services allerdings, nutzt eine andere Syntax. Darauf gehen wir
+aber später noch genauer ein.
+
+## Missing translation handlers
+Die linke Box zeigt mitgelieferte `missingTranslationHandler`. Diese werden ausgeführt
+wenn `$translate`- Service versucht eine Translation Id zu übersetzen, es aber keine
+korrenspondierende Übersetzung gibt. Wenn du nicht willst, musst du keinen Handler
+verwenden. Falls doch, `angular-translate` kommt mit einem Log-Services, der sich
+ganz einfach via Bower installieren lässt. Wenn das nicht ausreicht, kann man auch
+seine eigenen Handler implementieren.
+
+## Asynchronous loader
+
+Selbstverständlich möchtest du in der Lage sein, deine Übersetzungsdaten
+asynchron nachzuladen um deine App schneller zu machen. `angular-translate`
+bietet Unterstützung für sogenannte `Asynchronous Loader`, die sehr einfach
+zu benutzen sind. Es gibt zwei solcher Loader, der `urlLoader` und der `staticFilesLoader`.
+Beide lösen jeweils ein spezifisches Problem wenn es zum asynchronen Nachladen von
+Übersetzungsdaten kommt. Auch hier gilt, wenn keiner dieser Loader deinen
+Anforderungen entspricht, kannst du ganz einfach deine eigenen implementieren.
+
+## Storage
+
+Da es sehr üblich ist, dass sich eine App merkt, welche Sprache von einem Benutzer
+gewählt wurde, sodass er beim nächsten Aufruf der App die gleiche Sprache bekommt,
+gibt es sogenannte `Storages`. `angular-translate` erlaubt dir jeden nur möglichen
+Storage zu werden. Das Modul überprüft ob es einen Storage gibt und wenn ja
+sucht es nach einem bestimmten Identifier der wiederum den Wert eines Sprachschlüssels
+enthält, anhand dessen `angular-translate` dann die Sprache setzen kann.
+
+`angular-translate` kommt mit LocalStorage und Cookie Storage unterstützung.
+Auch hier ist es möglich einen Storage-Service zu entwickeln, der über die Funktionalität
+der beiden genannten hinaus geht.
+
+
+Jetzt hast du einen kleine Überblick darüber bekommen, wie `angular-translate`
+strukturiert ist und welche Features und Komponenten es mit sich bringt. Im nächsten
+Kapitel lernst du, wie du mit `angular-translate` durchstarten kannst.
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

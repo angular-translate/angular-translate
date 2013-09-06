@@ -1,29 +1,28 @@
 @ngdoc overview
-@name Custom Interpolators
+@name Custom Interpolator
 @description
 
-# Custom Interpolators
+# Custom Interpolator
 
-If you're smart enough to implement a smaller MessageFormat library, or if you
-just need another type of interpolation, you can simply build your own interpolation
-service and plug it into angular-translate. All you have to do is to follow a
-specific interface angular-translate expects from an interpolation service. Let's
-see how things work!
+Wenn du fit genug bist eine kleinere MessageFormat Library zu entwickeln,
+oder wenn du einfach eine andere Interpolation brauchst, kannst du ganz einfach
+deinen eigenen Interpolation Servive schreiben, den du dann in deinen Apps nutzen
+kannst. Alles was du tun musst, in ein bestimmtes Interface zu implementieren.
+Schauen wir, wie's funktioniert!
 
-## Building a custom interpolation service
+## Einen eigenen Interpolation-Service bauen
 
-When building a custom interpolation service, things should be pretty familiar
-if you've read [Custom Storages](#/guide/09_custom-storages) and
-[Custom Loaders](#/guide/11_custom-loaders). You start with building a factory
-that returns an object that implements a certain interface. The following methods
-have to be provided by a custom interpolation service:
+Die Entwicklung eines Custom Interpolation-Services sollte einem recht bekannt
+vorkommen wenn man [Eigene Storages](#/guide/09_custom-storages) und
+[Eigene Loader](#/guide/11_custom-loaders) gelesen hat. Du startest mit einer Factory
+die ein Objekt zurück gibt, die folgendes Interface implementiert:
 
-- `setLocale(langKey)` - sets the currently used language
-- `getInterpolationIdentifier()` - returns an identifier for interpolation
-- `interpolate(string, interpolatgeParams)` - interpolates strings against interpolate params
 
-Let's see how it looks like when implementing a custom interpolation service. First,
-we implement the interface:
+- `setLocale(langKey)` - Setzt die Sprache mit Sprachschlüssel
+- `getInterpolationIdentifier()` - Gibt einen Identifier für den Service zurück
+- `interpolate(string, interpolatgeParams)` - Interpoliert Strings gegen Interpolationparamter
+
+So könnte ein custom Interpolation-Service aussehen:
 
 <pre>
 app.factory('customInterpolation', function () {
@@ -45,9 +44,8 @@ app.factory('customInterpolation', function () {
 });
 </pre>
 
-Okay, this is the basic structure of an interpolation service. Now let's add some
-logic, so angular-translate can make use of it once our custom interpolation service
-comes in:
+Okay, das ist die Basisstruktur eines Interpolation-Services. Jetzt fügen wir etwas
+logic hinzu, damit angular-translate was mit dem Service anfangen kann:
 
 <pre>
 app.factory('customInterpolation', function ($interpolate) {
@@ -71,35 +69,33 @@ app.factory('customInterpolation', function ($interpolate) {
 });
 </pre>
 
-Alright. So what did we do here. `setLocale()` simply store the value of the current
-used language. `getInterpolationIdentifier()` returns a string `custom`. So what is
-it actually for? Remember how to
-[temporarily override the interpolation type](#/guide/12_pluralization#overridinginterpolationtemporarily)?
-Exactly. This is the identifier that is mapped to your service, so angular-translate
-knows which interpolation services to use, when you explicitly override interpolation
-service at runtime. `interpolate()` simply uses Angular's `$interpolate` service.
-In addition it prepends and appends the current locale to the given string.
+Also, was haben wir gemacht. `setLocale()` speichert einfach den Wert des Sprachschlüssels.
+`getInterpolationIdentifier()` gibt einen String `custom` zurück. Wofür ist das
+eigentlich gut? Erinnerst du dich wie du ein [Interpolation-Service temporär
+überschreiben](#/guide/12_pluralization#overridinginterpolationtemporarily) kannst?
+Genau. Dieser Identifier wird auf deinen Service gemappt, damit angular-translate
+ihn wieder erkennen kann. `interpolate()` benutzt einfach  Angular's `$interpolate`-
+Service. Außerden hängt es noch den aktuellen Sprachschlüssel an jede Translation.
 
-## Using your custom interpolation service
+## Den eigenen Interpolation-Service benutzen
 
-Just like there's a method for Storages (`useStorage()`) and Loaders (`useLoader()`),
-there's also a method for custom interpolations. `$translateProvider.useInterpolation()`
-is your friend when it comes to integrate your custom interpolation service into
-your app.
+Analog zu `useStorage()` und `useLoader()` gibt es eine Methode `useInterpolation()`
+am `$translateProvider`. Wie die anderen Methoden erwartet sie einen Factory Namen
+als Parameter um einen Interpolation-Service zu registrieren und zu benutzen.
 
 <pre>
 $translateProvider.useInterpolation('customInterpolation');
 </pre>
 
-You app now uses your custom interpolation as default. However, as you've learned
-in previous chapters, you can add your custom interpolation as optional interpolation,
-not to loose Angular's cool features:
+Deine App benutzt nun den custom Interpolation-Service als standard Interpolation
+für alle Übersetzungen. Wie du gelernt hast, kannst du ihn aber auch als optionalen
+Interpolation-Service registrieren:
 
 <pre>
 $translateProvider.addInterpolation('customInterpolation');
 </pre>
 
-Here' what it looks like:
+So siehts aus:
 
 <doc:example module="myApp">
   <doc:source>

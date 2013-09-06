@@ -1,0 +1,84 @@
+@ngdoc overview
+@name $translate- Service benutzen
+@description
+
+# $translate- Service benutzen
+
+`angular-translate` bietet verschiedene Wege die Inhalte deiner App zu übersetzen.
+Ein Weg ist, den `$translate`- Service direkt zu benutzen. Eigentlich würde man
+dass nicht machen, da es schönere Wege gibt (zum Beispiel via Filter oder Direktiven),
+da die Übersetzungslogik zu stark an einem Controller oder Service gekoppelt wäre.
+Es stellte sich allerdings heraus, dass es tatsächlich Anwendungsfälle für die
+direkte Benutzung des `$translate`- Service gibt.
+
+Stelle dir einfach nur vor, du möchtest den `<title>` deines HTML-Dokuments
+übersetzen.`<title>` wird sich niemals innerhalb einer `ng-app`- Direktive befinden,
+was bedeutet, `<title>` wird immer außerhalb der Angular-Welt sein. Man muss also
+den App-Titel manipulieren, während wir uns in der Laufzeit befinden, sprich:
+zum Beispiel innerhalb eines Controllers oder Services.
+
+## Allgemeine Benutzung
+An dieser Stelle kommt `$translate`- Service ins Spiel. `$translate`- Service
+zu benutzen ist sehr einfach. Alles was du tun musst, ist den Service in deinem
+Code zu injecten. Der Code könnte so aussehen:
+
+<pre>
+app.controller('Ctrl', ['$translate', function ($translate) {
+
+}]);
+</pre>
+
+Um jetzt Inhalte zu übersetzen, muss nichts weiter geschehen, als dem `$translate`-
+Service eine Translation ID zu übergeben (die vorher durch `$translateProvider`
+registriert wurde). Dieser gibt dann die korrespondierende Übersetzung zurück.
+Außerdem injecten wir `$scope` um die übersetzen Werte im View-Layer verfügbar
+zu machen.
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $scope.headline = $translate('HEADLINE');
+  $scope.paragraph = $translate('PARAGRAPH');
+  $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+}]);
+</pre>
+**Achtung:** Übersetzungen mit Namespaces werden mit Dot-Notation aufgelöst (siehe: 'NAMESPACE.PARAGRAPH'`).
+
+Das ist alles. Also, falls du darüber nachdenkst deinen `<title>` zu übersetzen,
+kannst du dies in deinem Controller machen.
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        NAMESPACE: {
+          PARAGRAPH: 'And it comes with awesome features!'
+        }
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider.translations(translations);
+      }]);
+
+      app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+        // expose translation via `$translate` service
+        $scope.headline = $translate('HEADLINE');
+        $scope.paragraph = $translate('PARAGRAPH');
+        $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h1>{{headline}}</h1>
+      <p>{{paragraph}}</p>
+      <p>{{namespaced_paragraph}}</p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,25 +1,25 @@
 @ngdoc overview
-@name Custom Storages
+@name Eigene Storages
 @description
 
-# Custom Storages
+# Eigene Storages
 
-If you've read [Storages](#/guide/08_storages), you know how to use either
-cookiesStorage, or localStorage, to let your app remember the last chosen
-language over cross http requests. If neither localStorage nor cookieStorage
-fits your needs, you can simply build your own storage service and use that
-instead.
+Wenn du [Storages](#/guide/08_storages) gelesen hast, weißt du wie du entweder
+localStorage oder cookieStorage verwenden kannst, um deiner App beizubringen sich
+die Sprache zu merken, die ein Benutzer zuletzt gewählt hat. Wenn sowohl cookieStorage
+also auch localStorage nicht deinen Ansprüchen entsprechen, kannst du ganz einfach
+eigene Storage-Services schreiben und diese verwenden.
 
-## Building a custom storage service
+## Einen eigenen Storage- Service bauen
 
-If you want to use your own custom storage in your app, you have to build a
-service which has to implement some methods, so angular-translate can make use
-of them. The interface for a storage service is pretty straight forward. All you
-need is to provide a `set()` and a `get()` method on your custom storage service.
+Wenn du einen anderen Storage verwenden möchtest, musst du deinen eigenen Storage-Service
+entwickeln, der ein bestimmtes Interface implementieren muss. In JavaScript gibt
+es keine Interfaces. Deswegen wird hier beschrieben, welche Methoden ein Storage-Service
+implementieren muss. Es wird nur eine `set()`- und eine `get()`- Methode gebraucht.
 
-Let's say we want to use a custom storage service within our sample app. We can
-easily extend it with a new service. We just have to make sure that we return an
-object with a `get()` and a `set()` method. A custom service could look like this:
+Nehmen wir also an, wir wollen unsere Beispiel-App mit einem eigenen Storage-Service
+versehen. Dazu müssen wir nur sicher Stellen, dass unser Service eine `set()`- und
+eine `get()`- Methode implementiert. Unser Service könnte so aussehen:
 
 <pre>
 app.factory('customStorage', function () {
@@ -34,28 +34,28 @@ app.factory('customStorage', function () {
 });
 </pre>
 
-Easy, right? As you can see, `set()` expects two arguments. A name and a value. So
-you work with simple key-value pairs. On the other side, `get()` just needs a name
-to request a value. Providing a custom storage as a separate service gives you high
-flexibility when it comes to use this service in a different place. In addition
-to that, testing this service is pretty easy, since it's isolated.
+Wie du sehen kannst, erwartet `set()` zwei Parameter. Einen Namen und einen Value.
+Die `get()`- Methode braucht nur einen Namen um einen bestimmten Wert aus dem
+vorhanden Speicher anzufragen. Da wir Storage-Services als echt Angular Services
+implementieren müssen, können wir automatisch von einfachen Testing und Dependency
+Injection profitieren.
 
-## Using the custom storage service
+## Den Service benutzen
 
-Once you've build your custom storage service, you have to tell angular-translate
-to make use of it. `$translateProvider` methods `useCookieStorage()` and
-`useLocalStorage()` are actually shortcut methods. They both use a method
-`useStorage()` internally. You can also use this method to let angular-translate
-know of you custom storage service by simply doing:
+Wenn du deinen Service entwickelt hast, kannst du angular-translate sagen, dass dieser
+benutzt werden soll. Es gibt analog zur `useCookieStorage()`- und `useLocalStorage()`-
+Methode, eine `useStorage()`- Methode. Eigentlich sind die ersteren Beiden Shortcuts
+für `useStorage()`. Wie dem auch sei, diese Methode erwartet den Namen eines
+Services. In unserem fall ist es `customStorage`.
+
 
 <pre>
 $translateProvider.useStorage('customStorage');
 </pre>
 
-angular-translate will use `$injector` to get an instance of the given factory
-name, which is in our case `customStorage`, and is then able to access its methods
-at runtime to save the last chosen language.
-
+angular-translate nutzt den `$injector` um eine Instance des Custom Storages zu bekommen.
+Danach kann dieser wieder jeder andere Storage-Service auch, genutzt werden um
+der App beizubringen, sich eine Sprache zu merken.
 
 <doc:example module="myApp">
   <doc:source>
@@ -126,9 +126,6 @@ at runtime to save the last chosen language.
     </div>
   </doc:source>
 </doc:example>
-
-Of course, our custom service doesn't do anything, which is why you can refresh
-the browser as often as you want, the app won't remember the language.
 
 <br>
 <hr>

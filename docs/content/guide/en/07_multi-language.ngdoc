@@ -15,7 +15,7 @@ provides, but things are getting really interesting when it comes to teach your
 apps more then just one language (which is actually what this module is for!).
 So let's get started by learning how to add different translation tables at a time!
 
-### Teaching your app more languages
+## Teaching your app more languages
 
 In [Getting Started](#/guide/02_getting-started) you've learned how to add a
 translation table to your app, using `$translateProvider` method `translations()`.
@@ -51,7 +51,7 @@ as many languages as needed, there's no limit. However, since there are now two
 languages available, which language should be used by an app? angular-translate
 doesn't prefer any language until you tell it to do so.
 
-### Decide which language to use
+## Decide which language to use
 
 Since you've now registered more then one translation table, `angular-translate`
 has to know which one to use. This is where a new method of `$translateProvider`
@@ -74,7 +74,7 @@ learn more on that in detail later. To get around this, we introduced
 `preferredLanguage()`. You should always use `preferredLanguage()` instead of
 `uses()` on `$translateProvider`.
 
-### Using another language to fall back
+## Using another language to fall back
 
 This is all great but unfortunately the `preferredLanguage()` you just choose
 is incomplete. So you would like `angular-translate` to try a second language
@@ -90,7 +90,7 @@ in the currently used translation table. Its usage is basically the same as
 $translateProvider.fallbackLanguage('en');
 </pre>
 
-### Switching the language at runtime
+## Switching the language at runtime
 
 To switch the language at runtime, `$translate` service has a method
 `uses()` which either returns the language key of the current used language, or,

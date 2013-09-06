@@ -25,7 +25,7 @@ Within the `$translate` service you can see some sub components which are used
 by it to translate your contents. We'll get into this in a more detail later
 but nevertheless its good to get an overview of what's actually happening there.
 
-### Interpolators
+## Interpolators
 The right box represents possible interpolation services `$translate` service uses
 to interpolate your translations against variable values you might want to use
 there. If you don't understand what this means, no worries. You'll learn everything
@@ -38,14 +38,14 @@ default interpolation service uses Angular's core interpolation service, so if
 you familiar with it, you don't have to learn anything new. The **MessageFormat**
 interpolation service uses a different syntax, but more on that later.
 
-### Missing translation handlers
+## Missing translation handlers
 The left box shows provided missing translation handlers. These get executed when
 `$translate` service tries to translate a key which doesn't exist. You
 don't have to use any handler, but if you want to, angular-translate comes with
 a logging service you can install as an extension. In addition to that, you can also
 implement your own handler and use it.
 
-### Asynchronous loader
+## Asynchronous loader
 Of course you want to be able to load your translation data asynchronously to
 speed up your apps performance. angular-translate supports the use of so called
 asynchronous loaders, which are very easy to use. There are two asynchronous
@@ -53,7 +53,7 @@ loaders, `urlLoader` and `staticFilesLoader`. Both of them solves a specific
 situation when it comes to asynchonous loading of translation data. Anyways, of
 course you can build your own custom loaders and use then if you want to.
 
-### Storage
+## Storage
 Since its pretty common that an app, which provides multi-language support, should
 remember the language a user has chosen during runtime, angular-translate gives
 you a way to use any kind of storage. It checks if it should rely on any storage and if so it tries to find a specific key - value pair within the configured storage

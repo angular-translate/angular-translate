@@ -13,7 +13,7 @@ lazy loading of translation data. And it works like a charm.
 angular-translate provides a pretty clever way to tell $translate service to
 load data asynchronously. To load your data from a server you have to use an
 asynchronous loader, which gets invoked later at runtime when it's needed.
-angular-translate comes with support for two different asynchronous loaders. Both
+angular-translate comes with support for three different asynchronous loaders. Both
 of them are installable via Bower. Let's take a look at them!
 
 ## Using urlLoader
@@ -294,7 +294,8 @@ the staticFilesLoader. First, we have to pull the translation tables out of the
 code and put them into separate locale files:
 
 **Note:** The data is now provided as _JSON_ so make sure to put everything in
-double quotes!
+double quotes! Also make sure to NOT copy the comment and let your server send
+JSON as JSON not as plain text!
 
 <pre>
 // locale-en.json
