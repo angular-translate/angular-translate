@@ -29,6 +29,10 @@ h2, h1 {
   color: rgb(102, 102, 102);
   font-weight: normal;
 }
+.header img {
+  width: 215px;
+  margin-top: 15px;
+}
 
 .hint {
   font-size: 0.5em;
@@ -48,10 +52,6 @@ h2, h1 {
 
 .navbar-inner {
   background: white;
-}
-
-.navbar .container .brand {
-  margin-top: 5px;
 }
 
 .navbar-inner li {
