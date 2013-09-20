@@ -277,6 +277,9 @@ form.well {
 .dropdown-menu > li > a > img {
   margin-right: 8px;
   vertical-align: -35%;
+  width: 24px;
+  padding-right: 0;
+  margin-top: 0;
 }
 .form-search > ul.nav > li > a {
   word-wrap: break-word;
