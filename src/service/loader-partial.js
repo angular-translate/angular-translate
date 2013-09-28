@@ -109,7 +109,47 @@ angular.module('pascalprecht.translate')
     if (!hasPart(name)) {
       parts[name] = new Part(name);
     }
+    parts[name].isActive = true;
     
+    return this;
+  };
+  
+  /**
+   * @ngdocs function
+   * @name pascalprecht.translate.$translatePartialLoaderProvider#setPart
+   * @methodOf pascalprecht.translate.$translatePartialLoaderProvider
+   *
+   * @description
+   * Sets a translation table to the specified part. This method does not make the specified part
+   * available, but only avoids loading this part from the server.
+   *
+   * @param {string} lang A language of the given translation table
+   * @param {string} part A name of the target part
+   * @param {object} table A translation table to set to the specified part
+   *
+   * @return {object} $translatePartialLoaderProvider, so this method is chainable
+   *
+   * @throws {TypeError} The method could throw a **TypeError** if you pass params of the wrong 
+   * type. Please, note that the `lang` and `part` params have to be a non-empty **string**s and
+   * the `table` param has to be an object.
+   */
+  this.setPart = function(lang, part, table) {
+    if (!isStringValid(lang)) {
+      throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
+    }
+    if (!isStringValid(part)) {
+      throw new TypeError('Invalid type of a second argument, a non-empty string expected.');
+    }
+    if (typeof table !== 'object' || table === null) {
+      throw new TypeError('Invalid type of a third argument, an object expected.');
+    }
+    
+    if (!hasPart(part)) {
+      parts[part] = new Part(part);
+      parts[part].isActive = false;
+    }
+    
+    parts[part].tables[lang] = table;
     return this;
   };
   
@@ -134,7 +174,9 @@ angular.module('pascalprecht.translate')
       throw new TypeError('Invalid type of a first argument, a non-empty string expected.');
     }
     
-    delete parts[name];
+    if (hasPart(name)) {
+      parts[name].isActive = false;
+    }
     
     return this;
   };
