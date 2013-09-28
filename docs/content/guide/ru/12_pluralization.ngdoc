@@ -25,8 +25,8 @@
 [простую подстановку переменных](https://github.com/SlexAxton/messageformat.js#simple-variable-replacement),
 [SelectFormat](https://github.com/SlexAxton/messageformat.js#selectformat),
 и [PluralFormat](https://github.com/SlexAxton/messageformat.js#pluralformat).
-Итак, как же использовать MessageFormat вместе с angular-translate так, чтобы получить доступ ко
-всем ее функциям?
+Итак, как же использовать MessageFormat вместе с angular-translate так, чтобы получить доступ к ее
+функциональности?
 
 Конечно, для этого есть соответствующее расширение. Просто установите сервис интерполяции
 MessageFormat при помощи Bower:
@@ -73,8 +73,8 @@ $translateProvider.preferredLanguage('en');
 ```
 
 Как видите, MessageFormat поддерживает `SelectFormat` для интерполяции текстов на основе, к примеру,
-данного пола. Мы можем использовать сервис `$translate`,  директиву и фильтр `translate` для
-перевода идентификатора `LIKE_TEXT` так же, как и раньше:
+данного пола. Мы можем использовать сервис `$translate`, директиву и фильтр `translate` для перевода
+идентификатора `LIKE_TEXT` так же, как и всегда:
 
 <pre>
 // using `$translate` service
