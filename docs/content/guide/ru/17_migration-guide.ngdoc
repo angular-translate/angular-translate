@@ -7,7 +7,7 @@
 # 1.0.0 (2013-07-23)
 
 angular-translate 1.0 introduces pluggable interpolation system. Extension package
-`angular-translate-interpolation-default is required`.
+`angular-translate-interpolation-default` is required.
 
 `translate` directive now uses `translate-values` instead of `values` attribute
 

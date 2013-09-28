@@ -7,7 +7,7 @@
 Это руководство покажет вам как быть с подстановкой переменных в переводах. Если вы еще не прочитали
 вводные главы про [сервис $translate](#/guide/03_using-translate-service),
 [фильтр translate](#/guide/04_using-translate-filter) и
-[директиву translate](guide/05_using-translate-directive), то самое время это сделать!
+[директиву translate](#/guide/05_using-translate-directive), то самое время это сделать!
 
 Сервис `$translate`, фильтр `translate` и директива `translate` дают очень точные результаты! Но как
 быть, если ваши переводы требуют наличия переменных значений? Скажем, вы хотите отобразить
