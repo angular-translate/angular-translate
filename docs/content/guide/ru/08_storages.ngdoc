@@ -70,7 +70,7 @@ $ bower install angular-translate-storage-local
 $translateProvider.useLocalStorage();
 </pre>
 
-Это все. Теперь ваше приложение использует localStorage для того, чтобы помнить язык.
+Это все. Теперь ваше приложение использует localStorage для того, чтобы запоминать язык.
 Давайте также обновим наше приложение для использования localStorage:
 
 
