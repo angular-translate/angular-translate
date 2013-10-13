@@ -12,7 +12,18 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
 
   var $translateInterpolator = {},
       $locale,
-      $identifier = 'default';
+      $identifier = 'default',
+      $useSanitizedValues = false;
+
+  var sanitizeParams = function (params) {
+        var result = {};
+        for (var key in params) {
+          if (params.hasOwnProperty(key)) {
+            result[key] = angular.element('<div></div>').text(params[key]).html();
+          }
+        }
+        return result;
+      };
 
   /**
    * @ngdoc function
@@ -42,6 +53,11 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
     return $identifier;
   };
 
+  $translateInterpolator.useSanitizedValues = function (value) {
+    $useSanitizedValues = (value === true);
+    return this;
+  };
+
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateDefaultInterpolation#interpolate
@@ -54,6 +70,9 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
    * @returns {string} interpolated string.
    */
   $translateInterpolator.interpolate = function (string, interpolateParams) {
+    if ($useSanitizedValues) {
+      interpolateParams = sanitizeParams(interpolateParams);
+    }
     return $interpolate(string)(interpolateParams);
   };
 

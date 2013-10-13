@@ -20,6 +20,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $missingTranslationHandlerFactory,
       $interpolationFactory,
       $interpolatorFactories = [],
+      $interpolationSanitization = false,
       $loaderFactory,
       $loaderOptions,
       $notFoundIndicatorLeft,
@@ -165,6 +166,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useInterpolation = function (factory) {
     $interpolationFactory = factory;
+    return this;
+  };
+
+  this.useSanitizedValues = function (value) {
+    $interpolationSanitization = value;
     return this;
   };
 
@@ -559,6 +565,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
     }
 
+    // apply additional settings
+    if (typeof defaultInterpolator.useSanitizedValues === 'function') {
+      defaultInterpolator.useSanitizedValues($interpolationSanitization);
+    }
+
     // if we have additional interpolations that were added via
     // $translateProvider.addInterpolation(), we have to map'em
     if ($interpolatorFactories.length > 0) {
@@ -568,6 +579,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var interpolator = $injector.get(interpolatorFactory);
         // setting initial locale for each interpolation service
         interpolator.setLocale($preferredLanguage || $uses);
+        // apply additional settings
+        if (typeof interpolator.useSanitizedValues === 'function') {
+          interpolator.useSanitizedValues($interpolationSanitization);
+        }
         // make'em recognizable through id
         interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
       });
