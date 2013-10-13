@@ -86,7 +86,7 @@ have to inject the provider into your modules configuration function (which is
 the only place where you can access it).
 
 <pre>
-app.config(function ['$translateProvider', ($translateProvider) {
+app.config(['$translateProvider', function($translateProvider) {
 
 }]);
 </pre>
@@ -110,8 +110,8 @@ the concrete translation for certain language. You don't even have to provide
 any information in your translation table, to which language it corresponds. But
 more on that later.
 
-You can also organize your translatations by enclosing them inside namespaces.
-This is particularly insteresting for big websites with many and/or long pages.
+You can also organize your translations by enclosing them inside namespaces.
+This is particularly interesting for big websites with many and/or long pages.
 All you have to do is to create nested JSON objects:
 
 ```json
@@ -124,7 +124,7 @@ All you have to do is to create nested JSON objects:
 }
 ```
 
-This translation table only contains one translation, but you can expend very
+This translation table only contains one translation, but you can expand very
 easily. You can have various nesting levels in your translation table, and each
 namespace can contain as many subnamespace as you want making it very flexible
 for you to use!
@@ -146,7 +146,7 @@ var translations = {
 We can add this table with the use of `$translateProvider.translations()`:
 
 <pre>
-app.config(function ['$translateProvider', ($translateProvider) {
+app.config(['$translateProvider', function ($translateProvider) {
   // add translation table
   $translateProvider.translations(translations);
 }]);
