@@ -435,7 +435,7 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       // Verify we have not any rich html content (actually, a bad result)
       expect(element.text()).toEqual('The Doctor is a citizen of !');
-      expect(element.html()).toEqual('The Doctor is a citizen of !');
+      expect(element.html()).toEqual('<span>The Doctor is a citizen of <strong ng-bind="world"></strong>!</span>');
     });
 
     it('should be enabled using "translate-compile"-attribute', function () {
