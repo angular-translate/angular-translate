@@ -433,7 +433,7 @@ describe('pascalprecht.translate', function () {
     it('should be disabled at default', function () {
       element = $compile('<p translate="text" translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
       $rootScope.$digest();
-      // Verify we have not any rich html content (actually, a bad result)
+      // Verify we have no additional bindings (ng-bind)
       expect(element.text()).toEqual('The Doctor is a citizen of !');
       expect(element.html()).toEqual('<span>The Doctor is a citizen of <strong ng-bind="world"></strong>!</span>');
     });
@@ -441,9 +441,11 @@ describe('pascalprecht.translate', function () {
     it('should be enabled using "translate-compile"-attribute', function () {
       element = $compile('<p translate="text" translate-compile translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
       $rootScope.$digest();
-      // Verify we have rich html content now
+      // Verify we have additional bindings (ng-bind)
       expect(element.text()).toEqual('The Doctor is a citizen of Gallifrey!');
-      expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Gallifrey</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      //expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Gallifrey</strong>!</span>');
+      expect(element.find('strong').html()).toEqual('Gallifrey');
     });
 
     it('should consider even live binding in compiled value', function () {
@@ -453,7 +455,9 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       // Verify that the new value of "world" is used.
       expect(element.text()).toEqual('The Doctor is a citizen of Earth!');
-      expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Earth</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      //expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Earth</strong>!</span>');
+      expect(element.find('strong').html()).toEqual('Earth');
     });
   });
 });
