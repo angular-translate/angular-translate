@@ -18,12 +18,33 @@
   <h1 translate>HEADER</h1>
   <h2 translate>SUBHEADER</h2>
 
-<script src="../bower_components/angular/angular.js"></script>
+  <script src="../bower_components/angular/angular.js"></script>
+  <!-- Note that to use a cookie storage you have to include this module -->
+  <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
 
-<!-- Note that to use a cookie storage you have to include this module -->
-<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+  <!-- from bower install -->
+  <script src="../bower_components/angular-translate/angular-translate.js"></script> 
+  <script src="../bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <!-- 
+  <script src="../bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+  <script src="../bower_components/angular-translate-loader-url/angular-translate-loader-url.js"></script>
+  <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="../bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+  <script src="../bower_components/angular-translate-handler-log/angular-translate-handler-log.js"></script>
+  <script src="../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js"></script>
+  -->
 
-<script src="js/angular-translate.js"></script>
+  <!-- from grunt build -->
+  <!-- 
+  <script src="../dist/angular-translate.js"></script>
+  <script src="../dist/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script src="../dist/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+  <script src="../dist/angular-translate-loader-url/angular-translate-loader-url.js"></script>
+  <script src="../dist/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="../dist/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+  <script src="../dist/angular-translate-handler-log/angular-translate-handler-log.js"></script>
+  <script src="../dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js"></script>
+  -->
 
 <script>
 // Note that to use the cookie storage you have to pass ngCookies dependency to your module
