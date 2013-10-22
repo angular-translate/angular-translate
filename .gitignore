@@ -4,3 +4,5 @@ components
 bower_components
 dist
 demo/js/angular-translate-latest.js
+
+.idea/
