@@ -82,7 +82,7 @@ angular-translate поставляется с провайдером `$translate
 нему доступ).
 
 <pre>
-app.config(function ['$translateProvider', ($translateProvider) {
+app.config(['$translateProvider', function ($translateProvider) {
 
 }]);
 </pre>
@@ -137,7 +137,7 @@ var translations = {
 Мы можем ее добавить при помощи `$translateProvider.translations()`:
 
 <pre>
-app.config(function ['$translateProvider', ($translateProvider) {
+app.config(['$translateProvider', function ($translateProvider) {
   // add translation table
   $translateProvider.translations(translations);
 }]);
