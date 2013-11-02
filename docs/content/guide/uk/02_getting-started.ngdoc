@@ -61,11 +61,11 @@ app.config(function ($routeProvider) {
 });
 </pre>
 
-Те, що тут відбувається, це не _використання певних сервісів_ для налаштування яких-небудь речей.
-Це, скоріше, _налаштування певного сервісу_, який надалі буде використаний у вашому застосунку, за
-допомогою _провайдеру_. Це означає, що `$locationProvider.html5Mode(true)` налаштовує **сервіс**
-`$location` на роботу в режимі html5. Таким чином, якщо сервіс може бути налаштований ззовні, він
-потребує відповідного провайдеру, що надає необхідний для цього інтерфейс.
+Те, що тут відбувається, це не використання певних сервісів для налаштування яких-небудь речей.
+Це, скоріше, налаштування певного сервісу, який надалі буде використаний у вашому застосунку, за
+допомогою провайдера. Це означає, що `$locationProvider.html5Mode(true)` налаштовує **сервіс**
+`$location` на роботу в режимі html5. Таким чином, якщо сервіс може бути налаштований зовні, він
+потребує відповідного провайдера, що надає необхідний для цього інтерфейс.
 
 angular-translate поставляється з провайдером `$translateProvider`, який можна використовувати для
 налаштування сервісу `$translate`, що обробляє матеріали i18n у вашому застосунку. Сервіс 
@@ -83,7 +83,7 @@ angular-translate поставляється з провайдером `$transla
 нього доступ).
 
 <pre>
-app.config(function ['$translateProvider', ($translateProvider) {
+app.config(['$translateProvider', function ($translateProvider) {
 
 }]);
 </pre>
@@ -138,7 +138,7 @@ var translations = {
 Ми можемо додати її за допомогою `$translateProvider.translations()`:
 
 <pre>
-app.config(function ['$translateProvider', ($translateProvider) {
+app.config(['$translateProvider', function ($translateProvider) {
   // add translation table
   $translateProvider.translations(translations);
 }]);

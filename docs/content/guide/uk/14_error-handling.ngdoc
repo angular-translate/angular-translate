@@ -18,7 +18,7 @@
 $ bower install angular-translate-handler-log
 ```
 
-Все, що потрібно зробити для використання цього обробника - викикати у `$translateProvider`'а метод
+Все, що потрібно зробити для використання цього обробника - викликати у `$translateProvider`'а метод
 `useMissingTranslationHandlerLog()`. angular-translate зробить для вас все інше.
 
 <pre>
