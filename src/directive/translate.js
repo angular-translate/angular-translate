@@ -75,7 +75,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$interpolate', function ($filter, $interpolate) {
+.directive('translate', ['$filter', '$interpolate', '$parse', function ($filter, $interpolate, $parse) {
 
   var translate = $filter('translate');
 
@@ -99,7 +99,7 @@ angular.module('pascalprecht.translate')
       });
 
       attr.$observe('translateValues', function (interpolateParams) {
-        scope.interpolateParams = interpolateParams;
+        scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
       });
 
       // Ensures the text will be refreshed after the current language was changed
