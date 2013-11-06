@@ -828,7 +828,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
                   delete $translationTable[lang];
                 }
               }
-              for (var i = 0; i < newTranslations.length; i++) {
+              for (var i = 0, len = newTranslations.length; i < len; i++) {
                 translations(newTranslations[i].key, newTranslations[i].table);
               }
               if ($uses) {
