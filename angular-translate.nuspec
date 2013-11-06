@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>angular-translate</id>
+    <version>1.1.0</version>
+    <authors>Pascal Precht, Michael Lehmann</authors>
+    <owners>Pascal Precht</owners>
+    <!--<licenseUrl>https://github.com/PascalPrecht/angular-translate/blob/master/LICENSE</licenseUrl>-->
+    <projectUrl>http://pascalprecht.github.io/angular-translate</projectUrl>
+    <iconUrl>https://github.com/PascalPrecht/angular-translate/blob/master/identity/logo/angular-translate/angular-translate_small.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>angular-translate is an AngularJS module that makes your life much easier when it comes to i18n and l10n including lazy loading and pluralization.</description>
+    <tags>angular angularjs angular-translate localization</tags>
+    <dependencies>
+      <dependency id="angularjs" version="1.0.8" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="dist\angular-translate-*.js" target="content\scripts" />
+	<file src="dist\angular-translate.min-*.js" target="content\scripts" />
+  </files>
+</package>
