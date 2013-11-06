@@ -10,7 +10,7 @@
     <iconUrl>https://github.com/PascalPrecht/angular-translate/blob/master/identity/logo/angular-translate/angular-translate_small.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>angular-translate is an AngularJS module that makes your life much easier when it comes to i18n and l10n including lazy loading and pluralization.</description>
-    <tags>angular angularjs angular-translate localization</tags>
+    <tags>angular-translate angular angularjs localization</tags>
     <dependencies>
       <dependency id="angularjs" version="1.0.8" />
     </dependencies>
