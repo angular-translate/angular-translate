@@ -519,7 +519,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $rootScope.$broadcast('$translateLoadingStart');
 
       pendingLoader = true;
-      $nextLang = key;
 
       $injector.get($loaderFactory)(angular.extend($loaderOptions, {
         key: key
@@ -535,16 +534,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           angular.extend(translationTable, data);
         }
 
-        translations(key, translationTable);
-
         pendingLoader = false;
-        $nextLang = undefined;
-        deferred.resolve(key);
+        deferred.resolve({
+          key : key,
+          table : translationTable
+        });
         $rootScope.$broadcast('$translateLoadingEnd');
       }, function (key) {
         $rootScope.$broadcast('$translateLoadingError');
         deferred.reject(key);
-        $nextLang = undefined;
         $rootScope.$broadcast('$translateLoadingEnd');
       });
 
@@ -730,11 +728,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       // if there isn't a translation table for the language we've requested,
       // we load it asynchronously
       if (!$translationTable[key] && $loaderFactory) {
-        loadAsync(key).then(useLanguage, function (key) {
-          $rootScope.$broadcast('$translateChangeError');
-          deferred.reject(key);
-          $rootScope.$broadcast('$translateChangeEnd');
-        });
+        $nextLang = key;
+        loadAsync(key).then(
+          function(translation) {
+            $nextLang = undefined;
+            translations(translation.key, translation.table);
+            useLanguage(translation.key);
+          }, function (key) {
+            $nextLang = undefined;
+            $rootScope.$broadcast('$translateChangeError');
+            deferred.reject(key);
+            $rootScope.$broadcast('$translateChangeEnd');
+          }
+        );
       } else {
         useLanguage(key);
       }
@@ -786,6 +792,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      * process is finished successfully, and reject if not.
      */
     $translate.refresh = function(langKey) {
+      if (!$loaderFactory) {
+        throw new Error('Couldn\'t refresh translation table, no loader registered!');
+      }
+      
       var deferred = $q.defer();
 
       function onLoadSuccess() {
@@ -796,47 +806,71 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       function onLoadFailure() {
         deferred.reject();
         $rootScope.$broadcast('$translateRefreshEnd');
-      }
-
-      if (!$loaderFactory) {
-        throw new Error('Couldn\'t refresh translation table, no loader registered!');
-      }
+      }      
 
       if (!langKey) {
-
+        
         $rootScope.$broadcast('$translateRefreshStart');
-
-        for (var lang in $translationTable) {
-          if ($translationTable.hasOwnProperty(lang)) {
-            delete $translationTable[lang];
-          }
-        }
 
         var loaders = [];
         if ($fallbackLanguage) {
           loaders.push(loadAsync($fallbackLanguage));
         }
         if ($uses) {
-          loaders.push($translate.uses($uses));
+          loaders.push(loadAsync($uses));
         }
 
         if (loaders.length > 0) {
-          $q.all(loaders).then(onLoadSuccess, onLoadFailure);
+          $q.all(loaders).then(
+            function(newTranslations) {
+              for (var lang in $translationTable) {
+                if ($translationTable.hasOwnProperty(lang)) {
+                  delete $translationTable[lang];
+                }
+              }
+              for (var i = 0; i < newTranslations.length; i++) {
+                translations(newTranslations[i].key, newTranslations[i].table);
+              }
+              if ($uses) {
+                $translate.uses($uses);
+              }
+              onLoadSuccess();
+            },
+            function (key) {
+              if (key === $uses) {
+                $rootScope.$broadcast('$translateChangeError');
+              }
+              onLoadFailure();
+            }
+          );
         } else onLoadSuccess();
-
+        
       } else if ($translationTable.hasOwnProperty(langKey)) {
 
         $rootScope.$broadcast('$translateRefreshStart');
 
-        delete $translationTable[langKey];
-
-        var loader = null;
+        var loader = loadAsync(langKey);
         if (langKey === $uses) {
-          loader = $translate.uses($uses);
+          loader.then(
+            function(newTranslation) {
+              $translationTable[langKey] = newTranslation.table;
+              $translate.uses($uses);
+              onLoadSuccess();
+            },
+            function() {
+              $rootScope.$broadcast('$translateChangeError');
+              onLoadFailure();
+            }
+          );
         } else {
-          loader = loadAsync(langKey);
+          loader.then(
+            function(newTranslation) {
+              $translationTable[langKey] = newTranslation.table;
+              onLoadSuccess();
+            },
+            onLoadFailure
+          );
         }
-        loader.then(onLoadSuccess, onLoadFailure);
 
       } else deferred.reject();
 
