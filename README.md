@@ -10,7 +10,7 @@
 
 ### Links
 * Website [http://pascalprecht.github.io/angular-translate/](http://pascalprecht.github.io/angular-translate/)
-* API Reference [http://pascalprecht.github.io/angular-translate/#/api](http://pascalprecht.github.io/angular-translate/#/api)
+* API Reference [http://pascalprecht.github.io/angular-translate/docs/en/#/api](http://pascalprecht.github.io/angular-translate/docs/en/#/api)
 * Plato report [http://pascalprecht.github.io/angular-translate/plato](http://pascalprecht.github.io/angular-translate/plato)
 * [Contribution Guidelines](https://github.com/PascalPrecht/angular-translate/blob/master/CONTRIBUTING.md)
 
