@@ -118,7 +118,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // Create shortcut path (foo.bar == foo.bar.bar)
           keyWithShortPath = "" + path.join(NESTED_OBJECT_DELIMITER);
           // Link it to original path
-          result[keyWithShortPath] = '@' + keyWithPath;
+          result[keyWithShortPath] = '@:' + keyWithPath;
         }
         result[keyWithPath] = val;
       }
@@ -588,8 +588,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       // if the translation id exists, we can just interpolate it
       if (table && table.hasOwnProperty(translationId)) {
         // If using link, rerun $translate with linked translationId and return it
-        if(angular.isString(table[translationId]) && table[translationId].substr(0,1) === '@'){
-          return $translate(table[translationId].substr(1),interpolateParams,interpolationId);
+        if(angular.isString(table[translationId]) && table[translationId].substr(0,2) === '@:'){
+          return $translate(table[translationId].substr(2),interpolateParams,interpolationId);
         }
         return Interpolator.interpolate(table[translationId], interpolateParams);
       }

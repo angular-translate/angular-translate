@@ -117,6 +117,73 @@ describe('pascalprecht.translate', function () {
 
   });
 
+  describe('$translateService shortcuts', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.translations({
+        'FOO': {
+          'BAR': {
+            'BAR': 'So, this horse walks in to a bar, right...',
+            'BAZ': 'A baby seal walks in to a club...'
+          }
+        }
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should should return the translation of the longer path normally', function () {
+      inject(function ($translate) {
+        expect($translate('FOO.BAR.BAR')).toEqual('So, this horse walks in to a bar, right...');
+      });
+    });
+
+    it('should should return the translation of the longer path using shortcut', function () {
+      inject(function ($translate) {
+        expect($translate('FOO.BAR')).toEqual($translate('FOO.BAR.BAR'));
+      });
+    });
+
+  });
+
+  describe('$translateService linked IDs', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.translations({
+        'FOO': {
+          'BAR': {
+            'BAR': 'fubar'
+          }
+        },
+        'ID_LINKED_TO': 'This should be linked',
+        'LINKED_ID': '@:ID_LINKED_TO',
+        'LINKED_SHORTCUT_ID': '@:FOO.BAR'
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should should return the the linked translation id', function () {
+      inject(function ($translate) {
+        expect($translate('LINKED_ID')).toEqual('This should be linked');
+      });
+    });
+
+    it('should should return the the linked translation id using shortcut', function () {
+      inject(function ($translate) {
+        expect($translate('LINKED_SHORTCUT_ID')).toEqual('fubar');
+      });
+    });
+  });
+
   describe('$translateService (single-lang)', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
