@@ -99,7 +99,11 @@ angular.module('pascalprecht.translate')
       });
 
       attr.$observe('translateValues', function (interpolateParams) {
-        scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
+        // Only watch parent scope if there is data to retreive from it
+        if (interpolateParams)
+          scope.$parent.$watch(function() {
+            scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
+          });
       });
 
       // Ensures the text will be refreshed after the current language was changed
@@ -110,11 +114,11 @@ angular.module('pascalprecht.translate')
 
       // Ensures the text will be refreshed after either the scope's translationId
       // or the interpolated params have been changed.
-      scope.$watch('translationId + interpolateParams', function (nValue) {
+      scope.$watch('[translationId, interpolateParams]', function (nValue) {
         if (nValue) {
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         }
-      });
+      }, true);
     }
   };
 }]);
