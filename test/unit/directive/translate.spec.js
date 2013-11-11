@@ -243,6 +243,22 @@ describe('pascalprecht.translate', function () {
           });
         });
       });
+
+      describe('while given values refer to scope data', function () {
+
+        it('should replace interpolate directive and keep updated when td id is attribute value and refers to scope data', function () {
+          inject(function ($rootScope, $compile, $timeout) {
+            $rootScope.translationId = 'TD_WITH_VALUE';
+            $rootScope.user = { name: 'foo' };
+            element = $compile('<div translate="{{translationId}}" translate-values="{ value: user.name }"></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum foo');
+            $rootScope.user.name = 'bar';
+            $rootScope.$digest();
+            expect(element.text()).toBe('Lorem Ipsum bar');
+          });
+        });
+      });
     });
   });
 
