@@ -18,5 +18,19 @@
   <files>
 	<file src="dist/angular-translate.js" target="content\scripts" />
 	<file src="dist/angular-translate.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-handler-log/angular-translate-handler-log.js" target="content\scripts" />
+	<file src="dist/angular-translate-handler-log/angular-translate-handler-log.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js" target="content\scripts" />
+	<file src="dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-partial/angular-translate-loader-partial.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-partial/angular-translate-loader-partial.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-static-files/angular-translate-loader-static-files.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-url/angular-translate-loader-url.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-url/angular-translate-loader-url.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-cookie/angular-translate-storage-cookie.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-local/angular-translate-storage-local.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-local/angular-translate-storage-local.min.js" target="content\scripts" />
   </files>
 </package>
