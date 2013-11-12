@@ -29,6 +29,7 @@
     "grunt-ngmin": "0.0.2",
     "express": "~3.2.4",
     "grunt-ngdocs": "~0.1.6",
-    "grunt-contrib-clean": "~0.5.0"
+    "grunt-contrib-clean": "~0.5.0",
+    "load-grunt-tasks" : "~0.2.0"
   }
 }

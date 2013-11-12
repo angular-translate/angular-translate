@@ -1,17 +1,6 @@
 module.exports = function (grunt) {
 
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-bump');
-  grunt.loadNpmTasks('grunt-express');
-  grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-conventional-changelog');
-  grunt.loadNpmTasks('grunt-ngmin');
-  grunt.loadNpmTasks('grunt-ngdocs');
+  require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
 
