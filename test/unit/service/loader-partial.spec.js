@@ -148,6 +148,132 @@ describe('pascalprecht.translate', function() {
       });
       
       
+      describe('setPart()', function() {
+      
+        it('should be defined', function() {
+          inject(function($translatePartialLoader) {
+            expect($provider.setPart).toBeDefined();
+          });
+        });
+      
+        it('should be a function', function() {
+          inject(function($translatePartialLoader) {
+            expect(typeof $provider.setPart).toBe('function');
+          });
+        });
+        
+        it('should throw an error if a first arg is not a non-empty string', function() {
+          inject(function($translatePartialLoader) {
+            var message = 'Invalid type of a first argument, a non-empty string expected.';
+            expect(function() { $provider.setPart(function(){}); }).toThrow(message);
+            expect(function() { $provider.setPart(false);        }).toThrow(message);
+            expect(function() { $provider.setPart(null);         }).toThrow(message);
+            expect(function() { $provider.setPart(NaN);          }).toThrow(message);
+            expect(function() { $provider.setPart([]);           }).toThrow(message);
+            expect(function() { $provider.setPart({});           }).toThrow(message);
+            expect(function() { $provider.setPart(2);            }).toThrow(message);
+            expect(function() { $provider.setPart();             }).toThrow(message);
+          });
+        });
+        
+        it('should throw an error if a second arg is not a non-empty string', function() {
+          inject(function($translatePartialLoader) {
+            var message = 'Invalid type of a second argument, a non-empty string expected.';
+            expect(function() { $provider.setPart('l', function(){}); }).toThrow(message);
+            expect(function() { $provider.setPart('l', false);        }).toThrow(message);
+            expect(function() { $provider.setPart('l', null);         }).toThrow(message);
+            expect(function() { $provider.setPart('l', NaN);          }).toThrow(message);
+            expect(function() { $provider.setPart('l', []);           }).toThrow(message);
+            expect(function() { $provider.setPart('l', {});           }).toThrow(message);
+            expect(function() { $provider.setPart('l', 2);            }).toThrow(message);
+            expect(function() { $provider.setPart('l');               }).toThrow(message);
+          });
+        });
+        
+        it('should throw an error if a third arg is not an object', function() {
+          inject(function($translatePartialLoader) {
+            var message = 'Invalid type of a third argument, an object expected.';
+            expect(function() { $provider.setPart('l', 'p', function(){}); }).toThrow(message);
+            expect(function() { $provider.setPart('l', 'p', false);        }).toThrow(message);
+            expect(function() { $provider.setPart('l', 'p', null);         }).toThrow(message);
+            expect(function() { $provider.setPart('l', 'p', NaN);          }).toThrow(message);
+            expect(function() { $provider.setPart('l', 'p', 's');          }).toThrow(message);
+            expect(function() { $provider.setPart('l', 'p', 2);            }).toThrow(message);
+            expect(function() { $provider.setPart('l', 'p');               }).toThrow(message);
+          });
+        });
+        
+        it('shouldn\'t broadcast any event', function() {
+          inject(function($translatePartialLoader, $rootScope) {
+            spyOn($rootScope, '$broadcast');
+            $provider.setPart('lang', 'part', { foo : 'Foo' });
+            expect($rootScope.$broadcast).not.toHaveBeenCalled();
+          });
+        });
+        
+        it('should be chainable if called with args', function() {
+          inject(function($translatePartialLoader) {
+            expect($provider.setPart('lang', 'part', {})).toEqual($provider);
+          });
+        });
+      
+        it('shouldn\'t make the setted part available', function() {
+          inject(function($translatePartialLoader) {
+            $provider.setPart('lang', 'part', { foo : 'Foo' });
+            expect($provider.isPartAvailable('part')).toEqual(false);
+          });
+        });
+        
+        it('should set a translation table for the part', function() {
+          module(function($httpProvider) {
+            $httpProvider.defaults.transformRequest.push(ThrowErrorHttpInterceptor);
+          });
+        
+          inject(function($translatePartialLoader, $rootScope) {
+            $provider.setPart('en', 'part', { foo : 'Foo' });
+            $provider.addPart('part');
+            
+            var table;
+            expect(function() {
+              $translatePartialLoader({
+                key : 'en',
+                urlTemplate : '/locales/{part}-{lang}.json'
+              }).then(function(data) {
+                table = data;
+              }, function() {
+                table = {};
+              });
+            }).not.toThrow('$http service was used!');
+            $rootScope.$digest();
+            expect(table.foo).toBeDefined();
+            expect(table.foo).toEqual('Foo');
+          });
+        });
+        
+        it('should override the previously setted translation table of the part', function() {
+          inject(function($translatePartialLoader, $rootScope) {
+            $provider.setPart('en', 'part', { foo : 'Foo' });
+            $provider.setPart('en', 'part', { foo : 'Bar' });
+            $provider.addPart('part');
+            
+            var table;
+            $translatePartialLoader({
+              key : 'en',
+              urlTemplate : '/locales/{part}-{lang}.json'
+            }).then(function(data) {
+              table = data;
+            }, function() {
+              table = {};
+            });
+            $rootScope.$digest();
+            expect(table.foo).toBeDefined();
+            expect(table.foo).toEqual('Bar');
+          });
+        });
+        
+      });
+      
+      
       describe('deletePart()', function() {
       
         it('should be defined', function() {
