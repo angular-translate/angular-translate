@@ -958,11 +958,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     // we should try to load them.
     if ($loaderFactory) {
       if (angular.equals($translationTable, {})) {
-          $translate.uses($translate.uses());
+        $translate.uses($translate.uses());
       }
 
       if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
-          loadAsync($fallbackLanguage);
+        loadAsync($fallbackLanguage);
       }
       if ($fallbackLanguages) {
         var fallbackLanguagesSize = $fallbackLanguages.length;
