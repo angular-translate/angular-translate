@@ -98,7 +98,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return this;
   };
 
-  var flatObject = function (data, path, result) {
+  var flatObject = function (data, path, result, prevKey) {
     var key, keyWithPath, val;
 
     if (!path) {
@@ -111,9 +111,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if (!data.hasOwnProperty(key)) continue;
       val = data[key];
       if (angular.isObject(val)) {
-        flatObject(val, path.concat(key), result);
+        flatObject(val, path.concat(key), result, key);
       } else {
         keyWithPath = path.length ? ("" + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
+        if(path.length && key === prevKey){
+          // Create shortcut path (foo.bar == foo.bar.bar)
+          keyWithShortPath = "" + path.join(NESTED_OBJECT_DELIMITER);
+          // Link it to original path
+          result[keyWithShortPath] = '@:' + keyWithPath;
+        }
         result[keyWithPath] = val;
       }
     }
@@ -581,6 +587,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       // if the translation id exists, we can just interpolate it
       if (table && table.hasOwnProperty(translationId)) {
+        // If using link, rerun $translate with linked translationId and return it
+        if(angular.isString(table[translationId]) && table[translationId].substr(0,2) === '@:'){
+          return $translate(table[translationId].substr(2),interpolateParams,interpolationId);
+        }
         return Interpolator.interpolate(table[translationId], interpolateParams);
       }
 
