@@ -717,7 +717,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return $fallbackLanguages;
     };
 
-        /**
+    /**
      * @ngdoc function
      * @name pascalprecht.translate.$translate#proposedLanguage
      * @methodOf pascalprecht.translate.$translate
@@ -957,21 +957,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
     if ($loaderFactory) {
-        if (angular.equals($translationTable, {})) {
-            $translate.uses($translate.uses());
-        }
+      if (angular.equals($translationTable, {})) {
+          $translate.uses($translate.uses());
+      }
 
-        if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
-            loadAsync($fallbackLanguage);
+      if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
+          loadAsync($fallbackLanguage);
+      }
+      if ($fallbackLanguages) {
+        var fallbackLanguagesSize = $fallbackLanguages.length;
+        for (var current = 0; current < fallbackLanguagesSize; current++) {
+          if (!$translationTable[$fallbackLanguages[current]]) {
+            loadAsync($fallbackLanguages[current]);
+          }
         }
-        if ($fallbackLanguages) {
-            var fallbackLanguagesSize = $fallbackLanguages.length;
-            for (var current = 0; current < fallbackLanguagesSize; current++) {
-                if (!$translationTable[$fallbackLanguages[current]]) {
-                      loadAsync($fallbackLanguages[current]);
-                }
-            }
-        }
+      }
     }
 
     return $translate;
