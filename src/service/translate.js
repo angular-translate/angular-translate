@@ -12,6 +12,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   var $translationTable = {},
       $preferredLanguage,
       $fallbackLanguage,
+      $fallbackLanguages = [],
       $uses,
       $nextLang,
       $storageFactory,
@@ -281,8 +282,29 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
   };
 
+   /**
+    * @ngdoc function
+    * @name pascalprecht.translate.$translateProvider#fallbackLanguages
+    * @methodOf pascalprecht.translate.$translateProvider
+    *
+    * @description
+    * Tells the module which of the registered translation tables to use when missing translations
+    * at initial startup by passing a language key. Similar to `$translateProvider#uses`
+    * only that it says which language to **fallback**.
+    *
+    * @param {Array} langKey A list of language keys to be iterated through from 0...n.
+    *
+    */
+   this.fallbackLanguages = function (langKeys) {
+       if (langKeys) {
+           $fallbackLanguages = langKeys;
+           return this;
+       } else {
+           return $fallbackLanguages;
+       }
+   };
 
- /**
+  /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#uses
    * @methodOf pascalprecht.translate.$translateProvider
@@ -618,6 +640,30 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
       }
 
+        // if the array of fallback languages is set,
+        // we also try to catch the content from all mentioned languages
+        if ($uses && $fallbackLanguages){
+            // iterate through the language array
+            var fallbackLanguagesSize = $fallbackLanguages.length;
+            for (var current = 0; current < fallbackLanguagesSize; current++) {
+                if ($uses !== $translationTable[$fallbackLanguages[current]]) {
+                    var translationFromList = $translationTable[$fallbackLanguages[current]][translationId];
+
+                    // check if a translation for the fallback language exists
+                    if (translationFromList) {
+                        var returnValFromList;
+                        // temporarly letting Interpolator know we're using fallback language now.
+                        Interpolator.setLocale($fallbackLanguages[current]);
+                        returnValFromList = Interpolator.interpolate(translationFromList, interpolateParams);
+                        // after we've interpolated the translation, we reset Interpolator to proper locale.
+                        Interpolator.setLocale($uses);
+                        return returnValFromList;
+                    }
+                }
+            }
+        }
+
+
       // applying notFoundIndicators
       if ($notFoundIndicatorLeft) {
         translationId = [$notFoundIndicatorLeft, translationId].join(' ');
@@ -658,6 +704,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     };
 
     /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#fallbackLanguages
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the language key for the fallback language.
+     *
+     * @return {string} fallback language key
+     */
+    $translate.fallbackLanguages = function () {
+        return $fallbackLanguages;
+    };
+
+        /**
      * @ngdoc function
      * @name pascalprecht.translate.$translate#proposedLanguage
      * @methodOf pascalprecht.translate.$translate
@@ -826,6 +886,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($fallbackLanguage) {
           loaders.push(loadAsync($fallbackLanguage));
         }
+        if ($fallbackLanguages) {
+          var fallbackLanguagesSize = $fallbackLanguages.length;
+          for (var current = 0; current<fallbackLanguagesSize; current++) {
+              loaders.push(loadAsync($fallbackLanguage[current]));
+          }
+        }
+
         if ($uses) {
           loaders.push(loadAsync($uses));
         }
@@ -890,13 +957,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     // If at least one async loader is defined and there are no (default) translations available
     // we should try to load them.
     if ($loaderFactory) {
-      if (angular.equals($translationTable, {})) {
-        $translate.uses($translate.uses());
-      }
+        if (angular.equals($translationTable, {})) {
+            $translate.uses($translate.uses());
+        }
 
-      if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
-        loadAsync($fallbackLanguage);
-      }
+        if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
+            loadAsync($fallbackLanguage);
+        }
+        if ($fallbackLanguages) {
+            var fallbackLanguagesSize = $fallbackLanguages.length;
+            for (var current = 0; current < fallbackLanguagesSize; current++) {
+                if (!$translationTable[$fallbackLanguages[current]]) {
+                      loadAsync($fallbackLanguages[current]);
+                }
+            }
+        }
     }
 
     return $translate;
