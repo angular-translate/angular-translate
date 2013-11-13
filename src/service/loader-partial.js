@@ -17,7 +17,7 @@ angular.module('pascalprecht.translate')
   }
 
   Part.prototype.parseUrl = function(urlTemplate, targetLang) {
-    return urlTemplate.replace('{part}', this.name).replace('{lang}', targetLang);
+    return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
   Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
