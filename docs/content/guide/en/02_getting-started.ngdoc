@@ -124,7 +124,7 @@ All you have to do is to create nested JSON objects:
 }
 ```
 
-This translation table only contains one translation, but you can expend very
+This translation table only contains one translation, but you can extend it very
 easily. You can have various nesting levels in your translation table, and each
 namespace can contain as many subnamespace as you want making it very flexible
 for you to use!

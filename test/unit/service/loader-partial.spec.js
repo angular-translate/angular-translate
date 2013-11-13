@@ -636,6 +636,22 @@ describe('pascalprecht.translate', function() {
             });
           });
           
+          it('should correctly parse url template with multiple pattern occurrences', function() {
+            inject(function($translatePartialLoader, $httpBackend) {
+              $httpBackend.expectGET('/locales/part/part-en.json').respond(200, '{}');
+              
+              $translatePartialLoader.addPart('part');
+              $translatePartialLoader({
+                key : 'en',
+                urlTemplate : '/locales/{part}/{part}-{lang}.json'
+              });
+              
+              $httpBackend.flush();
+              $httpBackend.verifyNoOutstandingExpectation();
+              $httpBackend.verifyNoOutstandingRequest();
+            });
+          });
+          
           it('should throw an error if a urlTemplate is not a non-empty string', function() {
             inject(function($translatePartialLoader) {
               var message = 'Unable to load data, a urlTemplate is not a non-empty string.';
