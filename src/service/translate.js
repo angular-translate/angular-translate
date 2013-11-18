@@ -296,6 +296,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     *
     */
    this.fallbackLanguages = function (langKeys) {
+       if (typeof $fallbackLanguages !== 'undefined' && $fallbackLanguages.length === 0 && langKeys === undefined) {
+           return null;
+       }
        if (langKeys) {
            $fallbackLanguages = langKeys;
            return this;
