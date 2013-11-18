@@ -38,11 +38,6 @@ describe('pascalprecht.translate', function () {
         expect($translate.fallbackLanguage).toBeDefined();
       });
     });
-    it('should have a method fallbackLanguages()', function () {
-      inject(function ($translate) {
-        expect($translate.fallbackLanguages).toBeDefined();
-      });
-    });
 
     it('should have a method storageKey()', function () {
       inject(function ($translate) {
@@ -98,16 +93,16 @@ describe('pascalprecht.translate', function () {
       });
 
     });
-    describe('fallbackLanguages()', function () {
+    describe('fallbackLanguage()#array', function () {
       it('should be a function', function () {
         inject(function ($translate) {
-          expect(typeof $translate.fallbackLanguages).toBe('function');
+          expect(typeof $translate.fallbackLanguage).toBe('function');
         });
       });
-      it('should return empty Array if no language is specified', function () {
+      it('should return empty undefined if no language is specified', function () {
         inject(function ($translate) {
           var emptyVar = [];
-          expect($translate.fallbackLanguages()).toEqual(emptyVar);
+          expect($translate.fallbackLanguage()).toBeUndefined();
         });
       });
     });
@@ -410,7 +405,7 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('$translateService#fallbackLanguages()', function () {
+  describe('$translateService#fallbackLanguage()#array', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations('foo', {
@@ -427,18 +422,18 @@ describe('pascalprecht.translate', function () {
       });
 
       $translateProvider.preferredLanguage('bar');
-      $translateProvider.fallbackLanguages(['foo', 'foo_goo']);
+      $translateProvider.fallbackLanguage(['foo', 'foo_goo']);
     }));
 
     it('should return an Array if languages are specified', function () {
       inject(function ($translate) {
-        expect(typeof $translate.fallbackLanguages()).toBe('object');
+        expect(typeof $translate.fallbackLanguage()).toBe('object');
       });
     });
 
     it('should return a correct language code', function () {
       inject(function ($translate) {
-        expect($translate.fallbackLanguages()).toEqual(['foo', 'foo_goo']);
+        expect($translate.fallbackLanguage()).toEqual(['foo', 'foo_goo']);
       });
     });
 
@@ -453,15 +448,15 @@ describe('pascalprecht.translate', function () {
 
     it('should allow to change fallback language during config', function () {
       inject(function ($translate) {
-        expect($translate.fallbackLanguages()).toEqual(['foo', 'foo_goo']);
+        expect($translate.fallbackLanguage()).toEqual(['foo', 'foo_goo']);
       });
     });
 
     it('shouldn\'t allow to change fallback languages during runtime', function () {
       inject(function ($translate) {
-        var prevLang = $translate.fallbackLanguages();
-        $translate.fallbackLanguages(prevLang === ['foo', 'foo_goo'] ? ['foo'] : ['foo_goo']);
-        expect($translate.fallbackLanguages()).toBe(prevLang);
+        var prevLang = $translate.fallbackLanguage();
+        $translate.fallbackLanguage(prevLang === ['foo', 'foo_goo'] ? ['foo'] : ['foo_goo']);
+        expect($translate.fallbackLanguage()).toBe(prevLang);
       });
     });
   });
@@ -637,7 +632,7 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    describe('fallbackLanguages()', function () {
+    describe('fallbackLanguage()#array', function () {
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
         $translateProvider.useLoader('customLoader', {});
@@ -658,7 +653,7 @@ describe('pascalprecht.translate', function () {
         }]);
 
         $translateProvider.uses('en');
-        $translateProvider.fallbackLanguages('de', 'fr');
+        $translateProvider.fallbackLanguage('de', 'fr');
       }));
 
       it('should use custom loader to load fallbackLanguage', function () {

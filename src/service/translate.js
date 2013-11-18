@@ -12,7 +12,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   var $translationTable = {},
       $preferredLanguage,
       $fallbackLanguage,
-      $fallbackLanguages = [],
       $uses,
       $nextLang,
       $storageFactory,
@@ -270,42 +269,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * at initial startup by passing a language key. Similar to `$translateProvider#uses`
    * only that it says which language to **fallback**.
    *
-   * @param {string} langKey A language key.
+   * @param {string||array} langKey A language key.
    *
    */
-  this.fallbackLanguage = function(langKey) {
+  this.fallbackLanguage = function (langKey) {
     if (langKey) {
-      $fallbackLanguage = langKey;
+      if (typeof langKey === 'string' || langKey instanceof Array) {
+        $fallbackLanguage = langKey;
+      } else {
+        // Error!
+      }
       return this;
     } else {
       return $fallbackLanguage;
     }
   };
-
-   /**
-    * @ngdoc function
-    * @name pascalprecht.translate.$translateProvider#fallbackLanguages
-    * @methodOf pascalprecht.translate.$translateProvider
-    *
-    * @description
-    * Tells the module which of the registered translation tables to use when missing translations
-    * at initial startup by passing a language key. Similar to `$translateProvider#uses`
-    * only that it says which language to **fallback**.
-    *
-    * @param {Array} langKey A list of language keys to be iterated through from 0...n.
-    *
-    */
-   this.fallbackLanguages = function (langKeys) {
-       if (typeof $fallbackLanguages !== 'undefined' && $fallbackLanguages.length === 0 && langKeys === undefined) {
-           return null;
-       }
-       if (langKeys) {
-           $fallbackLanguages = langKeys;
-           return this;
-       } else {
-           return $fallbackLanguages;
-       }
-   };
 
   /**
    * @ngdoc function
@@ -517,7 +495,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @requires $q
    *
    * @description
-   * The `$translate` service is the actual core of angular-translate. It excepts a translation id
+   * The `$translate` service is the actual core of angular-translate. It expects a translation id
    * and optional interpolate parameters to translate contents.
    *
    * <pre>
@@ -602,72 +580,80 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       });
     }
 
-    var $translate = function (translationId, interpolateParams, interpolationId) {
+      // function to check if the current language is a fallback language or not
+      var checkValidFallback = function (usesLang) {
+        if (usesLang && $fallbackLanguage) {
+          if ($fallbackLanguage instanceof Array) {
+            var fallbackLanguagesSize = $fallbackLanguage.length;
+            for (var current = 0; current < fallbackLanguagesSize; current++) {
+              if ($uses === $translationTable[$fallbackLanguage[current]]) {
+                return false;
+              }
+            }
+            return true;
+          } else {
+            return (usesLang !== $fallbackLanguage);
+          }
+        } else {
+          return false;
+        }
+        return false;
+      };
 
-      // determine translation table and current Interpolator
-      var table = $uses ? $translationTable[$uses] : $translationTable,
+      var $translate = function (translationId, interpolateParams, interpolationId) {
+
+        // determine translation table and current Interpolator
+        var table = $uses ? $translationTable[$uses] : $translationTable,
           Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
 
-      // if the translation id exists, we can just interpolate it
-      if (table && table.hasOwnProperty(translationId)) {
-        // If using link, rerun $translate with linked translationId and return it
-        if(angular.isString(table[translationId]) && table[translationId].substr(0,2) === '@:'){
-          return $translate(table[translationId].substr(2),interpolateParams,interpolationId);
+        // if the translation id exists, we can just interpolate it
+        if (table && table.hasOwnProperty(translationId)) {
+          // If using link, rerun $translate with linked translationId and return it
+          if (angular.isString(table[translationId]) && table[translationId].substr(0, 2) === '@:') {
+            return $translate(table[translationId].substr(2), interpolateParams, interpolationId);
+          }
+          return Interpolator.interpolate(table[translationId], interpolateParams);
         }
-        return Interpolator.interpolate(table[translationId], interpolateParams);
-      }
 
-      // looks like the requested translation id doesn't exists.
-      // Now, if there is a registered handler for missing translations and no
-      // asyncLoader is pending, we execute the handler
-      if ($missingTranslationHandlerFactory && !pendingLoader) {
-        $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
-      }
-
-      // since we couldn't translate the inital requested translation id,
-      // we try it now with a fallback language, if a fallback language is
-      // configured.
-      if ($uses && $fallbackLanguage && $uses !== $fallbackLanguage){
-
-        var translation = $translationTable[$fallbackLanguage][translationId];
-
-        // check if a translation for the fallback language exists
-        if (translation) {
-          var returnVal;
-          // temporarly letting Interpolator know we're using fallback language now.
-          Interpolator.setLocale($fallbackLanguage);
-          returnVal = Interpolator.interpolate(translation, interpolateParams);
-          // after we've interpolated the translation, we reset Interpolator to proper locale.
-          Interpolator.setLocale($uses);
-          return returnVal;
+        // looks like the requested translation id doesn't exists.
+        // Now, if there is a registered handler for missing translations and no
+        // asyncLoader is pending, we execute the handler
+        if ($missingTranslationHandlerFactory && !pendingLoader) {
+          $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
         }
-      }
 
-        // if the array of fallback languages is set,
-        // we also try to catch the content from all mentioned languages
-        if ($uses && $fallbackLanguages){
-            // iterate through the language array
-            var fallbackLanguagesSize = $fallbackLanguages.length;
-            for (var current = 0; current < fallbackLanguagesSize; current++) {
-                if ($uses !== $translationTable[$fallbackLanguages[current]]) {
-                    var translationFromList = $translationTable[$fallbackLanguages[current]][translationId];
+        // since we couldn't translate the inital requested translation id,
+        // we try it now with one or more fallback languages, if fallback language(s) is
+        // configured.
+        var normatedLanguages;
+        if ($uses && $fallbackLanguage && checkValidFallback($uses)) {
+          if (typeof $fallbackLanguage === 'string') {
+            normatedLanguages = [];
+            normatedLanguages.push($fallbackLanguage);
+          } else {
+            normatedLanguages = $fallbackLanguage;
+          }
+          var fallbackLanguagesSize = normatedLanguages.length;
+          for (var current = 0; current < fallbackLanguagesSize; current++) {
+            if ($uses !== $translationTable[normatedLanguages[current]]) {
+              var translationFromList = $translationTable[normatedLanguages[current]][translationId];
 
-                    // check if a translation for the fallback language exists
-                    if (translationFromList) {
-                        var returnValFromList;
-                        // temporarly letting Interpolator know we're using fallback language now.
-                        Interpolator.setLocale($fallbackLanguages[current]);
-                        returnValFromList = Interpolator.interpolate(translationFromList, interpolateParams);
-                        // after we've interpolated the translation, we reset Interpolator to proper locale.
-                        Interpolator.setLocale($uses);
-                        return returnValFromList;
-                    }
-                }
+              // check if a translation for the fallback language exists
+              if (translationFromList) {
+                var returnValFromList;
+                console.log(translationId + " - " + translationFromList + " -- " + $uses);
+                // temporarly letting Interpolator know we're using fallback language now.
+                Interpolator.setLocale(normatedLanguages[current]);
+                returnValFromList = Interpolator.interpolate(translationFromList, interpolateParams);
+                // after we've interpolated the translation, we reset Interpolator to proper locale.
+                Interpolator.setLocale($uses);
+                return returnValFromList;
+              }
             }
+          }
         }
 
-
-      // applying notFoundIndicators
+        // applying notFoundIndicators
       if ($notFoundIndicatorLeft) {
         translationId = [$notFoundIndicatorLeft, translationId].join(' ');
       }
@@ -704,20 +690,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
      */
     $translate.fallbackLanguage = function () {
       return $fallbackLanguage;
-    };
-
-    /**
-     * @ngdoc function
-     * @name pascalprecht.translate.$translate#fallbackLanguages
-     * @methodOf pascalprecht.translate.$translate
-     *
-     * @description
-     * Returns the language key for the fallback language.
-     *
-     * @return {string} fallback language key
-     */
-    $translate.fallbackLanguages = function () {
-        return $fallbackLanguages;
     };
 
     /**
@@ -887,13 +859,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var loaders = [];
         if ($fallbackLanguage) {
+          if (typeof $fallbackLanguage === 'string') {
           loaders.push(loadAsync($fallbackLanguage));
-        }
-        if ($fallbackLanguages) {
-          var fallbackLanguagesSize = $fallbackLanguages.length;
+        } else {
+          var fallbackLanguagesSize = $fallbackLanguage.length;
           for (var current = 0; current<fallbackLanguagesSize; current++) {
               loaders.push(loadAsync($fallbackLanguage[current]));
           }
+        }
         }
 
         if ($uses) {
@@ -964,14 +937,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $translate.uses($translate.uses());
       }
 
-      if ($fallbackLanguage && !$translationTable[$fallbackLanguage]) {
-        loadAsync($fallbackLanguage);
-      }
-      if ($fallbackLanguages) {
-        var fallbackLanguagesSize = $fallbackLanguages.length;
-        for (var current = 0; current < fallbackLanguagesSize; current++) {
-          if (!$translationTable[$fallbackLanguages[current]]) {
-            loadAsync($fallbackLanguages[current]);
+      if ($fallbackLanguage) {
+        if (typeof $fallbackLanguage === 'string' && !$translationTable[$fallbackLanguage]) {
+          loadAsync($fallbackLanguage);
+        } else {
+          var fallbackLanguagesSize = $fallbackLanguage.length;
+          for (var current = 0; current < fallbackLanguagesSize; current++) {
+            if (!$translationTable[$fallbackLanguage[current]]) {
+              loadAsync($fallbackLanguage[current]);
+            }
           }
         }
       }
