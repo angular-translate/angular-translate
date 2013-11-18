@@ -3,7 +3,7 @@
  * @name pascalprecht.translate.$translateProvider
  * @description
  *
- * $tranlateProvider allows developers to register translation-tables, asynchronous loaders
+ * $translateProvider allows developers to register translation-tables, asynchronous loaders
  * and similar to configure translation behavior directly inside of a module.
  *
  */

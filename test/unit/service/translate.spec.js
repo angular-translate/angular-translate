@@ -38,6 +38,11 @@ describe('pascalprecht.translate', function () {
         expect($translate.fallbackLanguage).toBeDefined();
       });
     });
+    it('should have a method fallbackLanguages()', function() {
+        inject(function ($translate) {
+            expect($translate.fallbackLanguages).toBeDefined();
+        });
+    });
     it('should have a method storageKey()', function() {
       inject(function ($translate) {
         expect($translate.storageKey).toBeDefined();
@@ -89,6 +94,22 @@ describe('pascalprecht.translate', function () {
         inject(function($translate){
           expect($translate.fallbackLanguage()).toBeUndefined();
         });
+      });
+
+    });
+
+      describe('fallbackLanguages()', function() {
+
+      it('should be a function', function() {
+          inject(function($translate){
+              expect(typeof $translate.fallbackLanguages).toBe('function');
+          });
+      });
+
+      it ('should return undefined if no language is specified', function() {
+          inject(function($translate){
+              expect($translate.fallbackLanguages()).toBeUndefined();
+          });
       });
 
     });
@@ -340,6 +361,170 @@ describe('pascalprecht.translate', function () {
 
   });
 
+    describe('$translateServiceMulti (multi-lang with multi fallback)', function () {
+        beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+            $translateProvider.translations('de_DE', {
+                'EXISTING_TRANSLATION_ID': 'foo',
+                'ANOTHER_ONE': 'bar',
+                'BLANK_VALUE': '',
+                'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+                'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+                'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
+                'YET_ANOTHER': 'Hallo da!'
+            });
+            $translateProvider.translations('de_DE', {
+                'FOO': 'bar'
+            });
+            $translateProvider.translations('en_EN', {
+                'YET_ANOTHER': 'Hello there!'
+            });
+            $translateProvider.translations('fr_FR', {
+                'GOOD_MORNING': 'Bonjour!'
+            });
+            $translateProvider.translations('en_EN', {
+                'FOO': 'bar'
+            });
+            $translateProvider.uses('de_DE');
+            $translateProvider.fallbackLanguages(['en_EN', 'fr_FR']);
+
+            $translateProvider.preferredLanguage('en_EN');
+            $translateProvider.preferredLanguage('de_DE');
+            $translateProvider.storageKey('lang');
+        }));
+
+        var $translate, $rootScope, $compile;
+
+        beforeEach(inject(function (_$translate_, _$rootScope_, _$compile_) {
+          $translate = _$translate_;
+          $rootScope = _$rootScope_;
+          $compile = _$compile_;
+        }));
+
+        it('should return translation id if language is given and translation id doesn\'t exist', function () {
+          inject(function ($translate) {
+            expect($translate('NON_EXISTING_TRANSLATION_ID')).toEqual('NON_EXISTING_TRANSLATION_ID');
+          });
+        });
+
+        it('should return translation when language is given and translation id exist', function () {
+          inject(function ($translate) {
+            expect($translate('EXISTING_TRANSLATION_ID')).toEqual('foo');
+            expect($translate('ANOTHER_ONE')).toEqual('bar');
+            expect($translate('BLANK_VALUE')).toEqual('');
+          });
+        });
+
+        it('should replace interpolate directives with empty string if no values given and language is specified', function () {
+          inject(function ($translate) {
+            expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
+          });
+        });
+
+        it('should replace interpolate directives with given values when language is specified', function () {
+          inject(function ($translate) {
+            expect($translate('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
+            expect($translate('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
+            expect($translate('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
+            expect($translate('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
+            expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
+          });
+        });
+
+        it('should extend translation table rather then overwriting it', function () {
+          inject(function ($translate) {
+            expect($translate('FOO')).toEqual('bar');
+            $translate.uses('en_EN');
+            expect($translate('FOO')).toEqual('bar');
+          });
+        });
+
+        describe('$translateService#uses()', function () {
+
+          it('should return a string', function () {
+            inject(function ($translate) {
+              expect(typeof $translate.uses()).toBe('string');
+            });
+          });
+
+          it('should return language key', function () {
+            inject(function ($translate) {
+              expect($translate.uses()).toEqual('de_DE');
+            });
+          });
+
+          it('should change language at runtime', function () {
+            inject(function ($translate) {
+              expect($translate('YET_ANOTHER')).toEqual('Hallo da!');
+              $translate.uses('en_EN');
+              $rootScope.$apply();
+              expect($translate('YET_ANOTHER')).toEqual('Hello there!');
+            });
+          });
+
+          it('should change language and take effect in the UI', function () {
+            inject(function ($rootScope, $compile, $translate) {
+              element = $compile('<div translate="YET_ANOTHER"></div>')($rootScope);
+              $rootScope.$digest();
+              expect(element.text()).toBe('Hallo da!');
+
+              $translate.uses('en_EN');
+              element = $compile('<div translate="YET_ANOTHER"></div>')($rootScope);
+              $rootScope.$digest();
+              expect(element.text()).toBe('Hello there!');
+            });
+          });
+        });
+
+        describe('$translateService#storageKey()', function () {
+
+          it('should allow to change the storage key during config', function() {
+            inject(function($translate, $STORAGE_KEY) {
+              expect($translate.storageKey()).toNotEqual($STORAGE_KEY);
+            });
+          });
+
+          it('shouldn\'t allow to change the storage key during runtime', function() {
+            inject(function($translate, $STORAGE_KEY) {
+              var prevKey = $translate.storageKey();
+              $translate.storageKey(prevKey + "somestring");
+              expect($translate.storageKey()).toEqual(prevKey);
+            });
+          });
+
+        });
+
+        describe('$translateService#preferredLanguage()', function () {
+
+          it ('should return a string if language is specified', function() {
+            inject(function($translate){
+              expect(typeof $translate.preferredLanguage()).toBe('string');
+            });
+          });
+
+          it ('should return a correct language code', function() {
+            inject(function($translate){
+              expect($translate.preferredLanguage()).toEqual('de_DE');
+            });
+          });
+
+          it('should allow to change preferred language during config', function() {
+            inject(function($translate){
+              expect($translate.preferredLanguage()).toEqual('de_DE');
+            });
+          });
+
+          it('shouldn\'t allow to change preferred language during runtime', function() {
+            inject(function($translate){
+              var prevLang = $translate.preferredLanguage();
+              $translate.preferredLanguage(prevLang === 'de_DE' ? 'en_EN' : 'de_DE');
+              expect($translate.preferredLanguage()).toBe(prevLang);
+            });
+          });
+
+        });
+
+
+    });
   describe('$translateService#fallbackLanguage()', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
