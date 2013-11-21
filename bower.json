@@ -10,12 +10,15 @@
   },
   "main": "./build/angular-translate",
   "dependencies": {
-    "angular": "1.0.8"
+    "angular": "1.2.1"
   },
   "devDependencies": {
-    "angular-mocks": "1.0.8",
+    "angular-mocks": "1.2.1",
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular-translate-interpolation-messageformat": "~0.1.1",
-    "angular-cookies": "~1.0.8"
+    "angular-cookies": "~1.2.1"
+  },
+  "resolutions": {
+    "angular": "1.2.1"
   }
 }
