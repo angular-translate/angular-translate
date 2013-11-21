@@ -115,7 +115,7 @@ angular.module('pascalprecht.translate')
       // Ensures the text will be refreshed after either the scope's translationId
       // or the interpolated params have been changed.
       scope.$watch('[translationId, interpolateParams]', function (nValue) {
-        if (nValue) {
+        if (scope.translationId) {
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         }
       }, true);
