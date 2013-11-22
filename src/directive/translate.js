@@ -75,7 +75,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$interpolate', function ($filter, $interpolate) {
+.directive('translate', ['$filter', '$interpolate', '$parse', function ($filter, $interpolate, $parse) {
 
   var translate = $filter('translate');
 
@@ -99,7 +99,11 @@ angular.module('pascalprecht.translate')
       });
 
       attr.$observe('translateValues', function (interpolateParams) {
-        scope.interpolateParams = interpolateParams;
+        // Only watch parent scope if there is data to retreive from it
+        if (interpolateParams)
+          scope.$parent.$watch(function() {
+            scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
+          });
       });
 
       // Ensures the text will be refreshed after the current language was changed
@@ -110,11 +114,11 @@ angular.module('pascalprecht.translate')
 
       // Ensures the text will be refreshed after either the scope's translationId
       // or the interpolated params have been changed.
-      scope.$watch('translationId + interpolateParams', function (nValue) {
-        if (nValue) {
+      scope.$watch('[translationId, interpolateParams]', function (nValue) {
+        if (scope.translationId) {
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         }
-      });
+      }, true);
     }
   };
 }]);
