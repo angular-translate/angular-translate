@@ -85,9 +85,18 @@ in the currently used translation table. Its usage is basically the same as
 `preferredLanguage()`.
 
 <pre>
-// tells angular-translate to use the english language if translations are not
-// available in german
+// tells angular-translate to use the English language if translations are not
+// available in German
 $translateProvider.fallbackLanguage('en');
+</pre>
+
+Since version 1.1.1 it is also possible to include an array as the parameter. This will
+enable a range of fallback languages to be called in subsequent order.
+
+<pre>
+// tells angular-translate to use English language if translations are not
+// available in German, French if not even available in English
+$translateProvider.fallbackLanguage(['en','fr']);
 </pre>
 
 ## Switching the language at runtime
