@@ -63,7 +63,7 @@ be called, once the translation table, that is requested by asynchronous loader,
 available.
 
 You can do that by simply wrapping your `$translate` call into a `$translateChangeSucces`
-callback, which gets fired everytime a translation change was successful. Because an
+callback, which gets fired every time a translation change was successful. Because an
 asynchronous loader only requests a table when a language change is about to happen.
 Once its loaded, and the translate change happened, the event gets fired. Here's how
 it could look like:
