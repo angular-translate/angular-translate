@@ -1,3 +1,39 @@
+# 1.1.1 (2013-11-24)
+
+## Features
+### core
+
+* Update required Node up `0.10` (b7cf5f4)
+
+* shortcuts and links\n\nShortcuts creates a shorter translationId if the last key equals the one before(foo.bar.bar -> foo.bar). Also added support for linking one translationID to another by prepending '@:'. So if foo.bar = '@:chuck.norris', then the value for chuck.norris will be retrieved instead. (f9f2cf2)
+
+### docs
+
+* Ukrainian docs
+
+## Bug fixes
+### docs
+
+* fixes encoding (084f08c)
+
+### grunt
+
+* fixes missing storage-key (635d290)
+
+### docs
+
+* fixes typo (7e1c4e9)
+
+* fixes typo in landing page (0b999ab)
+
+### translateDirective
+
+* fixes occuring 'translation id undefined' erros (bb5a2c4)
+
+### translatePartialLoader
+
+* introduces setPart() to add static parts on translatePartialLoader
+
 # 1.1.0 (2013-09-02)
 
 ## Features
