@@ -13,17 +13,29 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
   var $translateInterpolator = {},
       $locale,
       $identifier = 'default',
-      $useSanitizedValues = false;
+      $sanitizeValueStrategy = null,
+      // map of all sanitize strategies
+      sanitizeValueStrategies = {
+        escaped: function (params) {
+          var result = {};
+          for (var key in params) {
+            if (params.hasOwnProperty(key)) {
+              result[key] = angular.element('<div></div>').text(params[key]).html();
+            }
+          }
+          return result;
+        }
+      };
 
   var sanitizeParams = function (params) {
-        var result = {};
-        for (var key in params) {
-          if (params.hasOwnProperty(key)) {
-            result[key] = angular.element('<div></div>').text(params[key]).html();
-          }
-        }
-        return result;
-      };
+    var result;
+    if (typeof sanitizeValueStrategies[$sanitizeValueStrategy] === 'function') {
+      result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
+    } else {
+      result = params;
+    }
+    return result;
+  };
 
   /**
    * @ngdoc function
@@ -53,8 +65,8 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
     return $identifier;
   };
 
-  $translateInterpolator.useSanitizedValues = function (value) {
-    $useSanitizedValues = (value === true);
+  $translateInterpolator.useSanitizeValueStrategy = function (value) {
+    $sanitizeValueStrategy = value;
     return this;
   };
 
@@ -70,7 +82,7 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
    * @returns {string} interpolated string.
    */
   $translateInterpolator.interpolate = function (string, interpolateParams) {
-    if ($useSanitizedValues) {
+    if ($sanitizeValueStrategy) {
       interpolateParams = sanitizeParams(interpolateParams);
     }
     return $interpolate(string)(interpolateParams);

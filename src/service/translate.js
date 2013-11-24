@@ -20,7 +20,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $missingTranslationHandlerFactory,
       $interpolationFactory,
       $interpolatorFactories = [],
-      $interpolationSanitization = false,
+      $interpolationSanitizationStrategy = false,
       $loaderFactory,
       $loaderOptions,
       $notFoundIndicatorLeft,
@@ -175,8 +175,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return this;
   };
 
-  this.useSanitizedValues = function (value) {
-    $interpolationSanitization = value;
+  this.useSanitizeValueStrategy = function (value) {
+    $interpolationSanitizationStrategy = value;
     return this;
   };
 
@@ -573,8 +573,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
 
       // apply additional settings
-      if (typeof defaultInterpolator.useSanitizedValues === 'function') {
-        defaultInterpolator.useSanitizedValues($interpolationSanitization);
+      if (typeof defaultInterpolator.useSanitizeValueStrategy === 'function') {
+        defaultInterpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
       }
 
       // if we have additional interpolations that were added via
@@ -587,8 +587,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // setting initial locale for each interpolation service
           interpolator.setLocale($preferredLanguage || $uses);
           // apply additional settings
-          if (typeof interpolator.useSanitizedValues === 'function') {
-            interpolator.useSanitizedValues($interpolationSanitization);
+          if (typeof interpolator.useSanitizeValueStrategy === 'function') {
+            interpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
           }
           // make'em recognizable through id
           interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;

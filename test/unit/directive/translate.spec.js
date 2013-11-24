@@ -465,7 +465,7 @@ describe('pascalprecht.translate', function () {
       });
 
       $translateProvider.preferredLanguage('en');
-      $translateProvider.useSanitizedValues(true);
+      $translateProvider.useSanitizeValueStrategy('escaped');
     }));
 
     beforeEach(inject(function (_$rootScope_, _$compile_) {
