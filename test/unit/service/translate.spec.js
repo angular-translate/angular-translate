@@ -620,6 +620,7 @@ describe('pascalprecht.translate', function () {
           };
         }]);
 
+        $translateProvider.translations('en', {});
         $translateProvider.uses('en');
         $translateProvider.fallbackLanguage('ne');
       }));
@@ -642,23 +643,30 @@ describe('pascalprecht.translate', function () {
             var deferred = $q.defer();
 
             $timeout(function () {
-              deferred.resolve({
-                FOO: 'foo',
-                BAR: 'bar'
-              });
-            }, Infinity);
+              if (options.key === 'de') {
+                deferred.resolve({
+                  FOO: 'foo'
+                });
+              } else if (options.key === 'fr') {
+                deferred.resolve({
+                  BAR: 'bar'
+                });
+              }
+            }, 20);
 
             return deferred.promise;
           };
         }]);
 
+        $translateProvider.translations('en', {});
         $translateProvider.uses('en');
         $translateProvider.fallbackLanguage('de', 'fr');
       }));
 
-      it('should use custom loader to load fallbackLanguage', function () {
+      it('should use custom loader to load all needed fallbackLanguages', function () {
         inject(function ($translate, $timeout) {
           $timeout.flush();
+          expect($translate('FOO')).toEqual('foo');
           expect($translate('BAR')).toEqual('bar');
         });
       });
