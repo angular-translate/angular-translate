@@ -2,7 +2,7 @@
   "author": "Pascal Precht",
   "name": "angular-translate",
   "description": "A translation module for AngularJS",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "http://github.com/PascalPrecht/angular-translate",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "devDependencies": {
     "angular-mocks": "1.0.8",
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
-    "angular-translate-interpolation-messageformat": "~0.1.1",
+    "angular-translate-interpolation-messageformat": "~0.1.2",
     "angular-cookies": "~1.0.8"
   }
 }
