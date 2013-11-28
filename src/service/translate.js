@@ -636,17 +636,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           var fallbackLanguagesSize = normatedLanguages.length;
           for (var current = 0; current < fallbackLanguagesSize; current++) {
             if ($uses !== $translationTable[normatedLanguages[current]]) {
-              var translationFromList = $translationTable[normatedLanguages[current]][translationId];
-
-              // check if a translation for the fallback language exists
-              if (translationFromList) {
-                var returnValFromList;
-                // temporarly letting Interpolator know we're using fallback language now.
-                Interpolator.setLocale(normatedLanguages[current]);
-                returnValFromList = Interpolator.interpolate(translationFromList, interpolateParams);
-                // after we've interpolated the translation, we reset Interpolator to proper locale.
-                Interpolator.setLocale($uses);
-                return returnValFromList;
+              var translationFromList;
+              var translationDict = $translationTable[normatedLanguages[current]];
+              if (translationDict) {
+                translationFromList = translationDict[translationId];
+                // check if a translation for the fallback language exists
+                if (translationFromList) {
+                  var returnValFromList;
+                  // temporarly letting Interpolator know we're using fallback language now.
+                  Interpolator.setLocale(normatedLanguages[current]);
+                  returnValFromList = Interpolator.interpolate(translationFromList, interpolateParams);
+                  // after we've interpolated the translation, we reset Interpolator to proper locale.
+                  Interpolator.setLocale($uses);
+                  return returnValFromList;
+                }
               }
             }
           }
