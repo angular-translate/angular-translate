@@ -634,25 +634,37 @@ describe('pascalprecht.translate', function () {
     });
 
     describe('fallbackLanguage()#array', function () {
+      var flushLoader;
+      
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
         $translateProvider.useLoader('customLoader', {});
 
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+        $provide.factory('customLoader', ['$q', function ($q) {
+          var flushers = [];
+          
+          flushLoader = function() {
+            for (var i = 0, len = flushers.length; i < len; i++) {
+              flushers[i]();
+            }
+          };
+          
           return function (options) {
             var deferred = $q.defer();
 
-            $timeout(function () {
-              if (options.key === 'de') {
+            if (options.key === 'de') {
+              flushers.push(function() {
                 deferred.resolve({
                   FOO: 'foo'
                 });
-              } else if (options.key === 'fr') {
+              });
+            } else if (options.key === 'fr') {
+              flushers.push(function() {
                 deferred.resolve({
                   BAR: 'bar'
                 });
-              }
-            }, 20);
+              });
+            }
 
             return deferred.promise;
           };
@@ -660,12 +672,13 @@ describe('pascalprecht.translate', function () {
 
         $translateProvider.translations('en', {});
         $translateProvider.uses('en');
-        $translateProvider.fallbackLanguage('de', 'fr');
+        $translateProvider.fallbackLanguage(['de', 'fr']);
       }));
 
       it('should use custom loader to load all needed fallbackLanguages', function () {
-        inject(function ($translate, $timeout) {
-          $timeout.flush();
+        inject(function ($translate, $rootScope) {
+          flushLoader();
+          $rootScope.$digest();
           expect($translate('FOO')).toEqual('foo');
           expect($translate('BAR')).toEqual('bar');
         });
