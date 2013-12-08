@@ -8,21 +8,22 @@
     "url": "http://github.com/PascalPrecht/angular-translate"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --browsers Firefox --single-run"
+    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --browsers Fir efox --single-run"
   },
   "author": {
     "name": "Pascal Precht"
   },
   "license": "WTFPL",
   "devDependencies": {
-    "karma": "~0.8.5",
+    "karma": "~0.10",
+    "karma-jasmine": "~0.1",
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.4.2",
     "grunt-contrib-concat": "~0.3.x",
     "grunt-contrib-uglify": "~0.2.x",
     "grunt-contrib-jshint": "~0.4.x",
     "grunt-bump": "0.0.2",
-    "grunt-karma": "~0.4.x",
+    "grunt-karma": "~0.6.x",
     "grunt-conventional-changelog": "0.0.12",
     "grunt-express": "~0.3.3",
     "grunt-contrib-copy": "~0.4.1",
