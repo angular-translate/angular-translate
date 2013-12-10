@@ -34,3 +34,7 @@ possible without these [great contributors](http://github.com/PascalPrecht/angul
 and everybody who comes with new ideas and feature requests! So **THANK YOU**!
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/PascalPrecht/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
