@@ -12,6 +12,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   var $translationTable = {},
       $preferredLanguage,
       $fallbackLanguage,
+      $fallbackWasString,
       $uses,
       $nextLang,
       $storageFactory,
@@ -275,15 +276,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   this.fallbackLanguage = function (langKey) {
     if (langKey) {
       if (angular.isString(langKey)) {
+        $fallbackWasString = true;
         $fallbackLanguage = [ langKey ];
       } else if (angular.isArray(langKey)) {
+        $fallbackWasString = false;
         $fallbackLanguage = langKey;
       } else {
         // Error!
       }
       return this;
     } else {
-      if ($fallbackLanguage && $fallbackLanguage.length === 1) {
+      if ($fallbackWasString) {
         return $fallbackLanguage[0];
       } else {
         return $fallbackLanguage;
@@ -676,12 +679,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @methodOf pascalprecht.translate.$translate
        *
        * @description
-       * Returns the array of language keys for the fallback languages.
+       * Returns the language key for the fallback languages.
        *
        * @return {string||array} fallback language key
        */
       $translate.fallbackLanguage = function () {
-        if ($fallbackLanguage && $fallbackLanguage.length === 1) {
+        if ($fallbackWasString) {
           return $fallbackLanguage[0];
         } else {
           return $fallbackLanguage;
