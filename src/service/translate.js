@@ -274,7 +274,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.fallbackLanguage = function (langKey) {
     if (langKey) {
-      if (typeof langKey === 'string') {
+      if (angular.isString(langKey)) {
         $fallbackLanguage = [ langKey ];
       } else if (angular.isArray(langKey)) {
         $fallbackLanguage = langKey;
@@ -599,7 +599,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var getStartFallbackIndex = function(usesLang) {
         return indexOf($fallbackLanguage, usesLang) + 1;
       };
-      
+
       var $translate = function (translationId, interpolateParams, interpolationId) {
 
         // determine translation table and current Interpolator
