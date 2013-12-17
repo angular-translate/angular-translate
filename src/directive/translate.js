@@ -2,6 +2,7 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translate
+ * @requires $compile
  * @requires $filter
  * @requires $interpolate
  * @restrict A
@@ -75,7 +76,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$interpolate', '$parse', '$rootScope', function ($filter, $interpolate, $parse, $rootScope) {
+.directive('translate', ['$compile', $filter', '$interpolate', '$parse', '$rootScope', function ($compile, $filter, $interpolate, $parse, $rootScope) {
 
   var translate = $filter('translate');
 
@@ -111,6 +112,9 @@ angular.module('pascalprecht.translate')
       // w/ $translate.uses(...)
       var unbind = $rootScope.$on('$translateChangeSuccess', function () {
         element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
+        if (attr.translateCompile !== undefined) {
+          $compile(element.contents())(scope);
+        }
       });
 
       // Ensures the text will be refreshed after either the scope's translationId
@@ -118,6 +122,9 @@ angular.module('pascalprecht.translate')
       scope.$watch('[translationId, interpolateParams]', function (nValue) {
         if (scope.translationId) {
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
+          if (attr.translateCompile !== undefined) {
+            $compile(element.contents())(scope);
+          }
         }
       }, true);
 
