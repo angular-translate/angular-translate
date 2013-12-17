@@ -7,10 +7,11 @@
 | ------------- |:-------------:|
 | master        | [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/angular-translate) |
 | canary        |[![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/angular-translate)     |
+| BitDeli       |[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/PascalPrecht/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")        |
 
 ### Links
 * Website [http://pascalprecht.github.io/angular-translate/](http://pascalprecht.github.io/angular-translate/)
-* API Reference [http://pascalprecht.github.io/angular-translate/#/api](http://pascalprecht.github.io/angular-translate/#/api)
+* API Reference [http://pascalprecht.github.io/angular-translate/docs/en/#/api](http://pascalprecht.github.io/angular-translate/docs/en/#/api)
 * Plato report [http://pascalprecht.github.io/angular-translate/plato](http://pascalprecht.github.io/angular-translate/plato)
 * [Contribution Guidelines](https://github.com/PascalPrecht/angular-translate/blob/master/CONTRIBUTING.md)
 

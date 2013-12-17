@@ -76,7 +76,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$compile', '$filter', '$interpolate', function ($compile, $filter, $interpolate) {
+.directive('translate', ['$compile', $filter', '$interpolate', '$parse', '$rootScope', function ($compile, $filter, $interpolate, $parse, $rootScope) {
 
   var translate = $filter('translate');
 
@@ -100,12 +100,16 @@ angular.module('pascalprecht.translate')
       });
 
       attr.$observe('translateValues', function (interpolateParams) {
-        scope.interpolateParams = interpolateParams;
+        // Only watch parent scope if there is data to retreive from it
+        if (interpolateParams)
+          scope.$parent.$watch(function() {
+            scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
+          });
       });
 
       // Ensures the text will be refreshed after the current language was changed
       // w/ $translate.uses(...)
-      scope.$on('$translateChangeSuccess', function () {
+      var unbind = $rootScope.$on('$translateChangeSuccess', function () {
         element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         if (attr.translateCompile !== undefined) {
           $compile(element.contents())(scope);
@@ -114,14 +118,16 @@ angular.module('pascalprecht.translate')
 
       // Ensures the text will be refreshed after either the scope's translationId
       // or the interpolated params have been changed.
-      scope.$watch('translationId + interpolateParams', function (nValue) {
-        if (nValue) {
+      scope.$watch('[translationId, interpolateParams]', function (nValue) {
+        if (scope.translationId) {
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
           if (attr.translateCompile !== undefined) {
             $compile(element.contents())(scope);
           }
         }
-      });
+      }, true);
+
+      scope.$on('$destroy', unbind);
     }
   };
 }]);

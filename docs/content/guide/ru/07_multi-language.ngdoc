@@ -77,9 +77,18 @@ angular-translate сделает два асинхронных запроса. �
 таблице. Его использование такое же, как и `preferredLanguage()`.
 
 <pre>
-// tells angular-translate to use the english language if translations are not
-// available in german
+// tells angular-translate to use the English language if translations are not
+// available in German
 $translateProvider.fallbackLanguage('en');
+</pre>
+
+Начиная с версии 1.1.1 в качестве параметра можно передавать массив. Так можно указывать для
+подстраховки сразу несколько языков, которые будут использоваться в соответствующем порядке.
+
+<pre>
+// tells angular-translate to use English language if translations are not
+// available in German, French if not even available in English
+$translateProvider.fallbackLanguage(['en','fr']);
 </pre>
 
 ## Смена языка во время выполнения
