@@ -530,14 +530,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$broadcast('$translateLoadingStart');
+        $rootScope.$emit('$translateLoadingStart');
 
         pendingLoader = true;
 
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
-          $rootScope.$broadcast('$translateLoadingSuccess');
+          $rootScope.$emit('$translateLoadingSuccess');
           var translationTable = {};
 
           if (angular.isArray(data)) {
@@ -553,11 +553,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             key: key,
             table: translationTable
           });
-          $rootScope.$broadcast('$translateLoadingEnd');
+          $rootScope.$emit('$translateLoadingEnd');
         }, function (key) {
-          $rootScope.$broadcast('$translateLoadingError');
+          $rootScope.$emit('$translateLoadingError');
           deferred.reject(key);
-          $rootScope.$broadcast('$translateLoadingEnd');
+          $rootScope.$emit('$translateLoadingEnd');
         });
 
         return deferred.promise;
@@ -744,11 +744,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$broadcast('$translateChangeStart');
+        $rootScope.$emit('$translateChangeStart');
 
         function useLanguage(key) {
           $uses = key;
-          $rootScope.$broadcast('$translateChangeSuccess');
+          $rootScope.$emit('$translateChangeSuccess');
 
           if ($storageFactory) {
             Storage.set($translate.storageKey(), $uses);
@@ -762,7 +762,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           });
 
           deferred.resolve(key);
-          $rootScope.$broadcast('$translateChangeEnd');
+          $rootScope.$emit('$translateChangeEnd');
         }
 
         // if there isn't a translation table for the language we've requested,
@@ -776,9 +776,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               useLanguage(translation.key);
             }, function (key) {
               $nextLang = undefined;
-              $rootScope.$broadcast('$translateChangeError');
+              $rootScope.$emit('$translateChangeError');
               deferred.reject(key);
-              $rootScope.$broadcast('$translateChangeEnd');
+              $rootScope.$emit('$translateChangeEnd');
             }
           );
         } else {
@@ -840,17 +840,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         function onLoadSuccess() {
           deferred.resolve();
-          $rootScope.$broadcast('$translateRefreshEnd');
+          $rootScope.$emit('$translateRefreshEnd');
         }
 
         function onLoadFailure() {
           deferred.reject();
-          $rootScope.$broadcast('$translateRefreshEnd');
+          $rootScope.$emit('$translateRefreshEnd');
         }
 
         if (!langKey) {
 
-          $rootScope.$broadcast('$translateRefreshStart');
+          $rootScope.$emit('$translateRefreshStart');
 
           var loaders = [];
           if ($fallbackLanguage && $fallbackLanguage.length) {
@@ -882,7 +882,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               },
               function (key) {
                 if (key === $uses) {
-                  $rootScope.$broadcast('$translateChangeError');
+                  $rootScope.$emit('$translateChangeError');
                 }
                 onLoadFailure();
               }
@@ -891,7 +891,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         } else if ($translationTable.hasOwnProperty(langKey)) {
 
-          $rootScope.$broadcast('$translateRefreshStart');
+          $rootScope.$emit('$translateRefreshStart');
 
           var loader = loadAsync(langKey);
           if (langKey === $uses) {
@@ -902,7 +902,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
                 onLoadSuccess();
               },
               function () {
-                $rootScope.$broadcast('$translateChangeError');
+                $rootScope.$emit('$translateChangeError');
                 onLoadFailure();
               }
             );
