@@ -100,10 +100,11 @@ angular.module('pascalprecht.translate')
 
       attr.$observe('translateValues', function (interpolateParams) {
         // Only watch parent scope if there is data to retreive from it
-        if (interpolateParams)
+        if (interpolateParams) {
           scope.$parent.$watch(function() {
             scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
           });
+        }
       });
 
       // Ensures the text will be refreshed after the current language was changed
