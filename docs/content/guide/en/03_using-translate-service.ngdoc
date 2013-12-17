@@ -46,7 +46,37 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 **Note:** Namespaced translations are accessed as JSON properties, see 'NAMESPACE.PARAGRAPH'`.
 
 That's all. Now when you think about translating the contents of a `<title>` you
-can do so within your controller. Here's a working sample:
+can do so within your controller.
+
+## Things to keep in mind
+Please keep in mind that the usage of the `$translate` service doesn't provide a two-way
+data binding default! When using `$translate` service it works synchronously, which means
+it returns the translation for the given translation id, if it exists. If it doesn't
+exist it'll probably just return the translation id.
+
+Now, for the case you're using an asynchronous loader, you might be a bit confused why
+the `$translate` service always returns the given translation id instead of the
+translation you're looking for. This is because the translation id doesn't exist in the
+moment `$translate` service searches for it because translation tables are loaded
+asynchronously. To get around this, you have to somehow tell `$translate` service to
+be called, once the translation table, that is requested by asynchronous loader, is
+available.
+
+You can do that by simply wrapping your `$translate` call into a `$translateChangeSucces`
+callback, which gets fired every time a translation change was successful. Because an
+asynchronous loader only requests a table when a language change is about to happen.
+Once its loaded, and the translate change happened, the event gets fired. Here's how
+it could look like:
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $scope.$on('$translateChangeSuccess', function () {
+    $scope.headline = $translate('HEADLINE');
+  });
+}]);
+</pre>
+
+Here's a working sample:
 
 <doc:example module="myApp">
   <doc:source>

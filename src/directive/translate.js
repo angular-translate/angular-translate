@@ -75,7 +75,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$interpolate', '$parse', function ($filter, $interpolate, $parse) {
+.directive('translate', ['$filter', '$interpolate', '$parse', '$rootScope', function ($filter, $interpolate, $parse, $rootScope) {
 
   var translate = $filter('translate');
 
@@ -108,7 +108,7 @@ angular.module('pascalprecht.translate')
 
       // Ensures the text will be refreshed after the current language was changed
       // w/ $translate.uses(...)
-      scope.$on('$translateChangeSuccess', function () {
+      var unbind = $rootScope.$on('$translateChangeSuccess', function () {
         element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
       });
 
@@ -119,6 +119,8 @@ angular.module('pascalprecht.translate')
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         }
       }, true);
+
+      scope.$on('$destroy', unbind);
     }
   };
 }]);

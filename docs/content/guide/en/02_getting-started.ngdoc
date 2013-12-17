@@ -129,6 +129,70 @@ easily. You can have various nesting levels in your translation table, and each
 namespace can contain as many subnamespace as you want making it very flexible
 for you to use!
 
+## Shortcuts and Links
+A very neat feature that is available since `1.1.1` is usage of Shortcuts and Links.
+Let's say you have a translation table that looks like this:
+
+```json
+{
+  "bar": {
+    "foo": {
+      "foo": "This is my text."
+    }
+  }
+}
+```
+
+You would later access the existing translation id actually via `bar.foo.foo`.
+So, this is pretty much okay, but we can do better. angular-translate is clever
+enought to recognize, if there's a translation id that has the same identifier as
+its corresponding namespace. If that is the case, you can access the translation id
+with a simple shortcut by just pointing to the regarding namespace rather than the
+translation id. This is possible, because there can only be one translation id
+with the same identifier under the same namespace.
+
+So this basically means, you can access the translation id above with the shortcut
+`bar.foo`. Cool, huh?
+
+Another cool feature that angular-translate provides is the ability to link within
+your translation table from one translation id to another. Let's say we have the
+following translation table:
+
+```json
+{
+  "SOME_NAMESPACE": {
+    "OK_TEXT": "OK"
+  },
+  "ANOTHER_NAMESPACE": {
+    "OK_TEXT": "OK"
+  }
+}
+```
+
+So as you can see we have to introduced namespaces here, but both of them kind of need
+a text that probably just says "OK". This case isn't unusual if you just think about
+a confirmation button or similar in your app. However, it isn't hard to recognize
+that we have a redundancy here and we as developers don't like redundancy right?
+
+If there's a translation id that will always have the same concrete text as another
+one you can just like to it. To link to another translation id, all you have to do
+is to prefix its contents with an `@:` sign followed by the full name of the
+translation id including the namespace you want to link to. So the example above
+could look like this:
+
+```json
+{
+  "SOME_NAMESPACE": {
+    "OK_TEXT": "OK"
+  },
+  "ANOTHER_NAMESPACE": {
+    "OK_TEXT": "@:SOME_NAMESPACE.OK_TEXT"
+  }
+}
+```
+
+## Aaaand action!
+
 Let's add a translation table to our app. `$translateProvider` provides a
 method called `translations()`, which takes care of that. Let's say we have a
 translation table like this:
