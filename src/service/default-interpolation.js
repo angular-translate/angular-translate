@@ -29,7 +29,7 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
 
   var sanitizeParams = function (params) {
     var result;
-    if (typeof sanitizeValueStrategies[$sanitizeValueStrategy] === 'function') {
+    if (angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])) {
       result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
     } else {
       result = params;

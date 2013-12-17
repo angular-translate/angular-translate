@@ -587,7 +587,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
 
       // apply additional settings
-      if (typeof defaultInterpolator.useSanitizeValueStrategy === 'function') {
+      if (angular.isFunction(defaultInterpolator.useSanitizeValueStrategy)) {
         defaultInterpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
       }
 
@@ -601,7 +601,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // setting initial locale for each interpolation service
           interpolator.setLocale($preferredLanguage || $uses);
           // apply additional settings
-          if (typeof interpolator.useSanitizeValueStrategy === 'function') {
+          if (angular.isFunction(interpolator.useSanitizeValueStrategy === 'function')) {
             interpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
           }
           // make'em recognizable through id
