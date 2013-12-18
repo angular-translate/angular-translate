@@ -1647,4 +1647,145 @@ describe('pascalprecht.translate', function () {
 
     });
   });
+
+
+
+
+  // getLangInfo
+  describe('provider', function () {
+
+    var $translateProvider,
+        $translate;
+
+    beforeEach(module('pascalprecht.translate', function (_$translateProvider_) {
+      $translateProvider = _$translateProvider_;
+    }));
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should has a langInfoNamespace() method', function () {
+      expect($translateProvider.langInfoNamespace).toBeDefined();
+      expect(typeof $translateProvider.langInfoNamespace).toBe('function');
+    });
+
+    describe('langInfoNamespace() method', function() {
+
+      it('has to return a name of predefined namespace', function () {
+        $translateProvider.langInfoNamespace('1');
+        expect($translateProvider.langInfoNamespace()).toEqual('1');
+      });
+
+      it('has to be able to change a predefined namespace', function () {
+        var prevNS = $translateProvider.langInfoNamespace();
+        $translateProvider.langInfoNamespace('-' + prevNS + '-');
+        expect($translateProvider.langInfoNamespace()).toEqual('-' + prevNS + '-');
+      });
+
+      it('has to be chainable when called with args', function () {
+        expect($translateProvider.langInfoNamespace('1')).toEqual($translateProvider);
+      });
+      
+    });
+
+  });
+
+  describe('service', function() {
+
+    beforeEach(module('pascalprecht.translate'));
+
+    it('should has a getLangInfo() method', function () {
+      inject(function ($translate) {
+        expect($translate.getLangInfo).toBeDefined();
+        expect(typeof $translate.getLangInfo).toBe('function');
+      });
+    });
+
+    describe('getLangInfo() method', function() {
+
+      describe('with one lang', function() {
+
+        beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+          $translateProvider.translations({
+            '___' : {
+              'dir' : 'ltr'
+            },
+            '___.key' : 'val'
+          });
+        }));
+
+        it ('should return a valid values for keys from object-based namespace', function() {
+          inject(function($translate) {
+            expect($translate.getLangInfo('dir')).toEqual('ltr');
+          });
+        });
+
+        it ('should return a valid values for keys from delimiter-based namespace', function() {
+          inject(function($translate) {
+            expect($translate.getLangInfo('key')).toEqual('val');
+          });
+        });
+
+        it ('should return undefined if there are no such key in the predefined ns', function() {
+          inject(function($translate) {
+            expect($translate.getLangInfo('foo')).toEqual(undefined);
+          });
+        });
+
+      });
+
+      describe('with many langs', function() {
+
+        beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+          $translateProvider.translations('foo', {
+            '___' : {
+              'dir' : 'ltr'
+            },
+            '___.isfoo' : 'yes'
+          });
+
+          $translateProvider.translations('bar', {
+            '___' : {
+              'dir' : 'rtl'
+            },
+            '___.isfoo' : 'no'
+          });
+
+          $translateProvider.uses('foo');
+        }));
+
+        it ('should return a valid values for keys from object-based namespace for the current ' +
+            'language', function() {
+          inject(function($translate) {
+            expect($translate.getLangInfo('dir')).toEqual('ltr');
+            $translate.uses('bar');
+            expect($translate.getLangInfo('dir')).toEqual('rtl');
+          });
+        });
+
+        it ('should return a valid values for keys from delimiter-based namespace for the current ' +
+            'language', function() {
+          inject(function($translate) {
+            expect($translate.getLangInfo('isfoo')).toEqual('yes');
+            $translate.uses('bar');
+            expect($translate.getLangInfo('isfoo')).toEqual('no');
+          });
+        });
+
+        it ('should return undefined if there are no such key in the predefined namespace for the ' +
+            'current language', function() {
+          inject(function($translate) {
+            expect($translate.getLangInfo('bar')).toEqual(undefined);
+            $translate.uses('bar');
+            expect($translate.getLangInfo('bar')).toEqual(undefined);
+          });
+        });
+
+      });
+
+    });
+
+  });
+
 });
