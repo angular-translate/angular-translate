@@ -1650,22 +1650,49 @@ describe('pascalprecht.translate', function () {
 
   describe('determineLanguage()', function () {
 
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations('en_US', {
-        FOO: 'bar'
-      });
+    describe('without locale negotiation', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.translations('en_US', {
+          FOO: 'bar'
+        });
 
-      $translateProvider.translations('de_DE', {
-        FOO: 'foo'
-      });
-      $translateProvider.determinePreferredLanguage();
-      // mocking
-      window.navigator.lang = 'en_US';
-    }));
+        $translateProvider.translations('de_DE', {
+          FOO: 'foo'
+        });
+        $translateProvider.determinePreferredLanguage();
+        // mocking
+        window.navigator.lang = 'en_US';
+      }));
 
-    it('should determine browser language', function () {
-      inject(function ($translate) {
-        expect($translate('FOO')).toEqual('bar');
+      it('should determine browser language', function () {
+        inject(function ($translate) {
+          expect($translate('FOO')).toEqual('bar');
+        });
+      });
+    });
+
+    describe('with locale negotiation', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider.translations('en', {
+          FOO: 'bar'
+        });
+
+        $translateProvider.translations('de', {
+          FOO: 'foo'
+        });
+        $translateProvider.registerAvailableLanguageKeys(['en', 'de'], {
+          'en_US': 'en',
+          'de_DE': 'de'
+        });
+        $translateProvider.determinePreferredLanguage();
+        // mocking
+        window.navigator.lang = 'en_US';
+      }));
+
+      it('should determine browser language', function () {
+        inject(function ($translate) {
+          expect($translate('FOO')).toEqual('bar');
+        });
       });
     });
   });

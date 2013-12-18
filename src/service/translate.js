@@ -11,6 +11,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var $translationTable = {},
       $preferredLanguage,
+      $availableLanguageKeys = [],
+      $languageKeyAliases,
       $fallbackLanguage,
       $fallbackWasString,
       $uses,
@@ -42,6 +44,39 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       return lang.join('_');
     }
     return lang;
+  };
+
+  var negotiateLocale = function (preferred) {
+
+    var avail = [],
+        locale = angular.lowercase(preferred),
+        i = 0,
+        n = $availableLanguageKeys.length;
+
+    for (; i < n; i++) {
+      avail.push(angular.lowercase($availableLanguageKeys[i]));
+    }
+
+    if (avail.indexOf(locale) > -1) {
+      return locale;
+    }
+
+    if ($languageKeyAliases) {
+
+      if ($languageKeyAliases[preferred]) {
+        var alias = $languageKeyAliases[preferred];
+
+        if (avail.indexOf(angular.lowercase(alias)) > -1) {
+          return alias;
+        }
+      }
+    }
+
+    var parts = preferred.split('_');
+
+    if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > 1) {
+      return parts[0];
+    }
   };
 
   /**
@@ -528,8 +563,40 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @param {object=} fn Function to determine a browser's locale
    */
   this.determinePreferredLanguage = function (fn) {
-    $preferredLanguage = (fn && angular.isFunction(fn)) ? fn() : getLocale();
-    return this;
+
+    var locale = (fn && angular.isFunction(fn)) ? fn() : getLocale();
+
+    if (!$availableLanguageKeys.length) {
+      $preferredLanguage = locale;
+      return this;
+    } else {
+      $preferredLanguage = negotiateLocale(locale);
+    }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#registerAvailableLanguageKeys
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Registers a set of language keys the app will work with. Use this method in
+   * combination with
+   * {@link pascalprecht.translate.$translateProvider#determinePreferredLanguage determinePreferredLanguage}. When available languages keys are registered, angular-translate
+   * tries to find the best fitting language key depending on the browsers locale,
+   * considering your language key convention.
+   *
+   * @param {object} languageKeys Array of language keys the your app will use
+   */
+  this.registerAvailableLanguageKeys = function (languageKeys, aliases) {
+    if (languageKeys) {
+      $availableLanguageKeys = languageKeys;
+      if (aliases) {
+        $languageKeyAliases = aliases;
+      }
+      return this;
+    }
+    return $availableLanguageKeys;
   };
 
   /**
