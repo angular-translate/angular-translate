@@ -601,7 +601,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // setting initial locale for each interpolation service
           interpolator.setLocale($preferredLanguage || $uses);
           // apply additional settings
-          if (angular.isFunction(interpolator.useSanitizeValueStrategy === 'function')) {
+          if (angular.isFunction(interpolator.useSanitizeValueStrategy)) {
             interpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
           }
           // make'em recognizable through id
