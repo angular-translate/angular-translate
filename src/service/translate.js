@@ -445,6 +445,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return this;
   };
 
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#langInfoNamespace
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Gets or sets a name of the predefined namespace used as a storage for language-specific data
+   *
+   * @param {string} namespace A name for the predefined namespace
+   */
   this.langInfoNamespace = function(namespace) {
     if (!angular.isString(namespace)) {
       return $langInfoNamespace;
@@ -812,6 +822,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return storageKey();
       };
 
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#getLangInfo
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns an information about the current language represented by the given key.
+       *
+       * @return {string} An information about the current language
+       */
       $translate.getLangInfo = function(infoKey) {
         var table = $uses ? $translationTable[$uses] : $translationTable;
         if (table) {
