@@ -25,6 +25,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $loaderOptions,
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
+      $langInfoNamespace = '___',
       NESTED_OBJECT_DELIMITER = '.';
 
   /**
@@ -444,6 +445,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return this;
   };
 
+  this.langInfoNamespace = function(namespace) {
+    if (!angular.isString(namespace)) {
+      return $langInfoNamespace;
+    } else {
+      $langInfoNamespace = namespace;
+      return this;
+    }
+  };
+
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#useMissingTranslationHandlerLog
@@ -802,6 +812,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return storageKey();
       };
 
+      $translate.getLangInfo = function(infoKey) {
+        var table = $uses ? $translationTable[$uses] : $translationTable;
+        if (table) {
+          return table[$langInfoNamespace + '.' + infoKey];
+        }
+        return undefined;
+      };
+      
       /**
        * @ngdoc function
        * @name pascalprecht.translate.$translate#refresh
