@@ -27,6 +27,23 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $notFoundIndicatorRight,
       NESTED_OBJECT_DELIMITER = '.';
 
+
+  // tries to determine the browsers locale
+  var getLocale = function () {
+    var nav = window.navigator;
+    var lang = ((
+      nav.language ||
+      nav.browserLanguage ||
+      nav.systemLanguage ||
+      nav.userLanguage
+    ) || '').split('-');
+
+    if (angular.equals(lang.length, 2)) {
+      return lang.join('_');
+    }
+    return lang;
+  };
+
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#translations
@@ -488,6 +505,30 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useMissingTranslationHandler = function (factory) {
     $missingTranslationHandlerFactory = factory;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#determinePreferredLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to try to determine on its own which language key
+   * to set as preferred language. When `fn` is given, angular-translate uses it
+   * to determine a language key, otherwise it uses the built-in `getLocale()`
+   * method.
+   *
+   * The `getLocale()` returns a language key in the format `[lang]_[country]` or
+   * `[lang]` depending on what the browser provides.
+   *
+   * Use this method at your own risk, since not all browsers return a valid
+   * locale.
+   *
+   * @param {object=} fn Function to determine a browser's locale
+   */
+  this.determinePreferredLanguage = function (fn) {
+    $preferredLanguage = (fn && angular.isFunction(fn)) ? fn() : getLocale();
     return this;
   };
 

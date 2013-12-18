@@ -1647,4 +1647,26 @@ describe('pascalprecht.translate', function () {
 
     });
   });
+
+  describe('determineLanguage()', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.translations('en_US', {
+        FOO: 'bar'
+      });
+
+      $translateProvider.translations('de_DE', {
+        FOO: 'foo'
+      });
+      $translateProvider.determinePreferredLanguage();
+      // mocking
+      window.navigator.lang = 'en_US';
+    }));
+
+    it('should determine browser language', function () {
+      inject(function ($translate) {
+        expect($translate('FOO')).toEqual('bar');
+      });
+    });
+  });
 });
