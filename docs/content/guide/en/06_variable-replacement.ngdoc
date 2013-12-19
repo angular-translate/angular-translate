@@ -100,14 +100,21 @@ directive expects an optional `translate-values` attribute you can use to pass
 some values through it. All you have to do is to combine the directive with the
 `translate-values` attribute.
 
-You can pass either an object literal as string, or, if the value is dynamic,
-an interpolation directive. Both get internally evaluated and parsed by `translate`
+You can pass either an object literal as string, expression,  or, if the value is dynamic,
+an interpolation directive. Whatever you pass in, it gets internally evaluated and parsed by `translate`
 filter, so what comes out is a plain old JavaScript object which gets passed to
 `$translate` service.
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values='{ username: "PascalPrect"}'></ANY>
+</pre>
+
+or
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{ username: someScopeObject.username }"></ANY>
 </pre>
 
 or

@@ -98,14 +98,21 @@ Selbstverständlich kannst du auch dynamische Werte an die Direktive übergeben.
 `translate`- Direktive erwartet ein optionales `translate-values`- Attribut, welches
 genutzt werden kann um dynamische Werte an die Direktive zu übergeben.
 
-Du kannst entweder ein Objektliteral als String, oder, wenn der Wert dynamisch ist,
-als Interpolation übergeben. Beides wird intern evaluiert und geparst, so dass am
+Du kannst entweder ein Objektliteral als String, eine Expression, oder, wenn der Wert dynamisch ist,
+als Interpolation übergeben. Der übergebene Ausdruck  wird intern evaluiert und geparst, so dass am
 Ende wieder ein JavaScript Objekt herauskommt, welches ohne Probleme an den
 `$translate`- Service übergeben werden kann.
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values='{ username: "PascalPrect"}'></ANY>
+</pre>
+
+oder
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{ username: someScopeObject.username }"></ANY>
 </pre>
 
 oder
