@@ -84,10 +84,17 @@ angular.module('pascalprecht.translate')
     scope: true,
     compile: function (tElement, tAttr) {
 
-      var translateValuesExist = (tAttr.translateValues && !angular.equals(tAttr.translateValues, ''));
-      var translateInterpolation = (tAttr.translateInterpolation) ? tAttr.translateInterpolation : undefined;
+      var translateValuesExist = (tAttr.translateValues) ?
+        tAttr.translateValues : undefined
+
+      var translateInterpolation = (tAttr.translateInterpolation) ?
+        tAttr.translateInterpolation : undefined;
+
+      var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
 
       return function linkFn(scope, iElement, iAttr) {
+
+        scope.interpolateParams = {};
 
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
@@ -104,14 +111,27 @@ angular.module('pascalprecht.translate')
           iAttr.$observe('translateValues', function (interpolateParams) {
             if (interpolateParams) {
               scope.$parent.$watch(function () {
-                scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
+                angular.extend(scope.interpolateParams, $parse(interpolateParams)(scope.$parent));
               });
             }
           });
         }
 
+        if (translateValueExist) {
+          for (attr in iAttr) {
+            if (iAttr.hasOwnProperty(attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+              (function () {
+                var attrName = attr;
+                iAttr.$observe(attr, function (value) {
+                  scope.interpolateParams[angular.lowercase(attrName.substr(14))] = value;
+                });
+              }());
+            }
+          }
+        }
+
         var updateTranslationFn = (function () {
-          if (!translateValuesExist) {
+          if (!translateValuesExist && !translateValueExist) {
             return function () {
               var unwatch = scope.$watch('translationId', function (value) {
                 if (value) {
