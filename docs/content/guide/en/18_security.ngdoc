@@ -2,7 +2,7 @@
 @name Security
 @description
 
-# Escapong of variable content
+# Escaping of variable content
 
 Speaking of regular output, AngularJS ensures the output will be escaped correctly.
 However, when using `angular-translate` and variable content, the result will not be
@@ -14,16 +14,16 @@ escaped correctly. This means your app is vulnerable for serious attacks
 The method `useSanitizeValueStrategy(strategy)` defines which strategy for escaping
 will be used; this is global.
 
-At the moment, two options are available: `null` (nothing) und `escaped` (for HTML).
+At the moment, two options are available: `null` (nothing) and `escaped` (for HTML).
 
 We enforce being completely backwards compatible, which means the escaping is disabled
-at default.
+by default.
 
 ```javascript
 $translateProvider.useSanitizeValueStrategy(null);
 ```
 
-However, we will enable the more secure variant in the future.
+However, we will enable the more secure variant `escaped` in the future by default.
 
 ```javascript
 $translateProvider.useSanitizeValueStrategy('escaped');
@@ -59,7 +59,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
   </doc:source>
 </doc:example>
 
-### OUtput of variable replacements escaped
+### Output of variable replacements escaped
 
 <doc:example module="myApp">
   <doc:source>
