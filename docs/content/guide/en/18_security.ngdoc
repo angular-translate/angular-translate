@@ -31,7 +31,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
 
 ## Demonstrations
 
-### Output of variable replacements not escaped
+### Not escaped
 
 <doc:example module="myApp">
   <doc:source>
@@ -59,7 +59,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
   </doc:source>
 </doc:example>
 
-### Output of variable replacements escaped
+### Escaped
 
 <doc:example module="myApp">
   <doc:source>
