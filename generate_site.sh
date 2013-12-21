@@ -1,4 +1,4 @@
-#!bin/bash/ -e
+#!/bin/bash -e
 
 mkdir -p site/docs/en site/docs/ru site/docs/de site/docs/uk
 
