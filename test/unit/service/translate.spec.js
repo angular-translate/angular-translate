@@ -1659,9 +1659,19 @@ describe('pascalprecht.translate', function () {
         $translateProvider.translations('de_DE', {
           FOO: 'foo'
         });
-        $translateProvider.determinePreferredLanguage();
-        // mocking
-        window.navigator.lang = 'en_US';
+        $translateProvider.determinePreferredLanguage(function () {
+          // mocking
+          // Work's like `window.navigator.lang = 'en_US'`
+          var nav = {
+            language: 'en_US'
+          };
+          return ((
+            nav.language ||
+            nav.browserLanguage ||
+            nav.systemLanguage ||
+            nav.userLanguage
+          ) || '').split('-').join('_');
+        });
       }));
 
       it('should determine browser language', function () {
@@ -1684,9 +1694,19 @@ describe('pascalprecht.translate', function () {
           'en_US': 'en',
           'de_DE': 'de'
         });
-        $translateProvider.determinePreferredLanguage();
-        // mocking
-        window.navigator.lang = 'en_US';
+        $translateProvider.determinePreferredLanguage(function () {
+          // mocking
+          // Work's like `window.navigator.lang = 'en_US'`
+          var nav = {
+            language: 'en_US'
+          };
+          return ((
+            nav.language ||
+            nav.browserLanguage ||
+            nav.systemLanguage ||
+            nav.userLanguage
+          ) || '').split('-').join('_');
+        });
       }));
 
       it('should determine browser language', function () {
