@@ -33,17 +33,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   // tries to determine the browsers locale
   var getLocale = function () {
     var nav = window.navigator;
-    var lang = ((
+    return ((
       nav.language ||
       nav.browserLanguage ||
       nav.systemLanguage ||
       nav.userLanguage
-    ) || '').split('-');
-
-    if (angular.equals(lang.length, 2)) {
-      return lang.join('_');
-    }
-    return lang;
+    ) || '').split('-').join('_');
   };
 
   var negotiateLocale = function (preferred) {
