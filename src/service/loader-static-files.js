@@ -29,7 +29,8 @@ angular.module('pascalprecht.translate')
         options.suffix
       ].join(''),
       method: 'GET',
-      params: ''
+      params: '',
+      cache: options.cache
     }).success(function (data) {
       deferred.resolve(data);
     }).error(function (data) {
