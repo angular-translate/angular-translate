@@ -75,50 +75,89 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$interpolate', '$parse', function ($filter, $interpolate, $parse) {
+.directive('translate', ['$filter', '$q', '$interpolate', '$parse', '$rootScope', function ($filter, $q, $interpolate, $parse, $rootScope) {
 
   var translate = $filter('translate');
 
   return {
     restrict: 'AE',
     scope: true,
-    link: function linkFn(scope, element, attr) {
+    compile: function (tElement, tAttr) {
 
-      if (attr.translateInterpolation) {
-        scope.interpolation = attr.translateInterpolation;
-      }
-      // Ensures any change of the attribute "translate" containing the id will
-      // be re-stored to the scope's "translationId".
-      // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
-      attr.$observe('translate', function (translationId) {
-        if (angular.equals(translationId , '') || translationId === undefined) {
-          scope.translationId = $interpolate(element.text().replace(/^\s+|\s+$/g,''))(scope.$parent);
-        } else {
-          scope.translationId = translationId;
-        }
-      });
+      var translateValuesExist = (tAttr.translateValues) ?
+        tAttr.translateValues : undefined
 
-      attr.$observe('translateValues', function (interpolateParams) {
-        // Only watch parent scope if there is data to retreive from it
-        if (interpolateParams)
-          scope.$parent.$watch(function() {
-            scope.interpolateParams = $parse(interpolateParams)(scope.$parent);
+      var translateInterpolation = (tAttr.translateInterpolation) ?
+        tAttr.translateInterpolation : undefined;
+
+      var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
+
+      return function linkFn(scope, iElement, iAttr) {
+
+        scope.interpolateParams = {};
+
+        // Ensures any change of the attribute "translate" containing the id will
+        // be re-stored to the scope's "translationId".
+        // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
+        iAttr.$observe('translate', function (translationId) {
+          if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
+            scope.translationId = $interpolate(iElement.text().replace(/^\s+|\s+$/g,''))(scope.$parent);
+          } else {
+            scope.translationId = translationId;
+          }
+        });
+
+        if (translateValuesExist) {
+          iAttr.$observe('translateValues', function (interpolateParams) {
+            if (interpolateParams) {
+              scope.$parent.$watch(function () {
+                angular.extend(scope.interpolateParams, $parse(interpolateParams)(scope.$parent));
+              });
+            }
           });
-      });
-
-      // Ensures the text will be refreshed after the current language was changed
-      // w/ $translate.uses(...)
-      scope.$on('$translateChangeSuccess', function () {
-        element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
-      });
-
-      // Ensures the text will be refreshed after either the scope's translationId
-      // or the interpolated params have been changed.
-      scope.$watch('[translationId, interpolateParams]', function (nValue) {
-        if (scope.translationId) {
-          element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
         }
-      }, true);
+
+        if (translateValueExist) {
+          for (attr in iAttr) {
+            if (iAttr.hasOwnProperty(attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+              (function () {
+                var attrName = attr;
+                iAttr.$observe(attr, function (value) {
+                  scope.interpolateParams[angular.lowercase(attrName.substr(14))] = value;
+                });
+              }());
+            }
+          }
+        }
+
+        var updateTranslationFn = (function () {
+          if (!translateValuesExist && !translateValueExist) {
+            return function () {
+              var unwatch = scope.$watch('translationId', function (value) {
+                if (value) {
+                  iElement.html(translate(value,  {}, translateInterpolation));
+                  unwatch();
+                }
+              }, true);
+            };
+          } else {
+            return function () {
+              scope.$watch('interpolateParams', function (value) {
+                if (value) {
+                  iElement.html(translate(scope.translationId,  value, translateInterpolation));
+                }
+              }, true);
+            };
+          }
+        }());
+
+        // Ensures the text will be refreshed after the current language was changed
+        // w/ $translate.uses(...)
+        var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslationFn);
+
+        updateTranslationFn();
+        scope.$on('$destroy', unbind);
+      };
     }
   };
 }]);
