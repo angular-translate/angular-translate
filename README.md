@@ -7,6 +7,7 @@
 | ------------- |:-------------:|
 | master        | [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/angular-translate) |
 | canary        |[![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/angular-translate)     |
+| BitDeli       |[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/PascalPrecht/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")        |
 
 ### Links
 * Website [http://pascalprecht.github.io/angular-translate/](http://pascalprecht.github.io/angular-translate/)

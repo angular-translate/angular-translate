@@ -11,7 +11,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var $translationTable = {},
       $preferredLanguage,
+      $availableLanguageKeys = [],
+      $languageKeyAliases,
       $fallbackLanguage,
+      $fallbackWasString,
       $uses,
       $nextLang,
       $storageFactory,
@@ -20,11 +23,57 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $missingTranslationHandlerFactory,
       $interpolationFactory,
       $interpolatorFactories = [],
+      $interpolationSanitizationStrategy = false,
       $loaderFactory,
       $loaderOptions,
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
       NESTED_OBJECT_DELIMITER = '.';
+
+
+  // tries to determine the browsers locale
+  var getLocale = function () {
+    var nav = window.navigator;
+    return ((
+      nav.language ||
+      nav.browserLanguage ||
+      nav.systemLanguage ||
+      nav.userLanguage
+    ) || '').split('-').join('_');
+  };
+
+  var negotiateLocale = function (preferred) {
+
+    var avail = [],
+        locale = angular.lowercase(preferred),
+        i = 0,
+        n = $availableLanguageKeys.length;
+
+    for (; i < n; i++) {
+      avail.push(angular.lowercase($availableLanguageKeys[i]));
+    }
+
+    if (avail.indexOf(locale) > -1) {
+      return locale;
+    }
+
+    if ($languageKeyAliases) {
+
+      if ($languageKeyAliases[preferred]) {
+        var alias = $languageKeyAliases[preferred];
+
+        if (avail.indexOf(angular.lowercase(alias)) > -1) {
+          return alias;
+        }
+      }
+    }
+
+    var parts = preferred.split('_');
+
+    if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > 1) {
+      return parts[0];
+    }
+  };
 
   /**
    * @ngdoc function
@@ -174,6 +223,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return this;
   };
 
+  this.useSanitizeValueStrategy = function (value) {
+    $interpolationSanitizationStrategy = value;
+    return this;
+  };
+
  /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#preferredLanguage
@@ -191,9 +245,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     if (langKey) {
       $preferredLanguage = langKey;
       return this;
-    } else {
-      return $preferredLanguage;
     }
+    return $preferredLanguage;
   };
 
   /**
@@ -274,14 +327,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.fallbackLanguage = function (langKey) {
     if (langKey) {
-      if (typeof langKey === 'string' || angular.isArray(langKey)) {
+      if (angular.isString(langKey)) {
+        $fallbackWasString = true;
+        $fallbackLanguage = [ langKey ];
+      } else if (angular.isArray(langKey)) {
+        $fallbackWasString = false;
         $fallbackLanguage = langKey;
-      } else {
-        // Error!
       }
       return this;
     } else {
-      return $fallbackLanguage;
+      if ($fallbackWasString) {
+        return $fallbackLanguage[0];
+      } else {
+        return $fallbackLanguage;
+      }
     }
   };
 
@@ -308,9 +367,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
       $uses = langKey;
       return this;
-    } else {
-      return $uses;
     }
+    return $uses;
   };
 
  /**
@@ -487,6 +545,62 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   };
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#determinePreferredLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to try to determine on its own which language key
+   * to set as preferred language. When `fn` is given, angular-translate uses it
+   * to determine a language key, otherwise it uses the built-in `getLocale()`
+   * method.
+   *
+   * The `getLocale()` returns a language key in the format `[lang]_[country]` or
+   * `[lang]` depending on what the browser provides.
+   *
+   * Use this method at your own risk, since not all browsers return a valid
+   * locale.
+   *
+   * @param {object=} fn Function to determine a browser's locale
+   */
+  this.determinePreferredLanguage = function (fn) {
+
+    var locale = (fn && angular.isFunction(fn)) ? fn() : getLocale();
+
+    if (!$availableLanguageKeys.length) {
+      $preferredLanguage = locale;
+      return this;
+    } else {
+      $preferredLanguage = negotiateLocale(locale);
+    }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#registerAvailableLanguageKeys
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Registers a set of language keys the app will work with. Use this method in
+   * combination with
+   * {@link pascalprecht.translate.$translateProvider#determinePreferredLanguage determinePreferredLanguage}. When available languages keys are registered, angular-translate
+   * tries to find the best fitting language key depending on the browsers locale,
+   * considering your language key convention.
+   *
+   * @param {object} languageKeys Array of language keys the your app will use
+   */
+  this.registerAvailableLanguageKeys = function (languageKeys, aliases) {
+    if (languageKeys) {
+      $availableLanguageKeys = languageKeys;
+      if (aliases) {
+        $languageKeyAliases = aliases;
+      }
+      return this;
+    }
+    return $availableLanguageKeys;
+  };
+
+  /**
    * @ngdoc object
    * @name pascalprecht.translate.$translate
    * @requires $interpolate
@@ -525,14 +639,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$broadcast('$translateLoadingStart');
+        $rootScope.$emit('$translateLoadingStart');
 
         pendingLoader = true;
 
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
-          $rootScope.$broadcast('$translateLoadingSuccess');
+          $rootScope.$emit('$translateLoadingSuccess');
           var translationTable = {};
 
           if (angular.isArray(data)) {
@@ -548,14 +662,23 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             key: key,
             table: translationTable
           });
-          $rootScope.$broadcast('$translateLoadingEnd');
+          $rootScope.$emit('$translateLoadingEnd');
         }, function (key) {
-          $rootScope.$broadcast('$translateLoadingError');
+          $rootScope.$emit('$translateLoadingError');
           deferred.reject(key);
-          $rootScope.$broadcast('$translateLoadingEnd');
+          $rootScope.$emit('$translateLoadingEnd');
         });
 
         return deferred.promise;
+      };
+
+      var indexOf = function(array, searchElement) {
+        for (var i = 0, len = array.length; i < len; i++) {
+          if (array[i] === searchElement) {
+            return i;
+          }
+        }
+        return -1;
       };
 
       if ($storageFactory) {
@@ -564,6 +687,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (!Storage.get || !Storage.set) {
           throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or set() method!');
         }
+      }
+
+      // apply additional settings
+      if (angular.isFunction(defaultInterpolator.useSanitizeValueStrategy)) {
+        defaultInterpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
       }
 
       // if we have additional interpolations that were added via
@@ -575,32 +703,23 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           var interpolator = $injector.get(interpolatorFactory);
           // setting initial locale for each interpolation service
           interpolator.setLocale($preferredLanguage || $uses);
+          // apply additional settings
+          if (angular.isFunction(interpolator.useSanitizeValueStrategy)) {
+            interpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
+          }
           // make'em recognizable through id
           interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
         });
       }
 
-      // function to check if the current language is a fallback language or not
-      var checkValidFallback = function (usesLang) {
-        if (usesLang && $fallbackLanguage) {
-          if (angular.isArray($fallbackLanguage)) {
-            var fallbackLanguagesSize = $fallbackLanguage.length;
-            for (var current = 0; current < fallbackLanguagesSize; current++) {
-              if ($uses === $translationTable[$fallbackLanguage[current]]) {
-                return false;
-              }
-            }
-            return true;
-          } else {
-            return (usesLang !== $fallbackLanguage);
-          }
-        } else {
-          return false;
-        }
-        return false;
+      // get an index in the $fallbackLanguage array from which we can to apply fallbacks
+      var getStartFallbackIndex = function(usesLang) {
+        return indexOf($fallbackLanguage, usesLang) + 1;
       };
 
       var $translate = function (translationId, interpolateParams, interpolationId) {
+        // trim off any whitespace
+        translationId = translationId.trim();
 
         // determine translation table and current Interpolator
         var table = $uses ? $translationTable[$uses] : $translationTable,
@@ -625,28 +744,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         // since we couldn't translate the inital requested translation id,
         // we try it now with one or more fallback languages, if fallback language(s) is
         // configured.
-        var normatedLanguages;
-        if ($uses && $fallbackLanguage && checkValidFallback($uses)) {
-          if (typeof $fallbackLanguage === 'string') {
-            normatedLanguages = [];
-            normatedLanguages.push($fallbackLanguage);
-          } else {
-            normatedLanguages = $fallbackLanguage;
-          }
-          var fallbackLanguagesSize = normatedLanguages.length;
-          for (var current = 0; current < fallbackLanguagesSize; current++) {
-            if ($uses !== $translationTable[normatedLanguages[current]]) {
-              var translationFromList = $translationTable[normatedLanguages[current]][translationId];
+        if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
+          for (var i = getStartFallbackIndex($uses), len = $fallbackLanguage.length; i < len; i++) {
+            if ($translationTable.hasOwnProperty($fallbackLanguage[i])) {
+
+              var translation = $translationTable[$fallbackLanguage[i]][translationId];
 
               // check if a translation for the fallback language exists
-              if (translationFromList) {
-                var returnValFromList;
+              if (translation) {
                 // temporarly letting Interpolator know we're using fallback language now.
-                Interpolator.setLocale(normatedLanguages[current]);
-                returnValFromList = Interpolator.interpolate(translationFromList, interpolateParams);
+                Interpolator.setLocale($fallbackLanguage[i]);
+                translation = Interpolator.interpolate(translation, interpolateParams);
                 // after we've interpolated the translation, we reset Interpolator to proper locale.
                 Interpolator.setLocale($uses);
-                return returnValFromList;
+                return translation;
               }
             }
           }
@@ -684,12 +795,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @methodOf pascalprecht.translate.$translate
        *
        * @description
-       * Returns the language key for the fallback language.
+       * Returns the language key for the fallback languages.
        *
-       * @return {string} fallback language key
+       * @return {string||array} fallback language key
        */
       $translate.fallbackLanguage = function () {
-        return $fallbackLanguage;
+        if ($fallbackWasString) {
+          return $fallbackLanguage[0];
+        } else {
+          return $fallbackLanguage;
+        }
       };
 
       /**
@@ -749,11 +864,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$broadcast('$translateChangeStart');
+        $rootScope.$emit('$translateChangeStart');
 
         function useLanguage(key) {
           $uses = key;
-          $rootScope.$broadcast('$translateChangeSuccess');
+          $rootScope.$emit('$translateChangeSuccess');
 
           if ($storageFactory) {
             Storage.set($translate.storageKey(), $uses);
@@ -767,7 +882,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           });
 
           deferred.resolve(key);
-          $rootScope.$broadcast('$translateChangeEnd');
+          $rootScope.$emit('$translateChangeEnd');
         }
 
         // if there isn't a translation table for the language we've requested,
@@ -781,9 +896,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               useLanguage(translation.key);
             }, function (key) {
               $nextLang = undefined;
-              $rootScope.$broadcast('$translateChangeError');
+              $rootScope.$emit('$translateChangeError');
               deferred.reject(key);
-              $rootScope.$broadcast('$translateChangeEnd');
+              $rootScope.$emit('$translateChangeEnd');
             }
           );
         } else {
@@ -845,27 +960,23 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         function onLoadSuccess() {
           deferred.resolve();
-          $rootScope.$broadcast('$translateRefreshEnd');
+          $rootScope.$emit('$translateRefreshEnd');
         }
 
         function onLoadFailure() {
           deferred.reject();
-          $rootScope.$broadcast('$translateRefreshEnd');
+          $rootScope.$emit('$translateRefreshEnd');
         }
 
         if (!langKey) {
 
-          $rootScope.$broadcast('$translateRefreshStart');
+          $rootScope.$emit('$translateRefreshStart');
 
           var loaders = [];
-          if ($fallbackLanguage) {
-            if (typeof $fallbackLanguage === 'string') {
-              loaders.push(loadAsync($fallbackLanguage));
-            } else {
-              var fallbackLanguagesSize = $fallbackLanguage.length;
-              for (var current = 0; current < fallbackLanguagesSize; current++) {
-                loaders.push(loadAsync($fallbackLanguage[current]));
-              }
+          if ($fallbackLanguage && $fallbackLanguage.length) {
+            var fallbackLanguagesSize = $fallbackLanguage.length;
+            for (var current = 0; current < fallbackLanguagesSize; current++) {
+              loaders.push(loadAsync($fallbackLanguage[current]));
             }
           }
 
@@ -891,7 +1002,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               },
               function (key) {
                 if (key === $uses) {
-                  $rootScope.$broadcast('$translateChangeError');
+                  $rootScope.$emit('$translateChangeError');
                 }
                 onLoadFailure();
               }
@@ -900,7 +1011,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         } else if ($translationTable.hasOwnProperty(langKey)) {
 
-          $rootScope.$broadcast('$translateRefreshStart');
+          $rootScope.$emit('$translateRefreshStart');
 
           var loader = loadAsync(langKey);
           if (langKey === $uses) {
@@ -911,7 +1022,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
                 onLoadSuccess();
               },
               function () {
-                $rootScope.$broadcast('$translateChangeError');
+                $rootScope.$emit('$translateChangeError');
                 onLoadFailure();
               }
             );
@@ -937,17 +1048,42 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           $translate.uses($translate.uses());
         }
 
-        if ($fallbackLanguage) {
-          if (typeof $fallbackLanguage === 'string' && !$translationTable[$fallbackLanguage]) {
-            loadAsync($fallbackLanguage);
-          } else {
-            var fallbackLanguagesSize = $fallbackLanguage.length;
-            for (var current = 0; current < fallbackLanguagesSize; current++) {
-              if (!$translationTable[$fallbackLanguage[current]]) {
-                loadAsync($fallbackLanguage[current]);
+        if ($fallbackLanguage && $fallbackLanguage.length) {
+          var loaders = [],
+              failedKeys = [];
+
+          var fallbackLoadSuccess = function(fallbackTranslation) {
+            translations(fallbackTranslation.key, fallbackTranslation.table);
+          };
+
+          var fallbackLoadFail = function(failKkey) {
+            failedKeys.push(failKkey);
+          };
+
+          var fallbacksCleanup = function() {
+            if (failedKeys.length) {
+              // Remove all fallback languages which were not loaded.
+              // Also we need to keep the order of elements in $fallbackLanguage
+              var newFallbacks = [];
+              for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+                if (indexOf(failedKeys, $fallbackLanguage[i]) === -1) {
+                  newFallbacks.push($fallbackLanguage[i]);
+                }
               }
+              $fallbackLanguage = newFallbacks;
+            }
+          };
+
+          for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+            if (!$translationTable[$fallbackLanguage[i]]) {
+              loaders.push(
+                loadAsync($fallbackLanguage[i])
+                  .then(fallbackLoadSuccess, fallbackLoadFail)
+              );
             }
           }
+
+          $q.all(loaders).then(fallbacksCleanup, fallbacksCleanup);
         }
       }
 

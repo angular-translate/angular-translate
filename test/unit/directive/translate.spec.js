@@ -426,4 +426,106 @@ describe('pascalprecht.translate', function () {
       expect(element.text()).toEqual('custom interpolation');
     });
   });
+
+  describe('custom translate-value-* attributes', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.translations({
+        'FOO': 'hello my name is {{name}}',
+        'BAR': 'and I\'m {{age}} years old',
+        'BAZINGA': 'hello my name is {{name}} and I\'m {{age}} years old.',
+        'YAY': 'hello my name is {{name}} and I\'m {{age}} years old. {{foo}}'
+      });
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+
+      $rootScope.name = 'Pascal';
+      $rootScope.age = 22;
+    }));
+
+    it('should use custom translate-value-* attributes for variable replacement', function () {
+      element = $compile('<p translate="FOO" translate-value-name="Pascal"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('hello my name is Pascal');
+      element = $compile('<p translate="BAR" translate-value-age="22"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('and I\'m 22 years old');
+      element = $compile('<p translate="BAZINGA" translate-value-name="Pascal" translate-value-age="22"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('hello my name is Pascal and I\'m 22 years old.');
+      element = $compile('<p translate="YAY" translate-value-name="Pascal" translate-value-age="22" translate-values=\'{ foo: "bar" }\'></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('hello my name is Pascal and I\'m 22 years old. bar');
+    });
+
+    it('should use custom translate-value-* attributes with interpolation', function () {
+      element = $compile('<p translate="FOO" translate-value-name="{{name}}"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('hello my name is Pascal');
+      element = $compile('<p translate="BAR" translate-value-age="{{age}}"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('and I\'m 22 years old');
+      element = $compile('<p translate="BAZINGA" translate-value-name="{{name}}" translate-value-age="{{age}}"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('hello my name is Pascal and I\'m 22 years old.');
+    });
+  });
+
+  describe('translate sanitization', function () {
+
+    var $rootScope, $compile;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.translations('en', {
+        'hacking': '{{v}}'
+      });
+
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+    }));
+
+    it('should be disabled at default', function () {
+      element = $compile('<p translate="hacking" translate-values="{v: \'<u>test</u>\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify content is not escaped.
+      expect(element.text()).toEqual('test');
+      expect(element.html()).toEqual('<u>test</u>');
+    });
+  });
+
+  describe('translate sanitization (escaping)', function () {
+
+    var $rootScope, $compile;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.translations('en', {
+        'hacking': '{{v}}'
+      });
+
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useSanitizeValueStrategy('escaped');
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+    }));
+
+    it('should be enabled via useSanitizedValues(true)', function () {
+      element = $compile('<p translate="hacking" translate-values="{v: \'<u>test</u>\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify content is escaped.
+      expect(element.text()).toEqual('<u>test</u>'); // possible because text
+      expect(element.html()).toEqual('&lt;u&gt;test&lt;/u&gt;');
+    });
+  });
 });
