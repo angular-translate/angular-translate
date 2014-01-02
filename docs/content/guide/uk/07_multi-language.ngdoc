@@ -81,6 +81,15 @@ $translateProvider.preferredLanguage('de');
 $translateProvider.fallbackLanguage('en');
 </pre>
 
+Починаючи з версії 1.1.1 у якості параметра можна передавати масив. Таким чином можна вказати для
+підстраховки одразу декілька мов, що будуть використовуватися у відповідному порядку.
+
+<pre>
+// tells angular-translate to use English language if translations are not
+// available in German, French if not even available in English
+$translateProvider.fallbackLanguage(['en','fr']);
+</pre>
+
 ## Зміна мови під час використання
 
 Для зміни мови під час використання сервіс `$translate` має метод `uses()` який або повертає ключ 

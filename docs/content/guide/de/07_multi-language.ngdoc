@@ -91,6 +91,16 @@ einen Sprachschlüssel. `angular-translate` kümmert sich dann um den Rest.
 $translateProvider.fallbackLanguage('en');
 </pre>
 
+Seit Version 1.1.1 ist angular-translate auch in der Lage, mit mehreren Fallback-Sprachen 
+umzugehen. Dafür wird einfach statt eines Strings ein Array an die Funktion übergeben.
+
+<pre>
+// tells angular-translate to use English language if translations are not
+// available in German, French if not even available in English
+$translateProvider.fallbackLanguage(['en','fr']);
+</pre>
+
+
 ## Sprache zur Laufzeit wechseln
 
 Um die Sprache zur Laufzeit zu wechseln, bietet `$translate`- Service eine Methode
