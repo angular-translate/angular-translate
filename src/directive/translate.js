@@ -1,4 +1,5 @@
 angular.module('pascalprecht.translate')
+.value('translateCompileEnabled', false)
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translate
@@ -76,7 +77,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$compile', '$filter', '$interpolate', '$parse', '$rootScope', function ($compile, $filter, $interpolate, $parse, $rootScope) {
+.directive('translate', ['$compile', '$filter', '$interpolate', '$parse', '$rootScope', 'translateCompileEnabled', function ($compile, $filter, $interpolate, $parse, $rootScope, translateCompileEnabled) {
 
   var translate = $filter('translate');
 
@@ -111,7 +112,7 @@ angular.module('pascalprecht.translate')
       // w/ $translate.uses(...)
       var unbind = $rootScope.$on('$translateChangeSuccess', function () {
         element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
-        if (attr.translateCompile !== undefined) {
+        if (translateCompileEnabled || attr.translateCompile !== undefined) {
           $compile(element.contents())(scope);
         }
       });
@@ -121,7 +122,7 @@ angular.module('pascalprecht.translate')
       scope.$watch('[translationId, interpolateParams]', function (nValue) {
         if (scope.translationId) {
           element.html(translate(scope.translationId, scope.interpolateParams, scope.interpolation));
-          if (attr.translateCompile !== undefined) {
+          if (translateCompileEnabled || attr.translateCompile !== undefined) {
             $compile(element.contents())(scope);
           }
         }
