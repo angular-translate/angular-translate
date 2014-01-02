@@ -76,7 +76,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$compile', $filter', '$interpolate', '$parse', '$rootScope', function ($compile, $filter, $interpolate, $parse, $rootScope) {
+.directive('translate', ['$compile', '$filter', '$interpolate', '$parse', '$rootScope', function ($compile, $filter, $interpolate, $parse, $rootScope) {
 
   var translate = $filter('translate');
 
