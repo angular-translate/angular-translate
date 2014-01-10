@@ -85,7 +85,7 @@ angular.module('pascalprecht.translate')
     compile: function (tElement, tAttr) {
 
       var translateValuesExist = (tAttr.translateValues) ?
-        tAttr.translateValues : undefined
+        tAttr.translateValues : undefined;
 
       var translateInterpolation = (tAttr.translateInterpolation) ?
         tAttr.translateInterpolation : undefined;
@@ -118,14 +118,14 @@ angular.module('pascalprecht.translate')
         }
 
         if (translateValueExist) {
-          for (attr in iAttr) {
+          var fn = function (attrName) {
+            iAttr.$observe(attrName, function (value) {
+              scope.interpolateParams[angular.lowercase(attrName.substr(14))] = value;
+            });
+          };
+          for (var attr in iAttr) {
             if (iAttr.hasOwnProperty(attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
-              (function () {
-                var attrName = attr;
-                iAttr.$observe(attr, function (value) {
-                  scope.interpolateParams[angular.lowercase(attrName.substr(14))] = value;
-                });
-              }());
+              fn(attr);
             }
           }
         }
