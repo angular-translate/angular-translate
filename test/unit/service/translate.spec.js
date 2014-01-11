@@ -167,6 +167,15 @@ describe('pascalprecht.translate', function () {
         expect($translate("BLANK_VALUE")).toEqual('');
       });
     });
+    
+    it('should return translation if translation id if exists with whitespace', function () {
+      inject(function ($translate) {
+        expect($translate("EXISTING_TRANSLATION_ID\t        \n")).toEqual('foo');
+        expect($translate("\t        \nEXISTING_TRANSLATION_ID")).toEqual('foo');
+        expect($translate("BLANK_VALUE\t        \n")).toEqual('');
+        expect($translate("\t        \nBLANK_VALUE")).toEqual('');
+      });
+    });
 
     it('should replace interpolate directives with empty string if no values given', function () {
       inject(function ($translate) {
