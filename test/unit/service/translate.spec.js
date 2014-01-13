@@ -1,794 +1,267 @@
 describe('pascalprecht.translate', function () {
 
-  describe('$translateService', function () {
+  var translationMock = {
+    'EXISTING_TRANSLATION_ID': 'foo',
+    'BLANK_VALUE': '',
+    'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+    'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+    'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
+    'DOCUMENT': {
+      'HEADER': {
+        'TITLE': 'Header'
+      },
+      'SUBHEADER': {
+        'TITLE': '2. Header'
+      }
+    }
+  };
 
-    beforeEach(module('pascalprecht.translate'));
+  describe('$translate', function () {
 
-    var $translate;
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations(translationMock)
+        .translations({
+          'FOO': 'bar',
+          'BAR': 'foo'
+        });
+    }));
 
-    beforeEach(inject(function (_$translate_) {
+    var $translate, $STORAGE_KEY;
+
+    beforeEach(inject(function (_$translate_, _$STORAGE_KEY_) {
       $translate = _$translate_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
     }));
 
     it('should be defined', function () {
-      inject(function ($translate) {
-        expect($translate).toBeDefined();
-      });
+      expect($translate).toBeDefined();
     });
 
     it('should be a function object', function () {
-      inject(function ($translate) {
-        expect(typeof $translate).toBe("function");
-      });
+      expect(typeof $translate).toBe("function");
     });
 
     it('should have a method uses()', function () {
-      inject(function ($translate) {
-        expect($translate.uses).toBeDefined();
-      });
+      expect($translate.uses).toBeDefined();
     });
 
     it('should have a method preferredLanguage()', function () {
-      inject(function ($translate) {
-        expect($translate.preferredLanguage).toBeDefined();
-      });
+      expect($translate.preferredLanguage).toBeDefined();
     });
+
     it('should have a method fallbackLanguage()', function () {
-      inject(function ($translate) {
-        expect($translate.fallbackLanguage).toBeDefined();
-      });
+      expect($translate.fallbackLanguage).toBeDefined();
     });
 
     it('should have a method storageKey()', function () {
-      inject(function ($translate) {
-        expect($translate.storageKey).toBeDefined();
-      });
+      expect($translate.storageKey).toBeDefined();
     });
 
-    describe('uses()', function () {
+    it('should have a method refresh()', function () {
+      expect($translate.refresh).toBeDefined();
+    });
+
+    describe('$translate#preferredLanguage()', function () {
 
       it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.uses).toBe('function');
-        });
+        expect(typeof $translate.preferredLanguage).toBe('function');
       });
 
       it('should return undefined if no language is specified', function () {
-        inject(function ($translate) {
-          expect($translate.uses()).toBeUndefined();
-        });
+        expect($translate.preferredLanguage()).toBeUndefined();
       });
-
     });
 
-    describe('preferredLanguage()', function () {
+    describe('$translate#fallbackLanguage()', function () {
 
       it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.preferredLanguage).toBe('function');
-        });
+        expect(typeof $translate.fallbackLanguage).toBe('function');
       });
 
       it('should return undefined if no language is specified', function () {
-        inject(function ($translate) {
-          expect($translate.preferredLanguage()).toBeUndefined();
-        });
-      });
-
-    });
-
-
-    describe('fallbackLanguage()', function () {
-
-      it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.fallbackLanguage).toBe('function');
-        });
-      });
-
-      it('should return undefined if no language is specified', function () {
-        inject(function ($translate) {
-          expect($translate.fallbackLanguage()).toBeUndefined();
-        });
-      });
-
-    });
-    describe('fallbackLanguage()#array', function () {
-      it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.fallbackLanguage).toBe('function');
-        });
-      });
-      it('should return empty undefined if no language is specified', function () {
-        inject(function ($translate) {
-          var emptyVar = [];
-          expect($translate.fallbackLanguage()).toBeUndefined();
-        });
+        expect($translate.fallbackLanguage()).toBeUndefined();
       });
     });
 
-    describe('storageKey()', function () {
+    describe('$translate#storageKey()', function () {
 
       it('should be a function', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.storageKey).toBe('function');
-        });
+        expect(typeof $translate.storageKey).toBe('function');
       });
 
       it('should return a string', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.storageKey()).toBe('string');
-        });
+        expect(typeof $translate.storageKey()).toBe('string');
       });
 
       it('should be equal to $STORAGE_KEY by default', function () {
-        inject(function ($translate, $STORAGE_KEY) {
-          expect($translate.storageKey()).toEqual($STORAGE_KEY);
-        });
+        expect($translate.storageKey()).toEqual($STORAGE_KEY);
       });
-
     });
-
-  });
-
-  describe('$translateService (single-lang)', function () {
-
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations({
-        'EXISTING_TRANSLATION_ID': 'foo',
-        'BLANK_VALUE': '',
-        'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-        'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-        'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
-      });
-
-      $translateProvider.translations({
-        'FOO': 'bar',
-        'BAR': 'foo'
-      });
-    }));
-
-    var $translate;
-
-    beforeEach(inject(function (_$translate_) {
-      $translate = _$translate_;
-    }));
 
     it('should return translation id if translation doesn\'t exist', function () {
       var translationId = 'NOT_EXISTING_TRANSLATION_ID';
-      inject(function ($translate) {
-        expect($translate(translationId)).toEqual(translationId);
-      });
+      expect($translate(translationId)).toEqual(translationId);
     });
 
     it('should return translation if translation id if exists', function () {
-      inject(function ($translate) {
-        expect($translate("EXISTING_TRANSLATION_ID")).toEqual('foo');
-        expect($translate("BLANK_VALUE")).toEqual('');
-      });
-    });
-    
-    it('should return translation if translation id if exists with whitespace', function () {
-      inject(function ($translate) {
-        expect($translate("EXISTING_TRANSLATION_ID\t        \n")).toEqual('foo');
-        expect($translate("\t        \nEXISTING_TRANSLATION_ID")).toEqual('foo');
-        expect($translate("BLANK_VALUE\t        \n")).toEqual('');
-        expect($translate("\t        \nBLANK_VALUE")).toEqual('');
-      });
+      expect($translate("EXISTING_TRANSLATION_ID")).toEqual('foo');
+      expect($translate("BLANK_VALUE")).toEqual('');
     });
 
-    it('should replace interpolate directives with empty string if no values given', function () {
-      inject(function ($translate) {
+    it('should return translation, if translation id exists with whitespace', function () {
+      expect($translate("EXISTING_TRANSLATION_ID\t        \n")).toEqual('foo');
+      expect($translate("\t        \nEXISTING_TRANSLATION_ID")).toEqual('foo');
+      expect($translate("BLANK_VALUE\t        \n")).toEqual('');
+      expect($translate("\t        \nBLANK_VALUE")).toEqual('');
+    });
+
+    it('should use $interpolate service', function () {
         expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
-      });
-    });
-
-    it('should replace interpolate directives with given values', function () {
-      inject(function ($translate) {
-        expect($translate('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
-        expect($translate('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
-        expect($translate('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
-        expect($translate('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
-        expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
-      });
+        expect($translate('TRANSLATION_ID', {
+          value: 'foo'
+        })).toEqual('Lorem Ipsum foo');
+        expect($translate('TRANSLATION_ID_2', {
+          value: 'foo'
+        })).toEqual('Lorem Ipsum foo + foo');
+        expect($translate('TRANSLATION_ID_3', {
+          value: 'foo'
+        })).toEqual('Lorem Ipsum foofoo');
+        expect($translate('TRANSLATION_ID_3', {
+          value: '3'
+        })).toEqual('Lorem Ipsum 33');
+        expect($translate('TRANSLATION_ID_3', {
+          value: 3
+        })).toEqual('Lorem Ipsum 6');
     });
 
     it('should extend translation table rather then overwriting it', function () {
-      inject(function ($translate) {
-        expect($translate('FOO')).toEqual('bar');
-        expect($translate('BAR')).toEqual('foo');
-      });
-    });
-  });
-
-  describe('$translateService (multi-lang)', function () {
-
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations('de_DE', {
-        'EXISTING_TRANSLATION_ID': 'foo',
-        'ANOTHER_ONE': 'bar',
-        'BLANK_VALUE': '',
-        'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-        'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-        'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
-        'YET_ANOTHER': 'Hallo da!'
-      });
-      $translateProvider.translations('de_DE', {
-        'FOO': 'bar'
-      });
-      $translateProvider.translations('en_EN', {
-        'YET_ANOTHER': 'Hello there!'
-      });
-      $translateProvider.translations('en_EN', {
-        'FOO': 'bar'
-      });
-      $translateProvider.uses('de_DE');
-      $translateProvider.fallbackLanguage('en_EN');
-
-      $translateProvider.preferredLanguage('en_EN');
-      $translateProvider.preferredLanguage('de_DE');
-      $translateProvider.storageKey('lang');
-    }));
-
-    var $translate, $rootScope, $compile;
-
-    beforeEach(inject(function (_$translate_, _$rootScope_, _$compile_) {
-      $translate = _$translate_;
-      $rootScope = _$rootScope_;
-      $compile = _$compile_;
-    }));
-
-    it('should return translation id if language is given and translation id doesn\'t exist', function () {
-      inject(function ($translate) {
-        expect($translate('NON_EXISTING_TRANSLATION_ID')).toEqual('NON_EXISTING_TRANSLATION_ID');
-      });
+      expect($translate('FOO')).toEqual('bar');
+      expect($translate('BAR')).toEqual('foo');
     });
 
-    it('should return translation when language is given and translation id exist', function () {
-      inject(function ($translate) {
-        expect($translate('EXISTING_TRANSLATION_ID')).toEqual('foo');
-        expect($translate('ANOTHER_ONE')).toEqual('bar');
-        expect($translate('BLANK_VALUE')).toEqual('');
-      });
-    });
-
-    it('should replace interpolate directives with empty string if no values given and language is specified', function () {
-      inject(function ($translate) {
-        expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
-      });
-    });
-
-    it('should replace interpolate directives with given values when language is specified', function () {
-      inject(function ($translate) {
-        expect($translate('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
-        expect($translate('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
-        expect($translate('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
-        expect($translate('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
-        expect($translate('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
-      });
-    });
-
-    it('should extend translation table rather then overwriting it', function () {
-      inject(function ($translate) {
-        expect($translate('FOO')).toEqual('bar');
-        $translate.uses('en_EN');
-        expect($translate('FOO')).toEqual('bar');
-      });
-    });
-
-    describe('$translateService#uses()', function () {
-
-      it('should return a string', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.uses()).toBe('string');
-        });
-      });
-
-      it('should return language key', function () {
-        inject(function ($translate) {
-          expect($translate.uses()).toEqual('de_DE');
-        });
-      });
-
-      it('should change language at runtime', function () {
-        inject(function ($translate) {
-          expect($translate('YET_ANOTHER')).toEqual('Hallo da!');
-          $translate.uses('en_EN');
-          $rootScope.$apply();
-          expect($translate('YET_ANOTHER')).toEqual('Hello there!');
-        });
-      });
-
-      it('should change language and take effect in the UI', function () {
-        inject(function ($rootScope, $compile, $translate) {
-          var element = $compile('<div translate="YET_ANOTHER"></div>')($rootScope);
-          $rootScope.$digest();
-          expect(element.text()).toBe('Hallo da!');
-
-          $translate.uses('en_EN');
-          element = $compile('<div translate="YET_ANOTHER"></div>')($rootScope);
-          $rootScope.$digest();
-          expect(element.text()).toBe('Hello there!');
-        });
-      });
-    });
-
-    describe('$translateService#storageKey()', function () {
-
-      it('should allow to change the storage key during config', function () {
-        inject(function ($translate, $STORAGE_KEY) {
-          expect($translate.storageKey()).toNotEqual($STORAGE_KEY);
-        });
-      });
-
-      it('shouldn\'t allow to change the storage key during runtime', function () {
-        inject(function ($translate, $STORAGE_KEY) {
-          var prevKey = $translate.storageKey();
-          $translate.storageKey(prevKey + "somestring");
-          expect($translate.storageKey()).toEqual(prevKey);
-        });
-      });
-
-    });
-
-    describe('$translateService#preferredLanguage()', function () {
-
-      it('should return a string if language is specified', function () {
-        inject(function ($translate) {
-          expect(typeof $translate.preferredLanguage()).toBe('string');
-        });
-      });
-
-      it('should return a correct language code', function () {
-        inject(function ($translate) {
-          expect($translate.preferredLanguage()).toEqual('de_DE');
-        });
-      });
-
-      it('should allow to change preferred language during config', function () {
-        inject(function ($translate) {
-          expect($translate.preferredLanguage()).toEqual('de_DE');
-        });
-      });
-
-      it('shouldn\'t allow to change preferred language during runtime', function () {
-        inject(function ($translate) {
-          var prevLang = $translate.preferredLanguage();
-          $translate.preferredLanguage(prevLang === 'de_DE' ? 'en_EN' : 'de_DE');
-          expect($translate.preferredLanguage()).toBe(prevLang);
-        });
-      });
-
-    });
-
-  });
-
-  describe('$translateService#fallbackLanguage()', function () {
-
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations('foo', {
-        'TRANSLATION_ID': 'foo',
-        'TRANSLATION__ID': 'booyaka'
-      });
-
-      $translateProvider.translations('bar', {
-        'TRANSLATION__ID': 'bazinga'
-      });
-
-      $translateProvider.preferredLanguage('bar');
-      $translateProvider.fallbackLanguage('foo');
-    }));
-
-    it('should return a string if language is specified', function () {
-      inject(function ($translate) {
-        expect(typeof $translate.fallbackLanguage()).toBe('string');
-      });
-    });
-
-    it('should return a correct language code', function () {
-      inject(function ($translate) {
-        expect($translate.fallbackLanguage()).toEqual('foo');
-      });
-    });
-
-    it('should use fallback language if translation id doesn\'t exist', function () {
-      inject(function ($translate, $rootScope) {
-        $rootScope.$apply();
-        expect($translate('TRANSLATION__ID')).toEqual('bazinga');
-        expect($translate('TRANSLATION_ID')).toEqual('foo');
-      });
-    });
-
-    it('should allow to change fallback language during config', function () {
-      inject(function ($translate) {
-        expect($translate.fallbackLanguage()).toEqual('foo');
-      });
-    });
-
-    it('shouldn\'t allow to change fallback language during runtime', function () {
-      inject(function ($translate) {
-        var prevLang = $translate.fallbackLanguage();
-        $translate.fallbackLanguage(prevLang === 'foo' ? 'bar' : 'foo');
-        expect($translate.fallbackLanguage()).toBe(prevLang);
-      });
-    });
-  });
-
-  describe('$translateService#fallbackLanguage()#array', function () {
-
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations('foo', {
-        'TRANSLATION_ID': 'foo',
-        'TRANSLATION__ID': 'booyaka'
-      });
-      $translateProvider.translations('foo_goo', {
-        'TRANSLATION__ID': 'kazinga',
-        'TRANSLATE_GOO': 'onlyGoo'
-      });
-
-      $translateProvider.translations('bar', {
-        'TRANSLATION__ID': 'bazinga'
-      });
-
-      $translateProvider.preferredLanguage('bar');
-      $translateProvider.fallbackLanguage(['foo', 'foo_goo']);
-    }));
-
-    it('should return an Array if languages are specified', function () {
-      inject(function ($translate) {
-        expect(typeof $translate.fallbackLanguage()).toBe('object');
-      });
-    });
-
-    it('should return a correct language code', function () {
-      inject(function ($translate) {
-        expect($translate.fallbackLanguage()).toEqual(['foo', 'foo_goo']);
-      });
-    });
-
-    it('should use fallback languages foo and foo_goo if translation id doesn\'t exist', function () {
-      inject(function ($translate, $rootScope) {
-        $rootScope.$apply();
-        expect($translate('TRANSLATION__ID')).toEqual('bazinga');
-        expect($translate('TRANSLATION_ID')).toEqual('foo');
-        expect($translate('TRANSLATE_GOO')).toEqual('onlyGoo');
-      });
-    });
-
-    it('should allow to change fallback language during config', function () {
-      inject(function ($translate) {
-        expect($translate.fallbackLanguage()).toEqual(['foo', 'foo_goo']);
-      });
-    });
-
-    it('shouldn\'t allow to change fallback languages during runtime', function () {
-      inject(function ($translate) {
-        var prevLang = $translate.fallbackLanguage();
-        $translate.fallbackLanguage(prevLang === ['foo', 'foo_goo'] ? ['foo'] : ['foo_goo']);
-        expect($translate.fallbackLanguage()).toBe(prevLang);
-      });
-    });
-  });
-
-
-  describe('where data is a nested object structure (namespace support)', function () {
-
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations('en_US', {
-        "DOCUMENT": {
-          "HEADER": {
-            "TITLE": "Header"
-          },
-          "SUBHEADER": {
-            "TITLE": "2. Header"
-          }
-        }
-      });
-    }));
-
-    it('implicit invoking loader should be successful', inject(function ($translate, $timeout, $rootScope) {
-      $translate.uses('en_US');
-      $rootScope.$apply();
+    it('should support namespaces in translation ids', function () {
       expect($translate('DOCUMENT.HEADER.TITLE')).toEqual('Header');
       expect($translate('DOCUMENT.SUBHEADER.TITLE')).toEqual('2. Header');
-    }));
-
+    });
   });
 
-  describe('if language is specified', function () {
+  describe('$translate#uses()', function () {
+
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations('de_DE', {});
-      $translateProvider.translations('en_EN', {});
-      $translateProvider.preferredLanguage('en_EN');
-      $translateProvider.fallbackLanguage('en_EN');
+      $translateProvider
+        .translations('de_DE', translationMock)
+        .translations('de_DE', { 'YET_ANOTHER': 'Hallo da!' })
+        .translations('en_EN', { 'YET_ANOTHER': 'Hello there!' })
+        .preferredLanguage('de_DE');
+    }));
+
+    var $translate, $rootScope, $STORAGE_KEY;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_, _$STORAGE_KEY_) {
+      $translate = _$translate_;
+      $rootScope = _$rootScope_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+    }));
+
+    it('should be a function', function () {
+      expect(typeof $translate.uses).toBe('function');
+    });
+
+    it('should return a string', function () {
+      expect(typeof $translate.uses()).toBe('string');
+    });
+
+    it('should return language key', function () {
+      expect($translate.uses()).toEqual('de_DE');
+    });
+
+    it('should change language at runtime', function () {
+      expect($translate('YET_ANOTHER')).toEqual('Hallo da!');
+      $translate.uses('en_EN');
+      $rootScope.$apply();
+      expect($translate('YET_ANOTHER')).toEqual('Hello there!');
+    });
+  });
+
+  describe('$translate#storageKey()', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.storageKey('foo');
+    }));
+
+    var $translate, $STORAGE_KEY;
+
+    beforeEach(inject(function (_$translate_, _$STORAGE_KEY_) {
+      $translate = _$translate_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+    }));
+
+    it('should allow to change the storage key during config', function () {
+      expect($translate.storageKey()).toNotEqual($STORAGE_KEY);
+    });
+
+    it('shouldn\'t allow to change the storage key during runtime', function () {
+      var prevKey = $translate.storageKey();
+      $translate.storageKey(prevKey + "somestring");
+      expect($translate.storageKey()).toEqual(prevKey);
+    });
+  });
+
+  describe('$translateService#preferredLanguage()', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.preferredLanguage('de_DE');
     }));
 
     var $translate;
+
     beforeEach(inject(function (_$translate_) {
       $translate = _$translate_;
     }));
 
-    it('uses method should use the preferredLanguage if no storage is used', function () {
-      inject(function ($translate, $rootScope) {
-        $rootScope.$apply();
-        expect($translate.uses()).toEqual($translate.preferredLanguage());
-      });
+    it('should return a string if language is specified', function () {
+      expect(typeof $translate.preferredLanguage()).toBe('string');
+    });
+
+    it('should return a correct language code', function () {
+      expect($translate.preferredLanguage()).toEqual('de_DE');
     });
   });
 
-  describe('using async loaders', function () {
+  describe('$translate#fallbackLanguage()', function () {
 
-    describe('loader returning single promise', function () {
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        $translateProvider.useLoader('customLoader', {});
-
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
-          return function (options) {
-            var deferred = $q.defer();
-
-            $timeout(function () {
-              deferred.resolve({
-                FOO: 'bar'
-              });
-            }, 1000);
-
-            return deferred.promise;
-          };
-        }]);
-      }));
-
-      it('should use custom loader', function () {
-        inject(function ($translate, $timeout) {
-          $translate.uses('en');
-          $timeout.flush();
-          expect($translate('FOO')).toEqual('bar');
-        });
-      });
-    });
-
-    describe('load()', function () {
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        $translateProvider.useLoader('customLoader', {});
-
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
-          return function (options) {
-            var deferred = $q.defer();
-
-            $timeout(function () {
-              deferred.resolve({
-                FOO: 'foo',
-                BAR: 'bar'
-               });
-             }, Infinity);
-
-            return deferred.promise;
-          };
-        }]);
-      }));
-
-      it('should use custom loader to load and use preferredLanguage', function () {
-         inject(function ($translate, $timeout, $rootScope) {
-          expect($translate('BAR')).toEqual('BAR');
-           $translate.uses('tt');
-           $timeout.flush();
-           expect($translate('BAR')).toEqual('bar');
-         });
-       });
-     });
-
-    describe('preferredLanguage()', function () {
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        $translateProvider.useLoader('customLoader', {});
-
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
-          return function (options) {
-            var deferred = $q.defer();
-
-            $timeout(function () {
-              deferred.resolve({
-                FOO: 'foo',
-                BAR: 'bar'
-              });
-            }, Infinity);
-
-            return deferred.promise;
-          };
-        }]);
-
-        $translateProvider.preferredLanguage('ne');
-      }));
-
-      it('should use custom loader to load and use preferredLanguage', function () {
-        inject(function ($translate, $timeout) {
-          $timeout.flush();
-          expect($translate('BAR')).toEqual('bar');
-        });
-      });
-    });
-
-    describe('fallbackLanguage()', function () {
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        $translateProvider.useLoader('customLoader', {});
-
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
-          return function (options) {
-            var deferred = $q.defer();
-
-            $timeout(function () {
-              deferred.resolve({
-                FOO: 'foo',
-                BAR: 'bar'
-              });
-            }, Infinity);
-
-            return deferred.promise;
-          };
-        }]);
-
-        $translateProvider.translations('en', {});
-        $translateProvider.uses('en');
-        $translateProvider.fallbackLanguage('ne');
-      }));
-
-      it('should use custom loader to load fallbackLanguage', function () {
-        inject(function ($translate, $timeout) {
-          $timeout.flush();
-          expect($translate('BAR')).toEqual('bar');
-        });
-      });
-    });
-
-    describe('fallbackLanguage()#array', function () {
-      var flushLoader;
-
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        $translateProvider.useLoader('customLoader', {});
-
-        $provide.factory('customLoader', ['$q', function ($q) {
-          var flushers = [];
-
-          flushLoader = function() {
-            for (var i = 0, len = flushers.length; i < len; i++) {
-              flushers[i]();
-            }
-          };
-
-          return function (options) {
-            var deferred = $q.defer();
-
-            if (options.key === 'de') {
-              flushers.push(function() {
-                deferred.resolve({
-                  FOO: 'foo'
-                });
-              });
-            } else if (options.key === 'fr') {
-              flushers.push(function() {
-                deferred.resolve({
-                  BAR: 'bar'
-                });
-              });
-            }
-
-            return deferred.promise;
-          };
-        }]);
-
-        $translateProvider.translations('en', {});
-        $translateProvider.uses('en');
-        $translateProvider.fallbackLanguage(['de', 'fr']);
-      }));
-
-      it('should use custom loader to load all needed fallbackLanguages', function () {
-        inject(function ($translate, $rootScope) {
-          flushLoader();
-          $rootScope.$digest();
-          expect($translate('FOO')).toEqual('foo');
-          expect($translate('BAR')).toEqual('bar');
-        });
-      });
-    });
-
-    describe('loader returning multiple promises', function () {
-
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        $translateProvider.useLoader('customLoader');
-
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
-          return function (options) {
-            var firstDeferred = $q.defer(),
-                secondDeferred = $q.defer();
-
-            $timeout(function () {
-              firstDeferred.resolve({
-                FOO: 'bar'
-              });
-            });
-
-            $timeout(function () {
-              secondDeferred.resolve({
-                BAR: 'foo'
-              });
-            });
-
-            return $q.all([firstDeferred.promise, secondDeferred.promise]);
-          };
-        }]);
-
-        $translateProvider.preferredLanguage('en');
-      }));
-
-      it('should be able to handle multiple promises', function () {
-        inject(function ($translate, $timeout) {
-          $timeout.flush();
-          expect($translate('FOO')).toEqual('bar');
-          expect($translate('BAR')).toEqual('foo');
-        });
-      });
-    });
-
-  });
-
-  describe('missing translation handling', function () {
-
-    var hasBeenCalled = false;
-
-    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-      // consider we have a custom loader, which needs a bit 'til it returns translation
-      // data
-      $provide.factory('customLoader', function ($timeout, $q) {
-        return function (options) {
-          var deferred = $q.defer(),
-              translations = {
-                'FOO': 'BAR'
-              };
-
-          $timeout(function () {
-            deferred.resolve(translations);
-          }, 2000);
-
-          return deferred.promise;
-        };
-      });
-
-      // we also have a custom missing translation handler which gets called, when
-      // trying to translate translation ids that aren't existing.
-      $provide.factory('customMissingTranslationHandler', function () {
-        return function (translationId) {
-          hasBeenCalled = true;
-        };
-      });
-
-      // finally, we make use of both
-      $translateProvider.useLoader('customLoader', {});
-      $translateProvider.useMissingTranslationHandler('customMissingTranslationHandler');
-      $translateProvider.preferredLanguage('en_US');
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('de_DE', translationMock)
+        .translations('en_EN', { 'TRANSLATION__ID': 'bazinga' })
+        .preferredLanguage('de_DE')
+        .fallbackLanguage('en_EN');
     }));
 
-    it('shouldn\'t call when there is a pending loader', function () {
-      inject(function ($translate, $timeout) {
-        expect($translate('FOO')).toEqual('FOO');
-        // missingTranslationHandler should not has been called, because i18n data
-        // is loaded asynchronously it should wait, once its loaded.
-        expect(hasBeenCalled).toBe(false);
-        $timeout.flush();
-        expect($translate('FOO')).toEqual('BAR');
-        expect($translate('MISSING_ONE')).toEqual('MISSING_ONE');
-        expect(hasBeenCalled).toBe(true);
-      });
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should return a string if language is specified', function () {
+      expect(typeof $translate.fallbackLanguage()).toBe('string');
+    });
+
+    it('should return a correct language code', function () {
+      expect($translate.fallbackLanguage()).toEqual('en_EN');
+    });
+
+    it('should use fallback language if translation id doesn\'t exist', function () {
+      expect($translate('TRANSLATION__ID')).toEqual('bazinga');
     });
   });
 
-  describe('translationNotFoundIndicator', function () {
+  describe('$translateProvider#translationNotFoundIndicator', function () {
 
     describe('setting both indicators implicitly', function () {
+
       beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider.translationNotFoundIndicator('✘');
       }));
@@ -827,183 +300,42 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('#useMessageFormatInterpolation()', function () {
+  describe('$translateProvider#useLoader', function () {
+
+    beforeEach(module('pascalprecht.translate', function($translateProvider, $provide) {
+      $translateProvider.useLoader('customLoader');
+      $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+
+          $timeout(function () {
+            deferred.resolve({
+              FOO: 'bar'
+            });
+          }, 1000);
+
+          return deferred.promise;
+        };
+      }]);
+    }));
+
+    it('should use custom loader', function () {
+      inject(function ($translate, $timeout) {
+        $translate.uses('en');
+        $timeout.flush();
+        expect($translate('FOO')).toEqual('bar');
+      });
+    });
+  });
+
+  describe('$translateProvider#useMessageFormatInterpolation()', function () {
 
     var $translate;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
 
-      $translateProvider.translations('en', {
-        'REPLACE_VARS': 'Foo bar {value}',
-        'SELECT_FORMAT': '{GENDER, select, male{He} female{She} other{They}} liked this.',
-        'PLURAL_FORMAT': 'There {NUM_RESULTS, plural, one{is one result} other{are # results}}.',
-        'PLURAL_FORMAT_OFFSET': 'You {NUM_ADDS, plural, offset:1' +
-                                  '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
-                                  'zero{added this to your profile}' +   //   the offset value
-                                  'one{and one other person added this to their profile}' +
-                                  'other{and # others added this to their profiles}' +
-                                '}.'
-      });
-
-      $translateProvider.useMessageFormatInterpolation();
-      $translateProvider.preferredLanguage('en');
-    }));
-
-    beforeEach(inject(function (_$translate_, $rootScope) {
-      $translate = _$translate_;
-      $rootScope.$apply();
-    }));
-
-    it('should replace interpolateParams with concrete values', function () {
-      expect($translate('REPLACE_VARS', { value: 5 })).toEqual('Foo bar 5');
-    });
-
-    it('should support SelectFormat', function () {
-      expect($translate('SELECT_FORMAT', { GENDER: 'male'}))
-        .toEqual('He liked this.');
-      expect($translate('SELECT_FORMAT', { GENDER: 'female'}))
-        .toEqual('She liked this.');
-      expect($translate('SELECT_FORMAT'))
-        .toEqual('They liked this.');
-    });
-
-    it('should support PluralFormat', function () {
-
-      expect($translate('PLURAL_FORMAT', {
-        'NUM_RESULTS': 0
-      })).toEqual('There are 0 results.');
-
-      expect($translate('PLURAL_FORMAT', {
-        'NUM_RESULTS': 1
-      })).toEqual('There is one result.');
-
-      expect($translate('PLURAL_FORMAT', {
-        'NUM_RESULTS': 100
-      })).toEqual('There are 100 results.');
-    });
-
-    it('should support PluralFormat - offset extension', function () {
-      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 })).toEqual('You didnt add this to your profile.');
-      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 2 })).toEqual('You and one other person added this to their profile.');
-      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 3 })).toEqual('You and 2 others added this to their profiles.');
-    });
-
-  });
-
-  describe('interpolations', function () {
-
-    /*ddescribe('incorrect interpolation service given', function () {
-
-      var $translate;
-
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-        $provide.factory('incorrectInterpolationService', function () {
-          return {};
-        });
-
-        $translateProvider.translations('en', {
-          FOO: 'FOO'
-        });
-        $translateProvider.useInterpolation('incorrectInterpolationService');
-        $translateProvider.preferredLanguage('en');
-      }));
-
-      beforeEach(inject(function (_$translate_) {
-        $translate = _$translate_;
-      }));
-
-      it('should throw an error when interpolation service interface isn\'t implemented', function () {
-        expect(function () {
-          $translate('FOO');
-        }).toThrow("Couldn\'t interpolate! Interpolation service doesn\'t implement the correct interface!");
-      });
-    });*/
-
-    describe('addInterpolation', function () {
-
-      var $translate;
-
-      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
-        // building custom interpolation service
-        $provide.factory('customInterpolation', function () {
-
-          var translateInterpolator = {},
-              $locale;
-
-          // provide a method to set locale
-          translateInterpolator.setLocale = function (locale) {
-            $locale = locale;
-          };
-
-          // provide a method to return an interpolation identifier
-          translateInterpolator.getInterpolationIdentifier = function () {
-            return 'custom';
-          };
-
-          // defining the actual interpolate function
-          translateInterpolator.interpolate = function (string, interpolateParams) {
-            if ($locale === 'de') {
-              return 'foo';
-            } else {
-              return 'custom interpolation';
-            }
-          };
-
-          return translateInterpolator;
-        });
-
-        // tell angular-translate to optionally use customInterpolation
-        $translateProvider.addInterpolation('customInterpolation');
-
-        // register translations
-        $translateProvider.translations('en', {
-          'FOO': 'Some text'
-        });
-
-        $translateProvider.translations('de', {
-          'FOO': 'Irgendwas',
-          'BAR': 'yupp'
-        });
-        // set default language
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.fallbackLanguage('de');
-      }));
-
-      beforeEach(inject(function (_$translate_, _$rootScope_) {
-        $translate = _$translate_;
-        $rootScope = _$rootScope_;
-        $rootScope.$apply();
-      }));
-
-      it('should translate', function () {
-        expect($translate('FOO')).toEqual('Some text');
-      });
-
-      it('should use custom interpolation', function () {
-        expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
-      });
-
-      it('should inform custom interpolation when language has been changed', function () {
-        expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
-        $translate.uses('de');
-        $rootScope.$apply();
-        expect($translate('FOO', {}, 'custom')).toEqual('foo');
-      });
-
-      it('should use fallback language, if configured', function () {
-        expect($translate('BAR', {}, 'custom')).toEqual('foo');
-        expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
-      });
-    });
-
-    describe('addInterpolation messageformat', function () {
-
-      var $translate;
-
-      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-
-        $translateProvider.translations('en', {
+      $translateProvider
+        .translations('en', {
           'REPLACE_VARS': 'Foo bar {value}',
           'SELECT_FORMAT': '{GENDER, select, male{He} female{She} other{They}} liked this.',
           'PLURAL_FORMAT': 'There {NUM_RESULTS, plural, one{is one result} other{are # results}}.',
@@ -1013,53 +345,111 @@ describe('pascalprecht.translate', function () {
                                     'one{and one other person added this to their profile}' +
                                     'other{and # others added this to their profiles}' +
                                   '}.'
-        });
+        })
+        .useMessageFormatInterpolation()
+        .preferredLanguage('en');
+    }));
 
-        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
-        $translateProvider.preferredLanguage('en');
-      }));
+    beforeEach(inject(function (_$translate_, $rootScope) {
+      $translate = _$translate_;
+    }));
 
-      beforeEach(inject(function (_$translate_, $rootScope) {
-        $translate = _$translate_;
-        $rootScope.$apply();
-      }));
+    it('should replace interpolateParams with concrete values', function () {
+      expect($translate('REPLACE_VARS', { value: 5 })).toEqual('Foo bar 5');
+    });
 
-      it('should replace interpolateParams with concrete values', function () {
-        expect($translate('REPLACE_VARS', { value: 5 }, 'messageformat')).toEqual('Foo bar 5');
-      });
+    it('should support SelectFormat', function () {
+      expect($translate('SELECT_FORMAT', { GENDER: 'male'})).toEqual('He liked this.');
+      expect($translate('SELECT_FORMAT', { GENDER: 'female'})).toEqual('She liked this.');
+      expect($translate('SELECT_FORMAT')).toEqual('They liked this.');
+    });
 
-      it('should support SelectFormat', function () {
-        expect($translate('SELECT_FORMAT', { GENDER: 'male'}, 'messageformat'))
-          .toEqual('He liked this.');
-        expect($translate('SELECT_FORMAT', { GENDER: 'female'}, 'messageformat'))
-          .toEqual('She liked this.');
-        expect($translate('SELECT_FORMAT', {}, 'messageformat'))
-          .toEqual('They liked this.');
-      });
+    it('should support PluralFormat', function () {
+      expect($translate('PLURAL_FORMAT', { 'NUM_RESULTS': 0 })).toEqual('There are 0 results.');
+      expect($translate('PLURAL_FORMAT', { 'NUM_RESULTS': 1 })).toEqual('There is one result.');
+      expect($translate('PLURAL_FORMAT', { 'NUM_RESULTS': 100 })).toEqual('There are 100 results.');
+    });
 
-      it('should support PluralFormat', function () {
-        expect($translate('PLURAL_FORMAT', {
-          'NUM_RESULTS': 0
-        }, 'messageformat')).toEqual('There are 0 results.');
-
-        expect($translate('PLURAL_FORMAT', {
-          'NUM_RESULTS': 1
-        }, 'messageformat')).toEqual('There is one result.');
-
-        expect($translate('PLURAL_FORMAT', {
-          'NUM_RESULTS': 100
-        }, 'messageformat')).toEqual('There are 100 results.');
-      });
-
-      it('should support PluralFormat - offset extension', function () {
-        expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 }, 'messageformat')).toEqual('You didnt add this to your profile.');
-        expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 2 }, 'messageformat')).toEqual('You and one other person added this to their profile.');
-        expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 3 }, 'messageformat')).toEqual('You and 2 others added this to their profiles.');
-      });
+    it('should support PluralFormat - offset extension', function () {
+      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 })).toEqual('You didnt add this to your profile.');
+      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 2 })).toEqual('You and one other person added this to their profile.');
+      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 3 })).toEqual('You and 2 others added this to their profiles.');
     });
   });
 
-  describe('proposedLanguage()', function () {
+  describe('$translateProvider#addInterpolation', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $provide.factory('customInterpolation', function () {
+
+        var translateInterpolator = {},
+            $locale;
+
+        // provide a method to set locale
+        translateInterpolator.setLocale = function (locale) {
+          $locale = locale;
+        };
+
+        // provide a method to return an interpolation identifier
+        translateInterpolator.getInterpolationIdentifier = function () {
+          return 'custom';
+        };
+
+        // defining the actual interpolate function
+        translateInterpolator.interpolate = function (string, interpolateParams) {
+          if ($locale === 'de') {
+            return 'foo';
+          } else {
+            return 'custom interpolation';
+          }
+        };
+
+        return translateInterpolator;
+      });
+
+      // tell angular-translate to optionally use customInterpolation
+      $translateProvider
+        .addInterpolation('customInterpolation')
+        .translations('en', { 'FOO': 'Some text' })
+        .translations('de', {
+          'FOO': 'Irgendwas',
+          'BAR': 'yupp'
+        })
+        .preferredLanguage('en')
+        .fallbackLanguage('de');
+    }));
+
+    var $translate, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_) {
+      $translate = _$translate_;
+      $rootScope = _$rootScope_;
+      $rootScope.$apply();
+    }));
+
+    it('should translate', function () {
+      expect($translate('FOO')).toEqual('Some text');
+    });
+
+    it('should use custom interpolation', function () {
+      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+    });
+
+    it('should inform custom interpolation when language has been changed', function () {
+      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+      $translate.uses('de');
+      $rootScope.$apply();
+      expect($translate('FOO', {}, 'custom')).toEqual('foo');
+    });
+
+    it('should use fallback language, if configured', function () {
+      expect($translate('BAR', {}, 'custom')).toEqual('foo');
+      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+    });
+  });
+
+  describe('$translate#proposedLanguage', function () {
 
     var $translate;
 
@@ -1077,8 +467,9 @@ describe('pascalprecht.translate', function () {
         };
       });
 
-      $translateProvider.useLoader('customLoader');
-      $translateProvider.preferredLanguage('en');
+      $translateProvider
+        .useLoader('customLoader')
+        .preferredLanguage('en');
     }));
 
     beforeEach(inject(function (_$translate_) {
@@ -1109,17 +500,14 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('$missingTranslationHandlerFactory', function () {
+  describe('$translateProvider#useMissingTranslationHandler', function () {
 
     var missingTranslations = {};
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-      $translateProvider.translations({
-        'EXISTING_TRANSLATION_ID': 'foo',
-        'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-        'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-        'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}'
-      });
+      $translateProvider
+        .translations(translationMock)
+        .useMissingTranslationHandler('customHandler');
 
       $provide.factory('customHandler', function () {
         return function (translationId, language) {
@@ -1127,7 +515,6 @@ describe('pascalprecht.translate', function () {
         };
       });
 
-      $translateProvider.useMissingTranslationHandler('customHandler');
     }));
 
     var $translate;
@@ -1136,111 +523,47 @@ describe('pascalprecht.translate', function () {
       $translate = _$translate_;
     }));
 
-
     it('should not invoke missingTranslationHandler if translation id exists', function () {
-      inject(function ($translate) {
-        $translate('TRANSLATION_ID');
-        expect(missingTranslations).toEqual({});
-      });
+      $translate('TRANSLATION_ID');
+      expect(missingTranslations).toEqual({});
     });
 
     it('should invoke missingTranslationHandler if set and translation id doesn\'t exist', function () {
-      inject(function ($translate) {
-        $translate('NOT_EXISTING_TRANSLATION_ID');
-        expect(missingTranslations).toEqual({
-          'NOT_EXISTING_TRANSLATION_ID': {
-            lang: undefined
-          }
-        });
+      $translate('NOT_EXISTING_TRANSLATION_ID');
+      expect(missingTranslations).toEqual({
+        'NOT_EXISTING_TRANSLATION_ID': {
+          lang: undefined
+        }
       });
     });
   });
 
-  describe('provider', function () {
+  describe('$translate#refresh', function () {
 
-    var $translateProvider,
-        $translate;
+    beforeEach(module('pascalprecht.translate'));
 
-    beforeEach(module('pascalprecht.translate', function (_$translateProvider_) {
-      $translateProvider = _$translateProvider_;
-    }));
+    var $translate;
 
     beforeEach(inject(function (_$translate_) {
       $translate = _$translate_;
     }));
 
-
-    it('should not has an refresh() method', function () {
-      expect($translateProvider.refresh).not.toBeDefined();
+    it('should be a function', function () {
+      expect(typeof $translate.refresh).toBe('function');
     });
 
+    it('should throw an error', function () {
+      expect(function () {
+        $translate.refresh();
+      }).toThrow('Couldn\'t refresh translation table, no loader registered!');
+    });
   });
+});
 
   describe('service', function () {
 
     var $translateProvider,
         $translationTable;
-
-    beforeEach(module('pascalprecht.translate', function (_$translateProvider_) {
-      $translateProvider = _$translateProvider_;
-      $translationTable = $translateProvider.translations();
-    }));
-
-
-    it('should has an refresh() method', function () {
-      inject(function ($translate) {
-        expect($translate.refresh).toBeDefined();
-        expect(typeof $translate.refresh).toBe('function');
-      });
-    });
-
-
-    describe('refresh() method', function () {
-
-      describe('without loader', function () {
-
-        beforeEach(module('pascalprecht.translate', function () {
-          $translateProvider.translations('en', {});
-          $translateProvider.translations('ru', {});
-          $translateProvider.uses('en');
-        }));
-
-
-        it('should throw an error', function () {
-          inject(function ($translate) {
-            expect(function () {
-              $translate.refresh();
-            }).toThrow('Couldn\'t refresh translation table, no loader registered!');
-          });
-        });
-
-
-        // Events
-        describe('', function () {
-
-          it('should not broadcast $translateRefreshStart event', function () {
-            inject(function ($translate, $rootScope) {
-              spyOn($rootScope, '$emit');
-              try { $translate.refresh(); } catch (e) {}
-              expect($rootScope.$emit).not.toHaveBeenCalledWith('$translateRefreshStart');
-            });
-          });
-
-          it('should not broadcast $translateRefreshEnd event', function () {
-            inject(function ($translate, $rootScope) {
-              spyOn($rootScope, '$emit');
-              try {
-                $translate.refresh();
-              } catch (e) {
-              }
-              expect($rootScope.$emit).not.toHaveBeenCalledWith('$translateRefreshEnd');
-            });
-          });
-
-        });
-
-      });
-
 
       describe('with loader', function () {
 
@@ -1248,7 +571,7 @@ describe('pascalprecht.translate', function () {
             ruCalled,
             shouldResolve;
 
-        beforeEach(module('pascalprecht.translate', function ($provide) {
+        beforeEach(module('pascalprecht.translate', function ($provide, $translateProvider) {
           enCalled = 0;
           ruCalled = 0;
           shouldResolve = true;
@@ -1655,7 +978,6 @@ describe('pascalprecht.translate', function () {
       });
 
     });
-  });
 
   describe('determineLanguage()', function () {
 
@@ -1725,4 +1047,3 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
-});
