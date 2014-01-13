@@ -2,13 +2,14 @@ describe('pascalprecht.translate', function () {
 
   describe('$translateStaticFilesLoader', function () {
 
-    var $translate, $httpBackend;
+    var $translate, $httpBackend, $translateStaticFilesLoader;
 
     beforeEach(module('pascalprecht.translate'));
 
-    beforeEach(inject(function (_$translate_, _$httpBackend_) {
+    beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_) {
       $httpBackend = _$httpBackend_;
       $translate = _$translate_;
+      $translateStaticFilesLoader = _$translateStaticFilesLoader_;
 
       $httpBackend.when('GET', 'lang_de_DE.json').respond({HEADER: 'Ueberschrift'});
       $httpBackend.when('GET', 'lang_en_US.json').respond({HEADER:'Header'});
@@ -21,52 +22,42 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should be defined', function () {
-      inject(function ($translateStaticFilesLoader) {
-        expect($translateStaticFilesLoader).toBeDefined();
-      });
+      expect($translateStaticFilesLoader).toBeDefined();
     });
 
     it('should be a function', function () {
-      inject(function ($translateStaticFilesLoader) {
-        expect(typeof $translateStaticFilesLoader).toBe('function');
-      });
+      expect(typeof $translateStaticFilesLoader).toBe('function');
     });
 
     it('should throw an error when called without prefix or suffix', function () {
-      inject(function ($translateStaticFilesLoader) {
-        expect(function () {
-          $translateStaticFilesLoader();
-        }).toThrow('Couldn\'t load static files, no prefix or suffix specified!');
-      });
+      expect(function () {
+        $translateStaticFilesLoader();
+      }).toThrow('Couldn\'t load static files, no prefix or suffix specified!');
     });
 
     it('should fetch static files when invoking', function () {
-      inject(function ($translateStaticFilesLoader) {
-        $httpBackend.expectGET('lang_de_DE.json');
-        $translateStaticFilesLoader({
-          key: 'de_DE',
-          prefix: 'lang_',
-          suffix: '.json'
-        });
-        $httpBackend.flush();
+      $httpBackend.expectGET('lang_de_DE.json');
+      $translateStaticFilesLoader({
+        key: 'de_DE',
+        prefix: 'lang_',
+        suffix: '.json'
       });
+      $httpBackend.flush();
     });
 
     it('should return a promise', function () {
-      inject(function ($translateStaticFilesLoader) {
-        var promise = $translateStaticFilesLoader({
-          key: 'de_DE',
-          prefix: 'lang_',
-          suffix: '.json'
-        });
-        expect(promise.then).toBeDefined();
-        expect(typeof promise.then).toBe('function');
-        $httpBackend.flush();
+      var promise = $translateStaticFilesLoader({
+        key: 'de_DE',
+        prefix: 'lang_',
+        suffix: '.json'
       });
+      expect(promise.then).toBeDefined();
+      expect(typeof promise.then).toBe('function');
+      $httpBackend.flush();
     });
   });
 
-  describe('useStaticFilesLoader()', function () {
+  describe('$translateProvider#useStaticFilesLoader', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.useStaticFilesLoader({

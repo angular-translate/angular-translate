@@ -2,13 +2,14 @@ describe('pascalprecht.translate', function () {
 
   describe('$translateUrlLoader', function () {
 
-    var $translate, $httpBackend;
+    var $translate, $httpBackend, $translateUrlLoader;
 
     beforeEach(module('pascalprecht.translate'));
 
-    beforeEach(inject(function (_$translate_, _$httpBackend_) {
+    beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateUrlLoader_) {
       $translate = _$translate_;
       $httpBackend = _$httpBackend_;
+      $translateUrlLoader = _$translateUrlLoader_;
 
       $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({
         it: 'works'
@@ -21,50 +22,40 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should be defined', function () {
-      inject(function ($translateUrlLoader) {
-        expect($translateUrlLoader).toBeDefined();
-      });
+      expect($translateUrlLoader).toBeDefined();
     });
 
     it('should be a function', function () {
-      inject(function ($translateUrlLoader) {
-        expect(typeof $translateUrlLoader).toBe('function');
-      });
+      expect(typeof $translateUrlLoader).toBe('function');
     });
 
     it('should throw an error when called without url option', function () {
-      inject(function ($translateUrlLoader) {
-        expect(function () {
-          $translateUrlLoader();
-        }).toThrow('Couldn\'t use urlLoader since no url is given!');
-      });
+      expect(function () {
+        $translateUrlLoader();
+      }).toThrow('Couldn\'t use urlLoader since no url is given!');
     });
 
     it('should fetch url when invoking', function () {
-      inject(function ($translateUrlLoader) {
-        $httpBackend.expectGET('foo/bar.json?lang=de_DE');
-        $translateUrlLoader({
-          key: 'de_DE',
-          url: 'foo/bar.json'
-        });
-        $httpBackend.flush();
+      $httpBackend.expectGET('foo/bar.json?lang=de_DE');
+      $translateUrlLoader({
+        key: 'de_DE',
+        url: 'foo/bar.json'
       });
+      $httpBackend.flush();
     });
 
     it('should return a promise', function () {
-      inject(function ($translateUrlLoader) {
-        var promise = $translateUrlLoader({
-          key: 'de_DE',
-          url: 'foo/bar.json'
-        });
-        expect(promise.then).toBeDefined();
-        expect(typeof promise.then).toBe('function');
-        $httpBackend.flush();
+      var promise = $translateUrlLoader({
+        key: 'de_DE',
+        url: 'foo/bar.json'
       });
+      expect(promise.then).toBeDefined();
+      expect(typeof promise.then).toBe('function');
+      $httpBackend.flush();
     });
   });
 
-  describe('useUrlLoader()', function () {
+  describe('$translateProvider#useUrlLoader', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.useUrlLoader('foo/bar.json');
     }));
