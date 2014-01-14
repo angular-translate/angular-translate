@@ -7,7 +7,7 @@
  * and similar to configure translation behavior directly inside of a module.
  *
  */
-angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY', function ($STORAGE_KEY) {
+angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY', function $translateProvider($STORAGE_KEY) {
 
   var $translationTable = {},
       $preferredLanguage,
