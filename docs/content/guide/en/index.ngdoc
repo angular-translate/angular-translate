@@ -51,7 +51,7 @@ Teach you app translations:
 app.config(['$translateProvider', function ($translateProvider) {
   $translateProvider.translations('en', {
     'TITLE': 'Hello',
-    'FOO': 'This is a paragraph',
+    'FOO': 'This is a paragraph'
   });
 
   $translateProvider.translations('de', {
