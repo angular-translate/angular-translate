@@ -29,7 +29,7 @@ the functionality of MessageFormat, since it solves all the problems including
 [simple variable replacement](https://github.com/SlexAxton/messageformat.js#simple-variable-replacement),
 [SelectFormat](https://github.com/SlexAxton/messageformat.js#selectformat),
 and [PluralFormat](https://github.com/SlexAxton/messageformat.js#pluralformat).
-So, how can we use MessageFormat with angular-translate to take advatage of its full
+So, how can we use MessageFormat with angular-translate to take advantage of its full
 functionality within our apps?
 
 Of course, there is a corresponding extension for it. Simply install the MessageFormat
