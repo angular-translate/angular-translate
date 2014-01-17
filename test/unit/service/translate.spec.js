@@ -406,7 +406,7 @@ describe('pascalprecht.translate', function () {
         expect($translate.fallbackLanguage().length).toBeDefined();
       });
 
-      iit('should use fallback languages in given order', function () {
+      it('should use fallback languages in given order', function () {
         var deferred = $q.defer(),
             promise = deferred.promise,
             value;
@@ -462,15 +462,16 @@ describe('pascalprecht.translate', function () {
         }]);
       }));
 
-      var $translate, $timeout, $q;
+      var $rootScope, $translate, $timeout, $q;
 
-      beforeEach(inject(function (_$translate_, _$timeout_, _$q_) {
+      beforeEach(inject(function (_$rootScope_, _$translate_, _$timeout_, _$q_) {
+        $rootScope = _$rootScope_;
         $translate = _$translate_;
         $timeout = _$timeout_;
         $q = _$q_;
       }));
 
-      it('should use fallback language', inject(function ($rootScope) {
+      it('should use fallback language', function () {
         var resolvedValue;
 
         $translate('BOOYA').then(function (translation) {
@@ -480,7 +481,26 @@ describe('pascalprecht.translate', function () {
         $rootScope.$apply();
 
         expect(resolvedValue).toEqual('KA');
-      }));
+      });
+
+      iit('should load a fallback language asynchrously only once', function () {
+        spyOn($translate, '_loadLanguage').andCallThrough();
+        var values;
+
+        $q.all([
+            $translate('BOOYA'),
+            $translate('BOOYA')
+        ]).then(function (translations) {
+            values = translations;
+        });
+
+        $rootScope.$apply();
+
+        expect(values[0]).toBe('KA');
+        expect(values[1]).toBe('KA');
+        // TODO: Adjust to 2 when _loadLanguage is also used to load the preferred language.
+        expect($translate._loadLanguage.calls.length).toBe(1);
+      });
     });
   });
 
