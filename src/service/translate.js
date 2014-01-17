@@ -802,53 +802,70 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         });
       }
 
-      var fallbackTranslation = function (translationId, interpolateParams, Interpolator) {
+      var loadLanguage = function (langKey) {
+        return loadAsync(langKey).then(function (data) {
+          translations(data.key, data.table);
+          return data.table;
+        });
+      };
 
-        var deferred = $q.defer(),
-            i = 0,
-            len = $fallbackLanguage.length,
-            translationFound = false;
+      var getTranslationTable = function (langKey) {
+        if ($translationTable.hasOwnProperty(langKey)) {
+          var deferred = $q.defer();
+          deferred.resolve($translationTable[langKey]);
+          return deferred.promise;
+        } else {
+          return loadLanguage(langKey);
+        }
+      };
 
-        for (; i < len; i++) {
-          var langKey = $fallbackLanguage[i];
+      var getTranslation = function (langKey, translationId, interpolateParams, Interpolator) {
+        var deferred = $q.defer();
 
-          if ($translationTable.hasOwnProperty(langKey)) {
-
-            var translation = $translationTable[langKey][translationId];
-
-            // check if a translation for the fallback language exists
-            if (translation) {
-              translationFound = true;
-              // temporarly letting Interpolator know we're using fallback language now.
-              Interpolator.setLocale($fallbackLanguage[i]);
-              translation = Interpolator.interpolate(translation, interpolateParams);
-              // after we've interpolated the translation, we reset Interpolator to proper locale.
-              Interpolator.setLocale($uses);
-              deferred.resolve(translation);
-            }
+        getTranslationTable(langKey).then(function (translationTable) {
+          if (translationTable.hasOwnProperty(translationId)) {
+            Interpolator.setLocale(langKey);
+            deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
+            Interpolator.setLocale($uses);
           } else {
-            if ($loaderFactory) {
-              loadAsync(langKey).then(function (data) {
-                translations(langKey, data.table);
-                if ($translationTable[langKey][translationId]) {
-                  translationFound = true;
-                  // temporarly letting Interpolator know we're using fallback language now.
-                  Interpolator.setLocale($fallbackLanguage[i]);
-                  translation = Interpolator.interpolate(translation, interpolateParams);
-                  // after we've interpolated the translation, we reset Interpolator to proper locale.
-                  Interpolator.setLocale($uses);
-                }
-              }, function () {
-                console.log('loading failed'); 
-              });
-            }
+            deferred.reject();
           }
+        }, function () {
+          deferred.reject();
+        });
+
+        return deferred.promise;
+      };
+
+      var resolveForFallbackLanguage = function (fallbackLanguageIndex, translationId, interpolateParams,
+                                                 Interpolator
+      ) {
+        var deferred = $q.defer();
+
+        if (fallbackLanguageIndex >= 0 && fallbackLanguageIndex < $fallbackLanguage.length) {
+          var langKey = $fallbackLanguage[fallbackLanguageIndex];
+
+          getTranslation(langKey, translationId, interpolateParams, Interpolator).then(
+            function (translation) {
+              deferred.resolve(translation);
+            },
+            function () {
+              // Look in the next fallback language for a translation
+              deferred.resolve(
+                resolveForFallbackLanguage(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator)
+              );
+            }
+          );
+        } else {
+          // No translation found in any fallback language
+          deferred.resolve(translationId);
         }
 
-        if (!translationFound) {
-          deferred.reject(translationId);
-        }
         return deferred.promise;
+      };
+
+      var fallbackTranslation = function (translationId, interpolateParams, Interpolator) {
+        return resolveForFallbackLanguage(0, translationId, interpolateParams, Interpolator);
       };
 
       var determineTranslation = function (translationId, interpolateParams, interpolationId) {

@@ -440,23 +440,23 @@ describe('pascalprecht.translate', function () {
           .preferredLanguage('en_EN')
           .fallbackLanguage(['de_DE']);
 
-        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+        $provide.factory('customLoader', ['$q', function ($q) {
           return function (options) {
             var deferred = $q.defer();
 
-            $timeout(function () {
-              switch (options.key) {
-                case 'en_EN':
-                  deferred.resolve({
-                    'FOO': 'BAR'
-                  });
-                case 'de_DE':
-                  deferred.resolve({
-                    'BOOYA': 'KA'
-                  });
-                  break;
-              }
-            }, 1000);
+            switch (options.key) {
+              case 'en_EN':
+                deferred.resolve({
+                  'FOO': 'BAR'
+                });
+                break;
+              case 'de_DE':
+                deferred.resolve({
+                  'BOOYA': 'KA'
+                });
+                break;
+            }
+
             return deferred.promise;
           };
         }]);
@@ -470,24 +470,17 @@ describe('pascalprecht.translate', function () {
         $q = _$q_;
       }));
 
-      it('should use fallback language', function () {
-        var deferred = $q.defer(),
-            promise = deferred.promise,
-            value;
-
-        promise.then(function (translations) {
-          value = translations;
-        });
+      it('should use fallback language', inject(function ($rootScope) {
+        var resolvedValue;
 
         $translate('BOOYA').then(function (translation) {
-          deferred.resolve(translation);
-        }, function (translationId) {
-          deferred.resolve('something wrong');
+          resolvedValue = translation;
         });
 
-        $timeout.flush();
-        expect(value).toEqual('KA');
-      });
+        $rootScope.$apply();
+
+        expect(resolvedValue).toEqual('KA');
+      }));
     });
   });
 
