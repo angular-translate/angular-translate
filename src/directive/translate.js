@@ -94,6 +94,8 @@ angular.module('pascalprecht.translate')
 
       return function linkFn(scope, iElement, iAttr) {
 
+        var deferred = $q.defer();
+
         scope.interpolateParams = {};
 
         // Ensures any change of the attribute "translate" containing the id will
@@ -135,8 +137,14 @@ angular.module('pascalprecht.translate')
             return function () {
               var unwatch = scope.$watch('translationId', function (value) {
                 if (value) {
-                  iElement.html(translate(value,  {}, translateInterpolation));
-                  unwatch();
+                  translate(value,  {}, translateInterpolation)
+                    .then(function (translation) {
+                      iElement.html(translation);
+                      unwatch();
+                    }, function (translationId) {
+                      iElement.html(translationId);
+                      unwatch();
+                    });
                 }
               }, true);
             };
@@ -144,7 +152,12 @@ angular.module('pascalprecht.translate')
             return function () {
               scope.$watch('interpolateParams', function (value) {
                 if (value) {
-                  iElement.html(translate(scope.translationId,  value, translateInterpolation));
+                  translate(scope.translationId,  value, translateInterpolation)
+                    .then(function (translation) {
+                      iElement.html(translation);
+                    }, function (translationId) {
+                      iElement.html(translationId);
+                    });
                 }
               }, true);
             };
