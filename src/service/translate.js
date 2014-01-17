@@ -647,6 +647,48 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           interpolatorHashMap = {},
           loaderFetchTable;
 
+      var $translate = function (translationId, interpolateParams, interpolationId) {
+
+        var deferred = $q.defer();
+        // trim off any whitespace
+        translationId = translationId.trim();
+
+        if (!loaderFetchTable) {
+          determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
+            deferred.resolve(translation);
+          }, function (translationId) {
+            deferred.reject(translationId);
+          });
+        } else {
+          loaderFetchTable.then(function () {
+            determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
+              deferred.resolve(translation);
+            }, function (translationId) {
+              deferred.reject(translationId);
+            });
+          });
+        }
+        return deferred.promise;
+      };
+
+      /**
+       * @name loadLanguage
+       * @private
+       *
+       * @description
+       * Loads a language asynchronously.
+       *
+       * @param langKey
+       * @returns {Q.promise} Promise, that resolves to the language table
+       * or is rejected if an error occurred.
+       */
+      $translate._loadLanguage = function (langKey) {
+        return loadAsync(langKey).then(function (data) {
+          translations(data.key, data.table);
+          return data.table;
+        });
+      };
+
       /**
        * @name indexOf
        * @private
@@ -803,24 +845,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
 
       /**
-       * @name loadLanguage
-       * @private
-       *
-       * @description
-       * Loads a language asynchronously.
-       *
-       * @param langKey
-       * @returns {Q.promise} Promise, that resolves to the language table
-       * or is rejected if an error occurred.
-       */
-      var loadLanguage = function (langKey) {
-        return loadAsync(langKey).then(function (data) {
-          translations(data.key, data.table);
-          return data.table;
-        });
-      };
-
-      /**
        * @name getTranslationTable
        * @private
        *
@@ -837,7 +861,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           deferred.resolve($translationTable[langKey]);
           return deferred.promise;
         } else {
-          return loadLanguage(langKey);
+          return $translate._loadLanguage(langKey);
         }
       };
 
@@ -974,30 +998,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           } else {
             deferred.reject(applyNotFoundIndicators(translationId));
           }
-        }
-        return deferred.promise;
-      };
-
-      var $translate = function (translationId, interpolateParams, interpolationId) {
-
-        var deferred = $q.defer();
-        // trim off any whitespace
-        translationId = translationId.trim();
-
-        if (!loaderFetchTable) {
-          determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
-            deferred.resolve(translation);
-          }, function (translationId) {
-            deferred.reject(translationId);
-          });
-        } else {
-          loaderFetchTable.then(function () {
-            determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
-              deferred.resolve(translation);
-            }, function (translationId) {
-              deferred.reject(translationId);
-            });
-          });
         }
         return deferred.promise;
       };
