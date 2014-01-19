@@ -233,12 +233,12 @@ angular.module('contact')
 </pre>
 
 You can also use the `$translatePartialLoaderStructureChanged` event to automate
-the process, by listening to that event with `$rootProvider` and refreshing
+the process, by listening to that event with `$rootScope` and refreshing
 translation tables everytime it gets fired.
 
 <pre>
-app.run(function ($rootProvider, $translate) {
-  $rootProvider.$on('$translatePartialLoaderStructureChanged', function () {
+app.run(function ($rootScope, $translate) {
+  $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
     $translate.refresh();
   });
 });
