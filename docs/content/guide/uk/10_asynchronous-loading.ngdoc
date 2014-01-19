@@ -212,12 +212,12 @@ angular.module('contact')
 </pre>
 
 Для автоматизації процесу ви можете використати подію `$translatePartialLoaderStructureChanged`.
-Просто прослуховуйте його з допомогою `$rootProvider` і оновлюєте таблиці перекладів кожного разу,
+Просто прослуховуйте його з допомогою `$rootScope` і оновлюєте таблиці перекладів кожного разу,
 коли воно викликається.
 
 <pre>
-app.run(function ($rootProvider, $translate) {
-  $rootProvider.$on('$translatePartialLoaderStructureChanged', function () {
+app.run(function ($rootScope, $translate) {
+  $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
     $translate.refresh();
   });
 });

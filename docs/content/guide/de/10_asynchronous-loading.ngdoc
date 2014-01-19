@@ -225,8 +225,8 @@ Man kann außerdem den `$translatePartialLoaderStructuredChanged`- Event in
 Kombination mit `$rootScope` verwenden um den Prozess zu automatisieren.
 
 <pre>
-app.run(function ($rootProvider, $translate) {
-  $rootProvider.$on('$translatePartialLoaderStructureChanged', function () {
+app.run(function ($rootScope, $translate) {
+  $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
     $translate.refresh();
   });
 });
