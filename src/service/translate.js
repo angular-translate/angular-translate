@@ -720,7 +720,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var $translate = function (translationId, interpolateParams, interpolationId) {
         
         // trim off any whitespace
-        translationId = translationId.trim();
+        if (translationId) {
+          translationId = translationId.trim();
+        }
 
         // determine translation table and current Interpolator
         var table = $uses ? $translationTable[$uses] : $translationTable,
