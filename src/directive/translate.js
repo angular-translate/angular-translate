@@ -134,7 +134,7 @@ angular.module('pascalprecht.translate')
           if (!translateValuesExist && !translateValueExist) {
             return function () {
               var unwatch = scope.$watch('translationId', function (value) {
-                if (value) {
+                if (scope.translationId && value) {
                   iElement.html(translate(value,  {}, translateInterpolation));
                   unwatch();
                 }
@@ -143,7 +143,7 @@ angular.module('pascalprecht.translate')
           } else {
             return function () {
               scope.$watch('interpolateParams', function (value) {
-                if (value) {
+                if (scope.translationId && value) {
                   iElement.html(translate(scope.translationId,  value, translateInterpolation));
                 }
               }, true);
