@@ -796,10 +796,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
           if (angular.isArray(data)) {
             angular.forEach(data, function (table) {
-              angular.extend(translationTable, table);
+              angular.extend(translationTable, flatObject(table));
             });
           } else {
-            angular.extend(translationTable, data);
+            angular.extend(translationTable, flatObject(data));
           }
           pendingLoader = false;
           deferred.resolve({

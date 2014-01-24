@@ -63,6 +63,6 @@ angular.module('pascalprecht.translate')
       deferred.reject(translationId);
     });
 
-    return deferred.promise
+    return deferred.promise;
   };
 }]);
