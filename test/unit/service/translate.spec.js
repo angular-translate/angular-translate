@@ -483,7 +483,7 @@ describe('pascalprecht.translate', function () {
         expect(resolvedValue).toEqual('KA');
       });
 
-      iit('should load a fallback language asynchrously only once', function () {
+      it('should load a fallback language asynchrously only once', function () {
         spyOn($translate, '_loadLanguage').andCallThrough();
         var values;
 
@@ -627,9 +627,8 @@ describe('pascalprecht.translate', function () {
 
         promise.then(function (translation) {
           value = translation;
-        }, function () {
-          value= 'bar';
         });
+
         $translate.uses('en');
         $translate('FOO').then(function (translation) {
           deferred.resolve(translation);
@@ -642,7 +641,6 @@ describe('pascalprecht.translate', function () {
 
   describe('$translateProvider#useMessageFormatInterpolation()', function () {
 
-    var $translate;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
 
@@ -662,11 +660,22 @@ describe('pascalprecht.translate', function () {
         .preferredLanguage('en');
     }));
 
-    beforeEach(inject(function (_$translate_, $rootScope) {
+    var $translate, $q, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_, _$q_) {
       $translate = _$translate_;
+      $rootScope = _$rootScope_;
+      $q = _$q_;
     }));
 
     it('should replace interpolateParams with concrete values', function () {
+        var deferred = $q.defer(),
+            promise = deferred.promise,
+            value;
+
+        promise.then(function (translation) {
+          value = translation;
+        });
       expect($translate('REPLACE_VARS', { value: 5 })).toEqual('Foo bar 5');
     });
 
@@ -732,20 +741,45 @@ describe('pascalprecht.translate', function () {
         .fallbackLanguage('de');
     }));
 
-    var $translate, $rootScope;
+    var $translate, $rootScope, $q;
 
-    beforeEach(inject(function (_$translate_, _$rootScope_) {
+    beforeEach(inject(function (_$translate_, _$rootScope_, _$q_) {
       $translate = _$translate_;
       $rootScope = _$rootScope_;
+      $q = _$q_;
       $rootScope.$apply();
     }));
 
     it('should translate', function () {
-      expect($translate('FOO')).toEqual('Some text');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+      $translate('FOO').then(function (translation) {
+        deferred.resolve(translation);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('Some text');
     });
 
     it('should use custom interpolation', function () {
-      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+      $translate('FOO', {}, 'custom').then(function (translation) {
+        deferred.resolve(translation);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('custom interpolation');
     });
 
     it('should inform custom interpolation when language has been changed', function () {
@@ -974,8 +1008,19 @@ describe('pascalprecht.translate', function () {
       }));
 
       it('should determine browser language', function () {
-        inject(function ($translate) {
-          expect($translate('FOO')).toEqual('bar');
+        inject(function ($translate, $q, $rootScope) {
+          var deferred = $q.defer(),
+              promise = deferred.promise,
+              value;
+
+          promise.then(function (foo) {
+            value = foo;
+          });
+          $translate('FOO').then(function (translation) {
+            deferred.resolve(translation);
+          });
+          $rootScope.$digest();
+          expect(value).toEqual('bar');
         });
       });
     });
@@ -1006,8 +1051,19 @@ describe('pascalprecht.translate', function () {
       }));
 
       it('should determine browser language', function () {
-        inject(function ($translate) {
-          expect($translate('FOO')).toEqual('bar');
+        inject(function ($translate, $q, $rootScope) {
+          var deferred = $q.defer(),
+              promise = deferred.promise,
+              value;
+
+          promise.then(function (foo) {
+            value = foo;
+          });
+          $translate('FOO').then(function (translation) {
+            deferred.resolve(translation);
+          });
+          $rootScope.$digest();
+          expect(value).toEqual('bar');
         });
       });
     });

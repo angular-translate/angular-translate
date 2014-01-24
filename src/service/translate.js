@@ -645,22 +645,25 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation'),
           pendingLoader = false,
           interpolatorHashMap = {},
-          loaderFetchTable;
+          langPromises = {};
 
       var $translate = function (translationId, interpolateParams, interpolationId) {
-
         var deferred = $q.defer();
         // trim off any whitespace
         translationId = translationId.trim();
 
-        if (!loaderFetchTable) {
+        var promiseToWaitFor = $preferredLanguage ?
+          langPromises[$preferredLanguage] :
+          langPromises[$uses];
+
+        if (!promiseToWaitFor) {
           determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
             deferred.resolve(translation);
           }, function (translationId) {
             deferred.reject(translationId);
           });
         } else {
-          loaderFetchTable.then(function () {
+          promiseToWaitFor.then(function () {
             determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
               deferred.resolve(translation);
             }, function (translationId) {
@@ -669,24 +672,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           });
         }
         return deferred.promise;
-      };
-
-      /**
-       * @name loadLanguage
-       * @private
-       *
-       * @description
-       * Loads a language asynchronously.
-       *
-       * @param langKey
-       * @returns {Q.promise} Promise, that resolves to the language table
-       * or is rejected if an error occurred.
-       */
-      $translate._loadLanguage = function (langKey) {
-        return loadAsync(langKey).then(function (data) {
-          translations(data.key, data.table);
-          return data.table;
-        });
       };
 
       /**
@@ -708,11 +693,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }
         }
         return -1;
-      };
-
-      // get an index in the $fallbackLanguage array from which we can to apply fallbacks
-      var getStartFallbackIndex = function(usesLang) {
-        return indexOf($fallbackLanguage, usesLang) + 1;
       };
 
       /**
@@ -861,7 +841,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           deferred.resolve($translationTable[langKey]);
           return deferred.promise;
         } else {
-          return $translate._loadLanguage(langKey);
+          return langPromises[langKey].then(function (data) {
+            translations(data.key, data.table);
+            return data.table;
+          });
         }
       };
 
@@ -911,9 +894,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @param Interpolator
        * @returns {Q.promise} Promise that will resolve to the translation.
        */
-      var resolveForFallbackLanguage = function (fallbackLanguageIndex, translationId, interpolateParams,
-                                                 Interpolator
-      ) {
+      var resolveForFallbackLanguage = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator) {
         var deferred = $q.defer();
 
         if (fallbackLanguageIndex < $fallbackLanguage.length) {
@@ -987,7 +968,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // since we couldn't translate the inital requested translation id,
           // we try it now with one or more fallback languages, if fallback language(s) is
           // configured.
-          if ($uses && $fallbackLanguage.length) {
+          if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
             fallbackTranslation(translationId, interpolateParams, Interpolator)
               .then(function (translation) {
                 deferred.resolve(translation);
@@ -1097,19 +1078,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         // we load it asynchronously
         if (!$translationTable[key] && $loaderFactory) {
           $nextLang = key;
-          loaderFetchTable = loadAsync(key).then(
-            function (translation) {
-              $nextLang = undefined;
-              translations(translation.key, translation.table);
-              deferred.resolve(key);
-              useLanguage(translation.key);
-            }, function (key) {
-              $nextLang = undefined;
-              $rootScope.$emit('$translateChangeError');
-              deferred.reject(key);
-              $rootScope.$emit('$translateChangeEnd');
-            }
-          );
+          langPromises[key] = loadAsync(key).then(function (translation) {
+            $nextLang = undefined;
+            translations(translation.key, translation.table);
+            deferred.resolve(key);
+            useLanguage(translation.key);
+          }, function (key) {
+            $nextLang = undefined;
+            $rootScope.$emit('$translateChangeError');
+            deferred.reject(key);
+            $rootScope.$emit('$translateChangeEnd');
+          });
         } else {
           deferred.resolve(key);
           useLanguage(key);
@@ -1251,50 +1230,26 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return deferred.promise;
       };
 
-      // If at least one async loader is defined and there are no (default) translations available
-      // we should try to load them.
       if ($loaderFactory) {
+
+        // If at least one async loader is defined and there are no 
+        // (default) translations available we should try to load them.
         if (angular.equals($translationTable, {})) {
           $translate.uses($translate.uses());
         }
 
-        /*if ($fallbackLanguage && $fallbackLanguage.length) {
-          var loaders = [],
-              failedKeys = [];
+        // Also, if there are any fallback language registered, we start
+        // loading them asynchronously as soon as we can.
+        if ($fallbackLanguage && $fallbackLanguage.length) {
 
           var fallbackLoadSuccess = function(fallbackTranslation) {
             translations(fallbackTranslation.key, fallbackTranslation.table);
           };
 
-          var fallbackLoadFail = function(failKkey) {
-            failedKeys.push(failKkey);
-          };
-
-          var fallbacksCleanup = function() {
-            if (failedKeys.length) {
-              // Remove all fallback languages which were not loaded.
-              // Also we need to keep the order of elements in $fallbackLanguage
-              var newFallbacks = [];
-              for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-                if (indexOf(failedKeys, $fallbackLanguage[i]) === -1) {
-                  newFallbacks.push($fallbackLanguage[i]);
-                }
-              }
-              $fallbackLanguage = newFallbacks;
-            }
-          };
-
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            if (!$translationTable[$fallbackLanguage[i]]) {
-              loaders.push(
-                loadAsync($fallbackLanguage[i])
-                  .then(fallbackLoadSuccess, fallbackLoadFail)
-              );
-            }
+            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(fallbackLoadSuccess);
           }
-
-          $q.all(loaders).then(fallbacksCleanup, fallbacksCleanup);
-        }*/
+        }
       }
 
       return $translate;
