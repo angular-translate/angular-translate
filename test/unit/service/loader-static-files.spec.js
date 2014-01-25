@@ -1,3 +1,6 @@
+/*global describe, afterEach, beforeEach, inject, it, expect, ddescribe, iit, spyOn */
+/*jshint strict: false, camelcase: false, unused: false, quotmark: false */
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateStaticFilesLoader', function () {

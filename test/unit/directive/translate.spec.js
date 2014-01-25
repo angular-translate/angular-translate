@@ -1,3 +1,6 @@
+/*global describe, afterEach, beforeEach, inject, it, expect, ddescribe, iit, spyOn */
+/*jshint strict: false, camelcase: false, unused: false, quotmark: false */
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateDirective (single-lang)', function () {
@@ -219,7 +222,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-interpolation attribute', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -275,6 +278,8 @@ describe('pascalprecht.translate', function () {
 
   describe('custom translate-value-* attributes', function () {
 
+    var $rootScope, $compile, element;
+
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider.translations({
         'FOO': 'hello my name is {{name}}',
@@ -322,7 +327,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate sanitization', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -349,7 +354,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate sanitization (escaping)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 

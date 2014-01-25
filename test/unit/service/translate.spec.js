@@ -1,3 +1,6 @@
+/*global describe, afterEach, beforeEach, inject, it, expect, ddescribe, iit, spyOn */
+/*jshint strict: false, camelcase: false, unused: false, quotmark: false */
+
 describe('pascalprecht.translate', function () {
 
   var translationMock = {
@@ -117,22 +120,22 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should use $interpolate service', function () {
-        expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
-        expect($translate('TRANSLATION_ID', {
-          value: 'foo'
-        })).toEqual('Lorem Ipsum foo');
-        expect($translate('TRANSLATION_ID_2', {
-          value: 'foo'
-        })).toEqual('Lorem Ipsum foo + foo');
-        expect($translate('TRANSLATION_ID_3', {
-          value: 'foo'
-        })).toEqual('Lorem Ipsum foofoo');
-        expect($translate('TRANSLATION_ID_3', {
-          value: '3'
-        })).toEqual('Lorem Ipsum 33');
-        expect($translate('TRANSLATION_ID_3', {
-          value: 3
-        })).toEqual('Lorem Ipsum 6');
+      expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
+      expect($translate('TRANSLATION_ID', {
+        value: 'foo'
+      })).toEqual('Lorem Ipsum foo');
+      expect($translate('TRANSLATION_ID_2', {
+        value: 'foo'
+      })).toEqual('Lorem Ipsum foo + foo');
+      expect($translate('TRANSLATION_ID_3', {
+        value: 'foo'
+      })).toEqual('Lorem Ipsum foofoo');
+      expect($translate('TRANSLATION_ID_3', {
+        value: '3'
+      })).toEqual('Lorem Ipsum 33');
+      expect($translate('TRANSLATION_ID_3', {
+        value: 3
+      })).toEqual('Lorem Ipsum 6');
     });
 
     it('should extend translation table rather then overwriting it', function () {
