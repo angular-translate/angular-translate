@@ -44,8 +44,6 @@ describe('pascalprecht.translate', function() {
     });
 
 
-
-
     describe('provider', function() {
 
       var $provider;

@@ -22,6 +22,7 @@ angular.module('pascalprecht.translate', ['ng'])
       }
 
     } else {
+      console.log('try to use', storage.get(key));
       $translate.uses(storage.get(key));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
