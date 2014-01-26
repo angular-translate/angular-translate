@@ -1147,92 +1147,70 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        function onLoadSuccess() {
+        function resolve() {
           deferred.resolve();
           $rootScope.$emit('$translateRefreshEnd');
         }
 
-        function onLoadFailure() {
+        function reject() {
           deferred.reject();
           $rootScope.$emit('$translateRefreshEnd');
         }
 
+        $rootScope.$emit('$translateRefreshStart');
+
         if (!langKey) {
+          // if there's no language key specified we refresh ALL THE THINGS!
+          var tables = [];
 
-          $rootScope.$emit('$translateRefreshStart');
-
-          var loaders = [];
+          // reload registered fallback languages
           if ($fallbackLanguage && $fallbackLanguage.length) {
-            var fallbackLanguagesSize = $fallbackLanguage.length;
-            for (var current = 0; current < fallbackLanguagesSize; current++) {
-              loaders.push(loadAsync($fallbackLanguage[current]));
+            for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+              tables.push(loadAsync($fallbackLanguage[i]));
             }
           }
 
+          // reload currently used language
           if ($uses) {
-            loaders.push(loadAsync($uses));
+            tables.push(loadAsync($uses));
           }
 
-          if (loaders.length > 0) {
-            $q.all(loaders).then(
-              function (newTranslations) {
-                for (var lang in $translationTable) {
-                  if ($translationTable.hasOwnProperty(lang)) {
-                    delete $translationTable[lang];
-                  }
-                }
-                for (var i = 0, len = newTranslations.length; i < len; i++) {
-                  translations(newTranslations[i].key, newTranslations[i].table);
-                }
-                if ($uses) {
-                  $translate.uses($uses);
-                }
-                onLoadSuccess();
-              },
-              function (key) {
-                if (key === $uses) {
-                  $rootScope.$emit('$translateChangeError');
-                }
-                onLoadFailure();
+          $q.all(tables).then(function (tableData) {
+            angular.forEach(tableData, function (data) {
+              if ($translationTable[data.key]) {
+                delete $translationTable[data.key];
               }
-            );
-          } else onLoadSuccess();
+              translations(data.key, data.table)
+            });
+            resolve();
+          });
 
-        } else if ($translationTable.hasOwnProperty(langKey)) {
+        } else if ($translationTable[langKey]) {
 
-          $rootScope.$emit('$translateRefreshStart');
+          langPromises[langKey] = loadAsync(langKey);
 
-          var loader = loadAsync(langKey);
           if (langKey === $uses) {
-            loader.then(
-              function (newTranslation) {
-                $translationTable[langKey] = newTranslation.table;
-                $translate.uses($uses);
-                onLoadSuccess();
-              },
-              function () {
-                $rootScope.$emit('$translateChangeError');
-                onLoadFailure();
-              }
-            );
+            langPromises.then(function (data) {
+              translations(data.key, data.table);
+              $translate.uses($uses);
+              resolve();
+            }, reject);
           } else {
-            loader.then(
-              function (newTranslation) {
-                $translationTable[langKey] = newTranslation.table;
-                onLoadSuccess();
-              },
-              onLoadFailure
-            );
+            langPromises.then(function (data) {
+              translations(data.key, data.table);
+              resolve();
+            }, reject);
           }
 
-        } else deferred.reject();
-
+        } else {
+          reject();
+        }
         return deferred.promise;
       };
 
       if ($loaderFactory) {
 
-        // If at least one async loader is defined and there are no 
+        // If at least one async loader is defined and there are no
         // (default) translations available we should try to load them.
         if (angular.equals($translationTable, {})) {
           $translate.uses($translate.uses());
