@@ -680,16 +680,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // no promise to wait for? okay. Then there's no loader registered
           // nor is a one pending for language that comes from storage.
           // We can just translate.
-          console.log('translating instantly');
           determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
             deferred.resolve(translation);
           }, function (translationId) {
             deferred.reject(translationId);
           });
         } else {
-          console.log('wait for loader');
           promiseToWaitFor.then(function () {
-            console.log('loader done');
             determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
               deferred.resolve(translation);
             }, function (translationId) {
@@ -794,7 +791,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $rootScope.$emit('$translateLoadingStart');
         pendingLoader = true;
 
-        console.log('loading async for ' +key);
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
@@ -865,14 +861,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var getTranslationTable = function (langKey) {
         var deferred = $q.defer();
         if ($translationTable.hasOwnProperty(langKey)) {
-          console.log('table loaded');
           deferred.resolve($translationTable[langKey]);
           return deferred.promise;
         } else {
-          console.log('table not loaded, waiting for promise');
           langPromises[langKey].then(function (data) {
-            console.log('promise finished. setting up translations');
-            console.log(data);
             translations(data.key, data.table);
             deferred.resolve(data.table);
           }, function () {
@@ -901,7 +893,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var deferred = $q.defer();
 
         getTranslationTable(langKey).then(function (translationTable) {
-          console.log('translation table for ' + langKey + ' is ready');
           if (translationTable.hasOwnProperty(translationId)) {
             Interpolator.setLocale(langKey);
             deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
@@ -910,7 +901,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             deferred.reject();
           }
         }, function () {
-          console.log('requesting table ' + langKey + ' failed');
           deferred.reject();
         });
 
@@ -936,8 +926,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (fallbackLanguageIndex < $fallbackLanguage.length) {
           var langKey = $fallbackLanguage[fallbackLanguageIndex];
 
-          console.log('getting translation for fallback ', langKey);
-
           getFallbackTranslation(langKey, translationId, interpolateParams, Interpolator).then(
             function (translation) {
               deferred.resolve(translation);
@@ -945,9 +933,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             function () {
               // Look in the next fallback language for a translation.
               // It delays the resolving by passing another promise to resolve.
-              var nextFallbackLanguagePromise = resolveForFallbackLanguage(
-                fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator
-              );
+              var nextFallbackLanguagePromise = resolveForFallbackLanguage(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
               deferred.resolve(nextFallbackLanguagePromise);
             }
           );
@@ -955,7 +941,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // No translation found in any fallback language
           deferred.resolve(translationId);
         }
-
         return deferred.promise;
       };
 
@@ -973,7 +958,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       };
 
       var determineTranslation = function (translationId, interpolateParams, interpolationId) {
-        console.log('determine translation');
 
         var deferred = $q.defer();
 
@@ -982,7 +966,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         // if the translation id exists, we can just interpolate it
         if (table && table.hasOwnProperty(translationId)) {
-          console.log('translation id ' + translationId + ' exist');
           var translation = table[translationId];
 
           // If using link, rerun $translate with linked translationId and return it
@@ -998,7 +981,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             deferred.resolve(Interpolator.interpolate(translation, interpolateParams));
           }
         } else {
-          console.log('translation id '+ translationId +' doesn\'t exist');
           // looks like the requested translation id doesn't exists.
           // Now, if there is a registered handler for missing translations and no
           // asyncLoader is pending, we execute the handler
@@ -1010,7 +992,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // we try it now with one or more fallback languages, if fallback language(s) is
           // configured.
           if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
-            console.log('fallback language registered, try to get it');
             fallbackTranslation(translationId, interpolateParams, Interpolator)
               .then(function (translation) {
                 deferred.resolve(translation);
@@ -1119,23 +1100,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
         if (!$translationTable[key] && $loaderFactory) {
-          console.log('doesn\'t exist, calling loader');
           $nextLang = key;
           langPromises[key] = loadAsync(key).then(function (translation) {
-            console.log('loaded', key);
             $nextLang = undefined;
             translations(translation.key, translation.table);
             deferred.resolve(translation.key);
             useLanguage(translation.key);
           }, function (key) {
-            console.log('failed loading table for '+ key);
             $nextLang = undefined;
             $rootScope.$emit('$translateChangeError');
             deferred.reject(key);
             $rootScope.$emit('$translateChangeEnd');
           });
         } else {
-          console.log('exists, translating');
           deferred.resolve(key);
           useLanguage(key);
         }
@@ -1235,18 +1212,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
           langPromises[langKey] = loadAsync(langKey);
 
-          if (langKey === $uses) {
-            langPromises.then(function (data) {
-              translations(data.key, data.table);
-              $translate.uses($uses);
-              resolve();
-            }, reject);
-          } else {
-            langPromises.then(function (data) {
-              translations(data.key, data.table);
-              resolve();
-            }, reject);
-          }
+          langPromises[langKey].then(function (data) {
+            translations(data.key, data.table);
+            if (langKey === $uses) {
+              useLanguage($uses);
+            }
+            resolve();
+          }, reject);
 
         } else {
           reject();
@@ -1266,14 +1238,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         // loading them asynchronously as soon as we can.
         if ($fallbackLanguage && $fallbackLanguage.length) {
 
-          var fallbackLoadSuccess = function(fallbackTranslation) {
-            console.log('successfully loaded ' + fallbackTranslation.key);
-            translations(fallbackTranslation.key, fallbackTranslation.table);
-          };
-
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            console.log('saving promise for ' + $fallbackLanguage[i]);
-            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(fallbackLoadSuccess);
+            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
           }
         }
       }

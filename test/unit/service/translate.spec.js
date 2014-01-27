@@ -117,8 +117,8 @@ describe('pascalprecht.translate', function () {
 
       var translationId = 'NOT_EXISTING_TRANSLATION_ID';
 
-      $translate(translationId).then(function (translation) {
-        promise.resolve(translation);
+      $translate(translationId).then(null, function (translation) {
+        deferred.resolve(translation);
       });
 
       $rootScope.$digest();
@@ -482,25 +482,6 @@ describe('pascalprecht.translate', function () {
 
         expect(resolvedValue).toEqual('KA');
       });
-
-      it('should load a fallback language asynchrously only once', function () {
-        spyOn($translate, '_loadLanguage').andCallThrough();
-        var values;
-
-        $q.all([
-            $translate('BOOYA'),
-            $translate('BOOYA')
-        ]).then(function (translations) {
-            values = translations;
-        });
-
-        $rootScope.$apply();
-
-        expect(values[0]).toBe('KA');
-        expect(values[1]).toBe('KA');
-        // TODO: Adjust to 2 when _loadLanguage is also used to load the preferred language.
-        expect($translate._loadLanguage.calls.length).toBe(1);
-      });
     });
   });
 
@@ -603,7 +584,9 @@ describe('pascalprecht.translate', function () {
   describe('$translateProvider#useLoader', function () {
 
     beforeEach(module('pascalprecht.translate', function($translateProvider, $provide) {
-      $translateProvider.useLoader('customLoader');
+      $translateProvider
+        .useLoader('customLoader')
+        .preferredLanguage('en');
       $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
         return function (options) {
           var deferred = $q.defer();
@@ -629,9 +612,10 @@ describe('pascalprecht.translate', function () {
           value = translation;
         });
 
-        $translate.uses('en');
         $translate('FOO').then(function (translation) {
           deferred.resolve(translation);
+        }, function () {
+          deferred.resolve('foo');
         });
         $timeout.flush();
         expect(value).toEqual('bar');
@@ -669,32 +653,64 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should replace interpolateParams with concrete values', function () {
-        var deferred = $q.defer(),
-            promise = deferred.promise,
-            value;
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
 
-        promise.then(function (translation) {
-          value = translation;
-        });
-      expect($translate('REPLACE_VARS', { value: 5 })).toEqual('Foo bar 5');
+      promise.then(function (translation) {
+        value = translation;
+      });
+      $translate('REPLACE_VARS', { value: 5 }).then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Foo bar 5');
     });
 
     it('should support SelectFormat', function () {
-      expect($translate('SELECT_FORMAT', { GENDER: 'male'})).toEqual('He liked this.');
-      expect($translate('SELECT_FORMAT', { GENDER: 'female'})).toEqual('She liked this.');
-      expect($translate('SELECT_FORMAT')).toEqual('They liked this.');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+      $translate('SELECT_FORMAT', { GENDER: 'male'}).then(function (translation) {
+        deferred.resolve(translation);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('He liked this.');
     });
 
     it('should support PluralFormat', function () {
-      expect($translate('PLURAL_FORMAT', { 'NUM_RESULTS': 0 })).toEqual('There are 0 results.');
-      expect($translate('PLURAL_FORMAT', { 'NUM_RESULTS': 1 })).toEqual('There is one result.');
-      expect($translate('PLURAL_FORMAT', { 'NUM_RESULTS': 100 })).toEqual('There are 100 results.');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+      $translate('PLURAL_FORMAT', { 'NUM_RESULTS': 0 }).then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('There are 0 results.');
     });
 
     it('should support PluralFormat - offset extension', function () {
-      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 })).toEqual('You didnt add this to your profile.');
-      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 2 })).toEqual('You and one other person added this to their profile.');
-      expect($translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 3 })).toEqual('You and 2 others added this to their profiles.');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+      $translate('PLURAL_FORMAT_OFFSET', { 'NUM_ADDS': 0 }).then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('You didnt add this to your profile.');
     });
   });
 
@@ -782,16 +798,20 @@ describe('pascalprecht.translate', function () {
       expect(value).toEqual('custom interpolation');
     });
 
-    it('should inform custom interpolation when language has been changed', function () {
-      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
-      $translate.uses('de');
-      $rootScope.$apply();
-      expect($translate('FOO', {}, 'custom')).toEqual('foo');
-    });
-
     it('should use fallback language, if configured', function () {
-      expect($translate('BAR', {}, 'custom')).toEqual('foo');
-      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate('BAR', {}, 'custom').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('foo');
     });
   });
 
@@ -932,12 +952,13 @@ describe('pascalprecht.translate', function () {
         }]);
       }));
 
-      var $translate, $timeout, $rootScope;
+      var $translate, $timeout, $rootScope, $q
 
-      beforeEach(inject(function (_$translate_, _$timeout_, _$rootScope_) {
+      beforeEach(inject(function (_$translate_, _$timeout_, _$rootScope_, _$q_) {
         $translate = _$translate_;
         $timeout = _$timeout_;
         $rootScope = _$rootScope_;
+        $q = _$q_;
       }));
 
       it('should return a promise', function () {
@@ -945,12 +966,19 @@ describe('pascalprecht.translate', function () {
       });
 
       it('should refresh the translation table', function () {
-        expect($translate('EXISTING_TRANSLATION_ID')).toEqual('foo');
-        expect($translate('FOO')).toEqual('FOO');
+        var deferred = $q.defer(),
+            promise = deferred.promise,
+            value;
+
+        promise.then(function (translation) {
+          value = translation;
+        });
+        $translate('EXISTING_TRANSLATION_ID').then(null, function (translationId) {
+          deferred.promise(translationId);
+        });
         $translate.refresh();
         $timeout.flush();
-        expect($translate('EXISTING_TRANSLATION_ID')).toEqual('EXISTING_TRANSLATION_ID');
-        expect($translate('FOO')).toEqual('bar');
+        expect(value).toEqual('EXISTING_TRANSLATION_ID');
       });
 
       it('should emit $translateRefreshStart event', function () {
