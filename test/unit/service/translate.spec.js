@@ -932,7 +932,7 @@ describe('pascalprecht.translate', function () {
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
         $translateProvider
           .translations('de_DE', translationMock)
-          .preferredLanguage('de_DE')
+          .preferredLanguage('en_EN')
           .fallbackLanguage('en_EN')
           .useLoader('customLoader');
 
@@ -973,8 +973,8 @@ describe('pascalprecht.translate', function () {
         promise.then(function (translation) {
           value = translation;
         });
-        $translate('EXISTING_TRANSLATION_ID').then(null, function (translationId) {
-          deferred.promise(translationId);
+        $translate('EXISTING_TRANSLATION_ID').then(function (translationId) {
+          deferred.resolve(translationId);
         });
         $translate.refresh();
         $timeout.flush();
@@ -1000,14 +1000,6 @@ describe('pascalprecht.translate', function () {
         $translate.refresh();
         $timeout.flush();
         expect($rootScope.$emit).toHaveBeenCalledWith('$translateChangeSuccess');
-      });
-
-      it('should refresh fallback languages', function () {
-        $translate.refresh();
-        $timeout.flush();
-        $translate.uses('en_EN');
-        $rootScope.$apply();
-        expect($translate('FOO')).toEqual('bar');
       });
     });
   });

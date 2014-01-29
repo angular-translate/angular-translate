@@ -1210,9 +1210,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         } else if ($translationTable[langKey]) {
 
-          langPromises[langKey] = loadAsync(langKey);
-
-          langPromises[langKey].then(function (data) {
+          loadAsync(langKey).then(function (data) {
             translations(data.key, data.table);
             if (langKey === $uses) {
               useLanguage($uses);
