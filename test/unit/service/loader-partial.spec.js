@@ -131,9 +131,220 @@ describe('pascalprecht.translate', function() {
           expect($provider.setPart('lang', 'part', {})).toEqual($provider);
         });
       });
+
+      it('should set a translation table statically', function() {
+        inject(function($translatePartialLoader, $rootScope) {
+          $provider.setPart('en', 'part', { foo : 'Foo' });
+          $provider.addPart('part');
+
+          var table;
+
+          $translatePartialLoader({
+            key : 'en',
+            urlTemplate : '/locales/{part}-{lang}.json'
+          }).then(function(data) {
+            table = data;
+          }, function() {
+            table = {};
+          });
+          $rootScope.$digest();
+          expect(table.foo).toBeDefined();
+          expect(table.foo).toEqual('Foo');
+        });
+      });
+
+      it('should override the translation table ', function() {
+        inject(function($translatePartialLoader, $rootScope) {
+          $provider.setPart('en', 'part', { foo : 'Foo' });
+          $provider.setPart('en', 'part', { foo : 'Bar' });
+          $provider.addPart('part');
+
+          var table;
+          $translatePartialLoader({
+            key : 'en',
+            urlTemplate : '/locales/{part}-{lang}.json'
+          }).then(function(data) {
+            table = data;
+          }, function() {
+            table = {};
+          });
+          $rootScope.$digest();
+          expect(table.foo).toBeDefined();
+          expect(table.foo).toEqual('Bar');
+        });
+      });
+    });
+
+    describe('$translatePartialLoader#deletePart', function () {
+
+      it('should be defined', function() {
+        inject(function($translatePartialLoader) {
+          expect($provider.deletePart).toBeDefined();
+        });
+      });
+
+      it('should be a function', function() {
+        inject(function($translatePartialLoader) {
+          expect(typeof $provider.deletePart).toBe('function');
+        });
+      });
+
+      it('should throw an error if a given arg is not a string', function() {
+        inject(function($translatePartialLoader) {
+          var message = 'Couldn\'t delete part, first arg has to be string.';
+          expect(function() { $provider.deletePart(function(){}); }).toThrow(message);
+          expect(function() { $provider.deletePart(false);}).toThrow(message);
+          expect(function() { $provider.deletePart(null); }).toThrow(message);
+          expect(function() { $provider.deletePart(NaN);  }).toThrow(message);
+          expect(function() { $provider.deletePart([]);   }).toThrow(message);
+          expect(function() { $provider.deletePart({});   }).toThrow(message);
+          expect(function() { $provider.deletePart(2);    }).toThrow(message);
+          expect(function() { $provider.deletePart();     }).toThrow(message);
+        });
+      });
+
+      it('should be chainable', function() {
+        inject(function($translatePartialLoader) {
+          expect($provider.deletePart('part')).toEqual($provider);
+        });
+      });
+
+      it('should delete a part', function() {
+        inject(function($translatePartialLoader) {
+          $provider.addPart('part');
+          $provider.deletePart('part');
+          expect($provider.isPartAvailable('part')).toEqual(false);
+        });
+      });
     });
   });
 
+  describe('$translatePartialLoader', function () {
+
+    beforeEach(module('pascalprecht.translate'));
+
+    var $translatePartialLoader, $rootScope;
+
+    beforeEach(inject(function (_$translatePartialLoader_, _$rootScope_) {
+      $translatePartialLoader = _$translatePartialLoader_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should be defined', function() {
+      expect($translatePartialLoader).toBeDefined();
+    });
+
+    it('should be a function', function() {
+      expect(typeof $translatePartialLoader).toBe('function');
+    });
+
+    describe('$translatePartialLoader#addPart', function () {
+
+      it('should be defined', function() {
+        expect($translatePartialLoader.addPart).toBeDefined();
+      });
+
+      it('should be a function', function() {
+        expect(typeof $translatePartialLoader.addPart).toBe('function');
+      });
+
+      it('should throw an error if a given arg is not a non-empty string', function() {
+        var message = 'Couldn\'t add part, first arg has to be a string';
+        expect(function() { $translatePartialLoader.addPart(function(){}); }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart(false);}).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart(null); }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart(NaN);  }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart([]);   }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart({});   }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart(2);    }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart();     }).toThrow(message);
+      });
+
+      it('should be chainable', function() {
+        expect($translatePartialLoader.addPart('part')).toEqual($translatePartialLoader);
+      });
+
+      it('should add a part', function() {
+        $translatePartialLoader.addPart('part');
+        expect($translatePartialLoader.isPartAvailable('part')).toEqual(true);
+      });
+
+      it('should broadcast a $translatePartialLoaderStructureChanged event', function() {
+        spyOn($rootScope, '$emit');
+        $translatePartialLoader.addPart('part');
+        expect($rootScope.$emit).toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
+      });
+    });
+
+    describe('$translatePartialLoader#deletePart', function () {
+
+      it('should be defined', function() {
+        expect($translatePartialLoader.deletePart).toBeDefined();
+      });
+
+      it('should be a function', function() {
+        inject(function($translatePartialLoader) {
+          expect(typeof $translatePartialLoader.deletePart).toBe('function');
+        });
+      });
+
+      it('should throw an error if a first arg is not a string', function () {
+        var message = 'Couldn\'t delete part, first arg has to be string';
+        expect(function() { $translatePartialLoader.deletePart(function(){});}).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart(false);}).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart(null); }).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart(NaN);  }).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart([]);   }).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart({});   }).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart(2);    }).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart();     }).toThrow(message);
+      });
+
+      it('should be chainable', function() {
+        expect($translatePartialLoader.deletePart('part')).toEqual($translatePartialLoader);
+      });
+
+      it('should delete a target part', function() {
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader.deletePart('part');
+        expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
+      });
+
+      it('should broadcast a $translatePartialLoaderStructureChanged event', function() {
+        $translatePartialLoader.addPart('part');
+        spyOn($rootScope, '$emit');
+        $translatePartialLoader.deletePart('part');
+        expect($rootScope.$emit).toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
+      });
+    });
+
+    describe('$translatePartialLoader#isPartAvailable', function() {
+
+      it('should be defined', function() {
+        expect($translatePartialLoader.isPartAvailable).toBeDefined();
+      });
+
+      it('should be a function', function() {
+        expect(typeof $translatePartialLoader.isPartAvailable).toBe('function');
+      });
+
+      it('should return true if a target part was added', function() {
+        $translatePartialLoader.addPart('part');
+        expect($translatePartialLoader.isPartAvailable('part')).toEqual(true);
+      });
+
+      it('should return false if a target part was not added', function() {
+        expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
+      });
+
+      it('should return false if a target part was deleted', function() {
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader.deletePart('part');
+        expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
+      });
+    });
+  });
+});
   // describe('$translatePartialLoader', function() {
 
   //   beforeEach(module('pascalprecht.translate'));
@@ -176,534 +387,6 @@ describe('pascalprecht.translate', function() {
   //     resolveHandlerCounter = 0;
   //     rejectHandlerCounter = 0;
   //   });
-
-
-  //   describe('provider', function() {
-
-
-  //     describe('setPart()', function() {
-
-
-
-
-
-
-
-  //       it('should set a translation table for the part', function() {
-  //         module(function($httpProvider) {
-  //           $httpProvider.defaults.transformRequest.push(ThrowErrorHttpInterceptor);
-  //         });
-
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           $provider.setPart('en', 'part', { foo : 'Foo' });
-  //           $provider.addPart('part');
-
-  //           var table;
-  //           expect(function() {
-  //             $translatePartialLoader({
-  //               key : 'en',
-  //               urlTemplate : '/locales/{part}-{lang}.json'
-  //             }).then(function(data) {
-  //               table = data;
-  //             }, function() {
-  //               table = {};
-  //             });
-  //           }).not.toThrow('$http service was used!');
-  //           $rootScope.$digest();
-  //           expect(table.foo).toBeDefined();
-  //           expect(table.foo).toEqual('Foo');
-  //         });
-  //       });
-
-  //       it('should override the previously setted translation table of the part', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           $provider.setPart('en', 'part', { foo : 'Foo' });
-  //           $provider.setPart('en', 'part', { foo : 'Bar' });
-  //           $provider.addPart('part');
-
-  //           var table;
-  //           $translatePartialLoader({
-  //             key : 'en',
-  //             urlTemplate : '/locales/{part}-{lang}.json'
-  //           }).then(function(data) {
-  //             table = data;
-  //           }, function() {
-  //             table = {};
-  //           });
-  //           $rootScope.$digest();
-  //           expect(table.foo).toBeDefined();
-  //           expect(table.foo).toEqual('Bar');
-  //         });
-  //       });
-
-  //     });
-
-
-  //     describe('deletePart()', function() {
-
-  //       it('should be defined', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($provider.deletePart).toBeDefined();
-  //         });
-  //       });
-
-  //       it('should be a function', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(typeof $provider.deletePart).toBe('function');
-  //         });
-  //       });
-
-  //       it('should throw an error if a given arg is not a non-empty string', function() {
-  //         inject(function($translatePartialLoader) {
-  //           var message = 'Invalid type of a first argument, a non-empty string expected.';
-  //           expect(function() { $provider.deletePart(function(){}); }).toThrow(message);
-  //           expect(function() { $provider.deletePart(false);        }).toThrow(message);
-  //           expect(function() { $provider.deletePart(null);         }).toThrow(message);
-  //           expect(function() { $provider.deletePart(NaN);          }).toThrow(message);
-  //           expect(function() { $provider.deletePart([]);           }).toThrow(message);
-  //           expect(function() { $provider.deletePart({});           }).toThrow(message);
-  //           expect(function() { $provider.deletePart(2);            }).toThrow(message);
-  //           expect(function() { $provider.deletePart();             }).toThrow(message);
-  //         });
-  //       });
-
-  //       it('should be chainable if called with args', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($provider.deletePart('part')).toEqual($provider);
-  //         });
-  //       });
-
-  //       it('should delete a target part', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $provider.addPart('part');
-  //           $provider.deletePart('part');
-  //           expect($provider.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //       it('shouldn\'t throw an error if a target part is not present', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(function() {
-  //             $provider.deletePart('part');
-  //           }).not.toThrow();
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast any event if called without args', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           spyOn($rootScope, '$emit');
-  //           try { $provider.deletePart(); } catch (e) {}
-  //           expect($rootScope.$emit).not.toHaveBeenCalled();
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast any event called with args', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           spyOn($rootScope, '$emit');
-  //           $provider.deletePart('part');
-  //           expect($rootScope.$emit).not.toHaveBeenCalled();
-  //         });
-  //       });
-
-  //       it('shouldn\'t affect on other parts', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $provider.addPart('part1').addPart('part3');
-  //           var isPart1 = $provider.isPartAvailable('part1'),
-  //               isPart2 = $provider.isPartAvailable('part2');
-
-  //           $provider.deletePart('part3');
-
-  //           expect($provider.isPartAvailable('part1')).toEqual(isPart1);
-  //           expect($provider.isPartAvailable('part2')).toEqual(isPart2);
-  //         });
-  //       });
-
-  //     });
-
-
-  //     describe('isPartAvailable()', function() {
-
-  //       it('should be defined', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($provider.isPartAvailable).toBeDefined();
-  //         });
-  //       });
-
-  //       it('should be a function', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(typeof $provider.isPartAvailable).toBe('function');
-  //         });
-  //       });
-
-  //       it('should throw an error if a given arg is not a non-empty string', function() {
-  //         inject(function($translatePartialLoader) {
-  //           var message = 'Invalid type of a first argument, a non-empty string expected.';
-  //           expect(function() { $provider.isPartAvailable(function(){}); }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable(false);        }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable(null);         }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable(NaN);          }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable([]);           }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable({});           }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable(2);            }).toThrow(message);
-  //           expect(function() { $provider.isPartAvailable();             }).toThrow(message);
-  //         });
-  //       });
-
-  //       it('should return true if a target part was added', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $provider.addPart('part');
-  //           expect($provider.isPartAvailable('part')).toEqual(true);
-  //         });
-  //       });
-
-  //       it('should return false if a target part was not added', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($provider.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //       it('should return false if a target part was deleted', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $provider.addPart('part');
-  //           $provider.deletePart('part');
-  //           expect($provider.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //     });
-
-  //   });
-
-
-
-
-  //   describe('service', function() {
-
-  //     it('should be defined', function() {
-  //       inject(function($translatePartialLoader) {
-  //         expect($translatePartialLoader).toBeDefined();
-  //       });
-  //     });
-
-  //     it('should be a function', function() {
-  //       inject(function($translatePartialLoader) {
-  //         expect(typeof $translatePartialLoader).toBe('function');
-  //       });
-  //     });
-
-
-  //     describe('addPart()', function() {
-
-  //       it('should be defined', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($translatePartialLoader.addPart).toBeDefined();
-  //         });
-  //       });
-
-  //       it('should be a function', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(typeof $translatePartialLoader.addPart).toBe('function');
-  //         });
-  //       });
-
-  //       it('should throw an error if a given arg is not a non-empty string', function() {
-  //         inject(function($translatePartialLoader) {
-  //           var message = 'Invalid type of a first argument, a non-empty string expected.';
-  //           expect(function() { $translatePartialLoader.addPart(function(){}); }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart(false);        }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart(null);         }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart(NaN);          }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart([]);           }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart({});           }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart(2);            }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.addPart();             }).toThrow(message);
-  //         });
-  //       });
-
-  //       it('should be chainable if called with args', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($translatePartialLoader.addPart('part')).toEqual($translatePartialLoader);
-  //         });
-  //       });
-
-  //       it('should add a part', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part');
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(true);
-  //         });
-  //       });
-
-  //       it('shouldn\'t throw an error if the same part is added multiple times', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(function() {
-  //             $translatePartialLoader.addPart('part');
-  //             $translatePartialLoader.addPart('part');
-  //           }).not.toThrow();
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast any event if called without args', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           spyOn($rootScope, '$emit');
-  //           try { $translatePartialLoader.addPart(); } catch (e) {}
-  //           expect($rootScope.$emit).not.toHaveBeenCalled();
-  //         });
-  //       });
-
-  //       it('should broadcast a $translatePartialLoaderStructureChanged event ' +
-  //          'if a new part is added', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           spyOn($rootScope, '$emit');
-  //           $translatePartialLoader.addPart('part');
-  //           expect($rootScope.$emit)
-  //             .toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast a $translatePartialLoaderStructureChanged event ' +
-  //          'if the same part is added again', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           $translatePartialLoader.addPart('part');
-  //           spyOn($rootScope, '$emit');
-  //           $translatePartialLoader.addPart('part');
-  //           expect($rootScope.$emit)
-  //             .not.toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
-  //         });
-  //       });
-
-  //       it('should broadcast a $translatePartialLoaderStructureChanged event ' +
-  //          'if a target part is added again after being deleted', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           $translatePartialLoader.addPart('part');
-  //           $translatePartialLoader.deletePart('part');
-  //           spyOn($rootScope, '$emit');
-  //           $translatePartialLoader.addPart('part');
-  //           expect($rootScope.$emit)
-  //             .toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
-  //         });
-  //       });
-
-  //       it('shouldn\'t really load any data from the server', function() {
-  //         module(function($httpProvider) {
-  //           $httpProvider.defaults.transformRequest.push(ThrowErrorHttpInterceptor);
-  //         });
-  //         inject(function($translatePartialLoader) {
-  //           expect(function() {
-  //             $translatePartialLoader.addPart('part');
-  //           }).not.toThrow('$http service was used!');
-  //         });
-  //       });
-
-  //       it('shouldn\'t affect on other parts', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part1');
-  //           var isPart1 = $translatePartialLoader.isPartAvailable('part1'),
-  //               isPart2 = $translatePartialLoader.isPartAvailable('part2');
-
-  //           $translatePartialLoader.addPart('part3');
-
-  //           expect($translatePartialLoader.isPartAvailable('part1')).toEqual(isPart1);
-  //           expect($translatePartialLoader.isPartAvailable('part2')).toEqual(isPart2);
-  //         });
-  //       });
-
-  //     });
-
-
-  //     describe('deletePart()', function() {
-
-  //       it('should be defined', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($translatePartialLoader.deletePart).toBeDefined();
-  //         });
-  //       });
-
-  //       it('should be a function', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(typeof $translatePartialLoader.deletePart).toBe('function');
-  //         });
-  //       });
-
-  //       it('should throw an error if a given first arg is not a non-empty string', function() {
-  //         inject(function($translatePartialLoader) {
-  //           var message = 'Invalid type of a first argument, a non-empty string expected.';
-  //           expect(function() {
-  //             $translatePartialLoader.deletePart(function(){});
-  //           }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart(false);      }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart(null);       }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart(NaN);        }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart([]);         }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart({});         }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart(2);          }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart();           }).toThrow(message);
-  //         });
-  //       });
-
-  //       it('should throw an error if a given second arg is not a boolean', function() {
-  //         inject(function($translatePartialLoader) {
-  //           var message = 'Invalid type of a second argument, a boolean expected.';
-  //           expect(function() {
-  //             $translatePartialLoader.deletePart('s', function(){});
-  //            }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart('s', 'str'); }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart('s', null);  }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart('s', NaN);   }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart('s', []);    }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart('s', {});    }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.deletePart('s', 2);     }).toThrow(message);
-  //         });
-  //       });
-
-  //       it('should be chainable if called with args', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($translatePartialLoader.deletePart('part')).toEqual($translatePartialLoader);
-  //         });
-  //       });
-
-  //       it('should delete a target part', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part');
-  //           $translatePartialLoader.deletePart('part');
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //       it('should delete a target part if a second arg is true', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part');
-  //           $translatePartialLoader.deletePart('part', true);
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //       it('should delete a target part if a second arg is false', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part');
-  //           $translatePartialLoader.deletePart('part', false);
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //       it('shouldn\'t throw an error if a target part is not present', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(function() {
-  //             $translatePartialLoader.deletePart('part');
-  //           }).not.toThrow();
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast any event if called without args', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           spyOn($rootScope, '$emit');
-  //           try { $translatePartialLoader.deletePart(); } catch (e) {}
-  //           expect($rootScope.$emit).not.toHaveBeenCalled();
-  //         });
-  //       });
-
-  //       it('should broadcast a $translatePartialLoaderStructureChanged event ' +
-  //          'if a target part is deleted', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           $translatePartialLoader.addPart('part');
-  //           spyOn($rootScope, '$emit');
-  //           $translatePartialLoader.deletePart('part');
-  //           expect($rootScope.$emit)
-  //             .toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast a $translatePartialLoaderStructureChanged event ' +
-  //          'if a target part is not present', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           spyOn($rootScope, '$emit');
-  //           $translatePartialLoader.deletePart('part');
-  //           expect($rootScope.$emit)
-  //             .not.toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
-  //         });
-  //       });
-
-  //       it('shouldn\'t broadcast a $translatePartialLoaderStructureChanged event ' +
-  //          'if a target part was deleted bedore and not added again', function() {
-  //         inject(function($translatePartialLoader, $rootScope) {
-  //           $translatePartialLoader.addPart('part');
-  //           $translatePartialLoader.deletePart('part');
-  //           spyOn($rootScope, '$emit');
-  //           $translatePartialLoader.deletePart('part');
-  //           expect($rootScope.$emit)
-  //             .not.toHaveBeenCalledWith('$translatePartialLoaderStructureChanged', 'part');
-  //         });
-  //       });
-
-  //       it('shouldn\'t affect on other parts', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part1').addPart('part3');
-  //           var isPart1 = $translatePartialLoader.isPartAvailable('part1'),
-  //               isPart2 = $translatePartialLoader.isPartAvailable('part2');
-
-  //           $translatePartialLoader.deletePart('part3');
-
-  //           expect($translatePartialLoader.isPartAvailable('part1')).toEqual(isPart1);
-  //           expect($translatePartialLoader.isPartAvailable('part2')).toEqual(isPart2);
-  //         });
-  //       });
-
-  //     });
-
-
-  //     describe('isPartAvailable()', function() {
-
-  //       it('should be defined', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($translatePartialLoader.isPartAvailable).toBeDefined();
-  //         });
-  //       });
-
-  //       it('should be a function', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect(typeof $translatePartialLoader.isPartAvailable).toBe('function');
-  //         });
-  //       });
-
-  //       it('should throw an error if a given arg is not a non-empty string', function() {
-  //         inject(function($translatePartialLoader) {
-  //           var message = 'Invalid type of a first argument, a non-empty string expected.';
-  //           expect(function() {
-  //             $translatePartialLoader.isPartAvailable(function(){});
-  //           }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable(false); }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable(null);  }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable(NaN);   }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable([]);    }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable({});    }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable(2);     }).toThrow(message);
-  //           expect(function() { $translatePartialLoader.isPartAvailable();      }).toThrow(message);
-  //         });
-  //       });
-
-  //       it('should return true if a target part was added', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part');
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(true);
-  //         });
-  //       });
-
-  //       it('should return false if a target part was not added', function() {
-  //         inject(function($translatePartialLoader) {
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //       it('should return false if a target part was deleted', function() {
-  //         inject(function($translatePartialLoader) {
-  //           $translatePartialLoader.addPart('part');
-  //           $translatePartialLoader.deletePart('part');
-  //           expect($translatePartialLoader.isPartAvailable('part')).toEqual(false);
-  //         });
-  //       });
-
-  //     });
-
-
 
 
   //     describe('instance', function() {
@@ -1429,5 +1112,3 @@ describe('pascalprecht.translate', function() {
   //   });
 
   // });
-
-});
