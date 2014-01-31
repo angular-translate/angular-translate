@@ -44,8 +44,8 @@ describe('pascalprecht.translate', function () {
       expect(typeof $translate).toBe("function");
     });
 
-    it('should have a method uses()', function () {
-      expect($translate.uses).toBeDefined();
+    it('should have a method use()', function () {
+      expect($translate.use).toBeDefined();
     });
 
     it('should have a method preferredLanguage()', function () {
@@ -243,7 +243,7 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('$translate#uses()', function () {
+  describe('$translate#use()', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -263,15 +263,15 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should be a function', function () {
-      expect(typeof $translate.uses).toBe('function');
+      expect(typeof $translate.use).toBe('function');
     });
 
     it('should return a string', function () {
-      expect(typeof $translate.uses()).toBe('string');
+      expect(typeof $translate.use()).toBe('string');
     });
 
     it('should return language key', function () {
-      expect($translate.uses()).toEqual('de_DE');
+      expect($translate.use()).toEqual('de_DE');
     });
 
     it('should change language at runtime', function () {
@@ -283,7 +283,7 @@ describe('pascalprecht.translate', function () {
         value = translation;
       });
 
-      $translate.uses('en_EN');
+      $translate.use('en_EN');
       $translate('YET_ANOTHER').then(function (translation) {
         deferred.resolve(translation);
       });

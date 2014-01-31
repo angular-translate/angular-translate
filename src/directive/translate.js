@@ -165,7 +165,7 @@ angular.module('pascalprecht.translate')
         }());
 
         // Ensures the text will be refreshed after the current language was changed
-        // w/ $translate.uses(...)
+        // w/ $translate.use(...)
         var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslationFn);
 
         updateTranslationFn();

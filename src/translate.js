@@ -16,15 +16,15 @@ angular.module('pascalprecht.translate', ['ng'])
     if (!storage.get(key)) {
 
       if (angular.isString($translate.preferredLanguage())) {
-        $translate.uses($translate.preferredLanguage());
+        $translate.use($translate.preferredLanguage());
       } else {
-        storage.set(key, $translate.uses());
+        storage.set(key, $translate.use());
       }
 
     } else {
-      $translate.uses(storage.get(key));
+      $translate.use(storage.get(key));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
-    $translate.uses($translate.preferredLanguage());
+    $translate.use($translate.preferredLanguage());
   }
 }]);

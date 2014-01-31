@@ -74,9 +74,9 @@ describe('pascalprecht.translate', function () {
       $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should fetch url when invoking #uses', function () {
+    it('should fetch url when invoking #use', function () {
       $httpBackend.expectGET('foo/bar.json?lang=de_DE');
-      $translate.uses('de_DE');
+      $translate.use('de_DE');
       $httpBackend.flush();
     });
   });
