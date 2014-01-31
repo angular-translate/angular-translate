@@ -242,8 +242,8 @@ asynchron geladen. Okay. Aber was wenn ein Benutzer die Sprache zur Laufzeit än
 und die angefragte Sprache noch bisher noch nicht geladen wurde?
 
 In [Mehrsprachigkeit](#/guide/07_multi-language) hast du gelernt, wie man die
-Sprache zur Laufzeit mit `$translate.uses()` wechselt. Für den Fall dass die Daten
-asynchron geladen werden ändert sich nichts. `$translate.uses()` überprüft ob die
+Sprache zur Laufzeit mit `$translate.use()` wechselt. Für den Fall dass die Daten
+asynchron geladen werden ändert sich nichts. `$translate.use()` überprüft ob die
 angefragte Sprache vorhanden ist und wenn nicht, wird diese erst geladen.
 
 ## FOUC - Flash of untranslated content
@@ -335,7 +335,7 @@ schon fertig! Hier ist die funktionierende App:
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
         $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
+          $translate.use(langKey);
         };
       }]);
     </script>

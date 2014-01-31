@@ -97,7 +97,7 @@ app.config(['$translateProvider', function ($translateProvider) {
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
         $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
+          $translate.use(langKey);
         };
       }]);
     </script>
