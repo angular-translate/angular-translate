@@ -18,51 +18,134 @@ describe('pascalprecht.translate', function () {
       });
     }));
 
-    var $filter;
+    var $filter, $q, $rootScope, $translate;
 
-    beforeEach(inject(function (_$filter_) {
+    beforeEach(inject(function (_$filter_, _$q_, _$rootScope_) {
       $filter = _$filter_;
+      $q = _$q_;
+      $rootScope = _$rootScope_;
+      $translate = $filter('translate');
     }));
 
     it('should be a function object', function () {
-      expect(typeof $filter('translate')).toBe("function");
+      expect(typeof $translate).toBe("function");
     });
 
-    it('should return translation id if translation doesn\'t exist', function () {
-      expect($filter('translate')('WOOP')).toEqual('WOOP');
+    it('should return a promise', function () {
+      expect($translate('foo').then).toBeDefined();
+    });
+
+    it('should reject with translation id if translation doesn\'t exist', function () {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate('WOOP').then(null, function (translationId) {
+        deferred.resolve(translationId);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('WOOP');
     });
 
     it('should return translation if translation id exist', function () {
-      expect($filter('translate')('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
-      expect($filter('translate')('BLANK_VALUE')).toEqual('');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate('TRANSLATION_ID').then(function (translation) {
+        deferred.resolve(translation);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('Lorem Ipsum ');
     });
 
     it('should replace interpolate directives with empty string if no values given', function () {
-      expect($filter('translate')('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate('TRANSLATION_ID').then(function (translation) {
+        deferred.resolve(translation);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('Lorem Ipsum ');
     });
 
     it('should replace interpolate directives with given values', function () {
-      expect($filter('translate')('TRANSLATION_ID', { value: 'foo'})).toEqual('Lorem Ipsum foo');
-      expect($filter('translate')('TRANSLATION_ID_2', { value: 'foo'})).toEqual('Lorem Ipsum foo + foo');
-      expect($filter('translate')('TRANSLATION_ID_3', { value: 'foo'})).toEqual('Lorem Ipsum foofoo');
-      expect($filter('translate')('TRANSLATION_ID_3', { value: '3'})).toEqual('Lorem Ipsum 33');
-      expect($filter('translate')('TRANSLATION_ID_3', { value: 3})).toEqual('Lorem Ipsum 6');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $q.all([
+        $translate('TRANSLATION_ID', { value: 'foo'}),
+        $translate('TRANSLATION_ID_2', { value: 'foo'}),
+        $translate('TRANSLATION_ID_3', { value: 'foo'}),
+        $translate('TRANSLATION_ID_3', { value: '3'}),
+        $translate('TRANSLATION_ID_3', { value: 3})
+      ]).then(function (translations) {
+        deferred.resolve(translations);
+      });
+
+      $rootScope.$digest();
+      expect(value[0]).toEqual('Lorem Ipsum foo');
+      expect(value[1]).toEqual('Lorem Ipsum foo + foo');
+      expect(value[2]).toEqual('Lorem Ipsum foofoo');
+      expect(value[3]).toEqual('Lorem Ipsum 33');
+      expect(value[4]).toEqual('Lorem Ipsum 6');
     });
 
     it('should replace interpolate directives with given values as string expression', function () {
-      expect($filter('translate')('TEXT')).toEqual('this is a text');
-      expect($filter('translate')('TEXT_WITH_VALUE')).toEqual('This is a text with given value: ');
-      expect($filter('translate')('TEXT_WITH_VALUE', "{'value': 'dynamic value'}")).toEqual('This is a text with given value: dynamic value');
-      expect($filter('translate')('TEXT_WITH_VALUE', "{'value': '3'}")).toEqual('This is a text with given value: 3');
-      expect($filter('translate')('HOW_ABOUT_THIS', "{'value': '4'}")).toEqual('4 + 4');
-      expect($filter('translate')('AND_THIS', "{'value': 5}")).toEqual('10');
-      expect($filter('translate')('AND_THIS', "{'value': '5'}")).toEqual('55');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $q.all([
+        $translate('TEXT'),
+        $translate('TEXT_WITH_VALUE'),
+        $translate('TEXT_WITH_VALUE', "{'value': 'dynamic value'}"),
+        $translate('TEXT_WITH_VALUE', "{'value': '3'}"),
+        $translate('HOW_ABOUT_THIS', "{'value': '4'}"),
+        $translate('AND_THIS', "{'value': 5}"),
+        $translate('AND_THIS', "{'value': '5'}")
+      ]).then(function (translations) {
+        deferred.resolve(translations);
+      });
+
+      $rootScope.$digest();
+      expect(value[0]).toEqual('this is a text');
+      expect(value[1]).toEqual('This is a text with given value: ');
+      expect(value[2]).toEqual('This is a text with given value: dynamic value');
+      expect(value[3]).toEqual('This is a text with given value: 3');
+      expect(value[4]).toEqual('4 + 4');
+      expect(value[5]).toEqual('10');
+      expect(value[6]).toEqual('55');
     });
   });
 
   describe('additional interpolation', function () {
-
-    var $filter;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -75,17 +158,14 @@ describe('pascalprecht.translate', function () {
         translateInterpolator.setLocale = function (locale) {
           $locale = locale;
         };
-
         // provide a method to return an interpolation identifier
         translateInterpolator.getInterpolationIdentifier = function () {
           return 'custom';
         };
-
         // defining the actual interpolate function
         translateInterpolator.interpolate = function (string, interpolateParams) {
           return 'custom interpolation';
         };
-
         return translateInterpolator;
       });
 
@@ -98,13 +178,29 @@ describe('pascalprecht.translate', function () {
         .preferredLanguage('en');
     }));
 
-    beforeEach(inject(function (_$filter_, $rootScope) {
+    var $translate, $filter, $rootScope, $q;
+    beforeEach(inject(function (_$filter_, _$rootScope_, _$q_) {
       $filter = _$filter_;
-      $rootScope.$apply();
+      $rootScope = _$rootScope_;
+      $q = _$q_;
+      $translate = $filter('translate');
     }));
 
     it('should consider translate-interpolation value', inject(function () {
-      expect($filter('translate')('FOO', {}, 'custom')).toEqual('custom interpolation');
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate('FOO', {}, 'custom').then(function (translation) {
+        deferred.resolve(translation);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('custom interpolation');
     }));
   });
 });
