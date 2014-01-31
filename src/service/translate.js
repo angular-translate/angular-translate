@@ -326,22 +326,31 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    */
   this.fallbackLanguage = function (langKey) {
+    fallbackStack(langKey);
+    return this;
+  };
+
+  var fallbackStack = function (langKey) {
     if (langKey) {
-      if (angular.isString(langKey)) {
-        $fallbackWasString = true;
-        $fallbackLanguage = [ langKey ];
-      } else if (angular.isArray(langKey)) {
-        $fallbackWasString = false;
-        $fallbackLanguage = langKey;
-      }
-      return this;
-    } else {
-      if ($fallbackWasString) {
-        return $fallbackLanguage[0];
-      } else {
-        return $fallbackLanguage;
-      }
-    }
+          if (angular.isString(langKey)) {
+            $fallbackWasString = true;
+            $fallbackLanguage = [ langKey ];
+          } else if (angular.isArray(langKey)) {
+            $fallbackWasString = false;
+            $fallbackLanguage = langKey;
+          }
+          if (angular.isString($preferredLanguage)) {
+            $fallbackLanguage.push($preferredLanguage);
+          }
+
+          return this;
+        } else {
+          if ($fallbackWasString) {
+            return $fallbackLanguage[0];
+          } else {
+            return $fallbackLanguage;
+          }
+        }
   };
 
   /**
@@ -629,7 +638,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           pendingLoader = false,
           interpolatorHashMap = {},
           langPromises = {},
-          fallbackIndex;
+          fallbackIndex,
+          startFallbackIteration;
 
       var $translate = function (translationId, interpolateParams, interpolationId) {
         var deferred = $q.defer();
@@ -910,7 +920,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         if (fallbackLanguageIndex < $fallbackLanguage.length) {
           var langKey = $fallbackLanguage[fallbackLanguageIndex];
-
           getFallbackTranslation(langKey, translationId, interpolateParams, Interpolator).then(
             function (translation) {
               deferred.resolve(translation);
@@ -939,7 +948,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       var fallbackTranslation = function (translationId, interpolateParams, Interpolator) {
         // Start with the fallbackLanguage with index 0
-        return resolveForFallbackLanguage(fallbackIndex, translationId, interpolateParams, Interpolator);
+        return resolveForFallbackLanguage((startFallbackIteration>0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator);
       };
 
       var determineTranslation = function (translationId, interpolateParams, interpolationId) {
@@ -1011,16 +1020,62 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @methodOf pascalprecht.translate.$translate
        *
        * @description
-       * Returns the language key for the fallback languages.
+       * Returns the language key for the fallback languages or sets a new fallback stack.
+       *
+       * @param langKey (optional) language String or Array of fallback languages to be used (to change stack at runtime)
        *
        * @return {string||array} fallback language key
        */
-      $translate.fallbackLanguage = function () {
+      $translate.fallbackLanguage = function (langKey) {
+        if (langKey !== undefined && langKey !== null) {
+          fallbackStack(langKey);
+
+          // as we might have an async loader initiated and a new translation language might have been defined
+          // we need to add the promise to the stack also. So - iterate.
+          if ($loaderFactory) {
+            if ($fallbackLanguage && $fallbackLanguage.length) {
+              for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+                if (!langPromises[$fallbackLanguage[i]]) {
+                  langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+                }
+              }
+            }
+          }
+          $translate.use($translate.use());
+        }
         if ($fallbackWasString) {
           return $fallbackLanguage[0];
         } else {
           return $fallbackLanguage;
         }
+
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#useFallbackLanguage
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Sets the first key of the fallback language stack to be used for translation.
+       * Therefore all languages in the fallback array BEFORE this key will be skipped!
+       *
+       * @param langKey (String) contains the langKey the iteration shall start with. Set to false if you want to
+       * get back to the whole stack
+       */
+      $translate.useFallbackLanguage = function (langKey) {
+        if (langKey !== undefined && langKey !== null) {
+          if (!langKey) {
+            startFallbackIteration = 0;
+          } else {
+            var langKeyPosition = indexOf($fallbackLanguage, langKey);
+            if (langKeyPosition > -1) {
+              startFallbackIteration = langKeyPosition;
+            }
+          }
+
+        }
+
       };
 
       /**
@@ -1143,7 +1198,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * // this will refresh a translation table for the en_US language
        * $translate.refresh('en_US');
        *
-       * @param {string} lankKey A language key of the table, which has to be refreshed
+       * @param {string} langKey A language key of the table, which has to be refreshed
        *
        * @return {promise} Promise, which will be resolved in case a translation tables refreshing
        * process is finished successfully, and reject if not.
