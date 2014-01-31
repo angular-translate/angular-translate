@@ -233,8 +233,8 @@ app.run(function ($rootScope, $translate) {
 не загружены?
 
 В главе [Многоязычность](#/guide/07_multi-language) вы узнали как можно менять язык во время 
-выполнения при помощи `$translate.uses()`. Знаете что? Использование асинхронных загрузчиков ничего
-не меняет. `$translate.uses()` проверяет присутствует ли таблица переводов для данного ключа языка,
+выполнения при помощи `$translate.use()`. Знаете что? Использование асинхронных загрузчиков ничего
+не меняет. `$translate.use()` проверяет присутствует ли таблица переводов для данного ключа языка,
 и если нет, будет вызван зарегистрированный загрузчик для ее получения. Отложенная загрузка в
 лучшем виде!
 
@@ -338,7 +338,7 @@ $translateProvider.useLocalStorage();
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
         $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
+          $translate.use(langKey);
         };
       }]);
     </script>

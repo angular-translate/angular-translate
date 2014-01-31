@@ -254,8 +254,8 @@ soon as possible. Okay, cool. But what if a user wants to change the language an
 the corresponding translation data isn't also loaded yet?
 
 In [Multi Language](#/guide/07_multi-language) you've learned, how to change the
-language at runtime using `$translate.uses()`. Know what? Nothing will change when
-dealing with asynchronous loaders. `$translate.uses()` checks if a translation
+language at runtime using `$translate.use()`. Know what? Nothing will change when
+dealing with asynchronous loaders. `$translate.use()` checks if a translation
 table for a given language key is present or not. And if not, it'll invoke the
 registered loader to get it down! Lazy loading at it best!
 
@@ -360,7 +360,7 @@ Take a look at the working app:
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
         $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
+          $translate.use(langKey);
         };
       }]);
     </script>

@@ -17,7 +17,7 @@ These are general events you could always expect to be fired.
 
 Gets fired anytime angular-translate starts to try to change the language. This is
 at startup, when setting the language the first time, or when changing the language
-at runtime using `$translate.uses()`. This event gets also fired when angular-translate
+at runtime using `$translate.use()`. This event gets also fired when angular-translate
 has to load translation data asynchronously first.
 
 #### `$translateChangeSuccess`
