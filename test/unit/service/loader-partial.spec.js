@@ -1024,7 +1024,7 @@ describe('pascalprecht.translate', function() {
   //           inject(function($translate, $translatePartialLoader, $httpBackend) {
   //             $translatePartialLoader.addPart('foo');
   //             expect(function() {
-  //               $translate.uses('en');
+  //               $translate.use('en');
   //               $httpBackend.flush();
   //             }).not.toThrow();
   //           });
@@ -1040,7 +1040,7 @@ describe('pascalprecht.translate', function() {
 
   //             $translatePartialLoader.addPart('foo');
   //             $translatePartialLoader.addPart('bar');
-  //             $translate.uses('en');
+  //             $translate.use('en');
   //             $httpBackend.flush();
   //           });
   //         });
@@ -1054,7 +1054,7 @@ describe('pascalprecht.translate', function() {
 
   //             $translatePartialLoader.addPart('foo');
   //             $translatePartialLoader.addPart('bar');
-  //             $translate.uses('en');
+  //             $translate.use('en');
 
   //             var deferred = $q.defer(),
   //                 promise = deferred.promise,
@@ -1081,7 +1081,7 @@ describe('pascalprecht.translate', function() {
 
   //             $translatePartialLoader.addPart('foo');
   //             $translatePartialLoader.addPart('bar');
-  //             $translate.uses('ne');
+  //             $translate.use('ne');
   //             $httpBackend.flush();
 
   //             expect(resolveHandlerCounter).toEqual(1);
@@ -1097,7 +1097,7 @@ describe('pascalprecht.translate', function() {
 
   //             $translatePartialLoader.addPart('foo');
   //             $translatePartialLoader.addPart('bar');
-  //             $translate.uses('ne');
+  //             $translate.use('ne');
   //             $httpBackend.flush();
 
   //             expect($translate('foo')).toEqual('foo');

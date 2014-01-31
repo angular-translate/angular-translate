@@ -252,7 +252,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    * @description
    * Tells the module which of the registered translation tables to use for translation
-   * at initial startup by passing a language key. Similar to `$translateProvider#uses`
+   * at initial startup by passing a language key. Similar to `$translateProvider#use`
    * only that it says which language to **prefer**.
    *
    * @param {string} langKey A language key.
@@ -336,7 +336,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    * @description
    * Tells the module which of the registered translation tables to use when missing translations
-   * at initial startup by passing a language key. Similar to `$translateProvider#uses`
+   * at initial startup by passing a language key. Similar to `$translateProvider#use`
    * only that it says which language to **fallback**.
    *
    * @param {string||array} langKey A language key.
@@ -363,7 +363,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   /**
    * @ngdoc function
-   * @name pascalprecht.translate.$translateProvider#uses
+   * @name pascalprecht.translate.$translateProvider#use
    * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
@@ -375,7 +375,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    * @param {string} langKey A language key.
    */
-  this.uses = function (langKey) {
+  this.use = function (langKey) {
     if (langKey) {
       if (!$translationTable[langKey] && (!$loaderFactory)) {
         // only throw an error, when not loading translation data asynchronously
@@ -1068,11 +1068,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       /**
        * @ngdoc function
-       * @name pascalprecht.translate.$translate#uses
+       * @name pascalprecht.translate.$translate#use
        * @methodOf pascalprecht.translate.$translate
        *
        * @description
-       * Tells angular-translate which language to uses by given language key. This method is
+       * Tells angular-translate which language to use by given language key. This method is
        * used to change language at runtime. It also takes care of storing the language
        * key in a configured store to let your app remember the choosed language.
        *
@@ -1081,14 +1081,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        *
        * Returns promise object with loaded language file data
        * @example
-       * $translate.uses("en_US").then(function(data){
+       * $translate.use("en_US").then(function(data){
        *   $scope.text = $translate("HELLO");
        * });
        *
        * @param {string} key Language key
        * @return {string} Language key
        */
-      $translate.uses = function (key) {
+      $translate.use = function (key) {
         if (!key) {
           return $uses;
         }
@@ -1229,7 +1229,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         // If at least one async loader is defined and there are no
         // (default) translations available we should try to load them.
         if (angular.equals($translationTable, {})) {
-          $translate.uses($translate.uses());
+          $translate.use($translate.use());
         }
 
         // Also, if there are any fallback language registered, we start
