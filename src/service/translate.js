@@ -1203,7 +1203,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               if ($translationTable[data.key]) {
                 delete $translationTable[data.key];
               }
-              translations(data.key, data.table)
+              translations(data.key, data.table);
             });
             resolve();
           });

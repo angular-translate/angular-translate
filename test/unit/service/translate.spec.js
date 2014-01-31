@@ -952,7 +952,7 @@ describe('pascalprecht.translate', function () {
         }]);
       }));
 
-      var $translate, $timeout, $rootScope, $q
+      var $translate, $timeout, $rootScope, $q;
 
       beforeEach(inject(function (_$translate_, _$timeout_, _$rootScope_, _$q_) {
         $translate = _$translate_;
