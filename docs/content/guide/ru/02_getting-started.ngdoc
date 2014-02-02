@@ -200,13 +200,16 @@ var translations = {
 <pre>
 app.config(['$translateProvider', function ($translateProvider) {
   // add translation table
-  $translateProvider.translations(translations);
+  $translateProvider
+    .translations('en', translations)
+    .preferredLanguage('en');
 }]);
 </pre>
 
-В целом, это все, что нужно сделать. Поскольку мы добавляем таблицу переводов на этапе настройки,
-сервис `$translate` сможет получить к ней доступ как только будет инициализирован и использован. Вот
-работающий код:
+В целом, это все, что нужно сделать. Просто укажите ключ языка и добавьте для него таблицу перевода.
+После этого скажите angular-translate какой язык является предпочтительным. Поскольку мы добавляем 
+таблицу переводов на этапе настройки, сервис `$translate` сможет получить к ней доступ как только 
+будет инициализирован и использован. Вот работающий код:
 
 <doc:example module="myApp">
   <doc:source>
@@ -223,7 +226,9 @@ app.config(['$translateProvider', function ($translateProvider) {
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
     </script>
     <div>
