@@ -229,7 +229,7 @@ angular.module('pascalprecht.translate')
    *
    * @description
    *
-   * @param {object} options
+   * @param {object} options Options object
    *
    * @throws {TypeError}
    */
