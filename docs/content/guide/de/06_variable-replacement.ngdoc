@@ -160,7 +160,9 @@ Der funktionierende Code sieht dann so aus:
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {

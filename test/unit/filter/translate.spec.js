@@ -3,19 +3,21 @@ describe('pascalprecht.translate', function () {
   describe('$translateFilter', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations({
-        'EXISTING_TRANSLATION_ID': 'foo',
-        'ANOTHER_ONE': 'bar',
-        'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-        'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-        'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
-        'YET_ANOTHER': 'Hallo da!',
-        'TEXT': 'this is a text',
-        'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-        'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-        'AND_THIS': '{{value + value}}',
-        'BLANK_VALUE': ''
-      });
+      $translateProvider
+        .translations('en', {
+          'EXISTING_TRANSLATION_ID': 'foo',
+          'ANOTHER_ONE': 'bar',
+          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER': 'Hallo da!',
+          'TEXT': 'this is a text',
+          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
+          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
+          'AND_THIS': '{{value + value}}',
+          'BLANK_VALUE': ''
+        })
+        .preferredLanguage('en');
     }));
 
     var $filter, $q, $rootScope, $translate;

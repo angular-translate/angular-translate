@@ -81,22 +81,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * @methodOf pascalprecht.translate.$translateProvider
    *
    * @description
-   * Registers a new translation table either in general or for specific language key.
-   *
-   * You can register a translation table just by passing an object hash where a key
-   * represents a translation id and a value the concrete translation. Here is an
-   * example:
-   *
-   * <pre>
-   *  // register translation table
-   *  $translateProvider.translations({
-   *    'HEADLINE_TEXT':'Hey Guys, this is a headline!',
-   *    'SOME_TEXT': 'A text anywhere in the app.'
-   *  });
-   * </pre>
-   *
-   * In the example above there are two registered translations,
-   * HEADLINE_TEXT and SOME_TEXT.
+   * Registers a new translation table for specific language key.
    *
    * To register a translation table for specific language, pass a defined language
    * key as first parameter.
@@ -135,8 +120,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     if (langKey && !translationTable) {
       if (angular.isString(langKey)) {
         return $translationTable[langKey];
-      } else {
-        angular.extend($translationTable, flatObject(langKey));
       }
     } else {
       if (!angular.isObject($translationTable[langKey])) {

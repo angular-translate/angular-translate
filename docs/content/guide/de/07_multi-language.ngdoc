@@ -71,7 +71,7 @@ $translateProvider.preferredLanguage('de');
 Allerdings hat sich herausgestellt, dass es in Kombination mit einem asynchronen
 Loader zu unschönen Seiteneffekten kommt. Aus diesem Grund wurde `preferredLanguage()`
 eingeführt. Wenn man für diesen Anwendungsfall `preferredLanguage()` anstatt
-`uses()` verwendet, kann man nichts falsch machen.
+`use()` verwendet, kann man nichts falsch machen.
 
 ## Eine andere Sprache als Fallback verwenden
 
@@ -91,7 +91,7 @@ einen Sprachschlüssel. `angular-translate` kümmert sich dann um den Rest.
 $translateProvider.fallbackLanguage('en');
 </pre>
 
-Seit Version 1.1.1 ist angular-translate auch in der Lage, mit mehreren Fallback-Sprachen 
+Seit Version 1.1.1 ist angular-translate auch in der Lage, mit mehreren Fallback-Sprachen
 umzugehen. Dafür wird einfach statt eines Strings ein Array an die Funktion übergeben.
 
 <pre>
@@ -104,7 +104,7 @@ $translateProvider.fallbackLanguage(['en','fr']);
 ## Sprache zur Laufzeit wechseln
 
 Um die Sprache zur Laufzeit zu wechseln, bietet `$translate`- Service eine Methode
-`uses()`, welche entweder den Sprachschlüssel der aktuell verwendeten Sprache
+`use()`, welche entweder den Sprachschlüssel der aktuell verwendeten Sprache
 zurück gibt, oder, wenn ein Sprachschlüssel übergeben wird, die Sprache neu setzt.
 `$translate.use()` führt außerdem asynchrone Loader aus wenn nötig. Dazu aber später
 mehr.

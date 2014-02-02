@@ -20,11 +20,12 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
-        .translations(translationMock)
-        .translations({
+        .translations('en', translationMock)
+        .translations('en', {
           'FOO': 'bar',
           'BAR': 'foo'
-        });
+        })
+        .preferredLanguage('en');
     }));
 
     var $translate, $STORAGE_KEY, $q, $rootScope;
@@ -70,9 +71,6 @@ describe('pascalprecht.translate', function () {
         expect(typeof $translate.preferredLanguage).toBe('function');
       });
 
-      it('should return undefined if no language is specified', function () {
-        expect($translate.preferredLanguage()).toBeUndefined();
-      });
     });
 
     describe('$translate#fallbackLanguage()', function () {
@@ -872,7 +870,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
       $translateProvider
-        .translations(translationMock)
+        .translations('en', translationMock)
+        .preferredLanguage('en')
         .useMissingTranslationHandler('customHandler');
 
       $provide.factory('customHandler', function () {
@@ -898,7 +897,7 @@ describe('pascalprecht.translate', function () {
       $translate('NOT_EXISTING_TRANSLATION_ID');
       expect(missingTranslations).toEqual({
         'NOT_EXISTING_TRANSLATION_ID': {
-          lang: undefined
+          lang: 'en'
         }
       });
     });

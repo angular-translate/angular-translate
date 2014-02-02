@@ -143,11 +143,15 @@ Wr fügen diese Tabelle mit `$translateProvider.translations()` hinzu:
 <pre>
 app.config(function ['$translateProvider', ($translateProvider) {
   // add translation table
-  $translateProvider.translations(translations);
+  $translateProvider
+    .translations('en', translations)
+    .preferredLanguage('en');
 }]);
 </pre>
 
-Das ist eigentlich alles was du tun musst. Da wir die Übersetzungen zur Konfigurationszeit
+Das ist eigentlich alles was du tun musst. Die translation table wird einfach unter
+einem Sprachschluessel registriert. Danach sagen wir angular-translate welche Sprache
+wie nun benutzen wollen. Da wir die Übersetzungen zur Konfigurationszeit
 hinzufügen, kann `$translate`- Service später zur Laufzeit auf sie zugreifen.
 Hier ist der funktionierende Code:
 
@@ -166,7 +170,9 @@ Hier ist der funktionierende Code:
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
     </script>
     <div>
