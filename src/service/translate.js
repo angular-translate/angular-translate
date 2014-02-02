@@ -672,6 +672,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             // we increase the fallback language index to not search in that language
             // as fallback, since it's probably the first used language
             fallbackIndex = (index > -1) ? index+=1 : 0;
+            // but we can make sure to ALWAYS fallback to preferred language at least
+            $fallbackLanguage.push($preferredLanguage);
           }
           return promise;
         }());
