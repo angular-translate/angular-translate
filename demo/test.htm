@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+  <meta charset="utf-8">
+  <title>Fallback test</title>
+</head>
+<body ng-controller="AppCtrl">
+  <button ng-click="translate()">Translate</button>
+  <button ng-click="changeFallback()">Change fallback</button>
+
+  <h3>Exists</h3>
+  Service = {{ val1 }}<br />
+  Filter = {{ 'hello' | translate }}<br />
+  Directive = <span translate>hello</span><br />
+
+  <h3>Fallback</h3>
+  Service = {{ val2 }}<br />
+  Filter = {{ 'fallback1' | translate }}<br />
+  Directive = <span translate>fallback1</span><br />
+  
+  <h3>Fallback 2</h3>
+  Service = {{ val3 }}<br />
+  Filter = {{ 'fallback2' | translate }}<br />
+  Directive = <span translate>fallback2</span><br />
+  
+  <script src="../bower_components/angular/angular.js"></script>
+  <script src="../src/translate.js"></script>
+  <script src="../src/service/storage-key.js"></script>
+  <script src="../src/service/loader-static-files.js"></script>
+  <script src="../src/service/default-interpolation.js"></script>
+  <script src="../src/service/translate.js"></script>
+  <script src="../src/filter/translate.js"></script>
+  <script src="../src/directive/translate.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
