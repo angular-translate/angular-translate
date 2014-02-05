@@ -124,6 +124,46 @@ or
      translate-values="{{translationData}}"></ANY>
 </pre>
 
+## Custom translate value attributes
+
+Since version `2.0`, `translate` directive comes with another neat feature to pass
+values into your translations. We just learned how to use the `translate-values`
+attribute, which is nice, but what if we could in some cases be a bit more
+declarative in our code. What if we only want to pass in one or two values but
+declare these explicitly in our HTML?
+
+Well, in angular-translate `>=2.0` you can do exactly that. You are able to define
+your own `translate-value-*` attributes. 
+
+So how does that work? Easy-Peasy!
+
+Let's say we have the following translation id:
+
+<pre>
+{
+  "GREETING": "Hi, my name is {{name}}"
+}
+</pre>
+
+And we wanna translate it with the awesome `translate` directive. We can do this,
+but this time, we use a custom `translate-value-*` attribute to get the value
+into our translation. So here's how it works:
+
+<pre>
+<p translate="GREETING" translate-value-name="Pascal"></p>
+</pre>
+
+All you have to do is to use the `translate-value-` prefix and add the name of the
+identifier of the interpolate directive within your translation (in this case `name`).
+
+Oh sure, you can use them with interpolated values too:
+
+<pre>
+<p translate="GREETING" translate-value-name="{{name}}"></p>
+</pre>
+
+If that isn't a cool feature, I'm sold.
+
 Awesome! We can now replace variable values within our translations! Let's update
 our example app. We extend the translation table like this:
 
@@ -180,6 +220,7 @@ Our working code now looks like this:
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
       <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-name="PascalPrecht"></p>
     </div>
   </doc:source>
 </doc:example>
