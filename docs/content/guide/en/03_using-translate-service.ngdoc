@@ -32,17 +32,27 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 </pre>
 
 Now to translate your contents with `$translate` service, all you have to do is
-to pass a translation ID which was registered with `$translateProvider` before
-and it'll return the concrete translation of that translation ID. We also inject
-`$scope` within our controller to expose to our view layer the translated values:
+to pass a translation ID which was registered with `$translateProvider` before.
+Since it could be that there's some asynchronous loading going on (we'll get into
+this later), `$translate` service behaves asynchronous too and returns a promise,
+that either gets resolved with the translatoin of the given translation ID, or
+rejected with the translation ID. So the basic usage of `$translate` service
+on a controller (or service) level, would look like this:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $scope.headline = $translate('HEADLINE');
-  $scope.paragraph = $translate('PARAGRAPH');
-  $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+  $translate('HEADLINE').then(function (headline) {
+    $scope.headline = headline;
+  });
+  $translate('PARAGRAPH').then(function (paragraph) {
+    $scope.paragraph = paragraph;
+  });
+  $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+    $scope.namespaced_paragraph = anotherOne;
+  });
 }]);
 </pre>
+
 **Note:** Namespaced translations are accessed as JSON properties, see 'NAMESPACE.PARAGRAPH'`.
 
 That's all. Now when you think about translating the contents of a `<title>` you
@@ -50,31 +60,33 @@ can do so within your controller.
 
 ## Things to keep in mind
 Please keep in mind that the usage of the `$translate` service doesn't provide a two-way
-data binding default! When using `$translate` service it works synchronously, which means
-it returns the translation for the given translation id, if it exists. If it doesn't
-exist it'll probably just return the translation id.
+data binding default! `$translate` service works asynchronously, which means
+it returns the translation for the given translation id, as soon as it could determine
+it. If it doesn't exist it'll probably just return the translation id.
 
-Now, for the case you're using an asynchronous loader, you might be a bit confused why
-the `$translate` service always returns the given translation id instead of the
-translation you're looking for. This is because the translation id doesn't exist in the
-moment `$translate` service searches for it because translation tables are loaded
-asynchronously. To get around this, you have to somehow tell `$translate` service to
-be called, once the translation table, that is requested by asynchronous loader, is
-available.
+However, this doesn't mean that it knows when a languages has been changed. And because
+of that, translations translated through a directive `$translate` call, don't get
+updated when changing the language at runtime.
 
-You can do that by simply wrapping your `$translate` call into a `$translateChangeSucces`
-callback, which gets fired every time a translation change was successful. Because an
-asynchronous loader only requests a table when a language change is about to happen.
-Once its loaded, and the translate change happened, the event gets fired. Here's how
-it could look like:
+You can fix that by simply wrapping your `$translate` call into a `$translateChangeSucces`
+callback on `$rootScope`, which gets fired every time a translation change was successful.
+Once its changed, you can simply re-execute the code, that gives you your needed translations.
+
+Here's how it could look like:
 
 <pre>
-app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $scope.$on('$translateChangeSuccess', function () {
-    $scope.headline = $translate('HEADLINE');
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
+  $rooScope.$on('$translateChangeSuccess', function () {
+    $translate('HEADLINE').then(function (translation) {
+      $scope.headline = translation;
+    });
   });
 }]);
 </pre>
+
+Why on `$rootScope` instead of just `$scope` you wonder? angular-translate only `$emit`'s on
+`$rootScope` level because of performance reasons.
+See this [StackOverflow](http://stackoverflow.com/a/19498009/288703) post for more info.
 
 Here's a working sample:
 
@@ -100,9 +112,15 @@ Here's a working sample:
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
         // expose translation via `$translate` service
-        $scope.headline = $translate('HEADLINE');
-        $scope.paragraph = $translate('PARAGRAPH');
-        $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+        $translate('HEADLINE').then(function (headline) {
+          $scope.headline = headline;
+        });
+        $translate('PARAGRAPH').then(function (paragraph) {
+          $scope.paragraph = paragraph;
+        });
+        $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+          $scope.namespaced_paragraph = anotherOne;
+        });
       }]);
     </script>
     <div ng-controller="Ctrl">
