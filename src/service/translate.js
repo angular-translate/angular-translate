@@ -1022,7 +1022,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @description
        * Returns the language key for the fallback languages or sets a new fallback stack.
        *
-       * @param langKey (optional) language String or Array of fallback languages to be used (to change stack at runtime)
+       * @param {string=} langKey language String or Array of fallback languages to be used (to change stack at runtime)
        *
        * @return {string||array} fallback language key
        */
@@ -1060,7 +1060,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * Sets the first key of the fallback language stack to be used for translation.
        * Therefore all languages in the fallback array BEFORE this key will be skipped!
        *
-       * @param langKey (String) contains the langKey the iteration shall start with. Set to false if you want to
+       * @param {string=} langKey Contains the langKey the iteration shall start with. Set to false if you want to
        * get back to the whole stack
        */
       $translate.useFallbackLanguage = function (langKey) {
