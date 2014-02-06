@@ -675,19 +675,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // no promise to wait for? okay. Then there's no loader registered
           // nor is a one pending for language that comes from storage.
           // We can just translate.
-          determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
-            deferred.resolve(translation);
-          }, function (translationId) {
-            deferred.reject(translationId);
-          });
+          determineTranslation(translationId, interpolateParams, interpolationId).then(deferred.resolve, deferred.reject);
         } else {
           promiseToWaitFor.then(function () {
-            determineTranslation(translationId, interpolateParams, interpolationId).then(function (translation) {
-              deferred.resolve(translation);
-            }, function (translationId) {
-              deferred.reject(translationId);
-            });
-          });
+            determineTranslation(translationId, interpolateParams, interpolationId).then(deferred.resolve, deferred.reject);
+          }, deferred.reject);
         }
         return deferred.promise;
       };
@@ -862,9 +854,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           langPromises[langKey].then(function (data) {
             translations(data.key, data.table);
             deferred.resolve(data.table);
-          }, function () {
-            deferred.reject();
-          });
+          }, deferred.reject);
         }
         return deferred.promise;
       };
@@ -895,9 +885,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           } else {
             deferred.reject();
           }
-        }, function () {
-          deferred.reject();
-        });
+        }, deferred.reject);
 
         return deferred.promise;
       };
@@ -966,11 +954,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           if (translation.substr(0, 2) === '@:') {
 
             $translate(translation.substr(2), interpolateParams, interpolationId)
-              .then(function (_translation) {
-                deferred.resolve(_translation);
-              }, function () {
-                deferred.reject(_translation);
-              });
+              .then(deferred.resolve, deferred.reject);
           } else {
             deferred.resolve(Interpolator.interpolate(translation, interpolateParams));
           }
