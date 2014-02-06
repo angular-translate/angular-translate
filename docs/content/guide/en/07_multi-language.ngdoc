@@ -74,6 +74,40 @@ learn more on that in detail later. To get around this, we introduced
 `preferredLanguage()`. You should always use `preferredLanguage()` instead of
 `use()` on `$translateProvider`.
 
+## **Determining preferred language automatically**
+
+Since version `2.0` there's also a method `determinePreferredLanguage()` on the
+`$translateProvider`. This method tries to determine by itself what the preferred
+language would be. It searches for values in the `window.navigator` object in the
+following properties (also in this order):
+
+- `navigator.language`
+- `navigator.browserLanguage`
+- `navigator.systemLanguage`
+- `navigator.userLanguage`
+
+So instead of calling `$translateProvider.preferredLanguage(langKey)`, you'd do
+something like this:
+
+<pre>
+// try to find out preferred language by yourself
+$translateProvider.determinePreferredLanguage();
+</pre>
+
+Please use this method on your own risk! Be aware that each browser can return
+different values on these properties.
+
+If this doesn't fit to your needs, you can also pass in a custom function, that
+determines the preferred language key for you.
+
+<pre>
+$translateProvider.determinePreferredLanguage(function () {
+  var preferredlangKey = '';
+  // some custom logic's going on in here
+  return preferredLangKey;
+});
+</pre>
+
 ## Using another language to fall back
 
 This is all great but unfortunately the `preferredLanguage()` you just choose
