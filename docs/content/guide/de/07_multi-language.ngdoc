@@ -25,7 +25,7 @@ einer Sprache zuweisen kann.
 
 Eine Übersetzungstabelle mit einem Sprachschlüssel hinzuzufügen ist sehr einfach.
 Anstatt die Tabelle einfach als Argument an `translations()` zu übergeben,
-muss als erster Paraeter der Sprachschlüssel übergeben werden, während die Übersetzungstabelle
+muss als erster Parameter der Sprachschlüssel übergeben werden, während die Übersetzungstabelle
 als zweiter Parameter übergeben wird. Eine Übersetzungstabelle mit Sprachschlüssel
 hinzuzufügen, sieht also so aus:
 
@@ -72,6 +72,43 @@ Allerdings hat sich herausgestellt, dass es in Kombination mit einem asynchronen
 Loader zu unschönen Seiteneffekten kommt. Aus diesem Grund wurde `preferredLanguage()`
 eingeführt. Wenn man für diesen Anwendungsfall `preferredLanguage()` anstatt
 `use()` verwendet, kann man nichts falsch machen.
+
+## **Automatische Wahl der präferierten Sprache**
+
+Seit Version `2.0` besteht die Möglichkeit, mittels `determinePreferredLanguage()` im
+`$translateProvider` die bevorzugte Sprache setzen zu lassen. Die Methode probiert
+selbstständig, die bevorzugte Sprache (des Browsers) zu ermitteln. Dafür wird im
+`window.navigator` object nach folgenden Parametern geschaut (in dieser Reihenfolge):
+
+- `navigator.language`
+- `navigator.browserLanguage`
+- `navigator.systemLanguage`
+- `navigator.userLanguage`
+
+Statt `$translateProvider.preferredLanguage(langKey)` zu nutzen, wird folgende Funktion
+aufgerufen:
+
+<pre>
+// try to find out preferred language by yourself
+$translateProvider.determinePreferredLanguage();
+</pre>
+
+Die Zuverlässigkeit der Funktion kann allerdings nicht 100% garantiert werden, da jeder
+Browser unterschiedliche Werte in diese Parameter einträgt und diese nicht standardisiert
+sind.
+
+Falls die Werte unerwartet oder unpassend sind, kann eine eigene Funktion geschrieben werden,
+die entsprechende Werte ermittelt und zurückgibt.
+
+Beispiel:
+
+<pre>
+$translateProvider.determinePreferredLanguage(function () {
+  var preferredlangKey = '';
+  // some custom logic's going on in here
+  return preferredLangKey;
+});
+</pre>
 
 ## Eine andere Sprache als Fallback verwenden
 
