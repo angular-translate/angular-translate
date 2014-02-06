@@ -75,9 +75,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$q', '$interpolate', '$parse', '$rootScope', function ($filter, $q, $interpolate, $parse, $rootScope) {
-
-  var translate = $filter('translate');
+.directive('translate', ['$translate', '$q', '$interpolate', '$parse', '$rootScope', function ($translate, $q, $interpolate, $parse, $rootScope) {
 
   return {
     restrict: 'AE',
@@ -137,7 +135,7 @@ angular.module('pascalprecht.translate')
             return function () {
               var unwatch = scope.$watch('translationId', function (value) {
                 if (scope.translationId && value) {
-                  translate(value,  {}, translateInterpolation)
+                  $translate(value, {}, translateInterpolation)
                     .then(function (translation) {
                       iElement.html(translation);
                       unwatch();
@@ -152,7 +150,7 @@ angular.module('pascalprecht.translate')
             return function () {
               scope.$watch('interpolateParams', function (value) {
                 if (scope.translationId && value) {
-                  translate(scope.translationId,  value, translateInterpolation)
+                  $translate(scope.translationId, value, translateInterpolation)
                     .then(function (translation) {
                       iElement.html(translation);
                     }, function (translationId) {
