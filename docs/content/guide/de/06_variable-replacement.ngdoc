@@ -122,8 +122,49 @@ oder
      translate-values="{{translationData}}"></ANY>
 </pre>
 
-Klasse! Jetzt wissen wir, wie wir dynamische Werte an die Komponenten übergeben
-können. Updaten wir unsere App. Wir erweitern die Übersetzungstabelle wie folgt:
+## Maßgeschneiderte Übersetzungsattribute
+
+Seit Version 2.0 bietet die 'translate' - Direktive eine weitere, tolle Funktionalität,
+um Variablen bzw. Ersetzungen in die Schlüssel und Übersetzungsvorlagen zu bringen.
+Weiter oben haben wir gelernt, wie man die 'translate-values' Attribute benutzt.
+Aber wie wäre es, wenn wir genauer innerhalb des Quellcodes werden können?
+So, dass wir nur ein oder zwei Werte ersetzen wollen, diese aber nur im HTML beschreiben
+möchten oder können?
+
+Mit angular-translate ab Version 2.0 funktioniert das problemlos. Dafür können die
+individuellen 'translate-value-*'-Attribute genutzt werden!
+
+Das ist ganz einfach:
+
+Gehen wir von folgendem Übersetzungsschlüssel aus:
+
+<pre>
+{
+  "GREETING": "Hallo, mein Name ist {{name}}"
+}
+</pre>
+
+Diesen Schlüssel möchten wir gerne durch die 'translate' - Direktive übersetzen lassen.
+Das klappt auch ohne weitere Eingriffe, aber mit der Nutzung von 'translate-value-*'
+bekommen wir eine Ersetzung des Parameters {{name}} in den Übersetzungsprozess hinein.
+
+Beispiel:
+
+<pre>
+<p translate="GREETING" translate-value-name="Pascal"></p>
+</pre>
+
+Es muss nur das Präfix 'translate-value-' zusammen mit dem Namen des zu ersetzenden
+Textschlüssels angegeben werden - in diesem Fall 'name'.
+
+Natürlich funktioniert das auch mit interpolierten Werten:
+
+<pre>
+<p translate="GREETING" translate-value-name="{{name}}"></p>
+</pre>
+
+Klasse! Jetzt wissen wir, wie dynamische Werte an die Komponenten übergeben
+werden. Aktualisieren wir unsere App. Wir erweitern die Übersetzungstabelle wie folgt:
 
 <pre>
 var translations = {
@@ -178,6 +219,7 @@ Der funktionierende Code sieht dann so aus:
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
       <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-name="PascalPrecht"></p>
     </div>
   </doc:source>
 </doc:example>
