@@ -49,20 +49,13 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.filter('translate', ['$parse', '$translate', '$q', function ($parse, $translate, $q) {
+.filter('translate', ['$parse', '$translate', function ($parse, $translate) {
   return function (translationId, interpolateParams, interpolation) {
-    var deferred = $q.defer();
 
     if (!angular.isObject(interpolateParams)) {
       interpolateParams = $parse(interpolateParams)();
     }
 
-    $translate(translationId, interpolateParams, interpolation).then(function (translation) {
-      deferred.resolve(translation);
-    }, function (translationId) {
-      deferred.reject(translationId);
-    });
-
-    return deferred.promise;
+    return $translate.instant(translationId, interpolateParams, interpolation);
   };
 }]);

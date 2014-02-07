@@ -33,81 +33,27 @@ describe('pascalprecht.translate', function () {
       expect(typeof $translate).toBe("function");
     });
 
-    it('should return a promise', function () {
-      expect($translate('foo').then).toBeDefined();
-    });
-
-    it('should reject with translation id if translation doesn\'t exist', function () {
-      var deferred = $q.defer(),
-          promise = deferred.promise,
-          value;
-
-      promise.then(function (translation) {
-        value = translation;
-      });
-
-      $translate('WOOP').then(null, function (translationId) {
-        deferred.resolve(translationId);
-      });
-
-      $rootScope.$digest();
-      expect(value).toEqual('WOOP');
+    it('should return with translation id if translation doesn\'t exist', function () {
+      expect($translate('WOOP')).toEqual('WOOP');
     });
 
     it('should return translation if translation id exist', function () {
-      var deferred = $q.defer(),
-          promise = deferred.promise,
-          value;
-
-      promise.then(function (translation) {
-        value = translation;
-      });
-
-      $translate('TRANSLATION_ID').then(function (translation) {
-        deferred.resolve(translation);
-      });
-
-      $rootScope.$digest();
-      expect(value).toEqual('Lorem Ipsum ');
+      expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
     });
 
     it('should replace interpolate directives with empty string if no values given', function () {
-      var deferred = $q.defer(),
-          promise = deferred.promise,
-          value;
-
-      promise.then(function (translation) {
-        value = translation;
-      });
-
-      $translate('TRANSLATION_ID').then(function (translation) {
-        deferred.resolve(translation);
-      });
-
-      $rootScope.$digest();
-      expect(value).toEqual('Lorem Ipsum ');
+      expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
     });
 
     it('should replace interpolate directives with given values', function () {
-      var deferred = $q.defer(),
-          promise = deferred.promise,
-          value;
-
-      promise.then(function (translation) {
-        value = translation;
-      });
-
-      $q.all([
+      var value = [
         $translate('TRANSLATION_ID', { value: 'foo'}),
         $translate('TRANSLATION_ID_2', { value: 'foo'}),
         $translate('TRANSLATION_ID_3', { value: 'foo'}),
         $translate('TRANSLATION_ID_3', { value: '3'}),
         $translate('TRANSLATION_ID_3', { value: 3})
-      ]).then(function (translations) {
-        deferred.resolve(translations);
-      });
+      ];
 
-      $rootScope.$digest();
       expect(value[0]).toEqual('Lorem Ipsum foo');
       expect(value[1]).toEqual('Lorem Ipsum foo + foo');
       expect(value[2]).toEqual('Lorem Ipsum foofoo');
@@ -116,15 +62,7 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should replace interpolate directives with given values as string expression', function () {
-      var deferred = $q.defer(),
-          promise = deferred.promise,
-          value;
-
-      promise.then(function (translation) {
-        value = translation;
-      });
-
-      $q.all([
+      var value = [
         $translate('TEXT'),
         $translate('TEXT_WITH_VALUE'),
         $translate('TEXT_WITH_VALUE', "{'value': 'dynamic value'}"),
@@ -132,11 +70,8 @@ describe('pascalprecht.translate', function () {
         $translate('HOW_ABOUT_THIS', "{'value': '4'}"),
         $translate('AND_THIS', "{'value': 5}"),
         $translate('AND_THIS', "{'value': '5'}")
-      ]).then(function (translations) {
-        deferred.resolve(translations);
-      });
+      ];
 
-      $rootScope.$digest();
       expect(value[0]).toEqual('this is a text');
       expect(value[1]).toEqual('This is a text with given value: ');
       expect(value[2]).toEqual('This is a text with given value: dynamic value');
@@ -189,20 +124,7 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should consider translate-interpolation value', inject(function () {
-      var deferred = $q.defer(),
-          promise = deferred.promise,
-          value;
-
-      promise.then(function (translation) {
-        value = translation;
-      });
-
-      $translate('FOO', {}, 'custom').then(function (translation) {
-        deferred.resolve(translation);
-      });
-
-      $rootScope.$digest();
-      expect(value).toEqual('custom interpolation');
+      expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
     }));
   });
 });

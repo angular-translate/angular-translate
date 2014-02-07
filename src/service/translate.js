@@ -893,6 +893,32 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       };
 
       /**
+       * @name getFallbackTranslationInstant
+       * @private
+       *
+       * @description
+       * Returns a translation
+       * This function is currently only used for fallback language translation.
+       *
+       * @param langKey The language to translate to.
+       * @param translationId
+       * @param interpolateParams
+       * @param Interpolator
+       * @returns {string} translation
+       */
+      var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator) {
+        var result, translationTable = $translationTable[langKey];
+
+        if (translationTable.hasOwnProperty(translationId)) {
+          Interpolator.setLocale(langKey);
+          result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+          Interpolator.setLocale($uses);
+        }
+
+        return result;
+      };
+
+      /**
        * @name resolveForFallbackLanguage
        * @private
        *
@@ -929,6 +955,32 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       };
 
       /**
+       * @name resolveForFallbackLanguageInstant
+       * @private
+       *
+       * Recursive helper function for fallbackTranslation that will sequentially look
+       * for a translation in the fallbackLanguages starting with fallbackLanguageIndex.
+       *
+       * @param fallbackLanguageIndex
+       * @param translationId
+       * @param interpolateParams
+       * @param Interpolator
+       * @returns {string} translation
+       */
+      var resolveForFallbackLanguageInstant = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator) {
+        var result;
+
+        if (fallbackLanguageIndex < $fallbackLanguage.length) {
+          var langKey = $fallbackLanguage[fallbackLanguageIndex];
+          result = getFallbackTranslationInstant(langKey, translationId, interpolateParams, Interpolator);
+          if (!result) {
+            result = resolveForFallbackLanguageInstant(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
+          }
+        }
+        return result;
+      };
+
+      /**
        * Translates with the usage of the fallback languages.
        *
        * @param translationId
@@ -939,6 +991,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var fallbackTranslation = function (translationId, interpolateParams, Interpolator) {
         // Start with the fallbackLanguage with index 0
         return resolveForFallbackLanguage((startFallbackIteration>0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator);
+      };
+
+      /**
+       * Translates with the usage of the fallback languages.
+       *
+       * @param translationId
+       * @param interpolateParams
+       * @param Interpolator
+       * @returns {String} translation
+       */
+      var fallbackTranslationInstant = function (translationId, interpolateParams, Interpolator) {
+        // Start with the fallbackLanguage with index 0
+        return resolveForFallbackLanguageInstant((startFallbackIteration>0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator);
       };
 
       var determineTranslation = function (translationId, interpolateParams, interpolationId) {
@@ -984,6 +1049,42 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }
         }
         return deferred.promise;
+      };
+
+      var determineTranslationInstant = function (translationId, interpolateParams, interpolationId) {
+
+        var result, table = $uses ? $translationTable[$uses] : $translationTable,
+            Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
+
+        // if the translation id exists, we can just interpolate it
+        if (table && table.hasOwnProperty(translationId)) {
+          var translation = table[translationId];
+
+          // If using link, rerun $translate with linked translationId and return it
+          if (translation.substr(0, 2) === '@:') {
+            result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId);
+          } else {
+            result = Interpolator.interpolate(translation, interpolateParams);
+          }
+        } else {
+          // looks like the requested translation id doesn't exists.
+          // Now, if there is a registered handler for missing translations and no
+          // asyncLoader is pending, we execute the handler
+          if ($missingTranslationHandlerFactory && !pendingLoader) {
+            $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+          }
+
+          // since we couldn't translate the inital requested translation id,
+          // we try it now with one or more fallback languages, if fallback language(s) is
+          // configured.
+          if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
+            result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator);
+          } else {
+            result = applyNotFoundIndicators(translationId);
+          }
+        }
+
+        return result;
       };
 
       /**
@@ -1248,6 +1349,56 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           reject();
         }
         return deferred.promise;
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#instant
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns a translation instantly from the internal state of loaded translation. All rules
+       * regarding the current language, the preferred language of even fallback languages will be
+       * used except any promise handling. If a language was not found, an asynchronous loading
+       * will be invoked in the background.
+       *
+       * @param langKey The language to translate to.
+       * @param translationId
+       * @param interpolateParams
+       *
+       * @return {string} translation
+       */
+      $translate.instant = function (translationId, interpolateParams, interpolationId) {
+        translationId = translationId.trim();
+
+        var result, possibleLangKeys = [];
+        if ($preferredLanguage) {
+          possibleLangKeys.push($preferredLanguage);
+        }
+        if ($uses) {
+          possibleLangKeys.push($uses);
+        }
+        if ($fallbackLanguage && $fallbackLanguage.length) {
+          possibleLangKeys = possibleLangKeys.concat($fallbackLanguage);
+        }
+        for (var i = 0, c = possibleLangKeys.length; i < c; i++) {
+          var possibleLangKey = possibleLangKeys[i];
+          if ($translationTable[possibleLangKey]) {
+            if ($translationTable[possibleLangKey][translationId]) {
+              result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
+            }
+          } else {
+            // load in background
+            loadAsync(possibleLangKey);
+          }
+        }
+
+        if (!result) {
+          // Return translation if not found anything.
+          result = translationId;
+        }
+
+        return result;
       };
 
       if ($loaderFactory) {
