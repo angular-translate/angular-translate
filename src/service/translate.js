@@ -141,7 +141,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * namespaces, so they are later accessible via dot notation.
    */
   var flatObject = function (data, path, result, prevKey) {
-    var key, keyWithPath, val;
+    var key, keyWithPath, keyWithShortPath, val;
 
     if (!path) {
       path = [];
@@ -150,15 +150,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       result = {};
     }
     for (key in data) {
-      if (!data.hasOwnProperty(key)) continue;
+      if (!data.hasOwnProperty(key)) {
+        continue;
+      }
       val = data[key];
       if (angular.isObject(val)) {
         flatObject(val, path.concat(key), result, key);
       } else {
-        keyWithPath = path.length ? ("" + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
+        keyWithPath = path.length ? ('' + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
         if(path.length && key === prevKey){
           // Create shortcut path (foo.bar == foo.bar.bar)
-          keyWithShortPath = "" + path.join(NESTED_OBJECT_DELIMITER);
+          keyWithShortPath = '' + path.join(NESTED_OBJECT_DELIMITER);
           // Link it to original path
           result[keyWithShortPath] = '@:' + keyWithPath;
         }
@@ -332,25 +334,25 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var fallbackStack = function (langKey) {
     if (langKey) {
-          if (angular.isString(langKey)) {
-            $fallbackWasString = true;
-            $fallbackLanguage = [ langKey ];
-          } else if (angular.isArray(langKey)) {
-            $fallbackWasString = false;
-            $fallbackLanguage = langKey;
-          }
-          if (angular.isString($preferredLanguage)) {
-            $fallbackLanguage.push($preferredLanguage);
-          }
+      if (angular.isString(langKey)) {
+        $fallbackWasString = true;
+        $fallbackLanguage = [ langKey ];
+      } else if (angular.isArray(langKey)) {
+        $fallbackWasString = false;
+        $fallbackLanguage = langKey;
+      }
+      if (angular.isString($preferredLanguage)) {
+        $fallbackLanguage.push($preferredLanguage);
+      }
 
-          return this;
-        } else {
-          if ($fallbackWasString) {
-            return $fallbackLanguage[0];
-          } else {
-            return $fallbackLanguage;
-          }
-        }
+      return this;
+    } else {
+      if ($fallbackWasString) {
+        return $fallbackLanguage[0];
+      } else {
+        return $fallbackLanguage;
+      }
+    }
   };
 
   /**
@@ -770,7 +772,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       var loadAsync = function (key) {
         if (!key) {
-          throw "No language key specified for loading.";
+          throw 'No language key specified for loading.';
         }
 
         var deferred = $q.defer();
