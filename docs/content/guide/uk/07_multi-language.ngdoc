@@ -67,7 +67,39 @@ $translateProvider.preferredLanguage('de');
 ми ввели `preferredLanguage()`. Вам слід завжди використовувати `preferredLanguage()` замість 
 `use()` при роботі з `$translateProvider`.
 
-## Використання іншої мови для підстраховки
+## **Автоматичне визначення бажаної мови**
+
+Починаючи з версії `2.0` `$translateProvider` має метод `determinePreferredLanguage()`. Цей метод
+намагається самостійно визначити бажану мову для застосунку. Він шукає значення у наступних 
+властивостях об'єкту `window.navigator` (у відповідному порядку):
+
+- `navigator.language`
+- `navigator.browserLanguage`
+- `navigator.systemLanguage`
+- `navigator.userLanguage`
+
+Таким чином, замість виклику `$translateProvider.preferredLanguage(langKey)`, ви можете зробити так:
+
+<pre>
+// try to find out preferred language by yourself
+$translateProvider.determinePreferredLanguage();
+</pre>
+
+Будь ласка, використовуйте цей метод на свій власний ризик! Знайте, що кожен браузер може повернути
+різне значення цих властивостей.
+
+Якщо це не задовольняє ваших потреб, ви можете додатково передати функцію, що визначає ключ бажаної
+мови.
+
+<pre>
+$translateProvider.determinePreferredLanguage(function () {
+  var preferredlangKey = '';
+  // some custom logic's going on in here
+  return preferredLangKey;
+});
+</pre>
+
+## Використання іншої мови у якості запасної
 
 Це все прекрасно, але, нажаль, щойно обраний `preferredLanguage()` не повний. Ви б хотіли, щоб 
 `angular-translate` спробував іншу мову для таких перекладів замість того, щоб відображати порожні
@@ -81,8 +113,8 @@ $translateProvider.preferredLanguage('de');
 $translateProvider.fallbackLanguage('en');
 </pre>
 
-Починаючи з версії 1.1.1 у якості параметра можна передавати масив. Таким чином можна вказати для
-підстраховки одразу декілька мов, що будуть використовуватися у відповідному порядку.
+Починаючи з версії 1.1.1 у якості параметра можна передавати масив. Таким чином можна вказувати
+запасними одразу декілька мов, що будуть використовуватися у відповідному порядку.
 
 <pre>
 // tells angular-translate to use English language if translations are not

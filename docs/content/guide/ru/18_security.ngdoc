@@ -1,0 +1,93 @@
+@ngdoc overview
+@name Безопасность
+@description
+
+# Экранирование динамического контента
+
+Говоря об обычном выводе, AngularJS гарантирует, что он будет правильно экранирован. Тем не менее,
+при использовании `angular-translate` и динамического контента, результат не будет экранирован
+правильно. Это означает, что ваше приложение является уязвимым для серьезных атак
+(см: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+
+## Использование
+
+Метод `useSanitizeValueStrategy(strategy)` определяет какая глобальная стратегия экранирования будет
+использоваться.
+
+На текущий момент доступно два варианта: `null` (ничего) и `escaped` (для HTML).
+
+Экранирование осуществляется с полным сохранением обратной совместимости. Это означает, что
+экранирование отключено по умолчанию.
+
+```javascript
+$translateProvider.useSanitizeValueStrategy(null);
+```
+
+Впрочем, в будущем по умолчанию будет использоваться более защищенный вариант `escaped`.
+
+```javascript
+$translateProvider.useSanitizeValueStrategy('escaped');
+```
+
+## Демонтрация
+
+### Без экранирования
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations(translations);
+        // Using standard escaping (nothing)
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### С экранированием
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations(translations);
+        // Enable escaping of HTML
+        $translateProvider.useSanitizeValueStrategy('escaped');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
