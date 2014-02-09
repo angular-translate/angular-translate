@@ -92,8 +92,6 @@ angular.module('pascalprecht.translate')
 
       return function linkFn(scope, iElement, iAttr) {
 
-        var deferred = $q.defer();
-
         scope.interpolateParams = {};
 
         // Ensures any change of the attribute "translate" containing the id will
