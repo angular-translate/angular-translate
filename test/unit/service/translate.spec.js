@@ -65,6 +65,10 @@ describe('pascalprecht.translate', function () {
       expect($translate.refresh).toBeDefined();
     });
 
+    it('should have a method instant()', function () {
+      expect($translate.instant).toBeDefined();
+    });
+
     describe('$translate#preferredLanguage()', function () {
 
       it('should be a function', function () {
@@ -1085,6 +1089,83 @@ describe('pascalprecht.translate', function () {
           expect(value).toEqual('bar');
         });
       });
+    });
+  });
+
+  describe('$translate.instant', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', translationMock)
+        .translations('en', {
+          'FOO': 'bar',
+          'BAR': 'foo'
+        })
+        .preferredLanguage('en');
+    }));
+
+    var $translate, $STORAGE_KEY, $q, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$STORAGE_KEY_, _$q_, _$rootScope_) {
+      $translate = _$translate_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+      $q = _$q_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should return translation if translation id exist', function () {
+      expect($translate.instant('FOO')).toEqual('bar');
+    });
+
+    it('should return translation id if translation id nost exist', function () {
+      expect($translate.instant('FOO2')).toEqual('FOO2');
+    });
+  });
+
+  describe('$translate.instant (with fallback)', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      $translateProvider
+        .useLoader('customLoader')
+        .translations('en', {
+          'FOO': 'bar',
+          'BAR': 'foo'
+        })
+        .translations('de', {
+          'FOO2': 'bar2'
+        })
+        .preferredLanguage('de')
+        .fallbackLanguage('en');
+
+      $provide.factory('customLoader', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+
+          $timeout(function () {
+            deferred.resolve({});
+          }, 1000);
+
+          return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate, $STORAGE_KEY, $q, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$STORAGE_KEY_, _$q_, _$rootScope_) {
+      $translate = _$translate_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+      $q = _$q_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should return translation if translation id exist', function () {
+      expect($translate.instant('FOO')).toEqual('bar');
+      expect($translate.instant('FOO2')).toEqual('bar2');
+    });
+
+    it('should return translation id if translation id nost exist', function () {
+      expect($translate.instant('FOO3')).toEqual('FOO3');
     });
   });
 });
