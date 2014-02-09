@@ -13,7 +13,7 @@
   "author": {
     "name": "Pascal Precht"
   },
-  "license": "WTFPL",
+  "license": "MIT",
   "devDependencies": {
     "karma": "~0.8.5",
     "grunt": "~0.4.1",
