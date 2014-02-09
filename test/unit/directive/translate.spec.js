@@ -347,7 +347,7 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       // Verify content is not escaped.
       expect(element.text()).toEqual('test');
-      expect(element.html()).toEqual('<u class="ng-scope">test</u>');
+      expect(element.html()).toEqual('<u>test</u>');
     });
   });
 
@@ -376,7 +376,7 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       // Verify content is escaped.
       expect(element.text()).toEqual('<u>test</u>'); // possible because text
-      expect(element.html()).toEqual('<span class="ng-scope">&lt;u&gt;test&lt;/u&gt;</span>');
+      expect(element.html()).toEqual('&lt;u&gt;test&lt;/u&gt;');
     });
   });
 
@@ -391,7 +391,6 @@ describe('pascalprecht.translate', function () {
       });
 
       $translateProvider.preferredLanguage('en');
-      $translateProvider.usePostCompiling(false);
     }));
 
     beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_) {
@@ -449,6 +448,7 @@ describe('pascalprecht.translate', function () {
       });
 
       $translateProvider.preferredLanguage('en');
+      $translateProvider.usePostCompiling(true);
     }));
 
     beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_) {

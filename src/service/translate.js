@@ -28,7 +28,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $loaderOptions,
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
-      $postCompilingEnabled = true,
+      $postCompilingEnabled = false,
       NESTED_OBJECT_DELIMITER = '.';
 
 
