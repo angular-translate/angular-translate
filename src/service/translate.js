@@ -28,6 +28,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $loaderOptions,
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
+      $postCompilingEnabled = true,
       NESTED_OBJECT_DELIMITER = '.';
 
 
@@ -548,6 +549,29 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    */
   this.useMissingTranslationHandler = function (factory) {
     $missingTranslationHandlerFactory = factory;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#usePostCompiling
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If post compiling is enabled, all translated values will be processed
+   * again with AngularJS' $compile.
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.usePostCompiling(true);
+   *  });
+   * </pre>
+   *
+   * @param {string} factory Factory name
+   */
+  this.usePostCompiling = function (value) {
+    $postCompilingEnabled = !(!value);
     return this;
   };
 
@@ -1260,6 +1284,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       $translate.storageKey = function () {
         return storageKey();
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#isPostCompilingEnabled
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns whether post compiling is enabled or not
+       *
+       * @return {bool} storage key
+       */
+      $translate.isPostCompilingEnabled = function () {
+        return $postCompilingEnabled;
       };
 
       /**

@@ -347,7 +347,7 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       // Verify content is not escaped.
       expect(element.text()).toEqual('test');
-      expect(element.html()).toEqual('<u>test</u>');
+      expect(element.html()).toEqual('<u class="ng-scope">test</u>');
     });
   });
 
@@ -376,7 +376,134 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       // Verify content is escaped.
       expect(element.text()).toEqual('<u>test</u>'); // possible because text
-      expect(element.html()).toEqual('&lt;u&gt;test&lt;/u&gt;');
+      expect(element.html()).toEqual('<span class="ng-scope">&lt;u&gt;test&lt;/u&gt;</span>');
     });
   });
+
+  describe('translate-compile extension (globally disabled)', function () {
+
+    var $rootScope, $compile;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.translations('en', {
+        'text': '<span>{{name}} is a citizen of <strong ng-bind="world"></strong>!</span>'
+      });
+
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.usePostCompiling(false);
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+      $translate = _$translate_;
+      $rootScope.world = 'Gallifrey';
+    }));
+
+    it('should be disabled at default (global setting)', function () {
+      expect($translate.isPostCompilingEnabled()).toEqual(false);
+    });
+
+    it('should be disabled at default', function () {
+      element = $compile('<p translate="text" translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify we have no additional bindings (ng-bind)
+      expect(element.text()).toEqual('The Doctor is a citizen of !');
+      // expect(element.html()).toEqual('<span>The Doctor is a citizen of <strong ng-bind="world"></strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('');
+    });
+
+    it('should be enabled using "translate-compile"-attribute', function () {
+      element = $compile('<p translate="text" translate-compile translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify we have rich html content now
+      expect(element.text()).toEqual('The Doctor is a citizen of Gallifrey!');
+      // expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Gallifrey</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('Gallifrey');
+    });
+
+    it('should consider even live binding in compiled value', function () {
+      element = $compile('<p translate="text" translate-compile translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      $rootScope.world = 'Earth';
+      $rootScope.$digest();
+      // Verify that the new value of "world" is used.
+      expect(element.text()).toEqual('The Doctor is a citizen of Earth!');
+      // expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Earth</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('Earth');
+    });
+  });
+
+  describe('translate-compile extension (globally enabled)', function () {
+
+    var $rootScope, $compile;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.translations('en', {
+        'text': '<span>{{name}} is a citizen of <strong ng-bind="world"></strong>!</span>'
+      });
+
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+      $translate = _$translate_;
+      $rootScope.world = 'Gallifrey';
+    }));
+
+    it('should be enabled at default (global setting)', function () {
+      expect($translate.isPostCompilingEnabled()).toEqual(true);
+    });
+
+    it('should be enabled at default', function () {
+      element = $compile('<p translate="text" translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify we have no additional bindings (ng-bind)
+      expect(element.text()).toEqual('The Doctor is a citizen of Gallifrey!');
+      // expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Gallifrey</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('Gallifrey');
+    });
+
+    it('should be enabled using "translate-compile"-attribute (actually obselet)', function () {
+      element = $compile('<p translate="text" translate-compile translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify we have rich html content now
+      expect(element.text()).toEqual('The Doctor is a citizen of Gallifrey!');
+      // expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Gallifrey</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('Gallifrey');
+
+    });
+
+    it('should be disabled using "translate-compile"-attribute (if set to "false")', function () {
+      element = $compile('<p translate="text" translate-compile="false" translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify we have rich html content now
+      expect(element.text()).toEqual('The Doctor is a citizen of !');
+      // expect(element.html()).toEqual('<span>The Doctor is a citizen of <strong ng-bind="world"></strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('');
+    });
+
+    it('should consider even live binding in compiled value', function () {
+      element = $compile('<p translate="text" translate-values="{name: \'The Doctor\'}"></p>')($rootScope);
+      $rootScope.$digest();
+      $rootScope.world = 'Earth';
+      $rootScope.$digest();
+      // Verify that the new value of "world" is used.
+      expect(element.text()).toEqual('The Doctor is a citizen of Earth!');
+      // expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Earth</strong>!</span>');
+      // unfortunately, the order of tag attributes is not deterministic in all browsers
+      expect(element.find('strong').html()).toEqual('Earth');
+    });
+  });
+
 });
