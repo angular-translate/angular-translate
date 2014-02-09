@@ -2,6 +2,7 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translate
+ * @requires $compile
  * @requires $filter
  * @requires $interpolate
  * @restrict A
@@ -75,7 +76,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$translate', '$q', '$interpolate', '$parse', '$rootScope', function ($translate, $q, $interpolate, $parse, $rootScope) {
+.directive('translate', ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope', function ($translate, $q, $interpolate, $compile, $parse, $rootScope) {
 
   return {
     restrict: 'AE',
@@ -128,6 +129,16 @@ angular.module('pascalprecht.translate')
           }
         }
 
+        var applyElementContent = function (value, scope) {
+          iElement.html(value);
+          var globallyEnabled = $translate.isPostCompilingEnabled();
+          var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
+          var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
+          if ((globallyEnabled && !locallyDefined) || locallyEnabled) {
+            $compile(iElement.contents())(scope);
+          }
+        };
+
         var updateTranslationFn = (function () {
           if (!translateValuesExist && !translateValueExist) {
             return function () {
@@ -135,10 +146,10 @@ angular.module('pascalprecht.translate')
                 if (scope.translationId && value) {
                   $translate(value, {}, translateInterpolation)
                     .then(function (translation) {
-                      iElement.html(translation);
+                      applyElementContent(translation, scope);
                       unwatch();
                     }, function (translationId) {
-                      iElement.html(translationId);
+                      applyElementContent(translationId, scope);
                       unwatch();
                     });
                 }
@@ -150,9 +161,9 @@ angular.module('pascalprecht.translate')
                 if (scope.translationId && value) {
                   $translate(scope.translationId, value, translateInterpolation)
                     .then(function (translation) {
-                      iElement.html(translation);
+                      applyElementContent(translation, scope);
                     }, function (translationId) {
-                      iElement.html(translationId);
+                      applyElementContent(translationId, scope);
                     });
                 }
               }, true);
