@@ -44,6 +44,31 @@ Und auch das hier, funktioniert:
 
 Benutze sie so, wie es dir am besten passt!!
 
+## Post compiling
+Seit Version 2 gibt es die Möglichkeit, der Inhalt der Übersetzung auch im Kontext
+des aktuellen Scope via `$compile` zu kompilieren. Das bedeutet, dass alle dort
+verwendeten Direktiven innerhalb einer Übersetzung nun auch wie erwartet funktionieren.
+
+Dieses Verhalten kann man pro Direktive einschalten:
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile></ANY>
+```
+
+Darüberhinaus kann man das Feature auch global einschalten...
+
+```
+$translateProvider.usePostCompiling(true);
+```
+
+... um es dann pro Direktive wieder ausschalten zu können.
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
+```
+
+## Beispiel
+
 Passen wir unser Beispiel an fügen ein paar neue Übersetzungen hinzu. Wie wär's
 mit Texten, die jede mögliche Verwendung der Direktive darstellen? Unsere Übersetzungstabelle
 könnte so aussehen:
