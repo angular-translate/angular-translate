@@ -25,6 +25,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $interpolatorFactories = [],
       $interpolationSanitizationStrategy = false,
       $loaderFactory,
+      $cloakClassName = 'translate-cloak',
       $loaderOptions,
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
@@ -132,6 +133,26 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   };
 
   this.translations = translations;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#cloakClassName
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   *
+   * Let's you change the class name for `translate-cloak` directive.
+   * Default class name is `translate-cloak`.
+   *
+   * @param {string} name translate-cloak class name
+   */
+  this.cloakClassName = function (name) {
+    if (!name) {
+      return $cloakClassName;
+    }
+    $cloakClassName = name;
+    return this;
+  };
 
   /**
    * @name flatObject
@@ -1124,6 +1145,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       $translate.preferredLanguage = function () {
         return $preferredLanguage;
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#cloakClassName
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns the configured class name for `translate-cloak` directive.
+       *
+       * @return {string} cloakClassName
+       */
+      $translate.cloakClassName = function () {
+        return $cloakClassName;
       };
 
       /**
