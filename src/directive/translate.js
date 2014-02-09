@@ -107,6 +107,10 @@ angular.module('pascalprecht.translate')
           }
         });
 
+        iAttr.$observe('translateDefault', function (value) {
+          scope.defaultText = value;
+        });
+
         if (translateValuesExist) {
           iAttr.$observe('translateValues', function (interpolateParams) {
             if (interpolateParams) {
@@ -140,7 +144,11 @@ angular.module('pascalprecht.translate')
                       iElement.html(translation);
                       unwatch();
                     }, function (translationId) {
-                      iElement.html(translationId);
+                      if (scope.defaultText) {
+                        iElement.html(scope.defaultText);
+                      } else {
+                        iElement.html(translationId);
+                      }
                       unwatch();
                     });
                 }
@@ -154,7 +162,11 @@ angular.module('pascalprecht.translate')
                     .then(function (translation) {
                       iElement.html(translation);
                     }, function (translationId) {
-                      iElement.html(translationId);
+                      if (scope.defaultText) {
+                        iElement.html(scope.defaultText);
+                      } else {
+                        iElement.html(translationId);
+                      }
                     });
                 }
               }, true);
