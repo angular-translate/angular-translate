@@ -1,0 +1,20 @@
+@ngdoc overview
+@name Tools
+@description
+
+# Tools
+
+There isn't only angular-translate as an additional module you might wanna use.
+There's an entire angular-translate universe! This universe also covers additional
+things around the module itself. We're currently maintaining a few tools that
+you might be interested in when developing apps with angular-translate.
+
+Take a look!
+
+## grunt-angular-translate
+
+[grunt-angular-translate on GitHub](http://github.com/angular-translate/grunt-angular-translate)
+
+## grunt-po2json-angular-translate
+
+[grunt-po2json-angular-translate on GitHub](http://github.com/angular-translate/grunt-po2json-angular-translate)
