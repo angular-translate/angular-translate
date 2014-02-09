@@ -108,31 +108,6 @@ $translateProvider.determinePreferredLanguage(function () {
 });
 </pre>
 
-## Using another language to fall back
-
-This is all great but unfortunately the `preferredLanguage()` you just choose
-is incomplete. So you would like `angular-translate` to try a second language
-for these translations instead of displaying some empty or unformatted strings.
-The `fallbackLanguage()` feature will let you tell `angular-translate` do so.
-`angular-translate` will use this language in case it cannot find a translation
-in the currently used translation table. Its usage is basically the same as
-`preferredLanguage()`.
-
-<pre>
-// tells angular-translate to use the English language if translations are not
-// available in German
-$translateProvider.fallbackLanguage('en');
-</pre>
-
-Since version 1.1.1 it is also possible to include an array as the parameter. This will
-enable a range of fallback languages to be called in subsequent order.
-
-<pre>
-// tells angular-translate to use English language if translations are not
-// available in German, French if not even available in English
-$translateProvider.fallbackLanguage(['en','fr']);
-</pre>
-
 ## Switching the language at runtime
 
 To switch the language at runtime, `$translate` service has a method
