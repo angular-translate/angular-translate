@@ -18,7 +18,7 @@ wurde.
 
 Wird gefeuert sobald angular-translate versucht eine Sprache zu wechseln.
 Dies geschieht beim Startup, wenn die Sprache das erste mal eingerichtet wird, oder
-wenn die Sprache zur Laufzeit mit `$translate.uses()` gewechselt wird. Der Event
+wenn die Sprache zur Laufzeit mit `$translate.use()` gewechselt wird. Der Event
 wird außerdem gefeuert wenn Übersetzungen asynchron geladen werden müssen.
 
 #### `$translateChangeSuccess`

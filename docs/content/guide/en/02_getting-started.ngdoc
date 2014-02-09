@@ -212,13 +212,17 @@ We can add this table with the use of `$translateProvider.translations()`:
 <pre>
 app.config(['$translateProvider', function ($translateProvider) {
   // add translation table
-  $translateProvider.translations(translations);
+  $translateProvider
+    .translations('en', translations)
+    .preferredLanguage('en');
 }]);
 </pre>
 
-This is basically all you have to do. Since we're adding the translation tables
-at configuration time, `$translate` service is able to access it, once it is
-instantiated and used. Here's the working code:
+This is basically all you have to do. Simply specify a language key and add a
+translate table for it. After that tell angular-translate what the preferred
+language is. Since we're adding the translation tables at configuration time,
+`$translate` service is able to access it, once it is instantiated and used.
+Here's the working code:
 
 <doc:example module="myApp">
   <doc:source>
@@ -235,7 +239,9 @@ instantiated and used. Here's the working code:
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
     </script>
     <div>

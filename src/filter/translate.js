@@ -55,6 +55,7 @@ angular.module('pascalprecht.translate')
     if (!angular.isObject(interpolateParams)) {
       interpolateParams = $parse(interpolateParams)();
     }
-    return $translate(translationId, interpolateParams, interpolation);
+
+    return $translate.instant(translationId, interpolateParams, interpolation);
   };
 }]);

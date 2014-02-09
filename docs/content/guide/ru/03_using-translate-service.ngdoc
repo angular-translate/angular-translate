@@ -30,45 +30,59 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 </pre>
 
 Теперь, чтобы перевести свой контент с помощью сервиса `$translate`, вам необходимо передать ранее
-зарегистрированный при помощи `$translateProvider` идентификатор перевода и он вернет конкретный
-перевод этого идентификатора. Также, чтобы отобразить переведенные значения в представлении, мы
-внедрили `$scope` в наш контроллер:
+зарегистрированный при помощи `$translateProvider` идентификатор перевода. Поскольку возможно, что
+в момент вызова сервиса происходит асинхронная загрузка данных (мы поговорим об этом позже), сервис
+`$translate` тоже ведет себя асинхронно и возвращает обещание (promise), которое либо разрешается
+(resolve) с переводом данного идентификатора перевода, либо отбрасывается (reject) с идентификатором
+перевода. Таким образом базовое использование сервиса `$translate` на уровне контроллера
+(или сервиса) выглядит так:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $scope.headline = $translate('HEADLINE');
-  $scope.paragraph = $translate('PARAGRAPH');
-  $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+  $translate('HEADLINE').then(function (headline) {
+   $scope.headline = headline;
+  });
+  $translate('PARAGRAPH').then(function (paragraph) {
+    $scope.paragraph = paragraph;
+  });
+  $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+    $scope.namespaced_paragraph = anotherOne;
+  });
 }]);
 </pre>
+
 **Заметьте:** Переводы в пространствах имен доступны как JSON свойства (см. 'NAMESPACE.PARAGRAPH').
 
 Это все. Теперь, для перевода содержимого `<title>` вы можете воспользоваться этим контроллером.
 
 ## Имейте ввиду
 Пожалуйста, имейте ввиду, что сервис `$translate` по умолчанию не предоставляет двухстороннего
-связывания данных! При использовании, сервис `$translate` работает синхронно, то есть возвращает
-перевод для данного идентификатора перевода. Если перевода не существует, сервис вернет всего лишь
-идентификатор перевода.
+связывания данных! Сервис `$translate` работает асинхронно. Это значит, что он возвращает перевод
+для данного идентификатора перевода как только он будет в состоянии его определить. Если перевода
+не существует, он вероятно просто вернет идентификатор перевода.
 
-Если вы используете асинхронный загрузчик, вас мог привести в замешательство тот факт, что сервис
-`$translate` постоянно возвращает идентификатор вместо ожидаемого перевода. Это происходит потому,
-что такого идентификатора перевода нет момент поиска его сервисом `$translate`, ведь таблицы
-переводов загружаются асинхронно. Чтобы обойти такое поведение, вам нужно использовать сервис
-`$translate` после того, как таблица переводов, которую запрашивает асинхронный загрузчик, будет
-доступна.
+Тем не менее, это не означает, что он знает о смене языка. Поэтому, переводы сделанные при помощи
+прямого вызова `$translate` не обновляются при смене языка во время выполнения.
 
-Для этого достаточно просто обернуть использование сервиса `$translate` в обратный вызов события
-`$translateChangeSucces`. Оно вызывается каждый раз, когда асинхронный загрузчик загрузил таблицу
-переводов и смена языка прошла успешно. Вот как это выглядит:
+Вы можете это исправить просто обернув ваш вызов `$translate` в `$translateChangeSucces` колбек
+`$rootScope`а, который вызывается  каждый раз при успешной смене языка. Как только он изменится, вы
+легко можете повторно выполнить код, ответственный за необходимые вам переводы.
+
+Вот как это выглядит:
 
 <pre>
-app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $scope.$on('$translateChangeSuccess', function () {
-    $scope.headline = $translate('HEADLINE');
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
+  $rooScope.$on('$translateChangeSuccess', function () {
+    $translate('HEADLINE').then(function (translation) {
+      $scope.headline = translation;
+    });
   });
 }]);
 </pre>
+
+Вы удивлены почему `$rootScope`, а не просто `$scope`? angular-translate порождает события только на
+уровне `$rootScope` исходя из соображений производительности.
+Более подробно смотрите в этом посте на [StackOverflow](http://stackoverflow.com/a/19498009/288703).
 
 Вот работающий пример:
 
@@ -87,14 +101,22 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
         // expose translation via `$translate` service
-        $scope.headline = $translate('HEADLINE');
-        $scope.paragraph = $translate('PARAGRAPH');
-        $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+        $translate('HEADLINE').then(function (headline) {
+          $scope.headline = headline;
+        });
+        $translate('PARAGRAPH').then(function (paragraph) {
+          $scope.paragraph = paragraph;
+        });
+        $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+          $scope.namespaced_paragraph = anotherOne;
+        });
       }]);
     </script>
     <div ng-controller="Ctrl">

@@ -5,19 +5,21 @@ describe('pascalprecht.translate', function () {
     var element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations({
-        'EXISTING_TRANSLATION_ID': 'foo',
-        'ANOTHER_ONE': 'bar',
-        'TRANSLATION_ID': 'foo',
-        'TD_WITH_VALUE': 'Lorem Ipsum {{value}}',
-        'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-        'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
-        'YET_ANOTHER': 'Hallo da!',
-        'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-        'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-        'AND_THIS': '{{value + value}}',
-        'BLANK_VALUE': ''
-      });
+      $translateProvider
+        .translations('en', {
+          'EXISTING_TRANSLATION_ID': 'foo',
+          'ANOTHER_ONE': 'bar',
+          'TRANSLATION_ID': 'foo',
+          'TD_WITH_VALUE': 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER': 'Hallo da!',
+          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
+          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
+          'AND_THIS': '{{value + value}}',
+          'BLANK_VALUE': ''
+        })
+        .preferredLanguage('en');
     }));
 
     var $compile, $rootScope;
@@ -310,12 +312,14 @@ describe('pascalprecht.translate', function () {
   describe('custom translate-value-* attributes', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-      $translateProvider.translations({
-        'FOO': 'hello my name is {{name}}',
-        'BAR': 'and I\'m {{age}} years old',
-        'BAZINGA': 'hello my name is {{name}} and I\'m {{age}} years old.',
-        'YAY': 'hello my name is {{name}} and I\'m {{age}} years old. {{foo}}'
-      });
+      $translateProvider
+        .translations('en', {
+          'FOO': 'hello my name is {{name}}',
+          'BAR': 'and I\'m {{age}} years old',
+          'BAZINGA': 'hello my name is {{name}} and I\'m {{age}} years old.',
+          'YAY': 'hello my name is {{name}} and I\'m {{age}} years old. {{foo}}'
+        })
+        .preferredLanguage('en');
     }));
 
     beforeEach(inject(function (_$rootScope_, _$compile_) {

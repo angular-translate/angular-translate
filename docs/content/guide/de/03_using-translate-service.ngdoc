@@ -30,21 +30,57 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 
 Um jetzt Inhalte zu übersetzen, muss nichts weiter geschehen, als dem `$translate`-
 Service eine Translation ID zu übergeben (die vorher durch `$translateProvider`
-registriert wurde). Dieser gibt dann die korrespondierende Übersetzung zurück.
-Außerdem injecten wir `$scope` um die übersetzen Werte im View-Layer verfügbar
-zu machen.
+registriert wurde). Da es moelglich ist, dass Translation-Daten asynchron geladen
+werden muessen, verhaelt sich `$translate` Service asynchron und gibt ein Promise
+zurueck, dass entweder mit der Uebersetzung augeloest oder mit der Translation ID
+ausgeworfen wird. So wuerde also die Benutzung von `$translate` Service auf Controller
+Level aussehen:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $scope.headline = $translate('HEADLINE');
-  $scope.paragraph = $translate('PARAGRAPH');
-  $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+  $translate('HEADLINE').then(function (headline) {
+    $scope.headline = headline;
+  });
+  $translate('PARAGRAPH').then(function (paragraph) {
+    $scope.paragraph = paragraph;
+  });
+  $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+    $scope.namespaced_paragraph = anotherOne;
+  });
 }]);
 </pre>
 **Achtung:** Übersetzungen mit Namespaces werden mit Dot-Notation aufgelöst (siehe: 'NAMESPACE.PARAGRAPH'`).
 
 Das ist alles. Also, falls du darüber nachdenkst deinen `<title>` zu übersetzen,
 kannst du dies in deinem Controller machen.
+
+## Dinge die Beruecksichtigt werden sollten
+Bitte beachte dass `$translate` Service kein Two-Way Data-Binding unterstuetzt.
+`$translate` Service arbeitet asynchron, dass bedeteut aber nicht, dass er informiert
+wird, wenn sich die Sprache aendert. Also aendern sich Uebersetzungen nicht,
+wenn sich die Sprache aendert, sofern diese mit dem Service uebersetzt wurden.
+
+Man dies aber ganz einfach moeglich machen, in dem man auf das `$translateChangeSuccess`
+Event horcht. Dieser Event wird jedes mal gefeuert, wenn die Sprachtabelle gewechselt
+wird.
+
+So wuerde das aussehen:
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
+  $rooScope.$on('$translateChangeSuccess', function () {
+    $translate('HEADLINE').then(function (translation) {
+      $scope.headline = translation;
+    });
+  });
+}]);
+</pre>
+
+Warum am `$rootScope` anstatt am `$scope`? angular-translate `$emitted` nur auf
+`$rootScope` Level aus Performance-Gruenden.
+Dieser [StackOverflow](http://stackoverflow.com/a/19498009/288703) Post erklaert warum.
+
+Hier ein funktionierendes Beispiel:
 
 <doc:example module="myApp">
   <doc:source>
@@ -61,14 +97,23 @@ kannst du dies in deinem Controller machen.
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
         // expose translation via `$translate` service
-        $scope.headline = $translate('HEADLINE');
-        $scope.paragraph = $translate('PARAGRAPH');
-        $scope.namespaced_paragraph = $translate('NAMESPACE.PARAGRAPH');
+        // expose translation via `$translate` service
+        $translate('HEADLINE').then(function (headline) {
+          $scope.headline = headline;
+        });
+        $translate('PARAGRAPH').then(function (paragraph) {
+          $scope.paragraph = paragraph;
+        });
+        $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+          $scope.namespaced_paragraph = anotherOne;
+        });
       }]);
     </script>
     <div ng-controller="Ctrl">

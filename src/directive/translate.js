@@ -75,9 +75,7 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$filter', '$q', '$interpolate', '$parse', '$rootScope', function ($filter, $q, $interpolate, $parse, $rootScope) {
-
-  var translate = $filter('translate');
+.directive('translate', ['$translate', '$q', '$interpolate', '$parse', '$rootScope', function ($translate, $q, $interpolate, $parse, $rootScope) {
 
   return {
     restrict: 'AE',
@@ -93,6 +91,8 @@ angular.module('pascalprecht.translate')
       var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
 
       return function linkFn(scope, iElement, iAttr) {
+
+        var deferred = $q.defer();
 
         scope.interpolateParams = {};
 
@@ -139,12 +139,18 @@ angular.module('pascalprecht.translate')
             return function () {
               var unwatch = scope.$watch('translationId', function (value) {
                 if (scope.translationId && value) {
-                  var result = translate(value, {}, translateInterpolation);
-                  if (result === scope.translationId && scope.defaultText) {
-                    result = scope.defaultText;
-                  }
-                  iElement.html(result);
-                  unwatch();
+                  $translate(value, {}, translateInterpolation)
+                    .then(function (translation) {
+                      iElement.html(translation);
+                      unwatch();
+                    }, function (translationId) {
+                      if (scope.defaultText) {
+                        iElement.html(scope.defaultText);
+                      } else {
+                        iElement.html(translationId);
+                      }
+                      unwatch();
+                    });
                 }
               }, true);
             };
@@ -152,11 +158,16 @@ angular.module('pascalprecht.translate')
             return function () {
               scope.$watch('interpolateParams', function (value) {
                 if (scope.translationId && value) {
-                  var result = translate(scope.translationId, value, translateInterpolation);
-                  if (result === scope.translationId && scope.defaultText) {
-                    result = scope.defaultText;
-                  }
-                  iElement.html(result);
+                  $translate(scope.translationId, value, translateInterpolation)
+                    .then(function (translation) {
+                      iElement.html(translation);
+                    }, function (translationId) {
+                      if (scope.defaultText) {
+                        iElement.html(scope.defaultText);
+                      } else {
+                        iElement.html(translationId);
+                      }
+                    });
                 }
               }, true);
             };
@@ -164,7 +175,7 @@ angular.module('pascalprecht.translate')
         }());
 
         // Ensures the text will be refreshed after the current language was changed
-        // w/ $translate.uses(...)
+        // w/ $translate.use(...)
         var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslationFn);
 
         updateTranslationFn();
@@ -173,4 +184,3 @@ angular.module('pascalprecht.translate')
     }
   };
 }]);
-

@@ -107,7 +107,7 @@ at runtime to save the last chosen language.
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
         $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
+          $translate.use(langKey);
         };
       }]);
     </script>

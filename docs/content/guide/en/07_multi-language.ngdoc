@@ -66,50 +66,59 @@ the code like this:
 $translateProvider.preferredLanguage('de');
 </pre>
 
-**Note:** It's actually also possible to use `$translateProvider.uses()` for that,
+**Note:** It's actually also possible to use `$translateProvider.use()` for that,
 since it's setting the languages as well. However it turns out that this is a bad
 practice when using asynchronous loaders in combination with a storage. In some
 cases it can happen that angular-translate does two asynchronous calls. You'll
 learn more on that in detail later. To get around this, we introduced
 `preferredLanguage()`. You should always use `preferredLanguage()` instead of
-`uses()` on `$translateProvider`.
+`use()` on `$translateProvider`.
 
-## Using another language to fall back
+## Determining preferred language automatically
 
-This is all great but unfortunately the `preferredLanguage()` you just choose
-is incomplete. So you would like `angular-translate` to try a second language
-for these translations instead of displaying some empty or unformatted strings.
-The `fallbackLanguage()` feature will let you tell `angular-translate` do so.
-`angular-translate` will use this language in case it cannot find a translation
-in the currently used translation table. Its usage is basically the same as
-`preferredLanguage()`.
+Since version `2.0` there's also a method `determinePreferredLanguage()` on the
+`$translateProvider`. This method tries to determine by itself what the preferred
+language would be. It searches for values in the `window.navigator` object in the
+following properties (also in this order):
+
+- `navigator.language`
+- `navigator.browserLanguage`
+- `navigator.systemLanguage`
+- `navigator.userLanguage`
+
+So instead of calling `$translateProvider.preferredLanguage(langKey)`, you'd do
+something like this:
 
 <pre>
-// tells angular-translate to use the English language if translations are not
-// available in German
-$translateProvider.fallbackLanguage('en');
+// try to find out preferred language by yourself
+$translateProvider.determinePreferredLanguage();
 </pre>
 
-Since version 1.1.1 it is also possible to include an array as the parameter. This will
-enable a range of fallback languages to be called in subsequent order.
+Please use this method on your own risk! Be aware that each browser can return
+different values on these properties.
+
+If this doesn't fit to your needs, you can also pass in a custom function, that
+determines the preferred language key for you.
 
 <pre>
-// tells angular-translate to use English language if translations are not
-// available in German, French if not even available in English
-$translateProvider.fallbackLanguage(['en','fr']);
+$translateProvider.determinePreferredLanguage(function () {
+  var preferredlangKey = '';
+  // some custom logic's going on in here
+  return preferredLangKey;
+});
 </pre>
 
 ## Switching the language at runtime
 
 To switch the language at runtime, `$translate` service has a method
-`uses()` which either returns the language key of the current used language, or,
+`use()` which either returns the language key of the current used language, or,
 when passing a language key as argument, tells angular-translate to use the
-corresponding language. `$translate.uses()` also invokes asynchronous loaders
+corresponding language. `$translate.use()` also invokes asynchronous loaders
 internally when trying to use a language of which the translation table hasn't been
 loaded yet. But more on that in
 [Asynchronous Loading](#/guide/10_asynchronous_loading).
 
-A good usage of `$translate.uses()` would be in a controller which controls the
+A good usage of `$translate.use()` would be in a controller which controls the
 change of a language. You just have to implement a function on the scope to
 expect a language key and then use it to tell angular-translate to change the
 language.
@@ -118,7 +127,7 @@ language.
 angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
   $scope.changeLanguage = function (langKey) {
-    $translate.uses(langKey);
+    $translate.use(langKey);
   };
 
 }]);
@@ -178,7 +187,7 @@ controllers scope:
 app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
   $scope.changeLanguage = function (langKey) {
-    $translate.uses(langKey);
+    $translate.use(langKey);
   };
 }]);
 </pre>
@@ -226,7 +235,7 @@ Et voilà! We now have an app with multi language support!
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
         $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
+          $translate.use(langKey);
         };
       }]);
     </script>
