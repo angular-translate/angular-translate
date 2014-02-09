@@ -1363,9 +1363,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * used except any promise handling. If a language was not found, an asynchronous loading
        * will be invoked in the background.
        *
-       * @param langKey The language to translate to.
-       * @param translationId
-       * @param interpolateParams
+       * @param {string} langKey The language to translate to.
+       * @param {string} translationId Translation ID
+       * @param {object} interpolateParams Params
        *
        * @return {string} translation
        */

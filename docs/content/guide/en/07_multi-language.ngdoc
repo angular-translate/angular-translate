@@ -74,7 +74,7 @@ learn more on that in detail later. To get around this, we introduced
 `preferredLanguage()`. You should always use `preferredLanguage()` instead of
 `use()` on `$translateProvider`.
 
-## **Determining preferred language automatically**
+## Determining preferred language automatically
 
 Since version `2.0` there's also a method `determinePreferredLanguage()` on the
 `$translateProvider`. This method tries to determine by itself what the preferred
