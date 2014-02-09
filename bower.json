@@ -12,8 +12,8 @@
   "devDependencies": {
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular-translate-interpolation-messageformat": "~0.1.2",
-    "angular-cookies": "~1.0.8",
     "angular": "~1.2.12",
-    "angular-mocks": "~1.2.12"
+    "angular-mocks": "~1.2.12",
+    "angular-cookies": "~1.2.12"
   }
 }
