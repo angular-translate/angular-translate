@@ -17,4 +17,105 @@ Folgende Tools existieren derzeit:
 
 ## grunt-po2json-angular-translate
 
-[grunt-po2json-angular-translate on GitHub](http://github.com/angular-translate/grunt-po2json-angular-translate)
+Mit diesem grunt task können po-foramtierte Zeichenketten in ein angular-translate-kompatibles Format gebracht werden.
+Für weitere Informationen schau bitte auf [GitHub repo](http://github.com/angular-translate/grunt-po2json-angular-translate).
+
+Hier aber die Wichtigsten beiden Schritte:
+
+1) Installiere und aktiviere den Task in deinem gruntfile
+
+```shell
+npm install grunt-po2json-angular-translate --save-dev
+```
+
+```js
+grunt.loadNpmTasks('grunt-po2json-angular-translate');
+```
+
+2) Füge die Konfiguration passend zu deinem Projekt hinzu - Beispiel:
+
+```js
+grunt.initConfig({
+  po2json_angular_translate: {
+  options: {
+     pretty: false,
+     upperCaseId : false
+    },
+    your_target: {
+                 files: {
+                     // This will generate a single json file with all the specified strings
+                     'tmp/dest.json' : ['test/fixtures/*.po'],
+
+                     //this will create several json files, the names of them will be the same than in the .po files
+                     'tmp/dest' : ['test/fixtures/*.po']
+                  }
+    },
+  },
+});
+```
+
+Je nach Anwendungsfall können einzelne oder mehrere JSON-Dateien bzw. ein Verzeichnis als Ziel angegeben werden.
+
+Es gibt zahlreiche Optionen zur Unterscheidung von Entwicklungs- und Produktionsumgebungen. Zusätzlich gibt es aber
+noch andere, sehr wichtige Einstellungen:
+
+#### options.pretty
+Type: `Boolean`
+Default value:  `false`
+Für eine lesbarere Ausgabe.
+
+#### options.cleanPrevStrings
+Type: `Boolean`
+Default value:  `false`
+Löscht alle bestehenden Zieldateien, bevor neue Dateien erzeugt werden.
+
+Es gibt noch mehr Einstellungen, die Einfluß auf die Ausgabedateien haben. Ein Beispiel ist die Konvertierung gemäß
+der gettext-Formatierungen für [Mehrzahl](https://github.com/angular-translate/grunt-po2json-angular-translate#pluralization),
+[für individuelle Platzhalter](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsenablealtplaceholders)
+oder um [```msgid``` in Großschreibung konvertieren](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsuppercaseid).
+
+
+Hier ein komplettes Praxisbeispiel:
+
+```js
+        'po2json_angular_translate': {
+            dev: {
+                options: {
+                    pretty: false,
+                    cleanPrevStrings: false
+                },
+                files: {
+                    'app/i18n/en/' : ['po/en/dashboard/*.po'],
+                    'app/i18n/en/common-strings.json' : ['po/en/dashboard/common/*.po'],
+
+                    'app/i18n/de/' : ['po/de/dashboard/*.po'],
+                    'app/i18n/de/common-strings.json' : ['po/de/dashboard/common/*.po']
+                }
+            },
+            devOneFile: {
+                options: {
+                    pretty: false,
+                    cleanPrevStrings: true
+                },
+                files: {
+                    'app/i18n/en/strings.json' : ['po/en/dashboard/**/*.po'],
+                    'app/i18n/de/strings.json' : ['po/de/dashboard/**/*.po']
+                }
+            },
+            dist: {
+                options: {
+                    pretty: false,
+                    cleanPrevStrings: true
+                },
+                files: {
+                    'app/dist/i18n/en/' : ['po/en/dashboard/*.po'],
+                    'app/dist/i18n/en/common-strings.json' : ['po/en/dashboard/common/*.po'],
+
+                    'app/dist/i18n/de/' : ['po/de/dashboard/*.po'],
+                    'app/dist/i18n/de/common-strings.json' : ['po/de/dashboard/common/*.po']
+                }
+            }
+        },
+
+```
+
