@@ -1,0 +1,20 @@
+@ngdoc overview
+@name Tools
+@description
+
+# Tools
+
+Angular-translate ist nicht nur eines der tollen Module, die man gerne benutzt.
+Es gibt um das Kernmodul von angular-translate herum ein kleines Ökosystem von
+weiteren Dingen bzw. Funktionalitäten. Es gibt noch weitere Hilfsprogramme vom
+Team, die für die Arbeit mit angular-translate sehr nützlich sein können.
+
+Folgende Tools existieren derzeit:
+
+## grunt-angular-translate
+
+[grunt-angular-translate on GitHub](http://github.com/angular-translate/grunt-angular-translate)
+
+## grunt-po2json-angular-translate
+
+[grunt-po2json-angular-translate on GitHub](http://github.com/angular-translate/grunt-po2json-angular-translate)
