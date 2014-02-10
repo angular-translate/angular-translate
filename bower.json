@@ -15,5 +15,8 @@
     "angular": "~1.2.12",
     "angular-mocks": "~1.2.12",
     "angular-cookies": "~1.2.12"
+  },
+  "resolutions": {
+    "angular": "~1.2.12"
   }
 }
