@@ -13,7 +13,7 @@ angular.module('pascalprecht.translate')
  * This directive can be used to prevent initial flickering when loading translation
  * data asynchronously.
  *
- * @param {string=} translate-cloak
+ * @param {string=} translate-cloak No string required
  */
 .directive('translateCloak', ['$rootScope', '$translate', function ($rootScope, $translate) {
 
