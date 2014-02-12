@@ -24,5 +24,5 @@ angular.module('pascalprecht.translate')
       });
       tElement.addClass($translate.cloakClassName());
     }
-  }
+  };
 }]);
