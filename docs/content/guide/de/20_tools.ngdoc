@@ -4,12 +4,12 @@
 
 # Tools
 
-There isn't only angular-translate as an additional module you might wanna use.
-There's an entire angular-translate universe! This universe also covers additional
-things around the module itself. We're currently maintaining a few tools that
-you might be interested in when developing apps with angular-translate.
+Angular-translate ist nicht nur eines der tollen Module, die man gerne benutzt.
+Es gibt um das Kernmodul von angular-translate herum ein kleines Ökosystem von
+weiteren Dingen bzw. Funktionalitäten. Es gibt noch weitere Hilfsprogramme vom
+Team, die für die Arbeit mit angular-translate sehr nützlich sein können.
 
-Take a look!
+Folgende Tools existieren derzeit:
 
 ## grunt-angular-translate
 
@@ -17,12 +17,12 @@ Take a look!
 
 ## grunt-po2json-angular-translate
 
-This is a grunt task created to help you to convert your po-formatted strings into a format compatible with angular-translate.
-If you want deeper information, head over to [the GitHub repo](http://github.com/angular-translate/grunt-po2json-angular-translate).
+Mit diesem grunt task können po-foramtierte Zeichenketten in ein angular-translate-kompatibles Format gebracht werden.
+Für weitere Informationen schau bitte auf [GitHub repo](http://github.com/angular-translate/grunt-po2json-angular-translate).
 
-Briefly, to set it up, you need two steps:
+Hier aber die Wichtigsten beiden Schritte:
 
-1) Install it and enable it on your gruntfile
+1) Installiere und aktiviere den Task in deinem gruntfile
 
 ```shell
 npm install grunt-po2json-angular-translate --save-dev
@@ -32,7 +32,7 @@ npm install grunt-po2json-angular-translate --save-dev
 grunt.loadNpmTasks('grunt-po2json-angular-translate');
 ```
 
-2) Add the configuration according to your needs, for example:
+2) Füge die Konfiguration passend zu deinem Projekt hinzu - Beispiel:
 
 ```js
 grunt.initConfig({
@@ -54,27 +54,28 @@ grunt.initConfig({
 });
 ```
 
-Whether you need a single or multiple .json files, depends on your special case.
+Je nach Anwendungsfall können einzelne oder mehrere JSON-Dateien bzw. ein Verzeichnis als Ziel angegeben werden.
 
-There are several options that could help you on the development/production environment, but the more important ones,
-are the next ones:
+Es gibt zahlreiche Optionen zur Unterscheidung von Entwicklungs- und Produktionsumgebungen. Zusätzlich gibt es aber
+noch andere, sehr wichtige Einstellungen:
 
 #### options.pretty
 Type: `Boolean`
 Default value:  `false`
-If you want to pretty print the result
+Für eine lesbarere Ausgabe.
 
 #### options.cleanPrevStrings
 Type: `Boolean`
 Default value:  `false`
-It will remove all the previous generated files on the destination specified before creating the new ones.
+Löscht alle bestehenden Zieldateien, bevor neue Dateien erzeugt werden.
+
+Es gibt noch mehr Einstellungen, die Einfluß auf die Ausgabedateien haben. Ein Beispiel ist die Konvertierung gemäß
+der gettext-Formatierungen für [Mehrzahl](https://github.com/angular-translate/grunt-po2json-angular-translate#pluralization),
+[für individuelle Platzhalter](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsenablealtplaceholders)
+oder um [```msgid``` in Großschreibung konvertieren](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsuppercaseid).
 
 
-There are other options to help you on the generation of the output .json file, for example, converting your gettext
-formatted [pluralized strings](https://github.com/angular-translate/grunt-po2json-angular-translate#pluralization), setting [custom placeholders](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsenablealtplaceholders) or [converting the ```msgid```  to uppercase](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsuppercaseid).
-
-
-This is an example of configuration used in an actual project:
+Hier ein komplettes Praxisbeispiel:
 
 ```js
         'po2json_angular_translate': {
@@ -117,3 +118,4 @@ This is an example of configuration used in an actual project:
         },
 
 ```
+

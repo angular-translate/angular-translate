@@ -1,0 +1,137 @@
+@ngdoc overview
+@name Alternativsprachen
+@description
+
+# Alternativsprachen
+
+Nachdem du nun gelernt hast, wie man die präferierte Sprache einstellt und wie man mit
+mehreren Sprachen arbeiten kann, möchtest du sicherlich auch wissen, ob man mit
+Alternativsprachen bzw. einer Liste von alternativen Sprachen arbeiten kann? Ja - kann man.
+
+## Alternativsprache konfigurieren
+
+Das Hinzufügen von Alternativsprachen ist lediglich der Aufruf einer Funktion mittels
+'$translateProvider'. Klingt einfach - ist es auch! Kommen wir zu einem kurzen Beispiel.
+Die Sprache Deutsch wird definiert:
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ });
+</pre>
+
+Nun gibt es einige der Sprachschlüssel auf Englisch, die aber **nicht** auf Deutsch
+übersetzt worden sind bisher. angular-translate würde in diesem Fall normalerweise
+den Schlüssel zurückgeben, da keine Übersetzung gefunden werden kann in der
+Sprachtabelle für Deutsch. Wenn nun aber eine Alternativsprache als Rückfall-Lösung
+registriert wird, so kann angular-translate dort nachsehen und die entsprechende
+Übersetzung aus dieser Sprache zurückgeben.
+
+Auf gehts zum Beispiel. Wir registrieren Englisch als Rückfallveriante. Vorher müssen
+wir jedoch noch Englisch als gültige Sprache bekanntmachen:
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ })
+  .translations('en', { /* ... */ });
+</pre>
+
+Und nun registrieren wir Englisch als alternative Sprache:
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ })
+  .translations('en', { /* ... */ })
+  .fallbackLanguage('en');
+</pre>
+
+Das wars. Falls nun keine deutsche Übersetzung existiert, wird angular-translate
+versuchen, die englischsprachige Übersetzung zu wählen und zurückzugeben.
+Einfach, oder?
+
+## Mehrere Alternativsprachen als Rückfallwerte registrieren
+
+Aber was ist, wenn du mehr als eine Alternativsprache haben willst? Kein Problem -
+angular-translate kann auch mit einem Array von Rückfallsprachen umgehen:
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ })
+  .translations('en', { /* ... */ })
+  .translations('fr', { /* ... */ })
+  .fallbackLanguage(['en', 'fr']);
+</pre>
+
+Falls nun vom angular-translate keine Übersetzung in der englischsprachigen
+Übersetzungstabelle gefunden wird (da dieses die erste Alternativsprache ist),
+wird solange über die Arraywerte iteriert, bis eine Übersetzung gefunden wird.
+Dabei wird das Array von vorne nach hinten durchlaufen. Die Größe des Arrays ist
+nicht beschränkt.
+
+## (Alternative) Einstiegssprache zur Laufzeit wechseln
+
+Sogar **das** ist mit angular-translate möglich. Es gibt Anwendungsfälle, in denen
+die Sprache zur Laufzeit geändert werden muss. Oder alles. Ein Beispiel: Angenommen,
+du hast Deutsch als bevorzugte Sprache definiert und Englisch wurde als Rückfall-Lösung
+gewählt. Kein Problem - das kennst du schon. Nun möchte der Anwender aber aus bestimmten
+Gründen, dass die aktuelle Sprache Englisch ist, die Alternative / Rückfall-Möglichkeit
+aber Französisch ist. Problem: Englisch ist bereits als Alternative definiert.
+
+Zur Laufzeit kann nun mit der Funktionalität von 'fallbackLanguage()' einfach der Austausch
+stattfinden:
+
+<pre>
+$scope.changeLanguage = function (langKey) {
+  if (langKey === 'en') {
+    $translate.fallbackLanguage('fr');
+  } else if (langKey == 'de') {
+    $translate.fallbackLanguage('en');
+  }
+  $translate.use(langKey);
+};
+</pre>
+
+Bitte denke daran, dass der Sprachschlüssel als Parameter steuert, an welcher Stelle der
+Iterator in der Sprachliste aufsetzt. Ein Beispiel: Falls 'en, fr, de' die Liste der
+Alternativsprachen darstellt und der Rückfall-Schlüssel wird auf 'fr' gesetzt, passiert
+folgendes: Sollte ein Schlüssel nicht auf 'fr' übersetzt sein, wird nur in der
+Sprachtabelle von 'de' nach einer Übersetzug gesucht.
+
+## Ändern der gesamten alternativen Sprachliste
+
+Ähnlich zum vorherigen Abschnitt kann folgendes gemacht werden:
+
+<pre>
+  $scope.changeLanguage = function (langKey) {
+  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.use(langKey);
+};
+</pre>
+
+Wenn die gesamte Liste gewechselt wird, kann gleichzeitig auch die Reihenfolge geändert werden!
+Somit bleibt der Prozess identisch, aber die Reihenfolge wird neu gestaltet.
+
+## Einschränken des Einstiegspunkts für die Iteration über Sprachalternativen
+
+Zusätzlich zu den oben genannten Möglichkeiten kann noch eine zusätzliche Einschränkung getroffen
+werden. Es gibt Anwendungsfälle, bei denen aus unterschiedlichen Gründen nur ein Teil der
+angebotenen Sprachpakete iteriert werden soll. Dies kann ebenfalls eingestellt werden.
+Wie oben erwähnt, wird die Sprachliste von vorne nach hinten durchlaufen bzw. iteriert.
+Möchten wir also im oben genannten Beispiel von 'de, en, fr' die Sprache 'de' nie übersetzen,
+ohne sie aus dem Stapel der Sprachen zu nehmen, so kann über 'useFallbackLanguage()' der Startpunkt
+der Schlüsselsuche gesetzt werden.
+
+<pre>
+  // langKey is 'en'
+  $scope.changeLanguage = function (langKey) {
+  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.useFallbackLanguage(langKey);
+};
+</pre>
+
+Nun wird die Übersetzungstabelle für 'de' ignoriert.
+Ein wichtiger Hinweis: Ignorierte Sprachen werden trotzdem übersetzt, falls diese aktuell die
+genutzte oder präferierte Sprache sind!
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

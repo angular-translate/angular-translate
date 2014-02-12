@@ -107,6 +107,28 @@ $scope.changeLanguage = function (langKey) {
 When changing the entire fallback language stack, you also change the order in how
 angular-translate iterate over them. So actually, the iteration process stays the same
 but you change the order of fallback languages to iterate over.
+
+## Limit the fallback languages to iterate
+
+An additional possibility to iterate through the fallback stack is to limit the languages to be
+scanned for translation keys. There are some use cases where the user / developer wants to scan
+only a part of the available fallback languages without removing some already defined or loaded
+languages. This is also possible!
+As mentioned above, the fallback stack is iterated from 'left to right'. So if we would like to
+start the iteration after 'de' in the stack of 'de, en, fr', we have to define the start with
+'useFallbackLanguage()'.
+
+<pre>
+  // langKey is 'en'
+  $scope.changeLanguage = function (langKey) {
+  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.useFallbackLanguage(langKey);
+};
+</pre>
+
+From now on - all translation texts in 'de' will be ignored and skipped.
+Important notice: If the ignored language is the preferred or current translation, it will be
+translated within that language - even though it should be skipped!
 <br>
 <hr>
 <center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
