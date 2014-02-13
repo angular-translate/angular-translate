@@ -100,29 +100,6 @@ $translateProvider.determinePreferredLanguage(function () {
 });
 </pre>
 
-## Использование другого языка в качестве запасного
-
-Это все замечательно, но, к сожалению, только что выбранный `preferredLanguage()` не полный. Вы бы
-хотели, чтобы `angular-translate` попробовал другой язык для этих переводов вместо того, чтобы
-отображать пустые или не форматированные строки. Функция `fallbackLanguage()` поможет вам сказать
-`angular-translate` какой язык стоит использовать в случае, если он не может найти перевод в текущей
-таблице. Его использование такое же, как и `preferredLanguage()`.
-
-<pre>
-// tells angular-translate to use the English language if translations are not
-// available in German
-$translateProvider.fallbackLanguage('en');
-</pre>
-
-Начиная с версии 1.1.1 в качестве параметра можно передавать массив. Так можно указывать запасными
-сразу несколько языков, которые будут использоваться в соответствующем порядке.
-
-<pre>
-// tells angular-translate to use English language if translations are not
-// available in German, French if not even available in English
-$translateProvider.fallbackLanguage(['en','fr']);
-</pre>
-
 ## Смена языка во время выполнения
 
 Для смены языка во время выполнения, сервис `$translate` имеет метод `use()` который или возвращает

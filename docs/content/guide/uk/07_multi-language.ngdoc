@@ -99,29 +99,6 @@ $translateProvider.determinePreferredLanguage(function () {
 });
 </pre>
 
-## Використання іншої мови у якості запасної
-
-Це все прекрасно, але, нажаль, щойно обраний `preferredLanguage()` не повний. Ви б хотіли, щоб 
-`angular-translate` спробував іншу мову для таких перекладів замість того, щоб відображати порожні
-або не форматовані рядки. Функція `fallbackLanguage()` допоможе вам сказати `angular-translate` яку
-мову слід використовувати у випадку, якщо він не може знайти переклад в поточній таблиці. Його
-використання таке ж, як і `preferredLanguage()`.
-
-<pre>
-// tells angular-translate to use the english language if translations are not
-// available in german
-$translateProvider.fallbackLanguage('en');
-</pre>
-
-Починаючи з версії 1.1.1 у якості параметра можна передавати масив. Таким чином можна вказувати
-запасними одразу декілька мов, що будуть використовуватися у відповідному порядку.
-
-<pre>
-// tells angular-translate to use English language if translations are not
-// available in German, French if not even available in English
-$translateProvider.fallbackLanguage(['en','fr']);
-</pre>
-
 ## Зміна мови під час використання
 
 Для зміни мови під час використання сервіс `$translate` має метод `use()` який або повертає ключ 
