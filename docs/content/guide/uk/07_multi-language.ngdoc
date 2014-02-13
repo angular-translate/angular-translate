@@ -67,7 +67,7 @@ $translateProvider.preferredLanguage('de');
 ми ввели `preferredLanguage()`. Вам слід завжди використовувати `preferredLanguage()` замість 
 `use()` при роботі з `$translateProvider`.
 
-## **Автоматичне визначення бажаної мови**
+## Автоматичне визначення бажаної мови
 
 Починаючи з версії `2.0` `$translateProvider` має метод `determinePreferredLanguage()`. Цей метод
 намагається самостійно визначити бажану мову для застосунку. Він шукає значення у наступних 
