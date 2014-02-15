@@ -15,14 +15,23 @@
     <a href="#" ng-click="setLang('ru_RU')">Русский</a>
   </p>
 
-  <h1>{{ 'load.static.HEADER' | translate }}</h1>
-  <h2 translate>load.static.SUBHEADER</h2>
+  <h1 translate="load.static.HEADER"></h1>
+  <h2 translate="load.static.SUBHEADER"></h2>
 
-<script src="../bower_components/angular/angular.js"></script>
-<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
-<script src="../dist/angular-translate.js"></script>
-<script src="../dist/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
-<script src="../dist/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+<script src="../../bower_components/angular/angular.js"></script>
+<script src="../../bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="../../src/translate.js"></script>
+<script src="../../src/service/default-interpolation.js"></script>
+<script src="../../src/service/handler-log.js"></script>
+<script src="../../src/service/loader-static-files.js"></script>
+
+
+<script src="../../src/service/storage-key.js"></script>
+<script src="../../src/service/storage-local.js"></script>
+<script src="../../src/service/storage-cookie.js"></script>
+<script src="../../src/service/translate.js"></script>
+<script src="../../src/directive/translate.js"></script>
+<script src="../../src/filter/translate.js"></script>
 
 <script>
 angular.module('app', ['pascalprecht.translate', 'ngCookies'])
@@ -40,16 +49,13 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
   // Tell the module what language to use by default
   $translateProvider.preferredLanguage('en_US');
 
-  // Tell the module to store the language in the cookies
-  $translateProvider.useCookieStorage();
-
 }])
 
 .controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
 
   $scope.setLang = function(langKey) {
     // You can change the language during runtime
-    $translate.uses(langKey);
+    $translate.use(langKey);
   };
 
 }]);
