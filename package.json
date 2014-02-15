@@ -8,6 +8,7 @@
     "url": "http://github.com/PascalPrecht/angular-translate"
   },
   "scripts": {
+    "postinstall": "bower install",
     "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run"
   },
   "author": {
