@@ -1,3 +1,102 @@
+# 2.0.0 (2014-02-16)
+
+## Features
+###
+
+* add option to html escape all values (fe94c1f)
+
+* add option to html escape all values (e042c44)
+
+* add an option for post processing compiling (d5cd943)
+
+### $translateProvider
+
+* adds determinePreferredLanguage() (7cbfabe)
+
+* adds registerAvailableLanguagesKeys for negotiation (6bef6bd)
+
+### translateDirective
+
+* teaches directive custom translate-value-* attr (5c27467)
+
+### service
+
+* add $translate.instant() for instant translations (3a855eb)
+
+### filter
+
+* filter now use $translate.instant() since promises could not use (a1b8a17)
+
+### translateCloak
+
+* adds translate-cloak directive (c125c56)
+
+
+
+## Bug fixes
+### fallbackLanguage
+
+* Fix fallback languages loading and applying (4c5c47c)
+
+### loader-static-files.js
+
+* Now allows empty string as prefix and postfix. (051f431)
+
+### translateDirective
+
+* fixes bad coding convention (d5db4ad)
+
+### demo
+
+* links to demo resources updated to new locactions (fddaa49)
+
+* fix server routes + add index page (eb0a2dc)
+
+### $translate
+
+* Trim whitespace off translationId (4939424)
+
+* check for fallbacklanguage (321803d)
+
+###
+
+* fix npe introduced in 4939424a30 (#281) (173a9bc)
+
+* avoid calls with empty translationId (sub issue of #298) (08f087b)
+
+### *
+
+* jshint fixes (1e3f8a6)
+
+### $translatePartialLoader
+
+* fixes docs annotation (d6ea84b)
+
+### guide/ru,uk
+
+* Fix uses->use in multi language (af59c6a)
+
+### service
+
+* fallback languages could not load when using `instant()` (26de486)
+
+### deps
+
+* add missing resolution (a98a2f6)
+
+### grunt
+
+* includes translate-cloak directive (84a59d2)
+
+### translateCloak
+
+* makes jshint happy (2058fd3)
+
+### docs
+
+* fixes links for languages (265490f)
+
+
 # 1.1.1 (2013-11-24)
 
 ## Features
