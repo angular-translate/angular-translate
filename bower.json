@@ -9,13 +9,14 @@
     "url": "git://github.com/PascalPrecht/angular-translate"
   },
   "main": "./build/angular-translate",
-  "dependencies": {
-    "angular": "1.0.8"
-  },
   "devDependencies": {
-    "angular-mocks": "1.0.8",
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular-translate-interpolation-messageformat": "~0.1.2",
-    "angular-cookies": "~1.0.8"
+    "angular": "~1.2.12",
+    "angular-mocks": "~1.2.12",
+    "angular-cookies": "~1.2.12"
+  },
+  "resolutions": {
+    "angular": "~1.2.12"
   }
 }

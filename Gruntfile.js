@@ -26,6 +26,7 @@ module.exports = function (grunt) {
         'src/service/default-interpolation.js',
         'src/service/storage-key.js',
         'src/directive/translate.js',
+        'src/directive/translate-cloak.js',
         'src/filter/translate.js'
       ],
 
@@ -314,14 +315,48 @@ module.exports = function (grunt) {
 
     karma: {
 
-      unit: {
+      // Runs standard tests in default browser
+      'unit': {
         configFile: 'karma.unit.conf.js',
         singleRun: true
       },
-
-      midway: {
+      'midway': {
         configFile: 'karma.midway.conf.js',
         singleRun: true
+      },
+
+      // Runs standard tests in headless PhantomJS
+      'headless-unit': {
+        configFile: 'karma.unit.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      },
+      'headless-midway': {
+        configFile: 'karma.midway.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      },
+
+      // Runs standard tests in Firefox
+      'browser-firefox-unit': {
+        configFile: 'karma.unit.conf.js',
+        singleRun: true,
+        browsers: ['Firefox']
+      },
+      'browser-firefox-midway': {
+        configFile: 'karma.midway.conf.js',
+        singleRun: true,
+        browsers: ['Firefox']
+      },
+
+      // Opens the default browser on the default port for advanced debugging.
+      'debug-unit': {
+        configFile: 'karma.unit.conf.js',
+        singleRun: false
+      },
+      'debug-midway': {
+        configFile: 'karma.midway.conf.js',
+        singleRun: false
       }
     },
 
@@ -404,12 +439,12 @@ module.exports = function (grunt) {
           'http://rawgithub.com/SlexAxton/messageformat.js/master/locale/de.js',
           'http://code.angularjs.org/1.1.5/angular.min.js',
           'http://rawgithub.com/angular/bower-angular-cookies/master/angular-cookies.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate/master/angular-translate.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-interpolation-messageformat/master/angular-translate-interpolation-messageformat.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js',
-          'http://rawgithub.com/PascalPrecht/bower-angular-translate-handler-log/master/angular-translate-handler-log.min.js'
+          'http://rawgithub.com/angular-translate/bower-angular-translate/master/angular-translate.min.js',
+          'http://rawgithub.com/angular-translate/bower-angular-translate-interpolation-messageformat/master/angular-translate-interpolation-messageformat.min.js',
+          'http://rawgithub.com/angular-translate/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
+          'http://rawgithub.com/angular-translate/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
+          'http://rawgithub.com/angular-translate/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js',
+          'http://rawgithub.com/angular-translate/bower-angular-translate-handler-log/master/angular-translate-handler-log.min.js'
         ],
         styles: ['docs/css/styles.css']
       },
@@ -432,7 +467,12 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('default', ['jshint:all', 'karma']);
-  grunt.registerTask('test', ['karma']);
+  grunt.registerTask('test', ['karma:unit', 'karma:midway']);
+
+  // Advanced test tasks
+  grunt.registerTask('test-headless', ['karma:headless-unit', 'karma:headless-midway']);
+  grunt.registerTask('test-browser-firefox', ['karma:browser-firefox-unit', 'karma:browser-firefox-midway']);
+  grunt.registerTask('test-all', ['karma']);
 
   grunt.registerTask('build', [
     'jshint:all',

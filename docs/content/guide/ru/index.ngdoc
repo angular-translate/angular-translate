@@ -69,47 +69,6 @@ app.config(['$translateProvider', function ($translateProvider) {
 <p>{{ 'FOO' | translate }}</p>
 </pre>
 
-Вот как это выглядит:
-
-<doc:example module="myApp">
-  <doc:source>
-    <script>
-      var app = angular.module('myApp', ['pascalprecht.translate']);
-
-      app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.translations('en', {
-          'TITLE': 'Hello',
-          'FOO': 'This is a paragraph',
-          'BUTTON_LANG_EN': 'english',
-          'BUTTON_LANG_DE': 'german'
-        });
-
-        $translateProvider.translations('de', {
-          'TITLE': 'Hallo',
-          'FOO': 'Dies ist ein Paragraph',
-          'BUTTON_LANG_EN': 'englisch',
-          'BUTTON_LANG_DE': 'deutsch'
-        });
-
-        $translateProvider.preferredLanguage('en');
-      }]);
-
-      app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-
-        $scope.changeLanguage = function (langKey) {
-          $translate.uses(langKey);
-        };
-      }]);
-    </script>
-    <div ng-controller="Ctrl">
-      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
-      <h1 translate="TITLE"></h1>
-      <p translate="FOO"></p>
-    </div>
-  </doc:source>
-</doc:example>
-
 Это просто быстрый пример того, как работает angular-translate. В целом, все это работает так:
 "_предоставить данные i18n, дать о них знать angular-translate и использовать его компоненты для
 интерполяции ваших переводов некоторыми значениями._". Просто, да?
@@ -118,6 +77,8 @@ app.config(['$translateProvider', function ($translateProvider) {
 В сети есть пара очень полезных вещей, которые могут быть для вас интересны. Так что, не забудьте
 ознакомиться с этим списком:
 
+- [Учебник на ng-newsletter.com](http://www.ng-newsletter.com/posts/angular-translate.html)
+- [angular-translate и загрузка по частям](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
 - [Примеры и демо](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - Сейчас на plnkr.co
 - [Учебник на angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - Статья на немецком
 - [Учебник на neoskop.de](http://www.neoskop.de/blog/angular-translate) - Статья на немецком

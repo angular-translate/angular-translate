@@ -16,15 +16,17 @@ angular.module('pascalprecht.translate', ['ng'])
     if (!storage.get(key)) {
 
       if (angular.isString($translate.preferredLanguage())) {
-        $translate.uses($translate.preferredLanguage());
+        $translate.use($translate.preferredLanguage());
+        // $translate.use() will also remember the language.
+        // So, we don't need to call storage.set() here.
       } else {
-        storage.set(key, $translate.uses());
+        storage.set(key, $translate.use());
       }
 
     } else {
-      $translate.uses(storage.get(key));
+      $translate.use(storage.get(key));
     }
   } else if (angular.isString($translate.preferredLanguage())) {
-    $translate.uses($translate.preferredLanguage());
+    $translate.use($translate.preferredLanguage());
   }
 }]);

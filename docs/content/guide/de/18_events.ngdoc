@@ -1,0 +1,67 @@
+@ngdoc overview
+@name Events
+@description
+
+# Events
+
+angular-translate triggert einige Events am `$rootScope` auf die du reagieren kannst,
+sobald sie gefeuert werden. Dieses Dokument beschreibt die verschiedenen Events.
+
+
+## Allgemein
+
+Einige Events werden gefeuert, unabhängig davon wie angular-translate konfiguriert
+wurde.
+
+
+#### `$translateChangeStart`
+
+Wird gefeuert sobald angular-translate versucht eine Sprache zu wechseln.
+Dies geschieht beim Startup, wenn die Sprache das erste mal eingerichtet wird, oder
+wenn die Sprache zur Laufzeit mit `$translate.use()` gewechselt wird. Der Event
+wird außerdem gefeuert wenn Übersetzungen asynchron geladen werden müssen.
+
+#### `$translateChangeSuccess`
+
+Wie der Name schon sagt, wird dieser Event gefeuert sobald das wechseln einer Sprache
+erfolgreich war. Wenn kein asynchroner Loader verwendet wird, geschieht dies
+in der Regel direkt nach dem `$translateChangeStart` Event. Dieser Event wird auch
+gefeuert, wenn erst Datn asynchron geladen werden mussten.
+
+#### `$translateChangeError`
+
+Wird gefeuert wenn ein Sprachwechsel fehl schlug. Das passiert in der Regel nur
+wenn ein Loader ein rejected Promise zurück gibt.
+
+
+#### `$translateChangeEnd`
+
+Wird jedes mal gefeuert wenn ein Translation Change endet, egal ob es erfolgreich
+war oder nicht und vor allem nachdem alle registrierten Interpolation-Services
+benachrichtigt wurden.
+
+## Asynchrones Laden
+
+Einige Events werden nur gefeuert, wenn man einen aynchronen Loader verwendet.
+
+#### `$translateLoadingStart`
+
+Wie der Eventname schon sagt, wird er gefeuert sobald ein Loader ausgeführt wird.
+
+#### `$translateLoadingSuccess`
+
+Wird gefeuert wenn ein Loader ein resolved Promise zurück gibt.
+
+#### `$translateLoadingError`
+
+Wird gefeuert wenn ein Loader ein rejected Promise zurück gibt.
+
+#### `$translateLoadingEnd`
+
+Wird gefeuert sobald der Loader ein Promise zurück gegeben hat, unabhänig davon
+ob es rejected oder resolved wurde. Dieser Event wird gefeuert nachdem die Übersetzungtabelle
+geupdated wurde.
+
+#### `$translatePartialLoaderStructureChanged`
+
+Wird gefeuert wenn der State von `$translatePartialLoader` verändert wird.

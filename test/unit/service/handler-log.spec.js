@@ -4,84 +4,86 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate'));
 
+    var $translateMissingTranslationHandlerLog, $log;
+
+    beforeEach(inject(function (_$translateMissingTranslationHandlerLog_, _$log_) {
+      $translateMissingTranslationHandlerLog = _$translateMissingTranslationHandlerLog_;
+      $log = _$log_;
+    }));
+
     it('should be defined', function () {
-      inject(function ($translateMissingTranslationHandlerLog) {
-        expect($translateMissingTranslationHandlerLog).toBeDefined();
-      });
+      expect($translateMissingTranslationHandlerLog).toBeDefined();
     });
 
     it('should be a function', function () {
-      inject(function ($translateMissingTranslationHandlerLog) {
-        expect(typeof $translateMissingTranslationHandlerLog).toBe('function');
-      });
+      expect(typeof $translateMissingTranslationHandlerLog).toBe('function');
     });
 
     it('should use $log service to log message', function () {
-      inject(function ($translateMissingTranslationHandlerLog, $log) {
-        spyOn($log, 'warn');
-        $translateMissingTranslationHandlerLog();
-        expect($log.warn).toHaveBeenCalled();
-      });
+      spyOn($log, 'warn');
+      $translateMissingTranslationHandlerLog();
+      expect($log.warn).toHaveBeenCalled();
     });
 
     it('should log the right message', function () {
-      inject(function ($translateMissingTranslationHandlerLog, $log) {
-        spyOn($log, 'warn');
-        $translateMissingTranslationHandlerLog('MISSING_TRANSLATION_ID');
-        expect($log.warn)
-          .toHaveBeenCalledWith('Translation for MISSING_TRANSLATION_ID doesn\'t exist');
-      });
+      spyOn($log, 'warn');
+      $translateMissingTranslationHandlerLog('MISSING_TRANSLATION_ID');
+      expect($log.warn)
+        .toHaveBeenCalledWith('Translation for MISSING_TRANSLATION_ID doesn\'t exist');
     });
   });
 
-  describe('missingTranslationHandler', function () {
+  describe('$translateProvider#useMissingTranslationHandler', function () {
 
-    describe('useMissingTranslationHandler()', function () {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
+    }));
 
-      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-        $translateProvider.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
-      }));
+    var $translate, $log;
 
-      it('should use given missing translation handler service', function () {
-        inject(function ($translate, $log) {
-          spyOn($log, 'warn');
-          $translate('MISSING_TRANSLATION_ID');
-          expect($log.warn).toHaveBeenCalled();
-        });
-      });
+    beforeEach(inject(function (_$translate_, _$log_) {
+      $translate = _$translate_;
+      $log = _$log_;
+    }));
 
-      it('should log the right message', function () {
-        inject(function($translate, $log) {
-          spyOn($log, 'warn');
-          $translate('MISSING_TRANSLATION_ID');
-          expect($log.warn)
-            .toHaveBeenCalledWith('Translation for MISSING_TRANSLATION_ID doesn\'t exist');
-        });
-      });
+    it('should use given missing translation handler service', function () {
+      spyOn($log, 'warn');
+      $translate('MISSING_TRANSLATION_ID');
+      expect($log.warn).toHaveBeenCalled();
     });
 
-    describe('useMissingTranslationHandlerLog()', function () {
+    it('should log the right message', function () {
+      spyOn($log, 'warn');
+      $translate('MISSING_TRANSLATION_ID');
+      expect($log.warn)
+        .toHaveBeenCalledWith('Translation for MISSING_TRANSLATION_ID doesn\'t exist');
+    });
+  });
 
-      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-        $translateProvider.useMissingTranslationHandlerLog();
-      }));
+  describe('$translateProvider#useMissingTranslationHandlerLog', function () {
 
-      it('should use $log service to log missing translation message', function () {
-        inject(function ($translate, $log) {
-          spyOn($log, 'warn');
-          $translate('MISSING_TRANSLATION_ID');
-          expect($log.warn).toHaveBeenCalled();
-        });
-      });
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.useMissingTranslationHandlerLog();
+    }));
 
-      it('should log the right message', function () {
-        inject(function($translate, $log) {
-          spyOn($log, 'warn');
-          $translate('MISSING_TRANSLATION_ID');
-          expect($log.warn)
-            .toHaveBeenCalledWith('Translation for MISSING_TRANSLATION_ID doesn\'t exist');
-        });
-      });
+    var $translate, $log;
+
+    beforeEach(inject(function (_$translate_, _$log_) {
+      $translate = _$translate_;
+      $log = _$log_;
+    }));
+
+    it('should use $log service to log missing translation message', function () {
+      spyOn($log, 'warn');
+      $translate('MISSING_TRANSLATION_ID');
+      expect($log.warn).toHaveBeenCalled();
+    });
+
+    it('should log the right message', function () {
+      spyOn($log, 'warn');
+      $translate('MISSING_TRANSLATION_ID');
+      expect($log.warn)
+        .toHaveBeenCalledWith('Translation for MISSING_TRANSLATION_ID doesn\'t exist');
     });
   });
 });

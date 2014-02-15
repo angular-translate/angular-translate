@@ -28,14 +28,14 @@ describe('pascalprecht.translate', function () {
     expect($translateMessageFormatInterpolation.interpolate).toBeDefined();
   });
 
-  describe('.setLocale()', function () {
+  describe('$translateMessageFormatInterpolation#setLocale', function () {
 
     it('should be a function ', function () {
       expect(typeof $translateMessageFormatInterpolation.setLocale).toBe('function');
     });
   });
 
-  describe('.getInterpolationIdentifier()', function () {
+  describe('$translateMessageFormatInterpolation#getInterpolationIdentifier', function () {
 
     it('should be a function ', function () {
       expect(typeof $translateMessageFormatInterpolation.getInterpolationIdentifier).toBe('function');
@@ -50,7 +50,7 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('.interpolate()', function () {
+  describe('$translateMessageFormatInterpolation#interpolate', function () {
 
     it('should be a function ', function () {
       expect(typeof $translateMessageFormatInterpolation.interpolate).toBe('function');

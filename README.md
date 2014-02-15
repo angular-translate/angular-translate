@@ -7,6 +7,7 @@
 | ------------- |:-------------:|
 | master        | [![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=master)](https://travis-ci.org/PascalPrecht/angular-translate) |
 | canary        |[![Build Status](https://travis-ci.org/PascalPrecht/angular-translate.png?branch=canary)](https://travis-ci.org/PascalPrecht/angular-translate)     |
+| BitDeli       |[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/PascalPrecht/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")        |
 
 ### Links
 * Website [http://pascalprecht.github.io/angular-translate/](http://pascalprecht.github.io/angular-translate/)
@@ -32,5 +33,3 @@ use this module and they are always thankful for it and the awesome support they
 get. I just want to make sure that you guys know: All this wouldn't have been
 possible without these [great contributors](http://github.com/PascalPrecht/angular-translate/contributors)
 and everybody who comes with new ideas and feature requests! So **THANK YOU**!
-
-[![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://wtfpl.net)

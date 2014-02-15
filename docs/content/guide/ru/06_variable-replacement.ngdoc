@@ -97,9 +97,9 @@ angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 значений. Все, что вам необходимо сделать - это использовать директиву вместе с атрибутом
 `translate-values`.
 
-Вы можете использовать как литерал объекта в виде строки, так и директиву интерполяции (если
-значение динамично). Оба варианта будут оценены и разобраны фильтром так, что в результате получится
-простой объект JavaScript, который будет передан сервису `$translate`.
+Вы можете использовать литерал объекта в виде строки, выражение, или директиву интерполяции (если
+значение динамично). Переданное значение будет оценено и разобрано фильтром так, что в результате
+получится простой объект JavaScript, который будет передан сервису `$translate`.
 
 <pre>
 <ANY translate="TRANSLATION_ID"
@@ -110,8 +110,53 @@ angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 
 <pre>
 <ANY translate="TRANSLATION_ID"
+     translate-values='{ username: someScopeObject.username }'></ANY>
+</pre>
+
+или
+
+<pre>
+<ANY translate="TRANSLATION_ID"
      translate-values="{{translationData}}"></ANY>
 </pre>
+
+## Пользовательские атрибуты для передачи значений
+
+Начиная с версии `2.0` директива `translate` предоставляет еще одну полезную возможность для
+передачи значений в ваши переводы. Мы только что узнали как использовать атрибут `translate-values`,
+что хорошо, но в некоторых случаях наш код мог бы быть немного более декларативным. Что если мы
+хотим передать одно или два значения, но указать это непосредственно в HTML?
+
+Что ж, в angular-translate `>=2.0` вы можете это сделать. Вы можете определять ваши собственные
+`translate-value-*` атрибуты.
+
+Итак, как это работает? Очень просто!
+
+Скажем, у нас есть такой идентификатор перевода:
+
+<pre>
+{
+  "GREETING": "Hi, my name is {{name}}"
+}
+</pre>
+
+И мы хотим перевести его с помощью директивы `translate`. Мы можем это сделать, но в этот раз мы
+будем использовать пользовательский атрибут `translate-value-*` для передачи значения в наш перевод.
+Вот как это работает:
+
+<pre>
+<p translate="GREETING" translate-value-name="Pascal"></p>
+</pre>
+
+Все, что нужно - это использовать префикс `translate-value-` перед названиями переменных из
+вашего перевода (в данном случае `name`).
+
+И, конечно, вы можете использовать их с интерполированными значениями тоже:
+<pre>
+<p translate="GREETING" translate-value-name="{{name}}"></p>
+</pre>
+
+Если это не круто, убедили.
 
 Здорово! Теперь мы можем использовать переменные в наших переводах! Давайте обновим наше учебное
 приложение. Мы расширили таблицу переводов таким образом:
@@ -151,7 +196,9 @@ var translations = {
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {
@@ -167,6 +214,7 @@ var translations = {
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
       <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-name="PascalPrecht"></p>
     </div>
   </doc:source>
 </doc:example>

@@ -42,7 +42,7 @@
 
       app.controller('Ctrl', function ($scope, $translate) {
         $scope.changeLanguage = function (key) {
-          $translate.uses(key);
+          $translate.use(key);
         };
       });
     </script>
@@ -127,7 +127,7 @@ app.config(function ($translateProvider) {
 
 app.controller('Ctrl', function ($scope, $translate) {
   $scope.changeLanguage = function (key) {
-    $translate.uses(key);
+    $translate.use(key);
   };
 });</pre>
             </div>
@@ -148,18 +148,18 @@ app.controller('Ctrl', function ($scope, $translate) {
           <div class="row">
             <h1 class="span12">What people say</h1>
             <blockquote class="span6">
-              <p>When building a product with global reach, angular-translate is a must-have addition to AngularJS. It integrates seamlessly with your application, making internationalization as easy as maintaining a few files containing all translations. angular-translate works very nicely with all AngularJS dynamic data-binding features, making it a breeze to switch languages on-the-fly. Highly recommended!</p>
+              <p>When building a product with global reach, angular-translate is a must-have addition to AngularJS. It integrates seamlessly with your application, making internationalization as easy as maintaining a few files containing all translations. angular-translate works very nicely with all AngularJS dynamic data-binding features, making it a breeze to switch languages on-the-fly. Highly recommended! </p>
               <footer>
                 <span>- <strong>Sander Mak</strong>, Luminis Technologies</span>
               </footer>
-					  </blockquote>
+            </blockquote>
 
             <blockquote class="span6">
               <p>I looked for some localization stuff to bring translations from server to client. There were some modules for i18n, but they didn't match all my needs. Then I found an angular-translate and I loved this module! Seriously. I was really surprised by its quality and support. It's also really awesome that the author of angular-translate is always open for new ideas!</p>
               <footer>
               <span>- <strong>Max Prichinenko</strong>, Freelancer</span>
               </footer>
-					  </blockquote>
+            </blockquote>
           </div>
           <div class="row">
 
@@ -168,7 +168,7 @@ app.controller('Ctrl', function ($scope, $translate) {
               <footer>
                 <span>- <strong>Chris Jones</strong>, Waters Corporation</span>
               </footer>
-					  </blockquote>
+            </blockquote>
           </div>
         </div>
         <hr>
@@ -178,13 +178,14 @@ app.controller('Ctrl', function ($scope, $translate) {
             <ul class="span12">
               <li><a href="http://neoskop.de"><img src="http://www.neoskop.de/assets/css/img/logo.png"></a></li>
               <li><a href="http://luminis-technologies.com"><img src="http://www.luminis-technologies.com/img/lt-logo.gif"></a></li>
+              <li><a href="http://jhipster.github.io"><img src="https://raw.github.com/jhipster/jhipster.github.io/master/images/logo_jhipster.png"></a></li>
             </ul>
           </div>
         </div>
       </div>
       <footer class="footer">
         <div class="container">
-          <p>Brought to you by <a href="http://github.com/PascalPrecht"> <img width="40" height="40" src="https://secure.gravatar.com/avatar/b32bdb1fc9fdadeb45d7a1267fdd2fc4?s=40"> Pascal Precht</a> <a href="http://github.com/knalli"><img height="210" src="https://secure.gravatar.com/avatar/6c349ffd9793132e1d217f0de572e080?s=40" width="40" height="40"> Jan Philipp</a> <a href="http://github.com/sgara"><img height="40" width="40" src="https://secure.gravatar.com/avatar/076e1a1b2f8ff489387fc5b1a7bd44f4?s=40"> Stéphane Garagnani <a href="http://github.com/DWand"><img height="40" width="40" src="https://secure.gravatar.com/avatar/2146036b95ee605ca39779b958cd54ce?s=40"> Max Prichinenko</a> and many <a href="http://github.com/PascalPrecht/angular-translate/contributors">others</a></p>
+          <p>Brought to you by <a href="http://github.com/PascalPrecht"> <img width="40" height="40" src="https://secure.gravatar.com/avatar/b32bdb1fc9fdadeb45d7a1267fdd2fc4?s=40"> Pascal Precht</a> <a href="http://github.com/knalli"><img height="210" src="https://secure.gravatar.com/avatar/6c349ffd9793132e1d217f0de572e080?s=40" width="40" height="40"> Jan Philipp</a> <a href="http://github.com/DWand"><img height="40" width="40" src="https://secure.gravatar.com/avatar/2146036b95ee605ca39779b958cd54ce?s=40"> Max Prichinenko</a> and many <a href="http://github.com/PascalPrecht/angular-translate/contributors">others</a></p>
 
             <p>Logo designed by <a href="http://stefankroeckel.tumblr.com/">Stefan Kröckel</a></p>
         </div>

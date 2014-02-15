@@ -45,6 +45,31 @@ couldn't handle it the same way with our first usage example. This also works:
 
 Choose what works best for you!
 
+## Post compiling
+Starting with version 2, the translation itself can be post processed in context of the
+current scope (using `$compile`). This means any directive used in a translation value
+itself will now work as expected.
+
+This behavior can be enabled per directive:
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile></ANY>
+```
+
+In addition to it, you can also enable the feature globally with...
+
+```
+$translateProvider.usePostCompiling(true);
+```
+
+... and even then you can disable the feature again per directive:
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
+```
+
+## Example
+
 Let's update our example app and add some new translations. How about texts which
 represents each possible way of using `translate` directive? Our translation table
 could look like this:
@@ -88,7 +113,9 @@ Our updated app then looks like this:
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider.translations(translations);
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {

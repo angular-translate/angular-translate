@@ -1,0 +1,95 @@
+@ngdoc overview
+@name Sicherheit
+@description
+
+# Escapen dynamischer Werte
+
+Für reguläre Ausgaben sorgt bereits AngularJS im Allgemeinen intern dafür, dass
+die Ausgabe korrekt escaped ausgegeben wird. Allerdings kann es bei der Verwendung
+`angular-translate` dazu führen, dass dynamische Inhalte im Ergebnis nicht korrekt
+escaped werden. Dies führt zu ernsthaften Sicherheitslücken innerhalb der eigenen
+Applikation (siehe auch: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+
+## Allgemeine Benutzung
+
+Grundsätzlich konfiguriert man die Ausgabeform mittels `useSanitizeValueStrategy(strategy)`
+und einer gewünschte Security-Strategy; dies gilt dann für die gesamte Applikation.
+
+Derzeit gibt es nur zwei Strategien: `null` (keine) und `escaped` (für HTML).
+
+Um eine vollständige Rückwärtskompatibilität zu gewährleisten, ist das Feature derzeit
+deaktiviert:
+
+```javascript
+$translateProvider.useSanitizeValueStrategy(null);
+```
+
+Selbstverständlich empfehlen wir aber das aktivierte Escaping (in einer späteren
+Version wird dies Standard sein):
+
+```javascript
+$translateProvider.useSanitizeValueStrategy('escaped');
+```
+
+## Anwendungsbeispiele
+
+### Ausgabe von dynamischen Variablen nicht escaped
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations(translations);
+        // Using standard escaping (nothing)
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Ausgabe von dynamischen Variablen escaped
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations(translations);
+        // Enable escaping of HTML
+        $translateProvider.useSanitizeValueStrategy('escaped');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
