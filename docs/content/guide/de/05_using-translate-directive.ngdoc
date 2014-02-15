@@ -122,7 +122,7 @@ Die neue App sieht dann so aus:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
 
       <p translate>PASSED_AS_TEXT</p>

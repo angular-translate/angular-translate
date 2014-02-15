@@ -156,7 +156,7 @@ Here' what it looks like:
 
     </script>
     <div ng-controller="Ctrl">
-      <h2 translate="HEADLINE"></h2>
+      <p translate="HEADLINE"></p>
       <p translate="TEXT" translate-values="{ val: 5 }"></p>
 
       <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>

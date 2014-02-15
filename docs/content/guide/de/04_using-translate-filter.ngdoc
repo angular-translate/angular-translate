@@ -61,7 +61,7 @@ Einfach oder? Hier ein funktionierendes Beispiel:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h1>{{ 'HEADLINE' | translate }}</h1>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
     </div>
   </doc:source>

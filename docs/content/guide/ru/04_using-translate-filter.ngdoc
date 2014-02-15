@@ -59,7 +59,7 @@ angular-translate предоставляет фильтр, с помощью к�
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h1>{{ 'HEADLINE' | translate }}</h1>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
     </div>
   </doc:source>

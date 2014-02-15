@@ -55,7 +55,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
     </div>
   </doc:source>
@@ -63,7 +63,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
 
 ### Ausgabe von dynamischen Variablen escaped
 
-<doc:example module="myApp">
+<doc:example module="myApp2">
   <doc:source>
     <script>
       var translations = {
@@ -71,7 +71,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
         PARAGRAPH: 'Hello {{username}}!',
       };
 
-      var app = angular.module('myApp', ['pascalprecht.translate']);
+      var app = angular.module('myApp2', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
         $translateProvider.translations(translations);
@@ -84,7 +84,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
     </div>
   </doc:source>

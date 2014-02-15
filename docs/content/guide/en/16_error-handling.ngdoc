@@ -60,7 +60,7 @@ Here's a working sample
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2 translate="NOT_EXISTING"></h2>
+      <p translate="NOT_EXISTING"></p>
       <p translate="ALSO_NOT_EXISTING"></p>
 
       <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>

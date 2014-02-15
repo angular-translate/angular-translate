@@ -55,9 +55,8 @@ Pretty easy ha? And of course, you can view a working sample here:
 
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
-        $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {
@@ -65,7 +64,7 @@ Pretty easy ha? And of course, you can view a working sample here:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h1>{{ 'HEADLINE' | translate }}</h1>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
     </div>
   </doc:source>
