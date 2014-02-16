@@ -1463,9 +1463,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             if ($translationTable[possibleLangKey][translationId]) {
               result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
             }
-          } else {
-            // load in background
-            loadAsync(possibleLangKey);
           }
         }
 
