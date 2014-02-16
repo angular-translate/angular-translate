@@ -133,7 +133,7 @@ declarative in our code. What if we only want to pass in one or two values but
 declare these explicitly in our HTML?
 
 Well, in angular-translate `>=2.0` you can do exactly that. You are able to define
-your own `translate-value-*` attributes. 
+your own `translate-value-*` attributes.
 
 So how does that work? Easy-Peasy!
 
@@ -212,7 +212,7 @@ Our working code now looks like this:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
 
       <p translate>PASSED_AS_TEXT</p>

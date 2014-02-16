@@ -51,13 +51,13 @@ Regarding our use case we discussed above, it'd look like this:
 $translateProvider
   .translations('en', { /* ... */ })
   .translations('de', { /* ... */ })
-  .determinePreferredLanguage()
   .registerAvailableLanguageKeys(['en', 'de'], {
     'en_US': 'en',
     'en_UK': 'en',
     'de_DE'; 'de',
     'de_CH': 'de'
-  });
+  })
+  .determinePreferredLanguage();
 </pre>
 
 If the browser now returns `en_US` or `en_UK`, angular-translate would set `en` as

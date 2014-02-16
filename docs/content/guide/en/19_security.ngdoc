@@ -44,7 +44,8 @@ $translateProvider.useSanitizeValueStrategy('escaped');
       var app = angular.module('myApp', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.translations(translations);
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
         // Using standard escaping (nothing)
       }]);
 
@@ -53,7 +54,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
     </div>
   </doc:source>
@@ -72,7 +73,8 @@ $translateProvider.useSanitizeValueStrategy('escaped');
       var app = angular.module('myApp', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.translations(translations);
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
         // Enable escaping of HTML
         $translateProvider.useSanitizeValueStrategy('escaped');
       }]);
@@ -82,7 +84,7 @@ $translateProvider.useSanitizeValueStrategy('escaped');
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
     </div>
   </doc:source>

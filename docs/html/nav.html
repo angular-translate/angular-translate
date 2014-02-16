@@ -1,9 +1,6 @@
 <script>
 function langLink(locale) {
-  return [
-    'http://' + window.location.host,
-    window.location.pathname.substr(0, window.location.pathname.length-3) + locale + '/' + window.location.hash
-  ].join('');
+  return 'http://angular-translate.github.io/docs/' + locale + '/' + window.location.hash;
 }
 </script>
 

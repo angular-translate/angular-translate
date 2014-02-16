@@ -704,16 +704,18 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             // looks like there's no pending promise for $preferredLanguage or
             // $uses. Maybe there's one pending for a language that comes from
             // storage.
-            var langKey = Storage.get($storageKey),
-                index = indexOf($fallbackLanguage, langKey);
-
+            var langKey = Storage.get($storageKey);
             promise = langPromises[langKey];
-            // maybe the language from storage is also defined as fallback language
-            // we increase the fallback language index to not search in that language
-            // as fallback, since it's probably the first used language
-            fallbackIndex = (index > -1) ? index+=1 : 0;
-            // but we can make sure to ALWAYS fallback to preferred language at least
-            $fallbackLanguage.push($preferredLanguage);
+
+            if ($fallbackLanguage && $fallbackLanguage.length) {
+                var index = indexOf($fallbackLanguage, langKey);
+                // maybe the language from storage is also defined as fallback language
+                // we increase the fallback language index to not search in that language
+                // as fallback, since it's probably the first used language
+                fallbackIndex = (index > -1) ? index+=1 : 0;
+                // but we can make sure to ALWAYS fallback to preferred language at least
+                $fallbackLanguage.push($preferredLanguage);
+            }
           }
           return promise;
         }());

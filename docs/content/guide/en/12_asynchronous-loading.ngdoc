@@ -335,7 +335,6 @@ $translateProvider.useStaticFilesLoader({
 });
 // load 'en' table on startup
 $translateProvider.preferredLanguage('en');
-$translateProvider.useLocalStorage();
 </pre>
 
 Since we don't have to make any changes in our controllers or HTML, we are done!
@@ -347,6 +346,16 @@ Take a look at the working app:
       var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', {
+          "HEADLINE": "What an awesome module!",
+          "PARAGRAPH": "Srsly!",
+          "PASSED_AS_TEXT": "Hey there! I'm passed as text value!",
+          "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
+          "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
+          "VARIABLE_REPLACEMENT": "Hi {{name}}",
+          "BUTTON_LANG_DE": "german",
+          "BUTTON_LANG_EN": "english"
+        });
         // configures staticFilesLoader
         $translateProvider.useStaticFilesLoader({
           prefix: 'data/locale-',
@@ -354,7 +363,6 @@ Take a look at the working app:
         });
         // load 'en' table on startup
         $translateProvider.preferredLanguage('en');
-        $translateProvider.useLocalStorage();
       }]);
 
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
@@ -365,7 +373,7 @@ Take a look at the working app:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h2>{{ 'HEADLINE' | translate }}</h2>
+      <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
 
       <p translate>PASSED_AS_TEXT</p>

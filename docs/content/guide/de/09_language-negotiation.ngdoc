@@ -50,13 +50,13 @@ Hier nun das Beispiel zum eben erläuterten Sachverhalt:
 $translateProvider
   .translations('en', { /* ... */ })
   .translations('de', { /* ... */ })
-  .determinePreferredLanguage()
   .registerAvailableLanguageKeys(['en', 'de'], {
     'en_US': 'en',
     'en_UK': 'en',
     'de_DE'; 'de',
     'de_CH': 'de'
-  });
+  })
+  .determinePreferredLanguage();
 </pre>
 
 Falls der Browser nun 'en_US' oder 'en_UK' zurückgibt, wird angular-translate 'en' als
