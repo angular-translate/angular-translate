@@ -30,11 +30,10 @@ $ git clone https://github.com/angular-translate/angular-translate
 ````
 
 This will clone the complete source to your local machine. Navigate to the project folder
-and install all needed dendencies via **npm** and **bower**:
+and install all needed dependencies via **npm**:
 
 ````
 $ npm install
-$ bower install
 ````
 
 <code>angular-translate</code> is now installed and ready to be built.
