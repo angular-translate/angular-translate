@@ -1407,6 +1407,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
                 delete $translationTable[data.key];
               }
               translations(data.key, data.table);
+              useLanguage(data.key);
             });
             resolve();
           });
