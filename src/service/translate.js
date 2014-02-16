@@ -1445,6 +1445,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @return {string} translation
        */
       $translate.instant = function (translationId, interpolateParams, interpolationId) {
+
+        if (typeof translationId === 'undefined' || translationId === '') {
+          return translationId;
+        }
+
         translationId = translationId.trim();
 
         var result, possibleLangKeys = [];
