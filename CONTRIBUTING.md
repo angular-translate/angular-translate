@@ -26,7 +26,7 @@ When **npm** is installed, use it to install the needed npm packages:
 To get the source of <code>angular-translate</code> clone the git repository via:
 
 ````
-$ git clone https://github.com/PascalPrecht/angular-translate
+$ git clone https://github.com/angular-translate/angular-translate
 ````
 
 This will clone the complete source to your local machine. Navigate to the project folder
