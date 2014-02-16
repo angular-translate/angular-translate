@@ -1408,6 +1408,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               }
               translations(data.key, data.table);
             });
+            if ($uses) {
+              useLanguage($uses);
+            }
             resolve();
           });
 
