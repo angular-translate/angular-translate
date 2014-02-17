@@ -476,7 +476,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jshint:all',
-    'karma',
+    'test-headless',
     'build:core',
     'build:messageformat_interpolation',
     'build:handler_log',
