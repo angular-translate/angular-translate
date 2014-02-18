@@ -25,6 +25,7 @@ $translateProvider.translations('en', {
   'greetings' : 'Hello',
   // some other keys
 });
+$translateProvider.use('en');
 ```
 
 ## uses -> use
