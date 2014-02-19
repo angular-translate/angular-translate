@@ -1291,10 +1291,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (!$translationTable[key] && $loaderFactory) {
           $nextLang = key;
           langPromises[key] = loadAsync(key).then(function (translation) {
-            $nextLang = undefined;
             translations(translation.key, translation.table);
             deferred.resolve(translation.key);
-            useLanguage(translation.key);
+
+            if ($nextLang === key) {
+              useLanguage(translation.key);
+              $nextLang = undefined;
+            }
           }, function (key) {
             $nextLang = undefined;
             $rootScope.$emit('$translateChangeError');
