@@ -1475,6 +1475,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
             }
           }
+          if (typeof result !== 'undefined') {
+            break;
+          }
         }
 
         if (!result) {
