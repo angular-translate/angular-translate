@@ -1480,6 +1480,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (!result) {
           // Return translation if not found anything.
           result = translationId;
+          if ($missingTranslationHandlerFactory && !pendingLoader) {
+            $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+          }
         }
 
         return result;
