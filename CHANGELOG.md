@@ -1,3 +1,29 @@
+# 2.0.1 (2014-02-25)
+
+## Features
+### instant
+
+* invoke missing handler within `$translate.instant(id)` (aaf52b5)
+
+
+
+## Bug fixes
+### instant
+
+* fix possible npe in case of filters with undefineds (61a9490)
+
+* $translate.instant(id) does not return correct fallback (eec1d77)
+
+### refresh
+
+* fix bug in refresh if using partial loader (95c43b4)
+
+### $translate
+
+* Ensuring that languages will be set based on the order they are requested, not the order the responses come in. (32e1851)
+
+
+
 # 2.0.0 (2014-02-16)
 
 ## Features
