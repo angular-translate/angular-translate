@@ -331,7 +331,7 @@ describe('pascalprecht.translate', function () {
             }
 
             return deferred.promise;
-        }
+        };
       });
     }));
 
