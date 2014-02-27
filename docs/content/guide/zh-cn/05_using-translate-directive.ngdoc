@@ -1,0 +1,128 @@
+@ngdoc overview
+@name 使用翻译指令
+@description
+
+# 使用翻译指令
+
+另一种方法的视图层内翻译内容是使用 `translate` 指令。使用 `translate` 过滤器是伟大的，但使用 `translate` 指令更
+好。原来，在一个视图中有太多的过滤器会导致设置太多的监听表达式，这是为什么 `angular-translate` 还提供了在视图层的一个指令来翻译所需内容。
+
+## 一般用法
+你可以许多不同的方式使用`translate`指令。一般用法看起来像这样：
+
+```
+<ANY translate>TRANSLATION_ID</ANY>
+```
+
+您还可以通过翻译ID作为`translate`指令的属性值像这样：
+
+```
+<ANY translate="TRANSLATION_ID"></ANY>
+```
+
+即使这已是使用的指令非常灵活的方式，angular-translate 还提供**使用它的另一个**方式。比方说，一个翻译的ID作为一个具体的标识符拿不到，因为它是一个遍历的数据集，翻译的ID在每一个迭代中。在这种情况下，翻译的ID唯一可用是动态。实际上，你必须先插值ID本身。
+angular-translate 一应俱全。这也是可能的：
+
+```
+<ANY translate="{{toBeInterpolated}}"></ANY>
+```
+
+是不是很酷？ ，是的，如果它不能以同样的方式处理我们的第一个用法范例 angular-translate 不会是 angular-translate。
+
+这也适用：
+
+```
+<ANY translate>{{toBeInterpolated}}</ANY>
+```
+
+选择最适合你的！
+
+## 编译后的
+从版本2开始，翻译本身可以在当前界内进行后处理（使用`$compile`）。
+这意味着在翻译值中使用的任何指令本身现在将如预期般运作。
+这种行为可以在每个指令被激活：
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile></ANY>
+```
+
+此外，您还可以全局启用该功能..
+
+```
+$translateProvider.usePostCompiling(true);
+```
+
+... 不仅如此，你还可以为每个指令再次禁用该功能：
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
+```
+
+## 例子
+
+让我们更新我们的示例应用程序，并添加了一些新的翻译。用文本表示使用 `translate` 指令的每一个可能的方法是什么这个主意怎么样？
+我们的翻译列表可能看起来像这样：
+
+<pre>
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+};
+</pre>
+
+之后，针对我们新ID翻译更新我们的视图：
+
+<pre>
+<p>{{ 'HEADLINE' | translate }}</p>
+<p>{{ 'PARAGRAPH' | translate }}</p>
+
+<p translate>PASSED_AS_TEXT</p>
+<p translate="PASSED_AS_ATTRIBUTE"></p>
+<p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+<p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+</pre>
+
+我们最新的应用程序，然后看起来像这样：
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

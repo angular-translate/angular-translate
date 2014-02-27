@@ -1,0 +1,221 @@
+@ngdoc overview
+@name 入门
+@description
+
+# 入门
+
+## 设置HTML
+要开始使用 angular-translate，你需要在你的HTML文档中嵌入angular-translate。当然，这应该发生 Angular 本身嵌入**后**. 您的HTML看起来应该像这样：
+
+<pre>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>i18n app</title>
+
+    <script src="path/to/angular.js"></script>
+    <script src="path/to/angular-translate.js"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-app="myApp">
+
+  </body>
+</html>
+</pre>
+
+## 声明依赖性
+一旦做到这一点，你可以声明 angular-translate 做为您的应用程序的依赖关系。
+作为你的应用程序的依赖， Angular 提供依赖注入，这是很酷的. 所以要告诉你的应用程序它需要
+angular-translate 才能够正常使用, 简单的注入 angular-translate 依赖性到你的组建之中就可以了，有下面的源代码所演示。
+这就给你引入 angular-translate 的组件：
+
+<pre>
+var app = angular.module('myApp', ['pascalprecht.translate']);
+</pre>
+
+## 介绍 `$translateProvider`
+
+angular-translate 现在被我声明作为依赖, 这意味着我们现在可以访问其所有组件。当涉及到你可能想在以后使用的不同的服务配置时 Angular 有非常清晰的架构。
+让我们来看看下面的代码。
+
+我敢肯定，你已经看过这样的代码：
+
+<pre>
+app.config(function ($locationProvider) {
+  $locationProvider.html5Mode(true);
+});
+</pre>
+
+或者，也许配置了 `$route` 服务：
+
+<pre>
+app.config(function ($routeProvider) {
+  $routeProvider.when('/something', {
+    templateUrl: 'url/to/template',
+    controller: 'SomeFancyCtrl'
+  });
+});
+</pre>
+
+实际发生的事情在这里不是_使用某些服务_去配置一些东西。而是_配置一些服务_ 去使用_供应商_, 而这恰好是你的应用程序以后要使用的。
+这意味着 `$locationProvider.html5Mode(true)` 在HTML5的模式下配置 `$location` **服务**去工作。所以，如果一个服务应该是从外部配置的，
+它需要一个相应的供应商，提供您所需要的接口。
+
+angular-translate 安装包里有 `$translateProvider`，它可以用来配置 `$translate`服务， 这个服务会处理i18n相关的内容。
+在你的应用程序中 `$translate` 服务被你的指令和过滤器使用。要使用这个服务去翻译，他必须要知道什么翻译是可以拿到的。
+
+这时候你就需要`$translateProvider`了. `$translateProvider` 提供一些方法来教你的应用程序不同的语言，并且可以让`$translate`服务来使用他们。
+
+## 教你的应用程序一个新的语言
+
+用 `$translateProvider` 教你的应用程序一个新的语言是很容易的。首先，你
+必须将供应商注入你的模块配置功能（这是唯一可以访问他的地方)。
+<pre>
+app.config(['$translateProvider', function($translateProvider) {
+
+}]);
+</pre>
+
+现在想要加一个新的语言，你必须让`$translateProvider`知道**翻译列表**. 这是什么意思呢？其实非常简单。
+angular-translate 期待一个翻译列表，他是一个JSON对象. 所以你需要做的事，就是把翻译列表作为一个Javascript HASH 对象, 或者
+作为 JSON 对象来远程加载。翻译列表的格式大概是这样的：
+
+```json
+{
+  "TRANSLATION_ID": "This is a concrete translation for a specific language."
+}
+```
+
+不是很容易吗？上面的转换表只包含一个翻译ID。正如你可以看到，键代表一个翻译的ID，而该值表示对一定的语言有具体的翻译。你甚至不必
+在你的翻译表中提供任何信息，何种语言和它相对应。关于此底下我们还会提到。
+
+您也可以通过命名空间来安排您的翻译列表。这是许多有趣的大网站对大和长的页面的做法。您需要做的就是创建嵌套的 JSON 对象：
+
+
+```json
+{
+  "NAMESPACE": {
+    "SUB_NAMESPACE": {
+       "TRANSLATION_ID1": "This is a namespaced translation."
+    }
+  }
+}
+```
+
+这个翻译列表只包含一个翻译。但是你可以很容易的扩展它。你可以有不同的嵌套的层次，在你的翻译列表中每一个命名空间都可以包括
+更多的子命名空间，这可以使你的解决方案非常的灵活！
+
+## 快捷方式和链接 
+自`1.1.1`版本以来一个非常实用的功能就是快捷方式和链接的使用。
+比方说，你有一个翻译列表看起来像这样：
+
+```json
+{
+  "bar": {
+    "foo": {
+      "foo": "This is my text."
+    }
+  }
+}
+```
+
+您你后将可以通过 `bar.foo.foo` 来对现有的翻译ID进行访问。虽然这样也不错，但我们可以做的更好。angular-translate 很聪明，
+它可以认识到，在其对应的命名空间是否有翻译的id具有相同标识符。如果是这样的话，他就可以用快捷方式在指向的命名空间访问这个翻译ID
+，而不是那个完整的翻译ID。
+
+这就意味着，你可以简单的使用快捷方式 `bar.foo` 来访问同一个特定的翻译ID。很酷对吧？
+
+另一个很酷的功能，angular-translate 提供链接的能力将您的翻译表从一个翻译的ID链接到另一个翻译的ID。比方说，我们有下列翻译转换表：
+
+```json
+{
+  "SOME_NAMESPACE": {
+    "OK_TEXT": "OK"
+  },
+  "ANOTHER_NAMESPACE": {
+    "OK_TEXT": "OK"
+  }
+}
+```
+
+因此，大家可以看到我们要在这里引入命名空间，但两者其实就是需要一个字符串，“OK（确定）”。这种情况下是很寻常的，如果你只是想想
+一个确认按钮，或者在您的应用程序其他类似的文本。然而，不难认识到我们有一个冗余在这里，我们开发者不喜欢冗余吧？
+
+如果有翻译ID已经有相同的具体文本，那你需要此文本的时候可以直接链接它。要链接到另一个翻译的ID，你只需要用`@：`符号，后面写上全名
+翻译标识，包括要链接到的命名空间。所以上面的示例可能看起来像这样：
+
+```json
+{
+  "SOME_NAMESPACE": {
+    "OK_TEXT": "OK"
+  },
+  "ANOTHER_NAMESPACE": {
+    "OK_TEXT": "@:SOME_NAMESPACE.OK_TEXT"
+  }
+}
+```
+
+## 现在让我们付诸行动!
+
+让我们在我们的应用程序添加一个翻译列表。 `$translateProvider` 提供一个方法叫做 `translates()`，就是用来做这个的。
+比方说，我们有一个翻译列表是这样的：
+
+<pre>
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  NAMESPACE: {
+    PARAGRAPH: 'And it comes with awesome features!'
+  }
+};
+</pre>
+
+我们可以通过调用 `$translateProvider.translations()`加入这个表:
+
+<pre>
+app.config(['$translateProvider', function ($translateProvider) {
+  // add translation table
+  $translateProvider
+    .translations('en', translations)
+    .preferredLanguage('en');
+}]);
+</pre>
+
+这基本上是所有你必须做的。只需指定一个语言键并添加翻译列表。之后告诉 angular-translate 什么是首选语言是。由于我们在配置时加入翻译列表，
+一旦它被实例化和使用 `$translate` 服务是能够访问它的。
+
+这是工作代码：
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        NAMESPACE: {
+          PARAGRAPH: 'And it comes with awesome features!'
+        }
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
+      }]);
+    </script>
+    <div>
+      <h1>Nothing to see here yet!</h1>
+      <p>But we'll change it now</p>
+    </div>
+  </doc:source>
+</doc:example>
+
+您的应用程序现在已准备好进行本地化！在下一章中，您将学习如何使用 angular-translate 提供的指令和过滤器来插值您的翻译。
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,0 +1,71 @@
+@ngdoc overview
+@name 错误处理
+@description
+
+# 错误处理
+
+有时候，你有一个复杂的应用程序，你不知道有多少翻译。你也不知道是否有漏译特定ID。这是漏译的处理程序大显身手的地方。
+
+## 使用日志处理程序扩展失踪翻译
+
+有一个针对 angular-translate 的扩展，如果你试着翻译不存在翻译的ID他将日志记录传到控制台。像所有的扩展一样，您可以通过 Bower 这样安装：
+
+```
+$ bower install angular-translate-handler-log
+```
+
+要使用它你只需要在 `$translateProvider` 上调用`useMissingTranslationHandlerLog()`。 angular-translate 会帮你完成其他所需。
+
+<pre>
+$translateProvider.useMissingTranslationHandlerLog();
+</pre>
+
+下面是一个示例工作
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useMissingTranslationHandlerLog();
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="NOT_EXISTING"></p>
+      <p translate="ALSO_NOT_EXISTING"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+现在，来看看浏览器的控制台，看看已经有记录了！
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

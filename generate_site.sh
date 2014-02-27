@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-mkdir -p site/docs/en site/docs/ru site/docs/de site/docs/uk
+mkdir -p site/docs/en site/docs/ru site/docs/de site/docs/uk site/docs/zh-cn site/docs/zh-tw
 
 grunt ngdocs $@
 grunt copy:logos
@@ -25,6 +25,19 @@ grunt copy:logos
 grunt copy:docs_assets
 mv tmp/* site/docs/uk
 rm -rf tmp
+
+grunt ngdocs --lang=zh-cn $@
+grunt copy:logos
+grunt copy:docs_assets
+mv tmp/* site/docs/zh-cn
+rm -rf tmp
+
+grunt ngdocs --lang=zh-tw $@
+grunt copy:logos
+grunt copy:docs_assets
+mv tmp/* site/docs/zh-tw
+rm -rf tmp
+
 
 cp docs/html/index.html site
 cp identity/favicon.ico site

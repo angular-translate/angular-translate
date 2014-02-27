@@ -1,0 +1,67 @@
+@ngdoc overview
+@name 使用翻译过滤器
+@description
+
+# 使用翻译过滤器
+
+在[使用 $translate 服务](#/guide/03_using-translate-service) 中，你已经学会如何通过注册的翻译标识使用`$translate`服务
+去翻译你的内容。当然，它很酷，但实际上你不想让你的翻译绑定到控制器或服务。 你主要是想让你的内容翻译在视图层，因为这是翻译属于的地方。
+
+angular-translate 提供了一个过滤器组件,这样你就可以在你的视图层内翻译你的翻译标识，而不让任何控制器或
+服务知道。这意味着，你可以将翻译逻辑从控制器或服务解耦合出来， 从而可以更新您的视图层而不碰业务逻辑代码。
+
+
+## 一般用法
+在 Angular 中使用过滤器是非常简单的。你可以在[这里](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters)阅读有关的一切信息。
+
+同样通过 angular-translate 的 `translate` 过滤器， 我们可以简单的将控制器的逻辑转化到视图层。
+[使用 $translate 服务](#/guide/03_using-translate-service#generalusage)。
+简单说 `translate` 过滤器是这样的:
+
+```
+<ANY>{{ TRANSLATION_ID | translate }}</ANY>
+```
+
+因此，要更新我们的例子，我们在控制器中删除 `$translate` 服务的使用，并使用`translate` 过滤器将逻辑添加到视图层。
+就像这样：
+
+<pre>
+<h1>{{'HEADLINE' | translate}}</h1>
+<p>{{'PARAGRAPH' | translate}}</p>
+</pre>
+
+很容易哈？当然，你可以在这里查看工作示例：
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+    </div>
+  </doc:source>
+</doc:example>
+
+太棒了！现在，您的内容的视图层内的翻译没有你的控制器逻辑与转换逻辑来污染了。
+当它涉及到一个视图层更换时整个翻译流程从你的业务逻辑分离出来，使您的应用程序更加灵活！
+接下来的章节将告诉您如何用所提供的 `translate` 指令这样做。
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

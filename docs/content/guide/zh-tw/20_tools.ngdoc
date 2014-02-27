@@ -1,0 +1,114 @@
+@ngdoc overview
+@name 工具
+@description
+
+# 工具
+
+這裡不僅有 angular-translate，你可能還想使用一個額外的模塊。這裡有一個完整的angular-translate 宇宙！
+這個宇宙中還包括附加模塊本身周圍的事物。我們目前維持了幾個小工具，你在開發angular-translate 應用程序時可能會有興趣使用。
+
+看看吧！
+
+## grunt-angular-translate
+
+[grunt-angular-translate 在GitHub](http://github.com/angular-translate/grunt-angular-translate)
+
+## grunt-po2json-angular-translate
+
+這是創建一個grunt 任務來幫助你給你的格式字符串轉換成與angular-translate 兼容的格式。
+如果你想更深入的信息，去[GitHub 庫](http://github.com/angular-translate/grunt-po2json-angular-translate).
+
+簡單地說，設置它，你需要兩個步驟：
+
+1）安裝它，在你的 gruntfile 中啟用
+
+```shell
+npm install grunt-po2json-angular-translate --save-dev
+```
+
+```js
+grunt.loadNpmTasks('grunt-po2json-angular-translate');
+```
+
+2) 根據您的需要添加的配置，例如：
+
+```js
+grunt.initConfig({
+  po2json_angular_translate: {
+  options: {
+     pretty: false,
+     upperCaseId : false
+    },
+    your_target: {
+                 files: {
+                     // This will generate a single json file with all the specified strings
+                     'tmp/dest.json' : ['test/fixtures/*.po'],
+
+                     //this will create several json files, the names of them will be the same than in the .po files
+                     'tmp/dest' : ['test/fixtures/*.po']
+                  }
+    },
+  },
+});
+```
+
+無論您是需要一個或多個.json的文件，取決於您的特例。
+這裡有幾個選項可以在開發/生產環境下幫助您，但更重要的，是以下的：
+
+#### options.pretty
+Type: `Boolean`
+Default value:  `false`
+如果你想漂亮的打印結果
+
+#### options.cleanPrevStrings
+Type: `Boolean`
+Default value:  `false`
+它會在創建新的之前刪除在目標文件夾裡所有以前生成的文件。
+
+還有其他選項，以幫助您生成.JSON文件的，例如，將您的gettext 的格式化[多樣化字符串](https://github.com/angular-translate/grunt-po2json-angular-translate# pluralization)，
+設置[自定義的佔位符](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsenablealtplaceholders)
+或者[轉換```msgid```為大寫](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsuppercaseid).
+
+這是在實際的項目中使用的一個例子的配置：
+
+```js
+        'po2json_angular_translate': {
+            dev: {
+                options: {
+                    pretty: false,
+                    cleanPrevStrings: false
+                },
+                files: {
+                    'app/i18n/en/' : ['po/en/dashboard/*.po'],
+                    'app/i18n/en/common-strings.json' : ['po/en/dashboard/common/*.po'],
+
+                    'app/i18n/de/' : ['po/de/dashboard/*.po'],
+                    'app/i18n/de/common-strings.json' : ['po/de/dashboard/common/*.po']
+                }
+            },
+            devOneFile: {
+                options: {
+                    pretty: false,
+                    cleanPrevStrings: true
+                },
+                files: {
+                    'app/i18n/en/strings.json' : ['po/en/dashboard/**/*.po'],
+                    'app/i18n/de/strings.json' : ['po/de/dashboard/**/*.po']
+                }
+            },
+            dist: {
+                options: {
+                    pretty: false,
+                    cleanPrevStrings: true
+                },
+                files: {
+                    'app/dist/i18n/en/' : ['po/en/dashboard/*.po'],
+                    'app/dist/i18n/en/common-strings.json' : ['po/en/dashboard/common/*.po'],
+
+                    'app/dist/i18n/de/' : ['po/de/dashboard/*.po'],
+                    'app/dist/i18n/de/common-strings.json' : ['po/de/dashboard/common/*.po']
+                }
+            }
+        },
+
+```
