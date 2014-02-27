@@ -1,0 +1,339 @@
+@ngdoc overview
+@name 异步加载
+@description
+
+# 异步加载
+
+好吧，不同的语言有不同的翻译是很酷。但如果你能异步加载翻译甚至更好对吧？
+`angular-translate` 有一些很酷的扩展来支持异步和延迟加载数据翻译。它很有魅力。
+
+## 异步装载机
+
+angular-translate 提供了一个非常巧妙的告诉 $translate 服务的方式来异步加载数据。
+从服务器加载数据，你必须使用一个异步加载程序，在运行时当需要时会被调用。angular-translate 支持两种不同的异步加载器的。
+这两者都是通过 bower 安装的。让我们来看看他们！
+
+## 使用 urlLoader
+这是可能异步装载换算数据的最简单的方法。所有您需要做的，
+就是用 bower 安装 `angular-translate-loader-url`扩展：
+
+```
+$ bower install angular-translate-loader-url
+```
+
+安装完成后，请确认你已经在HTML文档中内嵌了。
+好吧， 装载机是可用的了，我们现在要告诉 angular-translate 去使用它。
+`$translateProvider` 提供一个方法叫做 `useUrlLoader()`. 很简单对吧? 、
+`useUrlLoader()` 预期一个描述端点的参数。他将与那服务器进行翻译数据响应。
+
+此外，使用异步加载器的时候，我们必须使用`$translateProvider.preferredLanguage()`, 让angular-translate
+知道哪些语言应该载入翻译数据。
+
+<pre>
+$translateProvider.useUrlLoader('foo/bar.json');
+$translateProvider.preferredLanguage('en');
+</pre>
+
+所以，这里会发生什么？ angular-translate 使用扩展改造给定的字符串，
+到稍后可以在运行时调用一个真正的加载函数，
+一旦`$translate`服务启动. 同时告诉angular-translate去使用语言键值'en',
+增加了语言键值参数给定的加载程序的字符串。
+
+所以，上面的例子中实际请求 `foo/bar.json?lang=en`. angular-translate
+还注意到，可在启动时没有任何翻译数据，并将尽快自动调用加载器。
+
+## 使用 staticFilesLoader
+
+如果您有不只有一个URL期待`lang`参数来返回一个JSON，其中包含记得翻译，而是有多个本地化文件匹配一个特定的模式，
+你可能想使用`angular-translate-loader-static-files`扩展，它描述您的本地化文件模式。
+
+和urlLoader一样, 你可以使用 bower 安装 staticFilesLoader:
+
+```
+$ bower install angular-translate-loader-static-files
+```
+
+一旦软件包安装和嵌入，则可以使用 `$translateProvider` 的 `useStaticFilesLoader()` 方法来告诉 angular-translate 去使用它.
+静态文件加载器的工作原理有点不同。不只具有固定 url 而且需要一个`lang`参数，你现在可以有不同的本地化匹配特定模式的文件。
+
+如何定义模式取决于您的需要。要指定一种模式，以下信息是必需的：
+
+* **prefix** - 指定文件前缀
+* **suffix** - 指定文件后缀
+
+比方说，你有两个本地化文件 `locale-de.json` 和 `locale-en.json`.
+你可以简单地这样使用 staticFilesLoader：
+
+<pre>
+$translateProvider.useStaticFilesLoader({
+    prefix: 'locale-',
+    suffix: '.json'
+});
+$translateProvider.preferredLanguage('en');
+</pre>
+
+angular-translate 将连接所提供的资料成为
+`{{prefix}}{{langKey}}{{suffix}}` 这个格式。 所以这样会加载 `locale-en.json`.
+同时因为有没有任何翻译数据，它会尽快装入这样可以自动完成。
+
+## 使用 partialLoader
+在一个更大的复杂应用程序时，您通常会组织你的应用程序为几个
+子模块。例如，你可以有一个模块 `mainAPP`, 这个模块依赖于 'home' 和 'contact' 子模块。
+这只是两个子模块，但现在想象一下，你有一个非常大的应用程序依赖于10或20个子模块！
+
+在这样的应用程序也许20子模块里面13个永远不会被执行，因为用户
+总是走不到那里。然而，翻译这么大的应用程序内容时，其中
+也许并不总是执行的大约占50％的应用程序，在不同的语言下加载所有的翻译数据不是非常酷的加载方式。
+
+我们需要的，是一种方法，只需要加载我们当前视图的一个语言的翻译数据。
+这意味着，访问 `home` 子模块时，我们只是要加载转换为`home`模块的数据。
+如果我们改变语言，我们也只是想加载选择语言下的 `home` 模块的翻译。
+
+此外，当我们已经加载的翻译数据，比如说三个不同的模块，然后更改语言，然后再更改回最初的语言，
+我们当然不希望再次加载数据，因为我们在前面加载好了。
+
+是啊，当我们想部分加载这些都是我们关心的。然而，`angular-translate` 已经为你做了。 这就是
+`partialLoader` 的用武之地。
+
+你可以使用 bower 来安装， 就好象安装其他加载器一样:
+
+```
+$ bower install angular-translate-loader-partial
+```
+
+当你使用 `partialLoader` 你必须考虑用哪一个 `angular-translate` 模式来加载你的数据。 这和
+`staticFilesLoader` 很相似但更具体一点。 你必须指定一个 `part` 和一个 `lang` 属性, 
+`part` 为您的应用程序的具体属性(可能就是 `home`)， `lang` 是你知道的语言键.
+
+比方说，我们的翻译文件和组件文件结构看起来象这样的：
+
+```
+/i18n/home/en.json
+/i18n/home/de.json
+/i18n/contact/en.json
+/i18n/contact/de.json
+```
+
+非常直截了当哈？现在，我们知道我们的数据是如何组织的，我们可以配置 `$translateProvider` 来使用这种模式的部分装载机：
+
+<pre>
+$translateProvider.useLoader('$translatePartialLoader', {
+  urlTemplate: '/i18n/{part}/{lang}.json'
+});
+</pre>
+
+差不多完成了！当然 `angular-translate` 要知道使用哪种语言，所以我们添加以下内容：
+
+<pre>
+$translateProvider.preferredLanguage('en');
+</pre>
+
+好了，没有什么新的。现在，它变得有趣。如何让 `angular-translate` 知道加载哪一个"part"?
+简短来说：它不能。你必须告诉 `angular-translate` 你希望他在 **何时**加载**哪一个part** 。
+
+`partialLoader` 配备了 `provider` 可以用来配置装载机的初始状态。因此，要使用这个provider，我们必须把它注入到我们的配置功能里去：
+
+<pre>
+angular.module('main')
+.config(function ($translateProvider, $translatePartialLoaderProvider) {
+
+});
+</pre>
+
+好了， 现在让 `angular-translate` 知道哪一个part需要去加载,
+我们使用 `$translaterPartialLoaderProvider` 的 `addPart()` 方法。 所以我们简单地这样说：
+
+<pre>
+$translatePartialLoaderProvider.addPart('home');
+$translateProvider.useLoader('$translatePartialLoader', {
+  urlTemplate: '/i18n/{part}/{lang}.json'
+});
+$translateProvider.preferredLanguage('en');
+</pre>
+
+正如你所看到的，局部装载机全部功能是由装载机提供的，而不是 `angular-translate` 自己. 该模式现在已经完成，
+`angular-translate` 将尽快执行该加载器。
+
+好了，这是初始流程，但运行时如何？如果用户跨过了 `contact` 模块，我们只希望加载当前语言`contact` 模块的翻译数据？
+
+`$translatePartialLoaderProvider` 配置 `$translatePartialLoader` 这意味着你能将
+`$translatePartialLoader` 注入控制器及服务来使用他们。 但是，为什么你要这样做呢？
+正如你可以通过供应商的装载程序添加翻译，你也可以通过它提供的服务操作运行时加载程序的状态。
+这是什么意思呢？这意味着，你只是需要注入装载机， 然后使用他来添加额外的翻译部分件。
+
+比如在我们的 `contact` 组件里的 `ContactCtrl` 控制器, 大概代码是这样的：
+
+<pre>
+angular.module('contact')
+.controller('ContactCtrl', function ($scope, $translatePartialLoader) {
+  $translatePartialLoader.addPart('contact');
+});
+</pre>
+
+这并不难，对不对？因此，这里发生的事情是我们在运行时操纵我们的装载机状态。
+这可以确保 angular-translate 在真的要翻译数据时只加载特定的翻译数据。
+一旦你添加了一个新的部分件，`$translatePartialLoader` 就触发一个 `$translatePartialLoaderStructureChanged` 事件。
+
+到现在为止有没有加载额外的数据！ `angular-translate` 不知道装载机的状态，所以你必须告诉
+`angular-translate` **刷新** 目前的翻译列表。更新翻译列表会先去除（如果没有指定表），并重新加载它们。
+所以基本上，要实现部分加载，你必须​​做的就是操纵装载机的状态，告诉他哪个部分要增加，然后刷新翻译列表。
+因为，通过增加新的部分来改变当前装载机的状态，他们在下一次被调用时就会被使用。
+
+所以我们要做的就是简单地增加了以下内容：
+
+<pre>
+angular.module('contact')
+.controller('ContactCtrl', function ($scope, $translatePartialLoader, $translate) {
+  $translatePartialLoader.addPart('contact');
+  $translate.refresh();
+});
+</pre>
+
+Y你也可以使用 `$translatePartialLoaderStructureChanged` 事件去自动化这个过程中，通过监听 `$rootScope` 的该事件 每次这个事件
+触发翻译表都会被刷新。
+
+<pre>
+app.run(function ($rootScope, $translate) {
+  $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
+    $translate.refresh();
+  });
+});
+</pre>
+
+由于 `$translate.refresh（）` 返回一个承诺，它可以很好的和任何 `ngRoute` 模块或UI路由器一起工作。
+
+## 在运行时延迟加载
+
+一旦你的应用程序引导程序开始加载，它会尽快异步加载所需的翻译数据。
+好吧，很酷。但是，如果用户想更改语言而相应的翻译数据还没有装呢？
+
+在[多语言](#/guide/07_multi-language)这一章里我们学到怎么在运行时使用 `$translate.use()` 切换语言。
+知道吗？当用异步装载机什么都不会改变。 `$translate.use()` 检查对于一个给定的语言键翻译列表存在与否。
+如果没有，它会调用注册装载机把它弄下来！这是最好的延迟加载。
+
+**注意**：请注意，在使用的 `partialLoader` 时你必须首先刷新翻译列表！
+
+## FOUC - 非编码的Flash内容
+
+在使用异步加载器得到你的翻译数据时有一个缺点。 当进入应用程序时有那么一点点儿时间，当您的应用程序启动时有小小的闪烁，这是因为你的翻译数据还没有加载。
+。事实上，这不是 angular-translate 的错误，因为我们返回异步执行的东西，这是一个相当合乎逻辑的行为。
+
+为了解决这个问题，您可以提供至少一个语言**您的**应用程序无需异步加载它。如果您的应用程序，然后使用该提供
+语言作为默认语言，使用 `$translateProvider.preferredLanguage()`，你不会有这个FOUC，因为使用的语言已经存在。
+
+只要像这样使用 `$translateProvider.translations()` 和 `$translateProvider.{{whatever}}Loader` 的组合:
+
+<pre>
+$translateProvider.translations('en', {
+    'HELLO_TEXT': 'Hello World!'
+});
+$translateProvider.useStaticFilesLoader({
+    'prefix': 'locale-',
+    'suffix': '.json'
+});
+$translateProvider.preferredLanguage('de');
+</pre>
+
+让我们来使用相应的异步加载器来更新我们的示例应用程序！我们将使用 staticFilesLoader。首先，我们要从代码中抽取翻译转换表出来
+并把它们放在不同的区域设置文件中：
+
+**注：** 数据现在是_JSON_格式所以一定要确保把一切信息都放在双引号里面！另外，还要确保不复制评论，让你的服务器发送
+JSON因为JSON不是纯文本格式！
+
+<pre>
+// locale-en.json
+{
+  "HEADLINE": "What an awesome module!",
+  "PARAGRAPH": "Srsly!",
+  "PASSED_AS_TEXT": "Hey there! I'm passed as text value!",
+  "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
+  "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
+  "VARIABLE_REPLACEMENT": "Hi {{name}}",
+  "BUTTON_LANG_DE": "german",
+  "BUTTON_LANG_EN": "english"
+}
+</pre>
+
+<pre>
+// locale-de.json
+{
+  "HEADLINE": "Was für ein großartiges Modul!",
+  "PARAGRAPH": "Ernsthaft!",
+  "PASSED_AS_TEXT": "Hey! Ich wurde als text übergeben!",
+  "PASSED_AS_ATTRIBUTE": "Ich wurde als Attribut übergeben, cool oder?",
+  "PASSED_AS_INTERPOLATION": "Anfänger! Ich bin interpoliert!",
+  "VARIABLE_REPLACEMENT": "Hi {{name}}",
+  "BUTTON_LANG_DE": "deutsch",
+  "BUTTON_LANG_EN": "englisch"
+}
+</pre>
+
+下面我们设立 `$translate` 服务来使用 `$translateProvider`:
+
+<pre>
+// configures staticFilesLoader
+$translateProvider.useStaticFilesLoader({
+  prefix: 'data/locale-',
+  suffix: '.json'
+});
+// load 'en' table on startup
+$translateProvider.preferredLanguage('en');
+</pre>
+
+由于我们不需要改变控制器或HTML的源代码，我们已经完成了这个用例！
+看一看工作程序：
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', {
+          "HEADLINE": "What an awesome module!",
+          "PARAGRAPH": "Srsly!",
+          "PASSED_AS_TEXT": "Hey there! I'm passed as text value!",
+          "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
+          "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
+          "VARIABLE_REPLACEMENT": "Hi {{name}}",
+          "BUTTON_LANG_DE": "german",
+          "BUTTON_LANG_EN": "english"
+        });
+        // configures staticFilesLoader
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'data/locale-',
+          suffix: '.json'
+        });
+        // load 'en' table on startup
+        $translateProvider.preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+打开你的浏览器devtools和改变的时候看看网络活动。我们的应用程序现在在加载转换数据时是不同步的！
+接下来您将学习如何构建**自己的自定义加载器**。
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

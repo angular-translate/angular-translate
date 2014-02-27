@@ -1,0 +1,91 @@
+@ngdoc overview
+@name 安全性
+@description
+
+# 轉義的變數內容
+
+說到常規輸出，AngularJS 確保輸出將被正確轉義。 然而，當使用 `angular-translate` 和可變內容時，結果將不會是正確轉義。
+這意味著你的應用程式很容易受到嚴重的攻擊(參見: [OWASP](HTTPs://www.owasp.org/index.php/Cross-site_Scripting_(XSS)))。
+
+## 一般使用
+
+`useSanitizeValueStrategy(strategy)` 方法定義哪種轉義策略將被使用，這是全域的。
+
+目前，有兩個選項可供選擇：`null`（無）和 `escaped`（對於HTML）。
+
+我們執行是完全向後相容，這意味著在預設情況下轉義被禁用。
+
+```javascript
+$translateProvider.useSanitizeValueStrategy(null);
+```
+
+然而，我們在未來缺省將啟用更安全的變數 `escaped`。
+
+```javascript
+$translateProvider.useSanitizeValueStrategy('escaped');
+```
+
+## 演示
+
+### 沒有轉義
+
+<doc:example module="myApp">
+<doc:source>
+<script>
+var translations = {
+HEADLINE: 'XSS possible!',
+PARAGRAPH: 'Hello {{username}}!',
+};
+
+var app = angular.module('myApp', ['pascalprecht.translate']);
+
+app.config(['$translateProvider', function ($translateProvider) {
+$translateProvider.translations('en', translations);
+$translateProvider.preferredLanguage('en');
+// Using standard escaping (nothing)
+}]);
+
+app.controller('Ctrl', ['$scope', function ($scope) {
+
+}]);
+</script>
+<div ng-controller="Ctrl">
+<p>{{ 'HEADLINE' | translate }}</p>
+<p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+</div>
+</doc:source>
+</doc:example>
+
+### 轉義
+
+<doc:example module="myApp">
+<doc:source>
+<script>
+var translations = {
+HEADLINE: 'XSS possible!',
+PARAGRAPH: 'Hello {{username}}!',
+};
+
+var app = angular.module('myApp', ['pascalprecht.translate']);
+
+app.config(['$translateProvider', function ($translateProvider) {
+$translateProvider.translations('en', translations);
+$translateProvider.preferredLanguage('en');
+// Enable escaping of HTML
+$translateProvider.useSanitizeValueStrategy('escaped');
+}]);
+
+app.controller('Ctrl', ['$scope', function ($scope) {
+
+}]);
+</script>
+<div ng-controller="Ctrl">
+<p>{{ 'HEADLINE' | translate }}</p>
+<p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+</div>
+</doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](HTTP://github.com/PascalPrecht)</center>

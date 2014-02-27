@@ -1,0 +1,203 @@
+@ngdoc overview
+@name 变量替换
+@description
+
+# 变量替换
+本指南将告诉你如何处理翻译中的变量替换。如果你还没有阅读导游有关
+[$translate 服务](#/guide/03_using-translate-service),
+[translate 过滤器](#/guide/04_using-translate-filter) 和
+[translate 指令](#/guide/05_using-translate-directive)的介绍, 你应该这样做吧！
+
+使用 `$translate` 服务, `translate` 过滤器和 `translate` 指令其实很简单!
+但是，如果你的翻译需要变量的值？比如你想显示一个文本消息通知， 文本很像'_你接收了N个邮件_'，其中_N_是一个
+一个占位符变量， 但它可以是任何数量？
+
+`angular-translate` 已经为你想到了. 使用angular-translate的默认插值服务来翻译变量值是非常简单的。
+你没有看错。它取决于所用的插值服务，变量的值被他管理。
+
+## 翻译中使用的变量值
+
+当使用angular-translate的默认插值服务，您可以简单地依靠 Angular 的插值服务语法。因此，要在翻译中定义一个变量的值，你需要做的就是用 Angular 的插补指令。
+
+```
+{
+  "TRANSLATION_ID": "{{username}} is logged in."
+}
+```
+
+而'username'是，你可以传递的一个变量值的标识符。 那么它是如何通过组件获得了这些angular-translate提供的变量的值呢？
+
+## 变量替换 $translate 服务
+
+你可以通过第二个参数来传递变量给 `$translate` 服务。
+`$translate` 服务需要一个 JavaScript 对象的哈希作为第二个参数，这是用来插值的翻译。
+因此，如果我们有一个像上面描述的翻译的id，传递`username` 值会工作如下：
+
+<pre>
+$translate('TRANSLATION_ID', { username: 'PascalPrecht' });
+</pre>
+
+如果有一个翻译ID包含多个变量值， 只要用相应的键值对来简单的扩展传递的对象哈希。
+
+<pre>
+$translate('TRANSLATION_ID', {
+  username: 'PascalPrecht',
+  lastLogin: '2013-07-21 6:50PM'
+});
+</pre>
+
+## 变量替换翻译过滤
+
+由于在内部使用`$translate`翻译服务，我们只需要一种方法通过过滤器来传递动态值，使其可以作为该服务对象的哈希值
+。要做到这一点，需要的特定的语法，因为过滤器在 Angular 目前不能有一个参数名。因此有其他的方法来通过`translate`过滤器传递值。
+
+第一种方式是传递一个对象字面的字符串。之后它通过`$translate` 服务得到插值。
+
+<pre>
+{{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
+</pre>
+
+没有那么难吧？但是，如果 'username' 不应该有一个恒定值，而且在传递前也要进行插值？做到这个的唯一方法是
+通过过滤器传递一个范围对象作为 Angular 的表达。这也意味着，你必须在控制器上绑定变量的值和翻译， 只有这样这个范围对象才能得到这个翻译值。
+
+<pre>
+angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
+
+  $scope.translationData = {
+    username: 'PascalPrecht'
+  };
+}]);
+</pre>
+
+然后把它作为表达式通过过滤器：
+
+<pre>
+{{ 'TRANSLATION_ID' | translate:translationData }}
+</pre>
+
+## 在翻译指令变量替换
+
+当然，你可以用`translate`指令做出同样的事情。 `translate` 指令需要一个可选的 `translate-values` 属性，你可以用它来传递
+一些值。您需要做的就是在指令上加上 `translate-values` 属性。
+
+你可以传递一个对象字面字符串，表达式，或者，如果该值是动态的， 插补指令。不管你传递什么，它就会在内部进行评估，并分析了`translate`
+过滤器，所以生产出来的东西是被传递给`$translate` 服务的一个普通的JavaScript的对象
+.
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values='{ username: "PascalPrect"}'></ANY>
+</pre>
+
+或者
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{ username: someScopeObject.username }"></ANY>
+</pre>
+
+或者
+
+<pre>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{{translationData}}"></ANY>
+</pre>
+
+## 自定义转换值的属性
+
+从`2.0`版本后, `translate` 指令还展示了另一个实用的功能来传递值给你的翻译。我们刚学会了如何使用 `translate-values`
+属性，这是很好的，但如果我们能在某些情况下多一点声明在我们的代码就更好了。如果我们只是想传递一个或两个值，但希望
+在我们的 HTML 文件中明确声明这些？
+
+在 angular-translate `>=2.0` 你可以这样做。你可以定义你自己 `translate-value-*` 属性.
+
+那么，如何才能做到？太容易了！
+
+比方说，我们有以下的翻译ID：
+
+<pre>
+{
+  "GREETING": "Hi, my name is {{name}}"
+}
+</pre>
+
+我们想与很棒的 `translate` 指令翻译它。我们可以做到这一点，但是这一次，我们使用一个自定义的 `translate-value-*` 属性来获取
+我们的翻译的值。因此，这是如何工作的：
+
+<pre>
+<p translate="GREETING" translate-value-name="Pascal"></p>
+</pre>
+
+您需要做的是使用 `translate-value-` 前缀和添加的名称给您的翻译中的插值指令（在这种情况下`name`）的标识符。
+
+哦，当然，你可以用它们与插值的值一起使用：
+
+<pre>
+<p translate="GREETING" translate-value-name="{{name}}"></p>
+</pre>
+
+如果这不是一个很酷的功能，我服了。
+
+真棒！现在，我们可以在我们的翻译中替换变量的值了！让我们更新我们的示例应用程序。我们的翻译列表现在是这样的：
+
+<pre>
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+  VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+};
+</pre>
+
+接下来，我们传递一个 'translate' 指令：
+
+<pre>
+<p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+</pre>
+
+我们的工作代码现在看起来像这样：
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-name="PascalPrecht"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
