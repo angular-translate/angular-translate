@@ -65,9 +65,7 @@ Type: `Boolean`
 Default value:  `false`
 它会在创建新的之前删除在目标指定的所有以前生成的文件。
 
-
 还有其他选项，以帮助您在输出.JSON文件的生成，例如，将您的gettext的格式化 [复数化字符串](https://github.com/angular-translate/grunt-po2json-angular-translate#pluralization), 设置 [自定义的占位符](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsenablealtplaceholders)或者 [转换```msgid```为大写](https://github.com/angular-translate/grunt-po2json-angular-translate#optionsuppercaseid).
-
 
 这是在实际的项目中使用的结构的一个例子：
 

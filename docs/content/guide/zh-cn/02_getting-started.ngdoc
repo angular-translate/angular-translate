@@ -1,12 +1,12 @@
 @ngdoc 概述
-@name Getting Started
+@name 入门
 @description
 
-# Getting Started
+# 入门
 
-## Setup HTML
-To get started, embed angular-translate in your HTML document. Of course, this should happen
-**after** Angular itself is embedded. Your HTML should look like this:
+## 设置HTML
+要开始使用，在你的HTML文档中嵌入angular-translate。当然，这应该发生
+ Angular本身嵌入**后**. 您的HTML看起来应该像这样：
 
 <pre>
 <html>
@@ -25,9 +25,9 @@ To get started, embed angular-translate in your HTML document. Of course, this s
 </html>
 </pre>
 
-## Declaring dependencies
-Once this is done, you can declare angular-translate as a dependency of your app.
-Angular provides dependency injection, which is awesome. So, to tell your app
+## 声明依赖性
+一旦做到这一点，你可以声明angular-translate为您的应用程序的依赖关系。
+作为你的应用程序的依赖， Angular 提供依赖注入，这是很酷的. So, to tell your app
 that it needs angular-translate to work properly, simply inject
 angular-translate as a dependency into your module like shown in the following code.
 This gives you access to all components angular-translate comes with.

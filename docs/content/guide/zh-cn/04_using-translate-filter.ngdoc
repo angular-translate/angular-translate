@@ -70,12 +70,9 @@ Pretty easy ha? And of course, you can view a working sample here:
   </doc:source>
 </doc:example>
 
-Great! You're now able to translate your contents within the view layer without
-polluting your controllers logic with translation logic. The whole translation
-stuff is decoupled from your business logic and makes your app much more flexible
-when it comes to a view layer replacement! The next chapter shows you how to
-do the same with the provided `translate` directive.
-
+太棒了！现在，您可以将您的内容的视图层内无翻译污染你的控制器逻辑与转换逻辑。
+整个翻译东西是从你的业务逻辑分离，使您的应用程序更加灵活。
+当它涉及到一个视图层更换！接下来的章节将告诉您如何用所提供的翻译``指示这样做。
 <br>
 <hr>
 <center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

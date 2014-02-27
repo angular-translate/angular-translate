@@ -22,7 +22,6 @@ app.factory('myCustomHandlerFactory', function (dep1, dep2) {
     // do something with dep1 and dep2
   };
 });
-
 </pre>
 
 <br>
