@@ -1,0 +1,87 @@
+@ngdoc overview
+@name 安装
+@description
+
+# 安装
+
+## 安装依赖关系
+
+以下这些工具是在 angular-translate 开发过程中你需要使用的，所以你应该考虑将它们安装在你的机器上，以确保一切工作正常。
+请安装以下工具：
+
+- [Grunt](http://gruntjs.com)
+- [Karma Testrunner](http://karma-runner.github.com/0.8/index.html)
+- [Bower](https://github.com/twitter/bower)
+
+## 通过 Bower 安装
+
+您可以使用 Bower 很简单的安装 `angular-translate`包。在你的机器上安装 bower 后，只需运行：
+
+```
+$ bower install angular-translate
+```
+
+这将在您的配置组件文件夹中安装程序包。你可以在[这里](https://github.com/angular-translate/bower-angular-translate)查看 bower 安装的库。
+正如你所看到的，这几乎是分解到原料来源。不仅对于开发， 生产使用也是如此。
+
+你可能会注意到还有另外一个包。 `angular-translate-interpolation-default` 这个包中包含默认的插值引擎 angular-translate
+用来插值您的翻译。我们以后还会讨论这个引擎，目前你只要知道，这个包必须嵌入到你的HTML文档中。
+
+## 使用Git安装
+
+另一种方式来获得的 angular-translate 的源代码，是从 GitHub 上克隆整个版本库
+
+```
+$ git clone https://github.com/angular-translate/angular-translate.git
+```
+
+现在你有了一个 angular-translate 版本库的完整克隆，包括所有的历史记录和一切其他开发中的事件。你可以取你所需。
+
+由于开发时， angular-translates 是有一定的依赖关系，你可以一次性的安装所有的依赖关系。
+如果你这样做， `angular-translate-interpolation-default` 包已经包括在内。
+要安装所有需要的依赖，只需在 angular-translate 库中运行以下命令。
+
+```
+$ npm install
+$ bower install
+```
+
+## 运行提供的单元测试
+
+当然， `angular-translate` 自带有一个全功能的测试套件等待您来运行它。
+这就是 **Karma testrunner**。导航到你克隆此项目的文件夹，然后运行以下命令：
+
+```
+$ karma start karma.unit.conf
+```
+
+这将启动一个的 estRunner ，它使用**Jasmine 运行框架**执行所有提供的单元测试。
+如果一切呈现顺利的绿色，那你什么也不需要做，表明所有测试范例通过。否则，请解决这个问题，并发送一个pull
+请求。谢谢。
+
+也有**中途测试**可以运行。要做到这一点，用中途测试配置文动Karma：
+
+```
+$ karma start karma.midway.conf
+```
+
+## 从源代码编译
+
+当所有测试都顺利通过了，你可以再建一个开发环境了，你还可以在再建立一个产品版本，就像你前面用的 bower 包一样。
+angular-translate 提供配置了`Gruntfile.js`文件，其中包含可以用 grunt 来运行的配置好的任务。
+
+要获得 `angular-translate` 只需运行以下命令：
+
+```
+$ grunt build
+```
+
+这将生成 `dist` 文件夹，内有一系列文件，为开发和生产使用做好准备。
+文件看起来应该是类似 `dist/angular-translate.js` 和 `dist/angular-translate.min.js`。
+
+这两个文件生成之后，只要将它们嵌入在你的HTML文档中，你是准备摇滚吧！
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

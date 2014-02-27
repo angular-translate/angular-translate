@@ -1,0 +1,29 @@
+@ngdoc overview
+@name 自定义错误处理程序
+@description
+
+# 自定义错误处理程序
+
+当然，你希望能够使用自己的自定义处理程序。除了`useMissingTranslationHandlerLog()`
+还有另一种叫做'useMissingTranslationHandler()`方法，它需要一个工厂名称，这个工厂返回您的自定义处理程序。
+那么，这是什么样子的？
+
+
+<pre>
+var app = angular.module('myApp', ['pascalprecht.translate'], function ($translateProvider) {
+  // tell angular-translate to use your custom handler
+  $translateProvider.useMissingTranslationHandler('myCustomHandlerFactory');
+});
+
+// define custom handler
+app.factory('myCustomHandlerFactory', function (dep1, dep2) {
+  // has to return a function which gets a tranlation ID
+  return function (translationID) {
+    // do something with dep1 and dep2
+  };
+});
+</pre>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

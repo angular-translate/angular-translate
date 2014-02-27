@@ -1,0 +1,129 @@
+@ngdoc overview
+@name 存储
+@description
+
+# 存储
+
+上一个章节我们学到了很多关于angular-translate的内容。我们知道我们如何能
+[动态化我们的翻译](#/guide/06_variable-replacement). 我们还学到了
+[怎么加一个语言](#/guide/07_multi-language). 但是当打开我们的Web应用程序时还是有点感觉傻。
+每次我们推出我们应用程序时，我们都需要一遍又一遍点击（当然，'德语'的按钮只有当你是一个德语用户时 - 那就是我）！.
+
+所以问题是，我们的应用程序只是不记得最后一次是选择哪个语言打开了它的。本章将告诉您如何教你的应用程序
+记住用户选择的语言。
+
+## 让你的应用程序记住选择的语言
+
+为了让您的应用程序记住用户选择的语言，angular-translate带有一个
+对**存储**的支持。不管你用什么存储，angular-translate都会存储
+一门语言的键，它有一个特定标识符，所以在下一次用户启动应用程序时请求他。
+
+angular-translate 内置了两个存储支持. **localStorage** 和
+**cookieStorage**. 如果它不是由用户当前使用的浏览器的支持的话，localStorage会回退到cookieStorage。
+使用这些存储中的一个，你都必须安装相应的扩展包。
+
+## 使用cookieStorage
+
+如果您想使用cookieStorage在跨http请求时存储语言，只需通过 bower 安装cookie存储扩展：
+
+```
+$ bower install angular-translate-storage-cookie
+```
+
+之后，请确保您已在HTML文档中内嵌了他。一旦嵌入，你可以使用`$translateProvider`中的`useCookieStorage`方法，
+angular-translate会替你做其余的工作。
+
+<pre>
+$translateProvider.useCookieStorage();
+</pre>
+
+就是那么容易。angular-translate 现在将初始语言存储了，同时一旦用户切换语言将相应地更新它。
+
+## 使用localStorage
+
+如果你有几个原因不想使用 cookieStorage，你可以使用 localStorage 做出同样的可能。流程是基本相同的。
+安装相应的扩展包，并告诉 `$translateProvider` 通过 `useLocalStorage()` 使用localStorage。
+同样，angular-translate把其余的工作替你完成了。
+
+请记住，如果浏览器不支持 localStorage, localStorage 会回退到 cookieStorage 中。
+因此，你必须提供 cookieStorage 扩展。
+
+您可以这样安装扩展包：
+
+```
+$ bower install angular-translate-storage-local
+```
+
+现在告诉 `$translateProvider` 你希望用以下的:
+
+<pre>
+$translateProvider.useLocalStorage();
+</pre>
+
+这就是全部。您的应用程序现在使用localStorage中记住用户的语言。让我们
+更新我们的应用程序全部使用localStorage！
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translationsEN = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'german',
+        BUTTON_LANG_EN: 'english'
+      };
+
+      var translationsDE= {
+        HEADLINE: 'Was für ein großartiges Modul!',
+        PARAGRAPH: 'Ernsthaft!',
+        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'deutsch',
+        BUTTON_LANG_EN: 'englisch'
+      };
+
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation tables
+        $translateProvider.translations('en', translationsEN);
+        $translateProvider.translations('de', translationsDE);
+        $translateProvider.preferredLanguage('en');
+        // remember language
+        $translateProvider.useLocalStorage();
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+变更语言并刷新浏览器！我们的应用程序现在应该还记得上次使用的语言！
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

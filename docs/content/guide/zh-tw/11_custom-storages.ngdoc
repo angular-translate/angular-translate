@@ -1,0 +1,126 @@
+@ngdoc overview
+@name 自定義存儲
+@description
+
+# 自定義存儲
+
+如果你已經讀過[存儲](#/guide/10_storages), 你知道如何使用
+cookiesStorage 或localStorage讓您的應用程序在跨HTTP請求時記住上次選擇。
+如果沒有localStorage 也沒有cookieStorage 適合您的需求，您還可以簡單地構建自己的存儲服務，並使用該服務來代替。
+
+## 建立一個自定義存儲服務
+
+如果你想在您的應用程序使用自己的自定義存儲，你必須建立一個服務，必須實現一些方法，這樣angular-translate 才可以利用
+它們。存儲服務的接口是非常簡單的。你需要在你的自定義存儲服務中提供一個`set()` 和一個​​`get()` 方法。
+
+比方說，我們希望在我們的示例應用程序中使用自定義的存儲服務。我們可以簡單地用新的服務擴展。我們只需要確保我們返回
+對像有 `get()` 和 `set()` 方法。自定義服務可能看起來像這樣：
+
+<pre>
+app.factory('customStorage', function () {
+  return {
+    set: function (name, value) {
+      // store `value` under `name` somehow
+    },
+    get: function (name) {
+      // request value of `name` somehow
+    }
+  };
+});
+</pre>
+
+很簡單，對不對？正如你所看到的，`set()` 方法需要兩個參數。一個名和一個值。所以
+你只需要考慮簡單的鍵-值對。另一方面，`get()` 只是需要一個名
+去請求一個值。提供了一個自定義存儲作為單獨的服務為您在不同的地方使用此服務提供了高度的靈活性。
+此外因為它是獨立的，測試這項服務是很容易的。
+
+## 使用自定義存儲服務
+
+一旦你建立了你的自定義存儲服務，你必須告訴angular-translate 如何使用它。 `$translateProvider` 的 `useCookieStorage()` 和
+`useLocalStorage()` 方法實際上是快捷方式的方法。兩者內部都使用同一方法`useStorage()`。您也可以使用這個方法來讓angular-translate
+知道你自定義的存儲服務，只需做：
+
+<pre>
+$translateProvider.useStorage('customStorage');
+</pre>
+
+angular-translate 會使用`$injector` 獲得給定的工廠的一個實例名， 在我們的例子這是`customStorage`，
+並隨後在運行時能夠訪問它的方法來保存上次選擇的語言。
+
+
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translationsEN = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'german',
+        BUTTON_LANG_EN: 'english'
+      };
+
+      var translationsDE= {
+        HEADLINE: 'Was für ein großartiges Modul!',
+        PARAGRAPH: 'Ernsthaft!',
+        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'deutsch',
+        BUTTON_LANG_EN: 'englisch'
+      };
+
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation tables
+        $translateProvider.translations('en', translationsEN);
+        $translateProvider.translations('de', translationsDE);
+        $translateProvider.preferredLanguage('en');
+        // remember language
+        $translateProvider.useStorage('customStorage');
+      }]);
+
+      app.factory('customStorage', function () {
+        return {
+          set: function (name, value) {
+            // store `value` under `name` somehow
+          },
+          get: function (name) {
+            // request value of `name` somehow
+          }
+        };
+      });
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values​​="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+當然，我們的定制服務並不做任何事情，這就是為什麼你可以多次刷新瀏覽器，應用程序不會記得該語言。
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

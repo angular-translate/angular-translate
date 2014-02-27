@@ -1,0 +1,57 @@
+@ngdoc overview
+@name 事件
+@description
+
+# 事件
+
+angular-translate 在$rootScope 上會反應一些自定義事件一旦這些事件被觸發。請一定要監聽`$rootScope`這些事件！
+你不能在`$scope` 範圍監聽，因為它們是在`$rootScope` 層面發射的，這是為了一個應用程序範圍內的事件總線具有更好的性能。
+
+本文檔介紹不同的事件和他們如何被觸發。
+
+## 通用事件
+
+有些事件得到觸發和您是如何配置angular-translate 是獨立的。這些都是通用事件，你總是可以指望被觸發的。
+
+**`$translateChangeStart`**
+
+此事件在angular-translate 開始嘗試改變語言時得以觸發。這是在啟動時，當第一次設置語言時，或用`$translate.use()`改變語言時。
+此事件還在angular-translate 第一次異步加載翻譯的數據得到觸發。
+
+**`$translateChangeSuccess`**
+
+從名字就可以看出來，這個時間是在angular-translate 改變翻譯成功之後觸發的。
+當不使用異步加載時，這個事件通常在`$translateChangeStart` 事件之後被立刻觸發。
+這個事件在異步加載程序必須首先加載翻譯數據後也得到觸發。
+
+**`$translateChangeError`**
+
+此事件在翻譯更改失敗後觸發。這實際上只發生在一個異步加載被拒絕返回的承諾時。
+
+**`$translateChangeEnd`**
+
+當翻譯的變化最終結束時被觸發，成功或不成功，所有註冊的插值服務都會被通知有關翻譯的變化。
+
+## 異步加載
+
+有一些事件，僅當異步加載程序使用時被觸發。這些都是在這裡介紹。
+
+**`$translateLoadingStart`**
+
+正如此事件的名字所說，在註冊異步裝載程序被調用時這個事件被觸發時，就在`$translateChangeStart` 被觸發之後。
+
+**`$translateLoadingSuccess`**
+
+異步加載返回一個解決的承諾時被觸發。
+
+**`$translateLoadingError`**
+
+異步加載返回一個拒絕承諾時被觸發。
+
+**`$translateLoadingEnd`**
+
+在一個異步加載器返回解決或拒絕的承諾時被觸發。在異步加載器返回一個解決的承諾情況下，此事件在轉換錶更新後被觸發。
+
+**`$translatePartialLoaderStructureChanged`**
+
+在改變`$translatePartialLoader` 的“結構”時使用任何種類的`*Part()`方法時被觸發。

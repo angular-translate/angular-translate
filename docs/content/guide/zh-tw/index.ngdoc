@@ -1,0 +1,93 @@
+@ngdoc overview
+@name 概觀
+@description
+
+# 國際化你的 Angular 應用程式是如此的輕鬆
+
+#### 最簡單的方法國際化和當地語系化你的 Angular 應用程式！
+
+<BR>
+你想找到一個**國際化**和**當地語系化**你的angular應用程式，卻找不到一個簡單的方法麼？
+angular-translate可以提供你所需的服務。它配備了豐富實用的功能和擴展，並為您提供超高的靈活性和可定制性。
+這些都是偉大的功能，一下只是簡單列舉幾個：
+
+## 功能
+
+- 通過元件（篩檢程式/指令）來翻譯你的內容
+- 非同步載入國際化的資料
+- 採用多元化的支援[ **MessageFormat.js** ](HTTPs://github.com/SlexAxton/messageformat.js)
+- 通過便於使用的介面提供可擴充性
+
+如果你喜歡的這個模組，並把它用在你的專案中，請將這個資訊公開在
+[ngmodules](HTTP://ngmodules.org/modules/angular-translate)，並按一下
+"_I use it_" 按鈕！angular-translate 易於安裝， 使用起來更加得心應手！
+當您閱讀本文時，您將瞭解如何使用 angular-translate 和他擁有的很酷的功能！
+讓我們開始吧：
+
+## 快速入門
+通過 bower 安裝模組：
+
+```
+$ bower install angular-translate
+```
+
+確保將它嵌入在你的HTML文檔中。
+
+<pre>
+<script src="path/to/angular-translate.js"></script>
+</pre>
+
+將 <code>angular-translate</code> 模組作為依賴注入到你的應用程式：
+
+<pre>
+var app = angular.module('myApp', ['pascalprecht.translate']);
+</pre>
+
+教你的應用程式去翻譯：
+
+<pre>
+app.config(['$translateProvider', function ($translateProvider) {
+$translateProvider.translations('en', {
+'TITLE': 'Hello',
+'FOO': 'This is a paragraph'
+});
+
+$translateProvider.translations('de', {
+'TITLE': 'Hallo',
+'FOO': 'Dies ist ein Paragraph'
+});
+
+$translateProvider.preferredLanguage('en');
+}]);
+</pre>
+
+翻譯你的應用程式：
+
+<pre>
+<h1>{{ 'TITLE' | translate }}</h1>
+<p>{{ 'FOO' | translate }}</p>
+</pre>
+
+這是一個 angular-translate 如何翻譯的簡單的例子。基本上整個事情就像「_提供一些國際化的資料，讓 angular-translate 知道它
+並使用其元件來（對某些值）插值入你的翻譯。_“。容易，不是麼？
+
+##有用的資源
+以下是網路上一些非常有用的資源，所以一定要看看這個清單。
+
+- [在ng-newsletter.com的教程](HTTP://www.ng-newsletter.com/posts/angular-translate.html)
+- [angular-translate 和部分載入](HTTP://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
+- [例子和演示](https://github.com/angular-translate/angular-translate/wiki/Demos) - 目前在 plnkr.co 上
+- [在 angularjs.de 上的教程](HTTP://angularjs.de/artikel/angularjs-i18n-ng-translate) - 德語文章
+- [在 neoskop.de 上的教程](HTTP://www.neoskop.de/blog/angular-translate) - 德語文章
+- [在 GitHub 上的 angular-translate](https://github.com/angular-translate/angular-translate.git) - The GitHub repository
+- [在 ngmodules.org 上的 angular-translate](HTTP://ngmodules.org/modules/angular-translate)
+- [angular-translate 郵寄清單](HTTPs://groups.google.com/forum/#!forum/angular-translate) - 討論和其他一切有意思的對話!
+
+## 謝謝你，社區！
+到目前為止我們得到了很多來自社會各界的高度回饋！越來越多的人使用這個模組，他們一直對得到的支援很感激。
+我只是想確保你們知道：沒有這些 [偉大的貢獻者們](https://github.com/angular-translate/angular-translate/graphs/contributors), 他們帶來新的理念和他們對每個新功能的要求,
+這一切都不會是可能的! 所以，** 謝謝！**
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](HTTP://github.com/PascalPrecht)</center>
