@@ -667,11 +667,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * and optional interpolate parameters to translate contents.
    *
    * <pre>
-   *  $scope.translatedText = $translate('HEADLINE_TEXT');
+   *  $translate('HEADLINE_TEXT').then(function (translation) {
+   *    $scope.translatedText = translation;
+   *  });
    * </pre>
    *
    * @param {string} translationId A token which represents a translation id
    * @param {object=} interpolateParams An object hash for dynamic values
+   * @returns {Q.promise}
    */
   this.$get = [
     '$log',
