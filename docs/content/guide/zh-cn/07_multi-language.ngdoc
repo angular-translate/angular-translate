@@ -1,8 +1,8 @@
-@ngdoc 概述
-@name Multi Language
+@ngdoc overview
+@name 多语言
 @description
 
-# Multi Language
+# 多语言
 
 In [Variable replacement](#/guide/06_variable-replacement) you've learned how to
 pass dynamic values through the different components, to make use of them within

@@ -1,10 +1,10 @@
-@ngdoc 概述
-@name 指南
+@ngdoc overview
+@name 概观
 @description
 
-# 国际化你的Angular应用程序是如此的轻松
+# 国际化你的 Angular 应用程序是如此的轻松
 
-#### 最简单的方法国际化和本地化你的angular应用程序！
+#### 最简单的方法国际化和本地化你的 Angular 应用程序！
 
 <BR>
 你想找到一个**国际化**和**本地化**你的angular应用程序，却找不到一个简单的方法么？
@@ -13,15 +13,15 @@ angular-translate可以提供你所需的服务。它配备了丰富实用的功
 
 ## 功能
 
-- 元件（过滤器/指令）来翻译你的内容
+- 通过组件（过滤器/指令）来翻译你的内容
 - 异步加载国际化的数据
-- 采用单复数的支持[ **MessageFormat.js** ] （ https://github.com/SlexAxton/messageformat.js ）
-- 通过易于使用的借口提供可扩展性
+- 采用多元化的支持[ **MessageFormat.js** ](https://github.com/SlexAxton/messageformat.js)
+- 通过易于使用的接口提供可扩展性
 
-如果你喜欢的这个模块，并把她用在你的项目中，请将这个信息公开在
+如果你喜欢的这个模块，并把它用在你的项目中，请将这个信息公开在
 [ngmodules](http://ngmodules.org/modules/angular-translate)，并单击
-"_I use it_"按钮！angular-translate 易于安装， 使用起来更加得心应手！
-当您阅读本文时，您将了解如何使用angular-translate和他拥有的很酷的功能！
+"_I use it_" 按钮！angular-translate 易于安装， 使用起来更加得心应手！
+当您阅读本文时，您将了解如何使用 angular-translate 和他拥有的很酷的功能！
 让我们开始吧：
 
 ## 快速入门
@@ -31,13 +31,13 @@ angular-translate可以提供你所需的服务。它配备了丰富实用的功
 $ bower install angular-translate
 ```
 
-确保将她嵌入在你的HTML文档中。
+确保将它嵌入在你的HTML文档中。
 
 <pre>
 <script src="path/to/angular-translate.js"></script>
 </pre>
 
-注入 <code>angular-translate</code> 模块作为依赖到你的应用程序：
+将 <code>angular-translate</code> 模块作为依赖注入到你的应用程序：
 
 <pre>
 var app = angular.module('myApp', ['pascalprecht.translate']);
@@ -68,25 +68,24 @@ app.config(['$translateProvider', function ($translateProvider) {
 <p>{{ 'FOO' | translate }}</p>
 </pre>
 
-这是一个angular-translate 如何翻译的简单的例子。基本上整个事情就像“_提供一些国际化的数据，让angular-translate知道它
-并使用其组件来（对某些值）内插入你的翻译。_“。
-容易，是吧？
+这是一个 angular-translate 如何翻译的简单的例子。基本上整个事情就像“_提供一些国际化的数据，让 angular-translate 知道它
+并使用其组件来（对某些值）内插入你的翻译。_“。容易，不是么？
 
 ##有用的资源
 以下是网络上一些非常有用的资源，所以一定要看看这个列表。
 
-- [教程在ng-newsletter.com](http://www.ng-newsletter.com/posts/angular-translate.html)
-- [angular-translate 和部分负荷](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
-- [例子和演示](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - 目前在 plnkr.co
-- [教程在 angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - 德语文章
-- [教程在 neoskop.de](http://www.neoskop.de/blog/angular-translate) - 德语文章
-- [angular-translate 在 GitHub](http://github.com/PascalPrecht/angular-translate) - The GitHub repository
-- [angular-translate 在 ngmodules.org](http://ngmodules.org/modules/angular-translate)
+- [在ng-newsletter.com的教程](http://www.ng-newsletter.com/posts/angular-translate.html)
+- [angular-translate 和部分加载](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
+- [例子和演示](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - 目前在 plnkr.co 上
+- [在 angularjs.de 上的教程](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - 德语文章
+- [在 neoskop.de 上的教程](http://www.neoskop.de/blog/angular-translate) - 德语文章
+- [在 GitHub 上的 angular-translate](http://github.com/PascalPrecht/angular-translate) - The GitHub repository
+- [在 ngmodules.org 上的 angular-translate](http://ngmodules.org/modules/angular-translate)
 - [angular-translate 邮件列表](https://groups.google.com/forum/#!forum/angular-translate) - 讨论和其他一切有意思的对话!
 
-## 谢谢，社区！
+## 谢谢你，社区！
 到目前为止我们得到了很多来自社会各界的高度反馈！越来越多的人使用这个模块，他们一直对得到的支持很感激。
-我只是想确保你们知道：没有这些 [伟大的贡献者们](http://github.com/PascalPrecht/angular-translate/contributors), 和带来新的理念和功能要求的每一个人,
+我只是想确保你们知道：没有这些 [伟大的贡献者们](http://github.com/PascalPrecht/angular-translate/contributors), 他们带来新的理念和他们对每个新功能的要求,
 这一切都不会是可能的! 所以，** 谢谢！**
 
 <br>

@@ -1,9 +1,8 @@
-@ngdoc 概述
+@ngdoc overview
 @name 语言谈判
 @description
 
 # 语言谈判
-
 
 angular-translate 支持一个名为“语言协商”功能。用此功能，你可以定义类似的语言键之间的关系。
 

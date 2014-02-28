@@ -1,29 +1,23 @@
-@ngdoc 概述
-@name Using $translate service
+@ngdoc overview
+@name 使用 $translate 服务
 @description
 
-# Using $translate service
+# 使用 $translate 服务
 
-`angular-translate` provides several ways to translate the contents of your app.
-One way is to use the provided `$translate` service directly. You actually
-wouldn't use this approach, because you don't want to bind your apps
-controllers and services too hard to your translated content. However it turned
-out that there are indeed cases where you need to translate contents with
-`$translate` service.
+`angular-translate` 提供了多种方法来翻译你的应用程序中的内容。
+一种方式是直接使用所提供的`$translate` 服务。实际上，你不会使用这种方法，因为你不想将您的翻译内容太过紧密的
+绑定在您的应用程序控制器和服务上。然而事实证明，确实有你需要翻译的内容与案件
+`$translate` 服务的情况.
 
-Just imagine the case, where you want to translate the content of your HTML
-documents `<title>` tag. The `<title>` will never ever be inside of your `ng-app`
-directive, which means it is always outside of an Angular world. So, to achieve
-this, you actually have to manipulate your apps title once your app is running
-through controller or service logic.
+只是想象中的情况下，如果要翻译你的HTML内容
+文件 `<title>` 标签. `<title>` 永远也不会再你的 `ng-app` 指令里, 这意味着它始终是一个 Angular 的世界之外。所以，能够实现
+这一点，你确实有，一旦你的应用程序开始运行就通过控制器或业务逻辑操纵您的应用程序的标题。
 
-## General usage
-This is where `$translate` service comes in. Using `$translate` service is very
-easy. First of all, you have to inject it per dependency injection (like every
-service you want to use within your Angular code). Let's say we want to extend
-the app we started building in [Getting Started](#/guide/02_getting-started).
+## 一般用法
+这就是 `$translate` 服务. 使用 `$translate` 服务非常简单。 首先，你必须每依赖注入注入它（就像每一个
+你想在你的Angular 代码里使用的服务一样）的服务。比方说，我们要扩展我们前面开发的应用程序[入门](#/guide/02_getting-started).
 
-Our code would look something like this:
+我们的代码看起来像这样：
 
 <pre>
 app.controller('Ctrl', ['$translate', function ($translate) {
@@ -31,13 +25,11 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 }]);
 </pre>
 
-Now to translate your contents with `$translate` service, all you have to do is
-to pass a translation ID which was registered with `$translateProvider` before.
-Since it could be that there's some asynchronous loading going on (we'll get into
-this later), `$translate` service behaves asynchronous too and returns a promise,
-that either gets resolved with the translatoin of the given translation ID, or
-rejected with the translation ID. So the basic usage of `$translate` service
-on a controller (or service) level, would look like this:
+现在，用`$translate`翻译服务来翻译你的内容，所有您需要做的是
+传递你以前注册在`$translateProvider`中的翻译ID。
+因为这有一些异步加载事件（我们以后还会再介入这个话题），`$translate` 服务异步行为并返回一个承诺，
+要么获取给定翻译标识的翻译来解决这个承诺，或
+拒绝这个翻译的ID。所以`$translate`服务的基本用法是在控制器（或服务）的水平，看上去是这样的：
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
@@ -53,26 +45,22 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 }]);
 </pre>
 
-**Note:** Namespaced translations are accessed as JSON properties, see 'NAMESPACE.PARAGRAPH'`.
+**注意:** 命名空间的翻译是访问为JSON属性，请参阅 'NAMESPACE.PARAGRAPH'`.
 
-That's all. Now when you think about translating the contents of a `<title>` you
-can do so within your controller.
+这就是全部。当你想想看翻译的`<TITLE>`你的内容现在可以在您的控制器内这样做
 
-## Things to keep in mind
-Please keep in mind that the usage of the `$translate` service doesn't provide a two-way
-data binding default! `$translate` service works asynchronously, which means
-it returns the translation for the given translation id, as soon as it could determine
-it. If it doesn't exist it'll probably just return the translation id.
+## 谨记于心
+请记住`$translate`翻译服务，不提供默认双向数据绑定！ `$translate`翻译服务以异步方式工作，这意味着
+只要其能确定它就返回给定的翻译标识的翻译。如果它不存在，它很可能只是返回的翻译标识。
 
-However, this doesn't mean that it knows when a languages has been changed. And because
-of that, translations translated through a directive `$translate` call, don't get
-updated when changing the language at runtime.
 
-You can fix that by simply wrapping your `$translate` call into a `$translateChangeSucces`
-callback on `$rootScope`, which gets fired every time a translation change was successful.
-Once its changed, you can simply re-execute the code, that gives you your needed translations.
+但是，这并不意味着当一个语言已经改变时它就会知道。在语言更新时，通过指令`$translate`翻译命令执行后返回的翻译，没有得到更新
 
-Here's how it could look like:
+您可以修复这个问题，通过简单地包裹你的`$translate`翻译成为一个`$translateChangeSucces`
+在`$rootScope`回调，每次翻译的变化成功时这个都会被触发。
+一旦它的变化成功，你可以简单地重新执行该代码，这会提供您需要的翻译。
+
+下面是它的代码:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
@@ -84,11 +72,11 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $r
 }]);
 </pre>
 
-Why on `$rootScope` instead of just `$scope` you wonder? angular-translate only `$emit`'s on
-`$rootScope` level because of performance reasons.
-See this [StackOverflow](http://stackoverflow.com/a/19498009/288703) post for more info.
+为什么要在 `$rootScope` 而不是 `$scope` 呢? 因为性能的原因 angular-translate 只在`$rootScope` 层面上可以有`$emit`。
 
-Here's a working sample:
+更多的信息参见 [StackOverflow](http://stackoverflow.com/a/19498009/288703) 帖子.
+
+这是一个例子：
 
 <doc:example module="myApp">
   <doc:source>

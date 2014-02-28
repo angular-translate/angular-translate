@@ -1,47 +1,36 @@
-@ngdoc 概述
-@name Using translate filter
+@ngdoc overview
+@name 使用翻译过滤器
 @description
 
-# Using translate filter
+# 使用翻译过滤器
 
-In [Using $translate service](#/guide/03_using-translate-service) you've learned
-how to use `$translate` service to translate your contents with registered
-translation IDs. Of course, it's pretty cool that this works, but you actually
-don't want to bind your translation to hard to controllers or services. You mainly
-want to translate your contents in the view layer because this is where it all
-belongs to.
+在[使用 $translate 服务](#/guide/03_using-translate-service) 中，你已经学会如何使用`$translate`服务通过注册的翻译标识
+去翻译你的内容。当然，它很酷，但实际上你不想让你的翻译绑定到控制器或服务。 你主要是想让你的内容翻译在视图层，因为这是翻译属于的地方。
 
-angular-translate provides a filter component with which you are able to translate
-your translation IDs within the view layer, without letting any controller or
-service know of them. This means, you can decouple the translate logic from any
-controller or service an make your view layer replaceable without touching
-business logic code.
+angular-translate 提供了一个过滤器组件,这样你可以在你的视图层内翻译你的翻译标识，而不让任何控制器或
+服务知道。这意味着，你可以将翻译逻辑从控制器或服务解耦合出来， 从而可以更新您的视图层而不碰业务逻辑代码。
 
-## General usage
-Using a filter in Angular is pretty straight forward. You can read everything about
-Angular filters right
-[here](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters).
 
-The same goes for angular-translate's `translate` filter. We can update our
-example from
-[Using $translate service](#/guide/03_using-translate-service#generalusage)
-just by transfering the controller logic to our view layer. Basically the
-`translate` filter works like this:
+## 一般用法
+在 Angular 中使用过滤器是非常简单的。你可以在[这里](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters)阅读有关的一切信息。
+
+同样 angular-translate 的 `translate` 过滤器. 我们可以简单的转化控制器的逻辑到视图层。
+[使用 $translate 服务](#/guide/03_using-translate-service#generalusage)。
+简单说 `translate` 过滤器是这样的:
 
 ```
 <ANY>{{ TRANSLATION_ID | translate }}</ANY>
 ```
 
-So, to update our example, we remove the usage of `$translate` service within
-our controller and add the logic to our view layer by using `translate` filter,
-just like this:
+因此，要更新我们的例子，我们在控制器中删除`$translate`服务的使用，并使用`translate` 过滤器将逻辑添加到视图层。
+就像这样：
 
 <pre>
 <h1>{{'HEADLINE' | translate}}</h1>
 <p>{{'PARAGRAPH' | translate}}</p>
 </pre>
 
-Pretty easy ha? And of course, you can view a working sample here:
+很容易哈？当然，你可以在这里查看工作示例：
 
 <doc:example module="myApp">
   <doc:source>

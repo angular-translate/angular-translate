@@ -1,4 +1,4 @@
-@ngdoc 概述
+@ngdoc overview
 @name 多元化
 @description
 
@@ -94,41 +94,30 @@ $translate('LIKE_TEXT', { GENDER: 'male' });
 它们。那么，我们如何解决这个问题呢？我们需要一种方法来使用angular-translate的
 默认的内插，去使用所有的很酷的功能，并同时我们需要MessageFormat中全功能的多元化支持。
 
-## Overriding interpolation temporarily
+## 临时覆盖插值
 
-Since it's a bit silly to re-implement MessageFormat's functionality within
-angular-translate, we can't really use both interpolation types in a single translation.
-But we _can_ use one interpolation type application-wide
-and other interpolation types in specific cases. This means you would say for example:
-"_Please use default interpolation for all of my translations, except for translation
-A, B and C_".
+因为在 angular-translate 重新实现 MessageFormat's 功能有点儿傻，针对同一个翻译，我们不能同时使用不同插值类型。
+但是我们 _可以_ 在应用范围内使用一个插补类型的， 在具体的案件中使用其他插值类型。 这意味着你可以这样说:
+"_除了A，B，C，我所有的翻译请使用默认的内插的_".
 
-With that construct you're able to use all the cool features Angular provides
-with its interpolation service and in addition you can use MessageFormat interpolation
-for translation IDs containinig pluralization.
+用构造你能够使用所有很酷的 Angular 提供的其插值服务功能，除此之外你还可以使用 MessageFormat 的插值
+来翻译具有多元化标识的翻译ID。
 
-So how do we get this working? It's easy. Seriously. Once you have installed
-MessageFormat and its interpolation service, you actually have
-everything you need. All you have to do, is to say you don't want to use
-MessageFormat interpolation for all of your translations, but for specific
-translations only.
+那么，如何才能做到呢？这很容易，真的。一旦你已经安装了 MessageFormat 和他的插值服务，你已经有了你需要的一切。
+所有您需要做的，只是说你不想使用 MessageFormat 插值服务来做所有的翻译，而只是对于具体的翻译来使用而已。
+z
+最初我们要去除 `$translateProvider.useMessageFormatInterpolation()`。现在，我们的应用程序使用默认的内插。
+好吧。接下来，我们必须让 MessageFormat 插值服务可作为可选的插补类型。 `$translateProvider` 有一个方法`addInterpolation()`
+他预期一个插值服务的工厂名称服务作为第一个参数。
 
-At first, we remove `$translateProvider.useMessageFormatInterpolation()` again. Now our app
-uses default interpolation. Alright. Next, we have to make MessageFormat
-interpolation available as optional interpolation type. `$translateProvider`
-has a method `addInterpolation()` which expects a factory name for an interpolation
-service as first argument.
-
-Let's add MessageFormat interpolation service as an 'optional' interpolation type:
+让我们添加 MessageFormat 插值服务作为一个'可选'插补类型：
 
 <pre>
 $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 </pre>
 
-Okay, now, our app is configured using the default interpolation, but is also aware
-that there's another interpolation service that could be used for specific
-translations. We setup a new translation table with translations that use default
-interpolation and MessageFormat interpolation:
+好了，现在，我们的应用程序使用的是默认的内插配置，但它也知道可以使用另一插补服务来做特定的翻译。
+我们建立一个新的翻译表来使用默认的插值和MessageFormat插值：
 
 <pre>
 $translateProvider.translations('en', {
@@ -138,14 +127,11 @@ $translateProvider.translations('en', {
 });
 </pre>
 
-Okay, our translation table now contains translations that use either default
-interpolation or MessageFormat interpolation. In order to tell angular-translate
-which interpolation type should be used when using `$translate` service , we can
-pass an additional parameter to angular-translate's components.
+好了，我们的翻译表现在包含使用任何默认的翻译插值或MessageFormat的插值。要让angular-translate
+知道应当使用哪一种插值类型，我们可以传递一个额外的参数给 'angular-translate' 的组件.
 
-The `$translate` service expects an interpolation type as third argument. If you want
-to configure the `$translate` service to use MessageFormat interpolation for the given
-translation ID, you have to pass `messageformat` as interpolation type, like this:
+`$translate` 服务期望第三个参数是一个插值类型。如果你想配置`$translate` 服务对于给定的翻译标识
+去使用 MessageFormat 插值, 你必须传递 `messageformat` 作为插值类型，象这样：
 
 <pre>
 $translate('TEXT', { val: 5 });
@@ -155,8 +141,7 @@ $translate('PLURAL', { GENDER: 'male' }, 'messageformat');
 // "He liked this."
 </pre>
 
-We can achieve the same with `translate` filter. As explained earlier, the third
-argument is an identifier for the interpolation service:
+我们可以用`translate`转换过滤器实现相同的目的。如前面所解释的，第三个参数是一个插值服务的标识符：
 
 <pre>
 {{ 'TEXT' | translate:"{ val: 5 }" }}
@@ -165,9 +150,7 @@ argument is an identifier for the interpolation service:
 // "He liked this."
 </pre>
 
-`translate` directive expects a new attribute called `translate-interpolation`
-with which you can control which interpolation service to use for a specific
-translation ID:
+`translate` 指令需要一个叫做`translate-interpolation` 的新属性， 通过使用它你可以对特定的翻译使用它来控制特定的插值服务：
 
 <pre>
 <ANY
@@ -182,7 +165,7 @@ translation ID:
 // "He liked this."
 </pre>
 
-Here is a working example (please note: There is also an embedded file for locale 'de'):
+下面是一个工作示例（请注意：这里也有一个语言环境是'de'的嵌入式文件）：
 
 <doc:example module="myApp">
   <doc:source>

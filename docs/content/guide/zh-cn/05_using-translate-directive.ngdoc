@@ -1,8 +1,8 @@
-@ngdoc 概述
-@name Using translate directive
+@ngdoc overview
+@name 使用翻译指令
 @description
 
-# Using translate directive
+# 使用翻译指令
 
 Another way to translate contents within the view layer is to use the `translate`
 directive. Using `translate` filter is great, but using `translate` directive is

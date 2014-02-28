@@ -1,29 +1,21 @@
-@ngdoc 概述
-@name Custom Loaders
+@ngdoc overview
+@name 自定义加载器
 @description
 
-# Customer Loaders
+# 自定义加载器
 
-angular-translate wouldn't be angular-translate if it wouldn't provide you a way
-to build your custom asynchronous loaders.
-In [Asynchronous loading](#/guide/10_asynchronous-loading) you've learned how to
-use the provided loaders to load your translation data asynchronously from a
-service, using certain patterns.
+如果它不能提供你一个方法建立您的自定义异步装载机， angular-translate 将不再是 angular-translate。
+在 [异步加载](#/guide/10_asynchronous-loading) 你已经学会了如何使用特定的模式使用提供的加载器从一个异步加载您的翻译资料服务，。
 
-However in some cases this isn't enough. Maybe you want to have a totally
-different place to store your translation data and don't even want to load them
-from a remote server. This is where custom loaders come in. You can build your
-own loaders very easily. This chapter shows you how to do it!
+然而，在某些情况下，这是不够的。也许你想有一个完全不同的地方来存储您的翻译资料，甚至不希望加载它们从远程服务器。
+这是自装载机进来，你可以建立你拥有装载机变得非常容易。本章将告诉您如何做到这一点！
 
-## Building a custom loader service
+## 建立一个自定义加载程序服务
 
-If non of the provided loaders fits to your needs, you can register a custom
-asynchronous loader as a factory. The factory has to return a function, which
-expects an object where at least the language key property exists. With this
-architecture you're as free as possible and have full control of how your
-asynchronous loader should behave.
+如果不提供装载机适合您的需求，您可以注册一个自定义异步加载器作为一个工厂。工厂必须返回一个函数，它预期一个对象，其中至少有语言键属性存在。
+与此架构你尽可能地自由并完全控制您怎样的异步加载器应该表现。
 
-A custom loader factory could look like this:
+自定义加载器工厂可能看起来像这样：
 
 <pre>
 app.factory('customLoader', function ($http, $q) {
@@ -44,44 +36,35 @@ app.factory('customLoader', function ($http, $q) {
 });
 </pre>
 
-You have to make sure that your loader function returns a promise. It should either
-gets resolved with your translation data, or rejected with the language key. As
-you can see, there's a `key` property on the `options` object. It has the value
-of the language key with which the asynchronous loader is invoked.
+你必须确保你的加载函数返回一个承诺。它应该要么获取与您的翻译数据解析，或拒绝与语言键。
+如你可以看到，有个'选项'对象的'关键'属性。它具有价值语言的关键与异步加载器被调用。
 
-## Make use of a custom loader
+## 创建一个自定义加载器的使用
 
-You know `$translateProvider` provides methods like `useStaticFilesLoader()` or
-`useUrlLoader()`. Both of them use `useLoader()` internally to register a loader
-factory which gets later invoked by `$injector`. You can use the same method for
-you custom service. So, to register the custom service simply do:
+你知道 `$translateProvider` 提供类似 `useStaticFilesLoader()`的方法或者
+`useUrlLoader()` 的方法. 两者在内部都是用 `useLoader()` 去注册一个加载器共产。 这个工厂之后会被 `$injector` 触发。
+你可以使用相同的方法来自定制服务。因此注册自定义的服务只是做：
 
 <pre>
 $translateProvider.useLoader('customLoader');
 </pre>
 
-angular-translate access your custom loader factory with `$injector` service and
-does the rest for you.
+angular-translate 用 `$injector` 服务访问自定义加载器工厂，其他的就不需要你来管了。
 
-## Adding additional options
+## 添加额外的选项
 
-The `options.key` property indicates that `options` is just an object. You can
-extend it with additional properties to fit your own needs. For example you could
-expect a property `foo` on the `options` object, all you have to do is to provide
-the property when registering your custom loader factory.
+`options.key` 属性指示 `options` 就是一个对象。 您可以对附加属性进行扩展，以满足自己的需要。
+比如你可以期待  在 `options` 对象上的`foo`, 所有您需要做的是注册您的自定义加载器工厂时提供他们的属性。
 
-So, if we need a property `foo` with a value `bar` we can pass it like this:
+所以，如果我们需要一个属性`foo` 的一个值 `bar` 我们可以这样做：
 
 <pre>
 $translateProvider.useLoader('customLoader', { foo: 'bar'});
 </pre>
 
-Then, in your loader factory, you can access the property via `options.foo`. You
-don't have to worry about `options.key` since it gets added by angular-translate
-internally before invoking the loader.
+然后，在你装载机工厂，你可以通过 `options.foo` 访问该属性. 您不必担心`options.key` 因为它在调用加载器时被 angular-translate 内部加入了。
 
-Let's make use of a custom loader in our sample app to show how things work! First,
-we build the loader like this:
+让我们用我们的示例应用程序自定义加载程序的显示是如何工作的！首先， 我们建立这样的装载机：
 
 <pre>
 app.factory('asyncLoader', function ($q, $timeout) {
@@ -123,15 +106,14 @@ app.factory('asyncLoader', function ($q, $timeout) {
 });
 </pre>
 
-So what does it do? It uses `$timeout` service to wait two seconds and resolves
-our promise with either the english or the german translation table, depending
-on the language key. Now use `$translateProvider.useLoader()` to make use of it:
+那么它有什么作用？它使用 `$translate` 超时服务，等待两秒钟，做出决议。我们无论是与英语或德语翻译表，根据承诺
+对语言的关键。现在使用 `$translateProvider.useLoader()`，来使用：
 
 <pre>
 $translateProvider.useLoader('asyncLoader');
 </pre>
 
-Easy! Here's our working app with a custom loader!
+简单！下面是我们用自定义的装载机工作的应用程序！
 
 <doc:example module="myApp">
   <doc:source>
@@ -204,8 +186,7 @@ Easy! Here's our working app with a custom loader!
   </doc:source>
 </doc:example>
 
-When changing the language by clicking the `german` button, you see the app waits
-2 seconds until it resolves with the new translation data. Isn't that cool?
+如果通过单击`德国`键更改语言，你看到的应用程序等待2秒，它与新的翻译数据解析。是不是很酷？
 
 <br>
 <hr>
