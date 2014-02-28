@@ -39,7 +39,7 @@ $ bower install angular-translate-interpolation-messageformat
 **注：请务必通过嵌入MessageFormat中提供相应的语言环境的文件。这些文件提供了这是需要得到特定区域设置区域设置规则
 适当的多元化！**
 
-万事俱备后， 我们可以用 `$translateProvider`来告诉angular-translate 去使用MessageFormat内插服务，而不是用缺省的。
+万事俱备后， 我们可以用 `$translateProvider`来告诉angular-translate 去使用MessageFormat插值服务，而不是用缺省的。
 `$translateProvider`提供一个叫做`useMessageFormatInterpolation()`的方法来实现这个功能。
 我们还必须再次使用 `$translateProvider.preferredLanguage()`， 这是为了让MessageFormat知道用什么语言环境
 [named keys](https://github.com/SlexAxton/messageformat.js#named-keys).
@@ -49,8 +49,8 @@ $translateProvider.useMessageFormatInterpolation();
 $translateProvider.preferredLanguage('en');
 </pre>
 
-就是这些了！您的应用程序现在使用的MessageFormat来针对可能的值内插你的翻译。
-那么，这是什么意思呢？既然你现在是依靠essageFormat的内插值而不是默认的内插，你现在可以使用 MessageFormat.js来预计内插值给您的翻译。
+就是这些了！您的应用程序现在使用的MessageFormat来针对可能的值插值你的翻译。
+那么，这是什么意思呢？既然你现在是依靠essageFormat的插值值而不是默认的插值，你现在可以使用 MessageFormat.js来预计插值值给您的翻译。
 
 让我们看看一些在其README文件中提供的MessageFormat的例子。
 这是有些翻译可能的形式：
@@ -61,7 +61,7 @@ $translateProvider.preferredLanguage('en');
 }
 ```
 
-正如你所看到的，在给定的例子里， MessageFormat支持的`SelectFormat`来内插给定的性别。我们可以使用`$translate`翻译服务，以及
+正如你所看到的，在给定的例子里， MessageFormat支持的`SelectFormat`来插值给定的性别。我们可以使用`$translate`翻译服务，以及
 `translate`翻译指令和过滤器，去翻译`LIKE_TEXT`的翻译ID，如我们总是这样做：
 
 <pre>
@@ -77,8 +77,8 @@ $translate('LIKE_TEXT', { GENDER: 'male' });
 
 ## 缺点
 
-其实它很酷，我们能够使用的MessageFormat作为我们的插补发动机。不幸的是，当更换MessageFormat的内插
-为angular-translate的默认内插，还有一个很大的问题。来看看下面的代码， 你看到什么区别？
+其实它很酷，我们能够使用的MessageFormat作为我们的插补发动机。不幸的是，当更换MessageFormat的插值
+为angular-translate的默认插值，还有一个很大的问题。来看看下面的代码， 你看到什么区别？
 
 ```
 {
@@ -88,17 +88,17 @@ $translate('LIKE_TEXT', { GENDER: 'male' });
 ```
 
 没错。 MessageFormat中它的插值使用不同的语法。这意味着，在使用MessageFormat插补时，你必须检查你所有的翻译，
-如果他们使用任何类型的变量替换，你要更新它们相匹配的内插语法。这是不是一件很酷的事情。
+如果他们使用任何类型的变量替换，你要更新它们相匹配的插值语法。这是不是一件很酷的事情。
 
 除此之外，我们也失去了所有Angular的很酷的功能，比如表达式求值或使用的过滤器，因为MessageFormat不支持
 它们。那么，我们如何解决这个问题呢？我们需要一种方法来使用angular-translate的
-默认的内插，去使用所有的很酷的功能，并同时我们需要MessageFormat中全功能的多元化支持。
+默认的插值，去使用所有的很酷的功能，并同时我们需要MessageFormat中全功能的多元化支持。
 
 ## 临时覆盖插值
 
 因为在 angular-translate 重新实现 MessageFormat's 功能有点儿傻，针对同一个翻译，我们不能同时使用不同插值类型。
 但是我们 _可以_ 在应用范围内使用一个插补类型的， 在具体的案件中使用其他插值类型。 这意味着你可以这样说:
-"_除了A，B，C，我所有的翻译请使用默认的内插的_".
+"_除了A，B，C，我所有的翻译请使用默认的插值的_".
 
 用构造你能够使用所有很酷的 Angular 提供的其插值服务功能，除此之外你还可以使用 MessageFormat 的插值
 来翻译具有多元化标识的翻译ID。
@@ -106,7 +106,7 @@ $translate('LIKE_TEXT', { GENDER: 'male' });
 那么，如何才能做到呢？这很容易，真的。一旦你已经安装了 MessageFormat 和他的插值服务，你已经有了你需要的一切。
 所有您需要做的，只是说你不想使用 MessageFormat 插值服务来做所有的翻译，而只是对于具体的翻译来使用而已。
 z
-最初我们要去除 `$translateProvider.useMessageFormatInterpolation()`。现在，我们的应用程序使用默认的内插。
+最初我们要去除 `$translateProvider.useMessageFormatInterpolation()`。现在，我们的应用程序使用默认的插值。
 好吧。接下来，我们必须让 MessageFormat 插值服务可作为可选的插补类型。 `$translateProvider` 有一个方法`addInterpolation()`
 他预期一个插值服务的工厂名称服务作为第一个参数。
 
@@ -116,7 +116,7 @@ z
 $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 </pre>
 
-好了，现在，我们的应用程序使用的是默认的内插配置，但它也知道可以使用另一插补服务来做特定的翻译。
+好了，现在，我们的应用程序使用的是默认的插值配置，但它也知道可以使用另一插补服务来做特定的翻译。
 我们建立一个新的翻译表来使用默认的插值和MessageFormat插值：
 
 <pre>

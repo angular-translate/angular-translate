@@ -4,7 +4,7 @@
 
 # 自定义存储
 
-如果你已经读过 [存储](#/guide/08_storages), 你知道如何让您的应用程序在跨HTTP请求时记住上次选择使用
+如果你已经读过 [存储](#/guide/10_storages), 你知道如何让您的应用程序在跨HTTP请求时记住上次选择使用
 cookiesStorage 或 localStorage。如果没有的 localStorage 也没有 cookieStorage
 适合您的需求，您还可以简单地构建自己的存储服务，并使用该服务来代替。
 

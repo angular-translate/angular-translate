@@ -69,7 +69,7 @@ app.config(['$translateProvider', function ($translateProvider) {
 </pre>
 
 这是一个 angular-translate 如何翻译的简单的例子。基本上整个事情就像“_提供一些国际化的数据，让 angular-translate 知道它
-并使用其组件来（对某些值）内插入你的翻译。_“。容易，不是么？
+并使用其组件来（对某些值）插值入你的翻译。_“。容易，不是么？
 
 ##有用的资源
 以下是网络上一些非常有用的资源，所以一定要看看这个列表。

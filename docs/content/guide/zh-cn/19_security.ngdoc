@@ -4,15 +4,14 @@
 
 # 转义的变量内容
 
-说到常规输出的，AngularJS确保输出将被正确转义。 然而，当使用`angular-translate`和可变内容，结果将不会是正确转义。
-这意味着你的应用程序很容易受到严重的攻击
-(参见: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+说到常规输出，AngularJS 确保输出将被正确转义。 然而，当使用 `angular-translate` 和可变内容时，结果将不会是正确转义。
+这意味着你的应用程序很容易受到严重的攻击(参见: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)))。
 
-## 一般用
+## 一般使用
 
-该方法 `useSanitizeValueStrategy(strategy)` 定义哪种转义策略将被使用，这是全局的。
+`useSanitizeValueStrategy(strategy)` 方法定义哪种转义策略将被使用，这是全局的。
 
-目前，有两个选项可供选择：`nul`（无）和 `escape`（对于HTML）。
+目前，有两个选项可供选择：`null`（无）和 `escaped`（对于HTML）。
 
 我们执行是完全向后兼容，这意味着在默认情况下转义被禁用。
 

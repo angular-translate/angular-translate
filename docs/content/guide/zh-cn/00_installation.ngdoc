@@ -24,8 +24,8 @@ $ bower install angular-translate
 这将在您的配置组件文件夹中安装程序包。你可以在[这里](https://github.com/PascalPrecht/bower-angular-translate)查看 bower 安装的库。
 正如你所看到的，这几乎是分解到原料来源。不仅对于开发， 生产使用也是如此。
 
-你可能会注意到还有另外一个包。 `angular-translate-interpolation-default` 这个包中包含默认的内插引擎 angular-translate
-用来内插您的翻译。我们以后还会讨论这个引擎，目前你只要知道，这个包必须嵌入到你的HTML文档中。
+你可能会注意到还有另外一个包。 `angular-translate-interpolation-default` 这个包中包含默认的插值引擎 angular-translate
+用来插值您的翻译。我们以后还会讨论这个引擎，目前你只要知道，这个包必须嵌入到你的HTML文档中。
 
 ## 使用Git安装
 

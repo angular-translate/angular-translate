@@ -87,7 +87,7 @@ $translateProvider.determinePreferredLanguage(function () {
 
 在运行时切换语言，`$translate` 服务有一个方法 use()， 他返回当前使用的语言的语言键，或者，
 给出一门语言的键作为参数时，告诉 angular-translate 使用相应的语言。 `$translate.use()`在转换表尚未加载时会内部尝试调用异步装载机使用其中一种语言。
-我们在后面[异步加载](#/guide/10_asynchronous_loading)还会提到。
+我们在后面[异步加载](#/guide/12_asynchronous_loading)还会提到。
 
 一个好的`$translate.use()` 用法将在一个控制器内控制语言的变化。你只需要在实施的范围实现一个功能，这个功能期待一种语言键，
 然后用它来告诉 angular-translate 来改变语言。

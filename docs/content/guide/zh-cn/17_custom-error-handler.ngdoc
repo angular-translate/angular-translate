@@ -4,8 +4,8 @@
 
 # 自定义错误处理程序
 
-当然，你希望能够使用自己的自定义处理程序。除了`useMissingTranslationHandlerLog（）`
-还有另一种叫做'useMissingTranslationHandler（）`方法，它需要一个工厂名称，这个工厂返回您的自定义处理程序。
+当然，你希望能够使用自己的自定义处理程序。除了`useMissingTranslationHandlerLog()`
+还有另一种叫做'useMissingTranslationHandler()`方法，它需要一个工厂名称，这个工厂返回您的自定义处理程序。
 那么，这是什么样子的？
 
 

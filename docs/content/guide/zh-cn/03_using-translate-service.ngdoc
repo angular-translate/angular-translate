@@ -5,17 +5,16 @@
 # 使用 $translate 服务
 
 `angular-translate` 提供了多种方法来翻译你的应用程序中的内容。
-一种方式是直接使用所提供的`$translate` 服务。实际上，你不会使用这种方法，因为你不想将您的翻译内容太过紧密的
-绑定在您的应用程序控制器和服务上。然而事实证明，确实有你需要翻译的内容与案件
-`$translate` 服务的情况.
+一种方式是直接使用所提供的 `$translate` 服务。实际上，你不会使用这种方法，因为你不想将您的翻译内容太过紧密的绑定在您的应用程序控制器和服务上。
+然而事实证明，确实有你需要用 `$translate` 服务来翻译的内容的情况。
 
-只是想象中的情况下，如果要翻译你的HTML内容
-文件 `<title>` 标签. `<title>` 永远也不会再你的 `ng-app` 指令里, 这意味着它始终是一个 Angular 的世界之外。所以，能够实现
-这一点，你确实有，一旦你的应用程序开始运行就通过控制器或业务逻辑操纵您的应用程序的标题。
+想象一个情况下，如果要翻译HTML文件的 `<title>` 标签. `<title>` 永远也不会再你的 `ng-app` 指令里, 这意味着它始终是在 Angular 的世界之外的。
+所以，要能够实现这一点，一旦你的应用程序开始运行你就必须通过控制器或业务逻辑来操纵您的应用程序的标题。
 
 ## 一般用法
-这就是 `$translate` 服务. 使用 `$translate` 服务非常简单。 首先，你必须每依赖注入注入它（就像每一个
-你想在你的Angular 代码里使用的服务一样）的服务。比方说，我们要扩展我们前面开发的应用程序[入门](#/guide/02_getting-started).
+
+这就是 `$translate` 服务。 使用 `$translate` 服务非常简单。 首先，你必须每依赖注入它（就像每一个
+你想在你的 Angular 代码里使用的服务一样）的服务。比方说，我们要扩展我们前面开发的应用程序[入门](#/guide/02_getting-started).
 
 我们的代码看起来像这样：
 
@@ -25,11 +24,9 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 }]);
 </pre>
 
-现在，用`$translate`翻译服务来翻译你的内容，所有您需要做的是
-传递你以前注册在`$translateProvider`中的翻译ID。
-因为这有一些异步加载事件（我们以后还会再介入这个话题），`$translate` 服务异步行为并返回一个承诺，
-要么获取给定翻译标识的翻译来解决这个承诺，或
-拒绝这个翻译的ID。所以`$translate`服务的基本用法是在控制器（或服务）的水平，看上去是这样的：
+现在，用`$translate` 服务来翻译你的内容，您需要做的就是传递你以前注册在 `$translateProvider` 中的翻译ID。
+因为这有一些异步加载事件（我们以后还会再介入这个话题），`$translate` 服务也是异步行为并返回一个承诺，
+要么获取给定翻译标识的翻译来解决这个承诺，或拒绝这个翻译的ID。所以 `$translate` 服务的基本用法是在控制器（或服务）的水平，看上去是这样的：
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
@@ -45,19 +42,18 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 }]);
 </pre>
 
-**注意:** 命名空间的翻译是访问为JSON属性，请参阅 'NAMESPACE.PARAGRAPH'`.
+**注意:** 命名空间的翻译是作为JSON属性被访问的，请参阅 'NAMESPACE.PARAGRAPH'`.
 
-这就是全部。当你想想看翻译的`<TITLE>`你的内容现在可以在您的控制器内这样做
+这就是全部。当你想翻译`<TITLE>`的内容时，现在可以在您的控制器内这样做。
 
 ## 谨记于心
-请记住`$translate`翻译服务，不提供默认双向数据绑定！ `$translate`翻译服务以异步方式工作，这意味着
-只要其能确定它就返回给定的翻译标识的翻译。如果它不存在，它很可能只是返回的翻译标识。
+请记住 `$translate` 翻译服务，不提供默认双向数据绑定！ `$translate` 服务以异步方式工作，这意味着
+只要其能确定它就返回给定的翻译标识的翻译。如果翻译不存在，它很可能只是返回的翻译标识。
 
+但是，这并不意味着当一个语言已经改变时它就会知道。在语言更新时，通过指令 `$translate` 命令执行后返回的翻译，没有得到更新。
 
-但是，这并不意味着当一个语言已经改变时它就会知道。在语言更新时，通过指令`$translate`翻译命令执行后返回的翻译，没有得到更新
-
-您可以修复这个问题，通过简单地包裹你的`$translate`翻译成为一个`$translateChangeSucces`
-在`$rootScope`回调，每次翻译的变化成功时这个都会被触发。
+您可以通过简单地包裹你的`$translate`成为一个`$translateChangeSuccess`来解决这个问题。
+在`$rootScope`回调，每次翻译的变化成功时这个事件都会被触发。
 一旦它的变化成功，你可以简单地重新执行该代码，这会提供您需要的翻译。
 
 下面是它的代码:
@@ -72,7 +68,7 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $r
 }]);
 </pre>
 
-为什么要在 `$rootScope` 而不是 `$scope` 呢? 因为性能的原因 angular-translate 只在`$rootScope` 层面上可以有`$emit`。
+为什么要在 `$rootScope` 而不是 `$scope` 呢? 因为性能的原因 angular-translate 只在 `$rootScope` 层面上可以有`$emit`。
 
 更多的信息参见 [StackOverflow](http://stackoverflow.com/a/19498009/288703) 帖子.
 

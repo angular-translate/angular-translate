@@ -158,8 +158,8 @@ angular-translate 期待一个翻译列表，他是一个JSON对象. 所以你�
 
 ## 现在让我们付诸行动!
 
-让我们在我们的应用程序添加一个翻译列表。 `$translateProvider` 提供一个方法叫做`translates()`，就是用来做这个的。比方说，我们有一个
-翻译列表是这样的：
+让我们在我们的应用程序添加一个翻译列表。 `$translateProvider` 提供一个方法叫做 `translates()`，就是用来做这个的。
+比方说，我们有一个翻译列表是这样的：
 
 <pre>
 var translations = {
@@ -182,7 +182,7 @@ app.config(['$translateProvider', function ($translateProvider) {
 }]);
 </pre>
 
-这基本上是所有你必须做的。只需指定一个语言键并添加翻译列表吧。之后告诉 angular-translate 什么是首选语言是。由于我们在配置时加入翻译列表，
+这基本上是所有你必须做的。只需指定一个语言键并添加翻译列表。之后告诉 angular-translate 什么是首选语言是。由于我们在配置时加入翻译列表，
 一旦它被实例化和使用 `$translate` 服务是能够访问它的。
 
 这是工作代码：
@@ -214,7 +214,7 @@ app.config(['$translateProvider', function ($translateProvider) {
   </doc:source>
 </doc:example>
 
-您的应用程序现在已准备好进行本地化！在下一章中，您将学习如何使用 angular-translate 提供的指令和过滤器来内插您的翻译。
+您的应用程序现在已准备好进行本地化！在下一章中，您将学习如何使用 angular-translate 提供的指令和过滤器来插值您的翻译。
 
 <br>
 <hr>

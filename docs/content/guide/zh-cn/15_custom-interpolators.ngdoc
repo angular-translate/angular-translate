@@ -1,16 +1,16 @@
 @ngdoc overview
-@name 自定义内插器
+@name 自定义插值器
 @description
 
-# 自定义内插器
+# 自定义插值器
 
-如果你足够聪明来实现更小的MessageFormat库，或者如果你只需要另一种类型的内插，你可以简单地建立自己的插值
-服务，并将它插入角翻译。所有您需要做的是遵循具体的接口从插值服务角翻译的期望。让我们看看这是如何工作的！
+如果你足够聪明来实现更小的 MessageFormat 库，或者如果你只需要另一种类型的插值，你可以简单地建立自己的插值服务，并将它插入 angular-translate。
+您需要做的就是遵循 angular-translate 特定的插值服务具体的接口协议。让我们看看这是如何工作的！
 
-## 建立一个自定义的插补服务
+## 建立一个自定义的插值服务
 
-当建立一个自定义的插补服务，事情应该很熟悉如果你读过 [自定义存储](#/guide/09_custom-storages)和
-[自定义加载器](#/guide/11_custom-loaders)。 你开始建厂返回一个对象，它实现某个接口。
+当建立一个自定义的插值服务，事情应该很熟悉如果你读过 [自定义存储](#/guide/11_custom-storages)和
+[自定义加载器](#/guide/13_custom-loaders)。 你开始建厂返回一个对象，它实现某个接口。
 下面的方法必须由一个自定义的插值服务提供：
 
 - `setLocale(langKey)` - 设置当前使用的语言
@@ -78,7 +78,7 @@ app.factory('customInterpolation', function ($interpolate) {
 $translateProvider.useInterpolation('customInterpolation');
 </pre>
 
-你的应用程序现在使用您的自定义插值为默认值。然而，正如你在前面的章节中所学到，您可以添加自定义的插补作为可选内插，
+你的应用程序现在使用您的自定义插值为默认值。然而，正如你在前面的章节中所学到，您可以添加自定义的插补作为可选插值，
 而不触动 Angular 的很酷的功能：
 
 <pre>
