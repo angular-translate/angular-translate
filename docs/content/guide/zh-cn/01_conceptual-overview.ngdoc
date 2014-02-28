@@ -9,33 +9,50 @@
 <img class="pull-right" style="padding-left: 3em;" src="img/guide/conceptual_overview.png">
 
 ## The nitty-gritty
-As you can see, angular-translate provides a directive and a filter as components
-you can use to translate your apps content. The directive appears on top of the
-filter component because it makes use of it internally.
 
-In the next layer it gets a bit more interesting. Both, the directive and the
-filter use the `$translate` service. Which means, when translating contents of
-your app with a directive, you're actually doing it with the filter, which actually
-does it with the service. This also means that you can not only translate your
-contents in the view layer in a declarative way, but also (of course only if
-needed) in a business logic layer like a controller or another service.
+正如你可以看到，angular-translate提供了一个指令和过滤器组件 
+你可以用它来翻译你的应用程序。该指令会出现在过滤组件的上面，因为它会在内部使用过滤器。 
 
-Within the `$translate` service you can see some sub components which are used
-by it to translate your contents. We'll get into this in a more detail later
-but nevertheless its good to get an overview of what's actually happening there.
 
-## Interpolators
-The right box represents possible interpolation services `$translate` service uses
-to interpolate your translations against variable values you might want to use
-there. If you don't understand what this means, no worries. You'll learn everything
-you need to know about interpolators later. However, interpolation services are
-decoupled from the main core, which means, you can install them as extra packages.
-There's a default interpolation service which ships with angular-translate built-in.
+在接下来的一层它变得更加有趣。指令和 
+过滤器两者都使用`$translate`服务。这意味着，当你用指令来翻译你的应用程序时你，你实际上使用的是过滤器，
+二过滤器实际上是在用服务做它。这也意味着，你不仅可以在视图的层面上用声明的方式来翻译他的内容，
+，而且也可以（当然只有当 
+需要的话）在一个业务逻辑层类似的控制器或其他服务上来用你我声明的方式翻译它的内容。
 
-Interpolators influence the syntax you have to use within your translations. The
-default interpolation service uses Angular's core interpolation service, so if
-you familiar with it, you don't have to learn anything new. The **MessageFormat**
-interpolation service uses a different syntax, but more on that later.
+
+
+在 `$translate` 这个服务的内部，可以看到一些子组件被我它使用来翻译你的内容。我们以后会再次讨论这个问题，
+但是现在知道将来实际会发生什么的一个概述也是很好的。
+
+
+## 内插
+左边的方块代表可能的内插服务`$translate`服务，它可以将变量的值插入你的翻译之中。如果你不知道这个是什么意思，
+不用担心。在后面你会学习到关于内插的一切内容。但是，内插服务是和核心解偶的。这就意味着你可以把它们作为包来安装。
+angular-translate 安装中带有缺省的内插服务。
+
+内插服务我对你在翻译中使用的语法有影响。缺省的内插服务使用Angular的核心我内插服务。所以如果你对此熟悉的话，
+你就不需要学什么新的东西。**MessageFormat**内插服务使用不同的语法，他们在以后还会讨论到。
+
+## 缺少翻译处理程序
+
+左边的框显示提供缺少的翻译处理程序。当他们被执行时， 
+`$translate`翻译服务尝试翻译不存在的一个键值。您 
+不必使用任何特殊处理，但如果你愿意，angular-translate带有 
+日志服务，您可以作为一个扩展安装它。除此之外，您还可以 
+实现自己的处理程序并使用它。
+
+## 异步加载器 
+你当然希望能够异步加载您的翻译资料来
+加快你的应用程序的性能。角翻译支持使用所谓的 
+异步装载机，这是非常容易使用的。有两个异步 
+装载机，`urlLoader`和`staticFilesLoader`。当涉及到翻译数据的asynchonous装载时
+他们都解决一个特定的问题。不管怎么说， 如果你想
+当然你也可以建立自己的自定义加载器，并使用然后。
+
+
+
+uses a different syntax, but more on that later.
 
 ## Missing translation handlers
 The left box shows provided missing translation handlers. These get executed when
@@ -52,18 +69,16 @@ loaders, `urlLoader` and `staticFilesLoader`. Both of them solves a specific
 situation when it comes to asynchonous loading of translation data. Anyways, of
 course you can build your own custom loaders and use then if you want to.
 
-## Storage
-Since its pretty common that an app, which provides multi-language support, should
-remember the language a user has chosen during runtime, angular-translate gives
-you a way to use any kind of storage. It checks if it should rely on any storage and if so it tries to find a specific key - value pair within the configured storage
-to determine which language actually should be loaded.
+## 存储 
+在一个提供多语言支持的应用程序上，记住用户逸轩这个语言是一个非常常用的做法。angular-translate
+允许你使用任何类型的存储来实现这一功能。它会检查是否应该依赖任何存储，然后它在这个存储中
+试图找到一个特定的键 - 值对的配置的存储以确定哪些语言实际上应该被加载。
 
-angular-translate comes with support for localStorage and cookieStorage. You can
-easily install extension packages to make use of them.
+angular-translate 支持以下两种存储方式localStorage 和 cookieStorage. 你可以很容易的安装扩展包来使用他们。
 
-Now you got a little overview on how angular-translate is structured, which kind
-of features it provides and how the components are connected. In the next chapter
-you'll learn how to start with angular-translate.
+现在，你有一点点的概述如何angular-translate的结构，它提供了哪一些的
+的功能，它提供的组件是如何连接的。在接下来的章节 
+您将学习如何开始运用angular-translate.
 
 <br>
 <hr>

@@ -27,23 +27,23 @@
 
 ## 声明依赖性
 一旦做到这一点，你可以声明angular-translate为您的应用程序的依赖关系。
-作为你的应用程序的依赖， Angular 提供依赖注入，这是很酷的. So, to tell your app
-that it needs angular-translate to work properly, simply inject
-angular-translate as a dependency into your module like shown in the following code.
-This gives you access to all components angular-translate comes with.
+作为你的应用程序的依赖， Angular 提供依赖注入，这是很酷的. 所以要告诉你的应用程序它需要
+angular-translate 才能够正常使用, 简单的注入
+angular-translate 依赖性到你的组建之中就可以了，有下面的源代码所你演示。
+这就给你引入angular-translate 的组件.
 
 <pre>
 var app = angular.module('myApp', ['pascalprecht.translate']);
-</pre>
+</pre>你
 
-## Introducing `$translateProvider`
+## 介绍 `$translateProvider`
 
-angular-translate is now declared as dependency, which means we now have access
-to all of its components. Angular follows a pretty straight forward architecture
-when it comes to configuration of different services you might want to use later
-in your app. Just take a look at the following code.
+angular-translate 现在被我声明作为依赖, 这意味着我们现在可以访问 
+其所有组件。Angular 是一个非常清晰的架构 
+当涉及到不同的服务配置，你可能想在以后使用 
+时配置你的应用程序。让我们来看看下面的代码
 
-Pretty sure, you've already seen something like this:
+我敢肯定，你已经看过这样的代码：
 
 <pre>
 app.config(function ($locationProvider) {
@@ -62,41 +62,31 @@ app.config(function ($routeProvider) {
 });
 </pre>
 
-So what actually happens here is not the _use of a certain service_ to configure
-some things. Its more the _configuration of a certain service_ using a
-_provider_, which happens to be used later in your app. This means,
-`$locationProvider.html5Mode(true)` configures the `$location` **service** to
-work with html5 mode. So if a service should be configurable from outside,
-it needs a corresponding provider that provides the interface you need.
+实际发生的事情在这里不是_use of a certain service_去配置 
+一些东西。_configuration of a certain service_ 去使用_provider_,这恰好是你的应用程序以后要使用的。这意味着， 
+`$locationProvider.html5Mode（true）配置`$location`**服务** 
+在HTML5的模式下工作。所以，如果一个服务应该是从外部配置的， 
+它需要一个相应的供应商，提供您所需要的接口。
 
-angular-translate comes with a `$translateProvider` that you can use to
-configure the provided `$translate` service which handles the i18n stuff in your
-app. The `$translate` service is used by directives and filters you can use
-through your whole application. To let `$translate` service translate your
-contents, it has to know which translations are actually available.
+angular-translate 安装包里有 `$translateProvider` ，它可以用来配置 `$translate`服务， 这个服务回处理i18n相关的内容。 
+在你的应用程序中`$translate` 服务被我的指令和过滤器使用。要使用这个服务，他必须要知道什么翻译是可以拿到的。
 
-This is where `$translateProvider` comes in. `$translateProvider` provides
-methods to teach your app different languages and let `$translate` service
-make use of them.
+这时候你就需要`$translateProvider`需要. `$translateProvider` 提供一些方法来教你的应用程序不同的语言，并且可以让`$translate`服务来使用他们。
 
-## Teaching your app a language
+## 教你的应用程序一个新的语言
 
-Teaching your app a language with `$translateProvider` is very easy. First you
-have to inject the provider into your module configuration function (which is
-the only place where you can access it).
-
+用`$translateProvider`教你的应用程序一个新的语言是很容易的。首先，你 
+必须将提供商注入你的模块配置功能（这是唯一可以访问他的地方)。
 <pre>
 app.config(['$translateProvider', function($translateProvider) {
 
 }]);
 </pre>
 
-Now, to add a language, you have to make `$translateProvider` know of a
-**translation table**. What does that mean? It's actually quite simple.
-angular-translate expects translation tables as JSON objects. So all you have
-to do, is to represent your translation data as JavaScript hash object, or,
-when loading remotely, as a JSON object. This is how a translation table could
-look like:
+现在想要加一个新的语言，你必须让`$translateProvider`知道
+**翻译列表**. 这是什么意思呢？其实非常简单。
+angular-translate 期待一个翻译列表，他是一个JSON对象. 所以你只需要做的事，把翻译列表作为一个Javascript JSON 对象, 或者
+作为JSON对象来远程加载。翻译列表的格式大概是这样的：
 
 ```json
 {
@@ -104,15 +94,15 @@ look like:
 }
 ```
 
-Is that easy? The translation table above contains just one translation. As you
-can see, the key represents a translation ID, whereas the value represents
-the concrete translation for a certain language. You don't even have to provide
-any information in your translation table, to which language it corresponds. But
-more on that later.
+就那么容易吗？上面的转换表只包含一个翻译。正如你 
+可以看到，键代表一个翻译的ID，而该值表示 
+具体的翻译有一定的语言。你甚至不必
+在你的翻译表中提供任何信息，何种语言它对应。关于此底下我们还会提到。 
 
-You can also organize your translations by enclosing them inside namespaces.
-This is particularly interesting for big websites with many and/or long pages.
-All you have to do is to create nested JSON objects:
+您也可以通过命名空间内安排您的翻译。 
+这是许多有趣的大网站对大和长的页面的做法。 
+您需要做的就是创建嵌套的JSON对象：
+
 
 ```json
 {
@@ -124,10 +114,8 @@ All you have to do is to create nested JSON objects:
 }
 ```
 
-This translation table only contains one translation, but you can extend it very
-easily. You can have various nesting levels in your translation table, and each
-namespace can contain as many subnamespace as you want making it very flexible
-for you to use!
+这个翻译列表只包含一个翻译。但是你可以很容易的扩展他。你可以有不同的嵌套的层次，在你的翻译列表中每一个命名空间都可以包括
+更多的命名空间这可以使你的解决方案非常的灵活！
 
 ## Shortcuts and Links
 A very neat feature that is available since `1.1.1` is usage of Shortcuts and Links.
