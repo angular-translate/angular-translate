@@ -1,0 +1,191 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="--page"><h2 id="变量替换">变量替换</h2>
+<p>This guide will show you how to handle variable replacements within translations.
+If you haven&#39;t read the introduction guides about
+<a href="#/guide/03_using-translate-service">$translate service</a>,
+<a href="#/guide/04_using-translate-filter">translate filter</a> and
+<a href="#/guide/05_using-translate-directive">translate directive</a>, you should do so now!</p>
+<p>Using <code>$translate</code> service, <code>translate</code> filter and <code>translate</code> directive is pretty
+neat! But what if your translations need variable values? Say you want to display a
+notification message with a text like &#39;<em>You&#39;ve received n mails</em>&#39;, where <em>n</em> is
+a placeholder for a variable value which could be any number?</p>
+<p>Well, <code>angular-translate</code> got you covered. Bringing variable values to translations
+using angular-translate&#39;s default interpolation services is pretty straight
+forward. Yeap you read it right. It depends on the used interpolation service,
+how variable values are managed within translations.</p>
+<h3 id="变量替换_using-variable-values-within-translations">Using variable values within translations</h3>
+<p>When using angular-translate&#39;s default interpolation service, you can simply rely
+on Angular&#39;s interpolation service syntax. So, to define a variable value within
+a translation, all you have to do is to use Angular&#39;s interpolate directive.</p>
+<pre><code>{
+  &quot;TRANSLATION_ID&quot;: &quot;{{username}} is logged in.&quot;
+}</code></pre>
+<p>Whereas <code>username</code> is the identifier which you can pass a variable value through.
+So how is it possible to get these variable values passed through the components
+angular-translate provides?</p>
+<h3 id="变量替换_variable-replacement-in-$translate-service">Variable replacement in $translate service</h3>
+<p>You can pass variable values through <code>$translate</code> service by using its second
+argument. <code>$translate</code> service expects a JavaScript object hash as second argument
+which is used to interpolate translations against. So if we have a translation id
+like described above, passing a value for <code>username</code> would work as following:</p>
+<pre class="prettyprint linenums">
+$translate('TRANSLATION_ID', { username: 'PascalPrecht' });
+</pre>
+<p>If there&#39;s a translation ID containing more variable values, simply extend the
+passed object hash with corresponding key-value pairs.</p>
+<pre class="prettyprint linenums">
+$translate('TRANSLATION_ID', {
+  username: 'PascalPrecht',
+  lastLogin: '2013-07-21 6:50PM'
+});
+</pre>
+<h3 id="变量替换_variable-replacement-in-translate-filter">Variable replacement in translate filter</h3>
+<p>Since <code>translate</code> filter uses <code>$translate</code> service internally, we just need a way
+to pass dynamic values through the filter to make it available as object hash for
+the service. To achieve this, there is a specific syntax required, because filters
+in Angular are currently not able to have named parameters. So there are to ways to
+pass values through <code>translate</code> filter.</p>
+<p>The first way is to pass an object literal as string. Afterwards it gets
+interpolated by <code>$translate</code> service.</p>
+<pre class="prettyprint linenums">
+{{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
+</pre>
+<p>Not that hard right? But what if <code>username</code> should not have a constant value and also
+has to be interpolated before getting passed? The only way to get this done is to
+pass a scope object as Angular expression through the filter. Which also means,
+you have to bind your variable values for the translations in the controller which
+exposes the values on the scope.</p>
+<pre class="prettyprint linenums">
+angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
+
+  $scope.translationData = {
+    username: 'PascalPrecht'
+  };
+}]);
+</pre>
+<p>And then pass it as expression through the filter:</p>
+<pre class="prettyprint linenums">
+{{ 'TRANSLATION_ID' | translate:translationData }}
+</pre>
+<h3 id="变量替换_variable-replacement-in-translate-directive">Variable replacement in translate directive</h3>
+<p>Of course, you can make the same possible with <code>translate</code> directive. <code>translate</code>
+directive expects an optional <code>translate-values</code> attribute you can use to pass
+some values through it. All you have to do is to combine the directive with the
+<code>translate-values</code> attribute.</p>
+<p>You can pass either an object literal as string, expression,  or, if the value is dynamic,
+an interpolation directive. Whatever you pass in, it gets internally evaluated and parsed by <code>translate</code>
+filter, so what comes out is a plain old JavaScript object which gets passed to
+<code>$translate</code> service.</p>
+<pre class="prettyprint linenums">
+&lt;ANY translate="TRANSLATION_ID"
+     translate-values='{ username: "PascalPrect"}'&gt;&lt;/ANY&gt;
+</pre>
+<p>or</p>
+<pre class="prettyprint linenums">
+&lt;ANY translate="TRANSLATION_ID"
+     translate-values="{ username: someScopeObject.username }"&gt;&lt;/ANY&gt;
+</pre>
+<p>or</p>
+<pre class="prettyprint linenums">
+&lt;ANY translate="TRANSLATION_ID"
+     translate-values="{{translationData}}"&gt;&lt;/ANY&gt;
+</pre>
+<h3 id="变量替换_custom-translate-value-attributes">Custom translate value attributes</h3>
+<p>Since version <code>2.0</code>, <code>translate</code> directive comes with another neat feature to pass
+values into your translations. We just learned how to use the <code>translate-values</code>
+attribute, which is nice, but what if we could in some cases be a bit more
+declarative in our code. What if we only want to pass in one or two values but
+declare these explicitly in our HTML?</p>
+<p>Well, in angular-translate <code>&gt;=2.0</code> you can do exactly that. You are able to define
+your own <code>translate-value-*</code> attributes.</p>
+<p>So how does that work? Easy-Peasy!</p>
+<p>Let&#39;s say we have the following translation id:</p>
+<pre class="prettyprint linenums">
+{
+  "GREETING": "Hi, my name is {{name}}"
+}
+</pre>
+<p>And we wanna translate it with the awesome <code>translate</code> directive. We can do this,
+but this time, we use a custom <code>translate-value-*</code> attribute to get the value
+into our translation. So here&#39;s how it works:</p>
+<pre class="prettyprint linenums">
+&lt;p translate="GREETING" translate-value-name="Pascal"&gt;&lt;/p&gt;
+</pre>
+<p>All you have to do is to use the <code>translate-value-</code> prefix and add the name of the
+identifier of the interpolate directive within your translation (in this case <code>name</code>).</p>
+<p>Oh sure, you can use them with interpolated values too:</p>
+<pre class="prettyprint linenums">
+&lt;p translate="GREETING" translate-value-name="{{name}}"&gt;&lt;/p&gt;
+</pre>
+<p>If that isn&#39;t a cool feature, I&#39;m sold.</p>
+<p>Awesome! We can now replace variable values within our translations! Let&#39;s update
+our example app. We extend the translation table like this:</p>
+<pre class="prettyprint linenums">
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+  VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+};
+</pre>
+<p>Next, we  pass a name through a <code>translate</code> directive:</p>
+<pre class="prettyprint linenums">
+&lt;p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"&gt;&lt;/p&gt;
+</pre>
+<p>Our working code now looks like this:</p>
+<h3 id="变量替换_source">Source</h3>
+<div source-edit="myApp" source-edit-deps="angular.js script.js" source-edit-html="index.html-11" source-edit-css="" source-edit-js="script.js-10" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html-11" ng-html-wrap-loaded="myApp angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-11">
+    
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-name="PascalPrecht"></p>
+    </div>
+  </script>
+</div>
+<div class="tab-pane" title="script.js">
+<pre class="prettyprint linenums" ng-set-text="script.js-10"></pre>
+<script type="text/ng-template" id="script.js-10">
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+</div>
+</div><h3 id="变量替换_demo">Demo</h3>
+<div class="well doc-example-live animate-container" ng-embed-app="myApp" ng-set-html="index.html-11" ng-eval-javascript="script.js-10"></div>
+<p><br></p>
+<p><hr></p>
+<center>Made with unicorn &hearts; love by <a href="http://github.com/PascalPrecht">PascalPrecht</a></center>
+</div></div>

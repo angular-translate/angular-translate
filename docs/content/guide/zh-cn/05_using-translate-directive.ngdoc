@@ -4,75 +4,63 @@
 
 # 使用翻译指令
 
-Another way to translate contents within the view layer is to use the `translate`
-directive. Using `translate` filter is great, but using `translate` directive is
-better. It turned out that having too many filters in a view sets up too many watch
-expressions, which is why `angular-translate` also provides a directive to translate
-your contents in view layer.
+另一种方法的视图层内翻译内容是使用`translate`指令。使用`translate`过滤器是伟大的，但使用`translate`指令更
+好。原来，有一个观点太多的过滤器设置了太多的监听表达式，这是为什么`angular-translate`还提供了在视图层一个指令来翻译内容。
 
-## General usage
-You can use `translate` directive in many different ways. This is how the general
-usage looks like:
+## 一般用法
+你可以使用`translate`指令在许多不同的方式。这是怎样的一般用法看起来像：
 
 ```
 <ANY translate>TRANSLATION_ID</ANY>
 ```
 
-You can also pass a translation ID as attribute value of the `translate` directive
-like this:
+您还可以通过翻译ID作为`translate`指令的属性值像这样：
 
 ```
 <ANY translate="TRANSLATION_ID"></ANY>
 ```
 
-Even if that's already a very flexible way of using a directive, angular-translate
-offers **another** way of using it. Let's say a translation ID isn't available
-as a concrete identifier, because e.g. one is looping over a dataset which contains
-a translation ID in each iterator. In that case a translation ID is only dynamically
-available. You actually have to interpolate the ID itself first. angular-translate
-got you covered. This is also possible:
-
+即使这是已在使用的指令非常灵活的方式，angular-translate 提供**使用它的另一个**方式。比方说，翻译的ID不可用
+作为一个具体的标识符，因为如一个是遍历它包含一个数据集翻译的ID在每一个迭代器。在这种情况下，翻译的ID是唯一的动态
+可用。实际上，你必须先插值ID本身。angular-translate 一应俱全。这也是可能的：
 ```
 <ANY translate="{{toBeInterpolated}}"></ANY>
 ```
 
-Isn't that cool? And yeah, angular-translate wouldn't be angular-translate if it
-couldn't handle it the same way with our first usage example. This also works:
+是不是很酷？ ，是的，angular-translate不会是angular-translate，如果它不能以同样的方式与处理我们的第一个用法范例。
+这也适用：
 
 ```
 <ANY translate>{{toBeInterpolated}}</ANY>
 ```
 
-Choose what works best for you!
+选择最适合你的！
 
-## Post compiling
-Starting with version 2, the translation itself can be post processed in context of the
-current scope (using `$compile`). This means any directive used in a translation value
-itself will now work as expected.
-
-This behavior can be enabled per directive:
+## 编译后的
+从版本2开始，翻译本身可以在当前界内进行后处理（使用`$compile`）。
+这意味着在翻译值中使用的任何指令本身现在将如预期般运作。
+这种行为可以为每个指令被激活：
 
 ```
 <ANY translate="TRANSLATION_ID" translate-compile></ANY>
 ```
 
-In addition to it, you can also enable the feature globally with...
+此外，您还可以启用该功能与全局..
 
 ```
 $translateProvider.usePostCompiling(true);
 ```
 
-... and even then you can disable the feature again per directive:
+... 不仅如此，你还可以为每个指令再次禁用该功能：
 
 ```
 <ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
 ```
 
-## Example
+## 例子
 
-Let's update our example app and add some new translations. How about texts which
-represents each possible way of using `translate` directive? Our translation table
-could look like this:
+让我们更新我们的示例应用程序，并添加了一些新的翻译。怎么样的文本表示使用``翻译指令的每一个可能的方法是什么？
+我们的翻译表可能看起来像这样：
 
 <pre>
 var translations = {
@@ -84,7 +72,7 @@ var translations = {
 };
 </pre>
 
-After that we update our view with our new translation IDs:
+之后，针对我们新翻译的ID我们更新我们的视图：
 
 <pre>
 <p>{{ 'HEADLINE' | translate }}</p>
@@ -96,7 +84,7 @@ After that we update our view with our new translation IDs:
 <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
 </pre>
 
-Our updated app then looks like this:
+我们最新的应用程序，然后看起来像这样：
 
 <doc:example module="myApp">
   <doc:source>

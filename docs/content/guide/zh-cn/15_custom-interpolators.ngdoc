@@ -3,26 +3,21 @@
 @description
 
 # 自定义内插器
-If you're smart enough to implement a smaller MessageFormat library, or if you
-just need another type of interpolation, you can simply build your own interpolation
-service and plug it into angular-translate. All you have to do is to follow a
-specific interface angular-translate expects from an interpolation service. Let's
-see how things work!
 
-## Building a custom interpolation service
+如果你足够聪明来实现更小的MessageFormat库，或者如果你只需要另一种类型的内插，你可以简单地建立自己的插值
+服务，并将它插入角翻译。所有您需要做的是遵循具体的接口从插值服务角翻译的期望。让我们看看这是如何工作的！
 
-When building a custom interpolation service, things should be pretty familiar
-if you've read [Custom Storages](#/guide/09_custom-storages) and
-[Custom Loaders](#/guide/11_custom-loaders). You start with building a factory
-that returns an object that implements a certain interface. The following methods
-have to be provided by a custom interpolation service:
+## 建立一个自定义的插补服务
 
-- `setLocale(langKey)` - sets the currently used language
-- `getInterpolationIdentifier()` - returns an identifier for interpolation
-- `interpolate(string, interpolatgeParams)` - interpolates strings against interpolate params
+当建立一个自定义的插补服务，事情应该很熟悉如果你读过 [自定义存储](#/guide/09_custom-storages)和
+[自定义加载器](#/guide/11_custom-loaders)。 你开始建厂返回一个对象，它实现某个接口。
+下面的方法必须由一个自定义的插值服务提供：
 
-Let's see how it looks like when implementing a custom interpolation service. First,
-we implement the interface:
+- `setLocale(langKey)` - 设置当前使用的语言
+- `getInterpolationIdentifier()` - 返回一个标识符插值
+- `interpolate(string, interpolatgeParams)` - 对插值插值 params 字符串
+
+让我们来看看它的外观实现自定义的插补服务时一样。首先，我们实现的接口：
 
 <pre>
 app.factory('customInterpolation', function () {
@@ -44,9 +39,7 @@ app.factory('customInterpolation', function () {
 });
 </pre>
 
-Okay, this is the basic structure of an interpolation service. Now let's add some
-logic, so angular-translate can make use of it once our custom interpolation service
-comes in:
+好了，这是一个插值服务的基本结构。现在让我们来添加一些逻辑，所以 angular-translate 可以利用它一旦使用我们自定义的插补服务来自于：
 
 <pre>
 app.factory('customInterpolation', function ($interpolate) {
@@ -70,35 +63,29 @@ app.factory('customInterpolation', function ($interpolate) {
 });
 </pre>
 
-Alright. So what did we do here. `setLocale()` simply store the value of the current
-used language. `getInterpolationIdentifier()` returns a string `custom`. So what is
-it actually for? Remember how to
-[temporarily override the interpolation type](#/guide/12_pluralization#overridinginterpolationtemporarily)?
-Exactly. This is the identifier that is mapped to your service, so angular-translate
-knows which interpolation services to use, when you explicitly override interpolation
-service at runtime. `interpolate()` simply uses Angular's `$interpolate` service.
-In addition it prepends and appends the current locale to the given string.
+好吧。那么我们在这里做什么。 `setLocale()`只是存储目前使用的语言。 `getInterpolationIdentifier()`返回一个字符串，`custom`。
+那么，它实际上是什么呢？记住怎样[临时重载插补类型]（＃/ guide/12_pluralization＃overridinginterpolationtemporarily）？
+没错。这是映射到您的服务标识符，所以 angular-translate 知道要使用的插值服务，当你明确地在运行时重载插值服务。
+`interpolate()` 只是使用 Angular 的`$translate`插值服务。此外，它会预先将当前区域设置附加到给定的字符串（前缀和后缀）。
 
-## Using your custom interpolation service
 
-Just like there's a method for Storages (`useStorage()`) and Loaders (`useLoader()`),
-there's also a method for custom interpolations. `$translateProvider.useInterpolation()`
-is your friend when it comes to integrate your custom interpolation service into
-your app.
+## 使用自定义插值服务
+
+就像有一个方法储量（`useStorage()`）和装载机（`useLoader()`）， 另外还有自定义插值的方法。
+当谈到将自定义插值到服务您的应用程序 `$translateProvider.useInterpolation()` 是你的朋友，。
 
 <pre>
 $translateProvider.useInterpolation('customInterpolation');
 </pre>
 
-You app now uses your custom interpolation as default. However, as you've learned
-in previous chapters, you can add your custom interpolation as optional interpolation,
-not to loose Angular's cool features:
+你的应用程序现在使用您的自定义插值为默认值。然而，正如你在前面的章节中所学到，您可以添加自定义的插补作为可选内插，
+而不触动 Angular 的很酷的功能：
 
 <pre>
 $translateProvider.addInterpolation('customInterpolation');
 </pre>
 
-Here' what it looks like:
+就是这个样子的：
 
 <doc:example module="myApp">
   <doc:source>

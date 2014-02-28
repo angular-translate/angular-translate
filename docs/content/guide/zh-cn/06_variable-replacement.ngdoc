@@ -3,28 +3,21 @@
 @description
 
 # 变量替换
+本指南将告诉你如何翻译中处理的变量替换。如果你还没有阅读导游有关
+[$translate 服务](#/guide/03_using-translate-service),
+[translate 过滤器](#/guide/04_using-translate-filter) 和
+[translate 指令](#/guide/05_using-translate-directive)的介绍, 你应该这样做吧！
 
-This guide will show you how to handle variable replacements within translations.
-If you haven't read the introduction guides about
-[$translate service](#/guide/03_using-translate-service),
-[translate filter](#/guide/04_using-translate-filter) and
-[translate directive](#/guide/05_using-translate-directive), you should do so now!
+使用 `$translate` 服务, `translate` 过滤器和 `translate` 指令其实很简单!
+但是，如果你的翻译需要变量的值？说你想显示一个文本消息通知， 文本很像'_你接收了N个邮件_'，其中_N_是一个
+一个占位符变量， 它可以是任何数量？
 
-Using `$translate` service, `translate` filter and `translate` directive is pretty
-neat! But what if your translations need variable values? Say you want to display a
-notification message with a text like '_You've received n mails_', where _n_ is
-a placeholder for a variable value which could be any number?
+`angular-translate` 已经为你想到了. 使用angular-translate的默认插值服务将变量值来翻译是非常简单的。
+你没有看错。它取决于所用的插值服务，变量的值是如何进行管理的。
 
-Well, `angular-translate` got you covered. Bringing variable values to translations
-using angular-translate's default interpolation services is pretty straight
-forward. Yeap you read it right. It depends on the used interpolation service,
-how variable values are managed within translations.
+## 翻译中使用的变量值
 
-## Using variable values within translations
-
-When using angular-translate's default interpolation service, you can simply rely
-on Angular's interpolation service syntax. So, to define a variable value within
-a translation, all you have to do is to use Angular's interpolate directive.
+当使用angular-translate的默认插值服务，您可以简单地依靠 Angular 的内插服务语法。因此，要在翻译中定义一个变量的值，你需要做的就是用 Angular 的插补指令。
 
 ```
 {
@@ -32,16 +25,13 @@ a translation, all you have to do is to use Angular's interpolate directive.
 }
 ```
 
-Whereas `username` is the identifier which you can pass a variable value through.
-So how is it possible to get these variable values passed through the components
-angular-translate provides?
+而'username'是，你可以传递的一个变量值的标识符。 那么它是如何可能通过组件获得了这些angular-translate提供的变量的值呢？
 
-## Variable replacement in $translate service
+## 变量替换 $translate 服务
 
-You can pass variable values through `$translate` service by using its second
-argument. `$translate` service expects a JavaScript object hash as second argument
-which is used to interpolate translations against. So if we have a translation id
-like described above, passing a value for `username` would work as following:
+你可以通过`$translate通过使用它的第二个翻译`服务传递变量值的说法。
+`$translate` 服务需要一个 JavaScript 对象的哈希作为第二个参数，这是用来插反的翻译。
+因此，如果我们有一个翻译的id像上面描述的，通过为`用户名`值会工作如下：
 
 <pre>
 $translate('TRANSLATION_ID', { username: 'PascalPrecht' });
@@ -57,26 +47,19 @@ $translate('TRANSLATION_ID', {
 });
 </pre>
 
-## Variable replacement in translate filter
+## 变量替换翻译过滤
 
-Since `translate` filter uses `$translate` service internally, we just need a way
-to pass dynamic values through the filter to make it available as object hash for
-the service. To achieve this, there is a specific syntax required, because filters
-in Angular are currently not able to have named parameters. So there are to ways to
-pass values through `translate` filter.
+由于``翻译过滤器使用`$translate`翻译服务在内部，我们只需要一种方法通过过滤器来传递动态值，使其可以作为对象的哈希值
+该服务。要做到这一点，有需要的特定的语法，因为滤波器在角目前不能有一个名为参数。因此有其他的方法来通过`翻译`过滤器传递值。
 
-The first way is to pass an object literal as string. Afterwards it gets
-interpolated by `$translate` service.
+第一种方式是传递一个对象字面的字符串。后来它通过`$translate` 服务得到插值。
 
 <pre>
 {{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
 </pre>
 
-Not that hard right? But what if `username` should not have a constant value and also
-has to be interpolated before getting passed? The only way to get this done is to
-pass a scope object as Angular expression through the filter. Which also means,
-you have to bind your variable values for the translations in the controller which
-exposes the values on the scope.
+没有那么难吧？但是，如果'username'不应该有一个恒定值，也已获得通过之前，要进行插值？得到这个工作的唯一方法是
+通过过滤器传递一个范围对象作为角的表达。这也意味着，你拥有约束力的变量值在控制器中的翻译在公开的范围值。
 
 <pre>
 angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
@@ -87,57 +70,51 @@ angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 }]);
 </pre>
 
-And then pass it as expression through the filter:
+然后把它作为表达通过过滤器：
 
 <pre>
 {{ 'TRANSLATION_ID' | translate:translationData }}
 </pre>
 
-## Variable replacement in translate directive
+## 变量替换在翻译指令
 
-Of course, you can make the same possible with `translate` directive. `translate`
-directive expects an optional `translate-values` attribute you can use to pass
-some values through it. All you have to do is to combine the directive with the
-`translate-values` attribute.
+当然，你可以做出同样可以用`translate`指令。 `translate` 指令需要一个可选的 `translate-values` 属性你可以用它来传递
+一些值。您需要做的就是在指令上加上 `translate-values` 属性。
 
-You can pass either an object literal as string, expression,  or, if the value is dynamic,
-an interpolation directive. Whatever you pass in, it gets internally evaluated and parsed by `translate`
-filter, so what comes out is a plain old JavaScript object which gets passed to
-`$translate` service.
+你可以传递一个对象字面字符串，表达式，或者，如果该值是动态的， 插补指令。不管你传递什么，它就会在内部进行评估，并分析了`translate`
+过滤器，所以生产出来的东西是被传递给`$translate` 服务的一个普通的旧JavaScript的对象
+.
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values='{ username: "PascalPrect"}'></ANY>
 </pre>
 
-or
+或者
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values="{ username: someScopeObject.username }"></ANY>
 </pre>
 
-or
+或者
 
 <pre>
 <ANY translate="TRANSLATION_ID"
      translate-values="{{translationData}}"></ANY>
 </pre>
 
-## Custom translate value attributes
+## 自定义转换值的属性
 
-Since version `2.0`, `translate` directive comes with another neat feature to pass
-values into your translations. We just learned how to use the `translate-values`
-attribute, which is nice, but what if we could in some cases be a bit more
-declarative in our code. What if we only want to pass in one or two values but
-declare these explicitly in our HTML?
+从`2.0`版本后, `translate` 指令还展示了另一个实用的功能来传递值给你的翻译。我们刚学会了如何使用 `translate-values`
+属性，这是很好的，但如果我们能在某些情况下多一点声明在我们的代码就更好了。如果我们只是想传递一个或两个值，但
+在我们的 HTML 文件中明确声明这些？
 
-Well, in angular-translate `>=2.0` you can do exactly that. You are able to define
-your own `translate-value-*` attributes.
+在 angular-translate `>=2.0` 你可以这样做。你可以定义你自己 `translate-value-*` 属性.
 
-So how does that work? Easy-Peasy!
+那么，如何才能做到？太容易了！
 
-Let's say we have the following translation id:
+比方说，我们有以下的翻译ID：
 
 <pre>
 {
@@ -145,27 +122,24 @@ Let's say we have the following translation id:
 }
 </pre>
 
-And we wanna translate it with the awesome `translate` directive. We can do this,
-but this time, we use a custom `translate-value-*` attribute to get the value
-into our translation. So here's how it works:
+我们想与很棒的 `translate` 指令翻译它。我们可以做到这一点，但是这一次，我们使用一个自定义的 `translate-value-*` 属性来获取
+我们的翻译的值。因此，这是如何工作的：
 
 <pre>
 <p translate="GREETING" translate-value-name="Pascal"></p>
 </pre>
 
-All you have to do is to use the `translate-value-` prefix and add the name of the
-identifier of the interpolate directive within your translation (in this case `name`).
+所有您需要做的是使用 `translate-value-` 前缀和添加的名称您的翻译中的插值指令（在这种情况下`name`）的标识符。
 
-Oh sure, you can use them with interpolated values too:
+哦，当然，你可以用它们与内插值一起使用：
 
 <pre>
 <p translate="GREETING" translate-value-name="{{name}}"></p>
 </pre>
 
-If that isn't a cool feature, I'm sold.
+如果这不是一个很酷的功能，我服了。
 
-Awesome! We can now replace variable values within our translations! Let's update
-our example app. We extend the translation table like this:
+真棒！现在，我们可以我们的翻译中替换变量的值！让我们更新我们的示例应用程序。我们的转换表现在是这样的：
 
 <pre>
 var translations = {
@@ -178,13 +152,13 @@ var translations = {
 };
 </pre>
 
-Next, we  pass a name through a `translate` directive:
+接下来，我们传递一个 'translate' 指令：
 
 <pre>
 <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
 </pre>
 
-Our working code now looks like this:
+我们的工作代码现在看起来像这样：
 
 <doc:example module="myApp">
   <doc:source>

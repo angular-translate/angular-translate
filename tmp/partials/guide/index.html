@@ -1,0 +1,76 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="--page"><h2 id="国际化你的-angular-应用程序是如此的轻松">国际化你的 Angular 应用程序是如此的轻松</h2>
+<h5 id="国际化你的-angular-应用程序是如此的轻松_最简单的方法国际化和本地化你的-angular-应用程序！">最简单的方法国际化和本地化你的 Angular 应用程序！</h5>
+<p><BR>
+你想找到一个<strong>国际化</strong>和<strong>本地化</strong>你的angular应用程序，却找不到一个简单的方法么？
+angular-translate可以提供你所需的服务。它配备了丰富实用的功能和扩展，并为您提供超高的灵活性和可定制性。
+这些都是伟大的功能，一下只是简单列举几个：</p>
+<h3 id="国际化你的-angular-应用程序是如此的轻松_功能">功能</h3>
+<ul>
+<li>通过组件（过滤器/指令）来翻译你的内容</li>
+<li>异步加载国际化的数据</li>
+<li>采用多元化的支持<a href="https://github.com/SlexAxton/messageformat.js"> <strong>MessageFormat.js</strong> </a></li>
+<li>通过易于使用的接口提供可扩展性</li>
+</ul>
+<p>如果你喜欢的这个模块，并把它用在你的项目中，请将这个信息公开在
+<a href="http://ngmodules.org/modules/angular-translate">ngmodules</a>，并单击
+&quot;<em>I use it</em>&quot; 按钮！angular-translate 易于安装， 使用起来更加得心应手！
+当您阅读本文时，您将了解如何使用 angular-translate 和他拥有的很酷的功能！
+让我们开始吧：</p>
+<h3 id="国际化你的-angular-应用程序是如此的轻松_快速入门">快速入门</h3>
+<p>通过 bower 安装模块：</p>
+<pre><code>$ bower install angular-translate</code></pre>
+<p>确保将它嵌入在你的HTML文档中。</p>
+<pre class="prettyprint linenums">
+&lt;script src="path/to/angular-translate.js"&gt;&lt;/script&gt;
+</pre>
+<p>将 <code>angular-translate</code> 模块作为依赖注入到你的应用程序：</p>
+<pre class="prettyprint linenums">
+var app = angular.module('myApp', ['pascalprecht.translate']);
+</pre>
+<p>教你的应用程序去翻译：</p>
+<pre class="prettyprint linenums">
+app.config(['$translateProvider', function ($translateProvider) {
+  $translateProvider.translations('en', {
+    'TITLE': 'Hello',
+    'FOO': 'This is a paragraph'
+  });
+
+  $translateProvider.translations('de', {
+    'TITLE': 'Hallo',
+    'FOO': 'Dies ist ein Paragraph'
+  });
+
+  $translateProvider.preferredLanguage('en');
+}]);
+</pre>
+<p>翻译你的应用程序：</p>
+<pre class="prettyprint linenums">
+&lt;h1&gt;{{ 'TITLE' | translate }}&lt;/h1&gt;
+&lt;p&gt;{{ 'FOO' | translate }}&lt;/p&gt;
+</pre>
+<p>这是一个 angular-translate 如何翻译的简单的例子。基本上整个事情就像“<em>提供一些国际化的数据，让 angular-translate 知道它
+并使用其组件来（对某些值）内插入你的翻译。</em>“。容易，不是么？</p>
+<h3 id="国际化你的-angular-应用程序是如此的轻松_有用的资源">有用的资源</h3>
+<p>以下是网络上一些非常有用的资源，所以一定要看看这个列表。</p>
+<ul>
+<li><a href="http://www.ng-newsletter.com/posts/angular-translate.html">在ng-newsletter.com的教程</a></li>
+<li><a href="http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773">angular-translate 和部分加载</a></li>
+<li><a href="https://github.com/PascalPrecht/angular-translate/wiki/Demos">例子和演示</a> - 目前在 plnkr.co 上</li>
+<li><a href="http://angularjs.de/artikel/angularjs-i18n-ng-translate">在 angularjs.de 上的教程</a> - 德语文章</li>
+<li><a href="http://www.neoskop.de/blog/angular-translate">在 neoskop.de 上的教程</a> - 德语文章</li>
+<li><a href="http://github.com/PascalPrecht/angular-translate">在 GitHub 上的 angular-translate</a> - The GitHub repository</li>
+<li><a href="http://ngmodules.org/modules/angular-translate">在 ngmodules.org 上的 angular-translate</a></li>
+<li><a href="https://groups.google.com/forum/#!forum/angular-translate">angular-translate 邮件列表</a> - 讨论和其他一切有意思的对话!</li>
+</ul>
+<h3 id="国际化你的-angular-应用程序是如此的轻松_谢谢你，社区！">谢谢你，社区！</h3>
+<p>到目前为止我们得到了很多来自社会各界的高度反馈！越来越多的人使用这个模块，他们一直对得到的支持很感激。
+我只是想确保你们知道：没有这些 <a href="http://github.com/PascalPrecht/angular-translate/contributors">伟大的贡献者们</a>, 他们带来新的理念和他们对每个新功能的要求,
+这一切都不会是可能的! 所以，<strong> 谢谢！</strong></p>
+<p><br></p>
+<p><hr></p>
+<center>Made with unicorn &hearts; love by <a href="http://github.com/PascalPrecht">PascalPrecht</a></center>
+</div></div>

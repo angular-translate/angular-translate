@@ -1,0 +1,165 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="--page"><h2 id="自定义内插器">自定义内插器</h2>
+<p>If you&#39;re smart enough to implement a smaller MessageFormat library, or if you
+just need another type of interpolation, you can simply build your own interpolation
+service and plug it into angular-translate. All you have to do is to follow a
+specific interface angular-translate expects from an interpolation service. Let&#39;s
+see how things work!</p>
+<h3 id="自定义内插器_building-a-custom-interpolation-service">Building a custom interpolation service</h3>
+<p>When building a custom interpolation service, things should be pretty familiar
+if you&#39;ve read <a href="#/guide/09_custom-storages">Custom Storages</a> and
+<a href="#/guide/11_custom-loaders">Custom Loaders</a>. You start with building a factory
+that returns an object that implements a certain interface. The following methods
+have to be provided by a custom interpolation service:</p>
+<ul>
+<li><code>setLocale(langKey)</code> - sets the currently used language</li>
+<li><code>getInterpolationIdentifier()</code> - returns an identifier for interpolation</li>
+<li><code>interpolate(string, interpolatgeParams)</code> - interpolates strings against interpolate params</li>
+</ul>
+<p>Let&#39;s see how it looks like when implementing a custom interpolation service. First,
+we implement the interface:</p>
+<pre class="prettyprint linenums">
+app.factory('customInterpolation', function () {
+
+  return {
+
+    setLocale: function (locale) {
+
+    },
+
+    getInterpolationIdentifier: function () {
+
+    },
+
+    interpolate: function (string, interpolateParams) {
+
+    }
+  };
+});
+</pre>
+<p>Okay, this is the basic structure of an interpolation service. Now let&#39;s add some
+logic, so angular-translate can make use of it once our custom interpolation service
+comes in:</p>
+<pre class="prettyprint linenums">
+app.factory('customInterpolation', function ($interpolate) {
+
+  var $locale;
+
+  return {
+
+    setLocale: function (locale) {
+      $locale = locale;
+    },
+
+    getInterpolationIdentifier: function () {
+      return 'custom';
+    },
+
+    interpolate: function (string, interpolateParams) {
+      return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+    }
+  };
+});
+</pre>
+<p>Alright. So what did we do here. <code>setLocale()</code> simply store the value of the current
+used language. <code>getInterpolationIdentifier()</code> returns a string <code>custom</code>. So what is
+it actually for? Remember how to
+<a href="#/guide/12_pluralization#overridinginterpolationtemporarily">temporarily override the interpolation type</a>?
+Exactly. This is the identifier that is mapped to your service, so angular-translate
+knows which interpolation services to use, when you explicitly override interpolation
+service at runtime. <code>interpolate()</code> simply uses Angular&#39;s <code>$interpolate</code> service.
+In addition it prepends and appends the current locale to the given string.</p>
+<h3 id="自定义内插器_using-your-custom-interpolation-service">Using your custom interpolation service</h3>
+<p>Just like there&#39;s a method for Storages (<code>useStorage()</code>) and Loaders (<code>useLoader()</code>),
+there&#39;s also a method for custom interpolations. <code>$translateProvider.useInterpolation()</code>
+is your friend when it comes to integrate your custom interpolation service into
+your app.</p>
+<pre class="prettyprint linenums">
+$translateProvider.useInterpolation('customInterpolation');
+</pre>
+<p>You app now uses your custom interpolation as default. However, as you&#39;ve learned
+in previous chapters, you can add your custom interpolation as optional interpolation,
+not to loose Angular&#39;s cool features:</p>
+<pre class="prettyprint linenums">
+$translateProvider.addInterpolation('customInterpolation');
+</pre>
+<p>Here&#39; what it looks like:</p>
+<h3 id="自定义内插器_source">Source</h3>
+<div source-edit="myApp" source-edit-deps="angular.js script.js" source-edit-html="index.html-25" source-edit-css="" source-edit-js="script.js-24" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html-25" ng-html-wrap-loaded="myApp angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-25">
+    
+    <div ng-controller="Ctrl">
+      <p translate="HEADLINE"></p>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </script>
+</div>
+<div class="tab-pane" title="script.js">
+<pre class="prettyprint linenums" ng-set-text="script.js-24"></pre>
+<script type="text/ng-template" id="script.js-24">
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useInterpolation('customInterpolation');
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+
+      app.factory('customInterpolation', function ($interpolate) {
+
+        var $locale;
+
+        return {
+
+          setLocale: function (locale) {
+            $locale = locale;
+          },
+
+          getInterpolationIdentifier: function () {
+            return 'custom';
+          },
+
+          interpolate: function (string, interpolateParams) {
+            return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+          }
+        };
+      });
+
+    </script>
+</div>
+</div><h3 id="自定义内插器_demo">Demo</h3>
+<div class="well doc-example-live animate-container" ng-embed-app="myApp" ng-set-html="index.html-25" ng-eval-javascript="script.js-24"></div>
+<p><br></p>
+<p><hr></p>
+<center>Made with unicorn &hearts; love by <a href="http://github.com/PascalPrecht">PascalPrecht</a></center>
+</div></div>

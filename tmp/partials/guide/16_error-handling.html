@@ -1,0 +1,69 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="--page"><h2 id="错误处理">错误处理</h2>
+<p>有时候，你有一个复杂的应用程序，你不知道有多少翻译。你也不知道是否有一个漏译特定ID。这是漏译的处理程序进来。</p>
+<h3 id="错误处理_使用日志处理程序扩展失踪翻译">使用日志处理程序扩展失踪翻译</h3>
+<p>有一个针对angular-translate的扩展，如果你试着翻译不存在翻译的ID他将日志记录传到控制台。像所有的扩展一样，您可以通过 Bower 这样安装：</p>
+<pre><code>$ bower install angular-translate-handler-log</code></pre>
+<p>要使用它你只需要在<code>$translateProvider</code>上调用<code>useMissingTranslationHandlerLog()</code>. angular-translate 会帮你完成其他所需。</p>
+<pre class="prettyprint linenums">
+$translateProvider.useMissingTranslationHandlerLog();
+</pre>
+<p>下面是一个示例工作</p>
+<h3 id="错误处理_source">Source</h3>
+<div source-edit="myApp" source-edit-deps="angular.js script.js" source-edit-html="index.html-27" source-edit-css="" source-edit-js="script.js-26" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html-27" ng-html-wrap-loaded="myApp angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-27">
+    
+    <div ng-controller="Ctrl">
+      <p translate="NOT_EXISTING"></p>
+      <p translate="ALSO_NOT_EXISTING"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </script>
+</div>
+<div class="tab-pane" title="script.js">
+<pre class="prettyprint linenums" ng-set-text="script.js-26"></pre>
+<script type="text/ng-template" id="script.js-26">
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useMissingTranslationHandlerLog();
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+</div>
+</div><h3 id="错误处理_demo">Demo</h3>
+<div class="well doc-example-live animate-container" ng-embed-app="myApp" ng-set-html="index.html-27" ng-eval-javascript="script.js-26"></div>
+<p>现在，来看看浏览器的控制台，看看已经记录了！</p>
+<p><br></p>
+<p><hr></p>
+<center>Made with unicorn &hearts; love by <a href="http://github.com/PascalPrecht">PascalPrecht</a></center>
+</div></div>

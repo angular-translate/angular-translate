@@ -1,0 +1,180 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="--page"><h2 id="多元化">多元化</h2>
+<p>哇，我们已经走过远！我们已经学会了所有有关angular-translate提供的不同组件，我们知道如何在同一时间推出许多翻译表。
+此外，我们利用不同类型的存储区，让我们的应用程序记住了交叉http请求的语言以及最后但并非最不重要的，我们使用异步装载机
+异步从服务器加载我们的翻译资料！哇！</p>
+<p>但还是有一件事我们还没有谈到: <strong>多元化</strong>. 当谈到本地化（localization）和国际化（i18n) 时多元化是一个相当困难的话题。
+不同的语言和文化在某些情况下对如何使用语言有不同的解释。幸运的是我们有一个<a href="http://userguide.icu-project.org/formatparse/messages">标准</a>。
+但是，这并不改变的一个事实，这是一个很具挑战的实施。</p>
+<p>幸运的是， <a href="https://github.com/SlexAxton">Alex Sexton</a> 已经做了工作，并建立了一个JavaScript的库实现了<em>ICU User Guide</em> spec。
+这就是 MessageFormat， 你可以在<a href="https://github.com/SlexAxton/messageformat.js">这里</a>找到。</p>
+<h3 id="多元化_angular-translate-遇到-messageformat">angular-translate 遇到 MessageFormat</h3>
+<p>在我们看来，给人们带来多元化，以angular-translate 最好的办法就是去采用MessageFormat中的功能性，因为它解决了所有问题，包括
+<a href="https://github.com/SlexAxton/messageformat.js#simple-variable-replacement">简单的变量替换</a>,
+<a href="https://github.com/SlexAxton/messageformat.js#selectformat">选择格式</a>,
+和 <a href="https://github.com/SlexAxton/messageformat.js#pluralformat">复数格式</a>.
+那么我们如何在我们的应用程序中使用在angular-translate中使用MessageFormat来借此充分发挥其优势呢？</p>
+<p>当然，这有它相应的扩展。只需通过bower 安装MessageFormat：</p>
+<pre><code>$ bower install angular-translate-interpolation-messageformat</code></pre>
+<p>好吧，简单。不要忘了将它嵌入在你的HTML文档中，这样我们才可以使用所提供的服务。不要忘了先嵌入MessageFormat.js本身：</p>
+<pre class="prettyprint linenums">
+&lt;script src="path/to/messageformat.js"&gt;&lt;/script&gt;
+&lt;script src="path/to/angular-translate-interpolation-messageformat"&gt;&lt;/script&gt;
+</pre>
+<p><strong>注：请务必通过嵌入MessageFormat中提供相应的语言环境的文件。这些文件提供了这是需要得到特定区域设置区域设置规则
+适当的多元化！</strong></p>
+<p>万事俱备后， 我们可以用 <code>$translateProvider</code>来告诉angular-translate 去使用MessageFormat内插服务，而不是用缺省的。
+<code>$translateProvider</code>提供一个叫做<code>useMessageFormatInterpolation()</code>的方法来实现这个功能。
+我们还必须再次使用 <code>$translateProvider.preferredLanguage()</code>， 这是为了让MessageFormat知道用什么语言环境
+<a href="https://github.com/SlexAxton/messageformat.js#named-keys">named keys</a>.</p>
+<pre class="prettyprint linenums">
+$translateProvider.useMessageFormatInterpolation();
+$translateProvider.preferredLanguage('en');
+</pre>
+<p>就是这些了！您的应用程序现在使用的MessageFormat来针对可能的值内插你的翻译。
+那么，这是什么意思呢？既然你现在是依靠essageFormat的内插值而不是默认的内插，你现在可以使用 MessageFormat.js来预计内插值给您的翻译。</p>
+<p>让我们看看一些在其README文件中提供的MessageFormat的例子。
+这是有些翻译可能的形式：</p>
+<pre><code>{
+  &quot;LIKE_TEXT&quot;: &quot;{GENDER, select, male{He} female{She} other{They}} liked this.&quot;
+}</code></pre>
+<p>正如你所看到的，在给定的例子里， MessageFormat支持的<code>SelectFormat</code>来内插给定的性别。我们可以使用<code>$translate</code>翻译服务，以及
+<code>translate</code>翻译指令和过滤器，去翻译<code>LIKE_TEXT</code>的翻译ID，如我们总是这样做：</p>
+<pre class="prettyprint linenums">
+// using `$translate` service来
+$translate('LIKE_TEXT', { GENDER: 'male' });
+// using `translate` filter
+{{ 'LIKE_TEXT' | translate:"{ GENDER: 'male' }" }}
+// using `translate` directive
+&lt;ANY translate="LIKE_TEXT" translate-values="{ GENDER: 'male' }"&gt;&lt;/ANY&gt;
+</pre>
+<p>这很酷？您只需在angular-translate中插上MessageFormat的功能然后再您的翻译中使用高层次多元化！</p>
+<h3 id="多元化_缺点">缺点</h3>
+<p>其实它很酷，我们能够使用的MessageFormat作为我们的插补发动机。不幸的是，当更换MessageFormat的内插
+为angular-translate的默认内插，还有一个很大的问题。来看看下面的代码， 你看到什么区别？</p>
+<pre><code>{
+  &quot;DEFAULT_INTERPOLATION&quot;: &quot;This is a translation that uses default interpolation with a dynamic value: {{value}}&quot;,
+  &quot;MF_INTERPOLATION&quot;: &quot;This is a translation that uses MessageFormat interpolation with a dynamic value: {value}&quot;
+}</code></pre>
+<p>没错。 MessageFormat中它的插值使用不同的语法。这意味着，在使用MessageFormat插补时，你必须检查你所有的翻译，
+如果他们使用任何类型的变量替换，你要更新它们相匹配的内插语法。这是不是一件很酷的事情。</p>
+<p>除此之外，我们也失去了所有Angular的很酷的功能，比如表达式求值或使用的过滤器，因为MessageFormat不支持
+它们。那么，我们如何解决这个问题呢？我们需要一种方法来使用angular-translate的
+默认的内插，去使用所有的很酷的功能，并同时我们需要MessageFormat中全功能的多元化支持。</p>
+<h3 id="多元化_临时覆盖插值">临时覆盖插值</h3>
+<p>因为在 angular-translate 重新实现 MessageFormat&#39;s 功能有点儿傻，针对同一个翻译，我们不能同时使用不同插值类型。
+但是我们 <em>可以</em> 在应用范围内使用一个插补类型的， 在具体的案件中使用其他插值类型。 这意味着你可以这样说:
+&quot;<em>除了A，B，C，我所有的翻译请使用默认的内插的</em>&quot;.</p>
+<p>用构造你能够使用所有很酷的 Angular 提供的其插值服务功能，除此之外你还可以使用 MessageFormat 的插值
+来翻译具有多元化标识的翻译ID。</p>
+<p>那么，如何才能做到呢？这很容易，真的。一旦你已经安装了 MessageFormat 和他的插值服务，你已经有了你需要的一切。
+所有您需要做的，只是说你不想使用 MessageFormat 插值服务来做所有的翻译，而只是对于具体的翻译来使用而已。
+z
+最初我们要去除 <code>$translateProvider.useMessageFormatInterpolation()</code>。现在，我们的应用程序使用默认的内插。
+好吧。接下来，我们必须让 MessageFormat 插值服务可作为可选的插补类型。 <code>$translateProvider</code> 有一个方法<code>addInterpolation()</code>
+他预期一个插值服务的工厂名称服务作为第一个参数。</p>
+<p>让我们添加 MessageFormat 插值服务作为一个&#39;可选&#39;插补类型：</p>
+<pre class="prettyprint linenums">
+$translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+</pre>
+<p>好了，现在，我们的应用程序使用的是默认的内插配置，但它也知道可以使用另一插补服务来做特定的翻译。
+我们建立一个新的翻译表来使用默认的插值和MessageFormat插值：</p>
+<pre class="prettyprint linenums">
+$translateProvider.translations('en', {
+  HEADLINE: 'I\'m a headline',
+  TEXT: 'I\'m using default interpolation {{ val + val }}',
+  PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.'
+});
+</pre>
+<p>好了，我们的翻译表现在包含使用任何默认的翻译插值或MessageFormat的插值。要让angular-translate
+知道应当使用哪一种插值类型，我们可以传递一个额外的参数给 &#39;angular-translate&#39; 的组件.</p>
+<p><code>$translate</code> 服务期望第三个参数是一个插值类型。如果你想配置<code>$translate</code> 服务对于给定的翻译标识
+去使用 MessageFormat 插值, 你必须传递 <code>messageformat</code> 作为插值类型，象这样：</p>
+<pre class="prettyprint linenums">
+$translate('TEXT', { val: 5 });
+// "I'm using default interpolation 10"
+
+$translate('PLURAL', { GENDER: 'male' }, 'messageformat');
+// "He liked this."
+</pre>
+<p>我们可以用<code>translate</code>转换过滤器实现相同的目的。如前面所解释的，第三个参数是一个插值服务的标识符：</p>
+<pre class="prettyprint linenums">
+{{ 'TEXT' | translate:"{ val: 5 }" }}
+// "I'm using default interpolation 10"
+{{ 'PLURAL' | translate:"{ GENDER: 'male' }":"messageformat" }}
+// "He liked this."
+</pre>
+<p><code>translate</code> 指令需要一个叫做<code>translate-interpolation</code> 的新属性， 通过使用它你可以对特定的翻译使用它来控制特定的插值服务：</p>
+<pre class="prettyprint linenums">
+&lt;ANY
+  translate="TEXT"
+  translate-values="{ val: 5 }"&gt;&lt;/ANY&gt;
+// "I'm using default interpolation 10"
+
+&lt;ANY
+  translate="PLURAL"
+  translate-values="{ GENDER: 'male' }"
+  translate-interpolation="messageformat"&gt;&lt;/ANY&gt;
+// "He liked this."
+</pre>
+<p>下面是一个工作示例（请注意：这里也有一个语言环境是&#39;de&#39;的嵌入式文件）：</p>
+<h3 id="多元化_source">Source</h3>
+<div source-edit="myApp" source-edit-deps="angular.js script.js" source-edit-html="index.html-23" source-edit-css="" source-edit-js="script.js-22" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html-23" ng-html-wrap-loaded="myApp angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-23">
+    
+    <div ng-controller="Ctrl">
+      <p translate="HEADLINE"></p>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <p translate="PLURAL" translate-values="{ GENDER: 'other' }" translate-interpolation="messageformat"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </script>
+</div>
+<div class="tab-pane" title="script.js">
+<pre class="prettyprint linenums" ng-set-text="script.js-22"></pre>
+<script type="text/ng-template" id="script.js-22">
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+</div>
+</div><h3 id="多元化_demo">Demo</h3>
+<div class="well doc-example-live animate-container" ng-embed-app="myApp" ng-set-html="index.html-23" ng-eval-javascript="script.js-22"></div>
+<p><br></p>
+<p><hr></p>
+<center>Made with unicorn &hearts; love by <a href="http://github.com/PascalPrecht">PascalPrecht</a></center>
+</div></div>

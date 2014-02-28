@@ -1,0 +1,99 @@
+<h1><code ng:non-bindable="">translate</code>
+<div><span class="hint">directive in module <code ng:non-bindable="">pascalprecht.translate</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="pascalprecht-translate-directive-page pascalprecht-translate-directive-translate-page"><p>Translates given translation id either through attribute or DOM content.
+Internally it uses <code>translate</code> filter to translate translation id. It possible to
+pass an optional <code>translate-values</code> object literal as string into translation id.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$compile">$compile</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$filter">$filter</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$interpolate">$interpolate</a></code>
+</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<div class="usage">as attribute<pre class="prettyprint linenums">&lt;ANY translate="{string}"
+     [translate-values="{string}"]&gt;
+   ...
+&lt;/ANY&gt;</pre>
+<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>translate <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-directive-page pascalprecht-translate-directive-translate-page"><p>Translation id which could be either string or interpolated string.</p>
+</div></td></tr><tr><td>translate-values <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-directive-page pascalprecht-translate-directive-translate-page"><p>Values to pass into translation id. Can be passed as object literal string or interpolated object.</p>
+</div></td></tr></tbody></table></div>
+<h2 id="example">Example</h2>
+<div class="example"><div class="pascalprecht-translate-directive-page pascalprecht-translate-directive-translate-page"><h4 id="example_source">Source</h4>
+<div source-edit="ngView" source-edit-deps="angular.js script.js" source-edit-html="index.html" source-edit-css="" source-edit-js="script.js" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js"></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html" ng-html-wrap-loaded="ngView angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html">
+  <div ng-controller="TranslateCtrl">
+
+    <pre translate="TRANSLATION_ID"></pre>
+    <pre translate>TRANSLATION_ID</pre>
+    <pre translate="{{translationId}}"></pre>
+    <pre translate>{{translationId}}</pre>
+    <pre translate="WITH_VALUES" translate-values="{value: 5}"></pre>
+    <pre translate translate-values="{value: 5}">WITH_VALUES</pre>
+    <pre translate="WITH_VALUES" translate-values="{{values}}"></pre>
+    <pre translate translate-values="{{values}}">WITH_VALUES</pre>
+
+  </div>
+</script>
+</div>
+<div class="tab-pane" title="script.js">
+<pre class="prettyprint linenums" ng-set-text="script.js"></pre>
+<script type="text/ng-template" id="script.js">
+  angular.module('ngView', ['pascalprecht.translate'])
+
+  .config(function ($translateProvider) {
+
+    $translateProvider.translations({
+      'TRANSLATION_ID': 'Hello there!',
+      'WITH_VALUES': 'The following value is dynamic: {{value}}'
+    });
+
+  });
+
+  angular.module('ngView').controller('TranslateCtrl', function ($scope) {
+    $scope.translationId = 'TRANSLATION_ID';
+
+    $scope.values = {
+      value: 78
+    };
+  });
+</script>
+</div>
+<div class="tab-pane" title="End to end test">
+<pre class="prettyprint linenums" ng-set-text="scenario.js"></pre>
+<script type="text/ng-template" id="scenario.js">
+  it('should translate', function () {
+    inject(function ($rootScope, $compile) {
+      $rootScope.translationId = 'TRANSLATION_ID';
+
+      element = $compile('<p translate="TRANSLATION_ID"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Hello there!');
+
+      element = $compile('<p translate="{{translationId}}"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Hello there!');
+
+      element = $compile('<p translate>TRANSLATION_ID</p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Hello there!');
+
+      element = $compile('<p translate>{{translationId}}</p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Hello there!');
+    });
+  });
+</script>
+</div>
+</div><h4 id="example_demo">Demo</h4>
+<div class="well doc-example-live animate-container" ng-embed-app="ngView" ng-set-html="index.html" ng-eval-javascript="script.js"></div>
+</div></div>
+</div>

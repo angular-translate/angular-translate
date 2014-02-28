@@ -1,0 +1,294 @@
+p {
+  line-height: 1.6;
+  font-size: 16px;
+  color: #555;
+}
+
+a {
+  color: #5caed6;
+}
+
+.content h2,
+.content h3,
+.content h4,
+.content h5 {
+  color: #555;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 22.5px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+h2, h1 {
+  color: rgb(102, 102, 102);
+  font-weight: normal;
+}
+.header img {
+  width: 215px;
+  margin-top: 15px;
+}
+
+.hint {
+  font-size: 0.5em;
+}
+
+.content h2, .content h3, .content h4, .content h5 {
+  margin-top: 0.5em;
+}
+
+.content h3 {
+  font-weight: bold;
+}
+
+.nav .nav-header.module a.code {
+  word-wrap: break-word;
+}
+
+.clear-navbar {
+  margin-top: 85px;
+}
+
+.navbar-inner {
+  background: white;
+}
+
+.navbar-inner li {
+  line-height: 40px;
+}
+
+.navbar-fixed-top .navbar-inner {
+  box-shadow: none;
+}
+
+.nav-list > .active > a,
+.nav-list > .active > a:hover {
+  background: #5caed6;;
+  color: #fff;
+}
+
+.nav-list > li > a {
+  padding: 6px 15px;
+}
+
+.nav-list > .active > a:focus {
+  box-shadow: none;
+}
+
+
+.navbar .nav > li > a:hover,
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .avtive > a:focus {
+  box-shadow: none;
+}
+
+.masthead {
+  padding: 70px 0 50px;
+  margin-bottom: 0;
+  /*background: #ebf5fa;*/
+}
+
+.masthead .container {
+  text-align: center;
+}
+
+.masthead .container p {
+  margin-top: 50px;
+}
+
+.btn, button {
+  background: #5caed6;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+  text-shadow: none;
+}
+.btn:hover,
+button:hover {
+  background: rgb(20, 125, 160);
+  color: #fff;
+  box-shadow: none;
+}
+
+.btn-group.open .btn-primary.dropdown-toggle {
+  background: rgb(20, 125, 160);
+}
+
+.masthead .container .btn {
+  padding: 10px 20px;
+}
+
+.masthead .container .btn:hover {
+  background: rgb(20, 125, 160);
+}
+
+.masthead .container .tagline {
+  color: rgb(20, 125, 160);
+  font-size: 24px;
+  margin-top: 15px;
+  line-height: 1;
+}
+
+.masthead .container img {
+  margin-top: 60px;
+}
+
+.divider {
+  border-top: 1px solid rgb(212, 212, 212);
+}
+
+.container.main {
+  border-top: 1px solid rbg(212, 212, 212);
+  min-height: 300px;
+}
+
+.intro,
+.companies,
+.peeps,
+.example {
+  margin-top: 24px;
+}
+
+.companies h2, .peeps h2 {
+  margin-bottom: 15px;
+}
+
+.example h1 {
+  margin-top: 0;
+}
+
+.companies  ul {
+  list-style: none;
+}
+
+.companies li {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 25px;
+}
+
+.companies li:first-child {
+  margin-left: 0;
+}
+
+.peeps h1 {
+  margin-bottom: 25px;
+}
+
+.peeps blockquote {
+  border: 0;
+  padding: 0;
+  position: relative;
+  margin-top: 12px;
+}
+
+.peeps blockquote:before {
+  content: "“";
+  position: absolute;
+  font-size: 125px;
+  top: 14px;
+  left: -15px;
+  color: #5caed6;
+  letter-spacing: -10px;
+}
+.peeps blockquote p {
+  line-height: 1.5;
+  background: #eee;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.peeps blockquote footer span {
+  margin-top: 15px;
+  display: block;
+  margin-left: 14px;
+  color: #555;
+  font-style: italic;
+}
+
+.footer {
+  text-align: center;
+  border-top: 1px solid rgb(212, 212, 212);
+  padding: 45px 0 15px;
+  background: #fff;
+  margin-top: 40px;
+}
+
+.footer a {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.footer a:hover {
+  text-decoration: none;
+}
+
+.footer img {
+  border-radius: 3px;
+}
+
+.footer p {
+  color: #555;
+  text-align: center;
+  font-size: 14px;
+}
+
+.form-search input {
+  border-radius: 3px;
+}
+
+form.well {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding-top: 2px;
+}
+
+.dropdown-menu {
+  box-shadow: none;
+  border-radius: 0;
+  margin: -4px 0 0;
+}
+
+.navbar .pull-right > li > .dropdown-menu:before,
+.navbar .nav > li > .dropdown-menu.pull-right:before {
+  right: 22px;
+}
+
+.navbar .pull-right > li > .dropdown-menu:after,
+.navbar .nav > li > .dropdown-menu.pull-right:after {
+  right: 23px;
+}
+
+.dropdown-menu > li > a {
+  padding: 10px 20px;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-image: none;
+  background-color: #5caed6;
+}
+
+.dropdown-menu > li > a > img {
+  margin-right: 8px;
+  vertical-align: -35%;
+  width: 24px;
+  padding-right: 0;
+  margin-top: 0;
+}
+.form-search > ul.nav > li > a {
+  word-wrap: break-word;
+}
+
+.content code {
+  color: #333;
+}

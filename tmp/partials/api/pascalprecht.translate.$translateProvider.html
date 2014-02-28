@@ -1,0 +1,200 @@
+<h1><code ng:non-bindable="">$translateProvider</code>
+<div><span class="hint">service in module <code ng:non-bindable="">pascalprecht.translate</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="pascalprecht-translate-translateprovider-page"><p>$translateProvider allows developers to register translation-tables, asynchronous loaders
+and similar to configure translation behavior directly inside of a module.</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_addinterpolation">addInterpolation(factory)</h3>
+<div class="addinterpolation"><div class="pascalprecht-translate-translateprovider-addinterpolation-page"><p>Adds interpolation services to angular-translate, so it can manage them.</p>
+</div><h5 id="methods_addinterpolation_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>factory</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="pascalprecht-translate-translateprovider-addinterpolation-page"><p>Interpolation service factory</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_cloakclassname">cloakClassName(name)</h3>
+<div class="cloakclassname"><div class="pascalprecht-translate-translateprovider-cloakclassname-page"><p>Let&#39;s you change the class name for <code>translate-cloak</code> directive.
+Default class name is <code>translate-cloak</code>.</p>
+</div><h5 id="methods_cloakclassname_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>name</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-cloakclassname-page"><p>translate-cloak class name</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_determinepreferredlanguage">determinePreferredLanguage(fn)</h3>
+<div class="determinepreferredlanguage"><div class="pascalprecht-translate-translateprovider-determinepreferredlanguage-page"><p>Tells angular-translate to try to determine on its own which language key
+to set as preferred language. When <code>fn</code> is given, angular-translate uses it
+to determine a language key, otherwise it uses the built-in <code>getLocale()</code>
+method.</p>
+<p>The <code>getLocale()</code> returns a language key in the format <code>[lang]_[country]</code> or
+<code>[lang]</code> depending on what the browser provides.</p>
+<p>Use this method at your own risk, since not all browsers return a valid
+locale.</p>
+</div><h5 id="methods_determinepreferredlanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>fn <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="pascalprecht-translate-translateprovider-determinepreferredlanguage-page"><p>Function to determine a browser&#39;s locale</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_fallbacklanguage">fallbackLanguage(langKey)</h3>
+<div class="fallbacklanguage"><div class="pascalprecht-translate-translateprovider-fallbacklanguage-page"><p>Tells the module which of the registered translation tables to use when missing translations
+at initial startup by passing a language key. Similar to <code>$translateProvider#use</code>
+only that it says which language to <strong>fallback</strong>.</p>
+</div><h5 id="methods_fallbacklanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>langKey</td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-object"></a><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="pascalprecht-translate-translateprovider-fallbacklanguage-page"><p>A language key.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_preferredlanguage">preferredLanguage(langKey)</h3>
+<div class="preferredlanguage"><div class="pascalprecht-translate-translateprovider-preferredlanguage-page"><p>Tells the module which of the registered translation tables to use for translation
+at initial startup by passing a language key. Similar to <code>$translateProvider#use</code>
+only that it says which language to <strong>prefer</strong>.</p>
+</div><h5 id="methods_preferredlanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>langKey</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-preferredlanguage-page"><p>A language key.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_registeravailablelanguagekeys">registerAvailableLanguageKeys(languageKeys, aliases)</h3>
+<div class="registeravailablelanguagekeys"><div class="pascalprecht-translate-translateprovider-registeravailablelanguagekeys-page"><p>Registers a set of language keys the app will work with. Use this method in
+combination with
+<a href="#/api/pascalprecht.translate.$translateProvider#determinepreferredlanguage">determinePreferredLanguage</a>.
+When available languages keys are registered, angular-translate
+tries to find the best fitting language key depending on the browsers locale,
+considering your language key convention.</p>
+</div><h5 id="methods_registeravailablelanguagekeys_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>languageKeys</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="pascalprecht-translate-translateprovider-registeravailablelanguagekeys-page"><p>Array of language keys the your app will use</p>
+</div></td></tr><tr><td>aliases <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="pascalprecht-translate-translateprovider-registeravailablelanguagekeys-page"><p>Alias map.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_storagekey">storageKey(key)</h3>
+<div class="storagekey"><div class="pascalprecht-translate-translateprovider-storagekey-page"><p>Tells the module which key must represent the choosed language by a user in the storage.</p>
+</div><h5 id="methods_storagekey_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-storagekey-page"><p>A key for the storage.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_storageprefix">storagePrefix(prefix)</h3>
+<div class="storageprefix"><div class="pascalprecht-translate-translateprovider-storageprefix-page"><p>Sets prefix for storage key.</p>
+</div><h5 id="methods_storageprefix_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>prefix</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-storageprefix-page"><p>Storage key prefix</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_translationnotfoundindicator">translationNotFoundIndicator(indicator)</h3>
+<div class="translationnotfoundindicator"><div class="pascalprecht-translate-translateprovider-translationnotfoundindicator-page"><p>Sets an indicator which is used when a translation isn&#39;t found. E.g. when
+setting the indicator as &#39;X&#39; and one tries to translate a translation id
+called <code>NOT_FOUND</code>, this will result in <code>X NOT_FOUND X</code>.</p>
+<p>Internally this methods sets a left indicator and a right indicator using
+<code>$translateProvider.translationNotFoundIndicatorLeft()</code> and
+<code>$translateProvider.translationNotFoundIndicatorRight()</code>.</p>
+<p><strong>Note</strong>: These methods automatically add a whitespace between the indicators
+and the translation id.</p>
+</div><h5 id="methods_translationnotfoundindicator_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>indicator</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-translationnotfoundindicator-page"><p>An indicator, could be any string.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_translations">translations(key, translationTable)</h3>
+<div class="translations"><div class="pascalprecht-translate-translateprovider-translations-page"><p>Registers a new translation table for specific language key.</p>
+<p>To register a translation table for specific language, pass a defined language
+key as first parameter.</p>
+<pre class="prettyprint linenums">
+ // register translation table for language: 'de_DE'
+ $translateProvider.translations('de_DE', {
+   'GREETING': 'Hallo Welt!'
+ });
+
+ // register another one
+ $translateProvider.translations('en_US', {
+   'GREETING': 'Hello world!'
+ });
+</pre>
+<p>When registering multiple translation tables for for the same language key,
+the actual translation table gets extended. This allows you to define module
+specific translation which only get added, once a specific module is loaded in
+your app.</p>
+<p>Invoking this method with no arguments returns the translation table which was
+registered with no language key. Invoking it with a language key returns the
+related translation table.</p>
+</div><h5 id="methods_translations_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-translations-page"><p>A language key.</p>
+</div></td></tr><tr><td>translationTable</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="pascalprecht-translate-translateprovider-translations-page"><p>A plain old JavaScript object that represents a translation table.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_use">use(langKey)</h3>
+<div class="use"><div class="pascalprecht-translate-translateprovider-use-page"><p>Set which translation table to use for translation by given language key. When
+trying to &#39;use&#39; a language which isn&#39;t provided, it&#39;ll throw an error.</p>
+<p>You actually don&#39;t have to use this method since <code>$translateProvider#preferredLanguage</code>
+does the job too.</p>
+</div><h5 id="methods_use_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>langKey</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-use-page"><p>A language key.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_usecookiestorage">useCookieStorage()</h3>
+<div class="usecookiestorage"><div class="pascalprecht-translate-translateprovider-usecookiestorage-page"><p>Tells angular-translate to use <code>$translateCookieStorage</code> service as storage layer.</p>
+</div></div>
+</li>
+<li><h3 id="methods_useinterpolation">useInterpolation(factory)</h3>
+<div class="useinterpolation"><div class="pascalprecht-translate-translateprovider-useinterpolation-page"><p>Tells angular-translate which interpolation style to use as default, application-wide.
+Simply pass a factory/service name. The interpolation service has to implement
+the correct interface.</p>
+</div><h5 id="methods_useinterpolation_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>factory</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-useinterpolation-page"><p>Interpolation service name.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_useloader">useLoader(loaderFactory, options)</h3>
+<div class="useloader"><div class="pascalprecht-translate-translateprovider-useloader-page"><p>Tells angular-translate to use any other service as loader.</p>
+</div><h5 id="methods_useloader_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>loaderFactory</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-useloader-page"><p>Factory name to use</p>
+</div></td></tr><tr><td>options <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="pascalprecht-translate-translateprovider-useloader-page"><p>Optional configuration object</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_uselocalstorage">useLocalStorage()</h3>
+<div class="uselocalstorage"><div class="pascalprecht-translate-translateprovider-uselocalstorage-page"><p>Tells angular-translate to use <code>$translateLocalStorage</code> service as storage layer.</p>
+</div></div>
+</li>
+<li><h3 id="methods_usemessageformatinterpolation">useMessageFormatInterpolation()</h3>
+<div class="usemessageformatinterpolation"><div class="pascalprecht-translate-translateprovider-usemessageformatinterpolation-page"><p>Tells angular-translate to use interpolation functionality of messageformat.js.
+This is useful when having high level pluralization and gender selection.</p>
+</div></div>
+</li>
+<li><h3 id="methods_usemissingtranslationhandler">useMissingTranslationHandler(factory)</h3>
+<div class="usemissingtranslationhandler"><div class="pascalprecht-translate-translateprovider-usemissingtranslationhandler-page"><p>Expects a factory name which later gets instantiated with <code>$injector</code>.
+This method can be used to tell angular-translate to use a custom
+missingTranslationHandler. Just build a factory which returns a function
+and expects a translation id as argument.</p>
+<p>Example:
+<pre class="prettyprint linenums">
+ app.config(function ($translateProvider) {
+   $translateProvider.useMissingTranslationHandler('customHandler');
+ });
+
+ app.factory('customHandler', function (dep1, dep2) {
+   return function (translationId) {
+     // something with translationId and dep1 and dep2
+   };
+ });
+</pre>
+</div><h5 id="methods_usemissingtranslationhandler_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>factory</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-usemissingtranslationhandler-page"><p>Factory name</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_usemissingtranslationhandlerlog">useMissingTranslationHandlerLog()</h3>
+<div class="usemissingtranslationhandlerlog"><div class="pascalprecht-translate-translateprovider-usemissingtranslationhandlerlog-page"><p>Tells angular-translate to use built-in log handler when trying to translate
+a translation Id which doesn&#39;t exist.</p>
+<p>This is actually a shortcut method for <code>useMissingTranslationHandler()</code>.</p>
+</div></div>
+</li>
+<li><h3 id="methods_usepostcompiling">usePostCompiling(factory)</h3>
+<div class="usepostcompiling"><div class="pascalprecht-translate-translateprovider-usepostcompiling-page"><p>If post compiling is enabled, all translated values will be processed
+again with AngularJS&#39; $compile.</p>
+<p>Example:
+<pre class="prettyprint linenums">
+ app.config(function ($translateProvider) {
+   $translateProvider.usePostCompiling(true);
+ });
+</pre>
+</div><h5 id="methods_usepostcompiling_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>factory</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-usepostcompiling-page"><p>Factory name</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_usesanitizestrategy">useSanitizeStrategy(value)</h3>
+<div class="usesanitizestrategy"><div class="pascalprecht-translate-translateprovider-usesanitizestrategy-page"><p>Simply sets a sanitation strategy type.</p>
+</div><h5 id="methods_usesanitizestrategy_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>value</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-usesanitizestrategy-page"><p>Strategy type.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_usestaticfilesloader">useStaticFilesLoader(options)</h3>
+<div class="usestaticfilesloader"><div class="pascalprecht-translate-translateprovider-usestaticfilesloader-page"><p>Tells angular-translate to use <code>$translateStaticFilesLoader</code> extension service as loader.</p>
+</div><h5 id="methods_usestaticfilesloader_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>options <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="pascalprecht-translate-translateprovider-usestaticfilesloader-page"><p>Optional configuration object</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_usestorage">useStorage()</h3>
+<div class="usestorage"><div class="pascalprecht-translate-translateprovider-usestorage-page"><p>Tells angular-translate to use custom service as storage layer.</p>
+</div></div>
+</li>
+<li><h3 id="methods_useurlloader">useUrlLoader(url)</h3>
+<div class="useurlloader"><div class="pascalprecht-translate-translateprovider-useurlloader-page"><p>Tells angular-translate to use <code>$translateUrlLoader</code> extension service as loader.</p>
+</div><h5 id="methods_useurlloader_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="pascalprecht-translate-translateprovider-useurlloader-page"><p>Url</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>
