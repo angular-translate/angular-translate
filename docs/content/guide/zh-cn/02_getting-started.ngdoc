@@ -117,9 +117,9 @@ angular-translate 期待一个翻译列表，他是一个JSON对象. 所以你�
 这个翻译列表只包含一个翻译。但是你可以很容易的扩展他。你可以有不同的嵌套的层次，在你的翻译列表中每一个命名空间都可以包括
 更多的命名空间这可以使你的解决方案非常的灵活！
 
-## Shortcuts and Links
-A very neat feature that is available since `1.1.1` is usage of Shortcuts and Links.
-Let's say you have a translation table that looks like this:
+## 快捷方式和链接 
+一个非常实用的功能就是可以自`1.1.1`版本以来对快捷方式和链接的使用。 
+比方说，你有一个翻译表看起来像这样：
 
 ```json
 {
@@ -131,20 +131,17 @@ Let's say you have a translation table that looks like this:
 }
 ```
 
-You would later access the existing translation id actually via `bar.foo.foo`.
-So, this is pretty much okay, but we can do better. angular-translate is clever
-enought to recognize, if there's a translation id that has the same identifier as
-its corresponding namespace. If that is the case, you can access the translation id
-with a simple shortcut by just pointing to the regarding namespace rather than the
-translation id. This is possible, because there can only be one translation id
-with the same identifier under the same namespace.
+您你后将可以通过`bar.foo.foo`来对现有的翻译ID进行访问的。 
+所以虽然这样也不错，但我们可以做的更好。angular-translate很聪明 
+它可以认识到，如果有翻译的id，具有相同标识符 
+和其对应的命名空间。如果是这样的话，他就可以用快捷方式访问你这个翻译id 
+指向的命名空间，而不是一个简单的快捷方式指向在一个命名空间内针对一个你你标识只会有一个相对应的你翻译我标识符。
 
-So this basically means, you can access the translation id above with the shortcut
-`bar.foo`. Cool, huh?
+这就意味着，你可以简单的使用快捷方式来访问同一个特定的翻译ID我。很酷对吧？
 
-Another cool feature that angular-translate provides is the ability to link within
-your translation table from one translation id to another. Let's say we have the
-following translation table:
+另一个很酷的功能，角翻译提供链接的能力将 
+您的翻译表从一个翻译的id链接到另一个翻译的ID。比方说，我们有 
+下列转换表：
 
 ```json
 {
@@ -161,6 +158,8 @@ So as you can see we have to introduced namespaces here, but both of them kind o
 a text that probably just says "OK". This case isn't unusual if you just think about
 a confirmation button or similar in your app. However, it isn't hard to recognize
 that we have a redundancy here and we as developers don't like redundancy right?
+
+
 
 If there's a translation id that will always have the same concrete text as another
 one you can just link to it. To link to another translation id, all you have to do
