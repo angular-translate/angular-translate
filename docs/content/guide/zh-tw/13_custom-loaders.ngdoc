@@ -1,0 +1,192 @@
+@ngdoc overview
+@name 自定義加載器
+@description
+
+# 自定義加載器
+
+如果它不能提供你一個方法建立您的自定義異步裝載機， angular-translate 將不再是angular-translate。
+在[異步加載](#/guide/12_asynchronous-loading) 你已經學會瞭如何使用特定的模式使用提供的加載器從一個異步加載您的翻譯資料服務。
+
+然而，在某些情況下，這是不夠的。也許你想有一個完全不同的地方來存儲您的翻譯資料，甚至不希望從遠程服務器加載它們。
+這是自裝載機進來，你可以建立自定義裝載機變得非常容易。本章將告訴您如何做到這一點！
+
+## 建立一個自定義加載程序服務
+
+如果提供的裝載機不適合您的需求，您可以註冊一個工廠作為自定義異步加載器。工廠必須返回一個函數，它預期一個對象，其中至少有語言鍵屬性存在。
+用此架構你盡可能地自由並完全控制您的異步加載器應該表現。
+
+自定義加載器工廠可能看起來像這樣：
+
+<pre>
+app.factory('customLoader', function ($http, $q) {
+    // return loaderFn
+    return function (options) {
+        var deferred = $q.defer();
+        // do something with $http, $q and key to load localization files
+
+        var data = {
+            'TEXT': 'Fooooo'
+        };
+
+        // resolve with translation data
+        return deferred.resolve(data);
+        // or reject with language key
+        return deferred.reject(options.key);
+    };
+});
+</pre>
+
+你必須確保你的加載函數返回一個承諾。它應該要么解析獲取您的翻譯數據，或拒絕並返回語言鍵。
+如你可以看到，有個'option'對象的'key'屬性。它是被調用的異步加載器的語言鍵。
+
+## 使用自定義加載器
+
+你知道`$translateProvider` 提供類似`useStaticFilesL​​oader()`或者
+`useUrlLoader()` 的方法. 兩者在內部都是用`useLoader()` 去註冊一個加載器工廠。這個工廠之後會被 `$injector` 觸發。
+你可以使用相同的方法來自定制服務。因此註冊自定義的服務只是做：
+
+<pre>
+$translateProvider.useLoader('customLoader');
+</pre>
+
+angular-translate 用`$injector` 服務訪問自加載器工廠定義，其他的就不需要你來管了。
+
+## 添加額外的選項
+
+`options.key` 屬性指示`options` 就是一個對象。您可以對附加屬性進行擴展，以滿足自己的需要。
+比如你可以期待在`options` 對像上的`foo`, 所有您需要做的是註冊您的自定義加載器工廠時提供他們的屬性。
+
+所以，如果我們需要一個屬性`foo` 的一個值`bar` 我們可以這樣做：
+
+<pre>
+$translateProvider.useLoader('customLoader', { foo: 'bar'});
+</pre>
+
+然後，在你裝載機工廠，你可以通過`options.foo` 訪問該屬性. 您不必擔心`options.key` 因為它在調用加載器時被angular-translate 內部加入了。
+
+讓我們用我們的示例應用程序自定義加載程序的顯示是如何工作的！首先， 我們建立這樣的裝載機：
+
+<pre>
+app.factory('asyncLoader', function ($q, $timeout) {
+
+  return function (options) {
+    var deferred = $q.defer(),
+        translations;
+
+    if (options.key === 'en') {
+      translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'german',
+        BUTTON_LANG_EN: 'english'
+      };
+    } else {
+      translations = {
+        HEADLINE: 'Was für ein großartiges Modul!',
+        PARAGRAPH: 'Ernsthaft!',
+        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'deutsch',
+        BUTTON_LANG_EN: 'englisch'
+      };
+    }
+
+    $timeout(function () {
+      deferred.resolve(translations);
+    }, 2000);
+
+    return deferred.promise;
+  };
+});
+</pre>
+
+那麼它有什麼作用？它使用`$translate` 超時服務，等待兩秒鐘，做出決議。根據承諾的語言鍵返回英語或德語翻譯表。現在使用`$translateProvider.useLoader()` 來使用：
+
+<pre>
+$translateProvider.useLoader('asyncLoader');
+</pre>
+
+簡單！下面是我們用自定義的裝載機工作的應用程序！
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useLoader('asyncLoader');
+      }]);
+
+      app.factory('asyncLoader', function ($q, $timeout) {
+
+        return function (options) {
+          var deferred = $q.defer(),
+              translations;
+
+          if (options.key === 'en') {
+            translations = {
+              HEADLINE: 'What an awesome module!',
+              PARAGRAPH: 'Srsly!',
+              PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+              PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+              PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+              VARIABLE_REPLACEMENT: 'Hi {{name}}',
+              BUTTON_LANG_DE: 'german',
+              BUTTON_LANG_EN: 'english'
+            };
+          } else {
+            translations = {
+              HEADLINE: 'Was für ein großartiges Modul!',
+              PARAGRAPH: 'Ernsthaft!',
+              PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+              PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+              PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+              VARIABLE_REPLACEMENT: 'Hi {{name}}',
+              BUTTON_LANG_DE: 'deutsch',
+              BUTTON_LANG_EN: 'englisch'
+            };
+          }
+
+          $timeout(function () {
+            deferred.resolve(translations);
+          }, 2000);
+
+          return deferred.promise;
+        };
+      });
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values​​="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+如果通過單擊`德語`鍵更改語言，你看到的應用程序等待2秒，它與新的翻譯數據解析。是不是很酷？
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

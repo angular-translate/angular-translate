@@ -1,0 +1,71 @@
+@ngdoc overview
+@name 錯誤處理
+@description
+
+# 錯誤處理
+
+有時候，你有一個複雜的應用程序，你不知道有多少翻譯。你也不知道是否有漏譯特定ID。這是漏譯的處理程序大顯身手的地方。
+
+## 使用日誌處理程序擴展失踪翻譯
+
+有一個針對angular-translate 的擴展，如果你試著翻譯不存在翻譯的ID他將日誌記錄傳到控制台。像所有的擴展一樣，您可以通過Bower 這樣安裝：
+
+```
+$ bower install angular-translate-handler-log
+```
+
+要使用它你只需要在`$translateProvider` 上調用`useMissingTranslationHandlerLog()`。 angular-translate 會幫你完成其他所需。
+
+<pre>
+$translateProvider.useMissingTranslationHandlerLog();
+</pre>
+
+下面是一個示例工作
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useMissingTranslationHandlerLog();
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="NOT_EXISTING"></p>
+      <p translate="ALSO_NOT_EXISTING"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+現在，來看看瀏覽器的控制台，看看已經有記錄了！
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,0 +1,116 @@
+@ngdoc overview
+@name 回退語言
+@description
+
+# 回退語言
+
+你讀過之後現在你可能會問，你可以配置首選語言和
+註冊多語言使應用程序具有多語言支持, 你有一種方法來教您的應用程序回退語言麼？答案是肯定的。
+
+## 註冊一個回退語言
+
+教你的應用程序中使用回退語言就是簡單的調用一個`$translateProvider`的方法. 沒錯吧，這聽起來太簡單了，但是就是這樣的。
+比方說，我們有一個應用程序，我們註冊一個德語翻譯表。
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ });
+</pre>
+
+現在我們有一些翻譯的ID，**他們**在一個英語轉換錶裡，而不是在德語轉換錶裡。 angular-translate
+如果不能在轉換錶找到翻譯一般會返回給定翻譯的id。如果您註冊的後備語言裡有
+翻譯的id，angular-translate 將返回這個翻譯來代替。
+
+因此，首先我們要註冊語言本身是肯定的，讓我們為我們的應用程序註冊英語作為備用語言。
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ })
+  .translations('en', { /* ... */ });
+</pre>
+
+現在告訴angular-translate 使用英語來作為回退語言
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ })
+  .translations('en', { /* ... */ })
+  .fallbackLanguage('en');
+</pre>
+
+就是這樣。如果在德語翻譯表沒有翻譯的id，angular-translate 將搜索它的英文翻譯表。容易吧？
+
+## 註冊一個備用堆棧
+
+現在，如果你有一組備用的語言？ angular-translate可以處理這些所有這些！您需要做的就是作為數組註冊您的後備語言鍵：
+
+<pre>
+$translateProvider
+  .translations('de', { /* ... */ })
+  .translations('en', { /* ... */ })
+  .translations('fr', { /* ... */ })
+  .fallbackLanguage(['en', 'fr']);
+</pre>
+
+現在如果angular-translate 無法找到您的翻譯標識的英文翻譯表，這是第一回退語言，它遍歷其餘的註冊
+後備語言並且在那裡搜索。這是一種單程票，這意味著迭代開始在這種情況下，在`en` 開始直到找到`fr`.
+只要你想你可以註冊盡可能多的備用語言。
+
+## 運行時切換語言
+
+即使**那個** 是可能的! 在某些情況下，您可能想在運行時切換你的後援語言。甚至整個回退棧！例如
+想像一下，你設置德語作為首選語言，你想確保英語是回退語言。沒問題。我們可以做到這一點了。現在想像一下，
+實際的語言切換到英語，你要回退到法語，但英語已註冊為回退語言了。
+
+你可以在運行時用在`$translate`服務上用`fallbackLanguage()` 方法來切換回退語言。
+以下這個例子這樣：
+
+<pre>
+$scope.changeLanguage = function (langKey) {
+  if (langKey === 'en') {
+    $translate.fallbackLanguage('fr');
+  } else if (langKey == 'de') {
+    $translate.fallbackLanguage('en');
+  }
+  $translate.use(langKey);
+};
+</pre>
+
+不要忘記，回退語言鍵值控制回退語言迭代的起點。如果你有`en, fr, de` 註冊為回退語言然後你切換`fr` 作為你的回退語言, 這種情況下，
+如果有一個翻譯ID找不到的話， angular-translate 只會在`de` 這個回退裡面找回退翻譯.
+
+## 在運行時改變整個回退棧
+
+同上，你可以做：
+
+<pre>
+$scope.changeLanguage = function (langKey) {
+  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.use(langKey);
+};
+</pre>
+
+當你改變整個回退語言堆棧，你也改變了angular-translate 如何迭代它們的順序。因此實際上，迭代過程雖然保持不變
+但你可以通過改變後備語言的順序來切換。
+
+## 在進行迭代時限制回退語言
+
+另一種可能性，在進行迭代時限制回退語言。有一些用例，用戶/開發人員希望掃描
+可用後備語言的一部分而不是去掉定義或加載的那一部分語言。這也有可能！
+如上面所提到的，回退棧是從'左到右' 重複. 所以如果你想在回退棧'de, en, fr' 迭代中跳過'de' , 我們必須定義
+'useFallbackLanguage()'.
+
+<pre>
+  // langKey is 'en'
+  $scope.changeLanguage = function (langKey) {
+  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.useFallbackLanguage(langKey);
+};
+</pre>
+
+從現在開始- 所有翻譯文本中“de”將被忽略和跳過。重要提示：如果忽略語言是首選語言或者是目前的翻譯，這將是在
+翻譯的語言 - 即使它應跳過！
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

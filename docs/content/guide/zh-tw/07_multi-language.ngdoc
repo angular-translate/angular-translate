@@ -1,0 +1,224 @@
+@ngdoc overview
+@name 多語言
+@description
+
+# 多語言
+
+在[變量替換](#/guide/06_variable-replacement) 你已經學會瞭如何通過不同組件傳遞動態值，使他們使用您的翻譯。
+既然我們已經涵蓋了這些組件提供所有的基本功能（使用默認的插值服務），我們現在準備去一個新的層次： **多語言支持**.
+
+當然，知道如何使用angular-translate 提供的這些組件很酷，但談到教你的應用更多語言（這實際上就​​是模塊的內容！）事情變得很有趣。
+所以讓我們學習如何一次添加不同的轉換錶開始！
+
+## Teaching your app more languages
+
+在[入門](#/guide/02_getting-started) 你已經學會瞭如何使用`$translateProvider` 方法`translations()`在你的應用程序中添加翻譯列表。
+同樣的方法可以用於在同一時間添加更多的翻譯列表。給定翻譯表只需要拿出一個angular-translate 是能夠認識到的語言鍵，在翻譯轉換列表中他屬於哪個語言。
+
+用相應的語言鍵添加一個翻譯表也很簡約。你可以通過傳遞語言鍵作為第一個參數，而翻譯表成為第二
+參數來代替只是通過傳遞翻譯表的做法。因此語言鍵增加翻譯列表看起來像這樣：
+
+<pre>
+// registers translation table with language key 'en'
+$translateProvider.translations('en', {
+  GREETING: 'Hello world!'
+});
+</pre>
+
+現在，添加第二個轉換錶的另一種語言，讓我們說德語，只是用不同的語言鍵做同樣的：
+
+<pre>
+// registers translation table with language key 'de'
+$translateProvider.translations('de', {
+  GREETING: 'Hallo Welt!'
+});
+</pre>
+
+就是這麼簡單？您的應用程序現在知道兩種不同的語言。您可以根據需要添加盡可能多的語言，沒有限制。然而因為現在有兩個
+可用的語言，應用程序應使用哪一個語言？ angular-translate 沒有任何喜好，直到你告訴它該這樣做。
+
+## 決定使用哪種語言
+
+既然你現在註冊一個以上的轉換錶，`angular-translate` 已經知道使用哪一個。這是`$translateProvider`那裡的新方法
+的用武之地。 `preferredLanguage()` 告訴登記的angular-translate 應該使用默認的那個語言。它預期一個參數語言鍵，
+它指向一個特定的變換錶的值。所以要告訴一個應用程序應該使用德語而不是英語作為第一語言，延長代碼如此：
+
+<pre>
+// tells angular-translate to use the german language
+$translateProvider.preferredLanguage('de');
+</pre>
+
+**注：**它實際上還可以使用`$translateProvider.use()` 的，因為它是設置語言。
+然而事實證明，在與存儲結合使用異步加載器時這是一個不太好的做法。
+在一些情況下，它可能發生， angular-translate 做兩個異步調用。你會在後面了解更多。
+為了解決這個問題，我們引入了`preferredLanguage()`。你應該總是使用`preferredLanguage()`，而不是使用`$translateProvider`。
+
+## 自動確定首選語言
+
+版本`2.0` `$translateProvider`還有一個方法`determinePreferredLanguage()`。這個方法試圖自己來確定什麼首選語言。
+它在該`window.navigator`對像下面搜索以下屬性（也按照這個順序）：
+
+- `navigator.language`
+- `navigator.browserLanguage`
+- `navigator.systemLanguage`
+- `navigator.userLanguage`
+
+所以不要去調用`$translateProvider.preferredLanguage(langKey)`, 你需要做的是：
+
+<pre>
+// try to find out preferred language by yourself
+$translateProvider.determinePreferredLanguage();
+</pre>
+
+使用這個方法請自擔風險！請注意，每個瀏覽器對這些屬性可以返回不同的值。
+
+如果這不符合您的需求，您也可以通過自定義的函數，確定首選語言鍵為您服務。
+
+<pre>
+$translateProvider.determinePreferredLanguage(function () {
+  var preferredlangKey = '';
+  // some custom logic's going on in here
+  return preferredLangKey;
+});
+</pre>
+
+## 運行時切換語言
+
+在運行時切換語言，`$translate` 服務有一個方法use()， 他返回當前使用的語言的語言鍵，或者給出一門語言的鍵作為參數時，告訴angular-translate 使用相應的語言。 `$translate.use()`在轉換錶尚未加載時會內部嘗試調用異步裝載機使用其中一種語言。
+我們在後面[異步加載](#/guide/12_asynchronous_loading)還會提到。
+
+一個好的`$translate.use()` 用法將在一個控制器內控制語言的變化。你只需要在實施的範圍實現一個功能，這個功能期待一個語言鍵，
+然後用它來告訴angular-translate 來改變語言。
+
+<pre>
+angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+  $scope.changeLanguage = function (langKey) {
+    $translate.use(langKey);
+  };
+
+}]);
+</pre>
+
+為了得到它是如何工作的一個示例應用程序的感覺，我們來相應地更新我們的應用程序。首先，我們添加了一個德國語言轉換錶，在此表中
+添加兩個新的翻譯標識，這是我們想在以後添加的按鈕：
+
+<pre>
+var translationsEN = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+  VARIABLE_REPLACEMENT: 'Hi {{name}}',
+  BUTTON_LANG_DE: 'german',
+  BUTTON_LANG_EN: 'english'
+};
+
+var translationsDE= {
+  HEADLINE: 'Was für ein großartiges Modul!',
+  PARAGRAPH: 'Ernsthaft!',
+  PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+  PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+  PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+  VARIABLE_REPLACEMENT: 'Hi {{name}}',
+  BUTTON_LANG_DE: 'deutsch',
+  BUTTON_LANG_EN: 'englisch'
+};
+</pre>
+
+在那之後，我們更新的英文翻譯表的登記，它都有相應的語言鍵，並告訴angular-translate 以英語為
+默認語言：
+
+<pre>
+$translateProvider.translations('en', translationsEN);
+$translateProvider.translations('de', translationsDE);
+$translateProvider.preferredLanguage('en');
+</pre>
+
+酷！現在，我們需要控制器來在運行時改變語言。我們更新我們的HTML並為每種語言添加一個按鈕。我們還在每個指令按鈕上設置了`ng-click`
+，調用一個函數來更改語言：
+
+<pre>
+<button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+<button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+</pre>
+
+最後但並非最不重要的，在我們服務器界內我們實現一個相應的功能。
+
+<pre>
+app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+  $scope.changeLanguage = function (langKey) {
+    $translate.use(langKey);
+  };
+}]);
+</pre>
+
+哇！我們現在有一個支持多語言的應用程序了！
+
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translationsEN = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
+        BUTTON_LANG_DE: 'german',
+        BUTTON_LANG_EN: 'english'
+      };
+
+      var translationsDE= {
+        HEADLINE: 'Was für ein großartiges Modul!',
+        PARAGRAPH: 'Ernsthaft!',
+        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        // MISSING_TRANSLATION is ... missing :)
+        BUTTON_LANG_DE: 'deutsch',
+        BUTTON_LANG_EN: 'englisch'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation tables
+        $translateProvider.translations('en', translationsEN);
+        $translateProvider.translations('de', translationsDE);
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values​​="{ name: 'PascalPrecht' }"></p>
+      <p translate>MISSING_TRANSLATION</p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
