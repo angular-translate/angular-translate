@@ -4,20 +4,19 @@
 
 # 多语言
 
-在[变量替换](#/guide/06_variable-replacement) 你已经学会了如何通过不同组件传递动态值，内使他们的使用您的翻译。
-既然我们已经涵盖了所有的基本功能这些组件提供（使用默认的插值服务），我们现在准备去的一个新的水平： **多语言支持**.
+在[变量替换](#/guide/06_variable-replacement) 你已经学会了如何通过不同组件传递动态值，使他们使用您的翻译。
+既然我们已经涵盖了这些组件提供所有的基本功能（使用默认的插值服务），我们现在准备去一个新的层次： **多语言支持**.
 
-当然，它很酷知道如何使用这些组件 angular-translate 提供，但事情变得很有趣，当谈到教你的应用更多的则只是一种语言（这实际上是什么这个模块是！）。
+当然，知道如何使用angular-translate 提供的这些组件很酷，但谈到教你的应用更多语言（这实际上就是模块的内容！）事情变得很有趣。
 所以让我们学习如何一次添加不同的转换表开始！
 
 ## Teaching your app more languages
 
-在[入门](#/guide/02_getting-started) 你已经学会了如何添加转换表到你的应用程序，使用`$translateProvider` 方法`translations()`。
-同样的方法可以用于在同一时间添加更多的转换表。给定翻译表只需要拿出一个语言键 angular-translate 是能够认识到，该翻译转换列表中属于哪个
-语言。
+在[入门](#/guide/02_getting-started) 你已经学会了如何使用`$translateProvider` 方法`translations()`在你的应用程序中添加翻译列表。
+同样的方法可以用于在同一时间添加更多的翻译列表。给定翻译表只需要拿出一个angular-translate 是能够认识到的语言键 ，在翻译转换列表中他属于哪个语言。
 
-添加一个转换表用相应的语言按键也很简约。代替只是路过表通过`翻译（）`的说法，你可以通过语言键作为第一个参数，而转换表成为第二
-的说法。因此增加转换表用语言键看起来像这样：
+用相应的语言键添加一个翻译表也很简约。你可以通过传递语言键作为第一个参数，而翻译表成为第二
+参数来代替只是通过传递翻译表的做法。因此语言键增加翻译列表看起来像这样：
 
 <pre>
 // registers translation table with language key 'en'
@@ -41,7 +40,7 @@ $translateProvider.translations('de', {
 ## 决定使用哪种语言
 
 既然你现在注册一个以上的转换表，`angular-translate` 已经知道使用哪一个。这是`$translateProvider`那里的新方法
-的用武之地。 `preferredLanguage()` 告诉登记的 angular-translate 语言是应该使用默认的那个。它预期一个参数语言键，
+的用武之地。 `preferredLanguage()` 告诉登记的 angular-translate 应该使用默认的那个语言。它预期一个参数语言键，
 它指向一个特定的变换表的值。所以要告诉一个应用程序应该使用德语而不是英语作为第一语言，延长代码如此：
 
 <pre>
@@ -56,8 +55,8 @@ $translateProvider.preferredLanguage('de');
 
 ## 自动确定首选语言
 
-由于版本`2.0` `$translateProvider`还有一个方法`determinePreferredLanguage()`。这个方法试图自己来确定什么首选语言。
-它在该 `window.navigator`对象下面搜索属性（也按照这个顺序）：
+版本`2.0` `$translateProvider`还有一个方法`determinePreferredLanguage()`。这个方法试图自己来确定什么首选语言。
+它在该 `window.navigator`对象下面搜索以下属性（也按照这个顺序）：
 
 - `navigator.language`
 - `navigator.browserLanguage`
@@ -73,7 +72,7 @@ $translateProvider.determinePreferredLanguage();
 
 使用这个方法请自担风险！请注意，每个浏览器对这些属性可以返回不同的值。
 
-如果这不符合您的需求，您也可以通过在自定义的函数，即确定首选语言键为您服务。
+如果这不符合您的需求，您也可以通过自定义的函数，确定首选语言键为您服务。
 
 <pre>
 $translateProvider.determinePreferredLanguage(function () {
@@ -83,13 +82,12 @@ $translateProvider.determinePreferredLanguage(function () {
 });
 </pre>
 
-## 切换语言运行时
+## 运行时切换语言
 
-在运行时切换语言，`$translate` 服务有一个方法 use()， 他返回当前使用的语言的语言键，或者，
-给出一门语言的键作为参数时，告诉 angular-translate 使用相应的语言。 `$translate.use()`在转换表尚未加载时会内部尝试调用异步装载机使用其中一种语言。
+在运行时切换语言，`$translate` 服务有一个方法 use()， 他返回当前使用的语言的语言键，或者给出一门语言的键作为参数时，告诉 angular-translate 使用相应的语言。 `$translate.use()`在转换表尚未加载时会内部尝试调用异步装载机使用其中一种语言。
 我们在后面[异步加载](#/guide/12_asynchronous_loading)还会提到。
 
-一个好的`$translate.use()` 用法将在一个控制器内控制语言的变化。你只需要在实施的范围实现一个功能，这个功能期待一种语言键，
+一个好的`$translate.use()` 用法将在一个控制器内控制语言的变化。你只需要在实施的范围实现一个功能，这个功能期待一个语言键，
 然后用它来告诉 angular-translate 来改变语言。
 
 <pre>
@@ -157,7 +155,7 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 }]);
 </pre>
 
-哇！我们现在有一个多语言支持的应用程序了！
+哇！我们现在有一个支持多语言的应用程序了！
 
 
 <doc:example module="myApp">
