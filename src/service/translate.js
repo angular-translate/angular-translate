@@ -60,12 +60,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
 
     if ($languageKeyAliases) {
-
-      if ($languageKeyAliases[preferred]) {
-        var alias = $languageKeyAliases[preferred];
-
-        if (avail.indexOf(angular.lowercase(alias)) > -1) {
-          return alias;
+      var alias;
+      for (var langKeyAlias in $languageKeyAliases) {
+        if ($languageKeyAliases.hasOwnProperty(langKeyAlias) &&
+          angular.lowercase(langKeyAlias) === angular.lowercase(preferred)) {
+          alias = $languageKeyAliases[langKeyAlias];
+          if (avail.indexOf(angular.lowercase(alias)) > -1) {
+            return alias;
+          }
         }
       }
     }
