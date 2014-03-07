@@ -119,7 +119,7 @@ angular.module('pascalprecht.translate')
         if (translateValueExist) {
           var fn = function (attrName) {
             iAttr.$observe(attrName, function (value) {
-              scope.interpolateParams[angular.lowercase(attrName.substr(14))] = value;
+              scope.interpolateParams[angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15)] = value;
             });
           };
           for (var attr in iAttr) {
