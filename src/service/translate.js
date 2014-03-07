@@ -60,10 +60,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
 
     if ($languageKeyAliases) {
-
-      if ($languageKeyAliases[preferred]) {
-        var alias = $languageKeyAliases[preferred];
-
+      var alias;
+      for (var propt in $languageKeyAliases) {
+        if (angular.lowercase(propt) == preferred) {
+          alias = $languageKeyAliases[propt];
+          break;
+        }
+      }
+      if (alias) {
         if (avail.indexOf(angular.lowercase(alias)) > -1) {
           return alias;
         }
