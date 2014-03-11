@@ -70,7 +70,7 @@ updated when changing the language at runtime.
 
 You can fix that by simply wrapping your `$translate` call into a `$translateChangeSucces`
 callback on `$rootScope`, which gets fired every time a translation change was successful.
-Once its changed, you can simply re-execute the code, that gives you your needed translations.
+Once it's changed, you can simply re-execute the code, that gives you your needed translations.
 
 Here's how it could look like:
 
