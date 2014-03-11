@@ -7,14 +7,14 @@
 In [Using $translate service](#/guide/03_using-translate-service) you've learned
 how to use `$translate` service to translate your contents with registered
 translation IDs. Of course, it's pretty cool that this works, but you actually
-don't want to bind your translation to hard to controllers or services. You mainly
+don't want to bind your translation too hard to controllers or services. You mainly
 want to translate your contents in the view layer because this is where it all
 belongs to.
 
 angular-translate provides a filter component with which you are able to translate
 your translation IDs within the view layer, without letting any controller or
-service know of them. This means, you can decouple the translate logic from any
-controller or service an make your view layer replaceable without touching
+service know of them. This means you can decouple the translate logic from any
+controller or service and make your view layer replaceable without touching
 business logic code.
 
 ## General usage
@@ -41,7 +41,7 @@ just like this:
 <p>{{'PARAGRAPH' | translate}}</p>
 </pre>
 
-Pretty easy ha? And of course, you can view a working sample here:
+Pretty easy, ha? And of course, you can view a working sample here:
 
 <doc:example module="myApp">
   <doc:source>
