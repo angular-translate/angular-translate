@@ -135,7 +135,7 @@ declare these explicitly in our HTML?
 Well, in angular-translate `>=2.0` you can do exactly that. You are able to define
 your own `translate-value-*` attributes.
 
-So how does that work? Easy-Peasy!
+So how does that work? Easy-peasy!
 
 Let's say we have the following translation id:
 

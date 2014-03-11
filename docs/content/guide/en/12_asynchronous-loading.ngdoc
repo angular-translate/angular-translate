@@ -52,7 +52,7 @@ invoke the loader automatically as soon as possible.
 
 ## Using staticFilesLoader
 
-In case you haven't just a URL which expects a `lang` parameter to return a JSON
+In case you haven't got just a URL which expects a `lang` parameter to return a JSON
 that contains your translations, but several localization files which match a
 specific pattern, you probably want to use the
 `angular-translate-loader-static-files` extension which describes the pattern of
@@ -105,7 +105,7 @@ all the translation data for the whole app, just in a different language.
 What we need, is a way to just load the translation data of a language for a specific
 module we're currently on. Which means, when accessing the `home` submodule,
 we just want to load the translation data for the `home` module. If we change the
-language, we also just want to load the translation for the choosed language for
+language, we also just want to load the translation for the chosen language for
 the `home` module.
 
 In addition, when we've already loaded translation data for let's say three
