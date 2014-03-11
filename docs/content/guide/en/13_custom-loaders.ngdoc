@@ -17,7 +17,7 @@ own loaders very easily. This chapter shows you how to do it!
 
 ## Building a custom loader service
 
-If non of the provided loaders fits to your needs, you can register a custom
+If none of the provided loaders fits your needs, you can register a custom
 asynchronous loader as a factory. The factory has to return a function, which
 expects an object where at least the language key property exists. With this
 architecture you're as free as possible and have full control of how your
@@ -45,7 +45,7 @@ app.factory('customLoader', function ($http, $q) {
 </pre>
 
 You have to make sure that your loader function returns a promise. It should either
-gets resolved with your translation data, or rejected with the language key. As
+get resolved with your translation data, or rejected with the language key. As
 you can see, there's a `key` property on the `options` object. It has the value
 of the language key with which the asynchronous loader is invoked.
 
