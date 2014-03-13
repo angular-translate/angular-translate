@@ -1480,7 +1480,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }
         }
 
-        if (!result) {
+        if (result === null) {
           // Return translation if not found anything.
           result = translationId;
           if ($missingTranslationHandlerFactory && !pendingLoader) {
