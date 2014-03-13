@@ -1473,7 +1473,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         for (var i = 0, c = possibleLangKeys.length; i < c; i++) {
           var possibleLangKey = possibleLangKeys[i];
           if ($translationTable[possibleLangKey]) {
-            if ($translationTable[possibleLangKey][translationId]) {
+            if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
               result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
             }
           }
@@ -1482,7 +1482,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }
         }
 
-        if (!result) {
+        if (!result && result !== '') {
           // Return translation if not found anything.
           result = translationId;
           if ($missingTranslationHandlerFactory && !pendingLoader) {

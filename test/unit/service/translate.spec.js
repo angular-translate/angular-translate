@@ -1231,6 +1231,10 @@ describe('pascalprecht.translate', function () {
     it('should return translation id if translation id nost exist', function () {
       expect($translate.instant('FOO2')).toEqual('FOO2');
     });
+
+    it('should return empty string if translated string is empty', function () {
+      expect($translate.instant('BLANK_VALUE')).toEqual('');
+    });
   });
 
   describe('$translate.instant (with fallback)', function () {
