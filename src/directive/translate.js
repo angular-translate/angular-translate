@@ -157,16 +157,21 @@ angular.module('pascalprecht.translate')
             };
           } else {
             return function () {
-              scope.$watch('interpolateParams', function (value) {
-                if (scope.translationId && value) {
-                  $translate(scope.translationId, value, translateInterpolation)
+
+              var updateTranslations = function () {
+                if (scope.translationId && scope.interpolateParams) {
+                  $translate(scope.translationId, scope.interpolateParams, translateInterpolation)
                     .then(function (translation) {
                       applyElementContent(translation, scope);
                     }, function (translationId) {
                       applyElementContent(translationId, scope);
                     });
-                }
-              }, true);
+                  }
+              };
+
+              // watch both interpolateParams and translationId, because watchers are triggered non-deterministic
+              scope.$watch('interpolateParams', updateTranslations, true);
+              scope.$watch('translationId', updateTranslations);
             };
           }
         }());
