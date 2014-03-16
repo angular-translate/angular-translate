@@ -13,36 +13,44 @@ angular.module('pascalprecht.translate')
 .factory('$translateLocalStorage', ['$window', '$translateCookieStorage', function ($window, $translateCookieStorage) {
 
   // Setup adapter
-  var localStorageAdapter = {
-    /**
-     * @ngdoc function
-     * @name pascalprecht.translate.$translateLocalStorage#get
-     * @methodOf pascalprecht.translate.$translateLocalStorage
-     *
-     * @description
-     * Returns an item from localStorage by given name.
-     *
-     * @param {string} name Item name
-     * @return {string} Value of item name
-     */
-    get: function (name) {
-      return $window.localStorage.getItem(name);
-    },
-    /**
-     * @ngdoc function
-     * @name pascalprecht.translate.$translateLocalStorage#set
-     * @methodOf pascalprecht.translate.$translateLocalStorage
-     *
-     * @description
-     * Sets an item in localStorage by given name.
-     *
-     * @param {string} name Item name
-     * @param {string} value Item value
-     */
-    set: function (name, value) {
-      $window.localStorage.setItem(name, value);
-    }
-  };
+  var localStorageAdapter = (function(){
+    var langKey;
+    return {
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateLocalStorage#get
+       * @methodOf pascalprecht.translate.$translateLocalStorage
+       *
+       * @description
+       * Returns an item from localStorage by given name.
+       *
+       * @param {string} name Item name
+       * @return {string} Value of item name
+       */
+      get: function (name) {
+        if(!langKey) {
+          langKey = $window.localStorage.getItem(name);
+        }
+
+        return langKey;
+      },
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateLocalStorage#set
+       * @methodOf pascalprecht.translate.$translateLocalStorage
+       *
+       * @description
+       * Sets an item in localStorage by given name.
+       *
+       * @param {string} name Item name
+       * @param {string} value Item value
+       */
+      set: function (name, value) {
+        langKey=value;
+        $window.localStorage.setItem(name, value);
+      }
+    };
+  }());
 
   var $translateLocalStorage = ('localStorage' in $window && $window.localStorage !== null) ?
   localStorageAdapter : $translateCookieStorage;
