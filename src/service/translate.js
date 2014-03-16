@@ -74,7 +74,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     var parts = preferred.split('_');
 
-    if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > 1) {
+    if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > -1) {
       return parts[0];
     }
   };
