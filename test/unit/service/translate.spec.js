@@ -148,6 +148,24 @@ describe('pascalprecht.translate', function () {
       expect(value[1]).toEqual('');
     });
 
+    it('should return translations of multiple translation ids if exists', function () {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate(["EXISTING_TRANSLATION_ID", "BLANK_VALUE"]).then(function (translations) {
+        deferred.resolve(translations);
+      });
+
+      $rootScope.$digest();
+      expect(value.EXISTING_TRANSLATION_ID).toEqual('foo');
+      expect(value.BLANK_VALUE).toEqual('');
+    });
+
     it('should return translation, if translation id exists with whitespace', function () {
       var deferred = $q.defer(),
           promise = deferred.promise,
@@ -1234,6 +1252,13 @@ describe('pascalprecht.translate', function () {
 
     it('should return empty string if translated string is empty', function () {
       expect($translate.instant('BLANK_VALUE')).toEqual('');
+    });
+
+   it('should return translations of multiple translation ids', function () {
+      var result = $translate.instant(['FOO', 'FOO2', 'BLANK_VALUE']);
+      expect(result.FOO).toEqual('bar');
+      expect(result.FOO2).toEqual('FOO2');
+      expect(result.BLANK_VALUE).toEqual('');
     });
   });
 

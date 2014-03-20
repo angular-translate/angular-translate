@@ -54,6 +54,24 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 Das ist alles. Also, falls du darüber nachdenkst deinen `<title>` zu übersetzen,
 kannst du dies in deinem Controller machen.
 
+## Mehrere TranslationIds auf einmal
+Der Service kann auch mehrere Übersetzungen auf einmal laden.
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+Dabei muss jedoch beachtet werden, dass der Service immer ein Objekt mit allen
+Übersetzungen zurückgibt. Dabei spielt es keine Rolle, ob eine einzelne
+Übersetzung (oder sogar alle) nicht übersetzt werden konnten. Eine mögliche
+Fehlerbehandlung muss von Deiner Seite aus geschehen.
+
 ## Dinge die Beruecksichtigt werden sollten
 Bitte beachte dass `$translate` Service kein Two-Way Data-Binding unterstuetzt.
 `$translate` Service arbeitet asynchron, dass bedeteut aber nicht, dass er informiert
