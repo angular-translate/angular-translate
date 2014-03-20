@@ -338,7 +338,7 @@ describe('pascalprecht.translate', function () {
       expect(element.next().text()).toEqual('hello my name is Pascal');
     });
 
-    iit('should interpolate variables inside ng-repeat directives', function () {
+    it('should interpolate variables inside ng-repeat directives', function () {
       var markup = '<div><div ng-repeat="i in [1]"><p translate="FOO" translate-value-name="{{name}}"></p></div></div>';
       element = $compile(markup)($rootScope);
       $rootScope.$digest();
