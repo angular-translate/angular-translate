@@ -466,10 +466,8 @@ describe('pascalprecht.translate', function () {
         // factory provides a default fallback text being defined in the factory
         // gives a maximum of flexibility
         $provide.factory('customTranslationHandler', function () {
-          return function (translationID, uses, fallbacks) {
-            if (fallbacks) {
+          return function (translationID, uses) {
               return 'NO KEY FOUND';
-            }
           };
         });
         $translateProvider.useMissingTranslationHandler('customTranslationHandler');
