@@ -1,4 +1,4 @@
-# [![angular-translate](https://raw.github.com/angular-translate/angular-translate/canary/identity/logo/angular-translate-alternative/angular-translate_alternative_medium2.png)](http://angular-translate.github.io/angular-translate)
+# [![angular-translate](https://raw.github.com/angular-translate/angular-translate/canary/identity/logo/angular-translate-alternative/angular-translate_alternative_medium2.png)](http://angular-translate.github.io)
 
 > i18n for your Angular app, made easy!
 
@@ -12,9 +12,9 @@
 [![angular-translate Talk](presentation.png)](https://www.youtube.com/watch?v=9CWifOK_Wi8)
 
 ### Links
-* Website [http://angular-translate.github.io](http://angular-translate.github.io/angular-translate/)
-* API Reference [http://angular-translate.github.io/docs/en/#/api](http://angular-translate.github.io/angular-translate/docs/en/#/api)
-* Plato report [http://angular-translate.github.io/docs/plato](http://angular-translate.github.io/angular-translate/plato)
+* Website [http://angular-translate.github.io](http://angular-translate.github.io/)
+* API Reference [http://angular-translate.github.io/docs/#/api](http://angular-translate.github.io/docs/#/api)
+* Plato report [http://angular-translate.github.io/docs/plato](http://angular-translate.github.io/docs/plato)
 * [Contribution Guidelines](https://github.com/angular-translate/angular-translate/blob/master/CONTRIBUTING.md)
 
 ### Useful resources
