@@ -998,7 +998,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           );
         } else {
           // No translation found in any fallback language
-          deferred.resolve(translationId);
+
+          // If we have a handler factory - we might also call it here to determine if it provides
+          // a default text for a translationid that can't be found anywhere in our tables
+          if ($missingTranslationHandlerFactory) {
+            var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+            if (resultString !== undefined) {
+              deferred.resolve(resultString);
+            }
+          } else {
+            deferred.resolve(translationId);
+          }
         }
         return deferred.promise;
       };

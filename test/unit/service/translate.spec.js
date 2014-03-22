@@ -454,7 +454,7 @@ describe('pascalprecht.translate', function () {
 
     describe('multi fallback language', function () {
 
-      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', { 'TRANSLATION__ID': 'bazinga' })
@@ -462,6 +462,15 @@ describe('pascalprecht.translate', function () {
           .translations('en_UK', { 'YAY': 'it really does!' })
           .fallbackLanguage(['en_EN', 'fr_FR', 'en_UK'])
           .preferredLanguage('de_DE');
+
+        // factory provides a default fallback text being defined in the factory
+        // gives a maximum of flexibility
+        $provide.factory('customTranslationHandler', function () {
+          return function (translationID, uses) {
+              return 'NO KEY FOUND';
+          };
+        });
+        $translateProvider.useMissingTranslationHandler('customTranslationHandler');
       }));
 
       var $translate, $rootScope, $q;
@@ -500,7 +509,38 @@ describe('pascalprecht.translate', function () {
         expect(value[2]).toEqual('it works!');
         expect(value[3]).toEqual('it really does!');
       });
+
+
+      it('should use fallback languages and miss one of the translation keys', function () {
+        var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+        promise.then(function (translations) {
+          value = translations;
+        });
+
+        $q.all([
+          $translate('EXISTING_TRANSLATION_ID'),
+          $translate('TRANSLATION__ID'),
+          $translate('SUPERTEST'),
+          $translate('YAY'),
+          $translate('NOT_EXISTING')
+        ]).then(function (translations) {
+          deferred.resolve(translations);
+        });
+
+        $rootScope.$digest();
+
+        expect(value[0]).toEqual('foo');
+        expect(value[1]).toEqual('bazinga');
+        expect(value[2]).toEqual('it works!');
+        expect(value[3]).toEqual('it really does!');
+        expect(value[4]).toEqual('NO KEY FOUND');
+      });
     });
+
+
 
     describe('registered loader', function () {
 
