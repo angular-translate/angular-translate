@@ -25,6 +25,27 @@ app.factory('myCustomHandlerFactory', function (dep1, dep2) {
 
 </pre>
 
+# Eigener Error Handler mit Rückgabewert als Ersatztext
+
+Es gibt auch Situationen, in denen du keinen Schlüssel an deine Anwendung zurückgeben möchtest,
+sondern lediglich einen Standardtext, der dann von Übersetzern für Ihre Arbeit oder sogar
+Endusern (keine gute Idee) gesehen wird.
+Dieses ist nun auch möglich über eine kleine Modifizierung am o.g. Error Handler.
+Gib einfach einen Rückgabewert aus der Fehler-Behandlungs-Funktion mit zurück.
+
+<pre>
+app.factory('customTranslationHandler', function () {
+  return function (translationID, uses) {
+    // return the following text as a translation 'result' - this will be
+    // displayed instead of the language key.
+    return 'NO DEFAULT KEY';
+  };
+});
+</pre>
+
+Natürlich kannst Du auch die translationID noch an den Rückgabewert mit anhängen.
+So kann der Übersetzer bzw. User sehen, um welchen Schlüssel es sich handelt.
+
 <br>
 <hr>
 <center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
