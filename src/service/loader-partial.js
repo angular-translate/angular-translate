@@ -36,11 +36,14 @@ angular.module('pascalprecht.translate')
    * @param {string} targetLang Language key for language to be used.
    * @return {string} Parsed url template string
    */
-  Part.prototype.parseUrl = function(urlTemplate, targetLang) {
-    return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
+  Part.prototype.parseUrl = function($interpolate, urlTemplate, targetLang) {
+    var scope = {};
+    scope.part = this.name;
+    scope.lang = targetLang;
+    return $interpolate(urlTemplate)(scope);
   };
 
-  Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
+  Part.prototype.getTable = function(lang, $q, $http, $interpolate, urlTemplate, errorHandler) {
     var deferred = $q.defer();
 
     if (!this.tables[lang]) {
@@ -48,7 +51,7 @@ angular.module('pascalprecht.translate')
 
       $http({
         method : 'GET',
-        url : this.parseUrl(urlTemplate, lang)
+        url : this.parseUrl($interpolate, urlTemplate, lang)
       }).success(function(data){
         self.tables[lang] = data;
         deferred.resolve(data);
@@ -233,8 +236,8 @@ angular.module('pascalprecht.translate')
    *
    * @throws {TypeError}
    */
-  this.$get = ['$rootScope', '$injector', '$q', '$http',
-  function($rootScope, $injector, $q, $http) {
+  this.$get = ['$rootScope', '$injector', '$q', '$http', '$interpolate',
+  function($rootScope, $injector, $q, $http, $interpolate) {
 
     /**
      * @ngdoc event
@@ -278,7 +281,7 @@ angular.module('pascalprecht.translate')
         if (hasPart(part) && parts[part].isActive) {
           loaders.push(
             parts[part]
-              .getTable(options.key, $q, $http, options.urlTemplate, errorHandler)
+              .getTable(options.key, $q, $http, $interpolate, options.urlTemplate, errorHandler)
               .then(addTablePart)
           );
         }
@@ -422,4 +425,40 @@ angular.module('pascalprecht.translate')
 
   }];
 
+})
+/**
+ * @ngdoc filter
+ * @name pascalprecht.translate.filter:language
+ * @function
+ *
+ * @description
+ * Convert a locale code to language code(e.g. en_US => en). If locale format isn't a proper pattern, it returns original string.
+ *
+ * @param {string} Locale code.
+ *
+ * @returns {string} Parsed language code.
+ *
+ */
+.filter('language', function() {
+  return function(input) {
+    return input.split('_')[0];
+  };
+})
+/**
+ * @ngdoc filter
+ * @name pascalprecht.translate.filter:country
+ * @function
+ *
+ * @description
+ * Convert a locale code to country code(e.g. en_US => US). If locale format isn't a proper pattern, it returns original string.
+ *
+ * @param {string} Locale code.
+ *
+ * @returns {string} Parsed country code.
+ *
+ */
+.filter('country', function() {
+  return function(input) {
+    return input.indexOf('_') ? input.split('_')[1].substr(0,2):input;
+  };
 });
