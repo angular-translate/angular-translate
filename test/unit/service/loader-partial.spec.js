@@ -181,7 +181,7 @@ describe('pascalprecht.translate', function() {
 
           $translatePartialLoader({
             key : 'en',
-            urlTemplate : '/locales/{part}-{lang}.json'
+            urlTemplate : '/locales/{{part}}-{{lang}}.json'
           }).then(function(data) {
             table = data;
           }, function() {
@@ -202,7 +202,7 @@ describe('pascalprecht.translate', function() {
           var table;
           $translatePartialLoader({
             key : 'en',
-            urlTemplate : '/locales/{part}-{lang}.json'
+            urlTemplate : '/locales/{{part}}-{{lang}}.json'
           }).then(function(data) {
             table = data;
           }, function() {
@@ -391,7 +391,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         var promise = $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
 
         expect(promise.then).toBeDefined();
@@ -408,7 +408,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
 
         $httpBackend.flush();
@@ -424,7 +424,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}/{{part}}-{{lang}}.json'
         });
 
         $httpBackend.flush();
@@ -447,7 +447,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json',
+          urlTemplate : '/locales/{{part}}-{{lang}}.json',
           loadFailureHandler : 'ResolveErrorHandler'
         }).then(
           function() { promise = 'resolved'; },
@@ -470,7 +470,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part2');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json',
+          urlTemplate : '/locales/{{part}}-{{lang}}.json',
           loadFailureHandler : 'ResolveErrorHandler'
         }).then(
           function() { promise = 'resolved'; },
@@ -504,7 +504,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part2');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         $httpBackend.flush(2);
         expect(counter).toEqual(2);
@@ -525,13 +525,13 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         $httpBackend.flush();
 
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         try {
           $httpBackend.flush();
@@ -553,7 +553,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         $httpBackend.flush();
 
@@ -561,7 +561,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         try { $httpBackend.flush(); } catch (e) {}
 
@@ -583,7 +583,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         $httpBackend.flush();
 
@@ -591,7 +591,7 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{{part}}-{{lang}}.json'
         });
         $httpBackend.flush();
 
