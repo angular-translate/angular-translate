@@ -18,5 +18,9 @@
   },
   "resolutions": {
     "angular": "~1.2.12"
-  }
+  },
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/MIT"
+  }]
 }
