@@ -31,7 +31,6 @@ module.exports = function (grunt) {
       ],
 
       ext: {
-        default_interpolation: ['src/service/default-interpolation.js'],
         messageformat_interpolation: ['src/service/messageformat-interpolation.js'],
         handler_log: ['src/service/handler-log.js'],
         loader_partial: ['src/service/loader-partial.js'],
@@ -40,7 +39,6 @@ module.exports = function (grunt) {
         storage_cookie: ['src/service/storage-cookie.js'],
         storage_local: ['src/service/storage-local.js'],
         all: [
-          'src/service/default-interpolation.js',
           'src/service/messageformat-interpolation.js',
           'src/service/handler-log.js',
           'src/service/loader-partial.js',
@@ -91,12 +89,6 @@ module.exports = function (grunt) {
       extensions: {
         files: {
           src: ['<%= lib_files.ext.all %>']
-        }
-      },
-
-      default_interpolation: {
-        files: {
-          src: ['<%= lib_files.ext.default_interpolation %>']
         }
       },
 
@@ -162,19 +154,6 @@ module.exports = function (grunt) {
       core: {
         src: ['<%= lib_files.core %>'],
         dest: '<%= build_dir %>/angular-translate.js'
-      },
-
-      banner_default_interpolation: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src: '<%= concat.default_interpolation.dest %>',
-        dest: '<%= concat.default_interpolation.dest %>'
-      },
-
-      default_interpolation: {
-        src: ['<%= lib_files.ext.default_interpolation %>'],
-        dest: '<%= build_dir%>/angular-translate-interpolation-default/angular-translate-interpolation-default.js'
       },
 
       banner_messageformat_interpolation: {
@@ -279,12 +258,6 @@ module.exports = function (grunt) {
       core: {
         files: {
           '<%= build_dir %>/angular-translate.min.js': '<%= concat.core.dest %>'
-        }
-      },
-
-      default_interpolation: {
-        files: {
-          '<%= build_dir %>/angular-translate-interpolation-default/angular-translate-interpolation-default.min.js': '<%= concat.default_interpolation.dest %>'
         }
       },
 
@@ -442,11 +415,6 @@ module.exports = function (grunt) {
         dest: '<%= concat.core.dest %>'
       },
 
-      default_interpolation: {
-        src: '<%= concat.default_interpolation.dest %>',
-        dest: '<%= concat.default_interpolation.dest %>'
-      },
-
       messageformat_interpolation: {
         src: '<%= concat.messageformat_interpolation.dest %>',
         dest: '<%= concat.messageformat_interpolation.dest %>'
@@ -562,14 +530,6 @@ module.exports = function (grunt) {
     'ngmin:core',
     'concat:banner_core',
     'uglify:core'
-  ]);
-
-  grunt.registerTask('build:default_interpolation', [
-    'jshint:default_interpolation',
-    'concat:default_interpolation',
-    'ngmin:default_interpolation',
-    'concat:banner_default_interpolation',
-    'uglify:default_interpolation'
   ]);
 
   grunt.registerTask('build:messageformat_interpolation', [
