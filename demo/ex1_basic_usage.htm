@@ -31,7 +31,7 @@
   <p>{{'DATA_TO_FILTER' | translate: tlData}}</p>
 
   <!-- Passing a data object to the translation by the directive -->
-  <p translate="DATA_TO_DIRECTIVE" values="{{tlData}}"></p>
+  <p translate="DATA_TO_DIRECTIVE" translate-values="{{tlData}}"></p>
 
   <hr>
 
@@ -39,7 +39,7 @@
   <p>{{'RAW_TO_FILTER' | translate:'{ type: "raw" }' }}</p>
 
   <!-- Passing a raw data to the filter -->
-  <p translate="RAW_TO_DIRECTIVE" values="{ type: 'directives' }"></p>
+  <p translate="RAW_TO_DIRECTIVE" translate-values="{ type: 'directives' }"></p>
 
   <hr>
 
