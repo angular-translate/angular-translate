@@ -672,7 +672,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *  $scope.translatedText = $translate('HEADLINE_TEXT');
    * </pre>
    *
-   * @param {string} translationId A token which represents a translation id
+   * @param {string|array} translationId A token which represents a translation id
+   *                                     This can be optionally an array of translation ids which
+   *                                     results that the function returns an object where each key
+   *                                     is the translation id and the value the translation.
    * @param {object=} interpolateParams An object hash for dynamic values
    */
   this.$get = [
@@ -691,7 +694,41 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           startFallbackIteration;
 
       var $translate = function (translationId, interpolateParams, interpolationId) {
+
+        // Duck detection: If the first argument is an array, a bunch of translations was requested.
+        // The result is an object.
+        if (angular.isArray(translationId)) {
+          // Inspired by Q.allSettled by Kris Kowal
+          // https://github.com/kriskowal/q/blob/b0fa72980717dc202ffc3cbf03b936e10ebbb9d7/q.js#L1553-1563
+          // This transforms all promises regardless resolved or rejected
+          var translateAll = function (translationIds) {
+            var results = {}; // storing the actual results
+            var promises = []; // promises to wait for
+            // Wraps the promise a) being always resolved and b) storing the link id->value
+            var translate = function (translationId) {
+              var deferred = $q.defer();
+              var regardless = function (value) {
+                results[translationId] = value;
+                deferred.resolve([translationId, value]);
+              };
+              // we don't care whether the promise was resolved or rejected; just store the values
+              $translate(translationId, interpolateParams, interpolationId).then(regardless, regardless);
+              return deferred.promise;
+            };
+            for (var i = 0, c = translationIds.length; i < c; i++) {
+              promises.push(translate(translationIds[i]));
+            }
+            // wait for all (including storing to results)
+            return $q.all(promises).then(function () {
+              // return the results
+              return results;
+            });
+          };
+          return translateAll(translationId);
+        }
+
         var deferred = $q.defer();
+
         // trim off any whitespace
         translationId = translationId.trim();
 
@@ -1446,13 +1483,25 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * used except any promise handling. If a language was not found, an asynchronous loading
        * will be invoked in the background.
        *
-       * @param {string} langKey The language to translate to.
-       * @param {string} translationId Translation ID
+       * @param {string|array} translationId A token which represents a translation id
+       *                                     This can be optionally an array of translation ids which
+       *                                     results that the function's promise returns an object where
+       *                                     each key is the translation id and the value the translation.
        * @param {object} interpolateParams Params
        *
        * @return {string} translation
        */
       $translate.instant = function (translationId, interpolateParams, interpolationId) {
+
+        // Duck detection: If the first argument is an array, a bunch of translations was requested.
+        // The result is an object.
+        if (angular.isArray(translationId)) {
+          var results = {};
+          for (var i = 0, c = translationId.length; i < c; i++) {
+            results[translationId[i]] = $translate.instant(translationId[i], interpolateParams, interpolationId);
+          }
+          return results;
+        }
 
         if (typeof translationId === 'undefined' || translationId === '') {
           return translationId;
@@ -1470,8 +1519,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($fallbackLanguage && $fallbackLanguage.length) {
           possibleLangKeys = possibleLangKeys.concat($fallbackLanguage);
         }
-        for (var i = 0, c = possibleLangKeys.length; i < c; i++) {
-          var possibleLangKey = possibleLangKeys[i];
+        for (var j = 0, d = possibleLangKeys.length; j < d; j++) {
+          var possibleLangKey = possibleLangKeys[j];
           if ($translationTable[possibleLangKey]) {
             if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
               result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
