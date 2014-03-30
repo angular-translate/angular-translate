@@ -41,7 +41,7 @@ var app = angular.module('myApp', ['pascalprecht.translate']);
 
 Da angular-translate nun quasi Teil deiner Anwendung ist, kannst du auf all seine
 Komponenten zugreifen. Angular folgt einer ziemlich durchdachten Architektur
-wenn es darum geht Services zu Konfigureren, die später in der App verwendet
+wenn es darum geht Services zu konfigurieren, die später in der App verwendet
 werden sollen. Werfen wir einen Blick auf den folgenden Code.
 
 <pre>
@@ -62,7 +62,7 @@ app.config(function ($routeProvider) {
 </pre>
 
 Also was hier eigentlich passiert ist nicht etwa die _Benutzung eines bestimmten
-Services_ um Dinge zu konfigureren. Es ist die _Konfiguration eines Services
+Services_ um Dinge zu konfigurieren. Es ist die _Konfiguration eines Services
 durch einen bestimmten Provider_, welcher später in deiner App verwendet wird.
 Was bedeutet: `$locationProvider.html5Mode(true)` konfiguriert den `$location`
 **Service**, dass er im HTML5-Modus arbeitet. Also, wenn ein Service von außen
@@ -81,7 +81,7 @@ Service sich auf diese beziehen kann.
 ### Deiner App Sprachen beibringen
 
 Mit dem `$translateProvider` ist es sehr einfach deiner App eine Sprache
-beizubringe. Als erstes musst du den Provider in deiner Modulkonfiguration
+beizubringen. Als erstes musst du den Provider in deiner Modulkonfiguration
 verfügbar machen.
 
 <pre>
@@ -150,7 +150,7 @@ app.config(function ['$translateProvider', ($translateProvider) {
 </pre>
 
 Das ist eigentlich alles was du tun musst. Die translation table wird einfach unter
-einem Sprachschluessel registriert. Danach sagen wir angular-translate welche Sprache
+einem Sprachschlüssel registriert. Danach sagen wir angular-translate welche Sprache
 wie nun benutzen wollen. Da wir die Übersetzungen zur Konfigurationszeit
 hinzufügen, kann `$translate`- Service später zur Laufzeit auf sie zugreifen.
 Hier ist der funktionierende Code:

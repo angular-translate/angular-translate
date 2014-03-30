@@ -28,7 +28,7 @@ Außerdem kannst du eine Translation ID auch als Attributwert übergeben:
 Auch wenn das schon sehr flexibel ist, angular-translate bietet **noch einen**
 Weg, die Direktive zu nutzen. Gehen wir mal davon aus, dass eine Translation ID
 nicht als konkreter Identifier zur Verfügung steht, weil beispielsweise über ein
-Dataset geloopt wird. In solch einem Fall ist die Translation ID nur dynamisch
+Dataset iteriert wird. In solch einem Fall ist die Translation ID nur dynamisch
 verfügbar. Was bedeteut, sie muss interpoliert werden. Folgendes funktioniert also
 auch:
 

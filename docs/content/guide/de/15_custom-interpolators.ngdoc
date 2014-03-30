@@ -6,7 +6,7 @@
 
 Wenn du fit genug bist eine kleinere MessageFormat Library zu entwickeln,
 oder wenn du einfach eine andere Interpolation brauchst, kannst du ganz einfach
-deinen eigenen Interpolation Servive schreiben, den du dann in deinen Apps nutzen
+deinen eigenen Interpolation Service schreiben, den du dann in deinen Apps nutzen
 kannst. Alles was du tun musst, in ein bestimmtes Interface zu implementieren.
 Schauen wir, wie's funktioniert!
 

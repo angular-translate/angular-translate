@@ -20,7 +20,7 @@ wie sich eine Sprache verhält. Glücklicherweise gibt es einen
 dass es eine Herausforderung ist, Pluralisierung sprachübergreifend zu implementieren.
 
 [Alex Sexton](https://github.com/SlexAxton) hat sich glücklicherweise schon darum
-gekümmert und eine JavaScript Library entwickelt, diedie _ICU User Guide_- Spezifikation
+gekümmert und eine JavaScript Library entwickelt, die die _ICU User Guide_- Spezifikation
 implementiert. Die Library heißt MessageFormat und lässt sich[hier](https://github.com/SlexAxton/messageformat.js)
 finden.
 
@@ -42,7 +42,7 @@ Bower installieren:
 $ bower install angular-translate-interpolation-messageformat
 ```
 
-Undn nicht vergessen auch MessageFormat im HTML-Dokument einzubinden:
+Und nicht vergessen auch MessageFormat im HTML-Dokument einzubinden:
 
 <pre>
 <script src="path/to/messageformat.js"></script>
