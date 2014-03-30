@@ -4,11 +4,11 @@
 
 # Using translate filter
 
-In [$translate- Service beutzen](#/guide/03_using-translate-service) hast du
+In [$translate- Service benutzen](#/guide/03_using-translate-service) hast du
 gelernt, wie du deine Inhalte mit dem `$translate`- Service übersetzen kannst.
 Sicherlich ist es cool dass das funktioniert, aber eigentlich möchtest du diese
 Logik nicht zu sehr an deine Controller koppeln. Du möchtest deine Übersetzungen
-hauptsächlich im View-Layer handlen.
+hauptsächlich im View-Layer behandeln.
 
 angular-translate bietet einen Filter mit dem du in der Lage bist deine Inhalte
 zu übersetzen, ohne das ein Controller darüber bescheid wissen muss. Das bedeutet,

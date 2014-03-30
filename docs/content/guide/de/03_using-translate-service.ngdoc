@@ -30,11 +30,11 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 
 Um jetzt Inhalte zu übersetzen, muss nichts weiter geschehen, als dem `$translate`-
 Service eine Translation ID zu übergeben (die vorher durch `$translateProvider`
-registriert wurde). Da es moelglich ist, dass Translation-Daten asynchron geladen
-werden muessen, verhaelt sich `$translate` Service asynchron und gibt ein Promise
-zurueck, dass entweder mit der Uebersetzung augeloest oder mit der Translation ID
-ausgeworfen wird. So wuerde also die Benutzung von `$translate` Service auf Controller
-Level aussehen:
+registriert wurde). Da es möglich ist, dass Translation-Daten asynchron geladen
+werden müssen, verhält sich `$translate` Service ebenfalls asynchron und gibt ein Promise
+zurück, dass entweder mit der Übersetzung ausgelöst oder mit der Translation ID
+ausgeworfen wird. So würde also die Benutzung von `$translate` Service innerhalb
+eines Controllers wie folgt aussehen:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
@@ -72,17 +72,17 @@ Dabei muss jedoch beachtet werden, dass der Service immer ein Objekt mit allen
 Übersetzung (oder sogar alle) nicht übersetzt werden konnten. Eine mögliche
 Fehlerbehandlung muss von Deiner Seite aus geschehen.
 
-## Dinge die Beruecksichtigt werden sollten
-Bitte beachte dass `$translate` Service kein Two-Way Data-Binding unterstuetzt.
+## Dinge die berücksichtigt werden sollten
+Bitte beachte dass `$translate` Service kein Two-Way Data-Binding unterstützt.
 `$translate` Service arbeitet asynchron, dass bedeteut aber nicht, dass er informiert
-wird, wenn sich die Sprache aendert. Also aendern sich Uebersetzungen nicht,
-wenn sich die Sprache aendert, sofern diese mit dem Service uebersetzt wurden.
+wird, wenn sich die Sprache ändert. Also ändern sich Übersetzungen nicht,
+wenn sich die Sprache ändert, sofern diese mit dem Service übersetzt wurden.
 
-Man dies aber ganz einfach moeglich machen, in dem man auf das `$translateChangeSuccess`
+Man dies aber ganz einfach möglich machen, in dem man auf das `$translateChangeSuccess`
 Event horcht. Dieser Event wird jedes mal gefeuert, wenn die Sprachtabelle gewechselt
 wird.
 
-So wuerde das aussehen:
+So würde das aussehen:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
