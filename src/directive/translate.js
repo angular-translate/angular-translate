@@ -106,6 +106,10 @@ angular.module('pascalprecht.translate')
           }
         });
 
+        iAttr.$observe('translateDefault', function (value) {
+          scope.defaultText = value;
+        });
+
         if (translateValuesExist) {
           iAttr.$observe('translateValues', function (interpolateParams) {
             if (interpolateParams) {
@@ -129,7 +133,10 @@ angular.module('pascalprecht.translate')
           }
         }
 
-        var applyElementContent = function (value, scope) {
+        var applyElementContent = function (value, scope, successful) {
+          if (!successful && typeof scope.defaultText !== 'undefined') {
+            value = scope.defaultText;
+          }
           iElement.html(value);
           var globallyEnabled = $translate.isPostCompilingEnabled();
           var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
@@ -146,10 +153,10 @@ angular.module('pascalprecht.translate')
                 if (scope.translationId && value) {
                   $translate(value, {}, translateInterpolation)
                     .then(function (translation) {
-                      applyElementContent(translation, scope);
+                      applyElementContent(translation, scope, true);
                       unwatch();
                     }, function (translationId) {
-                      applyElementContent(translationId, scope);
+                      applyElementContent(translationId, scope, false);
                       unwatch();
                     });
                 }
@@ -162,9 +169,9 @@ angular.module('pascalprecht.translate')
                 if (scope.translationId && scope.interpolateParams) {
                   $translate(scope.translationId, scope.interpolateParams, translateInterpolation)
                     .then(function (translation) {
-                      applyElementContent(translation, scope);
+                      applyElementContent(translation, scope, true);
                     }, function (translationId) {
-                      applyElementContent(translationId, scope);
+                      applyElementContent(translationId, scope, false);
                     });
                   }
               };
