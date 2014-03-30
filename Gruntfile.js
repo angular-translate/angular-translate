@@ -9,7 +9,7 @@ module.exports = function (grunt) {
     language: grunt.option('lang') || 'en',
 
     meta: {
-      banner: '/**\n * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      banner: '/*!\n * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
         ' * <%= pkg.homepage %>\n' +
         ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
@@ -31,7 +31,6 @@ module.exports = function (grunt) {
       ],
 
       ext: {
-        default_interpolation: ['src/service/default-interpolation.js'],
         messageformat_interpolation: ['src/service/messageformat-interpolation.js'],
         handler_log: ['src/service/handler-log.js'],
         loader_partial: ['src/service/loader-partial.js'],
@@ -40,7 +39,6 @@ module.exports = function (grunt) {
         storage_cookie: ['src/service/storage-cookie.js'],
         storage_local: ['src/service/storage-local.js'],
         all: [
-          'src/service/default-interpolation.js',
           'src/service/messageformat-interpolation.js',
           'src/service/handler-log.js',
           'src/service/loader-partial.js',
@@ -91,12 +89,6 @@ module.exports = function (grunt) {
       extensions: {
         files: {
           src: ['<%= lib_files.ext.all %>']
-        }
-      },
-
-      default_interpolation: {
-        files: {
-          src: ['<%= lib_files.ext.default_interpolation %>']
         }
       },
 
@@ -151,7 +143,7 @@ module.exports = function (grunt) {
 
     concat: {
 
-      banner: {
+      banner_core: {
         options: {
           banner: '<%= meta.banner %>'
         },
@@ -164,9 +156,12 @@ module.exports = function (grunt) {
         dest: '<%= build_dir %>/angular-translate.js'
       },
 
-      default_interpolation: {
-        src: ['<%= lib_files.ext.default_interpolation %>'],
-        dest: '<%= build_dir%>/angular-translate-interpolation-default/angular-translate-interpolation-default.js'
+      banner_messageformat_interpolation: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.messageformat_interpolation.dest %>',
+        dest: '<%= concat.messageformat_interpolation.dest %>'
       },
 
       messageformat_interpolation: {
@@ -174,9 +169,25 @@ module.exports = function (grunt) {
         dest: '<%= build_dir%>/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js'
       },
 
+      banner_handler_log: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.handler_log.dest %>',
+        dest: '<%= concat.handler_log.dest %>'
+      },
+
       handler_log: {
         src: ['<%= lib_files.ext.handler_log %>'],
         dest: '<%= build_dir %>/angular-translate-handler-log/angular-translate-handler-log.js'
+      },
+
+      banner_loader_partial: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.loader_partial.dest %>',
+        dest: '<%= concat.loader_partial.dest %>'
       },
 
       loader_partial: {
@@ -184,9 +195,25 @@ module.exports = function (grunt) {
         dest: '<%= build_dir %>/angular-translate-loader-partial/angular-translate-loader-partial.js'
       },
 
+      banner_loader_static_files: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.loader_static_files.dest %>',
+        dest: '<%= concat.loader_static_files.dest %>'
+      },
+
       loader_static_files: {
         src: ['<%= lib_files.ext.loader_static_files %>'],
         dest: '<%= build_dir %>/angular-translate-loader-static-files/angular-translate-loader-static-files.js'
+      },
+
+      banner_loader_url: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.loader_url.dest %>',
+        dest: '<%= concat.loader_url.dest %>'
       },
 
       loader_url: {
@@ -194,9 +221,25 @@ module.exports = function (grunt) {
         dest: '<%= build_dir %>/angular-translate-loader-url/angular-translate-loader-url.js'
       },
 
+      banner_storage_cookie: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.storage_cookie.dest %>',
+        dest: '<%= concat.storage_cookie.dest %>'
+      },
+
       storage_cookie: {
         src: ['<%= lib_files.ext.storage_cookie %>'],
         dest: '<%= build_dir %>/angular-translate-storage-cookie/angular-translate-storage-cookie.js'
+      },
+
+      banner_storage_local: {
+        options: {
+          banner: '<%= meta.banner %>'
+        },
+        src: '<%= concat.storage_local.dest %>',
+        dest: '<%= concat.storage_local.dest %>'
       },
 
       storage_local: {
@@ -207,15 +250,14 @@ module.exports = function (grunt) {
     },
 
     uglify: {
+
+      options: {
+        preserveComments: 'some'
+      },
+
       core: {
         files: {
           '<%= build_dir %>/angular-translate.min.js': '<%= concat.core.dest %>'
-        }
-      },
-
-      default_interpolation: {
-        files: {
-          '<%= build_dir %>/angular-translate-interpolation-default/angular-translate-interpolation-default.min.js': '<%= concat.default_interpolation.dest %>'
         }
       },
 
@@ -373,11 +415,6 @@ module.exports = function (grunt) {
         dest: '<%= concat.core.dest %>'
       },
 
-      default_interpolation: {
-        src: '<%= concat.default_interpolation.dest %>',
-        dest: '<%= concat.default_interpolation.dest %>'
-      },
-
       messageformat_interpolation: {
         src: '<%= concat.messageformat_interpolation.dest %>',
         dest: '<%= concat.messageformat_interpolation.dest %>'
@@ -491,21 +528,15 @@ module.exports = function (grunt) {
     'jshint:core',
     'concat:core',
     'ngmin:core',
-    'concat:banner',
+    'concat:banner_core',
     'uglify:core'
-  ]);
-
-  grunt.registerTask('build:default_interpolation', [
-    'jshint:default_interpolation',
-    'concat:default_interpolation',
-    'ngmin:default_interpolation',
-    'uglify:default_interpolation'
   ]);
 
   grunt.registerTask('build:messageformat_interpolation', [
     'jshint:messageformat_interpolation',
     'concat:messageformat_interpolation',
     'ngmin:messageformat_interpolation',
+    'concat:banner_messageformat_interpolation',
     'uglify:messageformat_interpolation'
   ]);
 
@@ -513,6 +544,7 @@ module.exports = function (grunt) {
     'jshint:handler_log',
     'concat:handler_log',
     'ngmin:handler_log',
+    'concat:banner_handler_log',
     'uglify:handler_log'
   ]);
 
@@ -520,6 +552,7 @@ module.exports = function (grunt) {
     'jshint:loader_partial',
     'concat:loader_partial',
     'ngmin:loader_partial',
+    'concat:banner_loader_partial',
     'uglify:loader_partial'
   ]);
 
@@ -527,6 +560,7 @@ module.exports = function (grunt) {
     'jshint:loader_static_files',
     'concat:loader_static_files',
     'ngmin:loader_static_files',
+    'concat:banner_loader_static_files',
     'uglify:loader_static_files'
   ]);
 
@@ -534,6 +568,7 @@ module.exports = function (grunt) {
     'jshint:loader_url',
     'concat:loader_url',
     'ngmin:loader_url',
+    'concat:banner_loader_url',
     'uglify:loader_url'
   ]);
 
@@ -541,6 +576,7 @@ module.exports = function (grunt) {
     'jshint:storage_cookie',
     'concat:storage_cookie',
     'ngmin:storage_cookie',
+    'concat:banner_storage_cookie',
     'uglify:storage_cookie'
   ]);
 
@@ -548,6 +584,7 @@ module.exports = function (grunt) {
     'jshint:storage_local',
     'concat:storage_local',
     'ngmin:storage_local',
+    'concat:banner_storage_local',
     'uglify:storage_local'
   ]);
 
