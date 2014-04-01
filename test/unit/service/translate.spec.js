@@ -1219,6 +1219,46 @@ describe('pascalprecht.translate', function () {
         });
       });
     });
+
+    describe('with locale negotiation w/o aliases', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider
+          .translations('en', { FOO: 'bar' })
+          .translations('de', { FOO: 'foo' })
+          .registerAvailableLanguageKeys(['en', 'de'])
+          .determinePreferredLanguage(function () {
+            // mocking
+            // Work's like `window.navigator.lang = 'en_US'`
+            var nav = {
+              language: 'en_US'
+            };
+            return ((
+              nav.language ||
+              nav.browserLanguage ||
+              nav.systemLanguage ||
+              nav.userLanguage
+            ) || '').split('-').join('_');
+          });
+      }));
+
+      it('should determine browser language', function () {
+        inject(function ($translate, $q, $rootScope) {
+          var deferred = $q.defer(),
+              promise = deferred.promise,
+              value;
+
+          promise.then(function (foo) {
+            value = foo;
+          });
+          $translate('FOO').then(function (translation) {
+            deferred.resolve(translation);
+          });
+          $rootScope.$digest();
+          expect(value).toEqual('bar');
+        });
+      });
+    });
   });
 
   describe('$translate.instant', function () {
