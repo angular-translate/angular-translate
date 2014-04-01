@@ -10,6 +10,9 @@ angular.module('pascalprecht.translate')
  * "lang-en_US.json", "lang-de_DE.json", etc. Using this builder,
  * the response of these urls must be an object of key-value pairs.
  *
+ * Example of usage: 
+ * $translateProvider.useStaticFilesLoader({ prefix: "lang-", suffix: ".json" });
+ * 
  * @param {object} options Options object, which gets prefix, suffix and key.
  */
 .factory('$translateStaticFilesLoader', ['$q', '$http', function ($q, $http) {
