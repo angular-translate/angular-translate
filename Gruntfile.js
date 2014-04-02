@@ -468,7 +468,7 @@ module.exports = function (grunt) {
         html5Mode: false,
         title: false,
         image: 'identity/logo/angular-translate-alternative/angular-translate_alternative_small2.png',
-        imageLink: 'http://pascalprecht.github.io/angular-translate',
+        imageLink: 'http://angular-translate.github.io',
         startPage: '/guide',
         scripts: [
           'http://getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js',
