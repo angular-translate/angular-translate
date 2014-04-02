@@ -679,7 +679,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *                                     results that the function returns an object where each key
    *                                     is the translation id and the value the translation.
    * @param {object=} interpolateParams An object hash for dynamic values
-   * @returns {Q.promise}
+   * @returns {object} promise
    */
   this.$get = [
     '$log',
