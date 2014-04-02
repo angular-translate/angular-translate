@@ -1,3 +1,38 @@
+# 2.1.0 (2014-04-02)
+
+## Features
+### directive
+
+* Support for camel casing interpolation variables. (4791e25)
+
+* add option to define a default translation text (fc57d26)
+
+### service
+
+* add possibility to translate a set of translation ids (57bd07c)
+
+
+
+## Bug fixes
+### $translate
+
+* use case-insensitive check for language key aliases (09a8bf1)
+
+* if translation exists, use the translated string even if it's empty (4ba736f)
+
+* docs annotation (8ef0415)
+### directive
+
+* Make translate-value-* work inside ng-if and ng-repeat (f22624b)
+
+### package.json
+
+* fix repository url (a410c9a)
+
+### $translateProvider
+
+* fix comparison in one case of negotiateLocale() (c2b94ca)
+
 # 2.0.1 (2014-02-25)
 
 ## Features
