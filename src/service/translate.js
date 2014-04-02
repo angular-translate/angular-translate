@@ -621,10 +621,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     if (!$availableLanguageKeys.length) {
       $preferredLanguage = locale;
-      return this;
     } else {
       $preferredLanguage = negotiateLocale(locale);
     }
+
+    return this;
   };
 
   /**
