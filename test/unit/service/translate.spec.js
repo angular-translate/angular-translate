@@ -1222,6 +1222,8 @@ describe('pascalprecht.translate', function () {
 
     describe('with locale negotiation w/o aliases', function () {
 
+      var translateProvider;
+
       beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider
           .translations('en', { FOO: 'bar' })
@@ -1240,6 +1242,8 @@ describe('pascalprecht.translate', function () {
               nav.userLanguage
             ) || '').split('-').join('_');
           });
+
+          translateProvider = $translateProvider;
       }));
 
       it('should determine browser language', function () {
@@ -1256,6 +1260,26 @@ describe('pascalprecht.translate', function () {
           });
           $rootScope.$digest();
           expect(value).toEqual('bar');
+        });
+      });
+
+      it('should be chainable', function () {
+        inject(function () {
+          var ret = translateProvider.determinePreferredLanguage(function () {
+            // mocking
+            // Work's like `window.navigator.lang = 'en_US'`
+            var nav = {
+              language: 'en_US'
+            };
+            return ((
+              nav.language ||
+              nav.browserLanguage ||
+              nav.systemLanguage ||
+              nav.userLanguage
+            ) || '').split('-').join('_');
+          });
+
+          expect(ret).toEqual(translateProvider);
         });
       });
     });
