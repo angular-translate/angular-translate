@@ -20,13 +20,16 @@ describe('pascalprecht.translate', function () {
         .preferredLanguage('en');
     }));
 
-    var $filter, $q, $rootScope, $translate;
+    var $filter, $q, $rootScope, $translate, $compile;
 
-    beforeEach(inject(function (_$filter_, _$q_, _$rootScope_) {
+    beforeEach(inject(function (_$filter_, _$q_, _$rootScope_, _$compile_) {
       $filter = _$filter_;
       $q = _$q_;
       $rootScope = _$rootScope_;
       $translate = $filter('translate');
+      $compile = _$compile_;
+
+      $rootScope.foo = 'bar';
     }));
 
     it('should be a function object', function () {
@@ -79,6 +82,12 @@ describe('pascalprecht.translate', function () {
       expect(value[4]).toEqual('4 + 4');
       expect(value[5]).toEqual('10');
       expect(value[6]).toEqual('55');
+    });
+
+    it('should replace interpolate directive on element with given values', function () {
+      var element = $compile(angular.element('<div>{{"TRANSLATION_ID" | translate: "{value: foo}"}}</div>'))($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toEqual('Lorem Ipsum bar');
     });
   });
 
