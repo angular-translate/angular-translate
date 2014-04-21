@@ -734,7 +734,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var deferred = $q.defer();
 
         // trim off any whitespace
-        translationId = translationId.trim();
+        if (translationId) {
+          translationId = translationId.trim();
+        }
 
         var promiseToWaitFor = (function () {
           var promise = $preferredLanguage ?
@@ -1523,7 +1525,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           return translationId;
         }
 
-        translationId = translationId.trim();
+        // trim off any whitespace
+        if (translationId) {
+          translationId = translationId.trim();
+        }
 
         var result, possibleLangKeys = [];
         if ($preferredLanguage) {
