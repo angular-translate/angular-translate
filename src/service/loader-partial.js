@@ -48,7 +48,8 @@ angular.module('pascalprecht.translate')
 
       $http({
         method : 'GET',
-        url : this.parseUrl(urlTemplate, lang)
+        url: this.parseUrl(urlTemplate, lang),
+        cache: true
       }).success(function(data){
         self.tables[lang] = data;
         deferred.resolve(data);
@@ -233,8 +234,8 @@ angular.module('pascalprecht.translate')
    *
    * @throws {TypeError}
    */
-  this.$get = ['$rootScope', '$injector', '$q', '$http',
-  function($rootScope, $injector, $q, $http) {
+  this.$get = ['$rootScope', '$injector', '$q', '$http', '$cacheFactory',
+  function($rootScope, $injector, $q, $http, $cacheFactory) {
 
     /**
      * @ngdoc event
@@ -281,6 +282,7 @@ angular.module('pascalprecht.translate')
               .getTable(options.key, $q, $http, options.urlTemplate, errorHandler)
               .then(addTablePart)
           );
+          parts[part].urlTemplate = options.urlTemplate;
         }
       }
 
@@ -386,6 +388,9 @@ angular.module('pascalprecht.translate')
       if (hasPart(name)) {
         var wasActive = parts[name].isActive;
         if (removeData) {
+          angular.forEach(parts[name].tables, function(value, key) {
+            $cacheFactory.get('$http').remove(parts[name].parseUrl(parts[name].urlTemplate, key));
+          });
           delete parts[name];
         } else {
           parts[name].isActive = false;
