@@ -27,7 +27,8 @@ angular.module('pascalprecht.translate')
     $http({
       url: options.url,
       params: { lang: options.key },
-      method: 'GET'
+      method: 'GET',
+      cache: true
     }).success(function (data) {
       deferred.resolve(data);
     }).error(function (data) {
