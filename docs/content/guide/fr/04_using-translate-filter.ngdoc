@@ -1,0 +1,81 @@
+@ngdoc overview
+@name Utilisation du filtre translate
+@description
+
+# Utilisation du filtre translate
+
+Dans [Utilisation du service $translate](#/guide/03_using-translate-service), nous avons appris
+comment utiliser le service `$translate` pour traduire vos contenus avec des IDs de traduction
+enregistrés. Bien sûr, son fonctionnement est assez cool, mais en réalité vous ne souhaitez
+pas lier votre traduction aux contrôleurs ou aux services. Vous voulez
+surtout traduire votre contenu dans la vue, car c'est là que tout se
+passe.
+
+angular-translate fournit un composant de filtre avec lequel vous êtes en mesure
+de traduire vos IDs de traduction au sein de la vue, sans qu'aucun contrôleur ou
+service le sache. Cela signifie que vous pouvez dissocier la logique de traduction
+de n'importe quel contrôleur ou service et rendre votre vue modifiable sans toucher
+le code de la logique métier.
+
+## Utilisation générale
+L'utilisation d'un filtre Angular est assez simple. Vous pouvez lire plusieurs choses
+sur ​​les filtres d'Angular
+[ici](http://docs.angularjs.org/guide/filter).
+
+C'est la même chose pour le filtre `translate` de angular-translate. Nous pouvons
+mettre à jour notre exemple de
+[Utilisation du service $translate](#/guide/03_using-translate-service#generalusage)
+juste en transférant la logique du contrôleur vers notre vue. Fondamentalement, le
+filtre `translate` fonctionne ainsi :
+
+```
+<ANY>{{ TRANSLATION_ID | translate }}</ANY>
+```
+
+Donc, pour mettre à jour notre exemple, nous enlevons l'utilisation du service `$translate`
+dans notre contrôleur et nous ajoutons la logique dans notre vue en utilisant le filtre
+`translate` comme ceci :
+
+<pre>
+<h1>{{'HEADLINE' | translate}}</h1>
+<p>{{'PARAGRAPH' | translate}}</p>
+</pre>
+
+Assez facile, non ? Et bien sûr, vous pouvez voir un exemple qui fonctionne ici :
+
+<doc:example module="monApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'C\'est un module génial !',
+        PARAGRAPH: 'Srsly !'
+      };
+
+      var app = angular.module('monApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // ajoute la table de traduction
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+    </div>
+  </doc:source>
+</doc:example>
+
+Super ! Vous êtes maintenant en mesure de traduire vos contenus dans la vue sans
+polluer votre logique des contrôleurs avec la logique de traduction. L'ensemble
+de la traduction est dissocié de votre logique métier et rend votre application beaucoup
+plus souple quand il s'agit de modifier la vue ! Le chapitre suivant vous montre comment
+faire la même chose avec la directive `translate` fournie.
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
