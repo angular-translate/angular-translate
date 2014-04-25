@@ -6,10 +6,11 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate'));
 
-    beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateUrlLoader_) {
+    beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateUrlLoader_, _$translationCache_) {
       $translate = _$translate_;
       $httpBackend = _$httpBackend_;
       $translateUrlLoader = _$translateUrlLoader_;
+      $translationCache = _$translationCache_;
 
       $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({
         it: 'works'
@@ -42,6 +43,19 @@ describe('pascalprecht.translate', function () {
         url: 'foo/bar.json'
       });
       $httpBackend.flush();
+    });
+
+    it('should put a translation table into a cache', function() {
+      $httpBackend.expectGET('foo/bar.json?lang=de_DE');
+        $translateUrlLoader({
+        key: 'de_DE',
+        url: 'foo/bar.json',
+        $http: {
+          cache: $translationCache
+        }
+      });
+      $httpBackend.flush();
+      expect($translationCache.info().size).toEqual(1);
     });
 
     it('should return a promise', function () {

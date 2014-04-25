@@ -40,16 +40,16 @@ angular.module('pascalprecht.translate')
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
-  Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
+  Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
     var deferred = $q.defer();
 
     if (!this.tables[lang]) {
       var self = this;
 
-      $http({
+      $http(angular.extend({}, $httpOptions, {
         method : 'GET',
-        url : this.parseUrl(urlTemplate, lang)
-      }).success(function(data){
+        url: this.parseUrl(urlTemplate, lang)
+      })).success(function(data){
         self.tables[lang] = data;
         deferred.resolve(data);
       }).error(function() {
@@ -226,6 +226,7 @@ angular.module('pascalprecht.translate')
    * @requires $http
    * @requires $injector
    * @requires $rootScope
+   * @requires $translate
    *
    * @description
    *
@@ -233,8 +234,8 @@ angular.module('pascalprecht.translate')
    *
    * @throws {TypeError}
    */
-  this.$get = ['$rootScope', '$injector', '$q', '$http',
-  function($rootScope, $injector, $q, $http) {
+  this.$get = ['$rootScope', '$injector', '$q', '$http', '$translate',
+  function($rootScope, $injector, $q, $http, $translate) {
 
     /**
      * @ngdoc event
@@ -278,9 +279,10 @@ angular.module('pascalprecht.translate')
         if (hasPart(part) && parts[part].isActive) {
           loaders.push(
             parts[part]
-              .getTable(options.key, $q, $http, options.urlTemplate, errorHandler)
+              .getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
               .then(addTablePart)
           );
+          parts[part].urlTemplate = options.urlTemplate;
         }
       }
 
@@ -386,6 +388,17 @@ angular.module('pascalprecht.translate')
       if (hasPart(name)) {
         var wasActive = parts[name].isActive;
         if (removeData) {
+          var cache = $translate.loaderCache();
+          if (typeof(cache) === 'string') {
+            // getting on-demand instance of loader
+            cache = $injector.get(cache);
+          }
+          // Purging items from cache...
+          if (typeof(cache) === 'object') {
+            angular.forEach(parts[name].tables, function(value, key) {
+                cache.remove(parts[name].parseUrl(parts[name].urlTemplate, key));
+            });
+          }
           delete parts[name];
         } else {
           parts[name].isActive = false;
