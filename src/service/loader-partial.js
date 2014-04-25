@@ -40,7 +40,7 @@ angular.module('pascalprecht.translate')
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
-  Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
+  Part.prototype.getTable = function(lang, $q, $http, $translationCache, urlTemplate, errorHandler) {
     var deferred = $q.defer();
 
     if (!this.tables[lang]) {
@@ -48,7 +48,8 @@ angular.module('pascalprecht.translate')
 
       $http({
         method : 'GET',
-        url : this.parseUrl(urlTemplate, lang)
+        url: this.parseUrl(urlTemplate, lang),
+        cache: $translationCache
       }).success(function(data){
         self.tables[lang] = data;
         deferred.resolve(data);
@@ -233,8 +234,8 @@ angular.module('pascalprecht.translate')
    *
    * @throws {TypeError}
    */
-  this.$get = ['$rootScope', '$injector', '$q', '$http',
-  function($rootScope, $injector, $q, $http) {
+  this.$get = ['$rootScope', '$injector', '$q', '$http', '$translationCache',
+  function($rootScope, $injector, $q, $http, $translationCache) {
 
     /**
      * @ngdoc event
@@ -278,9 +279,10 @@ angular.module('pascalprecht.translate')
         if (hasPart(part) && parts[part].isActive) {
           loaders.push(
             parts[part]
-              .getTable(options.key, $q, $http, options.urlTemplate, errorHandler)
+              .getTable(options.key, $q, $http, $translationCache, options.urlTemplate, errorHandler)
               .then(addTablePart)
           );
+          parts[part].urlTemplate = options.urlTemplate;
         }
       }
 
@@ -386,6 +388,9 @@ angular.module('pascalprecht.translate')
       if (hasPart(name)) {
         var wasActive = parts[name].isActive;
         if (removeData) {
+          angular.forEach(parts[name].tables, function(value, key) {
+              $translationCache.remove(parts[name].parseUrl(parts[name].urlTemplate, key));
+          });
           delete parts[name];
         } else {
           parts[name].isActive = false;
