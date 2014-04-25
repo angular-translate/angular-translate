@@ -6,10 +6,11 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate'));
 
-    beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_) {
+    beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_, _$translationCache_) {
       $httpBackend = _$httpBackend_;
       $translate = _$translate_;
       $translateStaticFilesLoader = _$translateStaticFilesLoader_;
+      $translationCache = _$translationCache_;
 
       $httpBackend.when('GET', 'lang_de_DE.json').respond({HEADER: 'Ueberschrift'});
       $httpBackend.when('GET', 'lang_en_US.json').respond({HEADER:'Header'});
@@ -54,6 +55,17 @@ describe('pascalprecht.translate', function () {
       expect(promise.then).toBeDefined();
       expect(typeof promise.then).toBe('function');
       $httpBackend.flush();
+    });
+
+    it('should put a translation table into a cache', function() {
+      $httpBackend.expectGET('lang_de_DE.json');
+      $translateStaticFilesLoader({
+        key: 'de_DE',
+        prefix: 'lang_',
+        suffix: '.json'
+      });
+      $httpBackend.flush();
+      expect($translationCache.info().size).toEqual(1);
     });
   });
 });
