@@ -833,7 +833,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       var useLanguage = function (key) {
         $uses = key;
-        $rootScope.$emit('$translateChangeSuccess');
+        $rootScope.$broadcast('$translateChangeSuccess');
 
         if ($storageFactory) {
           Storage.set($translate.storageKey(), $uses);
@@ -844,7 +844,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         angular.forEach(interpolatorHashMap, function (interpolator, id) {
           interpolatorHashMap[id].setLocale($uses);
         });
-        $rootScope.$emit('$translateChangeEnd');
+        $rootScope.$broadcast('$translateChangeEnd');
       };
 
       /**
@@ -866,14 +866,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$emit('$translateLoadingStart');
+        $rootScope.$broadcast('$translateLoadingStart');
         pendingLoader = true;
 
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
           var translationTable = {};
-          $rootScope.$emit('$translateLoadingSuccess');
+          $rootScope.$broadcast('$translateLoadingSuccess');
 
           if (angular.isArray(data)) {
             angular.forEach(data, function (table) {
@@ -887,11 +887,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             key: key,
             table: translationTable
           });
-          $rootScope.$emit('$translateLoadingEnd');
+          $rootScope.$broadcast('$translateLoadingEnd');
         }, function (key) {
-          $rootScope.$emit('$translateLoadingError');
+          $rootScope.$broadcast('$translateLoadingError');
           deferred.reject(key);
-          $rootScope.$emit('$translateLoadingEnd');
+          $rootScope.$broadcast('$translateLoadingEnd');
         });
         return deferred.promise;
       };
@@ -1326,7 +1326,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$emit('$translateChangeStart');
+        $rootScope.$broadcast('$translateChangeStart');
 
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
@@ -1342,9 +1342,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             }
           }, function (key) {
             $nextLang = undefined;
-            $rootScope.$emit('$translateChangeError');
+            $rootScope.$broadcast('$translateChangeError');
             deferred.reject(key);
-            $rootScope.$emit('$translateChangeEnd');
+            $rootScope.$broadcast('$translateChangeEnd');
           });
         } else {
           deferred.resolve(key);
@@ -1420,15 +1420,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         function resolve() {
           deferred.resolve();
-          $rootScope.$emit('$translateRefreshEnd');
+          $rootScope.$broadcast('$translateRefreshEnd');
         }
 
         function reject() {
           deferred.reject();
-          $rootScope.$emit('$translateRefreshEnd');
+          $rootScope.$broadcast('$translateRefreshEnd');
         }
 
-        $rootScope.$emit('$translateRefreshStart');
+        $rootScope.$broadcast('$translateRefreshStart');
 
         if (!langKey) {
           // if there's no language key specified we refresh ALL THE THINGS!
