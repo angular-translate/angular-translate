@@ -42,7 +42,7 @@ wird der konfigurierte Sprachschlüssel an die URL gehängt, um eine spezifische
 Sprache beim Server anfragen zu können.
 
 Das obige Beispiel fragt also eigentlich `foo/bar.json?lang=en` an. angular-translate
-merkt, wenn noch keine Übersetzungtabelle für eine bestimmmte Sprache vorhanden ist
+merkt, wenn noch keine Übersetzungtabelle für eine bestimmte Sprache vorhanden ist
 und führt einen registrierten Loader so früh wie möglich aus.
 
 ## Den staticFilesLoader benutzen
@@ -150,7 +150,7 @@ benutzen wollen:
 $translateProvider.preferredLanguage('en');
 </pre>
 
-Okay, nichts neues. Aber jetzt wirds interessant. Woher weiß angular-translate,
+Okay, nichts neues. Aber jetzt wird es interessant. Woher weiß angular-translate,
 welchr `part` geladen werden muss?. Ums kurz zu machen: gar nicht. Du musst
 angular-translate sagen **wann** du **welchen** Part laden möchtest.
 
@@ -165,7 +165,7 @@ angular.module('main')
 });
 </pre>
 
-Okay, als nächstes müssen wir `angular-translate` sagen, welcher Part inital
+Okay, als nächstes müssen wir `angular-translate` sagen, welcher Part initial
 geladen werden soll (wenn überhaupt einer). Dafür verwenden wir die `addPart()`,-
 Methode des `$translatePartialLoader`.
 
@@ -249,14 +249,14 @@ angefragte Sprache vorhanden ist und wenn nicht, wird diese erst geladen.
 ## FOUC - Flash of untranslated content
 
 Es gibt einen Nachteil wenn man Asynchrone Loader verwendet. Für keinen kurzen
-Moment beim Startup der App könnte es ein kleines Flickern geben, da die initiale
+Moment beim Startup der App könnte es ein kleines Flackern geben, da die initiale
 Sprache noch nicht geladen wurde. Das ist kein Bug, aber ein ziemlich logisches
 Verhalten, da ja Daten asynchron geladen werden.
 
 Um dem vorzubeugen könnte man mindestens eine Sprache (vorzugsweise die, die auch
 als Default-Sprache konfiguriert wird) mit der App ausliefern. Also per
 `$translateProvider.translations()` registrieren. In dem Fall wäre die initiale
-Sprache schon vorhanden und kein Flickern würde auftreten.
+Sprache schon vorhanden und kein Flackern würde auftreten.
 
 <pre>
 $translateProvider.translations('en', {

@@ -14,7 +14,7 @@ $translateProvider
   .translations('de', { /* ... */ });
 </pre>
 
-你也可以告诉angular-translate,它应该通过调用 `.determinePreferredLanguage()`方法尽量确定首选您的应用程序本身的语言。 
+你也可以告诉angular-translate,它应该通过调用 `.determinePreferredLanguage()`方法尽量确定首选您的应用程序本身的语言。
 
 
 <pre>
@@ -44,7 +44,7 @@ $translateProvider
   .registerAvailableLanguageKeys(['en', 'de'], {
     'en_US': 'en',
     'en_UK': 'en',
-    'de_DE'; 'de',
+    'de_DE': 'de',
     'de_CH': 'de'
   })
   .determinePreferredLanguage();

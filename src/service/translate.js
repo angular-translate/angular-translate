@@ -623,10 +623,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     if (!$availableLanguageKeys.length) {
       $preferredLanguage = locale;
-      return this;
     } else {
       $preferredLanguage = negotiateLocale(locale);
     }
+
+    return this;
   };
 
   /**
@@ -733,7 +734,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var deferred = $q.defer();
 
         // trim off any whitespace
-        translationId = translationId.trim();
+        if (translationId) {
+          translationId = translationId.trim();
+        }
 
         var promiseToWaitFor = (function () {
           var promise = $preferredLanguage ?
@@ -1038,7 +1041,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           );
         } else {
           // No translation found in any fallback language
-          deferred.resolve(translationId);
+
+          // If we have a handler factory - we might also call it here to determine if it provides
+          // a default text for a translationid that can't be found anywhere in our tables
+          if ($missingTranslationHandlerFactory) {
+            var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+            if (resultString !== undefined) {
+              deferred.resolve(resultString);
+            } else {
+              deferred.resolve(translationId);
+            }
+          } else {
+            deferred.resolve(translationId);
+          }
         }
         return deferred.promise;
       };
@@ -1510,7 +1525,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           return translationId;
         }
 
-        translationId = translationId.trim();
+        // trim off any whitespace
+        if (translationId) {
+          translationId = translationId.trim();
+        }
 
         var result, possibleLangKeys = [];
         if ($preferredLanguage) {

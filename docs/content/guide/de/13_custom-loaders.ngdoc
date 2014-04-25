@@ -6,7 +6,7 @@
 
 angular-translate wäre nicht angular-translate wenn es dir keinen Weg bieten würde
 eigene asynchrone Loader zu bauen. In [Asynchrones Laden](#/guide/10_asynchronous-loading)
-hast du gelernt wie du mit asynchonen Loader deine Übersetzungsdaten von einem
+hast du gelernt wie du mit asynchronen Loader deine Übersetzungsdaten von einem
 Server laden kannst.
 
 Wie dem auch sei, in manchen Fällen reicht das nicht aus. Vielleicht liegen deine
@@ -17,7 +17,7 @@ bauen, dieses Kapitel zeigt wie es geht!
 
 ## Einen eigenen Loader bauen
 
-Wenn keiner der mitgelieferten Loadern deinen Ansprüchen gerecht wird, kannst du
+Wenn keiner der mitgelieferten Loader deinen Ansprüchen gerecht wird, kannst du
 deinen eigenen Loader als Factory registrieren. Die Factory muss eine Funktion
 zurück geben, die ein Konfigurationsobjekt erwartet, welches mindestens den
 Sprachschlüssel als Eigenschaft hat. Mit dieser Architektur hat man voll Kontrolle

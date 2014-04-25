@@ -65,7 +65,7 @@ Angular keine benamten Parameter erwarten können, ist Dazu eine
 bestimmte Syntax nötig, die man auf den Filter anwenden kann. Es gibt zwei Wege
 dynamische Werte an den Filter zu übergeben.
 
-Man kann zum Einen, ein Objektliteral als String übergeben. Dieser wird dann später
+Man kann zum Einen ein Objektliteral als String übergeben. Dieser wird dann später
 vom `$translate`- Service interpoliert.
 
 <pre>

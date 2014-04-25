@@ -22,7 +22,7 @@ Für weitere Informationen schau bitte auf [GitHub repo](http://github.com/angul
 
 Hier aber die Wichtigsten beiden Schritte:
 
-1) Installiere und aktiviere den Task in deinem gruntfile
+1) Installiere und aktiviere den Task in deinem Gruntfile
 
 ```shell
 npm install grunt-po2json-angular-translate --save-dev
@@ -118,4 +118,3 @@ Hier ein komplettes Praxisbeispiel:
         },
 
 ```
-

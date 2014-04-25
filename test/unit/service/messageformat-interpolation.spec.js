@@ -125,5 +125,28 @@ describe('pascalprecht.translate', function () {
           'NUM_ADDS': 3
         })).toEqual('You and 2 others added this to their profiles.');
     });
+
+    describe('should support sanitize strategies', function () {
+
+      it('disabled by default', function () {
+        expect($translateMessageFormatInterpolation.interpolate('The Doctor is a citizen of {world}!', {
+          world: 'Gallifrey'
+        })).toEqual('The Doctor is a citizen of Gallifrey!');
+        expect($translateMessageFormatInterpolation.interpolate('The Doctor is a citizen of {world}!', {
+          world: 'Gallifrey <span onclick="alert(\"EXTERMINATE\")">click me</span>'
+        })).toEqual('The Doctor is a citizen of Gallifrey <span onclick="alert("EXTERMINATE")">click me</span>!');
+      });
+
+      it('with strategy="escaped"', function () {
+        $translateMessageFormatInterpolation.useSanitizeValueStrategy('escaped');
+
+        expect($translateMessageFormatInterpolation.interpolate('The Doctor is a citizen of {world}!', {
+          world: 'Gallifrey <span onclick="alert(\"EXTERMINATE\")">click me</span>'
+        })).toEqual('The Doctor is a citizen of Gallifrey &lt;span onclick="alert("EXTERMINATE")"&gt;click me&lt;/span&gt;!');
+        $translateMessageFormatInterpolation.useSanitizeValueStrategy();
+
+      });
+
+    });
   });
 });

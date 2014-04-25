@@ -72,7 +72,7 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
-  $rooScope.$on('$translateChangeSuccess', function () {
+  $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
     });
