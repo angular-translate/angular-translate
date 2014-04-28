@@ -270,10 +270,13 @@ describe('pascalprecht.translate', function () {
         .translations('de_DE', translationMock)
         .translations('de_DE', { 'YET_ANOTHER': 'Hallo da!' })
         .translations('en', { 'YET_ANOTHER': 'Hello there!' })
-        .registerAvailableLanguageKeys(['en', 'de_DE'], {
+        .translations('tr_TR', { 'YET_ANOTHER': 'Selam millet! (tr_TR)' })
+        .translations('tr', { 'YET_ANOTHER': 'Selam millet! (tr)' })
+        .registerAvailableLanguageKeys(['en', 'de_DE', 'tr', 'tr_TR'], {
           'en_EN': 'en',
           'en_US': 'en',
-          'en_GB': 'en'
+          'en_GB': 'en',
+          'tr_*': 'tr'
         })
         .preferredLanguage('de_DE');
     }));
@@ -296,7 +299,7 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should return language key', function () {
-      expect($translate.use()).toEqual('de_de');
+      expect($translate.use()).toEqual('de_DE');
     });
 
     it('should change language at runtime', function () {
@@ -331,6 +334,40 @@ describe('pascalprecht.translate', function () {
       });
       $rootScope.$digest();
       expect(value).toEqual('Hello there!');
+    });
+
+    it('should load the language with the exact match first even if a wildcard is used', function () {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate.use('tr_TR');
+      $translate('YET_ANOTHER').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Selam millet! (tr_TR)');
+    });
+
+    it('should load the correct language if a wildcard is used', function () {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate.use('tr_TURKISH'); // Silly language name
+      $translate('YET_ANOTHER').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Selam millet! (tr)');
     });
   });
 
