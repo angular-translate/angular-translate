@@ -56,14 +56,21 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
 
     if (avail.indexOf(locale) > -1) {
-      return locale;
+      // return the exact language key rather than the lowercased one
+      return preferred;
     }
 
     if ($languageKeyAliases) {
       var alias;
       for (var langKeyAlias in $languageKeyAliases) {
-        if ($languageKeyAliases.hasOwnProperty(langKeyAlias) &&
-          angular.lowercase(langKeyAlias) === angular.lowercase(preferred)) {
+        var hasWildcardKey = false;
+        var hasExactKey = $languageKeyAliases.hasOwnProperty(langKeyAlias) &&
+          angular.lowercase(langKeyAlias) === angular.lowercase(preferred);
+
+        if (langKeyAlias.slice(-1) === '*') {
+          hasWildcardKey = langKeyAlias.slice(0, -1) === preferred.slice(0, langKeyAlias.length-1);
+        }
+        if (hasExactKey || hasWildcardKey) {
           alias = $languageKeyAliases[langKeyAlias];
           if (avail.indexOf(angular.lowercase(alias)) > -1) {
             return alias;
@@ -77,6 +84,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > -1) {
       return parts[0];
     }
+
+    // If everything fails, just return the preferred, unchanged.
+    return preferred;
   };
 
   /**
@@ -1342,6 +1352,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var deferred = $q.defer();
 
         $rootScope.$emit('$translateChangeStart');
+
+        // Try to get the aliased language key
+        var aliasedKey = negotiateLocale(key);
+        if (aliasedKey) {
+          key = aliasedKey;
+        }
 
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
