@@ -269,7 +269,12 @@ describe('pascalprecht.translate', function () {
       $translateProvider
         .translations('de_DE', translationMock)
         .translations('de_DE', { 'YET_ANOTHER': 'Hallo da!' })
-        .translations('en_EN', { 'YET_ANOTHER': 'Hello there!' })
+        .translations('en', { 'YET_ANOTHER': 'Hello there!' })
+        .registerAvailableLanguageKeys(['en', 'de_DE'], {
+          'en_EN': 'en',
+          'en_US': 'en',
+          'en_GB': 'en'
+        })
         .preferredLanguage('de_DE');
     }));
 
@@ -291,7 +296,7 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should return language key', function () {
-      expect($translate.use()).toEqual('de_DE');
+      expect($translate.use()).toEqual('de_de');
     });
 
     it('should change language at runtime', function () {
@@ -304,6 +309,23 @@ describe('pascalprecht.translate', function () {
       });
 
       $translate.use('en_EN');
+      $translate('YET_ANOTHER').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Hello there!');
+    });
+
+    it('should respect the language aliases', function () {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate.use('en_GB');
       $translate('YET_ANOTHER').then(function (translation) {
         deferred.resolve(translation);
       });
