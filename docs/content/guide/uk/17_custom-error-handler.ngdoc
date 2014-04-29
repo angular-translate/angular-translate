@@ -24,6 +24,26 @@ app.factory('myCustomHandlerFactory', function (dep1, dep2) {
 
 </pre>
 
+# Використання заміщуючого тексту у випадку помилки
+
+Іноді, може знадобитися вказати заміщуючий текст (не ключ) для фронтенду, щоб перекладачі або,
+навіть, кінцеві користувачі (погана ідея) могли бачити над чим ще треба працювати.
+Тепер це можливо завдяки трохи зміненому користувацькому обробнику помилок.
+Просто поверніть значення з обробника помилок в angular-translate.
+
+<pre>
+app.factory('customTranslationHandler', function () {
+  return function (translationID, uses) {
+    // return the following text as a translation 'result' - this will be
+    // displayed instead of the language key.
+    return 'NO DEFAULT KEY';
+  };
+});
+</pre>
+
+Звісно, ви можете додати translationID до значення, що повертається. тоді, відповідальна за
+переклади людина побачить проблемний ключ!
+
 <br>
 <hr>
 <center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
