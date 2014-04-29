@@ -55,6 +55,23 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
 Это все. Теперь, для перевода содержимого `<title>` вы можете воспользоваться этим контроллером.
 
+## Несколько идентификаторов перевода
+Сервис перевода позволяет переводить несколько идентификаторов перевода сразу.
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+Однако, сервис всегда будет возвращать объект с переводами -- даже если перевести идентификатор
+(или идентификаторы) не получилось. Запросив несколько переводов за один раз, вы должны сами
+обработать полученный результат.
+
 ## Имейте ввиду
 Пожалуйста, имейте ввиду, что сервис `$translate` по умолчанию не предоставляет двухстороннего
 связывания данных! Сервис `$translate` работает асинхронно. Это значит, что он возвращает перевод
