@@ -85,7 +85,7 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
     if ($sanitizeValueStrategy) {
       interpolateParams = sanitizeParams(interpolateParams);
     }
-    return $interpolate(string)(interpolateParams);
+    return $interpolate(string)(interpolateParams || {});
   };
 
   return $translateInterpolator;
