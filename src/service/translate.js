@@ -62,8 +62,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     if ($languageKeyAliases) {
       var alias;
       for (var langKeyAlias in $languageKeyAliases) {
-        if ($languageKeyAliases.hasOwnProperty(langKeyAlias) &&
-          angular.lowercase(langKeyAlias) === angular.lowercase(preferred)) {
+        var hasWildcardKey = false;
+        var hasExactKey = $languageKeyAliases.hasOwnProperty(langKeyAlias) &&
+          angular.lowercase(langKeyAlias) === angular.lowercase(preferred);
+
+        if (langKeyAlias.slice(-1) === '*') {
+          hasWildcardKey = langKeyAlias.slice(0, -1) === preferred.slice(0, langKeyAlias.length-1);
+        }
+        if (hasExactKey || hasWildcardKey) {
           alias = $languageKeyAliases[langKeyAlias];
           if (avail.indexOf(angular.lowercase(alias)) > -1) {
             return alias;
