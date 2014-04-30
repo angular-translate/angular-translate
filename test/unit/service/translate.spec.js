@@ -269,15 +269,7 @@ describe('pascalprecht.translate', function () {
       $translateProvider
         .translations('de_DE', translationMock)
         .translations('de_DE', { 'YET_ANOTHER': 'Hallo da!' })
-        .translations('en', { 'YET_ANOTHER': 'Hello there!' })
-        .translations('tr_TR', { 'YET_ANOTHER': 'Selam millet! (tr_TR)' })
-        .translations('tr', { 'YET_ANOTHER': 'Selam millet! (tr)' })
-        .registerAvailableLanguageKeys(['en', 'de_DE', 'tr', 'tr_TR'], {
-          'en_EN': 'en',
-          'en_US': 'en',
-          'en_GB': 'en',
-          'tr_*': 'tr'
-        })
+        .translations('en_EN', { 'YET_ANOTHER': 'Hello there!' })
         .preferredLanguage('de_DE');
     }));
 
@@ -319,6 +311,33 @@ describe('pascalprecht.translate', function () {
       expect(value).toEqual('Hello there!');
     });
 
+  });
+
+  describe('$translate#use() with aliases', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', { 'YET_ANOTHER': 'Hello there!' })
+        .translations('tr_TR', { 'YET_ANOTHER': 'Selam millet! (tr_TR)' })
+        .translations('tr', { 'YET_ANOTHER': 'Selam millet! (tr)' })
+        .registerAvailableLanguageKeys(['en', 'tr', 'tr_TR'], {
+          'en_EN': 'en',
+          'en_US': 'en',
+          'en_GB': 'en',
+          'tr_*': 'tr'
+        })
+        .preferredLanguage('en_EN');
+    }));
+
+    var $translate, $rootScope, $STORAGE_KEY, $q;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_, _$STORAGE_KEY_, _$q_) {
+      $translate = _$translate_;
+      $rootScope = _$rootScope_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+      $q = _$q_;
+    }));
+
     it('should respect the language aliases', function () {
       var deferred = $q.defer(),
           promise = deferred.promise,
@@ -329,6 +348,9 @@ describe('pascalprecht.translate', function () {
       });
 
       $translate.use('en_GB');
+
+      expect($translate.use()).toEqual('en');
+
       $translate('YET_ANOTHER').then(function (translation) {
         deferred.resolve(translation);
       });
@@ -346,6 +368,9 @@ describe('pascalprecht.translate', function () {
       });
 
       $translate.use('tr_TR');
+
+      expect($translate.use()).toEqual('tr_TR');
+
       $translate('YET_ANOTHER').then(function (translation) {
         deferred.resolve(translation);
       });
@@ -363,6 +388,9 @@ describe('pascalprecht.translate', function () {
       });
 
       $translate.use('tr_TURKISH'); // Silly language name
+
+      expect($translate.use()).toEqual('tr');
+
       $translate('YET_ANOTHER').then(function (translation) {
         deferred.resolve(translation);
       });
