@@ -56,7 +56,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     }
 
     if (avail.indexOf(locale) > -1) {
-      return locale;
+      return preferred;
     }
 
     if ($languageKeyAliases) {
@@ -77,6 +77,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > -1) {
       return parts[0];
     }
+
+    // If everything fails, just return the preferred, unchanged.
+    return preferred;
   };
 
   /**
@@ -1342,6 +1345,12 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var deferred = $q.defer();
 
         $rootScope.$emit('$translateChangeStart');
+
+        // Try to get the aliased language key
+        var aliasedKey = negotiateLocale(key);
+        if (aliasedKey) {
+          key = aliasedKey;
+        }
 
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
