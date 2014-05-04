@@ -1,3 +1,6 @@
+(function(window,document,undefined) {
+  'use strict';
+
 angular.module('pascalprecht.translate')
 /**
  * @ngdoc object
@@ -94,7 +97,7 @@ angular.module('pascalprecht.translate')
       if (src[property] && src[property].constructor &&
        src[property].constructor === Object) {
         dst[property] = dst[property] || {};
-        arguments.callee(dst[property], src[property]);
+        deepExtend(dst[property], src[property]);
       } else {
         dst[property] = src[property];
       }
@@ -423,3 +426,5 @@ angular.module('pascalprecht.translate')
   }];
 
 });
+
+})(window,document);
