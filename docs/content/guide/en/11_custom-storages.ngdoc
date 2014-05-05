@@ -4,7 +4,7 @@
 
 # Custom Storages
 
-If you've read [Storages](#/guide/08_storages), you know how to use either
+If you've read [Storages](#/guide/10_storages), you know how to use either
 cookiesStorage, or localStorage, to let your app remember the last chosen
 language over cross http requests. If neither localStorage nor cookieStorage
 fits your needs, you can simply build your own storage service and use that
