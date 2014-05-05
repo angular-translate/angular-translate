@@ -1,0 +1,135 @@
+@ngdoc overview
+@name Stockages personnalisés
+@description
+
+# Stockages personnalisés
+
+Si vous avez lu [Stockages](#/guide/10_storages), vous savez comment utiliser
+cookiesStorage ou localStorage, pour que votre application se souvienne de la
+dernière langue choisie. Si ni localStorage ni cookieStorage correspondent
+à vos besoins, vous pouvez simplement construire votre propre service de
+stockage et l'utiliser à la place.
+
+## Construire un service de stockage personnalisé
+
+Si vous souhaitez utiliser votre propre espace de stockage personnalisé dans votre application,
+vous devez créer un service qui doit implémenter des méthodes, ainsi angular-translate pourra les
+utiliser. L'interface d'un service de stockage est assez simple. Tout ce que vous avez besoin,
+c'est de fournir les méthodes `set()` et `get()` sur votre service de stockage personnalisé.
+
+Imaginons que nous voulons utiliser un service de stockage personnalisé au sein de notre exemple d'application.
+Nous pouvons facilement l'étendre avec un nouveau service. Nous devons juste nous assurer que nous retournons
+un objet avec les méthodes `get()` et `set()`. Un service personnalisé pourrait ressembler à ceci :
+
+<pre>
+app.factory('customStorage', function () {
+  return {
+    set: function (name, value) {
+      // stocke `value` sous `name`
+    },
+    get: function (name) {
+      // récupère la valeur de `name`
+    }
+  };
+});
+</pre>
+
+Facile, non ? Comme vous pouvez le voir, `set()` attend deux arguments. Un nom et une valeur. Donc,
+vous travaillez avec de simples paires clé-valeur. De l'autre côté, `get()` a juste besoin d'un nom
+pour demander une valeur. En fournissant un stockage personnalisé comme un service distinct, cela vous
+donne une grande flexibilité quand il s'agit d'utiliser ce service dans un endroit différent. En plus
+de cela, tester ce service est assez facile, car il est isolé.
+
+## Utilisation du service de stockage personnalisé
+
+Une fois que vous avez construit votre service de stockage personnalisé, vous devez dire à angular-translate
+d'en faire usage. Les méthodes `useCookieStorage()` et `useLocalStorage()` de `$translateProvider`
+sont en fait des méthodes raccourcies. Elles utilisent une méthode interne `useStorage()`.
+Vous pouvez également utiliser cette méthode pour faire connaitre à angular-translate
+votre service de stockage personnalisé en faisant simplement :
+
+<pre>
+$translateProvider.useStorage('customStorage');
+</pre>
+
+angular-translate utilisera `$injector` pour obtenir une instance du nom de la factory
+proposée, qui est dans notre cas `customStorage`, et il est alors en mesure d'accéder à ses
+méthodes à l'exécution pour sauver la dernière langue choisie.
+
+
+<doc:example module="monApp">
+  <doc:source>
+    <script>
+      var translationsFR = {
+        HEADLINE: 'C\'est un module génial !',
+        PARAGRAPH: 'Srsly !',
+        PASSED_AS_TEXT: 'Et là ! Je suis passé comme valeur de texte !',
+        PASSED_AS_ATTRIBUTE: 'Je suis passé comme une valeur de l\'attribut, cool non ?',
+        PASSED_AS_INTERPOLATION: 'Débutants ! Je suis interpolé !',
+        VARIABLE_REPLACEMENT: 'Salut {{name}}',
+        BUTTON_LANG_FR: 'français',
+        BUTTON_LANG_EN: 'anglais'
+      };
+
+      var translationsEN= {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_FR: 'french',
+        BUTTON_LANG_EN: 'english'
+      };
+
+      var app = angular.module('monApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // ajoute la table de traductions
+        $translateProvider.translations('fr', translationsFR);
+        $translateProvider.translations('en', translationsEN);
+        $translateProvider.preferredLanguage('fr');
+        // se souvenir de la langue
+        $translateProvider.useStorage('customStorage');
+      }]);
+
+      app.factory('customStorage', function () {
+        return {
+          set: function (name, value) {
+            // stocke `value` sous `name`
+          },
+          get: function (name) {
+            // récupère la valeur de `name`
+          }
+        };
+      });
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+      <button ng-click="changeLanguage('fr')" translate="BUTTON_LANG_FR"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+Bien sûr, notre service personnalisé ne fait rien, c'est pourquoi lorsque vous actualiserez
+le navigateur aussi souvent que vous le souhaitez, l'application ne se souviendra pas de la langue.
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,0 +1,139 @@
+@ngdoc overview
+@name  Utilisation de la directive translate
+@description
+
+# Utilisation de la directive translate
+
+Une autre façon de traduire le contenu d'une vue est d'utiliser la directive
+`translate`. L'utilisation du filtre `translate` est bien, mais utiliser la directive
+`translate` est mieux. Il s'est avéré que d'avoir trop de filtres dans une vue met en
+place trop d'expressions _watch_, ce qui explique pourquoi `angular-translate` fournit
+également une directive pour traduire vos contenus de la vue.
+
+## Utilisation générale
+Vous pouvez utiliser la directive `translate` de différentes façons. L'utilisation
+générale ressemble à :
+
+```
+<ANY translate>TRANSLATION_ID</ANY>
+```
+
+Vous pouvez également passer un ID de traduction en tant que valeur de l'attribut à
+la directive comme ceci :
+
+```
+<ANY translate="TRANSLATION_ID"></ANY>
+```
+
+Même si c'est déjà une façon très souple pour utiliser une directive, angular-translate
+offres une **autre** façon de l'utiliser. Imaginons un ID de traduction qui n'est pas disponible
+comme un identifiant concret, car par exemple l'un boucle sur un ensemble de données qui contient
+un ID de traduction dans chaque itération. Dans ce cas, un ID de traduction n'est disponible que
+dynamiquement. Vous devez en fait interpoler l'ID sur lui-même. angular-translate
+fait cela pour vous. Donc, ceci est également possible :
+
+```
+<ANY translate="{{toBeInterpolated}}"></ANY>
+```
+
+C'est cool ? Et oui, angular-translate ne serait pas angular-translate s'il ne pouvait
+pas gérer de la même façon notre premier exemple d'utilisation. Cela fonctionne également :
+
+```
+<ANY translate>{{toBeInterpolated}}</ANY>
+```
+
+Choisissez ce qui vous convient le mieux !
+
+## Post compilation
+En commençant avec la version 2, la traduction elle-même peut être post traitée dans le
+contexte du scope actuel (en utilisant `$compile`). Cela signifie qu'une directive utilisée
+dans une valeur de traduction elle-même fonctionnera désormais comme prévu.
+
+Ce comportement peut être activé par la directive :
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile></ANY>
+```
+
+En plus de cela, vous pouvez également activer la fonction de façon globale avec ...
+
+```
+$translateProvider.usePostCompiling(true);
+```
+
+... Et même vous pouvez désactiver à nouveau la fonction par la directive :
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
+```
+
+## Exemple
+
+Mettons à jour l'exemple de notre application et ajoutons quelques nouvelles traductions.
+Que diriez-vous d'utiliser des textes qui représentent chaque manière possible d'utiliser
+la directive `translate` ? Notre table de traduction pourrait ressembler à ceci :
+
+<pre>
+var translations = {
+  HEADLINE: 'C\'est un module génial !',
+  PARAGRAPH: 'Srsly !',
+  PASSED_AS_TEXT: 'Et là ! Je suis passé comme valeur de texte !',
+  PASSED_AS_ATTRIBUTE: 'Je suis passé comme une valeur de l\'attribut, cool non ?',
+  PASSED_AS_INTERPOLATION: 'Débutants ! Je suis interpolé !'
+};
+</pre>
+
+Ensuite, nous mettons à jour notre vue avec nos nouveaux ID de traduction :
+
+<pre>
+<p>{{ 'HEADLINE' | translate }}</p>
+<p>{{ 'PARAGRAPH' | translate }}</p>
+
+<p translate>PASSED_AS_TEXT</p>
+<p translate="PASSED_AS_ATTRIBUTE"></p>
+<p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+<p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+</pre>
+
+Notre application mise à jour ressemble alors à ceci :
+
+<doc:example module="monApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'C\'est un module génial !',
+        PARAGRAPH: 'Srsly !',
+        PASSED_AS_TEXT: 'Et là ! Je suis passé comme valeur de texte !',
+        PASSED_AS_ATTRIBUTE: 'Je suis passé comme une valeur de l\'attribut, cool non ?',
+        PASSED_AS_INTERPOLATION: 'Débutants ! Je suis interpolé !'
+      };
+
+      var app = angular.module('monApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // ajoute la table de traduction
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
