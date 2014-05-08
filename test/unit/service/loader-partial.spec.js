@@ -417,6 +417,23 @@ describe('pascalprecht.translate', function() {
       });
     });
 
+    it('should parse url template downloaded using jsonp', function() {
+      inject(function($translatePartialLoader, $httpBackend) {
+        $httpBackend.expectJSONP('/locales/part-en.json?callback=JSON_CALLBACK').respond(200, 'callback({})');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json?callback=JSON_CALLBACK',
+          method: 'JSONP'
+        });
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+    });
+
     it('should parse url template with multiple pattern occurrences', function () {
       inject(function($translatePartialLoader, $httpBackend) {
         $httpBackend.expectGET('/locales/part/part-en.json').respond(200, '{}');

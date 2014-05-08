@@ -40,14 +40,14 @@ angular.module('pascalprecht.translate')
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
-  Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
+  Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler, method) {
     var deferred = $q.defer();
 
     if (!this.tables[lang]) {
       var self = this;
 
       $http({
-        method : 'GET',
+        method : method || 'GET',
         url : this.parseUrl(urlTemplate, lang)
       }).success(function(data){
         self.tables[lang] = data;
@@ -278,7 +278,7 @@ angular.module('pascalprecht.translate')
         if (hasPart(part) && parts[part].isActive) {
           loaders.push(
             parts[part]
-              .getTable(options.key, $q, $http, options.urlTemplate, errorHandler)
+              .getTable(options.key, $q, $http, options.urlTemplate, errorHandler, options.method)
               .then(addTablePart)
           );
         }
