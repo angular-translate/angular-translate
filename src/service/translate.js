@@ -32,6 +32,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $postCompilingEnabled = false,
       NESTED_OBJECT_DELIMITER = '.';
 
+  var version = 'x.y.z';
 
   // tries to determine the browsers locale
   var getLocale = function () {
@@ -1561,6 +1562,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
 
         return result;
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#versionInfo
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns the current version information for the angular-translate library
+       *
+       * @return {string} angular-translate version
+       */
+      $translate.versionInfo = function () {
+        return version;
       };
 
       if ($loaderFactory) {

@@ -497,7 +497,17 @@ module.exports = function (grunt) {
         src: ['docs/content/guide/<%= language %>/*.ngdoc'],
         title: 'Guide'
       }
+    },
+
+    version: {
+        options: {
+            prefix: 'var version\\s+=\\s+[\'"]'
+        },
+        defaults: {
+            src: ['<%= concat.core.dest %>']
+        }
     }
+
   });
 
 
@@ -527,6 +537,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:core', [
     'jshint:core',
     'concat:core',
+    'version',
     'ngmin:core',
     'concat:banner_core',
     'uglify:core'
