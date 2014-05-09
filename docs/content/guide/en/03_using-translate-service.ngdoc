@@ -75,6 +75,16 @@ However, the service will always return an object containing translations -- reg
 a translation (or even all of them) has failed. When requesting multiple translations
 in one request, it is up to you to deal with the result.
 
+## angular-translate library version information
+As it may be useful for some "About" information in your application, we provide you a convenience
+function to display or use the installed library version information.
+
+Just call it this way:
+<pre>
+  $translate.versionInfo();
+  // returns e.g. "2.1.0"
+</pre>
+
 ## Things to keep in mind
 Please keep in mind that the usage of the `$translate` service doesn't provide a two-way
 data binding default! `$translate` service works asynchronously, which means
