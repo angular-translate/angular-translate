@@ -1412,4 +1412,33 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
     });
   });
+
+  describe('$translate.instant (with interpolation of non existing translation)', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', translationMock)
+        .translations('en', {
+          'FOO {{foo}}': 'bar {{foo}}-{{foo}}'
+        })
+        .preferredLanguage('en');
+    }));
+
+    var $translate, $STORAGE_KEY, $q, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$STORAGE_KEY_, _$q_, _$rootScope_) {
+      $translate = _$translate_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+      $q = _$q_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should return interpolated translation if translation id exist', function () {
+      expect($translate.instant('FOO {{foo}}', {foo: 'bar'})).toEqual('bar bar-bar');
+    });
+
+    it('should return interpolated translation if translation id does not exist', function () {
+      expect($translate.instant('BAR {{bar}}', {bar: 'foo'})).toEqual('BAR foo');
+    });
+  });
 });
