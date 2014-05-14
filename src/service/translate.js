@@ -1159,7 +1159,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
       };
 
-      var interpolateTranslation = function (translation, interpolateParams, interpolationId) {
+      var interpolateTranslationInstant = function (translation, interpolateParams, interpolationId) {
         // If using link, rerun $translate with linked translationId and return it
         if (translation.substr(0, 2) === '@:') {
           return determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId);
@@ -1176,7 +1176,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (table && table.hasOwnProperty(translationId)) {
           var translation = table[translationId];
 
-          result = interpolateTranslation(translation, interpolateParams, interpolationId);
+          result = interpolateTranslationInstant(translation, interpolateParams, interpolationId);
         } else {
           // looks like the requested translation id doesn't exists.
           // Now, if there is a registered handler for missing translations and no
@@ -1561,7 +1561,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         if (!result && result !== '') {
           // Return interpolated translation if not found anything.
-          result = interpolateTranslation(translationId, interpolateParams, interpolationId);
+          result = interpolateTranslationInstant(translationId, interpolateParams, interpolationId);
           if ($missingTranslationHandlerFactory && !pendingLoader) {
             $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
           }
