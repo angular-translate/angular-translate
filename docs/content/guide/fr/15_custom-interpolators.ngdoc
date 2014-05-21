@@ -1,0 +1,171 @@
+@ngdoc overview
+@name Interpolateurs personnalisés
+@description
+
+# Interpolateurs personnalisés
+
+Si vous êtes assez doué pour implémenter une bibliothèque plus petite que MessageFormat, ou
+si vous avez juste besoin d'un autre type d'interpolation, vous pouvez simplement construire votre
+propre service d'interpolation et le brancher à angular-translate. Tout ce que vous avez à faire, c'est
+de suivre une interface spécifique d'angular-translate qui attend un service d'interpolation.
+Voyons comment les choses fonctionnent !
+
+## Construction d'un service d'interpolation personnalisé
+
+Pour la construction d'un service d'interpolation personnalisé, les choses devraient vous paraitrent familiés,
+si vous avez lu [Stockages personnalisés](#/guide/11_custom-storages) et
+[Chargeurs personnalisés](#/guide/13_custom-loaders). Vous commencez avec la construction d'une factory
+qui retourne un objet qui implémente une certaine interface. Les méthodes suivantes
+doivent être fournies par un service d'interpolation personnalisé :
+
+- `setLocale(langKey)` - définit la langue utilisée
+- `getInterpolationIdentifier()` - retourne un identifiant pour l'interpolation
+- `interpolate(string, interpolateParams)` - interpole le string en interpolateParams
+
+Regardons à quoi ressemble l'implémentation d'un service d'interpolation personnalisé. Tout d'abord,
+nous implémentons l'interface :
+
+<pre>
+app.factory('customInterpolation', function () {
+
+  return {
+
+    setLocale: function (locale) {
+
+    },
+
+    getInterpolationIdentifier: function () {
+
+    },
+
+    interpolate: function (string, interpolateParams) {
+
+    }
+  };
+});
+</pre>
+
+Bon, c'est la structure de base d'un service d'interpolation. Maintenant, nous allons
+ajouter un peu de logique, ainsi angular-translate peut l'utiliser une fois que notre
+service d'interpolation personnalisé est livré :
+
+<pre>
+app.factory('customInterpolation', function ($interpolate) {
+
+  var $locale;
+
+  return {
+
+    setLocale: function (locale) {
+      $locale = locale;
+    },
+
+    getInterpolationIdentifier: function () {
+      return 'custom';
+    },
+
+    interpolate: function (string, interpolateParams) {
+      return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+    }
+  };
+});
+</pre>
+
+Très bien. Alors qu'est-ce que nous faisons ici. `setLocale()` stocke simplement la valeur de la
+langue courante utilisée. `getInterpolationIdentifier()` retourne un string `custom`. Pour faire
+quoi ? Vous vous rappelez de comment
+[remplacer temporairement le type d'interpolation](#/guide/14_pluralization#pluralisation_redéfinition-de-linterpolation-temporairement) ?
+Trés bien. C'est l'identifiant qui est mappé à votre service, afin que angular-translate sache quels sont les
+services d'interpolation à utiliser, lorsque vous remplacez explicitement le service d'interpolation à l'exécution.
+`interpolate()` utilise simplement le service `$interpolate` d'Angular. De plus, il ajoute au début et à la fin la
+localisation au string donné.
+
+## Utilisation de votre service d'interpolation personnalisé
+
+Tout comme il y a une méthode pour les stockages (`useStorage()`) et les chargeurs (`useLoader()`),
+il y a aussi une méthode pour les interpolations personnalisées. `$translateProvider.useInterpolation()`
+est votre ami quand il s'agit d'intégrer votre service d'interpolation personnalisé dans
+votre application.
+
+<pre>
+$translateProvider.useInterpolation('customInterpolation');
+</pre>
+
+Votre application utilise maintenant votre interpolation personnalisée par défaut. Cependant,
+comme vous l'avez appris dans les chapitres précédents, vous pouvez ajouter votre interpolation
+personnalisée de façon optionnelle, pour ne pas perdre de fonctionnalités intéressantes d'Angular :
+
+<pre>
+$translateProvider.addInterpolation('customInterpolation');
+</pre>
+
+Voici à quoi cela ressemble :
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('fr');
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+
+        $translateProvider.translations('fr', {
+          HEADLINE: 'Je suis l\'entête',
+          TEXT: 'J\'utilise l\'interpolation par défaut {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Il aime} female{Elle aime} other{Ils aiment}} ça.',
+          BUTTON_LANG_FR: 'français',
+          BUTTON_LANG_EN: 'anglais'
+        });
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_FR: 'french',
+          BUTTON_LANG_EN: 'english'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+
+      app.factory('customInterpolation', function ($interpolate) {
+
+        var $locale;
+
+        return {
+
+          setLocale: function (locale) {
+            $locale = locale;
+          },
+
+          getInterpolationIdentifier: function () {
+            return 'custom';
+          },
+
+          interpolate: function (string, interpolateParams) {
+            return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+          }
+        };
+      });
+
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="HEADLINE"></p>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+      <button ng-click="changeLanguage('fr')" translate="BUTTON_LANG_FR"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

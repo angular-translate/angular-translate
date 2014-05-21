@@ -1,0 +1,212 @@
+@ngdoc overview
+@name Chargeurs personnalisés
+@description
+
+# Chargeurs personnalisés
+
+angular-translate ne serait pas angular-translate s'il ne vous fournissez pas un moyen
+de construire vos chargeurs asynchrones personnalisés.
+Dans [Chargement asynchrone](#/guide/10_asynchronous-loading), vous avez appris à utiliser
+les chargeurs fournis pour charger vos données de traduction de manière asynchrone depuis
+un service, en utilisant certains modèles.
+
+Cependant, dans certains cas, ce n'est pas suffisant. Peut-être que vous voulez avoir un endroit
+totalement différent pour stocker vos données de traduction et même ne pas les charger à partir
+d'un serveur distant. C'est là que les chargeurs personnalisés entrent en jeu. Vous pouvez créer vos
+propres chargeurs très facilement. Ce chapitre vous montre comment faire !
+
+## Construire un service de chargeur personnalisé
+
+Si aucun des chargeurs fournis correspond à vos besoins, vous pouvez enregistrer un chargeur
+asynchrone personnalisé comme une factory. La factory doit retourner une fonction qui attend
+un objet où au moins la propriété clé de la langue existe. Avec cette architecture vous
+êtes aussi libre que possible et vous avez le contrôle total sur la façon dont votre
+chargeur asynchrone doit se comporter.
+
+Une factory de chargeur personnalisé pourrait ressembler à ceci :
+
+<pre>
+app.factory('customLoader', function ($http, $q) {
+    // retourne loaderFn
+    return function (options) {
+        var deferred = $q.defer();
+        // Faire quelquechose avec $http, $q et key pour charger les fichiers de localisation
+
+        var data = {
+            'TEXT': 'Fooooo'
+        };
+
+        // résoudre avec les données de traduction
+        return deferred.resolve(data);
+        // ou rejeter avec la clé de la langue
+        return deferred.reject(options.key);
+    };
+});
+</pre>
+
+Vous devez vous assurer que votre fonction de chargeur retourne une promise. Il doit,
+soit être résolu avec vos données de traduction, soit rejeté avec la clé de langue. Comme
+vous pouvez le voir, il y a une propriété `key` sur l'objet `options`. Elle a la valeur
+de la clé du langage avec lequel le chargeur asynchrone est appelé.
+
+## Faire usage d'un chargeur personnalisé
+
+Vous conaissez `$translateProvider` qui fournit des méthodes comme `useStaticFilesLoader()` ou
+`useUrlLoader()`. Les deux utilisent en interne `useLoader()` pour enregistrer une factory de
+chargeur qui sera plus tard appelé par `$injector`. Vous pouvez utiliser la même méthode pour
+votre service personnalisé. Donc, pour enregistrer le service personnalisé simplement faites :
+
+<pre>
+$translateProvider.useLoader('customLoader');
+</pre>
+
+angular-translate accède à votre factory de chargeur personnalisé avec le service
+`$injector` et fait le reste pour vous.
+
+## Ajout d'options supplémentaires
+
+La propriété `options.key` indique que `options` est juste un objet. Vous pouvez l'étendre
+avec des propriétés supplémentaires pour répondre à vos propres besoins. Par exemple, vous
+pourriez avoir une propriété `foo` sur l'objet `options`, tout ce que vous avez à faire, c'est
+de fournir la propriété lors de l'enregistrement de votre factory de chargeur personnalisé.
+
+Donc, si nous avons besoin d'une propriété `foo` avec une valeur `bar`, nous pouvons la passer comme ceci :
+
+<pre>
+$translateProvider.useLoader('customLoader', { foo: 'bar'});
+</pre>
+
+Ensuite, dans votre factory de chargeur, vous pouvez accéder à la propriété via `options.foo`.
+Vous n'avez pas à vous soucier de `options.key` car il est ajouté en interne
+par angular-translate avant d'appeler le chargeur.
+
+Faisons usage du chargeur personnalisé dans notre exemple d'application pour montrer
+comment les choses fonctionnent ! Tout d'abord, nous construisons le chargeur comme ceci :
+
+<pre>
+app.factory('asyncLoader', function ($q, $timeout) {
+
+  return function (options) {
+    var deferred = $q.defer(),
+        translations;
+
+    if (options.key === 'fr') {
+      translations = {
+        HEADLINE: 'C\'est un module génial !',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Et là ! Je suis passé comme valeur de texte !',
+        PASSED_AS_ATTRIBUTE: 'Je suis passé comme une valeur de l\'attribut, cool non ?',
+        PASSED_AS_INTERPOLATION: 'Débutants ! Je suis interpolé !',
+        VARIABLE_REPLACEMENT: 'Salut {{name}}',
+        BUTTON_LANG_EN: 'anglais',
+        BUTTON_LANG_FR: 'français'
+      };
+    } else {
+      translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I'm interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_EN: 'english',
+        BUTTON_LANG_FR: 'french'
+      };
+    }
+
+    $timeout(function () {
+      deferred.resolve(translations);
+    }, 2000);
+
+    return deferred.promise;
+  };
+});
+</pre>
+
+Qu'est ce qu'il fait ? Il utilise le service `$timeout` pour attendre deux secondes et résoudre
+notre promise soit avec la table de traduction française ou anglaise, en fonction de la
+clé de la langue. Maintenant, utilisez `$translateProvider.useLoader()` pour en faire usage :
+
+<pre>
+$translateProvider.useLoader('asyncLoader');
+</pre>
+
+Facile ! Voici notre application de travail avec un chargeur personnalisé !
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('fr');
+        $translateProvider.useLoader('asyncLoader');
+      }]);
+
+      app.factory('asyncLoader', function ($q, $timeout) {
+
+        return function (options) {
+          var deferred = $q.defer(),
+              translations;
+
+          if (options.key === 'fr') {
+            translations = {
+              HEADLINE: 'C\'est un module génial !',
+              PARAGRAPH: 'Srsly!',
+              PASSED_AS_TEXT: 'Et là ! Je suis passé comme valeur de texte !',
+              PASSED_AS_ATTRIBUTE: 'Je suis passé comme une valeur de l\'attribut, cool non ?',
+              PASSED_AS_INTERPOLATION: 'Débutants ! Je suis interpolé !',
+              VARIABLE_REPLACEMENT: 'Salut {{name}}',
+              BUTTON_LANG_EN: 'anglais',
+              BUTTON_LANG_FR: 'français'
+            };
+          } else {
+            translations = {
+              HEADLINE: 'What an awesome module!',
+              PARAGRAPH: 'Srsly!',
+              PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+              PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+              PASSED_AS_INTERPOLATION: 'Beginners! I'm interpolated!',
+              VARIABLE_REPLACEMENT: 'Hi {{name}}',
+              BUTTON_LANG_EN: 'english',
+              BUTTON_LANG_FR: 'french'
+            };
+          }
+
+          $timeout(function () {
+            deferred.resolve(translations);
+          }, 2000);
+
+          return deferred.promise;
+        };
+      });
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+      <button ng-click="changeLanguage('fr')" translate="BUTTON_LANG_FR"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+Lorsque vous changez la langue en cliquant sur ​​le bouton `anglais`, vous voyez que l'application
+attend 2 secondes, puis il résout avec les nouvelles données de traduction. N'est-ce pas cool ?
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

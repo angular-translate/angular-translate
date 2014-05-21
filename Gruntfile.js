@@ -474,6 +474,7 @@ module.exports = function (grunt) {
           '//getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js',
           '//rawgithub.com/SlexAxton/messageformat.js/master/messageformat.js',
           '//rawgithub.com/SlexAxton/messageformat.js/master/locale/de.js',
+          '//rawgithub.com/SlexAxton/messageformat.js/master/locale/fr.js',
           '//code.angularjs.org/1.1.5/angular.min.js',
           '//rawgithub.com/angular/bower-angular-cookies/master/angular-cookies.min.js',
           '//rawgithub.com/angular-translate/bower-angular-translate/master/angular-translate.min.js',

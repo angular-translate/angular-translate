@@ -1,0 +1,76 @@
+@ngdoc overview
+@name Gestion de l'erreur
+@description
+
+# Gestion de l'erreur
+
+Parfois, vous avez une application complexe, où vous ne connaissez pas vraiment le nombre de
+traductions que vous avez. Vous n'êtes pas sûr qu'il y ait une traduction manquante pour un ID
+de traduction spécifique. C'est là que les gestionnaires de traduction manquante entrent en jeu.
+
+## Utilisation de l'extension du gestionnaire de log pour les traductions manquantes
+
+Il y a une extension pour angular-translate qui écrit des avertissements dans la console si
+vous essayez de traduire un ID de traduction qui n'existe pas. Comme toutes les extensions,
+vous pouvez l'installer via Bower comme ceci :
+
+```
+$ bower install angular-translate-handler-log
+```
+
+Pour utiliser ce gestionnaire, tout ce que vous avez à faire, c'est d'appeler `useMissingTranslationHandlerLog()`
+sur `$translateProvider`. angular-translate fait le reste pour vous.
+
+<pre>
+$translateProvider.useMissingTranslationHandlerLog();
+</pre>
+
+Voici un exemple :
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('fr');
+        $translateProvider.useMissingTranslationHandlerLog();
+        $translateProvider.translations('fr', {
+          HEADLINE: 'Je suis l\'entête',
+          TEXT: 'J\'utilise l\'interpolation par défaut {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Il aime} female{Elle aime} other{Ils aiment}} ça.',
+          BUTTON_LANG_FR: 'français',
+          BUTTON_LANG_EN: 'anglais'
+        });
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_FR: 'french',
+          BUTTON_LANG_EN: 'english'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="NOT_EXISTING"></p>
+      <p translate="ALSO_NOT_EXISTING"></p>
+
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+      <button ng-click="changeLanguage('fr')" translate="BUTTON_LANG_FR"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+Maintenant, regardez la console du navigateur et visualisez ce qui a été enregistré !
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
