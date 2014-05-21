@@ -1,0 +1,71 @@
+@ngdoc overview
+@name Événements
+@description
+
+# Événements
+
+angular-translate déclenche des événements personnalisés sur `$rootScope`, vous pouvez réagir
+une fois qu'ils sont déclenchés. Donc veuillez vous assurez d'écouter ces événements sur
+`$rootScope` ! Vous ne pouvez pas les écouter sur `$scope`, car ils sont émis seulement au niveau
+de `$rootScope`, afin de créer un bus d'événements avec de meilleures performances sur des grandes applications.
+
+Ce document décrit les différents événements et quand ils sont déclenchés.
+
+## Général
+
+Certains événements sont déclenchés indépendamment de la configuration d'angular-translate.
+Ce sont des événements généraux, vous pouvez toujours attendre leurs déclenchements.
+
+**`$translateChangeStart`**
+
+Est déclenché à chaque fois qu'angular-translate commence à essayer de changer la langue. C'est
+au démarrage, lors du paramètrage de la langue la première fois, ou lorsque vous changez de langue
+à l'exécution en utilisant `$translate.use()`. Cet événement est également déclenché quand
+angular-translate doit charger la première fois les données de traduction de manière asynchrone.
+
+**`$translateChangeSuccess`**
+
+Comme le dit le nom de l'événement, celui-ci est déclenché lors d'un changement de traduction réussi.
+Si vous n'utilisez pas un chargeur asynchrone, cet événement est habituellement déclenché immédiatement
+après l'événement `$translateChangeStart`. Cet événement est également déclenché après un chargeur
+asynchrone qui charge les données de traduction pour la première fois.
+
+**`$translateChangeError`**
+
+Est déclenché lorsque un changement de traduction a échoué. Cela se produit réellement quand un
+chargeur asynchrone rejette une promise retournée.
+
+**`$translateChangeEnd`**
+
+Est toujours déclenché lorsqu'un changement de traduction se termine. Que ce soit réussie ou
+non, et après que tous les services d'interpolation enregistrés ont été informés du
+changement de la traduction.
+
+## Chargement asynchrone
+
+Il y a certains événements qui se déclenchent quand un chargeur asynchrone est utilisé.
+Ils sont couverts ici.
+
+**`$translateLoadingStart`**
+
+Tout comme le dit le nom de l'événement, cet événement est déclenché lorsque un chargeur
+asynchrone est appelé, juste après que `$translateChangeStart` ait été déclenché.
+
+**`$translateLoadingSuccess`**
+
+Est déclenché lorsque le chargeur asynchrone retourne avec une promise résolue.
+
+**`$translateLoadingError`**
+
+Est déclenché lorsque le chargeur asynchrone revient avec une promise rejetée.
+
+**`$translateLoadingEnd`**
+
+Est déclenché lorsqu'un chargeur asynchrone est retourné avec une promise résolue ou
+rejetée. Dans le cas d'un chargeur retourné avec une promise résolue, il est déclenché
+après que la table de traduction a été mise à jour.
+
+**`$translatePartialLoaderStructureChanged`**
+
+Est déclenché lors du changement de la "structure" de `$translatePartialLoader` en utilisant
+n'importe quel type de méthode `*Part()`.

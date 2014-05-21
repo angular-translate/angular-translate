@@ -1,0 +1,49 @@
+@ngdoc overview
+@name Gestionnaire d'erreur personnalisé
+@description
+
+# Gestionnaire d'erreur personnalisé
+
+Bien sûr, vous voulez être en mesure d'utiliser votre propre gestionnaire personnalisé. Outre `useMissingTranslationHandlerLog()`
+il y a une autre méthode appelée `useMissingTranslationHandler()` qui attend le nom d'une
+factory qui retourne votre gestionnaire personnalisé. Alors, à quoi cela ressemble ?
+
+<pre>
+var app = angular.module('myApp', ['pascalprecht.translate'], function ($translateProvider) {
+  // Dire à angular-translate d'utiliser votre gestionnaire personnalisé
+  $translateProvider.useMissingTranslationHandler('myCustomHandlerFactory');
+});
+
+// Définir le gestionnaire personnalisé
+app.factory('myCustomHandlerFactory', function (dep1, dep2) {
+  // Doit retourner une fonction qui reçoit un ID de traduction
+  return function (translationID) {
+    // Faire quelque chose avec dep1 et dep2
+  };
+});
+
+</pre>
+
+# Utilisation d'un texte de remplacement par défaut en cas d'erreur
+
+Quelquefois, vous voulez fournir un texte de remplacement par défaut (pas la clé) pour le frontend pour que
+les traducteurs ou même les utilisateurs finaux (bien que c'est une mauvaise idée) puissent voir où ils doivent
+faire le necessaire. C'est maintenant possible avec un gestionnaire d'erreur personnalisé légèrement modifié.
+Il faut juste retourner une valeur au framework angular-translate au sein du gestionnaire d'erreur.
+
+<pre>
+app.factory('customTranslationHandler', function () {
+  return function (translationID, uses) {
+    // retourne le texte suivant comme une traduction de 'Resultat' - ceci sera
+    // affiché au lieu de la clé de la langue.
+    return 'NO DEFAULT KEY';
+  };
+});
+</pre>
+
+Bien sûr, vous pouvez également ajouter l'ID de la traduction à la valeur de retour pour que la personne
+qui est en charge des traductions voit la clé d'origine !
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

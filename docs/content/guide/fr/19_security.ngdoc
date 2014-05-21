@@ -1,0 +1,95 @@
+@ngdoc overview
+@name Sécurité
+@description
+
+# Échapper du contenu de variable
+
+Lorsqu'on parle de restitution normale, AngularJS garantit que la restitution sera échappée correctement.
+Toutefois, lorsque vous utilisez `angular-translate` et un contenu de variable, le résultat ne sera pas
+échappé correctement. Cela signifie que votre application est vulnérable aux attaques graves
+(voir : [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)).
+
+## Utilisation générale
+
+La méthode `useSanitizeValueStrategy(strategy)` définit quelle stratégie sera utilisé
+pour échapper, de manière globale.
+
+Pour le moment, deux options sont disponibles : `null` (rien) et `escaped` (pour le HTML).
+
+Nous appliquons totalement la rétrocompatibilité, ce qui signifie que l'échappement est
+désactivée par défaut.
+
+```javascript
+$translateProvider.useSanitizeValueStrategy(null);
+```
+
+Pourtant, nous allons activer par défaut la variante la plus sûre : `escaped`.
+
+```javascript
+$translateProvider.useSanitizeValueStrategy('escaped');
+```
+
+## Démonstrations
+
+### Pas échappé
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Salut {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('fr', translations);
+        $translateProvider.preferredLanguage('fr');
+        // Utilisation de l'échappement standard (rien)
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Échappé
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('fr', translations);
+        $translateProvider.preferredLanguage('fr');
+        // Active l'échappement du HTML
+        $translateProvider.useSanitizeValueStrategy('escaped');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
