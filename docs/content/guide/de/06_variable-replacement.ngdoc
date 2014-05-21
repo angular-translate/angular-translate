@@ -8,7 +8,7 @@ Jetzt lernst du, wie du dynamische Werte in deinen Übersetzungen verbauen kanns
 Wenn du noch nicht die Guides zum
 [$translate- Service](#/guide/03_using-translate-service),
 [translate- Filter](#/guide/04_using-translate-filter) und
-[translate- Directive](guide/05_using-translate-directive), solltest du das jetzt tun!
+[translate- Directive](#/guide/05_using-translate-directive), solltest du das jetzt tun!
 
 Der Service, Filter und die Direktive sind ja schon richtig cool. Aber was wenn
 dynamische Werte gebraucht werden? Angenommen du möchtest eine Benachrichtigung

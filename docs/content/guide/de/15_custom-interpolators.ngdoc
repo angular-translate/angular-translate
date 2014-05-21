@@ -13,8 +13,8 @@ Schauen wir, wie's funktioniert!
 ## Einen eigenen Interpolation-Service bauen
 
 Die Entwicklung eines Custom Interpolation-Services sollte einem recht bekannt
-vorkommen wenn man [Eigene Storages](#/guide/09_custom-storages) und
-[Eigene Loader](#/guide/11_custom-loaders) gelesen hat. Du startest mit einer Factory
+vorkommen wenn man [Eigene Storages](#/guide/11_custom-storages) und
+[Eigene Loader](#/guide/13_custom-loaders) gelesen hat. Du startest mit einer Factory
 die ein Objekt zurück gibt, die folgendes Interface implementiert:
 
 
@@ -72,7 +72,7 @@ app.factory('customInterpolation', function ($interpolate) {
 Also, was haben wir gemacht. `setLocale()` speichert einfach den Wert des Sprachschlüssels.
 `getInterpolationIdentifier()` gibt einen String `custom` zurück. Wofür ist das
 eigentlich gut? Erinnerst du dich wie du ein [Interpolation-Service temporär
-überschreiben](#/guide/12_pluralization#overridinginterpolationtemporarily) kannst?
+überschreiben](#/guide/14_pluralization#overridinginterpolationtemporarily) kannst?
 Genau. Dieser Identifier wird auf deinen Service gemappt, damit angular-translate
 ihn wieder erkennen kann. `interpolate()` benutzt einfach  Angular's `$interpolate`-
 Service. Außerden hängt es noch den aktuellen Sprachschlüssel an jede Translation.

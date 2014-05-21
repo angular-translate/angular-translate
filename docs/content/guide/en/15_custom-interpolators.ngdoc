@@ -13,8 +13,8 @@ see how things work!
 ## Building a custom interpolation service
 
 When building a custom interpolation service, things should be pretty familiar
-if you've read [Custom Storages](#/guide/09_custom-storages) and
-[Custom Loaders](#/guide/11_custom-loaders). You start with building a factory
+if you've read [Custom Storages](#/guide/11_custom-storages) and
+[Custom Loaders](#/guide/13_custom-loaders). You start with building a factory
 that returns an object that implements a certain interface. The following methods
 have to be provided by a custom interpolation service:
 
@@ -74,7 +74,7 @@ app.factory('customInterpolation', function ($interpolate) {
 Alright. So what did we do here. `setLocale()` simply store the value of the current
 used language. `getInterpolationIdentifier()` returns a string `custom`. So what is
 it actually for? Remember how to
-[temporarily override the interpolation type](#/guide/12_pluralization#overridinginterpolationtemporarily)?
+[temporarily override the interpolation type](#/guide/14_pluralization#overridinginterpolationtemporarily)?
 Exactly. This is the identifier that is mapped to your service, so angular-translate
 knows which interpolation services to use, when you explicitly override interpolation
 service at runtime. `interpolate()` simply uses Angular's `$interpolate` service.
