@@ -1496,6 +1496,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       $translate.instant = function (translationId, interpolateParams, interpolationId) {
 
+        // Detect undefined and null values to shorten the execution and prevent exceptions
+        if (translationId === null || angular.isUndefined(translationId)) {
+          return translationId;
+        }
+
         // Duck detection: If the first argument is an array, a bunch of translations was requested.
         // The result is an object.
         if (angular.isArray(translationId)) {
@@ -1506,7 +1511,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           return results;
         }
 
-        if (typeof translationId === 'undefined' || translationId === '') {
+        // We discarded unacceptable values. So we just need to verify if translationId is empty String
+        if (angular.isString(translationId) && translationId.length < 1) {
           return translationId;
         }
 
