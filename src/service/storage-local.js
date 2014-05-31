@@ -52,8 +52,16 @@ angular.module('pascalprecht.translate')
     };
   }());
 
-  var $translateLocalStorage = ('localStorage' in $window && $window.localStorage !== null) ?
-  localStorageAdapter : $translateCookieStorage;
-
+  var hasLocalStorageSupport = 'localStorage' in $window && $window.localStorage !== null;
+  if (hasLocalStorageSupport) {
+    var testKey = 'pascalprecht.translate.storageTest';
+    try {
+      $window.localStorage.setItem(testKey, 'foo');
+      $window.localStorage.removeItem(testKey);
+    } catch (e){
+      hasLocalStorageSupport = false;
+    }
+  }
+  var $translateLocalStorage = hasLocalStorageSupport ? localStorageAdapter : $translateCookieStorage;
   return $translateLocalStorage;
 }]);
