@@ -15,7 +15,7 @@
 
 - `setLocale(langKey)` - 設置當前使用的語言
 - `getInterpolationIdentifier()` - 返回一個標識符插值
-- `interpolate(string, interpolatgeParams)` - 對字符串的params參數進行插值處理
+- `interpolate(string, interpolateParams)` - 對字符串的params參數進行插值處理
 
 讓我們來看看怎麼實現自定義的插值服務。首先，我們實現的接口：
 

@@ -130,7 +130,7 @@ A, B and C_".
 
 With that construct you're able to use all the cool features Angular provides
 with its interpolation service and in addition you can use MessageFormat interpolation
-for translation IDs containinig pluralization.
+for translation IDs containing pluralization.
 
 So how do we get this working? It's easy. Seriously. Once you have installed
 MessageFormat and its interpolation service, you actually have
