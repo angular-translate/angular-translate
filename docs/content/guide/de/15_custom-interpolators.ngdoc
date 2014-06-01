@@ -20,7 +20,7 @@ die ein Objekt zurück gibt, die folgendes Interface implementiert:
 
 - `setLocale(langKey)` - Setzt die Sprache mit Sprachschlüssel
 - `getInterpolationIdentifier()` - Gibt einen Identifier für den Service zurück
-- `interpolate(string, interpolatgeParams)` - Interpoliert Strings gegen Interpolationparamter
+- `interpolate(string, interpolateParams)` - Interpoliert Strings gegen Interpolationparamter
 
 So könnte ein custom Interpolation-Service aussehen:
 
