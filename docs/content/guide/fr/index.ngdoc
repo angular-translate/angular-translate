@@ -1,0 +1,100 @@
+@ngdoc overview
+@name Guide
+@description
+
+# Faire facilement du i18n pour vos applications Angular
+
+####La meilleure façon de mettre i18n et l10n dans vos applications Angular !
+
+<br>
+Vous voulez ajoutez **i18n** et **l10n** dans vos applications Angular, mais vous ne trouvez pas un moyen simple
+pour le faire ? angular-translate vous aide à faire cela. Il est livré avec plusieurs fonctionnalités et
+extensions utiles et vous donne une très grande flexibilité pour la personnalisation.
+Voici quelques-unes des grandes fonctionnalités.
+
+## Fonctionnalités
+
+- Composants (filtres/directives) pour traduire votre contenu
+- Chargement asynchrone des données i18n
+- Support de la pluralisation à l'aide de [**MessageFormat.js**](https://github.com/SlexAxton/messageformat.js)
+- Extensibilité via des interfaces faciles à utiliser
+
+Si vous aimez le module et si vous l'utiliser dans vos projets, rendez vous sur
+[ngmodules](http://ngmodules.org/modules/angular-translate) et cliquez sur le
+bouton "_I use it_" ! angular-translate est facile à installer et encore plus facile à utiliser !
+Dans ce document, vous apprendrez la manière d'utiliser angular-translate et ses intéressantes fonctionnalités !
+Voici un petit aperçu :
+
+
+## Démarrage rapide
+Installer le module via Bower :
+
+```
+$ bower install angular-translate
+```
+
+N'oubliez pas d'inclure le script dans votre document HTML :
+
+<pre>
+<script src="path/to/angular-translate.js"></script>
+</pre>
+
+Déclarez le module <code>angular-translate</code> comme une dépendance à votre application :
+
+<pre>
+var app = angular.module('monApp', ['pascalprecht.translate']);
+</pre>
+
+Renseignez les traductions de votre application :
+
+<pre>
+app.config(['$translateProvider', function ($translateProvider) {
+  $translateProvider.translations('en', {
+    'TITLE': 'Hello',
+    'FOO': 'This is a paragraph'
+  });
+
+  $translateProvider.translations('fr', {
+    'TITLE': 'Salut',
+    'FOO': 'Ceci est un Paragraphe'
+  });
+
+  $translateProvider.preferredLanguage('en');
+}]);
+</pre>
+
+Traduisez votre application :
+
+<pre>
+<h1>{{ 'TITLE' | translate }}</h1>
+<p>{{ 'FOO' | translate }}</p>
+</pre>
+
+Il s'agit d'un exemple très simple montrant comment angular-translate fonctionne réellement. Fondamentalement,
+le tout fonctionne ainsi "_Fournir des données i18n, laisser angular-translate en prendre connaissance et utiliser
+ses composants pour interpoler vos traductions (par des valeurs)._".
+Facile, non ?
+
+## Les ressources utiles
+Il y a des choses très utiles sur le web qui pourrait être intéressant pour vous,
+alors veuillez suivre cette liste.
+
+- [Tutoriel sur ng-newsletter.com](http://www.ng-newsletter.com/posts/angular-translate.html)
+- [Chargement de angular-translate and partial loading](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
+- [Exemples et démos](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - Actuellement sur plnkr.co
+- [Tutoriel sur angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - Article en allemand
+- [Tutoriel sur neoskop.de](http://www.neoskop.de/blog/angular-translate) - Article en allemand
+- [angular-translate sur GitHub](http://github.com/PascalPrecht/angular-translate) - Le dépôt GitHub
+- [angular-translate sur ngmodules.org](http://ngmodules.org/modules/angular-translate)
+- [Liste de diffusion de angular-translate](https://groups.google.com/forum/#!forum/angular-translate) - Discuter, parler et plus !
+
+## Merci à la communauté !
+Nous obtenons maintenant vraiment beaucoup de retours positifs ! De plus en plus de
+personnes utilisent ce module et sont reconnaissants pour toute l'aide qu'ils
+reçoivent. Tout cela n'aurait pas été possible sans ces
+[contributeurs](http://github.com/PascalPrecht/angular-translate/contributors) et tous
+ceux qui viennent avec de nouvelles idées et des demandes de fonctionnalités ! Donc **MERCI** !
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

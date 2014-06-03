@@ -1,0 +1,258 @@
+@ngdoc overview
+@name Pluralisation
+@description
+
+# Pluralisation
+
+Nous venons de loin ! Nous avons tout appris sur les différents composants fournis par angular-translate
+et nous savons comment introduire plusieurs tables de traduction. Aussi, nous avons
+utilisé différents types de stockages pour que notre application retienne la langue
+et enfin et surtout, nous avons utilisé les chargeurs asynchrones pour charger
+des données de traduction de manière asynchrone à partir d'un serveur !
+
+Mais il reste une chose à étudier : la **pluralisation**.
+La pluralisation est un sujet assez difficile lorsqu'il s'agit de localisation (l10n)
+et d'internationalisation (i18n). Les différentes langues et cultures ont leur
+propre manière de se comporter selon certaines
+situations. Heureusement, il existe une
+[norme](http://userguide.icu-project.org/formatparse/messages) qui spécifie toutes ces choses.
+Toutefois, cela ne change rien au fait que c'est un défi à implémenter.
+
+Heureusement, [Alex Sexton](https://github.com/SlexAxton) a déjà fait le travail et construit une
+bibliothèque JavaScript qui implémente la spec _ICU User Guide_. Elle est appelée MessageFormat et
+vous pouvez la trouver [ici](https://github.com/SlexAxton/messageformat.js).
+
+## angular-translate rencontre MessageFormat
+
+À notre avis, la meilleure façon d'apporter la pluralisation à angular-translate est d'adapter
+la fonctionnalité de MessageFormat, car elle résout tous les problèmes, en incluant le
+[remplacement de variable simple](https://github.com/SlexAxton/messageformat.js#simple-variable-replacement),
+[SelectFormat](https://github.com/SlexAxton/messageformat.js#selectformat)
+et [PluralFormat](https://github.com/SlexAxton/messageformat.js#pluralformat).
+Alors, comment pouvons-nous utiliser MessageFormat avec angular-translate pour profiter
+de toutes ses fonctionnalités dans nos applications ?
+
+Bien entendu, il existe une extension correspondante pour cela. Il suffit d'installer le service
+d'interpolation MessageFormat via Bower comme ceci :
+
+```
+$ bower install angular-translate-interpolation-messageformat
+```
+
+Bon, c'est facile. N'oubliez pas de l'intégrer dans votre document HTML pour avoir accès
+au service fourni. N'oubliez pas d'intégrer aussi MessageFormat.js en premier :
+
+<pre>
+<script src="path/to/messageformat.js"></script>
+<script src="path/to/angular-translate-interpolation-messageformat"></script>
+</pre>
+
+**Remarque : Veuillez vous assurer d'intégrer un fichier locale prévu par MessageFormat correspondant.
+Ces fichiers contiennent des règles régionales pour une locale spécifique, cela est
+nécessaire pour obtenir une pluralisation propre !**
+
+Une fois que tout est là, nous pouvons utiliser `$translateProvider` pour dire à angular-translate
+d'utiliser l'interpolation de MessageFormat à la place de celui par défaut.
+`$translateProvider` fournit une méthode appelée `useMessageFormatInterpolation()`
+qui fait cela. Nous devons aussi utiliser à nouveau `$translateProvider.preferredLanguage()` pour
+que MessageFormat connaisse le locale à utiliser pour les
+[clés nommées](https://github.com/SlexAxton/messageformat.js#named-keys).
+
+<pre>
+$translateProvider.useMessageFormatInterpolation();
+$translateProvider.preferredLanguage('en');
+</pre>
+
+C'est à peu près tout ! Votre application utilise maintenant MessageFormat pour interpoler vos traductions
+par des valeurs possibles. Alors qu'est-ce que cela signifie ? Puisque vous vous appuyez maintenant sur
+l'interpolation de MessageFormat au lieu de celle par défaut, vous pouvez maintenant utiliser la
+syntaxe de MessageFormat.js pour interpoler vos traductions.
+
+Prenons quelques-uns des exemples de MessageFormat fournis dans son fichier README.
+Certaines traductions pourraient ressembler à cela :
+
+```
+{
+  "LIKE_TEXT": "{GENDER, select, male{Il aime} female{Elle aime} other{Ils aiment}} cela."
+}
+```
+
+Comme vous pouvez le voir, MessageFormat supporte `SelectFormat` pour interpoler les
+textes en fonction par exemple du sexe donné. Nous pouvons utiliser le service `$translate`,
+ainsi que la directive et le filtre `translate`, pour traduire l'ID de traduction
+`LIKE_TEXT`, comme nous le faisons d'habitude :
+
+<pre>
+// Utilisation du service `$translate`
+$translate('LIKE_TEXT', { GENDER: 'male' });
+// Utilisation du filtre `translate`
+{{ 'LIKE_TEXT' | translate:"{ GENDER: 'male' }" }}
+// Utilisation de la directive `translate`
+<ANY translate="LIKE_TEXT" translate-values="{ GENDER: 'male' }"></ANY>
+</pre>
+C'est cool ? Vous pouvez simplement brancher la fonctionnalité de MessageFormat sur angular-translate
+et utiliser la pluralisation de haut niveau au sein de vos traductions !
+
+## L'inconvénient
+
+En fait, c'est plutôt cool d'être en mesure d'utiliser MessageFormat comme notre moteur
+d'interpolation. Malheureusement, lors du remplacement de l'interpolation de MessageFormat
+par l'interpolation par défaut d'angular-translate, il y a un gros problème. Regardez le code
+suivant, voyez-vous une différence ?
+
+```
+{
+  "DEFAULT_INTERPOLATION": "Ceci est une traduction qui utilise l'interpolation par défaut avec une valeur dynamique : {{value}}",
+  "MF_INTERPOLATION": "Ceci est une traduction qui utilise l'interpolation de  MessageFormat avec une valeur dynamique : {value}"
+}
+```
+
+Exactement. MessageFormat utilise une syntaxe différente pour son interpolation. Cela signifie que
+lors de l'utilisation de l'interpolation de MessageFormat, vous devez changer l'ensemble de vos traductions,
+vérifier si elles utilisent toute sorte de remplacement de variables et les mettre à jour pour correspondre
+à la bonne syntaxe d'interpolation. Ce n'est pas quelque chose de cool.
+
+En plus de cela, nous  perdons également toutes les fonctionnalités intéressantes d'Angular comme
+l'évaluation d'expression ou  l'utilisation de filtres, car MessageFormat ne les supporte pas. Alors,
+comment pouvons-nous faire ? Nous devons trouver un moyen d'utiliser l'interpolation par défaut
+d'angular-translate, pour avoir toutes les fonctionnalités intéressantes et en même temps, nous avons
+besoin de l'interpolation de MessageFormat pour utiliser toutes les fonctionnalité de la pluralisation.
+
+## Redéfinition de l'interpolation temporairement
+
+Comme c'est un peu idiot de ré-implémenter des fonctionnalités de MessageFormat dans angular-translate,
+nous ne pouvons pas vraiment utiliser les deux types d'interpolation dans une seule traduction.
+Mais nous _pouvons_ utiliser un type d'interpolation pour l'application et
+d'autres types d'interpolation dans des cas spécifiques. Cela veut dire par exemple :
+"_Veuillez utiliser l'interpolation par défaut pour toutes mes traductions, sauf pour la
+traduction A, B et C_".
+
+Avec cette construction, vous êtes en mesure d'utiliser toutes les fonctionnalités intéressantes
+d'Angular fournit avec son service d'interpolation et en plus vous pouvez utiliser l'interpolation de
+MessageFormat pour les IDs de traduction contenant la pluralisation.
+
+Alors, comment pouvons-nous obtenir ceci ? C'est facile. Sérieusement. Une fois que
+vous avez installé MessageFormat et son service d'interpolation, vous avez tout ce
+dont vous avez besoin. Tout ce que vous avez à faire, c'est de dire que vous ne voulez pas
+utiliser l'interpolation de MessageFormat pour toutes vos traductions, mais seulement
+pour des traductions spécifiques.
+
+Dans un premier temps, nous enlevons `$translateProvider.useMessageFormatInterpolation()`. Maintenant
+notre application utilise l'interpolation par défaut. Très bien. Ensuite, nous devons rendre
+l'interpolation de MessageFormat disponible comme un type d'interpolation optionnel.
+`$translateProvider` a une méthode `addInterpolation()` qui attend un nom de factory comme
+premier argumentpour un service d'interpolation.
+
+Ajoutons le service d'interpolation de MessageFormat comme un type d'interpolation 'optionnel' :
+
+<pre>
+$translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+</pre>
+
+Bon, maintenant, notre application est configurée à l'aide de l'interpolation par défaut, mais elle est
+également consciente qu'il y a un autre service d'interpolation qui pourrait être utilisé pour des traductions
+spécifiques. Nous configurons une nouvelle table de traduction avec des traductions qui utilisent l'interpolation
+par défaut et l'interpolation de MessageFormat :
+
+<pre>
+$translateProvider.translations('en', {
+  HEADLINE: 'Je suis l\'entête',
+  TEXT: 'J\'utilise l\'interpolation par défaut {{ val + val }}',
+  PLURAL: '{GENDER, select, male{Il aime} female{Elle aime} other{Ils aiment}} ça.'
+});
+</pre>
+
+D'accord, notre table de traduction contient maintenant les traductions qui utilisent soit
+l'interpolation par défaut, soit l'interpolation de MessageFormat. Pour dire à angular-translate
+quel type d'interpolation doit être utilisé lors de l'utilisation du service `$translate`, nous
+pouvons passer un paramètre supplémentaire aux composants d'angular-translate.
+
+Le services `$translate` prévoit un type d'interpolation en troisième argument. Si vous souhaitez
+configurer le service `$translate` pour utiliser l'interpolation de MessageFormat pour un
+ID de traduction donné, vous devez passer `messageformat` comme type d'interpolation, ainsi :
+
+<pre>
+$translate('TEXT', { val: 5 });
+// "J'utilise l'interpolation par défaut 10"
+
+$translate('PLURAL', { GENDER: 'male' }, 'messageformat');
+// "Il aime ça."
+</pre>
+
+Nous pouvons réaliser la même chose avec le filtre `translate`. Comme expliqué précédemment,
+le troisième argument est un identifiant pour le service d'interpolation :
+
+<pre>
+{{ 'TEXT' | translate:"{ val: 5 }" }}
+// "J'utilise l'interpolation par défaut 10"
+{{ 'PLURAL' | translate:"{ GENDER: 'male' }":"messageformat" }}
+// "Il aime ça."
+</pre>
+
+La directive `translate` prévoit un nouvel attribut appelé `translate-interpolation`
+avec lequel vous pouvez contrôler quel service d'interpolation sera utiliser pour un
+ID de traduction spécifique :
+
+<pre>
+<ANY
+  translate="TEXT"
+  translate-values="{ val: 5 }"></ANY>
+// "J'utilise l'interpolation par défaut 10"
+
+<ANY
+  translate="PLURAL"
+  translate-values="{ GENDER: 'male' }"
+  translate-interpolation="messageformat"></ANY>
+// "Il aime ça."
+</pre>
+
+Voici un exemple de travail (Veuillez noter : Il y a aussi un fichier intégré pour le locale 'fr') :
+
+<doc:example module="monApp">
+  <doc:source>
+    <script>
+      var app = angular.module('monApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('fr');
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+
+        $translateProvider.translations('fr', {
+          HEADLINE: 'Je suis l\'entête',
+          TEXT: 'J\'utilise l\'interpolation par défaut {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Il aime} female{Elle aime} other{Ils aiment}} ça.',
+          BUTTON_LANG_FR: 'français',
+          BUTTON_LANG_EN: 'anglais'
+        });
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_FR: 'french',
+          BUTTON_LANG_EN: 'english'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="HEADLINE"></p>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <p translate="PLURAL" translate-values="{ GENDER: 'other' }" translate-interpolation="messageformat"></p>
+
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+      <button ng-click="changeLanguage('fr')" translate="BUTTON_LANG_FR"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -58,6 +58,23 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 That's all. Now when you think about translating the contents of a `<title>` you
 can do so within your controller.
 
+## Multiple translation IDs
+The translation service is also aware of requesting multiple translation at once.
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+However, the service will always return an object containing translations -- regardless whether
+a translation (or even all of them) has failed. When requesting multiple translations
+in one request, it is up to you to deal with the result.
+
 ## Things to keep in mind
 Please keep in mind that the usage of the `$translate` service doesn't provide a two-way
 data binding default! `$translate` service works asynchronously, which means
@@ -70,13 +87,13 @@ updated when changing the language at runtime.
 
 You can fix that by simply wrapping your `$translate` call into a `$translateChangeSucces`
 callback on `$rootScope`, which gets fired every time a translation change was successful.
-Once its changed, you can simply re-execute the code, that gives you your needed translations.
+Once it's changed, you can simply re-execute the code, that gives you your needed translations.
 
 Here's how it could look like:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
-  $rooScope.$on('$translateChangeSuccess', function () {
+  $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
     });

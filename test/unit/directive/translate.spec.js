@@ -35,6 +35,25 @@ describe('pascalprecht.translate', function () {
       expect(element.text()).toBe('TEXT');
     });
 
+    it('should return default text if translation doesn\'t exist', function () {
+      element = $compile('<div translate="TEXT" translate-default="Not translated"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Not translated');
+    });
+
+    it('should return default text if translation doesn\'t exist', function () {
+      element = $compile('<div translate translate-default="Not translated">TEXT</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Not translated');
+    });
+
+    it('should return interpolated default text if translation doesn\'t exist', function () {
+      $rootScope.v = '123';
+      element = $compile('<div translate="TEXT" translate-default="Not translated {{v}}"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('Not translated 123');
+    });
+
     it('should return translation if translation id exist', function () {
       element = $compile('<div translate="TRANSLATION_ID"></div>')($rootScope);
       $rootScope.$digest();
@@ -283,7 +302,8 @@ describe('pascalprecht.translate', function () {
           'FOO': 'hello my name is {{name}}',
           'BAR': 'and I\'m {{age}} years old',
           'BAZINGA': 'hello my name is {{name}} and I\'m {{age}} years old.',
-          'YAY': 'hello my name is {{name}} and I\'m {{age}} years old. {{foo}}'
+          'YAY': 'hello my name is {{name}} and I\'m {{age}} years old. {{foo}}',
+          'CAMEL': 'hello my name is {{firstName}} {{lastName}}.'
         })
         .preferredLanguage('en');
     }));
@@ -321,6 +341,27 @@ describe('pascalprecht.translate', function () {
       element = $compile('<p translate="BAZINGA" translate-value-name="{{name}}" translate-value-age="{{age}}"></p>')($rootScope);
       $rootScope.$digest();
       expect(element.text()).toEqual('hello my name is Pascal and I\'m 22 years old.');
+    });
+
+    it('should handle interpolation variables with camel casing', function() {
+      element = $compile('<p translate="CAMEL" translate-value-first-name="Glenn" translate-value-last-name="Jorde"></p>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toEqual('hello my name is Glenn Jorde.');
+    });
+
+    // addresses [issue #433](https://github.com/angular-translate/angular-translate/issues/433)
+    it('should interpolate variables inside ng-if directives', function () {
+      var markup = '<div ng-if="true"><p translate="FOO" translate-value-name="{{name}}"></p></div>';
+      element = $compile(markup)($rootScope);
+      $rootScope.$digest();
+      expect(element.next().text()).toEqual('hello my name is Pascal');
+    });
+
+    it('should interpolate variables inside ng-repeat directives', function () {
+      var markup = '<div><div ng-repeat="i in [1]"><p translate="FOO" translate-value-name="{{name}}"></p></div></div>';
+      element = $compile(markup)($rootScope);
+      $rootScope.$digest();
+      expect(element.children().text()).toEqual('hello my name is Pascal');
     });
   });
 

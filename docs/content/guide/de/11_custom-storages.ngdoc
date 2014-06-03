@@ -4,7 +4,7 @@
 
 # Eigene Storages
 
-Wenn du [Storages](#/guide/08_storages) gelesen hast, weißt du wie du entweder
+Wenn du [Storages](#/guide/10_storages) gelesen hast, weißt du wie du entweder
 localStorage oder cookieStorage verwenden kannst, um deiner App beizubringen sich
 die Sprache zu merken, die ein Benutzer zuletzt gewählt hat. Wenn sowohl cookieStorage
 also auch localStorage nicht deinen Ansprüchen entsprechen, kannst du ganz einfach

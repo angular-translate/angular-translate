@@ -32,7 +32,7 @@ $translateProvider
 
 А что если ваш браузер вернет `en_US` вместо `en`? Как правило, это приведет к ошибке, потому что,
 на первый взгляд, `en_US` является ключом другого языка. Поэтому, angular-translate будет обращаться
-с ним как с другим языком. Но ведь вы хотите, чтобы angular-translate был достаточно умен, чтобы 
+с ним как с другим языком. Но ведь вы хотите, чтобы angular-translate был достаточно умен, чтобы
 распознать связь между `en_US` и `en`, и использовать `en` в этом случае.
 
 angular-translate учел ваши желания. При помощи метода `registerAvailableLanguageKeys()` вы можете
@@ -52,7 +52,7 @@ $translateProvider
   .registerAvailableLanguageKeys(['en', 'de'], {
     'en_US': 'en',
     'en_UK': 'en',
-    'de_DE'; 'de',
+    'de_DE': 'de',
     'de_CH': 'de'
   });
 </pre>

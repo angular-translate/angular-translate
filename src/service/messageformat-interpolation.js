@@ -14,11 +14,34 @@ angular.module('pascalprecht.translate')
  */
 .factory('$translateMessageFormatInterpolation', function ($cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
 
-  var $translateInterpolator = {};
+  var $translateInterpolator = {},
       $cache = $cacheFactory.get(TRANSLATE_MF_INTERPOLATION_CACHE),
       // instantiate with default locale (which is 'en')
       $mf = new MessageFormat(),
-      $identifier = 'messageformat';
+      $identifier = 'messageformat',
+      $sanitizeValueStrategy = null,
+      // map of all sanitize strategies
+      sanitizeValueStrategies = {
+        escaped: function (params) {
+          var result = {};
+          for (var key in params) {
+            if (params.hasOwnProperty(key)) {
+              result[key] = angular.element('<div></div>').text(params[key]).html();
+            }
+          }
+          return result;
+        }
+      };
+
+  var sanitizeParams = function (params) {
+    var result;
+    if (angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])) {
+      result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
+    } else {
+      result = params;
+    }
+    return result;
+  };
 
   if (!$cache) {
     // create cache if it doesn't exist already
@@ -59,6 +82,11 @@ angular.module('pascalprecht.translate')
     return $identifier;
   };
 
+  $translateInterpolator.useSanitizeValueStrategy = function (value) {
+    $sanitizeValueStrategy = value;
+    return this;
+  };
+
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateMessageFormatInterpolation#interpolate
@@ -72,6 +100,11 @@ angular.module('pascalprecht.translate')
   $translateInterpolator.interpolate = function (string, interpolateParams) {
 
     interpolateParams = interpolateParams || {};
+
+    if ($sanitizeValueStrategy) {
+      interpolateParams = sanitizeParams(interpolateParams);
+    }
+
     var interpolatedText = $cache.get(string + angular.toJson(interpolateParams));
 
     // if given string wasn't interpolated yet, we do so now and never have to do it again

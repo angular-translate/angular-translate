@@ -6,21 +6,21 @@
 
 Wenn du fit genug bist eine kleinere MessageFormat Library zu entwickeln,
 oder wenn du einfach eine andere Interpolation brauchst, kannst du ganz einfach
-deinen eigenen Interpolation Servive schreiben, den du dann in deinen Apps nutzen
+deinen eigenen Interpolation Service schreiben, den du dann in deinen Apps nutzen
 kannst. Alles was du tun musst, in ein bestimmtes Interface zu implementieren.
 Schauen wir, wie's funktioniert!
 
 ## Einen eigenen Interpolation-Service bauen
 
 Die Entwicklung eines Custom Interpolation-Services sollte einem recht bekannt
-vorkommen wenn man [Eigene Storages](#/guide/09_custom-storages) und
-[Eigene Loader](#/guide/11_custom-loaders) gelesen hat. Du startest mit einer Factory
+vorkommen wenn man [Eigene Storages](#/guide/11_custom-storages) und
+[Eigene Loader](#/guide/13_custom-loaders) gelesen hat. Du startest mit einer Factory
 die ein Objekt zurück gibt, die folgendes Interface implementiert:
 
 
 - `setLocale(langKey)` - Setzt die Sprache mit Sprachschlüssel
 - `getInterpolationIdentifier()` - Gibt einen Identifier für den Service zurück
-- `interpolate(string, interpolatgeParams)` - Interpoliert Strings gegen Interpolationparamter
+- `interpolate(string, interpolateParams)` - Interpoliert Strings gegen Interpolationparamter
 
 So könnte ein custom Interpolation-Service aussehen:
 
@@ -72,7 +72,7 @@ app.factory('customInterpolation', function ($interpolate) {
 Also, was haben wir gemacht. `setLocale()` speichert einfach den Wert des Sprachschlüssels.
 `getInterpolationIdentifier()` gibt einen String `custom` zurück. Wofür ist das
 eigentlich gut? Erinnerst du dich wie du ein [Interpolation-Service temporär
-überschreiben](#/guide/12_pluralization#overridinginterpolationtemporarily) kannst?
+überschreiben](#/guide/14_pluralization#overridinginterpolationtemporarily) kannst?
 Genau. Dieser Identifier wird auf deinen Service gemappt, damit angular-translate
 ihn wieder erkennen kann. `interpolate()` benutzt einfach  Angular's `$interpolate`-
 Service. Außerden hängt es noch den aktuellen Sprachschlüssel an jede Translation.

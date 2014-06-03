@@ -29,11 +29,6 @@ bower package repository [here](https://github.com/PascalPrecht/bower-angular-tr
 As you can see, it's pretty much broken down to things that matter. The raw source.
 For development as well as production use.
 
-You might notice that there's another package. `angular-translate-interpolation-default`
-is a package which contains the default interpolation engine angular-translate uses
-to interpolate your translations. We'll come to this later, currently you only
-have to know that this package exists and that you have to embed it in your HTML document.
-
 ## Installing with Git
 
 Another way to get the source of angular-translate, is to clone the whole repository
@@ -47,8 +42,7 @@ else that ever happened during the development of angular-translate. Do with the
 what ever the fuck you want.
 
 Since angular-translate has some dependencies when developing it, you can just install
-all of them at once. If you do so, the `angular-translate-interpolation-default` package is
-already included. To install all needed dependencies, simply run the following
+all of them at once. To install all needed dependencies, simply run the following
 commands in the cloned angular-translate repository.
 
 ```

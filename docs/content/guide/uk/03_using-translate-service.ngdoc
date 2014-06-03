@@ -55,6 +55,23 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
 Це все. Тепер, для перекладу вмісту `<title>` ви можете скористуватися цим контролером.
 
+## Декілька ідентифікаторів перекладу
+Сервіс перекладу дозволяє перекладати кілька ідентифікаторів одразу.
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+Однак, сервіс завжди буде повертати об'єкт з перекладами -- навіть якщо перекласти ідентифікатор
+(або ідентифікатори) не вдалося. Запросивши кілька перекладів за один раз ви повинні самі обробити
+отриманий результат.
+
 ## Майте на увазі
 
 Будь ласка, майте на увазі, що сервіс `$translate` за замовчуванням не надає двостороннього
@@ -73,7 +90,7 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
-  $rooScope.$on('$translateChangeSuccess', function () {
+  $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
     });

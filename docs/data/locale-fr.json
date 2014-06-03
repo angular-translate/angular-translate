@@ -1,0 +1,10 @@
+{
+  "HEADLINE": "C'est un module génial !",
+  "PARAGRAPH": "Srsly!",
+  "PASSED_AS_TEXT": "Et là ! Je suis passé comme valeur de texte !",
+  "PASSED_AS_ATTRIBUTE": "Je suis passé comme une valeur de l'attribut, cool non ?",
+  "PASSED_AS_INTERPOLATION": "Débutants ! Je suis interpolé !",
+  "VARIABLE_REPLACEMENT": "Salut {{name}}",
+  "BUTTON_LANG_FR": "français",
+  "BUTTON_LANG_EN": "anglais"
+}

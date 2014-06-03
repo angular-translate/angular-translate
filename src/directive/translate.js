@@ -106,6 +106,10 @@ angular.module('pascalprecht.translate')
           }
         });
 
+        iAttr.$observe('translateDefault', function (value) {
+          scope.defaultText = value;
+        });
+
         if (translateValuesExist) {
           iAttr.$observe('translateValues', function (interpolateParams) {
             if (interpolateParams) {
@@ -119,7 +123,7 @@ angular.module('pascalprecht.translate')
         if (translateValueExist) {
           var fn = function (attrName) {
             iAttr.$observe(attrName, function (value) {
-              scope.interpolateParams[angular.lowercase(attrName.substr(14))] = value;
+              scope.interpolateParams[angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15)] = value;
             });
           };
           for (var attr in iAttr) {
@@ -129,7 +133,10 @@ angular.module('pascalprecht.translate')
           }
         }
 
-        var applyElementContent = function (value, scope) {
+        var applyElementContent = function (value, scope, successful) {
+          if (!successful && typeof scope.defaultText !== 'undefined') {
+            value = scope.defaultText;
+          }
           iElement.html(value);
           var globallyEnabled = $translate.isPostCompilingEnabled();
           var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
@@ -146,10 +153,10 @@ angular.module('pascalprecht.translate')
                 if (scope.translationId && value) {
                   $translate(value, {}, translateInterpolation)
                     .then(function (translation) {
-                      applyElementContent(translation, scope);
+                      applyElementContent(translation, scope, true);
                       unwatch();
                     }, function (translationId) {
-                      applyElementContent(translationId, scope);
+                      applyElementContent(translationId, scope, false);
                       unwatch();
                     });
                 }
@@ -157,16 +164,21 @@ angular.module('pascalprecht.translate')
             };
           } else {
             return function () {
-              scope.$watch('interpolateParams', function (value) {
-                if (scope.translationId && value) {
-                  $translate(scope.translationId, value, translateInterpolation)
+
+              var updateTranslations = function () {
+                if (scope.translationId && scope.interpolateParams) {
+                  $translate(scope.translationId, scope.interpolateParams, translateInterpolation)
                     .then(function (translation) {
-                      applyElementContent(translation, scope);
+                      applyElementContent(translation, scope, true);
                     }, function (translationId) {
-                      applyElementContent(translationId, scope);
+                      applyElementContent(translationId, scope, false);
                     });
-                }
-              }, true);
+                  }
+              };
+
+              // watch both interpolateParams and translationId, because watchers are triggered non-deterministic
+              scope.$watch('interpolateParams', updateTranslations, true);
+              scope.$watch('translationId', updateTranslations);
             };
           }
         }());

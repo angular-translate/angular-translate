@@ -1,0 +1,152 @@
+@ngdoc overview
+@name Utilisation du service $translate
+@description
+
+# Utilisation du service $translate
+
+`angular-translate` fournit plusieurs façons de traduire le contenu de votre application. L'une des
+façons est l'utilisation du service `$translate` directement. Vous ne souhaitez effectivement pas utiliser
+cette approche, parce que vous ne voulez pas lier vos contrôleurs et vos services en dur à votre contenu traduit.
+Cependant, il y a effectivement des cas où vous avez besoin de traduire le contenu
+avec le service `$translate`.
+
+Imaginez le cas où vous voulez traduire le contenu de la balise `<title>` de votre
+document HTML. `<title>` ne sera jamais à l'intérieur de votre directive `ng-app`,
+ce qui signifie qu'il est toujours à l'extérieur du monde d'Angular. Donc, pour faire cela,
+vous allez manipuler le titre de votre application une fois que votre application sera
+en cours d'exécution via le contrôleur ou la logique du service.
+
+## Utilisation générale
+C'est là que le service `$translate` intervient. L'utilisation du service `$translate` est
+très facile. D'abord, vous l'ajoutez par l'injection de dépendance (comme tous les
+services que vous souhaitez utiliser dans votre code Angular). Imaginons que nous voulons
+étendre l'application que nous avons commencé dans [Mise en route](#/guide/02_getting-started).
+
+Notre code ressemblerait à quelque chose comme ceci :
+
+<pre>
+app.controller('Ctrl', ['$translate', function ($translate) {
+
+}]);
+</pre>
+
+Maintenant, pour traduire vos contenus avec le service `$translate`, vous devez faire
+passer un ID de traduction qui a été enregistré auparavant avec `$translateProvider`.
+Comme il possible d'avoir un chargement asynchrone en cours (nous y reviendrons plus
+tard), `$translate` se comporte aussi comme un service asynchrone et renvoie une _promise_,
+soit il obtient _resolved_ avec la traduction de l'ID de traduction donné, ou
+_rejected_ avec l'ID de traduction. Donc, l'utilisation de base du service `$translate`
+au niveau d'un contrôleur (ou d'un service) devrait ressembler à ceci :
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate('HEADLINE').then(function (headline) {
+    $scope.headline = headline;
+  });
+  $translate('PARAGRAPH').then(function (paragraph) {
+    $scope.paragraph = paragraph;
+  });
+  $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+    $scope.namespaced_paragraph = anotherOne;
+  });
+}]);
+</pre>
+
+**Remarque** : les traductions d'espace de nommage sont accessibles en tant que propriétés JSON, voir `'NAMESPACE.PARAGRAPH'`.
+
+Voilà c'est tout. Maintenant, quand vous penserez à la traduction du contenu d'un `<title>`,
+vous pourrez le faire dans votre contrôleur.
+
+## Plusieurs ID de traduction
+Le service de traduction sait également faire une demande de plusieurs traductions en une fois.
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+Toutefois, le service renverra toujours un objet contenant les traductions - sans savoir si une
+traduction (ou même toutes) a échoué. Lorsque vous demandez plusieurs traductions en une seule
+requête, c'est à vous de traiter le résultat.
+
+## Les choses à garder à l'esprit
+Veuillez gardez à l'esprit que l'utilisation du service `$translate` n'assure pas une liaison de
+données par défaut bidirectionnelle ! Le service `$translate` fonctionne de manière asynchrone, ce qui
+signifie qu'il retourne la traduction de l'id de traduction demandé, dès qu'il pourra la déterminer.
+Si elle n'existe pas, il va probablement retourner l'id de traduction.
+
+Toutefois, cela ne veut pas dire qu'il sait quand une langue a été modifiée. Et à cause de cela,
+les traductions traduites par un appel de `$translate` dans une directive, ne se mettent pas à jour
+en cas de changement de la langue lors de l'exécution.
+
+Vous pouvez résoudre ce problème en enveloppant simplement votre appel `$translate` dans un callback `$translateChangeSucces`
+sur `$rootScope`, qui se déclenchera à chaque fois qu'un changement de traductiona été fait avec succès.
+Une fois qu'elle a changé, il vous suffit de ré-exécuter le code, qui vous donne vos traductions nécessaires.
+
+Voilà à quoi cela pourrait ressembler :
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
+  $rootScope.$on('$translateChangeSuccess', function () {
+    $translate('HEADLINE').then(function (translation) {
+      $scope.headline = translation;
+    });
+  });
+}]);
+</pre>
+
+Vous vous demander pourquoi sur `$rootScope` au lieu de `$scope` ? angular-translate un `$emit` seulement sur
+le niveau `$rootScope` pour des raisons de performance.
+Voir cet article de [StackOverflow](http://stackoverflow.com/a/19498009/288703) pour plus d'informations.
+
+Voici un exemple qui fonctionne :
+
+<doc:example module="monApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'C\'est un module génial !',
+        PARAGRAPH: 'Srsly !',
+        NAMESPACE: {
+          PARAGRAPH: 'Et il est livré avec des fonctionnalités impressionnantes !'
+        }
+      };
+
+      var app = angular.module('monApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // ajoute la table de traduction
+        $translateProvider
+          .translations('fr', translations)
+          .preferredLanguage('fr');
+      }]);
+
+      app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+        // exposer les traductions via le service `$translate`
+        $translate('HEADLINE').then(function (headline) {
+          $scope.headline = headline;
+        });
+        $translate('PARAGRAPH').then(function (paragraph) {
+          $scope.paragraph = paragraph;
+        });
+        $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+          $scope.namespaced_paragraph = anotherOne;
+        });
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <h1>{{headline}}</h1>
+      <p>{{paragraph}}</p>
+      <p>{{namespaced_paragraph}}</p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

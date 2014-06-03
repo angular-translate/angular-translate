@@ -1,0 +1,68 @@
+@ngdoc overview
+@name Négociation de la langue
+@description
+
+# Négociation de la langue
+
+
+angular-translate supporte une fonctionnalité appelée "Négociation de la langue". Grâce à cette
+fonctionnalité, vous êtes en mesure de déclarer les relations entre les clés de langue similaires.
+
+Alors qu'est-ce que cela signifie ? Imaginons que vous avez des tables de traduction pour les
+langues avec les clés de langue `en` et `de`.
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ });
+</pre>
+
+Vous dites également à angular-translate, qu'il devrait lui-même essayer de déterminer
+la langue préférée de votre application, en utilisant la méthode
+`.determinePreferredLanguage()`.
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ })
+  .determinePreferredLanguage();
+</pre>
+
+Nous avons appris dans [Déterminer automatiquement la langue préférée](#/guide/07_multi-language#multilingue_déterminer-automatiquement-la-langue-préférée)
+que l'utilisation de cette méthode sans argument, tentera de déterminer une clé de langue
+en accédant aux propriétés de votre navigateur.
+
+Maintenant, si votre navigateur retourne `en_US` au lieu de `en` ? Normalement, cela conduira
+à une erreur, car `en_US` est, à première vue, juste une autre clé de langue. Donc
+angular-translate la traitera comme une langue différente. Ce n'est pas ce que vous
+voulez. Ce que vous voulez, c'est que angular-translate soit assez intelligent pour
+reconnaître la relation entre `en_US` et `en`, et qu'il utilise alors `en` dans ce cas.
+
+angular-translate le fait. Vous pouvez utiliser le système de négociation de la langue
+en utilisant la méthode `registerAvailableLanguageKeys()`. Cette méthode attend un tableau
+de clés de langue, que vous supportez dans votre application. Le deuxième paramètre est un objet
+qui mappe les clés des langues connexes avec les clés de la langue réelle. Une fois cela établi,
+angular-translate est capable de mapper la langue `en_US` qui est retournée par un navigateur,
+vers la clé de langue `en` qui est réellement utilisée par votre application.
+
+En ce qui concerne notre cas d'utilisation, cela ressemblerait à ceci :
+
+<pre>
+$translateProvider
+  .translations('fr', { /* ... */ })
+  .translations('en', { /* ... */ })
+  .registerAvailableLanguageKeys(['en', 'fr'], {
+    'en_US': 'en',
+    'en_UK': 'en',
+    'fr_FR': 'fr',
+    'fr_CH': 'fr'
+  })
+  .determinePreferredLanguage();
+</pre>
+
+Si le navigateur retourne maintenant `fr_FR` ou `fr_CH`, angular-translate met `fr` comme
+langue préférée. Il faut aussi mentionner que cette méthode n'a de sens que lorsqu'on utilise
+aussi `determinePreferredLanguage()`. 
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

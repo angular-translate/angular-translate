@@ -9,6 +9,12 @@
 | canary        |[![Build Status](https://travis-ci.org/angular-translate/angular-translate.png?branch=canary)](https://travis-ci.org/angular-translate/angular-translate)     |
 | BitDeli       |[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/angular-translate/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")        |
 
+### Presentation (Dutch AngularJS Meetup 2013)
+[![angular-translate Talk](presentation.png)](https://www.youtube.com/watch?v=9CWifOK_Wi8)
+
+### Presentation (Kod.io 2014)
+[![angular-translate Talk](presentation2.png)](https://www.youtube.com/watch?v=C7xqaExvaQ4)
+
 ### Links
 * Website [http://angular-translate.github.io](http://angular-translate.github.io/)
 * API Reference [http://angular-translate.github.io/docs/#/api](http://angular-translate.github.io/docs/#/api)

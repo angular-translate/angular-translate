@@ -1,0 +1,71 @@
+@ngdoc overview
+@name Vue d'ensemble conceptuelle
+@description
+
+# Vue d'ensemble conceptuelle
+
+La figure suivante montre de façon un peu abstraite comment angular-translate est
+structuré et comment sont reliés ensemble les différents composants.
+
+<img class="pull-right" style="padding-left: 3em;" src="img/guide/conceptual_overview.png">
+
+## Le vif du sujet
+Comme vous pouvez le voir, angular-translate fournit une directive et un filtre comme des composants
+que vous pouvez utiliser pour traduire le contenu de votre application. La directive apparaît au dessus
+de l'élément filtre, car elle l'utilise en interne.
+
+Dans la couche suivante, cela devient un peu plus intéressant. A la fois la directive et le
+filtre utilisent le service `$translate`. Donc, lors de la traduction du contenu de votre
+application avec une directive, vous le faites avec le filtre, qui le fait réellement avec
+le service. Cela signifie également que vous pouvez non seulement traduire vos contenus
+dans la couche de la vue de manière déclarative, mais aussi (bien sûr seulement si
+nécessaire) dans une couche de logique métier tel qu'un contrôleur ou un autre service.
+
+Dans le service `$translate`, vous pouvez voir des sous-composants qu'il utilise
+pour traduire vos contenus. Nous entrerons dans le détail plus tard, mais néanmoins
+il est bon d'avoir un aperçu de ce qui se passe réellement.
+
+## Services d'interpolation
+La boîte de droite représente les services d'interpolation possibles, le service `$translate`
+les utilise pour interpoler vos traductions depuis des valeurs de variable que vous voudrez
+peut-être utiliser. Si vous ne comprenez pas ce que cela signifie, pas de soucis. Vous apprendrez
+tout ce que vous devez savoir sur les interpolateurs plus tard. Toutefois, les services d'interpolation
+sont découplés du noyau principal, ce qui signifie, que vous pouvez les installer comme des packages supplémentaires.
+Il y a un service d'interpolation par défaut qui est livré avec angular-translate.
+
+Les interpolateurs influencent la syntaxe que vous devez utiliser dans vos traductions. Le
+service d'interpolation par défaut utilise le service de base d'interpolation d'Angular, donc si
+vous avez l'habitude de l'utiliser, vous n'avez rien de nouveau à apprendre. Le servide d'interpolation
+**MessageFormat** utilise une syntaxe différente, mais nous verrons cela plus tard.
+
+## Gestionnaires des traductions manquantes
+La boîte de gauche montre les gestionnaires de traduction manquantes. Ils sont exécutés quand
+le service `$translate` tente de traduire une clé qui n'existe pas. Vous n'avez pas besoin
+d'utiliser un gestionnaire, mais si vous le voulez, angular-translate est livré avec un service
+de log que vous pouvez installer comme une extension. En plus de cela, vous pouvez également
+mettre en place votre propre gestionnaire et l'utiliser.
+
+## Chargeur asynchrone
+Bien sûr, vous voulez être en mesure de charger vos données de traduction de manière asynchrone
+afin d'accélérer les performances de votre application. angular-translate supporte l'utilisation de ce
+qu'on appelle les chargeurs asynchrones, qui sont très faciles à utiliser. Il y a deux chargeurs
+asynchrones : `urlLoader` et `staticFilesLoader`. Tous les deux résolvent une situation spécifique
+quand il s'agit du chargement asynchrone des données de traduction. Quoi qu'il en soit, vous pouvez
+bien sûr créer vos propres chargeurs personnalisés et les utiliser ensuite, si vous le souhaitez.
+
+## Stockage
+Comme il est très fréquent qu'une application se souvienne de la langue qui a été sélectionnée
+par un utilisateur, afin qu'il obtienne la même langue lors de la prochaine éxécution de l'application,
+angular-translate vous permet de le stocker. Il vérifie s'il doit s'appuyer sur un stockage et s'il essaie donc de trouver une clé - valeur spécifique dans le stockage configuré
+pour déterminer quelle langue doit effectivement être chargée.
+
+angular-translate est livré avec un support pour localStorage et cookieStorage. Vous pouvez
+facilement installer des packages d'extension pour les utiliser.
+
+Maintenant vous avez un petit aperçu sur la façon dont angular-translate est structuré, qu'il dispose
+de fonctionnalités fournies et comment les composants sont reliés. Dans le chapitre suivant,
+vous allez apprendre à débuter avec angular-translate.
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

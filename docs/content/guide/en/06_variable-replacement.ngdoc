@@ -62,7 +62,7 @@ $translate('TRANSLATION_ID', {
 Since `translate` filter uses `$translate` service internally, we just need a way
 to pass dynamic values through the filter to make it available as object hash for
 the service. To achieve this, there is a specific syntax required, because filters
-in Angular are currently not able to have named parameters. So there are to ways to
+in Angular are currently not able to have named parameters. So there are two ways to
 pass values through `translate` filter.
 
 The first way is to pass an object literal as string. Afterwards it gets
@@ -135,7 +135,7 @@ declare these explicitly in our HTML?
 Well, in angular-translate `>=2.0` you can do exactly that. You are able to define
 your own `translate-value-*` attributes.
 
-So how does that work? Easy-Peasy!
+So how does that work? Easy-peasy!
 
 Let's say we have the following translation id:
 

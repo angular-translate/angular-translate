@@ -1,0 +1,202 @@
+@ngdoc overview
+@name Tests unitaires
+@description
+
+# Tests unitaires avec angular-translate
+
+AngularJS est construit en ayant à l'esprit la testabilité. Et nous aimons cela. C'est pourquoi
+nous faisons des tests unitaires sur angular-translate depuis le début. Cependant, lors de la construction
+d'application AngularJS qui supporte i18n en utilisant angular-translate, les tests de votre application
+peuvent être un peu difficile. Ce guide vous montre comment les gérer autour de problèmes communs lorsque
+vous écrivez des tests unitaires pour votre application qui utilise angular-translate.
+
+## Quel est le problème ?
+
+D'après notre expérience au cours de la période de développement d'angular-translate, il y eut seulement
+un problème lors des tests. Imaginez le scénario suivant : vous créez une application qui utilise
+non seulement angular-translate, mais aussi fait usage d'un chargeur asynchrone (ce qui est très
+fréquent). Donc, disons que la configuration de notre application ressemble à ceci :
+
+<pre>
+app.config(function ($translateProvider) {
+  $translateProvider
+    .useStaticFilesLoader({
+      prefix: 'locale-',
+      suffix: '.json'
+    })
+    .preferredLanguage('fr');
+});
+</pre>
+
+Dans cette configuration, nous utilisons le chargeur de fichiers statiques pour charger nos
+données i18n à partir d'un point distant. Nous disons aussi à angular-translate que notre
+langue préférée est `fr`. C'est assez simple.
+
+Disons que nous avons un contrôleur, qui utilise le service `$translate` pour changer
+la langue lors de l'exécution (qui est aussi *très* commun) :
+
+<pre>
+app.controller('LanguageController', function ($scope, $translate) {
+  $scope.switchLanguage = function (locale) {
+    $translate.use(locale);
+  });
+});
+</pre>
+
+Ok super. C'est fait. Passons en revue le code et réfléchissons à ce qui se passe
+lorsque nous lançons cette application. Voici le processus étape par étape :
+
+- nous enregistrons un chargeur asynchrone
+- nous définissons notre langue préférée
+- le service `$translate` est instancié la première fois qu'il est injecté
+- angular-translate notifie qu'il n'y a pas de langue disponible localement
+- il regarde si il y a un chargeur asynchrone enregistré
+- le chargeur asynchrone est appelé avec les paramètres régionaux de langue préférée
+- les données de traduction sont chargés et prêtes à être utilisées
+
+Il est important de comprendre comment angular-translate gère le flux pour obtenir une
+idée de ce que les problèmes peuvent causer. Donc, en passant par ces étapes, il y a une
+chose qui a un impact siginificatif. Quand un chargeur asynchrone est enregistré et qu'il
+n'y a pas de table de traduction encore en cache, angular-translate appelle le chargeur
+enregistré **implicitement**. Pourquoi cela peut causer des problèmes lors des tests
+unitaire de votre application ?
+
+Eh bien, pour comprendre cela, nous devons jeter un oeil à la façon dont nous ferions les
+tests unitaires avec par exemple Jasmine. Nous commençons avec un bloc `describe()` et
+chargeons notre application angular pour chaque spec :
+
+<pre>
+describe('monApp', function () {
+
+  beforeEach(module('monApp'));
+
+});
+</pre>
+
+Bon, qu'est ce que ça fait ? Cela permet de s'assurer que, sur chaque spec suivante, notre module
+de l'application est instancié. Ensuite, nous avons créé notre `LanguageController` avec un scope
+simulé comme ceci :
+
+<pre>
+describe('monApp', function () {
+
+  beforeEach(module('monApp'));
+
+  var LanguageCtrl, scope;
+
+  beforeEach(inject(function ($controller, $rootScope) {
+    scope = $rootScope.$new();
+
+    LanguageCtrl = $controller('LanguageCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('devrait faire quelque chose', function () {
+
+  });
+});
+</pre>
+
+Quand nous lançons ce test, nous obtenons l'erreur suivante :
+
+```
+Error: Unexpected request: GET locale-fr.json
+```
+
+Alors, pourquoi nous obtenons cette erreur ? Car le problème ici, c'est que angular-translate appelle le
+chargeur asynchrone implicitement. C'est à dire, lorsque le service `$translate` est instancié par la DI
+(l'injection de dépendance), il y a un XHR qui se déroule sans que nous faisions quelque chose.
+
+Lors de l'écriture des tests et lorsqu'il y a des XHRs, on doit explicitement dire que l'on attend
+un XHR dans certaine spec. Cela fait partie des tests appropriés. En d'autres termes,
+quand nous disons explicitement qu'il y a un XHR qui se déroule, cette erreur ne devrait
+pas se produire, d'accord ?
+
+Essayons donc de contourner cette erreur en injectant le service `$httpBackend` pour
+attendre des XHRs et répondre de manière fictive :
+
+<pre>
+describe('monApp', function () {
+
+  beforeEach(module('monApp'));
+
+  var LanguageCtrl, scope, $httpBackend;
+
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
+    scope = $rootScope.$new();
+    $httpBackend = _$httpBackend_;
+
+    LanguageCtrl = $controller('LanguageCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('devrait faire quelque chose', function () {
+    $httpBackend.expectGET('locale-fr.json');
+
+    // le code du test vient ici
+  });
+});
+</pre>
+
+Il s'avère que cela ne fonctionne pas non plus, car au moment où `expectGET()`
+est appelé, le chargeur asynchrone a déjà été exécuté. N'y'a-t-il pas un
+moyen de contourner ce problème ?
+
+## La solution
+
+Malheureusement, ce problème est causé par la conception de angular-translate. Pour contourner
+ces erreurs, tout ce que nous pouvons faire, c'est de remplacer la configuration de notre module
+dans notre suite de test, afin qu'il **n'utilise pas** le chargeur asynchrone. Quand il y a
+pas de chargeur asynchrone, il n'y a pas de XHR et donc aucune erreur.
+
+Alors, comment pouvons-nous remplaçons notre configuration du module lors de l'exécution de notre suite de test ?
+Lors de l'instanciation d'un module angular, nous pouvons toujours appliquer une fonction qui
+est exécutée comme une fonction de configuration. Cette fonction de configuration peut être utilisée
+pour remplacer la configuration des modules puisque nous avons accès à tous les providers.
+
+En utilisant le provider `$provide`, nous pouvons construire une factory de chargeur personnalisé, qui sera
+ensuite utilisé à la place du chargeur des fichiers statiques.
+
+<pre>
+beforeEach(module('monApp', function ($provide, $translateProvider) {
+
+  $provide.factory('customLoader', function () {
+    // la logique du chargeur vient ici
+  });
+
+  $translateProvider.useLoader('customLoader');
+
+}));
+</pre>
+
+Ce code est exécuté **avant** chaque spec, donc en d'autres termes, nous remplaçons le chargeur
+utilisé seulement pour les specs de test. Maintenant, tout ce que nous avons à faire, c'est de construire
+un chargeur qui ne fait pas un XHR :
+
+<pre>
+beforeEach(module('monApp', function ($provide, $translateProvider) {
+
+  $provide.factory('customLoader', function ($q) {
+    return function () {
+      var deferred = $q.defer();
+      deferred.resolve({});
+      return deferred.promise;
+    };
+  });
+
+  $translateProvider.useLoader('customLoader');
+
+}));
+</pre>
+
+C'est tout ! Une autre option serait de fournir toujours la langue préférée de votre
+application en tant que JSON statique :
+
+<pre>
+beforeEach(module('monApp', function ($translateProvider) {
+
+  $translateProvider.translations('fr', {});
+}));
+</pre>
