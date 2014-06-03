@@ -1,3 +1,44 @@
+<a name="2.2.0"></a>
+## 2.2.0 (2014-06-03)
+
+
+#### Bug Fixes
+
+* fix npe on empty strings (trim()) ([c69de7b8](http://github.com/PascalPrecht/angular-translate/commit/c69de7b87a0efe05548f03b1f2767968d2dc6aac))
+* **$translate:**
+  * checks modification ([b91e4ded](http://github.com/PascalPrecht/angular-translate/commit/b91e4ded560a96a815248f116c893e10414296af))
+  * if translation exists, use the translated string even if it's empty ([eeb8c2ad](http://github.com/PascalPrecht/angular-translate/commit/eeb8c2ad23f915828e83c840ecb00c840812dfa2))
+  * use case-insensitive check for language key aliases ([26ec3088](http://github.com/PascalPrecht/angular-translate/commit/26ec3088bcc50bacb8370e352e556d4e48830b64))
+* **$translateProvider:**
+  * determinePreferredLanguage was not chainable ([7c29f2fc](http://github.com/PascalPrecht/angular-translate/commit/7c29f2fc5aeea17dd50ecfc40d1fad67ddd93650), closes [#487](http://github.com/PascalPrecht/angular-translate/issues/487))
+  * fix comparison in one case of negotiateLocale() ([fe04c72f](http://github.com/PascalPrecht/angular-translate/commit/fe04c72fc1bb2b9ff07ac0d974374e16397d58c7))
+* **demo:**
+  * use `.instant()` ([6bea1928](http://github.com/PascalPrecht/angular-translate/commit/6bea19281d52f8ae956f6e898616d01c097d8c23))
+  * correct demo of `translate-values` ([7de2ae23](http://github.com/PascalPrecht/angular-translate/commit/7de2ae23ee87a10921c3b4883d535fd69ecf2b89))
+* **directive:** Make translate-value-* work inside ng-if and ng-repeat ([e07eea75](http://github.com/PascalPrecht/angular-translate/commit/e07eea757aec8cf3d2342abcd94e97d1fe615c80))
+* **docs:** removes explicit protocol declaration for assets ([eaa9bf7b](http://github.com/PascalPrecht/angular-translate/commit/eaa9bf7b46cf5983e9f9fd97a22a606bf52480dd))
+* **gruntfile:** fix image link ([65fc8be3](http://github.com/PascalPrecht/angular-translate/commit/65fc8be35ddae016438fd627d788317c46bb22f3))
+* **package.json:** fix repository url ([40af7ce7](http://github.com/PascalPrecht/angular-translate/commit/40af7ce79228526068e11f1a3b6cc3f56e30a831))
+* **partialLoader:** fixes deprecated usage of arguments.callee ([1ac3a0a7](http://github.com/PascalPrecht/angular-translate/commit/1ac3a0a7c69f0e765a615a395ea467f9de95f0c9))
+* **service:**
+  * use the aliased language key if available ([675e9a21](http://github.com/PascalPrecht/angular-translate/commit/675e9a21b6b20b9aa78514deb602954a985a5f83), closes [#530](http://github.com/PascalPrecht/angular-translate/issues/530))
+  * docs annotation ([839c4e89](http://github.com/PascalPrecht/angular-translate/commit/839c4e89f1fa062bfceebf43126cc38b699f891c))
+* **storageLocal:** fixes QUOTAEXCEEDEDERROR (safari private browsing) ([59aa2a01](http://github.com/PascalPrecht/angular-translate/commit/59aa2a01dca73b8343eadd77d41dcb294bfad89a))
+* **translateInterpolator:** make it work with 1.3-beta ([97e2241c](http://github.com/PascalPrecht/angular-translate/commit/97e2241c9f612df347863b3fb57acc5416168b07))
+
+
+#### Features
+
+* **directive:**
+  * add option to define a default translation text ([a8026651](http://github.com/PascalPrecht/angular-translate/commit/a8026651b5fdc424c681c03cda1b1f749493ba26))
+  * Support for camel casing interpolation variables. ([b3450410](http://github.com/PascalPrecht/angular-translate/commit/b3450410686846291fd068616237586b35beb91e))
+* **messageformat-support:** enhancing for sanitization like default ([ad016861](http://github.com/PascalPrecht/angular-translate/commit/ad016861f6ed4d65a6ee074b8feba3f9911dfc20))
+* **missingFallbackDefaultText:** enables a feature to return a default text for displaying in case of missing tra ([f24b15e8](http://github.com/PascalPrecht/angular-translate/commit/f24b15e8d3ca6231deab64a843d4ca5830176343))
+* **service:**
+  * allow using wildcards in language aliases ([6f0ae3bf](http://github.com/PascalPrecht/angular-translate/commit/6f0ae3bf6dd873534c9957b2cce398b290c92da7), closes [#426](http://github.com/PascalPrecht/angular-translate/issues/426))
+  * add possibility to translate a set of translation ids ([612dc27b](http://github.com/PascalPrecht/angular-translate/commit/612dc27b1382679941061f71920f4ee0bc6f7834))
+
+
 # 2.1.0 (2014-04-02)
 
 ## Features
