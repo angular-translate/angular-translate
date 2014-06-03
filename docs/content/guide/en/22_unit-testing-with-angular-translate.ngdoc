@@ -153,7 +153,7 @@ no asynchronous loader, there's no XHR and therefore no error.
 
 So how do we overwrite our module configuration at runtime for our test suite?
 When instantiating an angular module, we can always apply a inline function which
-is exectued as configuration function. This configuration function can be used
+is executed as configuration function. This configuration function can be used
 to overwrite the modules configuration since we have access to all providers.
 
 Using the `$provide` provider, we can build a custom loader factory, which should
