@@ -953,6 +953,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($translationTable.hasOwnProperty(langKey)) {
           deferred.resolve($translationTable[langKey]);
           return deferred.promise;
+        } else if(!langKey || !langPromises[langKey]) {
+        	deferred.reject();
         } else {
           langPromises[langKey].then(function (data) {
             translations(data.key, data.table);
