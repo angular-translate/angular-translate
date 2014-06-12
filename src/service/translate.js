@@ -1019,6 +1019,32 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return result;
       };
 
+
+      /**
+       * @name translateByHandler
+       * @private
+       *
+       * Translate by missing translation handler.
+       *
+       * @param translationId
+       * @returns translation created by $missingTranslationHandler or translationId is $missingTranslationHandler is
+       * absent
+       */
+      var translateByHandler = function (translationId) {
+        // If we have a handler factory - we might also call it here to determine if it provides
+        // a default text for a translationid that can't be found anywhere in our tables
+        if ($missingTranslationHandlerFactory) {
+          var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+          if (resultString !== undefined) {
+            return resultString;
+          } else {
+            return translationId;
+          }
+        } else {
+          return translationId;
+        }
+      };
+
       /**
        * @name resolveForFallbackLanguage
        * @private
@@ -1050,19 +1076,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           );
         } else {
           // No translation found in any fallback language
-
-          // If we have a handler factory - we might also call it here to determine if it provides
-          // a default text for a translationid that can't be found anywhere in our tables
-          if ($missingTranslationHandlerFactory) {
-            var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
-            if (resultString !== undefined) {
-              deferred.resolve(resultString);
-            } else {
-              deferred.resolve(translationId);
-            }
-          } else {
-            deferred.resolve(translationId);
-          }
+          deferred.resolve(translateByHandler(translationId));
         }
         return deferred.promise;
       };
@@ -1139,11 +1153,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             deferred.resolve(Interpolator.interpolate(translation, interpolateParams));
           }
         } else {
-          // looks like the requested translation id doesn't exists.
-          // Now, if there is a registered handler for missing translations and no
-          // asyncLoader is pending, we execute the handler
+          var missingTranslationHandlerTranslation;
+          // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+            missingTranslationHandlerTranslation = translateByHandler(translationId);
           }
 
           // since we couldn't translate the inital requested translation id,
@@ -1151,12 +1164,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // configured.
           if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
             fallbackTranslation(translationId, interpolateParams, Interpolator)
-              .then(function (translation) {
-                deferred.resolve(translation);
-              }, function (_translationId) {
-                deferred.reject(applyNotFoundIndicators(_translationId));
-              });
-
+                .then(function (translation) {
+                  deferred.resolve(translation);
+                }, function (_translationId) {
+                  deferred.reject(applyNotFoundIndicators(_translationId));
+                });
+          } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+            // looks like the requested translation id doesn't exists.
+            // Now, if there is a registered handler for missing translations and no
+            // asyncLoader is pending, we execute the handler
+            deferred.resolve(missingTranslationHandlerTranslation);
           } else {
             deferred.reject(applyNotFoundIndicators(translationId));
           }
@@ -1180,11 +1197,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             result = Interpolator.interpolate(translation, interpolateParams);
           }
         } else {
-          // looks like the requested translation id doesn't exists.
-          // Now, if there is a registered handler for missing translations and no
-          // asyncLoader is pending, we execute the handler
+          var missingTranslationHandlerTranslation;
+          // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+            missingTranslationHandlerTranslation = translateByHandler(translationId);
           }
 
           // since we couldn't translate the inital requested translation id,
@@ -1193,6 +1209,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
             fallbackIndex = 0;
             result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator);
+          } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+            // looks like the requested translation id doesn't exists.
+            // Now, if there is a registered handler for missing translations and no
+            // asyncLoader is pending, we execute the handler
+            result = missingTranslationHandlerTranslation;
           } else {
             result = applyNotFoundIndicators(translationId);
           }
@@ -1577,7 +1598,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // Return translation if not found anything.
           result = translationId;
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+            result = translateByHandler(translationId);
           }
         }
 
