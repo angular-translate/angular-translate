@@ -557,6 +557,36 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('translate returns handler result', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $translateProvider
+            .translations('de_DE', translationMock)
+            .preferredLanguage('de_DE');
+
+        // factory provides a default fallback text being defined in the factory
+        // gives a maximum of flexibility
+        $provide.factory('elementReturningTranslationHandler', function () {
+          return function (translationID, uses) {
+            return '<nkf>' + translationID + '</nkf>';
+          };
+        });
+        $translateProvider.useMissingTranslationHandler('elementReturningTranslationHandler');
+      }));
+
+      var $translate, $rootScope, $q;
+
+      beforeEach(inject(function (_$translate_, _$rootScope_, _$q_) {
+        $translate = _$translate_;
+        $rootScope = _$rootScope_;
+        $q = _$q_;
+      }));
+
+      it('when instant translate', function () {
+        expect($translate.instant('false.key')).toBe('<nkf>false.key</nkf>');
+      });
+    });
+
     describe('multi fallback language', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
