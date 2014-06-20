@@ -1201,6 +1201,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return result;
       };
 
+      $translate.translations = translations;
+
       /**
        * @ngdoc function
        * @name pascalprecht.translate.$translate#preferredLanguage
