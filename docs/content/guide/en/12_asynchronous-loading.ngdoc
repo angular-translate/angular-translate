@@ -171,7 +171,7 @@ angular.module('main')
 </pre>
 
 Allright. Now, to let `angular-translate` know which part it should load,
-we use `$translaterPartialLoaderProvider`'s `addPart()` method. So we simply
+we use `$translatePartialLoaderProvider`'s `addPart()` method. So we simply
 say something like:
 
 <pre>
