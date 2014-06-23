@@ -400,6 +400,54 @@ angular.module('pascalprecht.translate')
 
     /**
      * @ngdoc function
+     * @name pascalprecht.translate.$translatePartialLoader#isPartLoaded
+     * @methodOf pascalprecht.translate.$translatePartialLoader
+     *
+     * @description
+     * Checks if a registered translation part is loded into the translation table.
+     *
+     * @param {string} name A name of the part
+     * @param {string} lang The key of the language
+     *
+     * @returns {boolean} Returns **true** if the translation of the part is loaded to the translation table **false** if not.
+     *
+     * @throws {TypeError} The method could throw a **TypeError** if you pass the param of the wrong
+     * type. Please, note that the `name` and `lang` params have to be non-empty **string**.
+     */
+    service.isPartLoaded = function(name, lang) {
+      if (!isStringValid(name)) {
+        throw new TypeError('Couldn\'t delete part, first arg has to be string');
+      }
+      if (!isStringValid(lang)) {
+        throw new TypeError('Couldn\'t delete part, first arg has to be string');
+      }
+      return angular.isDefined(parts[name]) && angular.isDefined(parts[name].tables[lang]);
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translatePartialLoader#getRegisteredParts
+     * @methodOf pascalprecht.translate.$translatePartialLoader
+     *
+     * @description
+     * Gets the names of the parts that were added with the `addPart`.
+     *
+     * @returns {array} Returns array of registered parts, if none were registered then an empty array is returned.
+     */
+    service.getRegisteredParts = function() {
+      var registeredParts = [];
+      angular.forEach(parts, function(p){
+        if(p.isActive) {
+          registeredParts.push(p.name);
+        }
+      });
+      return registeredParts;
+    };
+
+
+
+    /**
+     * @ngdoc function
      * @name pascalprecht.translate.$translatePartialLoader#isPartAvailable
      * @methodOf pascalprecht.translate.$translatePartialLoader
      *
