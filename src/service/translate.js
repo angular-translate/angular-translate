@@ -1583,7 +1583,23 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         return result;
       };
-
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#getAvailableLanguageKeys
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns available language keys.
+       *
+       * @return {array} language ISO code
+       */
+      $translate.getAvailableLanguageKeys = function (){
+        var languages=[];
+        for(locale in $translationTable){
+          languages.push(locale.slice(0,locale.indexOf("_")));
+        };
+        return languages;
+      };
       if ($loaderFactory) {
 
         // If at least one async loader is defined and there are no
