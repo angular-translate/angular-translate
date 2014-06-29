@@ -56,4 +56,45 @@ describe('pascalprecht.translate', function () {
       $httpBackend.flush();
     });
   });
+  
+  describe('Testing to use the provider to set a formatter', function() {
+    var $httpBackend, $translateStaticFilesLoader; 
+    
+    beforeEach(module('pascalprecht.translate'));
+    
+    beforeEach(module(function($translateStaticFilesLoaderProvider) {
+      var transformer = function(data) {
+        var splitted = data.split('\n');
+        var result = {};
+        angular.forEach(splitted, function(pair) {
+          result[pair.split('=')[0]] = pair.split('=')[1];
+        });
+        return result;
+      }
+      $translateStaticFilesLoaderProvider.setTransformer(transformer);
+    }));
+    
+    beforeEach(inject(function (_$httpBackend_, _$translateStaticFilesLoader_) {
+      $httpBackend = _$httpBackend_;
+      $translateStaticFilesLoader = _$translateStaticFilesLoader_;
+      // Used for testing the formatter
+      $httpBackend.when('GET', 'lang_en_US.properties').respond('foo=bar\nfoo1=bar1');
+    }));
+
+    it('should format the data before sending them back', function() {
+       var promise = $translateStaticFilesLoader({
+          key: 'en_US',
+          prefix: 'lang_',
+          suffix: '.properties'
+        });
+        expect(promise.then).toBeDefined();
+        expect(typeof promise.then).toBe('function');
+        $httpBackend.flush();
+        promise.then(function(data) {
+          expect(data).toBe({'foo': 'bar', 'foo1': 'bar1'})
+        });
+      });
+  });
 });
+
+
