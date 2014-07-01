@@ -277,13 +277,16 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    */
   this.preferredLanguage = function(langKey) {
+    setupPreferredLanguage(langKey);
+    return this;
+
+  };
+  var setupPreferredLanguage = function (langKey) {
     if (langKey) {
       $preferredLanguage = langKey;
-      return this;
     }
     return $preferredLanguage;
-  };
-
+  }
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#translationNotFoundIndicator
@@ -374,7 +377,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $fallbackWasString = false;
         $fallbackLanguage = langKey;
       }
-      if (angular.isString($preferredLanguage)) {
+      if (angular.isString($preferredLanguage)  && $fallbackLanguage.indexOf($preferredLanguage) < 0) {
         $fallbackLanguage.push($preferredLanguage);
       }
 
@@ -1230,9 +1233,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @description
        * Returns the language key for the preferred language.
        *
+       * @param {string} langKey language String or Array to be used as preferredLanguage (changing at runtime)
+       *
        * @return {string} preferred language key
        */
-      $translate.preferredLanguage = function () {
+      $translate.preferredLanguage = function (langKey) {
+        if(langKey) {
+          setupPreferredLanguage(langKey);
+        }
         return $preferredLanguage;
       };
 
