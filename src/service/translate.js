@@ -32,6 +32,27 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $postCompilingEnabled = false,
       NESTED_OBJECT_DELIMITER = '.';
 
+  /**
+   * @name indexOf
+   * @private
+   *
+   * @description
+   * indexOf polyfill. Kinda sorta.
+   *
+   * @param {array} array Array to search in.
+   * @param {string} searchElement Element to search for.
+   *
+   * @returns {int} Index of search element.
+   */
+  var indexOf = function(array, searchElement) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      if (array[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
 
   // tries to determine the browsers locale
   var getLocale = function () {
@@ -71,7 +92,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
         if (hasExactKey || hasWildcardKey) {
           alias = $languageKeyAliases[langKeyAlias];
-          if (avail.indexOf(angular.lowercase(alias)) > -1) {
+          if (indexOf(avail, angular.lowercase(alias)) > -1) {
             return alias;
           }
         }
@@ -80,7 +101,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     var parts = preferred.split('_');
 
-    if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > -1) {
+    if (parts.length > 1 && indexOf(avail, angular.lowercase(parts[0])) > -1) {
       return parts[0];
     }
 
@@ -787,26 +808,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return deferred.promise;
       };
 
-      /**
-       * @name indexOf
-       * @private
-       *
-       * @description
-       * indexOf polyfill. Kinda sorta.
-       *
-       * @param {array} array Array to search in.
-       * @param {string} searchElement Element to search for.
-       *
-       * @returns {int} Index of search element.
-       */
-      var indexOf = function(array, searchElement) {
-        for (var i = 0, len = array.length; i < len; i++) {
-          if (array[i] === searchElement) {
-            return i;
-          }
-        }
-        return -1;
-      };
+      
 
       /**
        * @name applyNotFoundIndicators
