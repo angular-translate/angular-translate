@@ -763,9 +763,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
+        var trim = String.prototype.trim || function () {
+          return this.replace(/^\s+|\s+$/g, '');
+        };
+
         // trim off any whitespace
         if (translationId) {
-          translationId = translationId.trim();
+          translationId = trim.apply(translationId);
         }
 
         var promiseToWaitFor = (function () {
