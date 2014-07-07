@@ -3,12 +3,14 @@
   "version": "2.1.0",
   "description": "A translation module for AngularJS",
   "main": "index.js",
+  "browser": "./dist/angular-translate.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
+    "prepublish": "grunt build",  
     "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run"
   },
   "author": {
