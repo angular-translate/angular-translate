@@ -44,6 +44,40 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     ) || '').split('-').join('_');
   };
 
+  /**
+   * @name indexOf
+   * @private
+   *
+   * @description
+   * indexOf polyfill. Kinda sorta.
+   *
+   * @param {array} array Array to search in.
+   * @param {string} searchElement Element to search for.
+   *
+   * @returns {int} Index of search element.
+   */
+  var indexOf = function(array, searchElement) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      if (array[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  /**
+   * @name trim
+   * @private
+   *
+   * @description
+   * trim polyfill
+   *
+   * @returns {string} The string stripped of whitespace from both ends
+   */
+  var trim = function() {
+    return this.replace(/^\s+|\s+$/g, '');
+  };
+
   var negotiateLocale = function (preferred) {
 
     var avail = [],
@@ -55,7 +89,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       avail.push(angular.lowercase($availableLanguageKeys[i]));
     }
 
-    if (avail.indexOf(locale) > -1) {
+    if (indexOf(avail, locale) > -1) {
       return preferred;
     }
 
@@ -71,7 +105,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
         if (hasExactKey || hasWildcardKey) {
           alias = $languageKeyAliases[langKeyAlias];
-          if (avail.indexOf(angular.lowercase(alias)) > -1) {
+          if (indexOf(avail, angular.lowercase(alias)) > -1) {
             return alias;
           }
         }
@@ -747,7 +781,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         // trim off any whitespace
         if (translationId) {
-          translationId = translationId.trim();
+          translationId = trim.apply(translationId);
         }
 
         var promiseToWaitFor = (function () {
@@ -788,27 +822,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }, deferred.reject);
         }
         return deferred.promise;
-      };
-
-      /**
-       * @name indexOf
-       * @private
-       *
-       * @description
-       * indexOf polyfill. Kinda sorta.
-       *
-       * @param {array} array Array to search in.
-       * @param {string} searchElement Element to search for.
-       *
-       * @returns {int} Index of search element.
-       */
-      var indexOf = function(array, searchElement) {
-        for (var i = 0, len = array.length; i < len; i++) {
-          if (array[i] === searchElement) {
-            return i;
-          }
-        }
-        return -1;
       };
 
       /**
