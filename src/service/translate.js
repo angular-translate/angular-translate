@@ -44,6 +44,27 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     ) || '').split('-').join('_');
   };
 
+  /**
+   * @name indexOf
+   * @private
+   *
+   * @description
+   * indexOf polyfill. Kinda sorta.
+   *
+   * @param {array} array Array to search in.
+   * @param {string} searchElement Element to search for.
+   *
+   * @returns {int} Index of search element.
+   */
+  var indexOf = function(array, searchElement) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      if (array[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
   var negotiateLocale = function (preferred) {
 
     var avail = [],
@@ -55,7 +76,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       avail.push(angular.lowercase($availableLanguageKeys[i]));
     }
 
-    if (avail.indexOf(locale) > -1) {
+    if (indexOf(avail, locale) > -1) {
       return preferred;
     }
 
@@ -71,7 +92,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
         if (hasExactKey || hasWildcardKey) {
           alias = $languageKeyAliases[langKeyAlias];
-          if (avail.indexOf(angular.lowercase(alias)) > -1) {
+          if (indexOf(avail, angular.lowercase(alias)) > -1) {
             return alias;
           }
         }
@@ -788,27 +809,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           }, deferred.reject);
         }
         return deferred.promise;
-      };
-
-      /**
-       * @name indexOf
-       * @private
-       *
-       * @description
-       * indexOf polyfill. Kinda sorta.
-       *
-       * @param {array} array Array to search in.
-       * @param {string} searchElement Element to search for.
-       *
-       * @returns {int} Index of search element.
-       */
-      var indexOf = function(array, searchElement) {
-        for (var i = 0, len = array.length; i < len; i++) {
-          if (array[i] === searchElement) {
-            return i;
-          }
-        }
-        return -1;
       };
 
       /**
