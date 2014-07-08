@@ -8,8 +8,8 @@
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install",
-    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run"
+    "postinstall": "bower install",
+    "test": "karma start karma.unit.conf.js --single-run"
   },
   "author": {
     "name": "Pascal Precht"
