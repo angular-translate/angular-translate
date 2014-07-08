@@ -74,7 +74,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *
    * @returns {string} The string stripped of whitespace from both ends
    */
-  var trim = function(array, searchElement) {
+  var trim = function() {
     return this.replace(/^\s+|\s+$/g, '');
   };
 
