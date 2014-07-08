@@ -65,6 +65,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     return -1;
   };
 
+  /**
+   * @name trim
+   * @private
+   *
+   * @description
+   * trim polyfill
+   *
+   * @returns {string} The string stripped of whitespace from both ends
+   */
+  var trim = function(array, searchElement) {
+    return this.replace(/^\s+|\s+$/g, '');
+  };
+
   var negotiateLocale = function (preferred) {
 
     var avail = [],
@@ -768,7 +781,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         // trim off any whitespace
         if (translationId) {
-          translationId = translationId.trim();
+          translationId = trim.apply(translationId);
         }
 
         var promiseToWaitFor = (function () {
