@@ -1597,7 +1597,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($fallbackLanguage && $fallbackLanguage.length) {
 
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+            // Load a fallback language, only if it is not loaded already
+            //TODO: Check if this condition need to be applied in other places as well.
+            if($translationTable[$fallbackLanguage[i]]=== undefined){
+                langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+            }
           }
         }
       }
