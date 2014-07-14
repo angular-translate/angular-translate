@@ -404,12 +404,12 @@ angular.module('pascalprecht.translate')
      * @methodOf pascalprecht.translate.$translatePartialLoader
      *
      * @description
-     * Checks if a registered translation part is loded into the translation table.
+     * Checks if the registered translation part is loaded into the translation table.
      *
      * @param {string} name A name of the part
-     * @param {string} lang The key of the language
+     * @param {string} lang A key of the language
      *
-     * @returns {boolean} Returns **true** if the translation of the part is loaded to the translation table **false** if not.
+     * @returns {boolean} Returns **true** if the translation of the part is loaded to the translation table and **false** if not.
      *
      * @throws {TypeError} The method could throw a **TypeError** if you pass the param of the wrong
      * type. Please, note that the `name` and `lang` params have to be non-empty **string**.
@@ -430,7 +430,7 @@ angular.module('pascalprecht.translate')
      * @methodOf pascalprecht.translate.$translatePartialLoader
      *
      * @description
-     * Gets the names of the parts that were added with the `addPart`.
+     * Gets names of the parts that were added with the `addPart`.
      *
      * @returns {array} Returns array of registered parts, if none were registered then an empty array is returned.
      */
