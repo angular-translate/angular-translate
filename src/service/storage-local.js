@@ -62,6 +62,8 @@ angular.module('pascalprecht.translate')
         $window.localStorage.setItem(testKey, 'foo');
         $window.localStorage.removeItem(testKey);
         hasLocalStorageSupport = true;
+      } else {
+        hasLocalStorageSupport = false;
       }
     } catch (e){
       hasLocalStorageSupport = false;
