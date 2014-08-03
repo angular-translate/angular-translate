@@ -19,8 +19,10 @@ angular.module('pascalprecht.translate')
 
   return {
     compile: function (tElement) {
-      $rootScope.$on('$translateChangeEnd', function () {
+      var removeListener = $rootScope.$on('$translateChangeEnd', function () {
         tElement.removeClass($translate.cloakClassName());
+        removeListener();
+        removeListener = null;
       });
       tElement.addClass($translate.cloakClassName());
     }
