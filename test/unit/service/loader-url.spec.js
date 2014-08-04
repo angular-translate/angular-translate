@@ -49,7 +49,10 @@ describe('pascalprecht.translate', function () {
       $httpBackend.expectGET('foo/bar.json?lang=de_DE');
         $translateUrlLoader({
         key: 'de_DE',
-        url: 'foo/bar.json'
+        url: 'foo/bar.json',
+        $http: {
+          cache: $translationCache
+        }
       });
       $httpBackend.flush();
       expect($translationCache.info().size).toEqual(1);

@@ -62,7 +62,10 @@ describe('pascalprecht.translate', function () {
       $translateStaticFilesLoader({
         key: 'de_DE',
         prefix: 'lang_',
-        suffix: '.json'
+        suffix: '.json',
+        $http: {
+          cache: $translationCache
+        }
       });
       $httpBackend.flush();
       expect($translationCache.info().size).toEqual(1);

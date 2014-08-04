@@ -14,7 +14,7 @@ angular.module('pascalprecht.translate')
  *
  * @param {object} options Options object, which gets the url and key.
  */
-.factory('$translateUrlLoader', ['$q', '$http', '$translationCache', function ($q, $http, $translationCache) {
+.factory('$translateUrlLoader', ['$q', '$http', function ($q, $http) {
 
   return function (options) {
 
@@ -24,12 +24,11 @@ angular.module('pascalprecht.translate')
 
     var deferred = $q.defer();
 
-    $http({
+    $http(angular.extend({}, options.$http, {
       url: options.url,
       params: { lang: options.key },
-      method: 'GET',
-      cache: $translationCache
-    }).success(function (data) {
+      method: 'GET'
+    })).success(function (data) {
       deferred.resolve(data);
     }).error(function (data) {
       deferred.reject(options.key);

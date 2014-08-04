@@ -30,7 +30,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
       $postCompilingEnabled = false,
-      NESTED_OBJECT_DELIMITER = '.';
+      NESTED_OBJECT_DELIMITER = '.',
+      loaderCache;
 
 
   // tries to determine the browsers locale
@@ -670,6 +671,37 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   };
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useLoaderCache
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Registers a cache for internal $http based loaders.
+   * {@link pascalprecht.translate.$translateProvider#determinePreferredLanguage determinePreferredLanguage}.
+   * When false the cache will be disabled (default). When true or undefined
+   * the cache will be a default (see $cacheFactory). When an object it will
+   * be treat as a cache object itself: the usage is $http({cache: cache})
+   *
+   * @param {object} cache boolean, string or cache-object
+   */
+  this.useLoaderCache = function (cache) {
+    if (cache === false) {
+      // disable cache
+      loaderCache = undefined;
+    } else if (cache === true) {
+      // enable cache using AJS defaults
+      loaderCache = true;
+    } else if (typeof(cache) === 'undefined') {
+      // enable cache using default
+      loaderCache = '$translationCache';
+    } else if (cache) {
+      // enable cache using given one (see $cacheFactory)
+      loaderCache = cache;
+    }
+    return this;
+  };
+
+  /**
    * @ngdoc object
    * @name pascalprecht.translate.$translate
    * @requires $interpolate
@@ -884,8 +916,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $rootScope.$emit('$translateLoadingStart');
         pendingLoader = true;
 
+        var cache = loaderCache;
+        if (typeof(cache) === 'string') {
+          // getting on-demand instance of loader
+          cache = $injector.get(cache);
+        }
+
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
-          key: key
+          key: key,
+          $http: {
+            cache: cache
+          }
         })).then(function (data) {
           var translationTable = {};
           $rootScope.$emit('$translateLoadingSuccess');
@@ -1613,6 +1654,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return result;
       };
 
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#loaderCache
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns the defined loaderCache.
+       *
+       * @return {boolean|string|object} current value of loaderCache
+       */
+      $translate.loaderCache = function () {
+        return loaderCache;
+      };
+
       if ($loaderFactory) {
 
         // If at least one async loader is defined and there are no
@@ -1634,5 +1689,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       }
 
       return $translate;
-    }];
+    }
+  ];
 }]);

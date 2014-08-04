@@ -600,8 +600,9 @@ describe('pascalprecht.translate', function() {
     });
 
     it('should put a part into a cache and remove from the cache if the part was deleted', function() {
-      module(function($httpProvider) {
+      module(function($httpProvider, $translateProvider) {
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+        $translateProvider.useLoaderCache();
       });
 
       inject(function($translatePartialLoader, $httpBackend, $translationCache) {
@@ -610,7 +611,10 @@ describe('pascalprecht.translate', function() {
         $translatePartialLoader.addPart('part');
         $translatePartialLoader({
           key : 'en',
-          urlTemplate : '/locales/{part}-{lang}.json'
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            cache: $translationCache
+          }
         });
         $httpBackend.flush();
         expect($translationCache.info().size).toEqual(1);

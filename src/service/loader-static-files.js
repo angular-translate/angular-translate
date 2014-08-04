@@ -12,7 +12,7 @@ angular.module('pascalprecht.translate')
  *
  * @param {object} options Options object, which gets prefix, suffix and key.
  */
-.factory('$translateStaticFilesLoader', ['$q', '$http', '$translationCache', function ($q, $http, $translationCache) {
+.factory('$translateStaticFilesLoader', ['$q', '$http', function ($q, $http) {
 
   return function (options) {
 
@@ -22,16 +22,15 @@ angular.module('pascalprecht.translate')
 
     var deferred = $q.defer();
 
-    $http({
+    $http(angular.extend({}, options.$http, {
       url: [
         options.prefix,
         options.key,
         options.suffix
       ].join(''),
       method: 'GET',
-      params: '',
-      cache: $translationCache
-    }).success(function (data) {
+      params: ''
+    })).success(function (data) {
       deferred.resolve(data);
     }).error(function (data) {
       deferred.reject(options.key);
