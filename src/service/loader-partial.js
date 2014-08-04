@@ -415,12 +415,6 @@ angular.module('pascalprecht.translate')
      * type. Please, note that the `name` and `lang` params have to be non-empty **string**.
      */
     service.isPartLoaded = function(name, lang) {
-      if (!isStringValid(name)) {
-        throw new TypeError('Couldn\'t delete part, first arg has to be string');
-      }
-      if (!isStringValid(lang)) {
-        throw new TypeError('Couldn\'t delete part, first arg has to be string');
-      }
       return angular.isDefined(parts[name]) && angular.isDefined(parts[name].tables[lang]);
     };
 
