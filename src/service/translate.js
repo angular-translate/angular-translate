@@ -286,7 +286,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $preferredLanguage = langKey;
     }
     return $preferredLanguage;
-  }
+  };
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#translationNotFoundIndicator
@@ -1487,31 +1487,35 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           $rootScope.$emit('$translateRefreshEnd');
         }
 
+        function reloadTableData(data) {
+          if ($translationTable[data.key]) {
+            delete $translationTable[data.key];
+          }
+          translations(data.key, data.table);
+        }
+
         $rootScope.$emit('$translateRefreshStart');
 
         if (!langKey) {
           // if there's no language key specified we refresh ALL THE THINGS!
           var tables = [];
-
+          var languages = [];
           // reload registered fallback languages
           if ($fallbackLanguage && $fallbackLanguage.length) {
-            for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-              tables.push(loadAsync($fallbackLanguage[i]));
-            }
+            languages = languages.concat($fallbackLanguage);
           }
 
           // reload currently used language
           if ($uses) {
-            tables.push(loadAsync($uses));
+            languages.push($uses);
           }
+          angular.forEach(languages, function(language) {
+              var languagePromise = loadAsync(language).then(reloadTableData);
+              langPromises[language] = languagePromise;
+              tables.push(languagePromise);
+          });
 
-          $q.all(tables).then(function (tableData) {
-            angular.forEach(tableData, function (data) {
-              if ($translationTable[data.key]) {
-                delete $translationTable[data.key];
-              }
-              translations(data.key, data.table);
-            });
+          $q.all(tables).then(function () {
             if ($uses) {
               useLanguage($uses);
             }
