@@ -1389,7 +1389,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
-        if (!$translationTable[key] && $loaderFactory) {
+        if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
           $nextLang = key;
           langPromises[key] = loadAsync(key).then(function (translation) {
             translations(translation.key, translation.table);
@@ -1626,9 +1626,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         // Also, if there are any fallback language registered, we start
         // loading them asynchronously as soon as we can.
         if ($fallbackLanguage && $fallbackLanguage.length) {
-
+          var processAsyncResult = function (translation) {
+            translations(translation.key, translation.table);
+          };
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(processAsyncResult);
           }
         }
       }

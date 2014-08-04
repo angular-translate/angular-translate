@@ -52,12 +52,19 @@ angular.module('pascalprecht.translate')
     };
   }());
 
-  var hasLocalStorageSupport = 'localStorage' in $window && $window.localStorage !== null;
+  var hasLocalStorageSupport = 'localStorage' in $window;
   if (hasLocalStorageSupport) {
     var testKey = 'pascalprecht.translate.storageTest';
     try {
-      $window.localStorage.setItem(testKey, 'foo');
-      $window.localStorage.removeItem(testKey);
+      // this check have to be wrapped within a try/catch because on
+      // a SecurityError: Dom Exception 18 on iOS
+      if ($window.localStorage !== null) {
+        $window.localStorage.setItem(testKey, 'foo');
+        $window.localStorage.removeItem(testKey);
+        hasLocalStorageSupport = true;
+      } else {
+        hasLocalStorageSupport = false;
+      }
     } catch (e){
       hasLocalStorageSupport = false;
     }
