@@ -399,12 +399,115 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('$translate#use() with async loading', function () {
+  // Spec for edge case: while preferred language is still loading,
+  //                     another language will be requested and
+  //                     is returning before the preferred one
+  // t0 ~ 0.0s           (request ab_CD)
+  // t1 ~ 0.5s           (request en_US)
+  // t2 ~ 1.5s           (response en_US)
+  // t3 ~ 2.0s           (response ab_CD)
+  describe('$translate#use() with async loading and two unordered requests in parallel', function () {
 
     var fastButRequestedSecond = 'en_US',
         slowButRequestedFirst = 'ab_CD',
         expectedTranslation = 'Hello World',
-        fastRequestTime = 1000;
+        notExpectedTranslation = 'foo bar bork bork bork',
+        fastRequestTime = 1000,
+        firstLanguageResponded = false,
+        secondLanguageResponded = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        $translateProvider.useLoader('customLoader');
+
+        $translateProvider.preferredLanguage(slowButRequestedFirst);
+
+        $provide.service('customLoader', function ($q, $timeout) {
+          return function (options) {
+            var deferred = $q.defer();
+            var locale = options.key;
+
+            if (locale === fastButRequestedSecond) {
+                $timeout(function () {
+                    secondLanguageResponded = true;
+                    // t2
+                    deferred.resolve({
+                        greeting: expectedTranslation
+                    });
+                }, fastRequestTime);
+            }
+
+            if (locale === slowButRequestedFirst) {
+                $timeout(function() {
+                    firstLanguageResponded = true;
+                    // t3
+                    deferred.resolve({
+                        greeting: notExpectedTranslation
+                    });
+                }, fastRequestTime * 2);
+            }
+
+            return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope) {
+      $translate = _$translate_;
+      // t0 already happened
+
+      $timeout(function () {
+        // t1
+        $translate.use(fastButRequestedSecond);
+      }, fastRequestTime / 2);
+
+      // t2
+      $timeout.flush();
+      $rootScope.$digest();
+
+      // t3
+      $timeout.flush();
+    }));
+
+    it('should be requested the first language', function () {
+      expect(firstLanguageResponded).toEqual(true);
+    });
+
+    it('should be requested the second language', function () {
+      expect(secondLanguageResponded).toEqual(true);
+    });
+
+    it('should set the language to be the most recently requested one, not the most recently responded one', inject(function($rootScope, $q) {
+
+      var value;
+
+      $translate('greeting').then(function (translation) {
+        value = translation;
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual(expectedTranslation);
+    }));
+  });
+
+  // Spec for edge case: while preferred language is still loading,
+  //                     another language will be requested as fallback
+  //                     and is returning before the preferred one
+  // t0 ~ 0.0s           (request ab_CD)
+  // t1 ~ 0.5s           (request en_US)
+  // t2 ~ 1.5s           (response en_US)
+  // t3 ~ 2.0s           (response ab_CD)
+  describe('$translate#use() with async loading and two unordered requests in parallel (+fallback)', function () {
+
+    var fastButRequestedSecond = 'en_US',
+        slowButRequestedFirst = 'ab_CD',
+        expectedTranslation = 'Hello World',
+        notExpectedTranslation = 'foo bar bork bork bork',
+        fastRequestTime = 1000,
+        firstLanguageResponded = false,
+        secondLanguageResponded = false;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -420,6 +523,7 @@ describe('pascalprecht.translate', function () {
 
             if (locale === fastButRequestedSecond) {
                 $timeout(function () {
+                    secondLanguageResponded = true;
                     deferred.resolve({
                         greeting: expectedTranslation
                     });
@@ -427,10 +531,10 @@ describe('pascalprecht.translate', function () {
             }
 
             if (locale === slowButRequestedFirst) {
-
                 $timeout(function() {
+                    firstLanguageResponded = true;
                     deferred.resolve({
-                        greeting: 'foo bar bork bork bork'
+                        greeting: notExpectedTranslation
                     });
                 }, fastRequestTime * 2);
             }
@@ -451,8 +555,15 @@ describe('pascalprecht.translate', function () {
 
       $timeout.flush();
       $rootScope.$digest();
-      $timeout.flush();
     }));
+
+    it('should be requested the first language', function () {
+      expect(firstLanguageResponded).toEqual(true);
+    });
+
+    it('should be requested the second language', function () {
+      expect(secondLanguageResponded).toEqual(true);
+    });
 
     it('should set the language to be the most recently requested one, not the most recently responded one', inject(function($rootScope, $q) {
 
