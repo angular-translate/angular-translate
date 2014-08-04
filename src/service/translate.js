@@ -1510,12 +1510,17 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             languages.push($uses);
           }
           angular.forEach(languages, function(language) {
-              var languagePromise = loadAsync(language).then(reloadTableData);
-              langPromises[language] = languagePromise;
-              tables.push(languagePromise);
+            langPromises[language] = loadAsync(language);
+            tables.push(langPromises[language]);
           });
 
-          $q.all(tables).then(function () {
+          $q.all(tables).then(function (tableData) {
+            angular.forEach(tableData, function (data) {
+              if ($translationTable[data.key]) {
+                delete $translationTable[data.key];
+              }
+              translations(data.key, data.table);
+            });
             if ($uses) {
               useLanguage($uses);
             }
