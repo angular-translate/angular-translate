@@ -1487,13 +1487,6 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           $rootScope.$emit('$translateRefreshEnd');
         }
 
-        function reloadTableData(data) {
-          if ($translationTable[data.key]) {
-            delete $translationTable[data.key];
-          }
-          translations(data.key, data.table);
-        }
-
         $rootScope.$emit('$translateRefreshStart');
 
         if (!langKey) {
