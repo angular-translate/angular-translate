@@ -39,6 +39,12 @@ describe('pascalprecht.translate', function () {
         $rootScope.$digest();
         expect(element.hasClass('translate-cloak')).toBe(false);
       });
+
+      it('should not add translate-cloak class if loader has already finished', function () {
+        $rootScope.$digest();
+        element = $compile('<div translate-cloak></div>')($rootScope);
+        expect(element.hasClass('translate-cloak')).toBe(false);
+      })
     });
 
     describe('custom class name', function () {
@@ -77,6 +83,12 @@ describe('pascalprecht.translate', function () {
         $rootScope.$digest();
         expect(element.hasClass('foo')).toBe(false);
       });
+
+      it('should not add custom translate-cloak class if loader has already finished', function () {
+        $rootScope.$digest();
+        element = $compile('<div translate-cloak></div>')($rootScope);
+        expect(element.hasClass('foo')).toBe(false);
+      })
     });
   });
 });

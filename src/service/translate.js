@@ -707,7 +707,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           interpolatorHashMap = {},
           langPromises = {},
           fallbackIndex,
-          startFallbackIteration;
+          startFallbackIteration,
+          hasLoadedTranslations = false;
 
       var $translate = function (translationId, interpolateParams, interpolationId) {
 
@@ -889,6 +890,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         })).then(function (data) {
           var translationTable = {};
           $rootScope.$emit('$translateLoadingSuccess');
+          hasLoadedTranslations = true;
 
           if (angular.isArray(data)) {
             angular.forEach(data, function (table) {
@@ -1612,6 +1614,20 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         return result;
       };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#hasLoadedTranslations
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns true if at least one translation table has been loaded successfully.
+       *
+       * @return {boolean} whether a translation table has loaded.
+       */
+      $translate.hasLoadedTranslations = function () {
+          return hasLoadedTranslations;
+      }
 
       if ($loaderFactory) {
 
