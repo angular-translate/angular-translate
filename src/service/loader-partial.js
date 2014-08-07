@@ -74,7 +74,7 @@ angular.module('pascalprecht.translate')
   var parts = {};
 
   function hasPart(name) {
-    return parts.hasOwnProperty(name);
+    return Object.prototype.hasOwnProperty.call(parts, name);
   }
 
   function isStringValid(str) {

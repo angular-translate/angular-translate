@@ -97,7 +97,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var alias;
       for (var langKeyAlias in $languageKeyAliases) {
         var hasWildcardKey = false;
-        var hasExactKey = $languageKeyAliases.hasOwnProperty(langKeyAlias) &&
+        var hasExactKey = Object.prototype.hasOwnProperty.call($languageKeyAliases, langKeyAlias) &&
           angular.lowercase(langKeyAlias) === angular.lowercase(preferred);
 
         if (langKeyAlias.slice(-1) === '*') {
@@ -114,7 +114,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
     var parts = preferred.split('_');
 
-    if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > -1) {
+    if (parts.length > 1 && indexOf(avail, angular.lowercase(parts[0])) > -1) {
       return parts[0];
     }
 
@@ -217,7 +217,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       result = {};
     }
     for (key in data) {
-      if (!data.hasOwnProperty(key)) {
+      if (!Object.prototype.hasOwnProperty.call(data, key)) {
         continue;
       }
       val = data[key];
@@ -320,7 +320,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $preferredLanguage = langKey;
     }
     return $preferredLanguage;
-  }
+  };
   /**
    * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#translationNotFoundIndicator
@@ -411,7 +411,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $fallbackWasString = false;
         $fallbackLanguage = langKey;
       }
-      if (angular.isString($preferredLanguage)  && $fallbackLanguage.indexOf($preferredLanguage) < 0) {
+      if (angular.isString($preferredLanguage)  && indexOf($fallbackLanguage, $preferredLanguage) < 0) {
         $fallbackLanguage.push($preferredLanguage);
       }
 
@@ -966,7 +966,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       var getTranslationTable = function (langKey) {
         var deferred = $q.defer();
-        if ($translationTable.hasOwnProperty(langKey)) {
+        if (Object.prototype.hasOwnProperty.call($translationTable, langKey)) {
           deferred.resolve($translationTable[langKey]);
           return deferred.promise;
         } else {
@@ -997,7 +997,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         var deferred = $q.defer();
 
         getTranslationTable(langKey).then(function (translationTable) {
-          if (translationTable.hasOwnProperty(translationId)) {
+          if (Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
             Interpolator.setLocale(langKey);
             deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
             Interpolator.setLocale($uses);
@@ -1026,7 +1026,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator) {
         var result, translationTable = $translationTable[langKey];
 
-        if (translationTable.hasOwnProperty(translationId)) {
+        if (Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
           result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
           Interpolator.setLocale($uses);
@@ -1157,7 +1157,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
 
         // if the translation id exists, we can just interpolate it
-        if (table && table.hasOwnProperty(translationId)) {
+        if (table && Object.prototype.hasOwnProperty.call(table, translationId)) {
           var translation = table[translationId];
 
           // If using link, rerun $translate with linked translationId and return it
@@ -1203,7 +1203,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
 
         // if the translation id exists, we can just interpolate it
-        if (table && table.hasOwnProperty(translationId)) {
+        if (table && Object.prototype.hasOwnProperty.call(table, translationId)) {
           var translation = table[translationId];
 
           // If using link, rerun $translate with linked translationId and return it
@@ -1590,7 +1590,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         // trim off any whitespace
         if (translationId) {
-          translationId = translationId.trim();
+          translationId = trim.apply(translationId);
         }
 
         var result, possibleLangKeys = [];
