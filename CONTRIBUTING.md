@@ -95,7 +95,7 @@ at [demo/server_routes.js](demo/server_routes.js).
 
 ## Contributing/Submitting changes
 
-- Checkout a new branch based on <code>master</code> and name it to what you intend to do:
+- Checkout a new branch based on <code>canary</code> and name it to what you intend to do:
   - Example:
     ````
     $ git checkout -b BRANCH_NAME
