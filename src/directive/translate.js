@@ -138,7 +138,7 @@ angular.module('pascalprecht.translate')
             });
           };
           for (var attr in iAttr) {
-            if (iAttr.hasOwnProperty(attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+            if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
               fn(attr);
             }
           }

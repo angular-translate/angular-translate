@@ -19,7 +19,7 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
         escaped: function (params) {
           var result = {};
           for (var key in params) {
-            if (params.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(params, key)) {
               result[key] = angular.element('<div></div>').text(params[key]).html();
             }
           }
