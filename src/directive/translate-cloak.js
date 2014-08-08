@@ -27,6 +27,7 @@ angular.module('pascalprecht.translate')
           removeListener();
           removeListener = null;
         });
+        tElement.addClass($translate.cloakClassName());
       } 
     }
   };
