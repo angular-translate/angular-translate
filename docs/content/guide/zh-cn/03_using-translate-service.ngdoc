@@ -46,6 +46,30 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 
 这就是全部。当你想翻译`<TITLE>`的内容时，现在可以在您的控制器内这样做。
 
+## 多个翻译标识 
+翻译服务也意识到一次请求多个翻译的情况。
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+但是，该服务将始终返回一个包含翻译的对象 - 不管翻译（部分或者全部）是否失败了。当在一个要求l里请求多种翻译时，由你来决定如何处理结果。
+ 
+## angular-translate 库版本信息 
+因为在您的应用程序中显示“关于”信息是很有用，我们为您提供一个便利的函数来显示，或使用已安装的库版本信息。
+
+Just call it this way:
+<pre>
+  $translate.versionInfo();
+  // returns e.g. "2.1.0"
+</pre>
+
 ## 谨记于心
 请记住 `$translate` 翻译服务，不提供默认双向数据绑定！ `$translate` 服务以异步方式工作，这意味着
 只要其能确定它就返回给定的翻译标识的翻译。如果翻译不存在，它很可能只是返回的翻译标识。

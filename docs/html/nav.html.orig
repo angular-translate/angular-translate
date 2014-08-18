@@ -1,0 +1,28 @@
+<script>
+function langLink(locale) {
+  return 'http://angular-translate.github.io/docs/' + locale + '/' + window.location.hash;
+}
+</script>
+
+<ul class="nav pull-right">
+  <li>
+  <a href="http://angular-translate.github.io/docs/plato/"><i class="icon-signal"></i> Plato Report</a>
+  </li>
+  <li>
+    <a href="https://github.com/angular-translate/angular-translate">
+      <i class="icon-github-sign"></i> View on GitHub
+    </a>
+  </li>
+  <li class="dropdown">
+  <a href="#" class="dropdown-toggle"><i class="icon-align-justify"></i> Language</a>
+    <ul class="dropdown-menu">
+      <li><a href="" onClick="window.location = langLink('en');"><img src="img/flags/en.png"> English</a></li>
+      <li><a href="" onClick="window.location = langLink('ru');"><img src="img/flags/ru.png"> Russian</a></li>
+      <li><a href="" onClick="window.location = langLink('de');"><img src="img/flags/de.png"> German</a></li>
+      <li><a href="" onClick="window.location = langLink('uk');"><img src="img/flags/uk.png"> Ukrainian</a></li>
+      <li><a href="" onClick="window.location = langLink('zh-cn');"><img src="img/flags/zhcn.png"> Simplified Chinese</a></li>
+      <li><a href="" onClick="window.location = langLink('zh-tw');"><img src="img/flags/zhtw.png"> Traditional Chinese</a></li>
+      <li><a href="" onClick="window.location = langLink('fr');"><img src="img/flags/fr.png"> French</a></li>
+    </ul>
+  </li>
+</ul>

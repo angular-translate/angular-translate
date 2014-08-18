@@ -1,0 +1,57 @@
+@ngdoc overview
+@name 語言談判
+@description
+
+# 語言談判
+
+angular-translate 支持一個名為“語言協商”功能。用此功能，你可以定義類似的語言鍵之間的關係。
+
+所以，這是什麼意思？比方說，你的轉換錶的語言有鍵`en` 和`de`。
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ });
+</pre>
+
+你也可以告訴angular-translate,它應該通過調用`.determinePreferredLanguage()`方法盡量確定首選您的應用程序本身的語言。
+
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ })
+  .determinePreferredLanguage();
+</pre>
+
+我們學習過[自動確定首選語言](#/guide/07_multi-language#multi-language_determining-preferred-language-automatically)
+使用這個方法不帶任何參數，他將嘗試通過訪問瀏覽器屬性確定一個語言鍵。
+
+現在，如果您的瀏覽器返回`en_US` 而不是`en`? 通常，這將導致一個錯誤，因為`en_US` 是，在乍看之下，只是另一種語言的鍵。
+所以angular-translate 將其視為不同的語言。這是不是你想要的。你想要angular-translate 足夠聰明的識別`en_US`的`en`之間的關係，
+在這種情況下它應該使用`en`。
+
+angular-translate 一應俱全。您可以通過所使用的語言協商制度使用`registerAvailableLanguageKeys()` 方法。此方法需要一個數組，
+你的應用程序支持的語言的鍵。第二個參數是一個對象映射相關的語言鍵與實際語言鍵。一旦這個設置確定，
+angular-translate能夠通過映射瀏覽器返回的語言`EN_US`為語言鍵`en`，這才是實際上你的應用程序要使用的。
+
+關於我們的用例，我們上面所討論的，它看起來會像這樣：
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ })
+  .registerAvailableLanguageKeys(['en', 'de'], {
+    'en_US': 'en',
+    'en_UK': 'en',
+    'de_DE': 'de',
+    'de_CH': 'de'
+  })
+  .determinePreferredLanguage();
+</pre>
+
+如果瀏覽器現在返回`en_US` 或者`en_UK`, angular-translate 會設定`en`為首選語言.
+我們還要提到的是這個方法只能是在`determinePreferredLanguage()`同時也被使用時才有意義。
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

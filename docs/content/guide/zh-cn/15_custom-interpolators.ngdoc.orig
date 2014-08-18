@@ -1,0 +1,156 @@
+@ngdoc overview
+@name 自定义插值器
+@description
+
+# 自定义插值器
+
+如果你足够聪明来实现更小的 MessageFormat 库，或者如果你只需要另一种类型的插值，你可以简单地建立自己的插值服务，并将它插入 angular-translate。
+您需要做的就是遵循 angular-translate 特定的插值服务具体的接口协议。让我们看看这是如何工作的！
+
+## 建立一个自定义的插值服务
+
+当建立一个自定义的插值服务，事情应该很熟悉如果你读过 [自定义存储](#/guide/11_custom-storages)和
+[自定义加载器](#/guide/13_custom-loaders)。 你开始建厂返回一个对象，它实现某个接口。
+下面的方法必须由一个自定义的插值服务提供：
+
+- `setLocale(langKey)` - 设置当前使用的语言
+- `getInterpolationIdentifier()` - 返回一个标识符插值
+- `interpolate(string, interpolateParams)` - 对字符串的params参数进行插值处理
+
+让我们来看看怎么实现自定义的插值服务。首先，我们实现的接口：
+
+<pre>
+app.factory('customInterpolation', function () {
+
+  return {
+
+    setLocale: function (locale) {
+
+    },
+
+    getInterpolationIdentifier: function () {
+
+    },
+
+    interpolate: function (string, interpolateParams) {
+
+    }
+  };
+});
+</pre>
+
+好了，这是一个插值服务的基本结构。现在让我们来添加一些逻辑， 一旦使用我们自定义的插补服务被传递进来 angular-translate 可以使用这些逻辑：
+
+<pre>
+app.factory('customInterpolation', function ($interpolate) {
+
+  var $locale;
+
+  return {
+
+    setLocale: function (locale) {
+      $locale = locale;
+    },
+
+    getInterpolationIdentifier: function () {
+      return 'custom';
+    },
+
+    interpolate: function (string, interpolateParams) {
+      return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+    }
+  };
+});
+</pre>
+
+好吧。那么我们在这里做什么。 `setLocale()`只是存储目前使用的语言。 `getInterpolationIdentifier()`返回一个字符串，`custom`。
+那么，它实际上是什么呢？记住怎样[临时重载插补类型]（＃/guide/14_pluralization＃overridinginterpolationtemporarily）？
+没错。这是映射到您的服务标识符，所以当你明确地在运行时重载插值服务时 angular-translate 知道要使用的插值服务。
+`interpolate()` 只是使用 Angular 的 `$translate` 插值服务。此外，它会预先将当前区域设置附加到给定的字符串（前缀和后缀）。
+
+## 使用自定义插值服务
+
+就像有存储（`useStorage()`）和装载机（`useLoader()`）的上的不同方法， 另外还有自定义插值的方法。
+当谈到将自定义插值到服务您的应用程序 `$translateProvider.useInterpolation()` 是你的朋友。
+
+<pre>
+$translateProvider.useInterpolation('customInterpolation');
+</pre>
+
+你的应用程序现在使用您的自定义插值服务为默认值。然而，正如你在前面的章节中所学到，您可以添加自定义的插值服务作为可选插值，
+而不去触动 Angular 的很酷的功能：
+
+<pre>
+$translateProvider.addInterpolation('customInterpolation');
+</pre>
+
+就是这个样子的：
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useInterpolation('customInterpolation');
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'english',
+          BUTTON_LANG_DE: 'german'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'englisch',
+          BUTTON_LANG_DE: 'deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+
+      app.factory('customInterpolation', function ($interpolate) {
+
+        var $locale;
+
+        return {
+
+          setLocale: function (locale) {
+            $locale = locale;
+          },
+
+          getInterpolationIdentifier: function () {
+            return 'custom';
+          },
+
+          interpolate: function (string, interpolateParams) {
+            return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+          }
+        };
+      });
+
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="HEADLINE"></p>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,0 +1,57 @@
+@ngdoc overview
+@name 语言谈判
+@description
+
+# 语言谈判
+
+angular-translate 支持一个名为“语言协商”功能。用此功能，你可以定义类似的语言键之间的关系。
+
+所以，这是什么意思？比方说，你的转换表的语言有键 `en` 和 `de`。
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ });
+</pre>
+
+你也可以告诉angular-translate,它应该通过调用 `.determinePreferredLanguage()`方法尽量确定首选您的应用程序本身的语言。
+
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ })
+  .determinePreferredLanguage();
+</pre>
+
+我们学习过 [自动确定首选语言](#/guide/07_multi-language#multi-language_determining-preferred-language-automatically)
+使用这个方法不带任何参数，他将尝试通过访问浏览器属性确定一个语言键。
+
+现在，如果您的浏览器返回`en_US` 而不是`en`? 通常，这将导致一个错误，因为`en_US` 是，在乍看之下，只是另一种语言的键。
+所以 angular-translate 将其视为不同的语言。这是不是你想要的。你想要 angular-translate 足够聪明的识别`en_US`的`en`之间的关系，
+在这种情况下它应该使用`en`。
+
+angular-translate 一应俱全。您可以通过所使用的语言协商制度使用 `registerAvailableLanguageKeys()` 方法。此方法需要一个数组，
+你的应用程序支持的语言的键。 第二个参数是一个对象映射相关的语言键与实际语言键。一旦这个设置确定，
+angular-translate能够通过映射浏览器返回的语言`EN_US`为语言键`en`，这才是实际上你的应用程序要使用的。
+
+关于我们的用例，我们上面所讨论的，它看起来会像这样：
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ })
+  .registerAvailableLanguageKeys(['en', 'de'], {
+    'en_US': 'en',
+    'en_UK': 'en',
+    'de_DE': 'de',
+    'de_CH': 'de'
+  })
+  .determinePreferredLanguage();
+</pre>
+
+如果浏览器现在返回 `en_US` 或者 `en_UK`, angular-translate 会设定 `en`为首选语言.
+我们还要提到的是这个方法只能是在`determinePreferredLanguage()`同时也被使用时才有意义。
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
