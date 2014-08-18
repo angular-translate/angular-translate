@@ -46,6 +46,30 @@ $scope.namespaced_paragraph = anotherOne;
 
 這就是全部。當你想翻譯`<TITLE>`的內容時，現在可以在您的控制器內這樣做。
 
+## 多個翻譯標識
+翻譯服務也意識到一次請求多個翻譯的情況。
+
+<pre>
+app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  });
+}]);
+</pre>
+
+但是，該服務將始​​終返回一個包含翻譯的對象- 不管翻譯（部分或者全部）是否失敗了。當在一個要求l裡請求多種翻譯時，由你來決定如何處理結果。
+ 
+## angular-translate 庫版本信息
+因為在您的應用程序中顯示“關於”信息是很有用，我們為​​您提供一個便利的函數來顯示，或使用已安裝的庫版本信息。
+
+Just call it this way:
+<pre>
+  $translate.versionInfo();
+  // returns e.g. "2.1.0"
+</pre>
+
 ## 謹記于心
 請記住 `$translate` 翻譯服務，不提供預設雙向資料繫結！ `$translate` 服務以非同步方式工作，這意味著
 只要其能確定它就返回給定的翻譯標識的翻譯。如果翻譯不存在，它很可能只是返回的翻譯標識。
