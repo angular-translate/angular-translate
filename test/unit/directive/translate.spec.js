@@ -169,7 +169,7 @@ describe('pascalprecht.translate', function () {
           element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
           $rootScope.$digest();
           expect(element.text()).toBe('Lorem Ipsum ');
-        });
+       });
 
         it('should replace interpolation directive with empty string if translation id is in content', function () {
           element = $compile('<div translate>TD_WITH_VALUE</div>')($rootScope);
@@ -571,6 +571,70 @@ describe('pascalprecht.translate', function () {
       // expect(element.html()).toEqual('<span class="ng-scope">The Doctor is a citizen of <strong ng-bind="world" class="ng-binding">Earth</strong>!</span>');
       // unfortunately, the order of tag attributes is not deterministic in all browsers
       expect(element.find('strong').html()).toEqual('Earth');
+    });
+  });
+
+  describe('translate-attr-* attributes', function () {
+
+    var element;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'ANOTHER_ONE': 'bar',
+          'TRANSLATION_ID': 'foo',
+          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
+          'ANOTHER_TEXT_WITH_VALUE': 'And here is another value: {{another_value}}'
+        })
+        .preferredLanguage('en');
+    }));
+
+    var $compile, $rootScope;
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+    }));
+
+
+    it('should make simple attribute translation', function () {
+      element = $compile('<div translate translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('foo');
+    });
+
+    it('should translate multiple attributes', function () {
+      element = $compile('<div translate translate-attr-name="ANOTHER_ONE" translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('foo');
+      expect(element.attr('name')).toBe('bar');
+    });
+
+    it('should translate attributes and content', function () {
+      element = $compile('<div translate="ANOTHER_ONE" translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('foo');
+      expect(element.text()).toBe('bar');
+    });
+
+    it('should translate attributes with value interpolation', function () {
+      element = $compile('<div translate translate-attr-title="TEXT_WITH_VALUE" translate-values="{value: \'bar\'}"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('This is a text with given value: bar');
+    });
+
+    it('should translate attributes and text with multiplue values interpolation', function () {
+      element = $compile('<div translate="ANOTHER_TEXT_WITH_VALUE" translate-attr-title="TEXT_WITH_VALUE" translate-values="{value: \'bar\', another_value: \'foo\'}"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('This is a text with given value: bar');
+      expect(element.text()).toBe('And here is another value: foo');
+    });
+
+    it('should translate attributes with simple interpolation', function () {
+      $rootScope.who = 'there!';
+      element = $compile('<div translate translate-attr-title="Helloo {{who}}"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('Helloo there!');
     });
   });
 
