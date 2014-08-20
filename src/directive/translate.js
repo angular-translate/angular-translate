@@ -36,10 +36,10 @@ angular.module('pascalprecht.translate')
 
       .config(function ($translateProvider) {
 
-        $translateProvider.translations({
+        $translateProvider.translations('en',{
           'TRANSLATION_ID': 'Hello there!',
           'WITH_VALUES': 'The following value is dynamic: {{value}}'
-        });
+        }).preferredLanguage('en');
 
       });
 
