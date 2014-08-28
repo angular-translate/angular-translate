@@ -1386,6 +1386,31 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
       /**
        * @ngdoc function
+       * @name pascalprecht.translate.$translate#removeFallback
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Tells angular-translate to forget about a specific fallback language.
+       * 
+       * It will no longer try to load translations for it.
+       *
+       * @example
+       * var oldLanguage = $translate.use();
+       * $translate.use("en_US");
+       * $translate.removeFallback(oldLanguage);
+       *
+       * @param {string} key Language key
+       */
+      $translate.removeFallback = function(langKey) {
+        var idx = $fallbackLanguage.indexOf(langKey);
+        if (idx < 0) {
+            return;
+        }
+        $fallbackLanguage.splice(idx, 1);
+      };
+
+      /**
+       * @ngdoc function
        * @name pascalprecht.translate.$translate#storageKey
        * @methodOf pascalprecht.translate.$translate
        *
