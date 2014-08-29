@@ -9,6 +9,8 @@ angular.module('pascalprecht.translate')
  * $description
  * Adds a `translate-cloak` class name to the given element where this directive
  * is applied initially and removes it, once a loader has finished loading.
+ * If a loader has already finished loading, the `translate-cloak` class is not
+ * added.
  *
  * This directive can be used to prevent initial flickering when loading translation
  * data asynchronously.
@@ -19,12 +21,14 @@ angular.module('pascalprecht.translate')
 
   return {
     compile: function (tElement) {
-      var removeListener = $rootScope.$on('$translateChangeEnd', function () {
-        tElement.removeClass($translate.cloakClassName());
-        removeListener();
-        removeListener = null;
-      });
-      tElement.addClass($translate.cloakClassName());
+      if ($translate.hasLoadedTranslations() == false){
+        var removeListener = $rootScope.$on('$translateChangeEnd', function () {
+          tElement.removeClass($translate.cloakClassName());
+          removeListener();
+          removeListener = null;
+        });
+        tElement.addClass($translate.cloakClassName());
+      } 
     }
   };
 }]);

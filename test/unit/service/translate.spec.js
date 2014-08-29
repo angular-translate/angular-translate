@@ -69,6 +69,10 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant).toBeDefined();
     });
 
+    it('should have a method hasLoadedTranslations()', function () {
+      expect($translate.hasLoadedTranslations).toBeDefined();
+    });
+
     describe('$translate#preferredLanguage()', function () {
 
       it('should be a function', function () {
@@ -1640,4 +1644,42 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
     });
   });
+
+  describe('$translate.hasLoadedTranslations', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      $translateProvider
+        .useLoader('customLoader')
+        .preferredLanguage('en')
+
+      $provide.factory('customLoader', function ($q) {
+        return function (options) {
+          var deferred = $q.defer();
+
+          deferred.resolve({
+            'foo': 'bar'
+          });
+
+          return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_) {
+      $translate = _$translate_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should return false if translations have not yet loaded', function () {
+      expect($translate.hasLoadedTranslations()).toBe(false);
+    });
+
+    it('should return true after at least one loader has finished', function () {
+      debugger;
+      $rootScope.$digest();
+      expect($translate.hasLoadedTranslations()).toBe(true);
+    });
+  })
 });
