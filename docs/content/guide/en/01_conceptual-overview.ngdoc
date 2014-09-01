@@ -51,7 +51,7 @@ speed up your apps performance. angular-translate supports the use of so called
 asynchronous loaders, which are very easy to use. There are two asynchronous
 loaders, `urlLoader` and `staticFilesLoader`. Both of them solves a specific
 situation when it comes to asynchonous loading of translation data. Anyways, of
-course you can build your own custom loaders and use then if you want to.
+course you can build your own custom loaders and use them if you want to.
 
 ## Storage
 Since its pretty common that an app, which provides multi-language support, should
