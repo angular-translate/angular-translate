@@ -8,7 +8,7 @@
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run",
+    "test": "karma start karma.unit.conf.js --single-run",
     "pretest": "bower install",
     "prepublish": "bower install && grunt build"
   },
