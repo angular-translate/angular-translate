@@ -15,6 +15,9 @@
 ### Presentation (Kod.io 2014)
 [![angular-translate Talk](presentation2.png)](https://www.youtube.com/watch?v=C7xqaExvaQ4)
 
+### Installing from npm
+Just npm install and compile via browserify. By default, the `main` file is `dist/angular-translate.js`, but there are other flavors that you may be interested in pulling in.
+
 ### Links
 * Website [http://angular-translate.github.io](http://angular-translate.github.io/)
 * API Reference [http://angular-translate.github.io/docs/#/api](http://angular-translate.github.io/docs/#/api)

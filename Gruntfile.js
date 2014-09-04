@@ -514,7 +514,12 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jshint:all',
-    'karma',
+    'karma:unit',
+    'karma:midway',
+    'karma:headless-unit',
+    'karma:headless-midway',
+    'karma:browser-firefox-unit',
+    'karma:browser-firefox-midway',
     'build:core',
     'build:messageformat_interpolation',
     'build:handler_log',

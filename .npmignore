@@ -1,0 +1,24 @@
+# If someone is installing in npm, let's keep this package lightweight
+# and only include what they need. If they want to enjoy the docs
+# or tests, they can always clone the repo themselves.
+/bower_components/
+/demo/
+/docs/
+/identity/
+/src/
+/test/
+/.bowerrc
+/.editorconfig
+/.jshintrc
+/.travis.yml
+/bower.json
+/CONTRIBUTING.md
+/generate_site.sh
+/Gruntfile.js
+/karma.midway.conf.js
+/karma.unit.conf.js
+/presentation.png
+/presentation2.png
+/server.js
+/update-docs
+.idea
