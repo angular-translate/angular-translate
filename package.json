@@ -8,7 +8,8 @@
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run"
+    "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run",
+    "prepublish": "grunt build"
   },
   "author": {
     "name": "Pascal Precht"
@@ -19,6 +20,7 @@
     "karma": "~0.10.9",
     "grunt-karma": "~0.6.x",
     "grunt": "~0.4.1",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "~0.4.2",
     "grunt-contrib-concat": "~0.3.x",
     "grunt-contrib-uglify": "~0.2.x",
