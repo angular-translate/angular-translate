@@ -9,14 +9,15 @@
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.unit.conf.js --single-run",
-    "prepublish": "grunt build"
+    "pretest": "bower install",
+    "prepublish": "bower install && grunt build"
   },
   "author": {
     "name": "Pascal Precht"
   },
   "license": "MIT",
   "devDependencies": {
-    "bower": "~1.2.8",
+    "bower": "^1.3.9",
     "karma": "~0.10.9",
     "grunt-karma": "~0.6.x",
     "grunt": "~0.4.1",
