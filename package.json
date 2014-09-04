@@ -2,7 +2,7 @@
   "name": "angular-translate",
   "version": "2.2.2",
   "description": "A translation module for AngularJS",
-  "main": "index.js",
+  "main": "dist/angular-translate.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
