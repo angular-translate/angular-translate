@@ -855,7 +855,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
         // inform default interpolator
         defaultInterpolator.setLocale($uses);
-        // inform all others to!
+        // inform all others too!
         angular.forEach(interpolatorHashMap, function (interpolator, id) {
           interpolatorHashMap[id].setLocale($uses);
         });
