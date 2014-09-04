@@ -1,9 +1,8 @@
 .DS_Store
-node_modules
-components
-bower_components
-dist
-demo/js/angular-translate-latest.js
+/node_modules/
+/bower_components/
+/dist/
+/demo/js/angular-translate-latest.js
 .idea
 *.iml
 atlassian-ide-plugin.xml
