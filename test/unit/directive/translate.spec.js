@@ -110,6 +110,33 @@ describe('pascalprecht.translate', function () {
         expect(element.text()).toBe('foo');
       });
 
+      it('should return translation prepended by additional content when passed as interpolation', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate>abc{{translationId}}')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('abcfoo');
+      });
+
+      it('should return translation appended by additional content when passed as interpolation', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate>{{translationId}}def')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foodef');
+      });
+
+      it('should return translation surrounded by additional content when passed as interpolation', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate>abc{{translationId}}def')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('abcfoodef');
+      });
+
+      it('should return translation surrounded by additional content when passed as interpolation with literal', function () {
+        element = $compile('<div translate>abc{{"TRANSLATION_ID"}}def')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('abcfoodef');
+      });
+
       it('should return translation if translation id exists and if its passed surrounded by white space', function () {
         element = $compile('<div translate>  TRANSLATION_ID  </div>')($rootScope);
         $rootScope.$digest();
