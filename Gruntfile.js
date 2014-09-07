@@ -522,9 +522,19 @@ module.exports = function (grunt) {
   grunt.registerTask('test-browser-firefox', ['karma:browser-firefox-unit', 'karma:browser-firefox-midway']);
   grunt.registerTask('test-all', ['karma']);
 
+  grunt.registerTask('prepare-release', [
+    'jshint:all',
+    'test-headless',
+    'build-all'
+  ]);
+
   grunt.registerTask('build', [
     'jshint:all',
     'karma',
+    'build-all'
+  ]);
+
+  grunt.registerTask('build-all', [
     'build:core',
     'build:messageformat_interpolation',
     'build:handler_log',
