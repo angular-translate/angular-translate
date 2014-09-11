@@ -969,11 +969,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (Object.prototype.hasOwnProperty.call($translationTable, langKey)) {
           deferred.resolve($translationTable[langKey]);
           return deferred.promise;
-        } else {
-          langPromises[langKey].then(function (data) {
+        } else if(langKey && langPromises[langKey]) {
+        	langPromises[langKey].then(function (data) {
             translations(data.key, data.table);
             deferred.resolve(data.table);
           }, deferred.reject);
+        } else {
+          deferred.reject();
         }
         return deferred.promise;
       };
