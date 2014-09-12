@@ -14,6 +14,10 @@ describe('pascalprecht.translate', function () {
       $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({
         it: 'works'
       });
+
+      $httpBackend.when('JSONP', 'foo/bar.json?callback=JSON_CALLBACK&lang=de_DE').respond({
+        it: 'jsonp works'
+      });
     }));
 
     afterEach(function () {
@@ -43,6 +47,16 @@ describe('pascalprecht.translate', function () {
       });
       $httpBackend.flush();
     });
+
+    it('should fetch url using jsonp when invoking', function () {
+      $httpBackend.expectJSONP('foo/bar.json?callback=JSON_CALLBACK&lang=de_DE');
+      $translateUrlLoader({
+        key: 'de_DE',
+        url: 'foo/bar.json?callback=JSON_CALLBACK',
+        method: 'JSONP'
+      });
+      $httpBackend.flush();
+    });    
 
     it('should return a promise', function () {
       var promise = $translateUrlLoader({
