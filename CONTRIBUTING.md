@@ -98,7 +98,12 @@ at [demo/server_routes.js](demo/server_routes.js).
 - Checkout a new branch based on <code>canary</code> and name it to what you intend to do:
   - Example:
     ````
-    $ git checkout -b BRANCH_NAME
+    $ git checkout -b BRANCH_NAME origin/canary
+    ````
+    If you get error, you may need to fetch canary first by 
+    ````
+    $ git remote update
+    $ git fetch
     ````
   - Use one branch per fix/feature
 - Make your changes
