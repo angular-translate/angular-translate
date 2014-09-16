@@ -1616,8 +1616,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         }
 
         if (!result && result !== '') {
-          // Return translation if not found anything.
-          result = translationId;
+          // Return translation of default interpolator if not found anything.
+          result = defaultInterpolator.interpolate(translationId, interpolateParams);
           if ($missingTranslationHandlerFactory && !pendingLoader) {
             result = translateByHandler(translationId);
           }
