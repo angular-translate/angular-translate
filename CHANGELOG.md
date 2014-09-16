@@ -1,3 +1,37 @@
+<a name="2.3.0"></a>
+## 2.3.0 (2014-09-16)
+
+
+#### Bug Fixes
+
+* **$translate:** return $missingTranslationHandler result when no translation was found ([7625951d](http://github.com/PascalPrecht/angular-translate/commit/7625951de2474049be78294fa129c32ea46df6a9))
+* **bower.json:** Avoid 'invalid-meta angular-bootstrap-affix is missing "ignore" entry in bower.j ([595501a9](http://github.com/PascalPrecht/angular-translate/commit/595501a9d4882207e3ff510dec80dbe0a553d580))
+* **demo:** fixes wrong method call in demo ([47fc9436](http://github.com/PascalPrecht/angular-translate/commit/47fc9436cfc69347f8a9b7f09cf5c726c0ca1931))
+* **directive:**
+  * improve the cloak-directive's performance ([acab18ab](http://github.com/PascalPrecht/angular-translate/commit/acab18ab5e6f455db86f6c9dabbbbdbc2f7b7855))
+  * change event for listening to `$translateChangeEnd` ([98fe649a](http://github.com/PascalPrecht/angular-translate/commit/98fe649a241b79c245fb32d838b84f0fac319f5a), closes [#658](http://github.com/PascalPrecht/angular-translate/issues/658))
+* **docs:**
+  * fix example in directive ngdoc-documentation (fixes #678) ([176b3e96](http://github.com/PascalPrecht/angular-translate/commit/176b3e96a78c4590f42817e6dcf44addcc49a13f))
+  * Fix typo ([6c2ab307](http://github.com/PascalPrecht/angular-translate/commit/6c2ab307d5b31c0e2e70c2cce0ccbf804db4c540))
+* **package.json:** remove unnecessary relative paths from package.json ([8e5b87e7](http://github.com/PascalPrecht/angular-translate/commit/8e5b87e726562b2fcfdaefb49b35c114e92c66a0))
+* **service:**
+  * use hasOwnProperty of prototype #638 ([d8a5060b](http://github.com/PascalPrecht/angular-translate/commit/d8a5060b2273f699fa75e32d7a73e5f62aab670c))
+  * add shim for indexOf and trim #638 ([b951fd50](http://github.com/PascalPrecht/angular-translate/commit/b951fd50f1f312755de1fd66f51e38bef3f5b882))
+  * load fallback languages also for instant and filter ([ed6023a4](http://github.com/PascalPrecht/angular-translate/commit/ed6023a4aa2ebc51ba839b976eb1b8f8e8fa91b6))
+  * addition of preferred language to fallback language stack is now preventing dupl ([b2bb1669](http://github.com/PascalPrecht/angular-translate/commit/b2bb166944074aa174f0ed557bf4e2457128b3b8))
+* **storage:**
+  * fixup 75504cbe ([53a8badb](http://github.com/PascalPrecht/angular-translate/commit/53a8badbd1d8fe82d43ddc17e27eaae1a414ee9b))
+  * fix 'DOM Exception 18' at feature detection ([75504cbe](http://github.com/PascalPrecht/angular-translate/commit/75504cbe2ddc0d18e08288b0fa4453356aaafe73))
+* **translateService:**
+  * fixup/rewrite for b48f6bb (specs) ([45ac14d5](http://github.com/PascalPrecht/angular-translate/commit/45ac14d5bf7d8d9569fa0fff99a0dcb5bc419e68))
+  * prevent multiple XHR calls ([b48f6bb4](http://github.com/PascalPrecht/angular-translate/commit/b48f6bb438a193174df569beef24d193d5cd954c))
+
+
+#### Features
+
+* **directive:** add possibility to mix translation interpolation with other text in element body ([be621314](http://github.com/PascalPrecht/angular-translate/commit/be6213144a686b34cff3ba29b9a52041924b2c9e), closes [#461](http://github.com/PascalPrecht/angular-translate/issues/461))
+
+
 <a name="2.2.0"></a>
 ## 2.2.0 (2014-06-03)
 
