@@ -36,10 +36,10 @@ angular.module('pascalprecht.translate')
 
       .config(function ($translateProvider) {
 
-        $translateProvider.translations({
+        $translateProvider.translations('en',{
           'TRANSLATION_ID': 'Hello there!',
           'WITH_VALUES': 'The following value is dynamic: {{value}}'
-        });
+        }).preferredLanguage('en');
 
       });
 
@@ -91,16 +91,27 @@ angular.module('pascalprecht.translate')
 
       var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
 
+      var interpolateRegExp = "^(.*)(" + $interpolate.startSymbol() + ".*" + $interpolate.endSymbol() + ")(.*)";
+
       return function linkFn(scope, iElement, iAttr) {
 
         scope.interpolateParams = {};
+        scope.preText = "";
+        scope.postText = "";
 
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
         // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
         iAttr.$observe('translate', function (translationId) {
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
-            scope.translationId = $interpolate(iElement.text().replace(/^\s+|\s+$/g,''))(scope.$parent);
+            var interpolateMatches = iElement.text().match(interpolateRegExp);
+            if (angular.isArray(interpolateMatches)) {
+              scope.preText = interpolateMatches[1];
+              scope.postText = interpolateMatches[3];
+              scope.translationId = $interpolate(interpolateMatches[2])(scope.$parent);
+            } else {
+              scope.translationId = iElement.text().replace(/^\s+|\s+$/g,'');
+            }
           } else {
             scope.translationId = translationId;
           }
@@ -127,7 +138,7 @@ angular.module('pascalprecht.translate')
             });
           };
           for (var attr in iAttr) {
-            if (iAttr.hasOwnProperty(attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+            if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
               fn(attr);
             }
           }
@@ -137,7 +148,7 @@ angular.module('pascalprecht.translate')
           if (!successful && typeof scope.defaultText !== 'undefined') {
             value = scope.defaultText;
           }
-          iElement.html(value);
+          iElement.html(scope.preText + value + scope.postText);
           var globallyEnabled = $translate.isPostCompilingEnabled();
           var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
           var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
