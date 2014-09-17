@@ -4,6 +4,7 @@
 /identity/
 /src/
 /test/
+/test_scopes/
 /.bowerrc
 /.editorconfig
 /.jshintrc

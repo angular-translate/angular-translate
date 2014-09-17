@@ -10,7 +10,8 @@
   "scripts": {
     "prepublish": "bower install",
     "shipit": "bower install && bower update && grunt prepare-release",
-    "test": "grunt test"
+    "test": "grunt install-test && grunt test",
+    "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done"
   },
   "author": {
     "name": "Pascal Precht"
@@ -21,6 +22,7 @@
     "karma": "~0.10.9",
     "grunt-karma": "~0.6.x",
     "grunt": "~0.4.1",
+    "grunt-bower-install-simple": "^1.0.3",
     "grunt-contrib-watch": "~0.4.2",
     "grunt-contrib-concat": "~0.3.x",
     "grunt-contrib-uglify": "~0.2.x",

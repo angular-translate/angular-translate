@@ -1,6 +1,32 @@
+var fs = require('fs');
+
 module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
+
+  // Returns configuration for bower-install plugin
+  var loadTestScopeConfigurations = function () {
+    var scopes = fs.readdirSync('./test_scopes').filter(function (filename) {
+      return filename[0] !== '.';
+    });
+    var config = {
+      options : {
+        color : false,
+        interactive : false
+      }
+    };
+    // Create a sub config for each test scope
+    for (var idx in scopes) {
+      var scope = scopes[idx];
+      config['test_scopes_' + scope] = {
+        options : {
+          cwd : 'test_scopes/' + scope,
+          production : false
+        }
+      };
+    }
+    return  config;
+  };
 
   grunt.initConfig({
 
@@ -507,7 +533,9 @@ module.exports = function (grunt) {
         defaults: {
             src: ['<%= concat.core.dest %>']
         }
-    }
+    },
+
+    'bower-install-simple': loadTestScopeConfigurations()
 
   });
 
@@ -516,6 +544,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['jshint:all', 'karma']);
   grunt.registerTask('test', ['karma:unit', 'karma:midway']);
+  grunt.registerTask('install-test', ['bower-install-simple']);
 
   // Advanced test tasks
   grunt.registerTask('test-headless', ['karma:headless-unit', 'karma:headless-midway']);
