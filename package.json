@@ -2,14 +2,15 @@
   "name": "angular-translate",
   "version": "2.4.0",
   "description": "A translation module for AngularJS",
-  "main": "index.js",
+  "main": "dist/angular-translate.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "scripts": {
-    "postinstall": "bower install",
-    "test": "karma start karma.unit.conf.js --single-run"
+    "prepublish": "bower install",
+    "shipit": "bower install && bower update && grunt prepare-release",
+    "test": "grunt test"
   },
   "author": {
     "name": "Pascal Precht"

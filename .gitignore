@@ -1,9 +1,18 @@
+/node_modules/
+/components/
+/bower_components/
+/test_scopes/angular_1.3/bower_components/
+/dist/
+/demo/js/angular-translate-latest.js
+
+# OS X
 .DS_Store
-node_modules
-components
-bower_components
-dist
-demo/js/angular-translate-latest.js
-.idea
+
+# IntelliJ stuff
+/.idea/
 *.iml
-atlassian-ide-plugin.xml
+# Eclipse (plugins)
+/atlassian-ide-plugin.xml
+
+# Auto-added patterns
+
