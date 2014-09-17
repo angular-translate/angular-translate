@@ -598,5 +598,32 @@ describe('pascalprecht.translate', function() {
         expect(counter).toEqual(2);
       });
     });
+
+    it('shouldn\'t load a part more than once', function() {
+      // This case happens when $translate.refresh is called before the file has been retrieved from the server.
+      counter = 0;
+
+      module(function($httpProvider) {
+        $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+      });
+
+      inject(function($translatePartialLoader, $httpBackend) {
+        $httpBackend.whenGET('/locales/part-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json'
+        });
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json'
+        });
+
+        $httpBackend.flush();
+
+        expect(counter).toEqual(1);
+      });
+    });
   });
 });

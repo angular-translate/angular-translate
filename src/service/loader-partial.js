@@ -22,6 +22,7 @@ angular.module('pascalprecht.translate')
     this.name = name;
     this.isActive = true;
     this.tables = {};
+    this.langPromises = {};
   }
 
   /**
@@ -41,9 +42,13 @@ angular.module('pascalprecht.translate')
   };
 
   Part.prototype.getTable = function(lang, $q, $http, urlTemplate, errorHandler) {
-    var deferred = $q.defer();
 
-    if (!this.tables[lang]) {
+    var deferred = $q.defer();
+    if (this.tables[lang]) {
+      deferred.resolve(this.tables[lang]);
+      return deferred.promise;
+
+    } else if (!this.langPromises[lang]) {
       var self = this;
 
       $http({
@@ -65,10 +70,12 @@ angular.module('pascalprecht.translate')
         }
       });
 
+      this.langPromises[lang] = deferred.promise;
+      return deferred.promise;
+
     } else {
-      deferred.resolve(this.tables[lang]);
+      return this.langPromises[lang];
     }
-    return deferred.promise;
   };
 
   var parts = {};
