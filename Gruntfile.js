@@ -520,7 +520,7 @@ module.exports = function (grunt) {
   // Advanced test tasks
   grunt.registerTask('test-headless', ['karma:headless-unit', 'karma:headless-midway']);
   grunt.registerTask('test-browser-firefox', ['karma:browser-firefox-unit', 'karma:browser-firefox-midway']);
-  grunt.registerTask('test-all', ['karma']);
+  grunt.registerTask('test-all', ['test', 'test-headless', 'test-browser-firefox']);
 
   grunt.registerTask('prepare-release', [
     'jshint:all',
