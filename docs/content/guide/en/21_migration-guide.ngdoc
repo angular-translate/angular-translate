@@ -56,7 +56,7 @@ $translate('translationId').then(function(translation) {
 ```
 
 If you still want to use the service in sync manner then use
-`$translate.instant(langKey, translationId, interpolateParams)` method instead of direct service
+`$translate.instant(translationId, interpolateParams, interpolationId)` method instead of direct service
 call. But note that `instant` method doesn't wait until async loading is done. So, be careful using
 it.
 

@@ -51,7 +51,7 @@ $translate('translationId').then(function(translation) {
 ```
 
 如果您仍然想同步的方式使用该服务，那么请使用
-`$translate.instant(langKey, translationId, interpolateParams)` 方法，而不是直接的服务通话。
+`$translate.instant(translationId, interpolateParams, interpolationId)` 方法，而不是直接的服务通话。
 但是请注意， `instant` 方法不会等到异步加载完成。因此，要小心使用它。
 
 ## 事件现在只在$rootScope发射

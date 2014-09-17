@@ -51,7 +51,7 @@ stringFromService = translationId;
 ```
 
 如果您仍然想同步的方式使用該服務，那麼請使用
-`$translate.instant(langKey, translationId, interpolateParams)` 方法，而不是直接的服務通話。
+`$translate.instant(translationId, interpolateParams, interpolationId)` 方法，而不是直接的服務通話。
 但是請注意， `instant` 方法不會等到非同步載入完成。因此，要小心使用它。
 
 ## 事件現在只在$rootScope發射
