@@ -8,3 +8,8 @@ before_install:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+
+env:
+  - TEST_SCOPE=
+  - TEST_SCOPE=angular_1.2.x
+  - TEST_SCOPE=angular_1.3.x
