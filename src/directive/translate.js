@@ -105,43 +105,41 @@ angular.module('pascalprecht.translate')
         scope.interpolateParams = {};
         scope.preText = "";
         scope.postText = "";
-
-        var fullTranslationIds = {};
+        scope.translationIds = {};
 
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
         // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
         var observeElementTranslation = function (translationId) {
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
+            // Resolve translation id by inner html if required
             var interpolateMatches = iElement.text().match(interpolateRegExp);
+            // Interpolate translation id if required
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
-              fullTranslationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
+              scope.translationIds['translate'] = $interpolate(interpolateMatches[2])(scope.$parent);
             } else {
-              fullTranslationIds.translate = iElement.text().replace(/^\s+|\s+$/g,'');
+              scope.translationIds['translate'] = iElement.text().replace(/^\s+|\s+$/g,'');
             }
           } else {
-            fullTranslationIds.translate = translationId;
+            scope.translationIds['translate'] = translationId;
           }
+        };
+
+        var observeAttributeTranslation = function (translateAttr) {
+          iAttr.$observe(translateAttr, function (translationId) {
+            scope.translationIds[translateAttr] = translationId;
+          });
         };
 
         iAttr.$observe('translate', function (translationId) {
           observeElementTranslation(translationId);
-          updateTranslations();
         });
-
-
-        var observeAttrTranslation = function (translateAttr) {
-          iAttr.$observe(translateAttr, function (translationId) {
-            fullTranslationIds[translateAttr] = translationId;
-            updateTranslations();
-          });
-        };
 
         for (var translateAttr in iAttr) {
           if(iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
-            observeAttrTranslation(translateAttr);
+            observeAttributeTranslation(translateAttr);
           }
         }
 
@@ -160,30 +158,31 @@ angular.module('pascalprecht.translate')
         }
 
         if (translateValueExist) {
-          var fn = function (attrName) {
+          var observeValueAttribute = function (attrName) {
             iAttr.$observe(attrName, function (value) {
-              scope.interpolateParams[angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15)] = value;
+              var attributeName = angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15);
+              scope.interpolateParams[attributeName] = value;
             });
           };
           for (var attr in iAttr) {
             if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
-              fn(attr);
+              observeValueAttribute(attr);
             }
           }
         }
 
         // Master update function
         var updateTranslations = function () {
-            for (var key in fullTranslationIds) {
-              if (fullTranslationIds[key]) {
-                translateItem(key, fullTranslationIds[key]);
-              }
+          for (var key in scope.translationIds) {
+            if (scope.translationIds.hasOwnProperty(key) && scope.translationIds[key]) {
+              updateTranslation(key, scope.translationIds[key], scope, scope.interpolateParams);
             }
+          }
         };
 
         // Put translation processing function outside loop
-        var translateItem = function(translateAttr, translationId) {
-          $translate(translationId, scope.interpolateParams, translateInterpolation)
+        var updateTranslation = function(translateAttr, translationId, scope, interpolateParams) {
+          $translate(translationId, interpolateParams, translateInterpolation)
             .then(function (translation) {
               applyTranslation(translation, scope, true, translateAttr);
             }, function (translationId) {
@@ -193,6 +192,7 @@ angular.module('pascalprecht.translate')
 
         var applyTranslation = function (value, scope, successful, translateAttr) {
           if (translateAttr === 'translate') {
+            // default translate into innerHTML
             if (!successful && typeof scope.defaultText !== 'undefined') {
               value = scope.defaultText;
             }
@@ -203,17 +203,18 @@ angular.module('pascalprecht.translate')
             if ((globallyEnabled && !locallyDefined) || locallyEnabled) {
               $compile(iElement.contents())(scope);
             }
-          }
-          else {
+          } else {
+            // translate attribute
             if (!successful && typeof scope.defaultText !== 'undefined') {
               value = scope.defaultText;
             }
-            iElement.attr(iAttr.$attr[translateAttr].substr(15), value);
+            var attributeName = iAttr.$attr[translateAttr].substr(15);
+            iElement.attr(attributeName, value);
           }
         };
 
-
         scope.$watch('interpolateParams', updateTranslations, true);
+        scope.$watch('translationIds', updateTranslations, true);
 
         // Ensures the text will be refreshed after the current language was changed
         // w/ $translate.use(...)
