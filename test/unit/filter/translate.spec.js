@@ -93,11 +93,11 @@ describe('pascalprecht.translate', function () {
       });
     } else {
       it('should replace interpolate directive on element with given values', function () {
-        $rootScope['__this'] = {value: 'bar'};
+        $rootScope.__this = {value: 'bar'};
         var element = $compile(angular.element('<div>{{"TRANSLATION_ID" | translate: __this}}</div>'))($rootScope);
         $rootScope.$digest();
         expect(element.html()).toEqual('Lorem Ipsum bar');
-        $rootScope['__this'] = undefined;
+        $rootScope.__this = undefined;
       });
     }
   });
