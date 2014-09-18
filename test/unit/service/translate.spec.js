@@ -1639,5 +1639,9 @@ describe('pascalprecht.translate', function () {
     it('should return translation id if translation id nost exist', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
     });
+
+    it('should return translation id with default interpolator if translation id nost exist', function () {
+      expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
+    });
   });
 });
