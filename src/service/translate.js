@@ -1554,17 +1554,18 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (!langKey) {
           // if there's no language key specified we refresh ALL THE THINGS!
           var tables = [];
-
           // reload registered fallback languages
           if ($fallbackLanguage && $fallbackLanguage.length) {
             for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-              tables.push(loadAsync($fallbackLanguage[i]));
+              langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+              tables.push(langPromises[$fallbackLanguage[i]]);
             }
           }
 
           // reload currently used language
           if ($uses) {
-            tables.push(loadAsync($uses));
+            langPromises[$uses] = loadAsync($uses);
+            tables.push(langPromises[$uses]);
           }
 
           $q.all(tables).then(function (tableData) {

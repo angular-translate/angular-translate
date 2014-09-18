@@ -1358,6 +1358,22 @@ describe('pascalprecht.translate', function () {
         $timeout.flush();
         expect($rootScope.$emit).toHaveBeenCalledWith('$translateChangeSuccess', {language: 'en_EN'});
       });
+
+      it('should cause $translate to wait until it is completed', function() {
+        var refreshCompleted = false;
+        var refreshCalledFirst;
+        $translate.refresh().then(function() {
+          refreshCompleted = true;
+        });
+
+        $translate('EXISTING_TRANSLATION_ID').then(function () {
+          refreshCalledFirst = refreshCompleted;
+        });
+        $timeout.flush();
+
+        expect(refreshCalledFirst).toBe(true);
+
+      });
     });
   });
 
