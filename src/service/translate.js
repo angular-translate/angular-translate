@@ -37,6 +37,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
   var getLocale = function () {
     var nav = window.navigator;
     return ((
+      angular.isArray(nav.languages) ? nav.languages[0] :
       nav.language ||
       nav.browserLanguage ||
       nav.systemLanguage ||
