@@ -943,9 +943,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key,
-          $http: {
+          $http: angular.extend({}, $loaderOptions.$http, {
             cache: cache
-          }
+          })
         })).then(function (data) {
           var translationTable = {};
           $rootScope.$emit('$translateLoadingSuccess', {language: key});
