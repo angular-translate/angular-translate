@@ -1128,9 +1128,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if (fallbackLanguageIndex < $fallbackLanguage.length) {
           var langKey = $fallbackLanguage[fallbackLanguageIndex];
           getFallbackTranslation(langKey, translationId, interpolateParams, Interpolator).then(
-            function (translation) {
-              deferred.resolve(translation);
-            },
+            deferred.resolve,
             function () {
               // Look in the next fallback language for a translation.
               // It delays the resolving by passing another promise to resolve.
