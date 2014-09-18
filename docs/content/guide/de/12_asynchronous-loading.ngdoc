@@ -246,6 +246,52 @@ Sprache zur Laufzeit mit `$translate.use()` wechselt. Für den Fall dass die Dat
 asynchron geladen werden ändert sich nichts. `$translate.use()` überprüft ob die
 angefragte Sprache vorhanden ist und wenn nicht, wird diese erst geladen.
 
+## Konfiguration eines Loaders
+
+Jedem Loader kann eine erweiterte Konfiguration `options` angegeben werden. Dies
+gilt sowohl für den allgemeinen Konstructor `useLoader(name, options)` als auch
+die Shortcut-Konstruktoren wie `useStaticFilesLoader(options)`:
+
+<pre>
+$translationProvider.useLoader('customLoader', {
+  settingA: 'foobar'
+});
+$translationProvider.useStaticFilesLoader({
+  $http: {
+    method: 'POST'
+  }
+});
+</pre>
+
+Die Eigenschaft `$http` wird entsprechend durchgereicht. Nur das Attribut `cache` wird ggf. überschrieben
+(siehe nächstes Kapitel).
+
+## Benutzung eines Caches
+
+Bei der Verwendung der Standard Loader kann man das Caching steuern. Weitere Informationen
+über Caches finden sich in der
+[offiziellen AngularJS Dokumentation](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
+
+Den Cache kann man sehr leicht mit folgender Konfiguration aktivieren:
+
+<pre>
+$translationProvider.useLoaderCache(true); // default ist false, also deaktiviert
+</pre>
+
+Falls Du bereits eine eigene Instanz konfiguriert hast, kannst Du diese auch direkt übergeben:
+
+<pre>
+$translationProvider.useLoaderCache(yourSpecialCacheService);
+</pre>
+
+Angular-Translate unterstützt auch das Lazy-Binding, so dass auch folgendes funktioniert:
+
+<pre>
+$translationProvider.useLoaderCache('yourSpecialCacheService');
+</pre>
+
+Die Instanz mit der ID `yourSpecialCacheService` wird erst bei Bedarf aus dem Kontext geladen.
+
 ## FOUC - Flash of untranslated content
 
 Es gibt einen Nachteil wenn man Asynchrone Loader verwendet. Für keinen kurzen

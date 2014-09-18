@@ -262,6 +262,54 @@ registered loader to get it down! Lazy loading at it best!
 **Note**: Please notice that in case of using `partialLoader` you have to refresh
 translation tables first!
 
+## Configuration of a loader
+
+Each loader can be applied a dedicated configuration `options`, both for the common constructor
+`useLoader()`
+Jedem Loader kann eine erweiterte Konfiguration angegeben werden. Dies gilt sowohl für
+den allgemeinen Konstructor `useLoader(name, options)` als auch die Shortcut-Konstruktoren
+wie `useStaticFilesLoader(options)`:
+
+<pre>
+$translationProvider.useLoader('customLoader', {
+  settingA: 'foobar'
+});
+$translationProvider.useStaticFilesLoader({
+  $http: {
+    method: 'POST'
+  }
+});
+</pre>
+
+The property `$http` will be used internally in the loaders, except attribute `cache` could be
+overridden (see next chapter)).
+
+## Using a cache
+
+In order to control the caching behavior of the existing loaders, you can use an
+cache instance. See more details about this at the
+[Official AngularJS Docs](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
+
+In order to enable a standard cache, you can use following shortcut:
+
+<pre>
+$translationProvider.useLoaderCache(true); // default is false which means disable
+</pre>
+
+If you have already an instance (i.e. advanced configuration), you can bind this:
+
+<pre>
+$translationProvider.useLoaderCache(yourSpecialCacheService);
+</pre>
+
+Angular-Translate also supports lazy binding for instances, so this will work, too:
+
+<pre>
+$translationProvider.useLoaderCache('yourSpecialCacheService');
+</pre>
+
+The instance named with ID `yourspecialCacheService` will be looked up on demand.
+
 ## FOUC - Flash of untranslated content
 
 There's one drawback when using asynchronous loaders to get your translation data
