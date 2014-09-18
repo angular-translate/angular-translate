@@ -14,6 +14,7 @@ angular.module('pascalprecht.translate')
  *
  * @param {string=} translate Translation id which could be either string or interpolated string.
  * @param {string=} translate-values Values to pass into translation id. Can be passed as object literal string or interpolated object.
+ * @param {string=} translate-attr-ATTR translate Translation id and put it into ATTR attribute.
  *
  * @example
    <example module="ngView">
@@ -22,12 +23,14 @@ angular.module('pascalprecht.translate')
 
         <pre translate="TRANSLATION_ID"></pre>
         <pre translate>TRANSLATION_ID</pre>
+        <pre translate translate-attr-title="TRANSLATION_ID"></pre>
         <pre translate="{{translationId}}"></pre>
         <pre translate>{{translationId}}</pre>
         <pre translate="WITH_VALUES" translate-values="{value: 5}"></pre>
         <pre translate translate-values="{value: 5}">WITH_VALUES</pre>
         <pre translate="WITH_VALUES" translate-values="{{values}}"></pre>
         <pre translate translate-values="{{values}}">WITH_VALUES</pre>
+        <pre translate translate-attr-title="WITH_VALUES" translate-values="{{values}}"></pre>
 
       </div>
     </file>
@@ -71,6 +74,10 @@ angular.module('pascalprecht.translate')
           element = $compile('<p translate>{{translationId}}</p>')($rootScope);
           $rootScope.$digest();
           expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate translate-attr-title="TRANSLATION_ID"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.attr('title')).toBe('Hello there!');
         });
       });
     </file>
@@ -99,23 +106,44 @@ angular.module('pascalprecht.translate')
         scope.preText = "";
         scope.postText = "";
 
+        var fullTranslationIds = {};
+
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
         // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
-        iAttr.$observe('translate', function (translationId) {
+        var observeElementTranslation = function (translationId) {
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
             var interpolateMatches = iElement.text().match(interpolateRegExp);
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
-              scope.translationId = $interpolate(interpolateMatches[2])(scope.$parent);
+              fullTranslationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
             } else {
-              scope.translationId = iElement.text().replace(/^\s+|\s+$/g,'');
+              fullTranslationIds.translate = iElement.text().replace(/^\s+|\s+$/g,'');
             }
           } else {
-            scope.translationId = translationId;
+            fullTranslationIds.translate = translationId;
           }
+        };
+
+        iAttr.$observe('translate', function (translationId) {
+          observeElementTranslation(translationId);
+          updateTranslations();
         });
+
+
+        var observeAttrTranslation = function (translateAttr) {
+          iAttr.$observe(translateAttr, function (translationId) {
+            fullTranslationIds[translateAttr] = translationId;
+            updateTranslations();
+          });
+        };
+
+        for (var translateAttr in iAttr) {
+          if(iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
+            observeAttrTranslation(translateAttr);
+          }
+        }
 
         iAttr.$observe('translateDefault', function (value) {
           scope.defaultText = value;
@@ -144,61 +172,54 @@ angular.module('pascalprecht.translate')
           }
         }
 
-        var applyElementContent = function (value, scope, successful) {
-          if (!successful && typeof scope.defaultText !== 'undefined') {
-            value = scope.defaultText;
+        // Master update function
+        var updateTranslations = function () {
+            for (var key in fullTranslationIds) {
+              if (fullTranslationIds[key]) {
+                translateItem(key, fullTranslationIds[key]);
+              }
+            }
+        };
+
+        // Put translation processing function outside loop
+        var translateItem = function(translateAttr, translationId) {
+          $translate(translationId, scope.interpolateParams, translateInterpolation)
+            .then(function (translation) {
+              applyTranslation(translation, scope, true, translateAttr);
+            }, function (translationId) {
+              applyTranslation(translationId, scope, false, translateAttr);
+            });
+        };
+
+        var applyTranslation = function (value, scope, successful, translateAttr) {
+          if (translateAttr === 'translate') {
+            if (!successful && typeof scope.defaultText !== 'undefined') {
+              value = scope.defaultText;
+            }
+            iElement.html(scope.preText + value + scope.postText);
+            var globallyEnabled = $translate.isPostCompilingEnabled();
+            var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
+            var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
+            if ((globallyEnabled && !locallyDefined) || locallyEnabled) {
+              $compile(iElement.contents())(scope);
+            }
           }
-          iElement.html(scope.preText + value + scope.postText);
-          var globallyEnabled = $translate.isPostCompilingEnabled();
-          var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
-          var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
-          if ((globallyEnabled && !locallyDefined) || locallyEnabled) {
-            $compile(iElement.contents())(scope);
+          else {
+            if (!successful && typeof scope.defaultText !== 'undefined') {
+              value = scope.defaultText;
+            }
+            iElement.attr(iAttr.$attr[translateAttr].substr(15), value);
           }
         };
 
-        var updateTranslationFn = (function () {
-          if (!translateValuesExist && !translateValueExist) {
-            return function () {
-              var unwatch = scope.$watch('translationId', function (value) {
-                if (scope.translationId && value) {
-                  $translate(value, {}, translateInterpolation)
-                    .then(function (translation) {
-                      applyElementContent(translation, scope, true);
-                      unwatch();
-                    }, function (translationId) {
-                      applyElementContent(translationId, scope, false);
-                      unwatch();
-                    });
-                }
-              }, true);
-            };
-          } else {
-            return function () {
 
-              var updateTranslations = function () {
-                if (scope.translationId && scope.interpolateParams) {
-                  $translate(scope.translationId, scope.interpolateParams, translateInterpolation)
-                    .then(function (translation) {
-                      applyElementContent(translation, scope, true);
-                    }, function (translationId) {
-                      applyElementContent(translationId, scope, false);
-                    });
-                  }
-              };
-
-              // watch both interpolateParams and translationId, because watchers are triggered non-deterministic
-              scope.$watch('interpolateParams', updateTranslations, true);
-              scope.$watch('translationId', updateTranslations);
-            };
-          }
-        }());
+        scope.$watch('interpolateParams', updateTranslations, true);
 
         // Ensures the text will be refreshed after the current language was changed
         // w/ $translate.use(...)
-        var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslationFn);
+        var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslations);
 
-        updateTranslationFn();
+        updateTranslations();
         scope.$on('$destroy', unbind);
       };
     }
