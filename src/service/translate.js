@@ -867,7 +867,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       var useLanguage = function (key) {
         $uses = key;
-        $rootScope.$emit('$translateChangeSuccess');
+        $rootScope.$emit('$translateChangeSuccess', {language: key});
 
         if ($storageFactory) {
           Storage.set($translate.storageKey(), $uses);
@@ -878,7 +878,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         angular.forEach(interpolatorHashMap, function (interpolator, id) {
           interpolatorHashMap[id].setLocale($uses);
         });
-        $rootScope.$emit('$translateChangeEnd');
+        $rootScope.$emit('$translateChangeEnd', {language: key});
       };
 
       /**
@@ -900,14 +900,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$emit('$translateLoadingStart');
+        $rootScope.$emit('$translateLoadingStart', {language: key});
         pendingLoader = true;
 
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key
         })).then(function (data) {
           var translationTable = {};
-          $rootScope.$emit('$translateLoadingSuccess');
+          $rootScope.$emit('$translateLoadingSuccess', {language: key});
 
           if (angular.isArray(data)) {
             angular.forEach(data, function (table) {
@@ -921,11 +921,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             key: key,
             table: translationTable
           });
-          $rootScope.$emit('$translateLoadingEnd');
+          $rootScope.$emit('$translateLoadingEnd', {language: key});
         }, function (key) {
-          $rootScope.$emit('$translateLoadingError');
+          $rootScope.$emit('$translateLoadingError', {language: key});
           deferred.reject(key);
-          $rootScope.$emit('$translateLoadingEnd');
+          $rootScope.$emit('$translateLoadingEnd', {language: key});
         });
         return deferred.promise;
       };
@@ -1398,7 +1398,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         var deferred = $q.defer();
 
-        $rootScope.$emit('$translateChangeStart');
+        $rootScope.$emit('$translateChangeStart', {language: key});
 
         // Try to get the aliased language key
         var aliasedKey = negotiateLocale(key);
@@ -1420,9 +1420,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             }
           }, function (key) {
             $nextLang = undefined;
-            $rootScope.$emit('$translateChangeError');
+            $rootScope.$emit('$translateChangeError', {language: key});
             deferred.reject(key);
-            $rootScope.$emit('$translateChangeEnd');
+            $rootScope.$emit('$translateChangeEnd', {language: key});
           });
         } else {
           deferred.resolve(key);
@@ -1498,15 +1498,15 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
         function resolve() {
           deferred.resolve();
-          $rootScope.$emit('$translateRefreshEnd');
+          $rootScope.$emit('$translateRefreshEnd', {language: langKey});
         }
 
         function reject() {
           deferred.reject();
-          $rootScope.$emit('$translateRefreshEnd');
+          $rootScope.$emit('$translateRefreshEnd', {language: langKey});
         }
 
-        $rootScope.$emit('$translateRefreshStart');
+        $rootScope.$emit('$translateRefreshStart', {language: langKey});
 
         if (!langKey) {
           // if there's no language key specified we refresh ALL THE THINGS!
