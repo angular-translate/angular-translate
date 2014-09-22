@@ -598,5 +598,30 @@ describe('pascalprecht.translate', function() {
         expect(counter).toEqual(2);
       });
     });
+
+    it('should put a part into a cache and remove from the cache if the part was deleted', function() {
+      module(function($httpProvider, $translateProvider) {
+        $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+        $translateProvider.useLoaderCache();
+      });
+
+      inject(function($translatePartialLoader, $httpBackend, $translationCache) {
+        $httpBackend.whenGET('/locales/part-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            cache: $translationCache
+          }
+        });
+        $httpBackend.flush();
+        expect($translationCache.info().size).toEqual(1);
+
+        $translatePartialLoader.deletePart('part', true);
+        expect($translationCache.info().size).toEqual(0);
+      });
+    });
   });
 });

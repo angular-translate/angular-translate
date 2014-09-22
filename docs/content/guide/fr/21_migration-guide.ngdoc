@@ -56,7 +56,7 @@ $translate('translationId').then(function(translation) {
 ```
 
 Si vous voulez continuer à utiliser le service de manière synchrone alors utilisez
-la méthode `$translate.instant(langKey, translationId, interpolateParams)` au lieu de l'appel direct
+la méthode `$translate.instant(translationId, interpolateParams, interpolationId)` au lieu de l'appel direct
 du service. Mais notez que la méthode `instant` n'attend pas que le chargement asynchrone soit fait.
 Alors, soyez prudent dans son utilisation.
 

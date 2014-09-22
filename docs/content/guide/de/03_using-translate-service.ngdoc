@@ -72,6 +72,16 @@ Dabei muss jedoch beachtet werden, dass der Service immer ein Objekt mit allen
 Übersetzung (oder sogar alle) nicht übersetzt werden konnten. Eine mögliche
 Fehlerbehandlung muss von Deiner Seite aus geschehen.
 
+## angular-translate Versionsinformationen
+Für einige Anwendungen mag es sinnvoll sein, die eingesetzte Version im "Über uns"-Bereich o.ä. anzuzeigen.
+Damit dieses problemlos möglich ist, beinhaltet angular-translate eine Funktion, die sehr einfach verwendet werden
+kann und die aktuelle Modulversion zurückgibt:
+
+<pre>
+  $translate.versionInfo();
+  // returns e.g. "2.1.0"
+</pre>
+
 ## Dinge die berücksichtigt werden sollten
 Bitte beachte dass `$translate` Service kein Two-Way Data-Binding unterstützt.
 `$translate` Service arbeitet asynchron, dass bedeteut aber nicht, dass er informiert

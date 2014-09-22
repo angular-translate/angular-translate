@@ -84,11 +84,22 @@ describe('pascalprecht.translate', function () {
       expect(value[6]).toEqual('55');
     });
 
-    it('should replace interpolate directive on element with given values', function () {
-      var element = $compile(angular.element('<div>{{"TRANSLATION_ID" | translate: "{value: foo}"}}</div>'))($rootScope);
-      $rootScope.$digest();
-      expect(element.html()).toEqual('Lorem Ipsum bar');
-    });
+    if (angular.version.major === 1 && angular.version.minor <= 2) {
+      // Until and including AJS 1.2, a filter was bound to a context (current scope). This was removed in AJS 1.3
+      it('should replace interpolate directive on element with given values', function () {
+        var element = $compile(angular.element('<div>{{"TRANSLATION_ID" | translate: "{value: foo}"}}</div>'))($rootScope);
+        $rootScope.$digest();
+        expect(element.html()).toEqual('Lorem Ipsum bar');
+      });
+    } else {
+      it('should replace interpolate directive on element with given values', function () {
+        $rootScope.__this = {value: 'bar'};
+        var element = $compile(angular.element('<div>{{"TRANSLATION_ID" | translate: __this}}</div>'))($rootScope);
+        $rootScope.$digest();
+        expect(element.html()).toEqual('Lorem Ipsum bar');
+        $rootScope.__this = undefined;
+      });
+    }
   });
 
   describe('additional interpolation', function () {

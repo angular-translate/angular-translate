@@ -74,6 +74,16 @@ Toutefois, le service renverra toujours un objet contenant les traductions - san
 traduction (ou même toutes) a échoué. Lorsque vous demandez plusieurs traductions en une seule
 requête, c'est à vous de traiter le résultat.
 
+## Information de la version de la bibliothèque angular-translate
+Il peut être utile d'avoir certaines informations dans votre application, nous vous fournissons une
+fonction pour afficher ou utiliser les informations de la version de la bibliothèque installée.
+
+Il suffit de l'appeler de cette façon :
+<pre>
+  $translate.versionInfo();
+  // retourne par exemple "2.1.0"
+</pre>
+
 ## Les choses à garder à l'esprit
 Veuillez gardez à l'esprit que l'utilisation du service `$translate` n'assure pas une liaison de
 données par défaut bidirectionnelle ! Le service `$translate` fonctionne de manière asynchrone, ce qui

@@ -24,11 +24,11 @@ angular.module('pascalprecht.translate')
 
     var deferred = $q.defer();
 
-    $http({
+    $http(angular.extend({}, options.$http, {
       url: options.url,
       params: { lang: options.key },
       method: 'GET'
-    }).success(function (data) {
+    })).success(function (data) {
       deferred.resolve(data);
     }).error(function (data) {
       deferred.reject(options.key);

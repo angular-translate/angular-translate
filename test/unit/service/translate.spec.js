@@ -1342,21 +1342,21 @@ describe('pascalprecht.translate', function () {
         spyOn($rootScope, '$emit');
         $translate.refresh();
         $timeout.flush();
-        expect($rootScope.$emit).toHaveBeenCalledWith('$translateRefreshStart');
+        expect($rootScope.$emit).toHaveBeenCalledWith('$translateRefreshStart', {language: undefined});
       });
 
       it('should emit $translateRefreshEnd', function () {
         spyOn($rootScope, '$emit');
         $translate.refresh();
         $timeout.flush();
-        expect($rootScope.$emit).toHaveBeenCalledWith('$translateRefreshEnd');
+        expect($rootScope.$emit).toHaveBeenCalledWith('$translateRefreshEnd', {language: undefined});
       });
 
       it('should emit $translateChangeSuccess event', function() {
         spyOn($rootScope, '$emit');
         $translate.refresh();
         $timeout.flush();
-        expect($rootScope.$emit).toHaveBeenCalledWith('$translateChangeSuccess');
+        expect($rootScope.$emit).toHaveBeenCalledWith('$translateChangeSuccess', {language: 'en_EN'});
       });
     });
   });
@@ -1638,6 +1638,10 @@ describe('pascalprecht.translate', function () {
 
     it('should return translation id if translation id nost exist', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
+    });
+
+    it('should return translation id with default interpolator if translation id nost exist', function () {
+      expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
     });
   });
 });
