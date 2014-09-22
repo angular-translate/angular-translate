@@ -48,5 +48,6 @@ rm -rf tmp
 cp docs/html/index.html site
 cp identity/favicon.ico site
 
-plato -d plato src/*.js src/**/*.js
+npm install plato@1.2.x
+node_modules/.bin/plato -d plato src/*.js src/**/*.js
 mv plato site
