@@ -1,3 +1,44 @@
+# 2.4.0 (2014-09-22)
+
+## Features
+### service
+
+* introduce `versionInfo` function (e37d89c)
+
+* prefer detecting language by `navigator.languages` #722 (2204f4f)
+
+* enrich events with the currently handled language key (73b289d)
+
+* interpolate translationId in case of rejected translation (3efaac5)
+
+### loaders
+
+* introduce loader cache (b685601)
+
+### loader
+
+* apply support for loaderOptions.$http (8613bef)
+
+
+
+## Bug fixes
+### service
+
+* correctly iterate in fallback languages (fixes #690) (ac2f35c)
+
+* `$nextLang` should be not unset parallel loadings (d1745e4)
+
+* avoid possible doubled requested on refresh() (98d429d)
+
+* avoid possible npe in internal getTranslationTable() (9aaa9a0)
+
+### filter
+
+* mark filter being stateful required since Angular 1.3 rc2 (bffbf04)
+
+* interpolated params w/ scope aren't possible starting AJS1.3 (9465318)
+
+
 <a name="2.3.0"></a>
 ## 2.3.0 (2014-09-16)
 
