@@ -15,6 +15,7 @@ angular.module('pascalprecht.translate')
  * @param {string=} translate Translation id which could be either string or interpolated string.
  * @param {string=} translate-values Values to pass into translation id. Can be passed as object literal string or interpolated object.
  * @param {string=} translate-attr-ATTR translate Translation id and put it into ATTR attribute.
+ * @param {string=} translate-default will be used unless translation was successful
  *
  * @example
    <example module="ngView">
