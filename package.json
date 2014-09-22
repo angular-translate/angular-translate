@@ -28,7 +28,7 @@
     "grunt-contrib-uglify": "~0.2.x",
     "grunt-contrib-jshint": "~0.4.x",
     "grunt-bump": "0.0.2",
-    "grunt-conventional-changelog": "0.0.12",
+    "grunt-conventional-changelog": "~1.1.0",
     "grunt-express": "~0.3.3",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-ngmin": "0.0.2",
