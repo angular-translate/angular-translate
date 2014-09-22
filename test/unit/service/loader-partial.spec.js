@@ -624,4 +624,55 @@ describe('pascalprecht.translate', function() {
       });
     });
   });
+
+  describe('$translatePartialLoader with file format adapter', function () {
+    var $httpBackend, $translatePartialLoader, $customFileFormat;
+
+    function parseQS(text) {
+      var o = {};
+      text.split('&').forEach(function(pair) {
+        var two = pair.split('=');
+        o[two[0]] = two[1];
+      });
+      return o;
+    }
+
+    beforeEach(module('pascalprecht.translate', function ($provide) {
+      $provide.value('$customFileFormat', parseQS);
+    }));
+
+    beforeEach(inject(function (_$httpBackend_, _$translatePartialLoader_, _$customFileFormat_) {
+      $httpBackend = _$httpBackend_;
+      $translatePartialLoader = _$translatePartialLoader_;
+      $customFileFormat = _$customFileFormat_;
+
+      $httpBackend.when('GET', '/locales/part1-de_DE.properties').respond('a=b&e=f');
+      $httpBackend.when('GET', '/locales/part2-de_DE.properties').respond('c=d');
+    }));
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should adapt the response', function () {
+      $httpBackend.expectGET('/locales/part1-de_DE.properties');
+      $httpBackend.expectGET('/locales/part2-de_DE.properties');
+      var table;
+
+      $translatePartialLoader.addPart('part1');
+      $translatePartialLoader.addPart('part2');
+      $translatePartialLoader({
+        key: 'de_DE',
+        urlTemplate : '/locales/{part}-{lang}.properties',
+        responseHandler: $customFileFormat
+      }).then(function(_table_) { 
+        table = _table_;
+      });
+
+      $httpBackend.flush();
+
+      expect(table).toEqual({a: 'b', c: 'd', e: 'f'});
+    });
+  });
 });

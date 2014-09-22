@@ -25,6 +25,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $interpolatorFactories = [],
       $interpolationSanitizationStrategy = false,
       $loaderFactory,
+      $responseHandlerFactory,
       $cloakClassName = 'translate-cloak',
       $loaderOptions,
       $notFoundIndicatorLeft,
@@ -523,6 +524,26 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   /**
    * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useResponseHandler
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use a service, or, directly, a function, 
+   * to handle the response of asynchronous loaders.
+   *
+   * This can be used to convert the translation file format, 
+   * returned by an endpoint, 
+   * to the format required by angular-translate.
+   *
+   * @param {string|function} responseHandlerFactory Response handler service name or a function.
+   */
+  this.useResponseHandler = function (responseHandlerFactory) {
+    $responseHandlerFactory = responseHandlerFactory;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#useLocalStorage
    * @methodOf pascalprecht.translate.$translateProvider
    *
@@ -941,11 +962,19 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           cache = $injector.get(cache);
         }
 
+        var responseHandler;
+        if($responseHandlerFactory) {
+            responseHandler = angular.isFunction($responseHandlerFactory) ? 
+              $responseHandlerFactory : 
+              $injector.get($responseHandlerFactory);
+        }
+
         $injector.get($loaderFactory)(angular.extend($loaderOptions, {
           key: key,
           $http: angular.extend({}, $loaderOptions.$http, {
             cache: cache
-          })
+          }),
+          responseHandler: responseHandler
         })).then(function (data) {
           var translationTable = {};
           $rootScope.$emit('$translateLoadingSuccess', {language: key});
