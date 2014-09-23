@@ -262,6 +262,54 @@ le chargeur enregistré pour le descendre !
 **Remarque** : Veuillez noter que dans le cas de l'utilisation de `partialLoader` vous
 devez d'abord actualiser les tables de traduction!
 
+## Configuration d'un chargeur
+
+Pour chaque chargeur, une configuration avancée peut être spécifiée. Celle-ci est
+valable pour le constructeur `useLoader(name, options)` ainsi que pour les constructeurs
+tels que `useStaticFilesLoader(options)` :
+
+<pre>
+$translationProvider.useLoader('customLoader', {
+  settingA: 'foobar'
+});
+$translationProvider.useStaticFilesLoader({
+  $http: {
+    method: 'POST'
+  }
+});
+</pre>
+
+La propriété `$http` sera utilisée à l'intérieur des chargeurs, à l'exception de l'attribut `cache` qui
+pourra être remplacé (voir le chapitre suivant).
+
+## Utilisation d'un cache
+
+Afin de contrôler le comportement de mise en cache des chargeurs existants, vous pouvez utiliser une
+instance de cache. Vous pouvez voir plus de détails à ce sujet dans les
+[Docs officielles d'AngularJS]
+(https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
+
+
+Pour activer un cache standard, vous pouvez utiliser la technique suivante :
+
+<pre>
+$translationProvider.useLoaderCache(true); // Par défaut c'est à false, ce qui signifie que c'est désactivé
+</pre>
+
+Si vous avez déjà un exemple (de configuration avancée), vous pouvez la lier comme ceci :
+
+<pre>
+$translationProvider.useLoaderCache(yourSpecialCacheService);
+</pre>
+
+Angular-Translate supporte aussi le Lazy-Binding, de sorte que ceci fonctionne aussi :
+
+<pre>
+$translationProvider.useLoaderCache('yourSpecialCacheService');
+</pre>
+
+L'instance nommée avec l'ID `yourspecialCacheService` est chargé à la demande à partir du contexte.
+
 ## FOUC - Flash de contenu non traduit
 
 Il y a un inconvénient lors de l'utilisation des chargeurs asynchrones pour obtenir vos données
