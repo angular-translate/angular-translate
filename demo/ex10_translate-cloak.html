@@ -23,21 +23,21 @@
   <h1>{{ 'load.static.HEADER' | translate }}</h1>
   <h2 translate>load.static.SUBHEADER</h2>
 
-<script src="../../bower_components/angular/angular.js"></script>
-<script src="../../bower_components/angular-cookies/angular-cookies.js"></script>
-<script src="../../src/translate.js"></script>
-<script src="../../src/service/default-interpolation.js"></script>
-<script src="../../src/service/handler-log.js"></script>
-<script src="../../src/service/loader-static-files.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="../src/translate.js"></script>
+<script src="../src/service/default-interpolation.js"></script>
+<script src="../src/service/handler-log.js"></script>
+<script src="../src/service/loader-static-files.js"></script>
 
 
-<script src="../../src/service/storage-key.js"></script>
-<script src="../../src/service/storage-local.js"></script>
-<script src="../../src/service/storage-cookie.js"></script>
-<script src="../../src/service/translate.js"></script>
-<script src="../../src/directive/translate.js"></script>
-<script src="../../src/directive/translate-cloak.js"></script>
-<script src="../../src/filter/translate.js"></script>
+<script src="../src/service/storage-key.js"></script>
+<script src="../src/service/storage-local.js"></script>
+<script src="../src/service/storage-cookie.js"></script>
+<script src="../src/service/translate.js"></script>
+<script src="../src/directive/translate.js"></script>
+<script src="../src/directive/translate-cloak.js"></script>
+<script src="../src/filter/translate.js"></script>
 <script>
 angular.module('app', ['pascalprecht.translate', 'ngCookies'])
 
@@ -70,7 +70,7 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
 
   $scope.setLang = function(langKey) {
     // You can change the language during runtime
-    $translate.uses(langKey);
+    $translate.use(langKey);
   };
 
 }]);
