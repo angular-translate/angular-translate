@@ -265,10 +265,7 @@ translation tables first!
 ## Configuration of a loader
 
 Each loader can be applied a dedicated configuration `options`, both for the common constructor
-`useLoader()`
-Jedem Loader kann eine erweiterte Konfiguration angegeben werden. Dies gilt sowohl für
-den allgemeinen Konstructor `useLoader(name, options)` als auch die Shortcut-Konstruktoren
-wie `useStaticFilesLoader(options)`:
+`useLoader()` and `useStaticFilesLoader(options)`:
 
 <pre>
 $translationProvider.useLoader('customLoader', {
