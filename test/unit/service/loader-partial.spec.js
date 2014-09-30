@@ -624,4 +624,144 @@ describe('pascalprecht.translate', function() {
       });
     });
   });
+
+
+
+  describe('$translatePartialLoader with custom options (method=POST)', function () {
+
+    beforeEach(module('pascalprecht.translate'));
+
+    it('should make 1 request per 1 part', function () {
+
+      counter = 0;
+
+      module(function($httpProvider) {
+        $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+      });
+
+      inject(function($translatePartialLoader, $httpBackend) {
+        $httpBackend.expectPOST('/locales/part1-en.json').respond(200, '{}');
+        $httpBackend.expectPOST('/locales/part2-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part1');
+        $translatePartialLoader.addPart('part2');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        $httpBackend.flush(2);
+        expect(counter).toEqual(2);
+      });
+    });
+
+    it('shouldn\'t load the same part twice for one language', function() {
+
+      counter = 0;
+
+      module(function($httpProvider) {
+        $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+      });
+
+      inject(function($translatePartialLoader, $httpBackend) {
+        $httpBackend.whenPOST('/locales/part-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        $httpBackend.flush();
+
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        try {
+          $httpBackend.flush();
+        } catch (e) {}
+
+        expect(counter).toEqual(1);
+      });
+    });
+
+    it('shouldn\'t load a part if it was loaded, deleted and added again', function() {
+      counter = 0;
+      module(function($httpProvider) {
+        $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+      });
+
+      inject(function($translatePartialLoader, $httpBackend) {
+        $httpBackend.whenPOST('/locales/part-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        $httpBackend.flush();
+
+        $translatePartialLoader.deletePart('part');
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        try { $httpBackend.flush(); } catch (e) {}
+
+        expect(counter).toEqual(1);
+      });
+    });
+
+    it('should load a part if it was loaded, deleted and added again', function() {
+
+      counter = 0;
+
+      module(function($httpProvider) {
+        $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
+      });
+
+      inject(function($translatePartialLoader, $httpBackend) {
+        $httpBackend.whenPOST('/locales/part-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        $httpBackend.flush();
+
+        $translatePartialLoader.deletePart('part', true);
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json',
+          $http: {
+            method: 'POST'
+          }
+        });
+        $httpBackend.flush();
+
+        expect(counter).toEqual(2);
+      });
+    });
+  });
+
 });

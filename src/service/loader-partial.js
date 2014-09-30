@@ -46,10 +46,10 @@ angular.module('pascalprecht.translate')
     if (!this.tables[lang]) {
       var self = this;
 
-      $http(angular.extend({}, $httpOptions, {
+      $http(angular.extend({
         method : 'GET',
         url: this.parseUrl(urlTemplate, lang)
-      })).success(function(data){
+      }, $httpOptions)).success(function(data){
         self.tables[lang] = data;
         deferred.resolve(data);
       }).error(function() {
