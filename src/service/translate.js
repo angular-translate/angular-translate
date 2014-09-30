@@ -485,9 +485,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * Tells angular-translate to use `$translateUrlLoader` extension service as loader.
    *
    * @param {string} url Url
+   * @param {Object=} options Optional configuration object
    */
-  this.useUrlLoader = function (url) {
-    return this.useLoader('$translateUrlLoader', { url: url });
+  this.useUrlLoader = function (url, options) {
+    return this.useLoader('$translateUrlLoader', angular.extend({ url: url }, options));
   };
 
   /**
