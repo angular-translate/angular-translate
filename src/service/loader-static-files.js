@@ -10,7 +10,7 @@ angular.module('pascalprecht.translate')
  * "lang-en_US.json", "lang-de_DE.json", etc. Using this builder,
  * the response of these urls must be an object of key-value pairs.
  *
- * @param {object} options Options object, which gets prefix, suffix and key.
+ * @param {object} options Options object, which gets prefix, suffix, key and responseHandler.
  */
 .factory('$translateStaticFilesLoader', ['$q', '$http', function ($q, $http) {
 
@@ -18,6 +18,11 @@ angular.module('pascalprecht.translate')
 
     if (!options || (!angular.isString(options.prefix) || !angular.isString(options.suffix))) {
       throw new Error('Couldn\'t load static files, no prefix or suffix specified!');
+    }
+
+    var responseHandler = options.responseHandler;
+    if (responseHandler !== undefined && !angular.isFunction(responseHandler)) {
+      throw new Error('Couldn\'t load static files, responseHandler is not a function!');
     }
 
     var deferred = $q.defer();
@@ -31,7 +36,7 @@ angular.module('pascalprecht.translate')
       method: 'GET',
       params: ''
     })).success(function (data) {
-      deferred.resolve(data);
+      deferred.resolve(responseHandler ? responseHandler(data) : data);
     }).error(function (data) {
       deferred.reject(options.key);
     });

@@ -1644,4 +1644,74 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
     });
   });
+
+  describe('$translateProvider#useResponseHandler()', function () {
+    var $translate, $httpBackend;
+
+    function parseQS(text) {
+      var o = {};
+      text.split('&').forEach(function(pair) {
+        var two = pair.split('=');
+        o[two[0]] = two[1];
+      });
+      return o;
+    }
+
+    describe('given a service name', function () {
+      var $customResponseHandler;
+      
+      beforeEach(module('pascalprecht.translate', function ($provide, $translateProvider) {
+        $provide.value('$customResponseHandler', parseQS);
+        $translateProvider
+          .preferredLanguage('en')
+          .useUrlLoader('foo/bar.properties')
+          .useResponseHandler('$customResponseHandler');
+      }));
+      
+      beforeEach(inject(function (_$translate_, _$rootScope_, _$q_, _$httpBackend_, _$translateStaticFilesLoader_, _$customResponseHandler_) {
+        $translate = _$translate_;
+        $httpBackend = _$httpBackend_;
+        $customResponseHandler = _$customResponseHandler_;
+
+        $httpBackend.whenGET('foo/bar.properties?lang=en').respond('a=b');
+      }));
+
+      it('should translate to correct values in the processed translation format', function () {
+        $httpBackend.expectGET('foo/bar.properties?lang=en');
+
+        var value;
+
+        $translate('a').then(function (translation) { value = translation; });
+        $httpBackend.flush();
+        
+        expect(value).toEqual('b');
+      });
+    });
+
+    describe('given a function', function () {
+      beforeEach(module('pascalprecht.translate', function ($provide, $translateProvider) {
+        $translateProvider
+          .preferredLanguage('en')
+          .useUrlLoader('foo/bar.properties')
+          .useResponseHandler(parseQS);
+      }));
+      
+      beforeEach(inject(function (_$translate_, _$rootScope_, _$q_, _$httpBackend_, _$translateStaticFilesLoader_) {
+        $translate = _$translate_;
+        $httpBackend = _$httpBackend_;
+        $httpBackend.whenGET('foo/bar.properties?lang=en').respond('a=b');
+      }));
+
+      it('should translate to correct values in the processed translation format', function () {
+        $httpBackend.expectGET('foo/bar.properties?lang=en');
+
+        var value;
+
+        $translate('a').then(function (translation) { value = translation; });
+        $httpBackend.flush();
+        
+        expect(value).toEqual('b');
+      });
+    });
+  });
 });

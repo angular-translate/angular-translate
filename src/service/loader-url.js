@@ -22,6 +22,11 @@ angular.module('pascalprecht.translate')
       throw new Error('Couldn\'t use urlLoader since no url is given!');
     }
 
+    var responseHandler = options.responseHandler;
+    if (responseHandler !== undefined && !angular.isFunction(responseHandler)) {
+      throw new Error('Unable to load data, a responseHandler is not a function!');
+    }
+
     var deferred = $q.defer();
 
     $http(angular.extend({}, options.$http, {
@@ -29,7 +34,7 @@ angular.module('pascalprecht.translate')
       params: { lang: options.key },
       method: 'GET'
     })).success(function (data) {
-      deferred.resolve(data);
+      deferred.resolve(responseHandler ? responseHandler(data) : data);
     }).error(function (data) {
       deferred.reject(options.key);
     });

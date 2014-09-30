@@ -40,7 +40,7 @@ angular.module('pascalprecht.translate')
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
-  Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
+  Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler, responseHandler) {
     var deferred = $q.defer();
 
     if (!this.tables[lang]) {
@@ -48,13 +48,15 @@ angular.module('pascalprecht.translate')
 
       $http(angular.extend({}, $httpOptions, {
         method : 'GET',
-        url: this.parseUrl(urlTemplate, lang)
+        url : this.parseUrl(urlTemplate, lang)
       })).success(function(data){
+        if(responseHandler) { data = responseHandler(data); }
         self.tables[lang] = data;
         deferred.resolve(data);
       }).error(function() {
         if (errorHandler) {
           errorHandler(self.name, lang).then(function(data) {
+            if(responseHandler) { data = responseHandler(data); }
             self.tables[lang] = data;
             deferred.resolve(data);
           }, function() {
@@ -267,6 +269,11 @@ angular.module('pascalprecht.translate')
         } else errorHandler = $injector.get(errorHandler);
       }
 
+      var responseHandler = options.responseHandler;
+      if (responseHandler !== undefined && !angular.isFunction(responseHandler)) {
+        throw new Error('Unable to load data, a responseHandler is not a function!');
+      }
+
       var loaders = [],
           tables = [],
           deferred = $q.defer();
@@ -279,7 +286,7 @@ angular.module('pascalprecht.translate')
         if (hasPart(part) && parts[part].isActive) {
           loaders.push(
             parts[part]
-              .getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
+              .getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler, responseHandler)
               .then(addTablePart)
           );
           parts[part].urlTemplate = options.urlTemplate;
