@@ -3,11 +3,11 @@
   "name": "angular-translate",
   "description": "A translation module for AngularJS",
   "version": "2.4.1",
-  "homepage": "http://github.com/PascalPrecht/angular-translate",
+  "homepage": "http://github.com/angular-translate/angular-translate",
   "ignore": [],
   "repository": {
     "type": "git",
-    "url": "git://github.com/PascalPrecht/angular-translate"
+    "url": "git://github.com/angular-translate/angular-translate"
   },
   "main": "./build/angular-translate",
   "devDependencies": {
