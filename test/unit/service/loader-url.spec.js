@@ -94,4 +94,34 @@ describe('pascalprecht.translate', function () {
       $httpBackend.flush();
     });
   });
+
+  describe('$translateProvider#useUrlLoader with custom $http options (method=POST)', function () {
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.useUrlLoader('foo/bar.json', {
+        $http: {
+          method: 'POST'
+        }
+      });
+    }));
+
+    var $translate, $httpBackend;
+
+    beforeEach(inject(function (_$translate_, _$httpBackend_) {
+      $httpBackend = _$httpBackend_;
+      $translate = _$translate_;
+
+      $httpBackend.when('POST', 'foo/bar.json?lang=de_DE').respond({it: 'works'});
+    }));
+
+    afterEach(function () {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should fetch url when invoking #use', function () {
+      $httpBackend.expectPOST('foo/bar.json?lang=de_DE');
+      $translate.use('de_DE');
+      $httpBackend.flush();
+    });
+  });
 });

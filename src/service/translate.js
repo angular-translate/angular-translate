@@ -485,9 +485,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    * Tells angular-translate to use `$translateUrlLoader` extension service as loader.
    *
    * @param {string} url Url
+   * @param {Object=} options Optional configuration object
    */
-  this.useUrlLoader = function (url) {
-    return this.useLoader('$translateUrlLoader', { url: url });
+  this.useUrlLoader = function (url, options) {
+    return this.useLoader('$translateUrlLoader', angular.extend({ url: url }, options));
   };
 
   /**
@@ -941,12 +942,14 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           cache = $injector.get(cache);
         }
 
-        $injector.get($loaderFactory)(angular.extend($loaderOptions, {
+        var loaderOptions = angular.extend({}, $loaderOptions, {
           key: key,
-          $http: angular.extend({}, $loaderOptions.$http, {
+          $http: angular.extend({}, {
             cache: cache
-          })
-        })).then(function (data) {
+          }, $loaderOptions.$http)
+        });
+
+        $injector.get($loaderFactory)(loaderOptions).then(function (data) {
           var translationTable = {};
           $rootScope.$emit('$translateLoadingSuccess', {language: key});
 
@@ -1715,6 +1718,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         if ($fallbackLanguage && $fallbackLanguage.length) {
           var processAsyncResult = function (translation) {
             translations(translation.key, translation.table);
+            $rootScope.$emit('$translateChangeEnd', { language: translation.key });
           };
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
             langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(processAsyncResult);

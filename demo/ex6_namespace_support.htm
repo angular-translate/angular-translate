@@ -71,7 +71,7 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
 
   $scope.setLang = function(langKey) {
     // You can change the language during runtime
-    $translate.uses(langKey);
+    $translate.use(langKey);
   };
 
 }]);
