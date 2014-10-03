@@ -1,3 +1,15 @@
+<a name="2.4.1"></a>
+### 2.4.1 (2014-10-03)
+
+
+#### Bug Fixes
+
+* **service:**
+  * constructor `useUrlLoader()` missed optional options ([22f5c4b7](http://github.com/PascalPrecht/angular-translate/commit/22f5c4b7b9612b3645c5d79b9bc9d2fec917fe25))
+  * add missing final event on new (async) translations ([22cc8b42](http://github.com/PascalPrecht/angular-translate/commit/22cc8b42d61ca6c6e2641de565b4f61a13469a50))
+  * the loader options ($http) have been merged wrong #754 #547
+
+
 # 2.4.0 (2014-09-22)
 
 ## Features
