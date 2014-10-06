@@ -1578,7 +1578,7 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO')).toEqual('bar');
     });
 
-    it('should return translation id if translation id nost exist', function () {
+    it('should return translation id if translation id not exist', function () {
       expect($translate.instant('FOO2')).toEqual('FOO2');
     });
 
@@ -1644,4 +1644,89 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
     });
   });
+
+  describe('$translate#determineTranslation with fallback for shortcuts', function () {
+
+    var missingTranslations = {};
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      $translateProvider
+        .translations('en', {
+          'NAMESPACE1':
+          {
+            'SUBSPACE1':
+            {
+              'FOO': 'Translation1',
+              'BAR': 'Translation2',
+              'SUBSPACE1': 'Subtrans'
+            }
+          }
+        })
+        .translations('de', {
+          'FOO': 'Ich bin ein Foo'
+        })
+        .translations('fr', {
+          'NAMESPACE1': {
+            'SUBSPACE1': {
+              'FOO': 'Translation1 Francais',
+              'BAR': 'Translation2 Francais',
+              'SUBSPACE1': 'Subtrans',
+              'SUBSPACE2': 'Subtrans un a deux'
+            },
+            'SUBSPACE_FR': {
+              'SUBSPACE_FR': 'Francais angular'
+            },
+            'FALLBACK': '@:NAMESPACE1.SUBSPACE1.FOO'
+          }
+        })
+        .fallbackLanguage(['de', 'fr'])
+        .preferredLanguage('en');
+
+
+    }));
+
+    var $translate, $q, $rootScope;
+
+    beforeEach(inject(function (_$translate_, _$q_, _$rootScope_) {
+      $translate = _$translate_;
+      $q = _$q_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should invoke the translation method and return the sh1ortcut translation value', function () {
+      var deferred = $q.defer(),
+        promise = deferred.promise,
+        value;
+
+      promise.then(function (foo) {
+        value = foo;
+      });
+      $translate('NAMESPACE1.SUBSPACE1').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Subtrans');
+    });
+
+    it('should invoke the translation fallback stack and return the resolved french shortcut', function () {
+      var deferred = $q.defer(),
+        promise = deferred.promise,
+        value;
+
+      promise.then(function (foo) {
+        value = foo;
+      });
+      $translate('NAMESPACE1.SUBSPACE_FR').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Francais angular');
+    });
+
+    it('should invoke the translation fallback stack and return the resolved at syntax based shortcut', function () {
+      expect($translate.instant('NAMESPACE1.FALLBACK')).toBe('Translation1 Francais');
+    });
+
+  });
+
 });
