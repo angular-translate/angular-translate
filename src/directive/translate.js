@@ -162,7 +162,7 @@ angular.module('pascalprecht.translate')
             return function () {
               var unwatch = scope.$watch('translationId', function (value) {
                 if (scope.translationId && value) {
-                  $translate(value, {}, translateInterpolation)
+                  $translate(value, {}, translateInterpolation, scope.defaultText)
                     .then(function (translation) {
                       applyElementContent(translation, scope, true);
                       unwatch();
@@ -175,10 +175,9 @@ angular.module('pascalprecht.translate')
             };
           } else {
             return function () {
-
               var updateTranslations = function () {
                 if (scope.translationId && scope.interpolateParams) {
-                  $translate(scope.translationId, scope.interpolateParams, translateInterpolation)
+                  $translate(scope.translationId, scope.interpolateParams, translateInterpolation, scope.defaultText)
                     .then(function (translation) {
                       applyElementContent(translation, scope, true);
                     }, function (translationId) {
