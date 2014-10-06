@@ -1074,7 +1074,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         getTranslationTable(langKey).then(function (translationTable) {
           if (Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
             Interpolator.setLocale(langKey);
-            deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
+            var translation = translationTable[translationId];
+            if (translation.substr(0, 2) === '@:') {
+              getFallbackTranslation(langKey, translation.substr(2), interpolateParams, Interpolator)
+                .then(deferred.resolve, deferred.reject);
+            } else {
+              deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
+            }
             Interpolator.setLocale($uses);
           } else {
             deferred.reject();
