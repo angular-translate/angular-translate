@@ -22,6 +22,8 @@
 
   <h1>{{ 'load.static.HEADER' | translate }}</h1>
   <h2 translate>load.static.SUBHEADER</h2>
+  <section id="extendedContent">
+  </section>
 
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
@@ -51,7 +53,16 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
 
       $timeout(function () {
         deferred.resolve({
-          'foo': 'bar'
+          "load": {
+            "static": {
+              "TITLE" : "How to load static files?",
+              "HEADER" : "The module can lazzy load a translations table when it's needed.",
+              "SUBHEADER" : "So, you can load only those languages, which will be used.",
+              "TEXT" : "This is only some text to fill the space.",
+              "ONLY_EN": "only english",
+              "EN_RU": "EN and RU - EN Edition"
+            }
+          }
         });
         }, 2000);
 
@@ -66,12 +77,20 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
 
 }])
 
-.controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
+.controller('ctrl', ['$scope', '$translate', '$timeout', '$compile', function($scope, $translate, $timeout, $compile) {
 
   $scope.setLang = function(langKey) {
     // You can change the language during runtime
     $translate.use(langKey);
   };
+
+  $timeout(function () {
+    var elem = $compile('<div translate-cloak><h2>Simple cloak after language was already loaded</h2><p translate>load.static.TEXT</p></div>')($scope);
+    angular.element(document.body).find('section').append(elem);
+
+    var elem = $compile('<div translate-cloak="load.static.TEXT"><h2>Simple cloak with fine-tuned key</h2><p translate>load.static.TEXT</p></div>')($scope);
+    angular.element(document.body).find('section').append(elem);
+  }, 3000);
 
 }]);
 </script>

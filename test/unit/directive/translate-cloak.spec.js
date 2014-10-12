@@ -22,11 +22,12 @@ describe('pascalprecht.translate', function () {
         }]);
       }));
 
-      var $compile, $rootScope;
+      var $compile, $rootScope, $timeout;
 
-      beforeEach(inject(function (_$compile_, _$rootScope_) {
+      beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
+        $timeout = _$timeout_;
       }));
 
       it('should add translate-cloak class', function () {
@@ -38,6 +39,44 @@ describe('pascalprecht.translate', function () {
         element = $compile('<div translate-cloak></div>')($rootScope);
         $rootScope.$digest();
         expect(element.hasClass('translate-cloak')).toBe(false);
+      });
+
+      describe('an element added after the first translation', function () {
+        it('should still have translate-cloak', function () {
+          element = $compile('<div translate-cloak></div>')($rootScope);
+          $rootScope.$digest();
+          expect(element.hasClass('translate-cloak')).toBe(false);
+          $timeout(function () {
+            var element2 = $compile('<div translate-cloak></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element2.hasClass('translate-cloak')).toBe(true);
+          }, 100);
+          $timeout.flush();
+        });
+        describe('with an attr translate-cloak', function () {
+          it('with an invalid translation should still have not translate-cloak', function () {
+            element = $compile('<div translate-cloak></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.hasClass('translate-cloak')).toBe(false);
+            $timeout(function () {
+              var element2 = $compile('<div translate-cloak="invalid.id"></div>')($rootScope);
+              $rootScope.$digest();
+              expect(element2.hasClass('translate-cloak')).toBe(true);
+            }, 100);
+            $timeout.flush();
+          });
+          it('with a valid translation should still have not translate-cloak', function () {
+            element = $compile('<div translate-cloak></div>')($rootScope);
+            $rootScope.$digest();
+            expect(element.hasClass('translate-cloak')).toBe(false);
+            $timeout(function () {
+              var element2 = $compile('<div translate-cloak="foo"></div>')($rootScope);
+              $rootScope.$digest();
+              expect(element2.hasClass('translate-cloak')).toBe(false);
+            }, 100);
+            $timeout.flush();
+          });
+        });
       });
     });
 
