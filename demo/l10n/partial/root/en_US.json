@@ -1,0 +1,13 @@
+{
+  "load" : {
+    "partial" : {
+      "root": {
+        "english": "English",
+        "german": "German",
+        "TITLE" : "How to use the partial loader?",
+        "HEADER" : "The Partial Loader",
+        "SUBHEADER" : "The content will be loaded dynamically."
+      }
+    }
+  }
+}

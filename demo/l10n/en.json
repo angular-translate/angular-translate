@@ -16,6 +16,11 @@
     "TITLE" : "How to load dynamic files?",
     "HEADER" : "The module can lazzy load a translations table from the dynamic page.",
     "SUBHEADER" : "It will use the \"lang\" request param passed into GET."
+  },
+  "partial" : {
+    "TITLE" : "How to load partial files?",
+    "HEADER" : "The module can lazzy load a translations table from the dynamic page.",
+    "SUBHEADER" : "It will use the \"lang\" request param passed into GET."
   }
 }
 }
