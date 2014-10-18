@@ -1,0 +1,80 @@
+@ngdoc overview
+@name Migration Guide
+@description
+
+# 1.1.1 -> 2.0.0
+
+## Anonyme Übersetzungstabellen werden nicht mehr unterstützt
+
+Ab Version 2.0.0 werden anonyme
+Since version 2.0.0 Übersetzungstabellen nicht mehr von angular-translate unterstützt. Dies ist
+eine Folge von internen Strukturverbesserungen.
+
+Folgende Code-Zeilen müssen umgestellt werden:
+
+```js
+$translateProvider.translations({
+  'greetings' : 'Hello',
+  // some other keys
+});
+```
+
+Die Lösung ist, als ersten Paratemer die eigentliche Sprache festzulegen.
+
+```js
+$translateProvider.translations('en', {
+  'greetings' : 'Hello',
+  // some other keys
+});
+$translateProvider.use('en');
+```
+
+## uses -> use
+
+Aus Konsistenztgründen wurde beschlossen, dass die Methode `.uses()` fortan `.use()` heißen wird.
+Dies gilt sowohl für den Service $translate als auch den Provider $translateProvider. Es sollte
+überprüft werden, ob dies überall umgestellt ist.
+
+## $translate() ist asynchron
+
+Der Service $translate() ist ab sofort asynchron und gibt eine Promise zurück. Eine synchroner Aufruf
+ist nicht mehr möglich. Falls dies doch erforderlich ist, dann kann man $translate.instant() verwenden.
+
+
+Folgende Code-Zeilen müssen umgestellt werden:
+
+```js
+var stringFromService = $translate('translationId');
+```
+
+Die Lösung ist die Verwendung von Promise-Callbacks.
+
+```js
+var stringFromService;
+$translate('translationId').then(function(translation) {
+  stringFromService = translation;
+}, function(translationId){
+  // Unable to translate given translationId
+  stringFromService = translationId;
+});
+```
+
+Falls man dennoch die Übersetzungen synchron laden will, dann kann man
+`$translate.instant(translationId, interpolateParams, interpolationId)` verwenden.
+Allerdings muss man hier die Konsequenz von nicht aktuellen Übersetzungen selber tragen. Dieser
+Service wartet nicht auf das erfolgreiche Laden von Übersetzungen.
+
+## Events werden nur noch auf den $rootScope gesendet
+
+Alle Events von angular-translate werden jetzt nur auf dem $rootScope gesendet, das bedeutet ein
+einfaches Lauschen `$scope.$on()` funktioniert nicht mehr. Stattdessen muss dann auch
+`$rootScope.$on()` verwendet werden. Der Grund hierfür sind Performance-Gründe.
+
+## WTFPL -> MIT
+
+angular-translate wird nicht mehr unter der WTFPL veröffentlicht. Ab sofort gilt die MIT.
+
+## Structural changes
+
+Das gesamte angular-translate Projekt wird fortnun an als Organization bei GitHub geführt.
+Das bedeutet, alle Repositories sind verschoben worden (https://github.com/angular-translate).
