@@ -148,6 +148,27 @@ describe('pascalprecht.translate', function () {
       expect(value[1]).toEqual('');
     });
 
+    it('should return translation if translation id exists and return a default value if not existing', function () {
+      var deferred = $q.defer(),
+        promise = deferred.promise,
+        value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $q.all([
+        $translate("EXISTING_TRANSLATION_ID"),
+        $translate("NON_EXISTING_KEY", undefined, undefined, "Default Translation")
+      ]).then(function (translations) {
+        deferred.resolve(translations);
+      });
+
+      $rootScope.$digest();
+      expect(value[0]).toEqual('foo');
+      expect(value[1]).toEqual('Default Translation');
+    });
+
     it('should return translations of multiple translation ids if exists', function () {
       var deferred = $q.defer(),
           promise = deferred.promise,
@@ -783,6 +804,34 @@ describe('pascalprecht.translate', function () {
         expect(value[2]).toEqual('it works!');
         expect(value[3]).toEqual('it really does!');
         expect(value[4]).toEqual('NO KEY FOUND');
+      });
+
+      it('should use fallback languages and return a default value for one of the translation keys', function () {
+        var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+        promise.then(function (translations) {
+          value = translations;
+        });
+
+        $q.all([
+          $translate('EXISTING_TRANSLATION_ID'),
+          $translate('TRANSLATION__ID'),
+          $translate('SUPERTEST'),
+          $translate('YAY'),
+          $translate('NOT_EXISTING', undefined, undefined, 'Defaultvalue')
+        ]).then(function (translations) {
+          deferred.resolve(translations);
+        });
+
+        $rootScope.$digest();
+
+        expect(value[0]).toEqual('foo');
+        expect(value[1]).toEqual('bazinga');
+        expect(value[2]).toEqual('it works!');
+        expect(value[3]).toEqual('it really does!');
+        expect(value[4]).toEqual('Defaultvalue');
       });
     });
 
