@@ -903,7 +903,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $rootScope.$emit('$translateChangeSuccess', {language: key});
 
         if ($storageFactory) {
-          Storage.set($translate.storageKey(), $uses);
+          Storage.put($translate.storageKey(), $uses);
         }
         // inform default interpolator
         defaultInterpolator.setLocale($uses);
@@ -977,8 +977,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if ($storageFactory) {
         Storage = $injector.get($storageFactory);
 
-        if (!Storage.get || !Storage.set) {
-          throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or set() method!');
+        if (!Storage.get || !Storage.put) {
+          throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or put() method!');
         }
       }
 

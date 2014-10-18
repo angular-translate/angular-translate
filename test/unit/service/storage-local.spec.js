@@ -18,9 +18,10 @@ describe('pascalprecht.translate', function () {
       expect(typeof $translateLocalStorage).toBe('object');
     });
 
-    it('should have a set() and a get() method', function () {
+    it('should have a put() and a get() method', function () {
+      expect($translateLocalStorage.put).toBeDefined();
       expect($translateLocalStorage.get).toBeDefined();
-      expect($translateLocalStorage.set).toBeDefined();
+      expect($translateLocalStorage.set).toBeDefined(); // deprecated
     });
 
     describe('$translateLocalStorage#get', function () {
@@ -30,9 +31,10 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    describe('$translateLocalStorage#set()', function () {
+    describe('$translateLocalStorage#put()', function () {
       it('should be a function', function () {
-        expect(typeof $translateLocalStorage.set).toBe('function');
+        expect(typeof $translateLocalStorage.set).toBe('function'); // deprecated
+        expect(typeof $translateLocalStorage.put).toBe('function');
       });
     });
 

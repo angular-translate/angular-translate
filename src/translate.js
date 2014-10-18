@@ -18,9 +18,9 @@ angular.module('pascalprecht.translate', ['ng'])
       if (angular.isString($translate.preferredLanguage())) {
         $translate.use($translate.preferredLanguage());
         // $translate.use() will also remember the language.
-        // So, we don't need to call storage.set() here.
+        // So, we don't need to call storage.put() here.
       } else {
-        storage.set(key, $translate.use());
+        storage.put(key, $translate.use());
       }
 
     } else {

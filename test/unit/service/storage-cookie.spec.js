@@ -18,9 +18,10 @@ describe('pascalprecht.translate', function () {
       expect(typeof $translateCookieStorage).toBe('object');
     });
 
-    it('should have a set() and a get() method', function () {
+    it('should have a put() and a get() method', function () {
+      expect($translateCookieStorage.put).toBeDefined();
       expect($translateCookieStorage.get).toBeDefined();
-      expect($translateCookieStorage.set).toBeDefined();
+      expect($translateCookieStorage.set).toBeDefined(); // deprecated
     });
 
     describe('$translateCookieStorage#get', function () {
@@ -30,9 +31,10 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    describe('$translateCookieStorage#set', function () {
+    describe('$translateCookieStorage#put', function () {
       it('should be a function', function () {
-        expect(typeof $translateCookieStorage.set).toBe('function');
+        expect(typeof $translateCookieStorage.set).toBe('function'); // deprecated
+        expect(typeof $translateCookieStorage.put).toBe('function');
       });
     });
   });
@@ -82,7 +84,8 @@ describe('pascalprecht.translate', function () {
 
     it('should return registered storage instance if exists', function () {
       expect(typeof $translate.storage()).toBe('object');
-      expect($translate.storage().set).toBeDefined();
+      expect($translate.storage().set).toBeDefined(); // deprecated
+      expect($translate.storage().put).toBeDefined();
       expect($translate.storage().get).toBeDefined();
     });
   });

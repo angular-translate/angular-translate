@@ -42,10 +42,27 @@ angular.module('pascalprecht.translate')
        * @description
        * Sets an item in localStorage by given name.
        *
+       * @deprecated use #put
+       *
        * @param {string} name Item name
        * @param {string} value Item value
        */
       set: function (name, value) {
+        langKey=value;
+        $window.localStorage.setItem(name, value);
+      },
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateLocalStorage#put
+       * @methodOf pascalprecht.translate.$translateLocalStorage
+       *
+       * @description
+       * Sets an item in localStorage by given name.
+       *
+       * @param {string} name Item name
+       * @param {string} value Item value
+       */
+      put: function (name, value) {
         langKey=value;
         $window.localStorage.setItem(name, value);
       }
