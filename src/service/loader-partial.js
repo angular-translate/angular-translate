@@ -234,8 +234,8 @@ angular.module('pascalprecht.translate')
    *
    * @throws {TypeError}
    */
-  this.$get = ['$rootScope', '$injector', '$q', '$http', '$translate',
-  function($rootScope, $injector, $q, $http, $translate) {
+  this.$get = ['$rootScope', '$injector', '$q', '$http',
+  function($rootScope, $injector, $q, $http) {
 
     /**
      * @ngdoc event
@@ -388,6 +388,7 @@ angular.module('pascalprecht.translate')
       if (hasPart(name)) {
         var wasActive = parts[name].isActive;
         if (removeData) {
+          var $translate = $injector.get('$translate');
           var cache = $translate.loaderCache();
           if (typeof(cache) === 'string') {
             // getting on-demand instance of loader
