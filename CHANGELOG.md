@@ -1,3 +1,17 @@
+<a name="2.4.2"></a>
+### 2.4.2 (2014-10-21)
+
+
+#### Bug Fixes
+
+* **partialloader:** fix possible circular dependency ([25f252c1](http://github.com/angular-translate/angular-translate/commit/25f252c14aab58b9e2dc61e2765420b584106b6f), closes [#766](http://github.com/angular-translate/angular-translate/issues/766))
+
+
+#### Features
+
+* **directive:** translate-cloak supports optional value for cloaking ([f7ccb7fb](http://github.com/angular-translate/angular-translate/commit/f7ccb7fbdac184b6a8b216966ebf89b4a8d3fb5e))
+
+
 <a name="2.4.1"></a>
 ### 2.4.1 (2014-10-03)
 
