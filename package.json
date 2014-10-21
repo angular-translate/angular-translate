@@ -16,6 +16,19 @@
   "author": {
     "name": "Pascal Precht"
   },
+  "contributors": [
+    {
+      "name": "Jan Philipp",
+      "email": "knallisworld@googlemail.com",
+      "url": "https://github.com/knalli"
+    },
+    {
+      "name": "Max Prichinenko"
+    },
+    {
+      "name": "Thorsten S"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "bower": "^1.3.12",
