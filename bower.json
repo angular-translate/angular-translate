@@ -12,7 +12,7 @@
   "main": "./build/angular-translate",
   "devDependencies": {
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
-    "angular": "~1.2.12",
+    "angular": "~1.2.26",
     "angular-translate-interpolation-messageformat": "2.4.1",
     "angular-mocks": "~1.2.12",
     "angular-cookies": "~1.2.12"
