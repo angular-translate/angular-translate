@@ -527,12 +527,12 @@ module.exports = function (grunt) {
     },
 
     version: {
-        options: {
-            prefix: 'var version\\s+=\\s+[\'"]'
-        },
-        defaults: {
-            src: ['<%= concat.core.dest %>']
-        }
+      options: {
+        prefix: 'var version\\s+=\\s+[\'"]'
+      },
+      defaults: {
+        src: ['<%= concat.core.dest %>']
+      }
     },
 
     'bower-install-simple': loadTestScopeConfigurations()
