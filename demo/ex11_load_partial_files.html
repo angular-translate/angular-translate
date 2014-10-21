@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+
+<head>
+  <meta charset="utf-8">
+  <title translate="load.partial.root.TITLE">Load static files</title>
+</head>
+
+<body ng-controller="ctrl" translate-cloak>
+
+  <p>
+    <a href="#" ng-click="setLang('en_US')" translate="load.partial.root.english">English</a>
+    |
+    <a href="#" ng-click="setLang('de_DE')" translate="load.partial.root.german">German</a>
+  </p>
+
+  <h1>{{ 'load.partial.root.HEADER' | translate }}</h1>
+  <h2 translate>load.partial.root.SUBHEADER</h2>
+
+  <h2>Module A <a href="#" ng-click="loadModule($event, 'moduleA')">Load module</a>/<a href="#" ng-click="unloadModule($event, 'moduleA')">Unload module</a></h2>
+  <p translate>load.partial.moduleA.text</p>
+  <h2>Module B <a href="#" ng-click="loadModule($event, 'moduleB')">Load module</a>/<a href="#" ng-click="unloadModule($event, 'moduleB')">Unload module</a></h2>
+  <p translate>load.partial.moduleB.text</p>
+
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="../src/translate.js"></script>
+<script src="../src/service/default-interpolation.js"></script>
+<script src="../src/service/handler-log.js"></script>
+<script src="../src/service/loader-partial.js"></script>
+<script src="../src/service/storage-key.js"></script>
+<script src="../src/service/storage-local.js"></script>
+<script src="../src/service/storage-cookie.js"></script>
+<script src="../src/service/translate.js"></script>
+<script src="../src/directive/translate.js"></script>
+<script src="../src/directive/translate-cloak.js"></script>
+<script src="../src/filter/translate.js"></script>
+<script>
+angular.module('app', ['pascalprecht.translate', 'ngCookies'])
+
+.config(['$translateProvider', '$provide', '$translatePartialLoaderProvider', function($translateProvider, $provide, $translatePartialLoaderProvider){
+  $translateProvider.useLoader('$translatePartialLoader', {
+    urlTemplate: 'l10n/partial/{part}/{lang}.json'
+  });
+  // Tell the module what language to use by default
+  $translateProvider.preferredLanguage('en_US');
+  // Tell the module to store the language in the cookies
+  $translateProvider.useCookieStorage();
+  $translatePartialLoaderProvider.addPart('root');
+}])
+
+.controller('ctrl', ['$scope', '$translate', '$translatePartialLoader', function($scope, $translate, $translatePartialLoader) {
+
+  $scope.setLang = function(langKey) {
+    // You can change the language during runtime
+    $translate.use(langKey);
+  };
+
+  $scope.loadModule = function ($event, module) {
+    $event.preventDefault();
+    $translatePartialLoader.addPart(module);
+    $translate.refresh();
+  };
+
+  $scope.unloadModule = function ($event, module) {
+    $event.preventDefault();
+    $translatePartialLoader.deletePart(module);
+    $translate.refresh();
+  };
+
+}]);
+</script>
+
+</body>
+</html>

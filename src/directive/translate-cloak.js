@@ -19,12 +19,27 @@ angular.module('pascalprecht.translate')
 
   return {
     compile: function (tElement) {
-      var removeListener = $rootScope.$on('$translateChangeEnd', function () {
+      var applyCloak = function () {
+        tElement.addClass($translate.cloakClassName());
+      },
+      removeCloak = function () {
         tElement.removeClass($translate.cloakClassName());
+      },
+      removeListener = $rootScope.$on('$translateChangeEnd', function () {
+        removeCloak();
         removeListener();
         removeListener = null;
       });
-      tElement.addClass($translate.cloakClassName());
+      applyCloak();
+
+      return function linkFn(scope, iElement, iAttr) {
+        // Register a watcher for the defined translation allowing a fine tuned cloak
+        if (iAttr.translateCloak && iAttr.translateCloak.length) {
+          iAttr.$observe('translateCloak', function (translationId) {
+            $translate(translationId).then(removeCloak, applyCloak);
+          });
+        }
+      };
     }
   };
 }]);

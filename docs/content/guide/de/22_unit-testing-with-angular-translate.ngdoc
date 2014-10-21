@@ -1,0 +1,202 @@
+@ngdoc overview
+@name Unit Testing
+@description
+
+# Unit Testing with angular-translate
+
+AngularJS is built with testability in mind. And we love that. This is why we
+unit tested angular-translate from the ground up. However, when building AngularJS
+applications with i18n support using angular-translate, testing your application
+could get a bit tricky. This guide shows you how to get around common issues when
+writing unit tests for your application that uses angular-translate.
+
+## What's the problem?
+
+From our experience during the time of developing angular-translate, there came only
+one issue up when it comes to testing. Imagine the following scenario: You build an
+app that not only uses angular-translate, but also makes use of an asynchronous
+loader (which is very common). So let's say our app configuration looks like this:
+
+<pre>
+app.config(function ($translateProvider) {
+  $translateProvider
+    .useStaticFilesLoader({
+      prefix: 'locale-',
+      suffix: '.json'
+    })
+    .preferredLanguage('en');
+});
+</pre>
+
+In this configuration we use the static files loader to load our i18n data from a
+remote endpoint. We also tell angular-translate that our preferred language is `en`.
+Pretty straight forward.
+
+Let's say we have a controller, which uses the `$translate` service to switch
+the language at runtime (which is also *very* common):
+
+<pre>
+app.controller('LanguageController', function ($scope, $translate) {
+  $scope.switchLanguage = function (locale) {
+    $translate.use(locale);
+  });
+});
+</pre>
+
+Okay great. That's it. Let's go through our minds and think about what happens
+when we run this app. Here is the process step by step:
+
+- we register a asynchronous loader
+- we define our preferred language
+- `$translate` service is instantiated the first time it gets injected
+- angular-translate notices that there's no language locally available
+- it looks if there's a registered asynchronous loader
+- the asynchronous loader is called with the preferred language locale
+- the translation data is loaded and ready to be used
+
+It's important to understand how angular-translate handles the flow to get an
+idea what issues it can cause. So, going through this steps, there's one thing
+that has a siginificant impact. When an asynchronous loader is registered and
+there's no translation table cached yet, angular-translate calls the registered
+loader **implicitly**. Why can this cause issues when unit testing your
+application?
+
+Well, to understand that, we have to take a look how we would right unit tests with
+for example, Jasmine. We start with a `describe()` block and load our angular app
+for each spec:
+
+<pre>
+describe('myApp', function () {
+
+  beforeEach(module('myApp'));
+
+});
+</pre>
+
+Okay, so what this does, it makes sure that on every following spec our app module
+is instantiated. Next, we set up our `LanguageController` with a mocked scope like
+this:
+
+<pre>
+describe('myApp', function () {
+
+  beforeEach(module('myApp'));
+
+  var LanguageCtrl, scope;
+
+  beforeEach(inject(function ($controller, $rootScope) {
+    scope = $rootScope.$new();
+
+    LanguageCtrl = $controller('LanguageCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('should do something', function () {
+
+  });
+});
+</pre>
+
+When we run this test, we'll get the following error:
+
+```
+Error: Unexpected request: GET locale-en.json
+```
+
+So why do we get this error? So problem here is, that angular-translate calls the
+asynchronous loader implicitly. Which means, when `$translate` service is instantiated
+through DI, there's a XHR happening without us doing anything about it.
+
+When writing tests and there are XHRs, one has to explicitly say that one expects
+a XHR in a certain spec. This is part of proper testing. In other words,
+when we explicitly say that there's a XHR happening, this error shouldn't occur,
+right?
+
+So let's try to get around this error by injecting the `$httpBackend` service to
+expect XHRs and mock responses:
+
+<pre>
+describe('myApp', function () {
+
+  beforeEach(module('myApp'));
+
+  var LanguageCtrl, scope, $httpBackend;
+
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
+    scope = $rootScope.$new();
+    $httpBackend = _$httpBackend_;
+
+    LanguageCtrl = $controller('LanguageCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('should do something', function () {
+    $httpBackend.expectGET('locale-en.json');
+
+    // test code goes here
+  });
+});
+</pre>
+
+It turns out, that this doesn't work either, because at the time when `expectGET()`
+is called, the asynchronous loader has already been executed. Hell, is there no
+way to get around this issue?
+
+## The solution
+
+Unfortunately, this issue is caused by the design of angular-translate. To get
+around these errors, all we can do is to overwrite our module configuration in
+our test suite, that it **doesn't** use asynchronous loader at all. When there's
+no asynchronous loader, there's no XHR and therefore no error.
+
+So how do we overwrite our module configuration at runtime for our test suite?
+When instantiating an angular module, we can always apply a inline function which
+is executed as configuration function. This configuration function can be used
+to overwrite the modules configuration since we have access to all providers.
+
+Using the `$provide` provider, we can build a custom loader factory, which should
+then be used instead of the static files loader.
+
+<pre>
+beforeEach(module('myApp', function ($provide, $translateProvider) {
+
+  $provide.factory('customLoader', function () {
+    // loader logic goes here
+  });
+
+  $translateProvider.useLoader('customLoader');
+
+}));
+</pre>
+
+This code is executed **before** each spec, so in other words, we overwrite the used
+loader just for the test specs. Now all we have to do, is to build a loader that doesn't
+make a XHR:
+
+<pre>
+beforeEach(module('myApp', function ($provide, $translateProvider) {
+
+  $provide.factory('customLoader', function ($q) {
+    return function () {
+      var deferred = $q.defer();
+      deferred.resolve({});
+      return deferred.promise;
+    };
+  });
+
+  $translateProvider.useLoader('customLoader');
+
+}));
+</pre>
+
+That's it! Another option would be to always provide the preferred language of your
+app as static JSON:
+
+<pre>
+beforeEach(module('myApp', function ($translateProvider) {
+
+  $translateProvider.translations('en', {});
+}));
+</pre>
