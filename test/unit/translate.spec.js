@@ -29,7 +29,7 @@ describe('pascalprecht.translate', function () {
 
       var storage;
       var storageMockCreator = function(storageValue) {
-        var storage = jasmine.createSpyObj('storage', ['get', 'set']);
+        var storage = jasmine.createSpyObj('storage', ['get', 'put']);
         storage.get.andReturn(storageValue);
         return storage;
       };
@@ -39,15 +39,15 @@ describe('pascalprecht.translate', function () {
         beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
           storage = storageMockCreator('en');
           $provide.value('storageMock', storage);
-          
+
           $translateProvider
             .useStorage('storageMock')
             .preferredLanguage('de');
         }));
 
         it('should use value from storage when provided', inject(function($translate) {
-          expect(storage.get).toHaveBeenCalled(); 
-          expect($translate.use()).toEqual('en');  
+          expect(storage.get).toHaveBeenCalled();
+          expect($translate.use()).toEqual('en');
         }));
       });
 
@@ -56,14 +56,14 @@ describe('pascalprecht.translate', function () {
         beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
           storage = storageMockCreator(undefined);
           $provide.value('storageMock', storage);
-          
+
           $translateProvider
             .useStorage('storageMock')
             .preferredLanguage('de');
         }));
 
         it('should fallback to preferred locale', inject(function($translate) {
-          expect(storage.get).toHaveBeenCalled(); 
+          expect(storage.get).toHaveBeenCalled();
           expect($translate.use()).toEqual('de');
         }));
       });
@@ -84,7 +84,7 @@ describe('pascalprecht.translate', function () {
               });
             }
           });
-          
+
           $translateProvider
             .useStorage('storageMock')
             .useLoader('loaderMock')
@@ -93,8 +93,8 @@ describe('pascalprecht.translate', function () {
 
         it('should fallback to preferred locale', inject(function($translate, $rootScope) {
           $rootScope.$digest();
-          expect(storage.get).toHaveBeenCalled(); 
-          expect($translate.use()).toEqual('de');  
+          expect(storage.get).toHaveBeenCalled();
+          expect($translate.use()).toEqual('de');
         }));
       });
     });
