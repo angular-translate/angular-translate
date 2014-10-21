@@ -105,7 +105,7 @@ angular.module('pascalprecht.translate')
         scope.interpolateParams = {};
         scope.preText = "";
         scope.postText = "";
-        scope.translationIds = {};
+        var translationIds = {};
 
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
@@ -118,18 +118,20 @@ angular.module('pascalprecht.translate')
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
-              scope.translationIds['translate'] = $interpolate(interpolateMatches[2])(scope.$parent);
+              translationIds['translate'] = $interpolate(interpolateMatches[2])(scope.$parent);
             } else {
-              scope.translationIds['translate'] = iElement.text().replace(/^\s+|\s+$/g,'');
+              translationIds['translate'] = iElement.text().replace(/^\s+|\s+$/g,'');
             }
           } else {
-            scope.translationIds['translate'] = translationId;
+            translationIds['translate'] = translationId;
           }
+          updateTranslations();
         };
 
         var observeAttributeTranslation = function (translateAttr) {
           iAttr.$observe(translateAttr, function (translationId) {
-            scope.translationIds[translateAttr] = translationId;
+            translationIds[translateAttr] = translationId;
+            updateTranslations();
           });
         };
 
@@ -173,9 +175,9 @@ angular.module('pascalprecht.translate')
 
         // Master update function
         var updateTranslations = function () {
-          for (var key in scope.translationIds) {
-            if (scope.translationIds.hasOwnProperty(key) && scope.translationIds[key]) {
-              updateTranslation(key, scope.translationIds[key], scope, scope.interpolateParams);
+          for (var key in translationIds) {
+            if (translationIds.hasOwnProperty(key) && translationIds[key]) {
+              updateTranslation(key, translationIds[key], scope, scope.interpolateParams);
             }
           }
         };
@@ -214,7 +216,6 @@ angular.module('pascalprecht.translate')
         };
 
         scope.$watch('interpolateParams', updateTranslations, true);
-        scope.$watch('translationIds', updateTranslations, true);
 
         // Ensures the text will be refreshed after the current language was changed
         // w/ $translate.use(...)
