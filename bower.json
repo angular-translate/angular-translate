@@ -12,16 +12,18 @@
   "main": "./build/angular-translate",
   "devDependencies": {
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
-    "angular-translate-interpolation-messageformat": "~0.1.2",
     "angular": "~1.2.12",
+    "angular-translate-interpolation-messageformat": "2.4.1",
     "angular-mocks": "~1.2.12",
     "angular-cookies": "~1.2.12"
   },
   "resolutions": {
     "angular": "~1.2.12"
   },
-  "licenses": [{
-    "type": "MIT",
-    "url": "http://www.opensource.org/licenses/MIT"
-  }]
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ]
 }
