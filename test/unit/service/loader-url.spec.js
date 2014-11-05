@@ -15,6 +15,10 @@ describe('pascalprecht.translate', function () {
       $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({
         it: 'works'
       });
+
+      $httpBackend.when('GET', 'foo/bar.json?language=de_DE').respond({
+        it: 'works too'
+      });
     }));
 
     afterEach(function () {
@@ -41,6 +45,16 @@ describe('pascalprecht.translate', function () {
       $translateUrlLoader({
         key: 'de_DE',
         url: 'foo/bar.json'
+      });
+      $httpBackend.flush();
+    });
+
+    it('should use custom query parameter name when invoking with queryParameter', function () {
+      $httpBackend.expectGET('foo/bar.json?language=de_DE');
+      $translateUrlLoader({
+        key: 'de_DE',
+        url: 'foo/bar.json',
+        queryParameter: 'language'
       });
       $httpBackend.flush();
     });
