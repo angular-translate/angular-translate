@@ -240,6 +240,50 @@ UI Router.
 **Увага**: Відмітьте, що при використанні `partialLoader` вам треба спочатку оновити таблиці
 перекладів!
 
+## Налаштування завантажувача
+
+У будь-який завантажувач можна передати налаштування. для цього використовується такий синтаксис:
+
+<pre>
+$translationProvider.useLoader('customLoader', {
+  settingA: 'foobar'
+});
+$translationProvider.useStaticFilesLoader({
+  $http: {
+    method: 'POST'
+  }
+});
+</pre>
+
+Властивість `$http` буде використана завантажувачем під час запиту, проте атрибут `cache` може бути
+перевизначений (см. следующий раздел).
+
+## Використання кеша
+
+Для контролю над кешуванням в існуючих завантажувачах можна використовувати об'єкт cache. Докладніше
+про це Ви можете прочитати в 
+[офіційній документації AngularJS](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
+
+Для увімкнення стандартного кешування використовується наступний метод:
+
+<pre>
+$translationProvider.useLoaderCache(true); // default is false which means disable
+</pre>
+
+Якщо ж у Вас вже є єкземпляр кеша (спеціально налаштований), то прив'яжіть його так:
+
+<pre>
+$translationProvider.useLoaderCache(yourSpecialCacheService);
+</pre>
+
+Angular-Translate також підтримує ліниве зв'язування. Тому, такий варіант також буде працювати:
+
+<pre>
+$translationProvider.useLoaderCache('yourSpecialCacheService');
+</pre>
+
+Екземпляр під назвою `yourspecialCacheService` буде знайдено при необхідності.
+
 ## МНПК - Миготіння не перекладеного контента
 
 У використання асинхронних завантажувачів для отримання перекладів є один недолік. При запуску
