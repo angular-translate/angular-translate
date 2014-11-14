@@ -241,6 +241,50 @@ app.run(function ($rootScope, $translate) {
 **Внимание**: Заметьте, что при использовании `partialLoader` вам нужно сперва обновить таблицы
 перевода!
 
+## Настройка загрузчика
+
+В каждый загрузчик могут быть переданы настройки. Для этого используется такой синтаксис:
+
+<pre>
+$translationProvider.useLoader('customLoader', {
+  settingA: 'foobar'
+});
+$translationProvider.useStaticFilesLoader({
+  $http: {
+    method: 'POST'
+  }
+});
+</pre>
+
+Свойство `$http` будет использовано загрузчиками при запросе, однако атрибут `cache` может быть
+переопределен (см. следующий раздел).
+
+## Использование кэша
+
+Для контроля над кэшированием в существующих загрузчиках можно использовать объект cache. Более
+подробно об этом Вы можете прочитать в
+[официальной документации AngularJS](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
+
+Для включения стандартного кэширования используйте следующий метод:
+
+<pre>
+$translationProvider.useLoaderCache(true); // default is false which means disable
+</pre>
+
+Если же у Вас уже есть экземпляр кэша (специально настроенный), то привяжите его так:
+
+<pre>
+$translationProvider.useLoaderCache(yourSpecialCacheService);
+</pre>
+
+Angular-Translate также поддерживает ленивое связывание. Поэтому, такой вариант тоже будет работать:
+
+<pre>
+$translationProvider.useLoaderCache('yourSpecialCacheService');
+</pre>
+
+Экземпляр под названием `yourspecialCacheService` будет найден при необходимости.
+
 ## МНПК - Мигание не переведенного контента
 
 В использовании асинхронных загрузчиков для получения переводов есть один недостаток. При запуске
