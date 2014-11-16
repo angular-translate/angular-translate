@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>angular-translate</id>
+        <version>0.0.0</version>
+        <title>Angular Translate</title>
+        <authors>Pascal Precht, Jan Philipp, Max Prichinenko, Thorsten S</authors>
+        <iconUrl>https://avatars3.githubusercontent.com/u/6117835?v=3&amp;s=200</iconUrl>
+        <projectUrl>https://github.com/angular-translate/angular-translate</projectUrl>
+        <licenseUrl>https://github.com/angular-translate/angular-translate/blob/master/LICENSE</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>i18n in your Angular apps, made easy.</description>
+        <tags>angular angularjs translate translation i18n</tags>
+        <dependencies>
+            <dependency id="angularjs" version="1.2.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="dist/angular-translate.js"
+              target="content\Scripts\angular-translate.js" />
+        <file src="dist/angular-translate.min.js"
+              target="content\Scripts\angular-translate.min.js" />
+
+        <file src="dist/angular-translate-handler-log/angular-translate-handler-log.js"
+              target="content\Scripts\angular-translate-handler-log/angular-translate-handler-log.js" />
+        <file src="dist/angular-translate-handler-log/angular-translate-handler-log.min.js"
+              target="content\Scripts\angular-translate-handler-log/angular-translate-handler-log.min.js" />
+
+        <file src="dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js"
+              target="content\Scripts\angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js" />
+        <file src="dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js"
+              target="content\Scripts\angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js" />
+
+        <file src="dist/angular-translate-loader-partial/angular-translate-loader-partial.js"
+              target="content\Scripts\angular-translate-loader-partial/angular-translate-loader-partial.js" />
+        <file src="dist/angular-translate-loader-partial/angular-translate-loader-partial.min.js"
+              target="content\Scripts\angular-translate-loader-partial/angular-translate-loader-partial.min.js" />
+
+        <file src="dist/angular-translate-loader-static-files/angular-translate-loader-static-files.js"
+              target="content\Scripts\angular-translate-loader-static-files/angular-translate-loader-static-files.js" />
+        <file src="dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"
+              target="content\Scripts\angular-translate-loader-static-files/angular-translate-loader-static-files.min.js" />
+
+        <file src="dist/angular-translate-loader-url/angular-translate-loader-url.js"
+              target="content\Scripts\angular-translate-loader-url/angular-translate-loader-url.js" />
+        <file src="dist/angular-translate-loader-url/angular-translate-loader-url.min.js"
+              target="content\Scripts\angular-translate-loader-url/angular-translate-loader-url.min.js" />
+
+        <file src="dist/angular-translate-storage-cookie/angular-translate-storage-cookie.js"
+              target="content\Scripts\angular-translate-storage-cookie/angular-translate-storage-cookie.js" />
+        <file src="dist/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"
+              target="content\Scripts\angular-translate-storage-cookie/angular-translate-storage-cookie.min.js" />
+
+        <file src="dist/angular-translate-storage-local/angular-translate-storage-local.js"
+              target="content\Scripts\angular-translate-storage-local/angular-translate-storage-local.js" />
+        <file src="dist/angular-translate-storage-local/angular-translate-storage-local.min.js"
+              target="content\Scripts\angular-translate-storage-local/angular-translate-storage-local.min.js" />
+    </files>
+</package>

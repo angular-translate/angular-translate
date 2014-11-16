@@ -526,6 +526,16 @@ module.exports = function (grunt) {
       }
     },
 
+    nugetpack: {
+      dist: {
+        src: 'angular-translate.nuspec',
+        dest: 'dist.nuget/',
+        options: {
+          version: '<%= pkg.version %>'
+        }
+      }
+    },
+
     version: {
       options: {
         prefix: 'var version\\s+=\\s+[\'"]'

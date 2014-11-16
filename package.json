@@ -47,6 +47,7 @@
     "grunt-karma": "~0.6.x",
     "grunt-ngdocs": "~0.1.11",
     "grunt-ngmin": "0.0.2",
+    "grunt-nuget": "^0.1.4",
     "grunt-version": "~0.3.0",
     "karma": "~0.10.9",
     "load-grunt-tasks": "~0.2.0"
