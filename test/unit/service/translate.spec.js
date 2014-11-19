@@ -1375,12 +1375,23 @@ describe('pascalprecht.translate', function () {
             var nav = {
               language: 'en_US'
             };
-            return ((
+            var guessed = ((
               nav.language ||
               nav.browserLanguage ||
               nav.systemLanguage ||
               nav.userLanguage
-            ) || '').split('-').join('_');
+              ) || '').split('-').join('_');
+
+            // reformat guessed locale
+            var language = guessed.match(/^[a-z]{2}([-_][a-zA-Z]{2})?$/);
+            if (angular.isArray(language) && language.length === 2) {
+              var part = guessed.replace('-', '_').split('_');
+              if (part.length === 2) {
+                guessed = part[0].toLowerCase() + '_' + part[1].toUpperCase();
+              }
+            }
+
+            return guessed;
           });
       }));
 
@@ -1418,12 +1429,23 @@ describe('pascalprecht.translate', function () {
             var nav = {
               language: 'en_US'
             };
-            return ((
+            var guessed = ((
               nav.language ||
               nav.browserLanguage ||
               nav.systemLanguage ||
               nav.userLanguage
-            ) || '').split('-').join('_');
+              ) || '').split('-').join('_');
+
+            // reformat guessed locale
+            var language = guessed.match(/^[a-z]{2}([-_][a-zA-Z]{2})?$/);
+            if (angular.isArray(language) && language.length === 2) {
+              var part = guessed.replace('-', '_').split('_');
+              if (part.length === 2) {
+                guessed = part[0].toLowerCase() + '_' + part[1].toUpperCase();
+              }
+            }
+
+            return guessed;
           });
       }));
 
@@ -1461,12 +1483,23 @@ describe('pascalprecht.translate', function () {
             var nav = {
               language: 'en_us'
             };
-            return ((
+            var guessed = ((
               nav.language ||
-                nav.browserLanguage ||
-                nav.systemLanguage ||
-                nav.userLanguage
+              nav.browserLanguage ||
+              nav.systemLanguage ||
+              nav.userLanguage
               ) || '').split('-').join('_');
+
+            // reformat guessed locale
+            var language = guessed.match(/^[a-z]{2}([-_][a-zA-Z]{2})?$/);
+            if (angular.isArray(language) && language.length === 2) {
+              var part = guessed.replace('-', '_').split('_');
+              if (part.length === 2) {
+                guessed = part[0].toLowerCase() + '_' + part[1].toUpperCase();
+              }
+            }
+
+            return guessed;
           });
       }));
 
@@ -1503,12 +1536,23 @@ describe('pascalprecht.translate', function () {
             var nav = {
               language: 'en_US'
             };
-            return ((
+            var guessed = ((
               nav.language ||
               nav.browserLanguage ||
               nav.systemLanguage ||
               nav.userLanguage
-            ) || '').split('-').join('_');
+              ) || '').split('-').join('_');
+
+            // reformat guessed locale
+            var language = guessed.match(/^[a-z]{2}([-_][a-zA-Z]{2})?$/);
+            if (angular.isArray(language) && language.length === 2) {
+              var part = guessed.replace('-', '_').split('_');
+              if (part.length === 2) {
+                guessed = part[0].toLowerCase() + '_' + part[1].toUpperCase();
+              }
+            }
+
+            return guessed;
           });
 
           translateProvider = $translateProvider;
@@ -1539,12 +1583,23 @@ describe('pascalprecht.translate', function () {
             var nav = {
               language: 'en_US'
             };
-            return ((
+            var guessed = ((
               nav.language ||
               nav.browserLanguage ||
               nav.systemLanguage ||
               nav.userLanguage
-            ) || '').split('-').join('_');
+              ) || '').split('-').join('_');
+
+            // reformat guessed locale
+            var language = guessed.match(/^[a-z]{2}([-_][a-zA-Z]{2})?$/);
+            if (angular.isArray(language) && language.length === 2) {
+              var part = guessed.replace('-', '_').split('_');
+              if (part.length === 2) {
+                guessed = part[0].toLowerCase() + '_' + part[1].toUpperCase();
+              }
+            }
+
+            return guessed;
           });
 
           expect(ret).toEqual(translateProvider);

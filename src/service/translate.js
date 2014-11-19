@@ -35,16 +35,46 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var version = 'x.y.z';
 
-  // tries to determine the browsers locale
+  /**
+   * @name getLocale
+   * @private
+   *
+   * @description
+   * Tries to determine the browser's locale and reformat to look like "en" or "en_US"
+   * Ex, Safari returns "fr_fr", Chrome returns "fr_FR", Firefox returns "fr-fr", ...
+   *
+   * After browser detection, we reformat determined locale:
+   * | Browser detection          | After reformat |
+   * |----------------------------|----------------|
+   * | en, fr, de, ...            | en, fr, de, ...|
+   * | en-us, en-US, EN-us, EN-US | en_US          |
+   * | en_us, en_US, EN_us, EN_US | en_US          |
+   *
+   * @returns {String} Browser detected locale
+   */
   var getLocale = function () {
     var nav = window.navigator;
-    return ((
+    var guessed = ((
       angular.isArray(nav.languages) ? nav.languages[0] :
       nav.language ||
       nav.browserLanguage ||
       nav.systemLanguage ||
       nav.userLanguage
     ) || '').split('-').join('_');
+
+    // reformat guessed locale
+    var language = guessed.match(/^[a-z]{2}([-_][a-zA-Z]{2})?$/);   // en_US => language = ["en_US", "_US"]
+    if (angular.isArray(language) && language.length === 2) {
+      // replace "-" by "_"
+      var part = guessed.replace('-', '_').split('_');
+
+      // en_us (Safari) => en_US
+      if (part.length === 2) {
+        guessed = part[0].toLowerCase() + '_' + part[1].toUpperCase();
+      }
+    }
+
+    return guessed;
   };
 
   /**
