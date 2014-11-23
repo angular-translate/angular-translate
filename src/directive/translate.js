@@ -221,6 +221,10 @@ angular.module('pascalprecht.translate')
         // w/ $translate.use(...)
         var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslations);
 
+        // ensure translation will be looked up at least one
+        if (iElement.text().length) {
+          observeElementTranslation('');
+        }
         updateTranslations();
         scope.$on('$destroy', unbind);
       };
