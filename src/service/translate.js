@@ -1101,7 +1101,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator) {
         var result, translationTable = $translationTable[langKey];
 
-        if (Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
+        if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
           result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
           Interpolator.setLocale($uses);
