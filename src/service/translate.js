@@ -35,17 +35,40 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var version = 'x.y.z';
 
+  // tries to determine the browsers language
+  var getFirstBrowserLanguage = function () {
+    var nav = window.navigator,
+        browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
+        i,
+        language;
+
+    // support for HTML 5.1 "navigator.languages"
+    if (angular.isArray(nav.languages)) {
+      for (i = 0; i < nav.languages.length; i++) {
+        language = nav.languages[i];
+        if (language && language.length) {
+          return language;
+        }
+      }
+    }
+
+    // support for other well known properties in browsers
+    for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
+      language = nav[browserLanguagePropertyKeys[i]];
+      if (language && language.length) {
+        return language;
+      }
+    }
+
+    return null;
+  };
+  getFirstBrowserLanguage.displayName = 'angular-translate/service: getFirstBrowserLanguage';
+
   // tries to determine the browsers locale
   var getLocale = function () {
-    var nav = window.navigator;
-    return ((
-      angular.isArray(nav.languages) ? nav.languages[0] :
-      nav.language ||
-      nav.browserLanguage ||
-      nav.systemLanguage ||
-      nav.userLanguage
-    ) || '').split('-').join('_');
+    return (getFirstBrowserLanguage() || '').split('-').join('_');
   };
+  getLocale.displayName = 'angular-translate/service: getLocale';
 
   /**
    * @name indexOf
