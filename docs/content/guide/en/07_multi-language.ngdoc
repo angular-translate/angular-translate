@@ -81,6 +81,7 @@ Since version `2.0` there's also a method `determinePreferredLanguage()` on the
 language would be. It searches for values in the `window.navigator` object in the
 following properties (also in this order):
 
+- `navigator.languages[0]`
 - `navigator.language`
 - `navigator.browserLanguage`
 - `navigator.systemLanguage`
