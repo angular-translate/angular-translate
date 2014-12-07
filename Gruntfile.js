@@ -543,7 +543,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('default', ['jshint:all', 'karma']);
-  grunt.registerTask('test', ['karma:unit', 'karma:midway']);
+  grunt.registerTask('test', ['jshint:all', 'karma:unit', 'karma:midway']);
   grunt.registerTask('install-test', ['bower-install-simple']);
 
   // Advanced test tasks
