@@ -120,12 +120,12 @@ angular.module('pascalprecht.translate')
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
-              translationIds['translate'] = $interpolate(interpolateMatches[2])(scope.$parent);
+              translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
             } else {
-              translationIds['translate'] = iElement.text().replace(/^\s+|\s+$/g,'');
+              translationIds.translate = iElement.text().replace(/^\s+|\s+$/g,'');
             }
           } else {
-            translationIds['translate'] = translationId;
+            translationIds.translate = translationId;
           }
           updateTranslations();
         };

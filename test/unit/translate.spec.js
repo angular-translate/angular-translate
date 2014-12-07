@@ -82,7 +82,7 @@ describe('pascalprecht.translate', function () {
                 key: 'de',
                 table: {}
               });
-            }
+            };
           });
 
           $translateProvider
