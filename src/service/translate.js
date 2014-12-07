@@ -1484,6 +1484,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             if ($nextLang === key) {
               $nextLang = undefined;
             }
+            return translation;
           }, function (key) {
             if ($nextLang === key) {
               $nextLang = undefined;
@@ -1744,6 +1745,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           var processAsyncResult = function (translation) {
             translations(translation.key, translation.table);
             $rootScope.$emit('$translateChangeEnd', { language: translation.key });
+            return translation;
           };
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
             langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(processAsyncResult);
