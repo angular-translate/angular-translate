@@ -1,3 +1,37 @@
+<a name="2.5.0"></a>
+## 2.5.0 (2014-12-07)
+
+
+#### Bug Fixes
+
+* **directive:** ensure directive's text will be parsed at least once ([49cfef0f](http://github.com/angular-translate/angular-translate/commit/49cfef0f58dd8c8306e6c0d4c6e78854ff2bbd8b))
+* **loader:** under circum understances translation table got lost ([df373811](http://github.com/angular-translate/angular-translate/commit/df3738119677b6834b2d47455bf35161c9b0c588))
+* **messageformat-interpolation:** fix support for messageformat 0.2.* ([ac8d5ed1](http://github.com/angular-translate/angular-translate/commit/ac8d5ed1b43f3db7b269964383528b116ad26283))
+* **service:**
+  * fix npe when resolving fallback language for `instant` ([7c09d89d](http://github.com/angular-translate/angular-translate/commit/7c09d89d8b890a1a7018e051ec2491899b6d66f5))
+  * apply fix for empty strings in `navigator.language` ([5b4edd99](http://github.com/angular-translate/angular-translate/commit/5b4edd99ef2f2c75aa88176fd7331426be799453))
+
+
+#### Features
+
+* **$translateUrlLoader:** allow to use custom query parameter name for url loader ([e360bf8c](http://github.com/angular-translate/angular-translate/commit/e360bf8ca7266ba447bd23dd62ad5f8ae7d13b96))
+* **directive:**
+  * translate attributes (optimize process flow) ([508fd32e](http://github.com/angular-translate/angular-translate/commit/508fd32eedd483f972fb0e27472c48bc13b7149a))
+  * translate attributes using directive ([1d06d2a1](http://github.com/angular-translate/angular-translate/commit/1d06d2a11474aecbcc1fd2f0bd73563d889a8157), closes [#568](http://github.com/angular-translate/angular-translate/issues/568))
+* **module:** use same fallback for module.run when no storage key is set and not being able t ([247253dd](http://github.com/angular-translate/angular-translate/commit/247253ddf97f185cad507d345245881cc0ccb2c8), closes [#739](http://github.com/angular-translate/angular-translate/issues/739))
+* **storage:** rename set() into put() ([ef6a613e](http://github.com/angular-translate/angular-translate/commit/ef6a613e70c0e2fcf2c32fe4b0ad1ffa51be4f0c))
+
+
+#### Breaking Changes
+
+* This marks storage.set() as deprecated. In the
+next major release v3, the old method `set()` will be dropped in favor
+of `put()`.
+
+Relates #772
+ ([ef6a613e](http://github.com/angular-translate/angular-translate/commit/ef6a613e70c0e2fcf2c32fe4b0ad1ffa51be4f0c))
+
+
 <a name="2.4.2"></a>
 ### 2.4.2 (2014-10-21)
 
