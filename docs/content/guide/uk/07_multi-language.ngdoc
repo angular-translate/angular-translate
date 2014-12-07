@@ -73,6 +73,7 @@ $translateProvider.preferredLanguage('de');
 намагається самостійно визначити бажану мову для застосунку. Він шукає значення у наступних
 властивостях об'єкту `window.navigator` (у відповідному порядку):
 
+- `navigator.languages[0]`
 - `navigator.language`
 - `navigator.browserLanguage`
 - `navigator.systemLanguage`

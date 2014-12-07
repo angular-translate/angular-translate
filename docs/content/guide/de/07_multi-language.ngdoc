@@ -80,6 +80,7 @@ Seit Version `2.0` besteht die Möglichkeit, mittels `determinePreferredLanguage
 selbstständig, die bevorzugte Sprache (des Browsers) zu ermitteln. Dafür wird im
 `window.navigator` object nach folgenden Parametern geschaut (in dieser Reihenfolge):
 
+- `navigator.languages[0]`
 - `navigator.language`
 - `navigator.browserLanguage`
 - `navigator.systemLanguage`
