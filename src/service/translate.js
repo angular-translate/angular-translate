@@ -35,17 +35,40 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
 
   var version = 'x.y.z';
 
+  // tries to determine the browsers language
+  var getFirstBrowserLanguage = function () {
+    var nav = window.navigator,
+        browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
+        i,
+        language;
+
+    // support for HTML 5.1 "navigator.languages"
+    if (angular.isArray(nav.languages)) {
+      for (i = 0; i < nav.languages.length; i++) {
+        language = nav.languages[i];
+        if (language && language.length) {
+          return language;
+        }
+      }
+    }
+
+    // support for other well known properties in browsers
+    for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
+      language = nav[browserLanguagePropertyKeys[i]];
+      if (language && language.length) {
+        return language;
+      }
+    }
+
+    return null;
+  };
+  getFirstBrowserLanguage.displayName = 'angular-translate/service: getFirstBrowserLanguage';
+
   // tries to determine the browsers locale
   var getLocale = function () {
-    var nav = window.navigator;
-    return ((
-      angular.isArray(nav.languages) ? nav.languages[0] :
-      nav.language ||
-      nav.browserLanguage ||
-      nav.systemLanguage ||
-      nav.userLanguage
-    ) || '').split('-').join('_');
+    return (getFirstBrowserLanguage() || '').split('-').join('_');
   };
+  getLocale.displayName = 'angular-translate/service: getLocale';
 
   /**
    * @name indexOf
@@ -761,6 +784,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
    *                                     results that the function returns an object where each key
    *                                     is the translation id and the value the translation.
    * @param {object=} interpolateParams An object hash for dynamic values
+   * @param {string} interpolationId The id of the interpolation to use
    * @returns {object} promise
    */
   this.$get = [
@@ -903,7 +927,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         $rootScope.$emit('$translateChangeSuccess', {language: key});
 
         if ($storageFactory) {
-          Storage.set($translate.storageKey(), $uses);
+          Storage.put($translate.storageKey(), $uses);
         }
         // inform default interpolator
         defaultInterpolator.setLocale($uses);
@@ -977,8 +1001,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       if ($storageFactory) {
         Storage = $injector.get($storageFactory);
 
-        if (!Storage.get || !Storage.set) {
-          throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or set() method!');
+        if (!Storage.get || !Storage.put) {
+          throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or put() method!');
         }
       }
 
@@ -1077,7 +1101,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator) {
         var result, translationTable = $translationTable[langKey];
 
-        if (Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
+        if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
           result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
           Interpolator.setLocale($uses);
@@ -1460,6 +1484,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             if ($nextLang === key) {
               $nextLang = undefined;
             }
+            return translation;
           }, function (key) {
             if ($nextLang === key) {
               $nextLang = undefined;
@@ -1614,6 +1639,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        *                                     results that the function's promise returns an object where
        *                                     each key is the translation id and the value the translation.
        * @param {object} interpolateParams Params
+       * @param {string} interpolationId The id of the interpolation to use
        *
        * @return {string} translation
        */
@@ -1719,6 +1745,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           var processAsyncResult = function (translation) {
             translations(translation.key, translation.table);
             $rootScope.$emit('$translateChangeEnd', { language: translation.key });
+            return translation;
           };
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
             langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(processAsyncResult);

@@ -58,6 +58,7 @@ $translateProvider.preferredLanguage('de');
 版本`2.0` `$translateProvider`还有一个方法`determinePreferredLanguage()`。这个方法试图自己来确定什么首选语言。
 它在该 `window.navigator`对象下面搜索以下属性（也按照这个顺序）：
 
+- `navigator.languages[0]`
 - `navigator.language`
 - `navigator.browserLanguage`
 - `navigator.systemLanguage`

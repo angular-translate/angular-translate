@@ -76,11 +76,12 @@ avons introduit `preferredLanguage()`. Vous devriez toujours utiliser `preferred
 
 ## Déterminer automatiquement la langue préférée
 
-Depuis la version 2.0 il y a aussi une méthode `determinePreferredLanguage()` sur 
+Depuis la version 2.0 il y a aussi une méthode `determinePreferredLanguage()` sur
 `$translateProvider`. Cette méthode tente de déterminer par elle-même quelle serait
 la langue préférée. Elle cherche les valeurs de l'objet `window.navigator` dans les
 propriétés suivantes (également dans cet ordre) :
 
+- `navigator.languages[0]`
 - `navigator.language`
 - `navigator.browserLanguage`
 - `navigator.systemLanguage`
@@ -221,7 +222,7 @@ Et voilà! Nous avons maintenant une application avec le support Multilingue !
         // MISSING_TRANSLATION est ... oublié :)
         BUTTON_LANG_FR: 'french',
         BUTTON_LANG_EN: 'english'
-        
+
       };
 
       var app = angular.module('monApp', ['pascalprecht.translate']);
