@@ -124,7 +124,10 @@ angular.module('pascalprecht.translate')
               translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
               watcherMatches = iElement.text().match(watcherRegExp);
               if (angular.isArray(watcherMatches) && watcherMatches[2] && watcherMatches[2].length) {
-                scope.$watch(watcherMatches[2], updateTranslations);
+                scope.$watch(watcherMatches[2], function (newValue) {
+                  translationIds.translate = newValue;
+                  updateTranslations();
+                });
               }
             } else {
               translationIds.translate = iElement.text().replace(/^\s+|\s+$/g,'');

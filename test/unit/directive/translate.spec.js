@@ -123,7 +123,7 @@ describe('pascalprecht.translate', function () {
         $rootScope.$digest();
         $rootScope.translationId = 'TEXT'; // refresh expression
         $rootScope.$digest();
-        expect(element.text()).toBe('foo');
+        expect(element.text()).toBe('TEXT');
       });
 
       it('should return translation prepended by additional content when passed as interpolation', function () {
