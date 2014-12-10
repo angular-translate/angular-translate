@@ -24,8 +24,6 @@ module.exports = function (config) {
 
     exclude: [],
 
-    reports: ['progress'],
-
     port: 9876,
 
     colors: true,
@@ -47,13 +45,6 @@ module.exports = function (config) {
 
     captureTimeout: 60000,
 
-    singleRun: false,
-
-    plugins: [
-      'karma-jasmine',
-      'karma-chrome-launcher',
-      'karma-firefox-launcher',
-      'karma-phantomjs-launcher'
-    ]
+    singleRun: false
   });
 };

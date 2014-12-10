@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 
-var AVAILABLE_SCOPES = [], isValidScope, injectByScope, getAffectiveScope, log;
+var AVAILABLE_SCOPES = [], isValidScope, injectByScope, getAffectiveScope, log, isDefaultScope;
 
 (function(undefined){
   AVAILABLE_SCOPES = fs.readdirSync('./test_scopes').filter(function (filename) {
@@ -29,6 +29,9 @@ var AVAILABLE_SCOPES = [], isValidScope, injectByScope, getAffectiveScope, log;
   log = function (scope) {
     console.log('Available test scopes: ', AVAILABLE_SCOPES);
     console.log('Currently selected scope: ', getAffectiveScope(scope));
+  },
+  isDefaultScope = function (scope) {
+    return !isValidScope(scope);
   };
 })();
 
@@ -37,5 +40,6 @@ module.exports = {
   isValidScope: isValidScope,
   injectByScope: injectByScope,
   getAffectiveScope: getAffectiveScope,
+  isDefaultScope: isDefaultScope,
   log: log
 };

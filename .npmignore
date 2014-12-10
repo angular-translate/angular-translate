@@ -15,6 +15,7 @@
 /*.js
 /*.png
 /update-docs
+/build/
 
 # IntelliJ stuff
 .idea

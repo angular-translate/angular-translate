@@ -29,8 +29,18 @@ describe('pascalprecht.translate', function () {
 
       var storage;
       var storageMockCreator = function(storageValue) {
-        var storage = jasmine.createSpyObj('storage', ['get', 'put']);
-        storage.get.andReturn(storageValue);
+        var storage = {
+          get: function() {
+            return storage.value;
+          },
+          put: function(value) {
+            storage.value = value;
+          },
+          set: function(value) {
+            storage.value = value;
+          }
+        };
+        spyOn(storage, 'get').and.returnValue(storageValue);
         return storage;
       };
 
