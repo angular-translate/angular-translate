@@ -38,3 +38,22 @@ use this module and they are always thankful for it and the awesome support they
 get. I just want to make sure that you guys know: All this wouldn't have been
 possible without these [great contributors](http://github.com/angular-translate/angular-translate/contributors)
 and everybody who comes with new ideas and feature requests! So **THANK YOU**!
+
+## Contribution
+
+Contributing to <code>angular-translate</code> is fairly easy. [This document](CONTRIBUTING.md) shows you how to
+get the project, run all provided tests and generate a production ready build.
+
+## Tests
+
+### Unit tests
+
+Note: Check that dependencies are be installed (`npm install`).
+
+The *unit tests* are available with `npm test`. It performs tests under the current primary target version of AngularJS and other scoped versions as well. Under the hood, this calls `grunt test` for the primary target and for each scope.
+
+Testing only the primary target AngularJS version, simply invoke `grunt test`.
+
+## License
+
+Licensed under MIT.
