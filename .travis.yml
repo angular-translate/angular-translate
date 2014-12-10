@@ -2,12 +2,19 @@ language: node_js
 node_js:
   - "0.10"
 
+addons:
+  code_climate:
+    repo_token: 4b5723ff9465849b4e16754fb9b7995730eac35434375e9a38779cdc0d781bcf
+
 before_install:
-  - npm install -qg grunt-cli karma-cli
+  - npm install -qg grunt-cli karma-cli codeclimate-test-reporter
 
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+
+after_script:
+  - if [ "$TEST_SCOPE" == "" ]; then cat build/coverage/report/lcov.info | codeclimate; fi
 
 env:
   - TEST_SCOPE=
