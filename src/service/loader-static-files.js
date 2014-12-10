@@ -68,9 +68,9 @@ angular.module('pascalprecht.translate')
           mergedData = {};
 
       for (var i = 0; i < length; i++) {
-        angular.forEach(data[i], function(value, key) {
-          mergedData[key] = value;
-        });
+        for (var key in data[i]) {
+          mergedData[key] = data[i][key];
+        }
       }
 
       deferred.resolve(mergedData);
