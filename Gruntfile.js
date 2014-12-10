@@ -448,44 +448,39 @@ module.exports = function (grunt) {
       }
     },
 
-    ngmin: {
-
-      core: {
+    ngAnnotate: {
+      options: {
+        singleQuotes: true
+      },
+      'core': {
         src: '<%= concat.core.dest %>',
         dest: '<%= concat.core.dest %>'
       },
-
-      messageformat_interpolation: {
+      'messageformat_interpolation': {
         src: '<%= concat.messageformat_interpolation.dest %>',
         dest: '<%= concat.messageformat_interpolation.dest %>'
       },
-
-      handler_log: {
+      'handler_log': {
         src: '<%= concat.handler_log.dest %>',
         dest: '<%= concat.handler_log.dest %>'
       },
-
-      loader_partial: {
+      'loader_partial': {
         src: '<%= concat.loader_partial.dest %>',
         dest: '<%= concat.loader_partial.dest %>'
       },
-
-      loader_static_files: {
+      'loader_static_files': {
         src: '<%= concat.loader_static_files.dest %>',
         dest: '<%= concat.loader_static_files.dest %>'
       },
-
-      loader_url: {
+      'loader_url': {
         src: '<%= concat.loader_url.dest %>',
         dest: '<%= concat.loader_url.dest %>'
       },
-
-      storage_cookie: {
+      'storage_cookie': {
         src: '<%= concat.storage_cookie.dest %>',
         dest: '<%= concat.storage_cookie.dest %>'
       },
-
-      storage_local: {
+      'storage_local': {
         src: '<%= concat.storage_local.dest %>',
         dest: '<%= concat.storage_local.dest %>'
       }
@@ -592,7 +587,7 @@ module.exports = function (grunt) {
     'jshint:core',
     'concat:core',
     'version',
-    'ngmin:core',
+    'ngAnnotate:core',
     'concat:banner_core',
     'uglify:core'
   ]);
@@ -600,7 +595,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:messageformat_interpolation', [
     'jshint:messageformat_interpolation',
     'concat:messageformat_interpolation',
-    'ngmin:messageformat_interpolation',
+    'ngAnnotate:messageformat_interpolation',
     'concat:banner_messageformat_interpolation',
     'uglify:messageformat_interpolation'
   ]);
@@ -608,7 +603,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:handler_log', [
     'jshint:handler_log',
     'concat:handler_log',
-    'ngmin:handler_log',
+    'ngAnnotate:handler_log',
     'concat:banner_handler_log',
     'uglify:handler_log'
   ]);
@@ -616,7 +611,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:loader_partial', [
     'jshint:loader_partial',
     'concat:loader_partial',
-    'ngmin:loader_partial',
+    'ngAnnotate:loader_partial',
     'concat:banner_loader_partial',
     'uglify:loader_partial'
   ]);
@@ -624,7 +619,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:loader_static_files', [
     'jshint:loader_static_files',
     'concat:loader_static_files',
-    'ngmin:loader_static_files',
+    'ngAnnotate:loader_static_files',
     'concat:banner_loader_static_files',
     'uglify:loader_static_files'
   ]);
@@ -632,7 +627,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:loader_url', [
     'jshint:loader_url',
     'concat:loader_url',
-    'ngmin:loader_url',
+    'ngAnnotate:loader_url',
     'concat:banner_loader_url',
     'uglify:loader_url'
   ]);
@@ -640,7 +635,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:storage_cookie', [
     'jshint:storage_cookie',
     'concat:storage_cookie',
-    'ngmin:storage_cookie',
+    'ngAnnotate:storage_cookie',
     'concat:banner_storage_cookie',
     'uglify:storage_cookie'
   ]);
@@ -648,7 +643,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:storage_local', [
     'jshint:storage_local',
     'concat:storage_local',
-    'ngmin:storage_local',
+    'ngAnnotate:storage_local',
     'concat:banner_storage_local',
     'uglify:storage_local'
   ]);
