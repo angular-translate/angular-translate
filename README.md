@@ -7,7 +7,6 @@
 | ------------- |:-------------:|
 | master        | [![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=master)](https://travis-ci.org/angular-translate/angular-translate) |
 | canary        |[![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=canary)](https://travis-ci.org/angular-translate/angular-translate)     |
-| BitDeli       |[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/angular-translate/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")        |
 
 ### Presentation
 [![angular-translate Talk](presentation.png)](https://www.youtube.com/watch?v=9CWifOK_Wi8)
