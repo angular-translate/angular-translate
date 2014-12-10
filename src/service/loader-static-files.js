@@ -17,7 +17,7 @@ angular.module('pascalprecht.translate')
   return function (options) {
 
     if (!options || (!angular.isArray(options.files) && (!angular.isString(options.prefix) || !angular.isString(options.suffix)))) {
-      throw new Error('Couldn\'t load static files: no files or prefix and suffix specified!');
+      throw new Error('Couldn\'t load static files, no files or prefix and suffix specified!');
     }
     
     if (!options.files) {
@@ -29,7 +29,7 @@ angular.module('pascalprecht.translate')
 
     var load = function (file) {
       if (!file || (!angular.isString(file.prefix) || !angular.isString(file.suffix))) {
-        throw new Error('Couldn\'t load static file: no prefix or suffix specified!');
+        throw new Error('Couldn\'t load static file, no prefix or suffix specified!');
       }
 
       var deferred = $q.defer();
