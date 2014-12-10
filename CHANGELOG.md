@@ -1,3 +1,18 @@
+<a name="2.5.2"></a>
+### 2.5.2 (2014-12-10)
+
+Internal release. No changes.
+
+
+<a name="2.5.1"></a>
+### 2.5.1 (2014-12-10)
+
+
+#### Bug Fixes
+
+* **directive:** missing watch for expression within elements text nodes ([31c03560](http://github.com/angular-translate/angular-translate/commit/31c03560ddb537734303c41419b147262d511841), closes [#701](http://github.com/angular-translate/angular-translate/issues/701))
+
+
 <a name="2.5.0"></a>
 ## 2.5.0 (2014-12-07)
 
