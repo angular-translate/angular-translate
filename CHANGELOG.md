@@ -5,7 +5,7 @@
 #### Bug Fixes
 
 * **directive:** ensure directive's text will be parsed at least once ([49cfef0f](http://github.com/angular-translate/angular-translate/commit/49cfef0f58dd8c8306e6c0d4c6e78854ff2bbd8b))
-* **loader:** under circum understances translation table got lost ([df373811](http://github.com/angular-translate/angular-translate/commit/df3738119677b6834b2d47455bf35161c9b0c588))
+* **loader:** under certain circumstances translation table got lost ([df373811](http://github.com/angular-translate/angular-translate/commit/df3738119677b6834b2d47455bf35161c9b0c588))
 * **messageformat-interpolation:** fix support for messageformat 0.2.* ([ac8d5ed1](http://github.com/angular-translate/angular-translate/commit/ac8d5ed1b43f3db7b269964383528b116ad26283))
 * **service:**
   * fix npe when resolving fallback language for `instant` ([7c09d89d](http://github.com/angular-translate/angular-translate/commit/7c09d89d8b890a1a7018e051ec2491899b6d66f5))
