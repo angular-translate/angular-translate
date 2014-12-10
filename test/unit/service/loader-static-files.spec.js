@@ -30,10 +30,10 @@ describe('pascalprecht.translate', function () {
       expect(typeof $translateStaticFilesLoader).toBe('function');
     });
 
-    it('should throw an error when called without files or prefix and suffix', function () {
+    it('should throw an error when called without prefix or suffix', function () {
       expect(function () {
         $translateStaticFilesLoader();
-      }).toThrow('Couldn\'t load static files, no files or prefix and suffix specified!');
+      }).toThrow('Couldn\'t load static files, no prefix or suffix specified!');
     });
 
     it('should fetch static files when invoking', function () {
