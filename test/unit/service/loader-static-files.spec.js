@@ -30,10 +30,18 @@ describe('pascalprecht.translate', function () {
       expect(typeof $translateStaticFilesLoader).toBe('function');
     });
 
-    it('should throw an error when called without prefix or suffix', function () {
+    it('should throw an error when called without files and prefix or suffix', function () {
       expect(function () {
         $translateStaticFilesLoader();
-      }).toThrow('Couldn\'t load static files, no prefix or suffix specified!');
+      }).toThrow('Couldn\'t load static files, no files and prefix or suffix specified!');
+    });
+
+    it('should throw an error when called without prefix or suffix in files object', function () {
+      expect(function () {
+        $translateStaticFilesLoader({
+          files: [{}]
+        });
+      }).toThrow('Couldn\'t load static file, no prefix or suffix specified!');
     });
 
     it('should fetch static files when invoking', function () {
@@ -100,15 +108,26 @@ describe('pascalprecht.translate', function () {
     it('should be a function', function () {
       expect(typeof $translateStaticFilesLoader).toBe('function');
     });
-
-    it('should throw an error when called without prefix or suffix', function () {
+    
+    it('should throw an error when called without files and prefix or suffix', function () {
       expect(function () {
         $translateStaticFilesLoader({
           $http: {
             method: 'POST'
           }
         });
-      }).toThrow('Couldn\'t load static files, no prefix or suffix specified!');
+      }).toThrow('Couldn\'t load static files, no files and prefix or suffix specified!');
+    });
+
+    it('should throw an error when called without prefix or suffix in files object', function () {
+      expect(function () {
+        $translateStaticFilesLoader({
+          $http: {
+            method: 'POST'
+          },
+          files: [{}]
+        });
+      }).toThrow('Couldn\'t load static file, no prefix or suffix specified!');
     });
 
     it('should fetch static files when invoking', function () {
