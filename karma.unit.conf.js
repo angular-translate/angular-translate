@@ -27,7 +27,7 @@ module.exports = function (config) {
 
     reporters: shared.isDefaultScope(scope) ? ['progress', 'coverage'] : ['progress'],
 
-    preprocessors: shared.isDefaultScope(scope) ? { 'temp/src/*.js': ['coverage'] } : undefined,
+    preprocessors: shared.isDefaultScope(scope) ? { 'src/**/*.js': ['coverage'] } : undefined,
 
     coverageReporter: shared.isDefaultScope(scope) ? {
       dir: 'build/coverage',
