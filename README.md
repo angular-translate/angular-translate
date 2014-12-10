@@ -1,13 +1,15 @@
 # [![angular-translate](https://raw.github.com/angular-translate/angular-translate/canary/identity/logo/angular-translate-alternative/angular-translate_alternative_medium2.png)](http://angular-translate.github.io)
 
+![Bower](https://img.shields.io/bower/v/angular-translate.svg) [![NPM](https://img.shields.io/npm/v/angular-translate.svg)](https://www.npmjs.com/package/angular-translate) [![Build Status](https://img.shields.io/travis/angular-translate/angular-translate.svg)](https://travis-ci.org/angular-translate/angular-translate) ![License](https://img.shields.io/npm/l/angular-translate.svg) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
+
 > i18n for your Angular app, made easy!
 
 ### Status
 | Branch        | Status         |
 | ------------- |:-------------:|
-| master        | [![Build Status](https://travis-ci.org/angular-translate/angular-translate.png?branch=master)](https://travis-ci.org/angular-translate/angular-translate) |
-| canary        |[![Build Status](https://travis-ci.org/angular-translate/angular-translate.png?branch=canary)](https://travis-ci.org/angular-translate/angular-translate)     |
-| BitDeli       |[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/angular-translate/angular-translate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")        |
+| master        | [![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=master)](https://travis-ci.org/angular-translate/angular-translate) |
+| canary        |[![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=canary)](https://travis-ci.org/angular-translate/angular-translate)     |
 
 ### Presentation (Dutch AngularJS Meetup 2013)
 [![angular-translate Talk](presentation.png)](https://www.youtube.com/watch?v=9CWifOK_Wi8)
@@ -39,3 +41,22 @@ use this module and they are always thankful for it and the awesome support they
 get. I just want to make sure that you guys know: All this wouldn't have been
 possible without these [great contributors](http://github.com/angular-translate/angular-translate/contributors)
 and everybody who comes with new ideas and feature requests! So **THANK YOU**!
+
+## Contribution
+
+Contributing to <code>angular-translate</code> is fairly easy. [This document](CONTRIBUTING.md) shows you how to
+get the project, run all provided tests and generate a production ready build.
+
+## Tests
+
+### Unit tests
+
+Note: Check that dependencies are be installed (`npm install`).
+
+The *unit tests* are available with `npm test`. It performs tests under the current primary target version of AngularJS and other scoped versions as well. Under the hood, this calls `grunt test` for the primary target and for each scope.
+
+Testing only the primary target AngularJS version, simply invoke `grunt test`.
+
+## License
+
+Licensed under MIT.

@@ -37,7 +37,7 @@ describe('pascalprecht.translate', function () {
     it('should throw an error when called without url option', function () {
       expect(function () {
         $translateUrlLoader();
-      }).toThrow('Couldn\'t use urlLoader since no url is given!');
+      }).toThrowError('Couldn\'t use urlLoader since no url is given!');
     });
 
     it('should fetch url when invoking', function () {

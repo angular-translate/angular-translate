@@ -25,7 +25,15 @@ module.exports = function (config) {
 
     exclude: [],
 
-    reports: ['progress'],
+    reporters: shared.isDefaultScope(scope) ? ['progress', 'coverage'] : ['progress'],
+
+    preprocessors: shared.isDefaultScope(scope) ? { 'src/**/*.js': ['coverage'] } : undefined,
+
+    coverageReporter: shared.isDefaultScope(scope) ? {
+      dir: 'build/coverage',
+      subdir: 'report',
+      type: 'lcov'
+    } : undefined,
 
     port: 9876,
 
@@ -46,13 +54,6 @@ module.exports = function (config) {
 
     captureTimeout: 60000,
 
-    singleRun: false,
-
-    plugins: [
-      'karma-jasmine',
-      'karma-chrome-launcher',
-      'karma-firefox-launcher',
-      'karma-phantomjs-launcher'
-    ]
+    singleRun: false
   });
 };

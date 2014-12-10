@@ -592,7 +592,7 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should allow to change the storage key during config', function () {
-      expect($translate.storageKey()).toNotEqual($STORAGE_KEY);
+      expect($translate.storageKey()).not.toEqual($STORAGE_KEY);
     });
 
     it('shouldn\'t allow to change the storage key during runtime', function () {
@@ -1280,7 +1280,7 @@ describe('pascalprecht.translate', function () {
       it('should throw an error', function () {
         expect(function () {
           $translate.refresh();
-        }).toThrow('Couldn\'t refresh translation table, no loader registered!');
+        }).toThrowError('Couldn\'t refresh translation table, no loader registered!');
       });
     });
 

@@ -117,6 +117,15 @@ describe('pascalprecht.translate', function () {
         expect(element.text()).toBe('foo');
       });
 
+      it('should return newer translation if translation id exist and if its passed as interpolation', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+        $rootScope.$digest();
+        $rootScope.translationId = 'TEXT'; // refresh expression
+        $rootScope.$digest();
+        expect(element.text()).toBe('TEXT');
+      });
+
       it('should return translation prepended by additional content when passed as interpolation', function () {
         $rootScope.translationId = 'TRANSLATION_ID';
         element = $compile('<div translate>abc{{translationId}}')($rootScope);

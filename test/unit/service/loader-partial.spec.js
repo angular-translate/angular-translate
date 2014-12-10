@@ -86,14 +86,14 @@ describe('pascalprecht.translate', function() {
       it('should throw an error if given arg is not a string', function() {
         inject(function($translatePartialLoader) {
           var message = 'Couldn\'t add part, part name has to be a string!';
-          expect(function() { $provider.addPart(function(){}); }).toThrow(message);
-          expect(function() { $provider.addPart(false); }).toThrow(message);
-          expect(function() { $provider.addPart(null); }).toThrow(message);
-          expect(function() { $provider.addPart(NaN); }).toThrow(message);
-          expect(function() { $provider.addPart([]); }).toThrow(message);
-          expect(function() { $provider.addPart({}); }).toThrow(message);
-          expect(function() { $provider.addPart(2); }).toThrow(message);
-          expect(function() { $provider.addPart(); }).toThrow(message);
+          expect(function() { $provider.addPart(function(){}); }).toThrowError(message);
+          expect(function() { $provider.addPart(false); }).toThrowError(message);
+          expect(function() { $provider.addPart(null); }).toThrowError(message);
+          expect(function() { $provider.addPart(NaN); }).toThrowError(message);
+          expect(function() { $provider.addPart([]); }).toThrowError(message);
+          expect(function() { $provider.addPart({}); }).toThrowError(message);
+          expect(function() { $provider.addPart(2); }).toThrowError(message);
+          expect(function() { $provider.addPart(); }).toThrowError(message);
         });
       });
 
@@ -128,41 +128,41 @@ describe('pascalprecht.translate', function() {
       it('should throw an error if first arg is not a string', function() {
         inject(function($translatePartialLoader) {
           var message = 'Couldn\'t set part.`lang` parameter has to be a string!';
-          expect(function() { $provider.setPart(function(){}); }).toThrow(message);
-          expect(function() { $provider.setPart(false); }).toThrow(message);
-          expect(function() { $provider.setPart(null); }).toThrow(message);
-          expect(function() { $provider.setPart(NaN); }).toThrow(message);
-          expect(function() { $provider.setPart([]); }).toThrow(message);
-          expect(function() { $provider.setPart({}); }).toThrow(message);
-          expect(function() { $provider.setPart(2); }).toThrow(message);
-          expect(function() { $provider.setPart(); }).toThrow(message);
+          expect(function() { $provider.setPart(function(){}); }).toThrowError(message);
+          expect(function() { $provider.setPart(false); }).toThrowError(message);
+          expect(function() { $provider.setPart(null); }).toThrowError(message);
+          expect(function() { $provider.setPart(NaN); }).toThrowError(message);
+          expect(function() { $provider.setPart([]); }).toThrowError(message);
+          expect(function() { $provider.setPart({}); }).toThrowError(message);
+          expect(function() { $provider.setPart(2); }).toThrowError(message);
+          expect(function() { $provider.setPart(); }).toThrowError(message);
         });
       });
 
       it('should throw an error if a second arg is not a non-empty string', function() {
         inject(function($translatePartialLoader) {
           var message = 'Couldn\'t set part.`part` parameter has to be a string!';
-          expect(function() { $provider.setPart('l', function(){}); }).toThrow(message);
-          expect(function() { $provider.setPart('l', false); }).toThrow(message);
-          expect(function() { $provider.setPart('l', null);  }).toThrow(message);
-          expect(function() { $provider.setPart('l', NaN);   }).toThrow(message);
-          expect(function() { $provider.setPart('l', []);    }).toThrow(message);
-          expect(function() { $provider.setPart('l', {});    }).toThrow(message);
-          expect(function() { $provider.setPart('l', 2);     }).toThrow(message);
-          expect(function() { $provider.setPart('l');        }).toThrow(message);
+          expect(function() { $provider.setPart('l', function(){}); }).toThrowError(message);
+          expect(function() { $provider.setPart('l', false); }).toThrowError(message);
+          expect(function() { $provider.setPart('l', null);  }).toThrowError(message);
+          expect(function() { $provider.setPart('l', NaN);   }).toThrowError(message);
+          expect(function() { $provider.setPart('l', []);    }).toThrowError(message);
+          expect(function() { $provider.setPart('l', {});    }).toThrowError(message);
+          expect(function() { $provider.setPart('l', 2);     }).toThrowError(message);
+          expect(function() { $provider.setPart('l');        }).toThrowError(message);
         });
       });
 
       it('should throw an error if a third arg is not an object', function() {
         inject(function($translatePartialLoader) {
           var message = 'Couldn\'t set part. `table` parameter has to be an object!';
-          expect(function() { $provider.setPart('l', 'p', function(){}); }).toThrow(message);
-          expect(function() { $provider.setPart('l', 'p', false);}).toThrow(message);
-          expect(function() { $provider.setPart('l', 'p', null); }).toThrow(message);
-          expect(function() { $provider.setPart('l', 'p', NaN);  }).toThrow(message);
-          expect(function() { $provider.setPart('l', 'p', 's');  }).toThrow(message);
-          expect(function() { $provider.setPart('l', 'p', 2);    }).toThrow(message);
-          expect(function() { $provider.setPart('l', 'p');       }).toThrow(message);
+          expect(function() { $provider.setPart('l', 'p', function(){}); }).toThrowError(message);
+          expect(function() { $provider.setPart('l', 'p', false);}).toThrowError(message);
+          expect(function() { $provider.setPart('l', 'p', null); }).toThrowError(message);
+          expect(function() { $provider.setPart('l', 'p', NaN);  }).toThrowError(message);
+          expect(function() { $provider.setPart('l', 'p', 's');  }).toThrowError(message);
+          expect(function() { $provider.setPart('l', 'p', 2);    }).toThrowError(message);
+          expect(function() { $provider.setPart('l', 'p');       }).toThrowError(message);
         });
       });
 
@@ -232,14 +232,14 @@ describe('pascalprecht.translate', function() {
       it('should throw an error if a given arg is not a string', function() {
         inject(function($translatePartialLoader) {
           var message = 'Couldn\'t delete part, first arg has to be string.';
-          expect(function() { $provider.deletePart(function(){}); }).toThrow(message);
-          expect(function() { $provider.deletePart(false);}).toThrow(message);
-          expect(function() { $provider.deletePart(null); }).toThrow(message);
-          expect(function() { $provider.deletePart(NaN);  }).toThrow(message);
-          expect(function() { $provider.deletePart([]);   }).toThrow(message);
-          expect(function() { $provider.deletePart({});   }).toThrow(message);
-          expect(function() { $provider.deletePart(2);    }).toThrow(message);
-          expect(function() { $provider.deletePart();     }).toThrow(message);
+          expect(function() { $provider.deletePart(function(){}); }).toThrowError(message);
+          expect(function() { $provider.deletePart(false);}).toThrowError(message);
+          expect(function() { $provider.deletePart(null); }).toThrowError(message);
+          expect(function() { $provider.deletePart(NaN);  }).toThrowError(message);
+          expect(function() { $provider.deletePart([]);   }).toThrowError(message);
+          expect(function() { $provider.deletePart({});   }).toThrowError(message);
+          expect(function() { $provider.deletePart(2);    }).toThrowError(message);
+          expect(function() { $provider.deletePart();     }).toThrowError(message);
         });
       });
 
@@ -290,14 +290,14 @@ describe('pascalprecht.translate', function() {
 
       it('should throw an error if a given arg is not a non-empty string', function() {
         var message = 'Couldn\'t add part, first arg has to be a string';
-        expect(function() { $translatePartialLoader.addPart(function(){}); }).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart(false);}).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart(null); }).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart(NaN);  }).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart([]);   }).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart({});   }).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart(2);    }).toThrow(message);
-        expect(function() { $translatePartialLoader.addPart();     }).toThrow(message);
+        expect(function() { $translatePartialLoader.addPart(function(){}); }).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart(false);}).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart(null); }).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart(NaN);  }).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart([]);   }).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart({});   }).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart(2);    }).toThrowError(message);
+        expect(function() { $translatePartialLoader.addPart();     }).toThrowError(message);
       });
 
       it('should be chainable', function() {
@@ -330,14 +330,14 @@ describe('pascalprecht.translate', function() {
 
       it('should throw an error if a first arg is not a string', function () {
         var message = 'Couldn\'t delete part, first arg has to be string';
-        expect(function() { $translatePartialLoader.deletePart(function(){});}).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart(false);}).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart(null); }).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart(NaN);  }).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart([]);   }).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart({});   }).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart(2);    }).toThrow(message);
-        expect(function() { $translatePartialLoader.deletePart();     }).toThrow(message);
+        expect(function() { $translatePartialLoader.deletePart(function(){});}).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart(false);}).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart(null); }).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart(NaN);  }).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart([]);   }).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart({});   }).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart(2);    }).toThrowError(message);
+        expect(function() { $translatePartialLoader.deletePart();     }).toThrowError(message);
       });
 
       it('should be chainable', function() {
