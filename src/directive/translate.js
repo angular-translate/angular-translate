@@ -100,14 +100,14 @@ angular.module('pascalprecht.translate')
 
       var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
 
-      var interpolateRegExp = "^(.*)(" + $interpolate.startSymbol() + ".*" + $interpolate.endSymbol() + ")(.*)",
-          watcherRegExp = "^(.*)" + $interpolate.startSymbol() + "(.*)" + $interpolate.endSymbol() + "(.*)";
+      var interpolateRegExp = '^(.*)(' + $interpolate.startSymbol() + '.*' + $interpolate.endSymbol() + ')(.*)',
+          watcherRegExp = '^(.*)' + $interpolate.startSymbol() + '(.*)' + $interpolate.endSymbol() + '(.*)';
 
       return function linkFn(scope, iElement, iAttr) {
 
         scope.interpolateParams = {};
-        scope.preText = "";
-        scope.postText = "";
+        scope.preText = '';
+        scope.postText = '';
         var translationIds = {};
 
         // Ensures any change of the attribute "translate" containing the id will
