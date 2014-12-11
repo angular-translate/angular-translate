@@ -114,6 +114,13 @@ angular.module('pascalprecht.translate')
         // be re-stored to the scope's "translationId".
         // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
         var observeElementTranslation = function (translationId) {
+
+          // Remove any old watcher
+          if (angular.isFunction(observeElementTranslation._unwatchOld)) {
+            observeElementTranslation._unwatchOld();
+            observeElementTranslation._unwatchOld = undefined;
+          }
+
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
             // Resolve translation id by inner html if required
             var interpolateMatches = iElement.text().match(interpolateRegExp);
@@ -124,7 +131,7 @@ angular.module('pascalprecht.translate')
               translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
               var watcherMatches = iElement.text().match(watcherRegExp);
               if (angular.isArray(watcherMatches) && watcherMatches[2] && watcherMatches[2].length) {
-                scope.$watch(watcherMatches[2], function (newValue) {
+                observeElementTranslation._unwatchOld = scope.$watch(watcherMatches[2], function (newValue) {
                   translationIds.translate = newValue;
                   updateTranslations();
                 });
