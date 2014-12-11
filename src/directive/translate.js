@@ -122,7 +122,7 @@ angular.module('pascalprecht.translate')
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
               translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
-              watcherMatches = iElement.text().match(watcherRegExp);
+              var watcherMatches = iElement.text().match(watcherRegExp);
               if (angular.isArray(watcherMatches) && watcherMatches[2] && watcherMatches[2].length) {
                 scope.$watch(watcherMatches[2], function (newValue) {
                   translationIds.translate = newValue;
