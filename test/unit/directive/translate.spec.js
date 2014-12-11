@@ -170,6 +170,27 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('after a translation was successful should return empty string', function () {
+      it('(translation id is passed as interpolation in attribute', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foo');
+        $rootScope.translationId = '';
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+      it('(translation id is passed as interpolation in text', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foo');
+        $rootScope.translationId = '';
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+    });
+
     describe('Passing values', function () {
 
       describe('whereas no values given', function () {

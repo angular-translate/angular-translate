@@ -152,8 +152,19 @@ angular.module('pascalprecht.translate')
           });
         };
 
+        var firstAttributeChangedEvent = true;
         iAttr.$observe('translate', function (translationId) {
-          observeElementTranslation(translationId);
+          if (typeof translationId === 'undefined') {
+            // case of element "<translate>xyz</translate>"
+            observeElementTranslation('');
+          } else {
+            // case of regular attribute
+            if (translationId !== '' || !firstAttributeChangedEvent) {
+              translationIds.translate = translationId;
+              updateTranslations();
+            }
+          }
+          firstAttributeChangedEvent = false;
         });
 
         for (var translateAttr in iAttr) {
@@ -193,7 +204,7 @@ angular.module('pascalprecht.translate')
         // Master update function
         var updateTranslations = function () {
           for (var key in translationIds) {
-            if (translationIds.hasOwnProperty(key) && translationIds[key]) {
+            if (translationIds.hasOwnProperty(key)) {
               updateTranslation(key, translationIds[key], scope, scope.interpolateParams, scope.defaultText);
             }
           }
@@ -201,12 +212,17 @@ angular.module('pascalprecht.translate')
 
         // Put translation processing function outside loop
         var updateTranslation = function(translateAttr, translationId, scope, interpolateParams, defaultTranslationText) {
-          $translate(translationId, interpolateParams, translateInterpolation, defaultTranslationText)
-            .then(function (translation) {
-              applyTranslation(translation, scope, true, translateAttr);
-            }, function (translationId) {
-              applyTranslation(translationId, scope, false, translateAttr);
-            });
+          if (translationId) {
+            $translate(translationId, interpolateParams, translateInterpolation, defaultTranslationText)
+              .then(function (translation) {
+                applyTranslation(translation, scope, true, translateAttr);
+              }, function (translationId) {
+                applyTranslation(translationId, scope, false, translateAttr);
+              });
+          } else {
+            // as an empty string cannot be translated, we can solve this using successful=false
+            applyTranslation(translationId, scope, false, translateAttr);
+          }
         };
 
         var applyTranslation = function (value, scope, successful, translateAttr) {
