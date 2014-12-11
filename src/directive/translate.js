@@ -150,7 +150,7 @@ angular.module('pascalprecht.translate')
         });
 
         for (var translateAttr in iAttr) {
-          if(iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
+          if (iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
             observeAttributeTranslation(translateAttr);
           }
         }
