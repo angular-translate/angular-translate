@@ -33,7 +33,7 @@ Install module via Bower:
 $ bower install angular-translate
 ```
 
-Make sure to embed the it in your HTML document.
+Make sure to embed it in your HTML document.
 
 <pre>
 <script src="path/to/angular-translate.js"></script>
