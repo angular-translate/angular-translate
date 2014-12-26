@@ -1685,6 +1685,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           if ($translationTable[possibleLangKey]) {
             if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
               result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
+            } else if ($notFoundIndicatorLeft || $notFoundIndicatorRight) {
+              result = applyNotFoundIndicators(translationId);
             }
           }
           if (typeof result !== 'undefined') {
