@@ -1578,7 +1578,7 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO')).toEqual('bar');
     });
 
-    it('should return translation id if translation id nost exist', function () {
+    it('should return translation id if translation id not exist', function () {
       expect($translate.instant('FOO2')).toEqual('FOO2');
     });
 
@@ -1675,7 +1675,8 @@ describe('pascalprecht.translate', function () {
             },
             'SUBSPACE_FR': {
               'SUBSPACE_FR': 'Francais angular'
-            }
+            },
+            'FALLBACK': '@:NAMESPACE1.SUBSPACE1.FOO'
           }
         })
         .fallbackLanguage(['de', 'fr'])
@@ -1720,6 +1721,10 @@ describe('pascalprecht.translate', function () {
       });
       $rootScope.$digest();
       expect(value).toEqual('Francais angular');
+    });
+
+    it('should invoke the translation fallback stack and return the resolved at syntax based shortcut', function () {
+      expect($translate.instant('NAMESPACE1.FALLBACK')).toBe('Translation1 Francais');
     });
 
   });
