@@ -11,15 +11,15 @@ cookiesStorage 或 localStorage让您的应用程序在跨HTTP请求时记住上
 ## 建立一个自定义存储服务
 
 如果你想在您的应用程序使用自己的自定义存储，你必须建立一个服务，必须实现一些方法，这样 angular-translate 才可以利用
-它们。 存储服务的接口是非常简单的。你需要在你的自定义存储服务中提供一个 `set()` 和一个 `get()` 方法。
+它们。 存储服务的接口是非常简单的。你需要在你的自定义存储服务中提供一个 `put()` 和一个 `get()` 方法。
 
 比方说，我们希望在我们的示例应用程序中使用自定义的存储服务。我们可以简单地用新的服务扩展。我们只需要确保我们返回
-对象有 `get()` 和 `set()` 方法。自定义服务可能看起来像这样：
+对象有 `get()` 和 `put()` 方法。自定义服务可能看起来像这样：
 
 <pre>
 app.factory('customStorage', function () {
   return {
-    set: function (name, value) {
+    put: function (name, value) {
       // store `value` under `name` somehow
     },
     get: function (name) {
@@ -29,7 +29,7 @@ app.factory('customStorage', function () {
 });
 </pre>
 
-很简单，对不对？正如你所看到的，`set()` 方法需要两个参数。一个名和一个值。所以
+很简单，对不对？正如你所看到的，`put()` 方法需要两个参数。一个名和一个值。所以
 你只需要考虑简单的键-值对。另一方面，`get()` 只是需要一个名
 去请求一个值。提供了一个自定义存储作为单独的服务为您在不同的地方使用此服务提供了高度的灵活性。
 此外因为它是独立的，测试这项服务是很容易的。
@@ -87,7 +87,7 @@ angular-translate 会使用 `$injector` 获得给定的工厂的一个实例名�
 
       app.factory('customStorage', function () {
         return {
-          set: function (name, value) {
+          put: function (name, value) {
             // store `value` under `name` somehow
           },
           get: function (name) {
