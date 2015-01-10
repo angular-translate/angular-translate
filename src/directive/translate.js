@@ -194,14 +194,14 @@ angular.module('pascalprecht.translate')
         var updateTranslations = function () {
           for (var key in translationIds) {
             if (translationIds.hasOwnProperty(key) && translationIds[key]) {
-              updateTranslation(key, translationIds[key], scope, scope.interpolateParams);
+              updateTranslation(key, translationIds[key], scope, scope.interpolateParams, scope.defaultText);
             }
           }
         };
 
         // Put translation processing function outside loop
-        var updateTranslation = function(translateAttr, translationId, scope, interpolateParams) {
-          $translate(translationId, interpolateParams, translateInterpolation)
+        var updateTranslation = function(translateAttr, translationId, scope, interpolateParams, defaultTranslationText) {
+          $translate(translationId, interpolateParams, translateInterpolation, defaultTranslationText)
             .then(function (translation) {
               applyTranslation(translation, scope, true, translateAttr);
             }, function (translationId) {
