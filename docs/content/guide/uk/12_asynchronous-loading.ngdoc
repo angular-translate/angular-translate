@@ -71,13 +71,32 @@ $ bower install angular-translate-loader-static-files
 * **suffix** - вказує суфікс назви файла
 
 Скажімо, у вас є два файла локалізації `locale-de.json` і `locale-en.json`. Ви легко можете
-скористатися staticFilesLoader з таким шаблоном:
+скористатися завантажувачем наступним чином:
 
 <pre>
 $translateProvider.useStaticFilesLoader({
     prefix: 'locale-',
     suffix: '.json'
 });
+$translateProvider.preferredLanguage('en');
+</pre>
+
+Крім того, якщо у вас є декілька файлів з перекладами, що знаходяться у різних місцях, то можна
+передати завантажувачу масив файлів:
+
+<pre>
+$translateProvider.useStaticFilesLoader(
+    files: [{
+        prefix: 'locale-',
+        suffix: '.json'
+    }, {
+        prefix: '/absolute/path/to/locale-',
+        suffix: '.json'
+    }, {
+        prefix: 'another/path/to/locales/',
+        suffix: ''
+    }]
+);
 $translateProvider.preferredLanguage('en');
 </pre>
 
