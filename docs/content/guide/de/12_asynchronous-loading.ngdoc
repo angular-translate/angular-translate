@@ -82,7 +82,7 @@ $translateProvider.preferredLanguage('en');
 </pre>
 
 Falls mehrere Dateien an verschiedenen Orten zusammengefügt werden sollen,
-kann alternativ auch ein Array von Dateien definiert werden::
+kann alternativ auch ein Array von Dateien definiert werden:
 
 <pre>
 $translateProvider.useStaticFilesLoader(
