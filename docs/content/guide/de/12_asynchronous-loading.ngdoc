@@ -81,6 +81,25 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('en');
 </pre>
 
+Falls mehrere Dateien an verschiedenen Orten zusammengefügt werden sollen,
+kann alternativ auch ein Array von Dateien definiert werden::
+
+<pre>
+$translateProvider.useStaticFilesLoader(
+    files: [{
+        prefix: 'locale-',
+        suffix: '.json'
+    }, {
+        prefix: '/absolute/path/to/locale-',
+        suffix: '.json'
+    }, {
+        prefix: 'another/path/to/locales/',
+        suffix: ''
+    }]
+);
+$translateProvider.preferredLanguage('en');
+</pre>
+
 angular-translate verkettet die gegebenen Werte nach folgenden Muster:
 `{{prefix}}{{langKey}}{{suffix}}`. Und auch hier gilt, wenn noch keine
 Übersetzungstabelle für die gewählte Sprache vorhanden ist, wird der Loader automatisch
