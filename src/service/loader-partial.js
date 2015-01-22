@@ -18,10 +18,11 @@ angular.module('pascalprecht.translate')
    * @description
    * Represents Part object to add and set parts at runtime.
    */
-  function Part(name) {
+  function Part(name, priority) {
     this.name = name;
     this.isActive = true;
     this.tables = {};
+    this.priority = priority || 0;
   }
 
   /**
@@ -114,18 +115,20 @@ angular.module('pascalprecht.translate')
    * translation data, but only registers a part to be loaded in the future.
    *
    * @param {string} name A name of the part to add
+   * @param {int} [priority=0] Sets the load priority of this part.
+   *
    * @returns {object} $translatePartialLoaderProvider, so this method is chainable
    * @throws {TypeError} The method could throw a **TypeError** if you pass the param
    * of the wrong type. Please, note that the `name` param has to be a
    * non-empty **string**.
    */
-  this.addPart = function(name) {
+  this.addPart = function(name, priority) {
     if (!isStringValid(name)) {
       throw new TypeError('Couldn\'t add part, part name has to be a string!');
     }
 
     if (!hasPart(name)) {
-      parts[name] = new Part(name);
+      parts[name] = new Part(name, priority);
     }
     parts[name].isActive = true;
 
@@ -275,16 +278,22 @@ angular.module('pascalprecht.translate')
         tables.push(table);
       }
 
-      for (var part in parts) {
-        if (hasPart(part) && parts[part].isActive) {
+      var prioritizedParts = [];
+      for(var part in parts) {
+        prioritizedParts.push(parts[part]);
+      }
+      prioritizedParts.sort(function(a, b){return a.priority-b.priority;});
+
+      angular.forEach(prioritizedParts, function(part, index) {
+        if (part.isActive) {
           loaders.push(
-            parts[part]
+            part
               .getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
               .then(addTablePart)
           );
-          parts[part].urlTemplate = options.urlTemplate;
+          part.urlTemplate = options.urlTemplate;
         }
-      }
+      });
 
       if (loaders.length) {
         $q.all(loaders).then(
@@ -312,11 +321,12 @@ angular.module('pascalprecht.translate')
      * @methodOf pascalprecht.translate.$translatePartialLoader
      *
      * @description
-     * Registers a new part of the translation table. This method does actually not perform any xhr
-     * requests to get a translation data. The new parts would be loaded from the server next time
-     * `angular-translate` asks to loader to loaded translations.
+     * Registers a new part of the translation table. This method does not actually perform any xhr
+     * requests to get translation data. The new parts will be loaded in order of priority from the server next time
+     * `angular-translate` asks the loader to load translations.
      *
      * @param {string} name A name of the part to add
+     * @param {int} [priority=0] Sets the load priority of this part.
      *
      * @returns {object} $translatePartialLoader, so this method is chainable
      *
@@ -328,13 +338,13 @@ angular.module('pascalprecht.translate')
      * @throws {TypeError} The method could throw a **TypeError** if you pass the param of the wrong
      * type. Please, note that the `name` param has to be a non-empty **string**.
      */
-    service.addPart = function(name) {
+    service.addPart = function(name, priority) {
       if (!isStringValid(name)) {
         throw new TypeError('Couldn\'t add part, first arg has to be a string');
       }
 
       if (!hasPart(name)) {
-        parts[name] = new Part(name);
+        parts[name] = new Part(name, priority);
         $rootScope.$emit('$translatePartialLoaderStructureChanged', name);
       } else if (!parts[name].isActive) {
         parts[name].isActive = true;

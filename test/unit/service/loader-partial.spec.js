@@ -762,6 +762,35 @@ describe('pascalprecht.translate', function() {
         expect(counter).toEqual(2);
       });
     });
+
+    it('should load parts in order of priority', function() {
+      inject(function($translatePartialLoader, $httpBackend) {
+        var table;
+
+        $httpBackend.whenGET('/locales/part1-en.json').respond(200, '{"key1":"value1","key2":"value2","key3":"value3","key4":"value4"}');
+        $httpBackend.whenGET('/locales/part2-en.json').respond(200, '{"key2" : "overridenby2","key4":"overridenby2"}');
+        $httpBackend.whenGET('/locales/part3-en.json').respond(200, '{"key3" : "overridenby3","key4":"overridenby3"}');
+
+        $translatePartialLoader.addPart('part1', 0);
+        $translatePartialLoader.addPart('part2', 1);
+        $translatePartialLoader.addPart('part3', 2);
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json'
+        }).then(function(data) {
+          table = data;
+        }, function() {
+          table = {};
+        });
+
+        $httpBackend.flush();
+
+        expect(table.key1).toEqual('value1');
+        expect(table.key2).toEqual('overridenby2');
+        expect(table.key3).toEqual('overridenby3');
+        expect(table.key4).toEqual('overridenby3');
+      });
+    });
   });
 
 });
