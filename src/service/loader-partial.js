@@ -103,6 +103,15 @@ angular.module('pascalprecht.translate')
     return dst;
   }
 
+  function getPrioritizedParts() {
+    var prioritizedParts = [];
+    for(var part in parts) {
+      prioritizedParts.push(parts[part]);
+    }
+    prioritizedParts.sort(function(a, b){return a.priority-b.priority;});
+    return prioritizedParts;
+  }
+
 
   /**
    * @ngdoc function
@@ -278,11 +287,8 @@ angular.module('pascalprecht.translate')
         tables.push(table);
       }
 
-      var prioritizedParts = [];
-      for(var part in parts) {
-        prioritizedParts.push(parts[part]);
-      }
-      prioritizedParts.sort(function(a, b){return a.priority-b.priority;});
+
+      var prioritizedParts = getPrioritizedParts();
 
       angular.forEach(prioritizedParts, function(part, index) {
         if (part.isActive) {
@@ -299,9 +305,9 @@ angular.module('pascalprecht.translate')
         $q.all(loaders).then(
           function() {
             var table = {};
-            for (var i = 0; i < tables.length; i++) {
-              deepExtend(table, tables[i]);
-            }
+            angular.forEach(prioritizedParts, function(part) {
+              deepExtend(table, part.tables[options.key]);
+            });
             deferred.resolve(table);
           },
           function() {

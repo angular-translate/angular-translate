@@ -38,6 +38,7 @@ describe('pascalprecht.translate', function() {
         return deferred.promise;
       };
     });
+
   }));
 
   describe('$translatePartialLoaderProvider', function () {
@@ -763,32 +764,54 @@ describe('pascalprecht.translate', function() {
       });
     });
 
-    it('should load parts in order of priority', function() {
+    it('should load parts in order of priority', function(done) {
+      module(function($provide) {
+        //Randomly delay $http response to simulate real-world scenario.
+        $provide.decorator('$httpBackend', function($delegate) {
+          var proxy = function(method, url, data, callback, headers) {
+              var interceptor = function() {
+                  var _this = this,
+                      _arguments = arguments,
+                      _timeout = Math.floor((Math.random() * 50) + 1);
+                  console.log('setting timeout to', _timeout);
+                  setTimeout(function() {
+                      callback.apply(_this, _arguments);
+                  }, _timeout);
+              };
+              return $delegate.call(this, method, url, data, interceptor, headers);
+          };
+          for(var key in $delegate) {
+              proxy[key] = $delegate[key];
+          }
+          return proxy;
+        });
+      });
+
       inject(function($translatePartialLoader, $httpBackend) {
         var table;
-
+        
         $httpBackend.whenGET('/locales/part1-en.json').respond(200, '{"key1":"value1","key2":"value2","key3":"value3","key4":"value4"}');
         $httpBackend.whenGET('/locales/part2-en.json').respond(200, '{"key2" : "overridenby2","key4":"overridenby2"}');
         $httpBackend.whenGET('/locales/part3-en.json').respond(200, '{"key3" : "overridenby3","key4":"overridenby3"}');
 
-        $translatePartialLoader.addPart('part1', 0);
         $translatePartialLoader.addPart('part2', 1);
         $translatePartialLoader.addPart('part3', 2);
+        $translatePartialLoader.addPart('part1', 0);
         $translatePartialLoader({
           key : 'en',
           urlTemplate : '/locales/{part}-{lang}.json'
         }).then(function(data) {
           table = data;
+          expect(table.key1).toEqual('value1');
+          expect(table.key2).toEqual('overridenby2');
+          expect(table.key3).toEqual('overridenby3');
+          expect(table.key4).toEqual('overridenby3');
+          done();
         }, function() {
           table = {};
         });
 
         $httpBackend.flush();
-
-        expect(table.key1).toEqual('value1');
-        expect(table.key2).toEqual('overridenby2');
-        expect(table.key3).toEqual('overridenby3');
-        expect(table.key4).toEqual('overridenby3');
       });
     });
   });
