@@ -106,7 +106,9 @@ angular.module('pascalprecht.translate')
   function getPrioritizedParts() {
     var prioritizedParts = [];
     for(var part in parts) {
-      prioritizedParts.push(parts[part]);
+      if (parts[part].isActive) {
+        prioritizedParts.push(parts[part]);
+      }
     }
     prioritizedParts.sort(function(a, b){return a.priority-b.priority;});
     return prioritizedParts;
@@ -280,43 +282,28 @@ angular.module('pascalprecht.translate')
       }
 
       var loaders = [],
-          tables = [],
-          deferred = $q.defer();
-
-      function addTablePart(table) {
-        tables.push(table);
-      }
-
-
-      var prioritizedParts = getPrioritizedParts();
+          deferred = $q.defer(),
+          prioritizedParts = getPrioritizedParts();
 
       angular.forEach(prioritizedParts, function(part, index) {
-        if (part.isActive) {
-          loaders.push(
-            part
-              .getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
-              .then(addTablePart)
-          );
-          part.urlTemplate = options.urlTemplate;
-        }
+        loaders.push(
+          part.getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
+        );
+        part.urlTemplate = options.urlTemplate;
       });
 
-      if (loaders.length) {
-        $q.all(loaders).then(
-          function() {
-            var table = {};
-            angular.forEach(prioritizedParts, function(part) {
-              deepExtend(table, part.tables[options.key]);
-            });
-            deferred.resolve(table);
-          },
-          function() {
-            deferred.reject(options.key);
-          }
-        );
-      } else {
-        deferred.resolve({});
-      }
+      $q.all(loaders).then(
+        function() {
+          var table = {};
+          angular.forEach(prioritizedParts, function(part) {
+            deepExtend(table, part.tables[options.key]);
+          });
+          deferred.resolve(table);
+        },
+        function() {
+          deferred.reject(options.key);
+        }
+      );
 
       return deferred.promise;
     };
