@@ -1,3 +1,29 @@
+<a name="2.6.0"></a>
+## 2.6.0 (2015-02-08)
+
+
+#### Bug Fixes
+
+* **directive:**
+  * newlines before/after translation ids should be ignored ([8dcf3e23](http://github.com/angular-translate/angular-translate/commit/8dcf3e23e9623b59f71c4b18c19a066f649b7bdf), closes [#909](http://github.com/angular-translate/angular-translate/issues/909))
+  * fix missing update using dynamic translationIds ([faebe195](http://github.com/angular-translate/angular-translate/commit/faebe19598d35ac31678cce028d61c87ecd4b20a), closes [#854](http://github.com/angular-translate/angular-translate/issues/854))
+  * ensure internal watcher will be removed ([e69f4a14](http://github.com/angular-translate/angular-translate/commit/e69f4a14ccb4c549250900696c58ae4ede71c656))
+  * fix minor memory leak ([5e4533a4](http://github.com/angular-translate/angular-translate/commit/5e4533a4a485672ab7e1675d5d1a11f689e5d6ad))
+* **filter:** apply notFoundIndicators also for instant translations correctly ([5a9f436f](http://github.com/angular-translate/angular-translate/commit/5a9f436fb8444d4992b00383bd37b61580e816d4), closes [#866](http://github.com/angular-translate/angular-translate/issues/866))
+* **service:**
+  * fix an issue with default interpolator and expressions ([75b7381f](http://github.com/angular-translate/angular-translate/commit/75b7381fbfbb342b98a7fe8f9a9b7915004dc66c))
+  * use $window/$windowProvider instead of window fix(docs): update ngdocs on storag ([bfa7b7b2](http://github.com/angular-translate/angular-translate/commit/bfa7b7b28f6e2698205e774b4d13d34d85abfc2f))
+  * fallback languages follow shortcuts (fixes #758) ([cce897a3](http://github.com/angular-translate/angular-translate/commit/cce897a34a2087c6799cd11889bc90db3c56f227))
+
+
+#### Features
+
+* **$translatePartialLoader:** adds optional priority param to the addPart function ([570617cf](http://github.com/angular-translate/angular-translate/commit/570617cf68804fdd21ba215d9a6a7c4b3083fd2a))
+* **directive:** add $translateProvider.directityPriority ([b0b77162](http://github.com/angular-translate/angular-translate/commit/b0b771624cda1a51879c7f685f98e90923d4a3b0))
+* **loader:** support for multiple static translation files ([c462ee6a](http://github.com/angular-translate/angular-translate/commit/c462ee6aa6f095f3cd7e1b5ebc9d4b4d135c1ae2))
+* **service:** extend loader api: add isPartLoaded and getRegisteredParts to $translatePartialL ([54f8ab3e](http://github.com/angular-translate/angular-translate/commit/54f8ab3e166fa2e1ef1c1334263f9df612a4940e))
+
+
 <a name="2.5.2"></a>
 ### 2.5.2 (2014-12-10)
 
