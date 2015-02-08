@@ -31,7 +31,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $notFoundIndicatorRight,
       $postCompilingEnabled = false,
       NESTED_OBJECT_DELIMITER = '.',
-      loaderCache;
+      loaderCache,
+      directivePriority = 0;
 
   var version = 'x.y.z';
 
@@ -759,6 +760,28 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       loaderCache = cache;
     }
     return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#directivePriority
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Sets the default priority of the translate directive. The standard value is `0`.
+   * Calling this function without an argument will return the current value.
+   *
+   * @param {number} priority for the translate-directive
+   */
+  this.directivePriority = function (priority) {
+    if (priority === undefined) {
+      // getter
+      return directivePriority;
+    } else {
+      // setter with chaining
+      directivePriority = priority;
+      return this;
+    }
   };
 
   /**
@@ -1755,6 +1778,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        */
       $translate.loaderCache = function () {
         return loaderCache;
+      };
+
+      // internal purpose only
+      $translate.directivePriority = function () {
+        return directivePriority;
       };
 
       if ($loaderFactory) {

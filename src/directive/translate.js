@@ -90,6 +90,7 @@ angular.module('pascalprecht.translate')
   return {
     restrict: 'AE',
     scope: true,
+    priority: $translate.directivePriority(),
     compile: function (tElement, tAttr) {
 
       var translateValuesExist = (tAttr.translateValues) ?
