@@ -93,12 +93,28 @@ describe('pascalprecht.translate', function () {
         expect(element.text()).toBe('TEXT');
       });
 
+      it('should return translation id if translation doesn\'t exist (innerHTML with newlines)', function () {
+        element = $compile("<div translate>\nTEXT\n</div>")($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('TEXT');
+      });
+
       it('should return translation if translation id exist', function () {
         element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
         $rootScope.$digest();
         expect(element.text()).toBe('foo');
 
         element = $compile('<div translate>BLANK_VALUE</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+
+      it('should return translation if translation id exist (innerHTML with newlines)', function () {
+        element = $compile("<div translate>\nTRANSLATION_ID\n</div>")($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foo');
+
+        element = $compile("<div translate>\nBLANK_VALUE\n</div>")($rootScope);
         $rootScope.$digest();
         expect(element.text()).toBe('');
       });
@@ -165,6 +181,27 @@ describe('pascalprecht.translate', function () {
         expect(element.text()).toBe('foo');
 
         element = $compile('<translate>BLANK_VALUE</translate>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+    });
+
+    describe('after a translation was successful should return empty string', function () {
+      it('(translation id is passed as interpolation in attribute', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foo');
+        $rootScope.translationId = '';
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+      it('(translation id is passed as interpolation in text', function () {
+        $rootScope.translationId = 'TRANSLATION_ID';
+        element = $compile('<div translate>{{translationId}}</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foo');
+        $rootScope.translationId = '';
         $rootScope.$digest();
         expect(element.text()).toBe('');
       });

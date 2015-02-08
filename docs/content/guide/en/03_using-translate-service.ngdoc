@@ -102,7 +102,7 @@ Once it's changed, you can simply re-execute the code, that gives you your neede
 Here's how it could look like:
 
 <pre>
-app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate, $rootScope) {
+app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, $translate, $rootScope) {
   $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;

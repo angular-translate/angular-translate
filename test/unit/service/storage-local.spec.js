@@ -1,13 +1,17 @@
 describe('pascalprecht.translate', function () {
 
+  var $translateLocalStorage, $window;
+
   describe('$translateLocalStorage', function () {
 
     beforeEach(module('pascalprecht.translate', 'ngCookies'));
 
-    var $translateLocalStorage;
 
-    beforeEach(inject(function (_$translateLocalStorage_) {
+
+    beforeEach(inject(function (_$translateLocalStorage_, _$window_) {
+    //beforeEach(inject(function (_$translateLocalStorage_) {
       $translateLocalStorage = _$translateLocalStorage_;
+      $window = _$window_;
     }));
 
     it('should be defined', function () {
@@ -44,7 +48,7 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
       // ensure that the local storage is cleared.
-      window.localStorage.clear();
+      $window.localStorage.clear();
       $translateProvider
         .translations('de_DE', {
           'EXISTING_TRANSLATION_ID': 'foo',
@@ -59,7 +63,7 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should use localstorage', function () {
-      inject(function ($window, $translate) {
+      inject(function ($translate) {
         expect($translate.storage().get($translate.storageKey())).toEqual('de_DE');
       });
     });

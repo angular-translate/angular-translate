@@ -147,4 +147,30 @@ describe('pascalprecht.translate', function () {
       expect($translate('FOO', {}, 'custom')).toEqual('custom interpolation');
     }));
   });
+  describe('shall add the prefix and suffix elements', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.translations('en', {
+        'FOO': 'Have foo'
+      });
+
+      $translateProvider
+        .preferredLanguage('en')
+        .translationNotFoundIndicator('-+-+');
+    }));
+
+    var $translate, $filter, $rootScope, $q;
+    beforeEach(inject(function (_$filter_, _$rootScope_, _$q_) {
+      $filter = _$filter_;
+      $rootScope = _$rootScope_;
+      $q = _$q_;
+      $translate = $filter('translate');
+    }));
+
+    it('should contain the not found indicators', inject(function () {
+      expect($translate('FOO')).toEqual('Have foo');
+      expect($translate('FOO2')).toEqual('-+-+ FOO2 -+-+');
+    }));
+  });
 });

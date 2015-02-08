@@ -20,7 +20,11 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
           var result = {};
           for (var key in params) {
             if (Object.prototype.hasOwnProperty.call(params, key)) {
-              result[key] = angular.element('<div></div>').text(params[key]).html();
+              if (angular.isNumber(params[key])) {
+                result[key] = params[key];
+              } else {
+                result[key] = angular.element('<div></div>').text(params[key]).html();
+              }
             }
           }
           return result;

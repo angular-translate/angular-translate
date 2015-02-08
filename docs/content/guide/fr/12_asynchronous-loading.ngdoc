@@ -86,6 +86,25 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('fr');
 </pre>
 
+Alternativement, si vous avez plusieurs fichiers de traduction à des endroits
+distincts, vous pouvez plutôt fournir un tableau de fichiers au chargeur:
+
+<pre>
+$translateProvider.useStaticFilesLoader(
+    files: [{
+        prefix: 'locale-',
+        suffix: '.json'
+    }, {
+        prefix: '/absolute/path/to/locale-',
+        suffix: '.json'
+    }, {
+        prefix: 'another/path/to/locales/',
+        suffix: ''
+    }]
+);
+$translateProvider.preferredLanguage('fr');
+</pre>
+
 angular-translate concatenera l'information donnée en
 `{{prefix}}{{langKey}}{{suffix}}`. Donc, cela chargera `locale-fr.json`. Et encore une fois,
 comme il n'y a pas de données de traduction qui sont encore disponibles, il les chargera

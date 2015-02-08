@@ -76,13 +76,32 @@ the following information is required:
 * **suffix** - specifies file suffix
 
 Let's say you have two localization files `locale-de.json` and  `locale-en.json`.
-You can simply use the staticFilesLoader with this pattern like this:
+You can simply use the loader like this:
 
 <pre>
 $translateProvider.useStaticFilesLoader({
     prefix: 'locale-',
     suffix: '.json'
 });
+$translateProvider.preferredLanguage('en');
+</pre>
+
+Alternatively, if you have multiple translation files in distinct locations, you
+may instead supply an array of files to the loader:
+
+<pre>
+$translateProvider.useStaticFilesLoader(
+    files: [{
+        prefix: 'locale-',
+        suffix: '.json'
+    }, {
+        prefix: '/absolute/path/to/locale-',
+        suffix: '.json'
+    }, {
+        prefix: 'another/path/to/locales/',
+        suffix: ''
+    }]
+);
 $translateProvider.preferredLanguage('en');
 </pre>
 

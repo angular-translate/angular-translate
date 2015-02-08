@@ -87,9 +87,23 @@ angular.module('pascalprecht.translate')
  */
 .directive('translate', ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope', function ($translate, $q, $interpolate, $compile, $parse, $rootScope) {
 
+  /**
+   * @name trim
+   * @private
+   *
+   * @description
+   * trim polyfill
+   *
+   * @returns {string} The string stripped of whitespace from both ends
+   */
+  var trim = function() {
+    return this.replace(/^\s+|\s+$/g, '');
+  };
+
   return {
     restrict: 'AE',
     scope: true,
+    priority: $translate.directivePriority(),
     compile: function (tElement, tAttr) {
 
       var translateValuesExist = (tAttr.translateValues) ?
@@ -100,31 +114,38 @@ angular.module('pascalprecht.translate')
 
       var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
 
-      var interpolateRegExp = "^(.*)(" + $interpolate.startSymbol() + ".*" + $interpolate.endSymbol() + ")(.*)",
-          watcherRegExp = "^(.*)" + $interpolate.startSymbol() + "(.*)" + $interpolate.endSymbol() + "(.*)";
+      var interpolateRegExp = '^(.*)(' + $interpolate.startSymbol() + '.*' + $interpolate.endSymbol() + ')(.*)',
+          watcherRegExp = '^(.*)' + $interpolate.startSymbol() + '(.*)' + $interpolate.endSymbol() + '(.*)';
 
       return function linkFn(scope, iElement, iAttr) {
 
         scope.interpolateParams = {};
-        scope.preText = "";
-        scope.postText = "";
+        scope.preText = '';
+        scope.postText = '';
         var translationIds = {};
 
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
         // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
         var observeElementTranslation = function (translationId) {
+
+          // Remove any old watcher
+          if (angular.isFunction(observeElementTranslation._unwatchOld)) {
+            observeElementTranslation._unwatchOld();
+            observeElementTranslation._unwatchOld = undefined;
+          }
+
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
             // Resolve translation id by inner html if required
-            var interpolateMatches = iElement.text().match(interpolateRegExp);
+            var interpolateMatches = trim.apply(iElement.text()).match(interpolateRegExp);
             // Interpolate translation id if required
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
               translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
-              watcherMatches = iElement.text().match(watcherRegExp);
+              var watcherMatches = iElement.text().match(watcherRegExp);
               if (angular.isArray(watcherMatches) && watcherMatches[2] && watcherMatches[2].length) {
-                scope.$watch(watcherMatches[2], function (newValue) {
+                observeElementTranslation._unwatchOld = scope.$watch(watcherMatches[2], function (newValue) {
                   translationIds.translate = newValue;
                   updateTranslations();
                 });
@@ -145,12 +166,23 @@ angular.module('pascalprecht.translate')
           });
         };
 
+        var firstAttributeChangedEvent = true;
         iAttr.$observe('translate', function (translationId) {
-          observeElementTranslation(translationId);
+          if (typeof translationId === 'undefined') {
+            // case of element "<translate>xyz</translate>"
+            observeElementTranslation('');
+          } else {
+            // case of regular attribute
+            if (translationId !== '' || !firstAttributeChangedEvent) {
+              translationIds.translate = translationId;
+              updateTranslations();
+            }
+          }
+          firstAttributeChangedEvent = false;
         });
 
         for (var translateAttr in iAttr) {
-          if(iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
+          if (iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
             observeAttributeTranslation(translateAttr);
           }
         }
@@ -186,20 +218,25 @@ angular.module('pascalprecht.translate')
         // Master update function
         var updateTranslations = function () {
           for (var key in translationIds) {
-            if (translationIds.hasOwnProperty(key) && translationIds[key]) {
-              updateTranslation(key, translationIds[key], scope, scope.interpolateParams);
+            if (translationIds.hasOwnProperty(key)) {
+              updateTranslation(key, translationIds[key], scope, scope.interpolateParams, scope.defaultText);
             }
           }
         };
 
         // Put translation processing function outside loop
-        var updateTranslation = function(translateAttr, translationId, scope, interpolateParams) {
-          $translate(translationId, interpolateParams, translateInterpolation)
-            .then(function (translation) {
-              applyTranslation(translation, scope, true, translateAttr);
-            }, function (translationId) {
-              applyTranslation(translationId, scope, false, translateAttr);
-            });
+        var updateTranslation = function(translateAttr, translationId, scope, interpolateParams, defaultTranslationText) {
+          if (translationId) {
+            $translate(translationId, interpolateParams, translateInterpolation, defaultTranslationText)
+              .then(function (translation) {
+                applyTranslation(translation, scope, true, translateAttr);
+              }, function (translationId) {
+                applyTranslation(translationId, scope, false, translateAttr);
+              });
+          } else {
+            // as an empty string cannot be translated, we can solve this using successful=false
+            applyTranslation(translationId, scope, false, translateAttr);
+          }
         };
 
         var applyTranslation = function (value, scope, successful, translateAttr) {
