@@ -65,11 +65,28 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should replace interpolateParams with concrete values', function () {
-      expect($translateDefaultInterpolation.interpolate('Foo bar {{value}}', { value: 5 })).toEqual('Foo bar 5');
+      expect($translateDefaultInterpolation.interpolate('Foo bar {{value}}', {value: 5})).toEqual('Foo bar 5');
     });
 
     it('should evaluate interpolateParams with concrete values the right way', function () {
-      expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }}', { value: 5 })).toEqual('Foo bar 10');
+      expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }}', {value: 5})).toEqual('Foo bar 10');
+    });
+
+    it('should evaluate interpolateParams with concrete values the right way when in escaped mode', function () {
+      $translateDefaultInterpolation.useSanitizeValueStrategy('escaped');
+      expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }}', {value: 5})).toEqual('Foo bar 10');
+    });
+
+    it('should evaluate interpolateParams with values that contains html tags', function () {
+      $translateDefaultInterpolation.useSanitizeValueStrategy('escaped');
+
+      expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }} with {{name}}', {value: 5, name: 'CaTz <xss>'})).toEqual('Foo bar 10 with CaTz &lt;xss&gt;');
+    });
+  });
+
+  describe('$translateDefaultInterpolation#useSanitizeValueStrategy', function () {
+    it('should be a function ', function () {
+      expect(typeof $translateDefaultInterpolation.useSanitizeValueStrategy).toBe('function');
     });
   });
 });
