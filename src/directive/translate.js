@@ -87,6 +87,19 @@ angular.module('pascalprecht.translate')
  */
 .directive('translate', ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope', function ($translate, $q, $interpolate, $compile, $parse, $rootScope) {
 
+  /**
+   * @name trim
+   * @private
+   *
+   * @description
+   * trim polyfill
+   *
+   * @returns {string} The string stripped of whitespace from both ends
+   */
+  var trim = function() {
+    return this.replace(/^\s+|\s+$/g, '');
+  };
+
   return {
     restrict: 'AE',
     scope: true,
@@ -124,7 +137,7 @@ angular.module('pascalprecht.translate')
 
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
             // Resolve translation id by inner html if required
-            var interpolateMatches = iElement.text().match(interpolateRegExp);
+            var interpolateMatches = trim.apply(iElement.text()).match(interpolateRegExp);
             // Interpolate translation id if required
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];

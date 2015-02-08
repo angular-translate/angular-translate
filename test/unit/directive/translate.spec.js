@@ -93,12 +93,28 @@ describe('pascalprecht.translate', function () {
         expect(element.text()).toBe('TEXT');
       });
 
+      it('should return translation id if translation doesn\'t exist (innerHTML with newlines)', function () {
+        element = $compile("<div translate>\nTEXT\n</div>")($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('TEXT');
+      });
+
       it('should return translation if translation id exist', function () {
         element = $compile('<div translate>TRANSLATION_ID</div>')($rootScope);
         $rootScope.$digest();
         expect(element.text()).toBe('foo');
 
         element = $compile('<div translate>BLANK_VALUE</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+
+      it('should return translation if translation id exist (innerHTML with newlines)', function () {
+        element = $compile("<div translate>\nTRANSLATION_ID\n</div>")($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('foo');
+
+        element = $compile("<div translate>\nBLANK_VALUE\n</div>")($rootScope);
         $rootScope.$digest();
         expect(element.text()).toBe('');
       });
