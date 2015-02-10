@@ -27,6 +27,12 @@ angular-translate has built-in support for two storages. **localStorage** and
 supported by the browser the user currently uses. To use one of those storages,
 you have to install the corresponding extension package.
 
+Also remember to include angular-cookies.min.js file in your HTML and to add 'ngCookies' as dependency.
+
+```js
+var module = angular.module('AppService', ['pascalprecht.translate','ngCookies']);
+```
+
 ## Using cookieStorage
 
 If you want to use the cookieStorage to store the language over cross http requests,
