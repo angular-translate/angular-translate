@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git://github.com/angular-translate/angular-translate"
   },
-  "main": "./build/angular-translate",
+  "main": "./dist/angular-translate.js",
   "devDependencies": {
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular": "~1.2.26",
