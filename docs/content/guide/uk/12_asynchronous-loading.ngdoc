@@ -85,7 +85,7 @@ $translateProvider.preferredLanguage('en');
 передати завантажувачу масив файлів:
 
 <pre>
-$translateProvider.useStaticFilesLoader(
+$translateProvider.useStaticFilesLoader({
     files: [{
         prefix: 'locale-',
         suffix: '.json'
@@ -96,7 +96,7 @@ $translateProvider.useStaticFilesLoader(
         prefix: 'another/path/to/locales/',
         suffix: ''
     }]
-);
+});
 $translateProvider.preferredLanguage('en');
 </pre>
 
@@ -280,7 +280,7 @@ $translationProvider.useStaticFilesLoader({
 ## Використання кеша
 
 Для контролю над кешуванням в існуючих завантажувачах можна використовувати об'єкт cache. Докладніше
-про це Ви можете прочитати в 
+про це Ви можете прочитати в
 [офіційній документації AngularJS](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
 
 Для увімкнення стандартного кешування використовується наступний метод:

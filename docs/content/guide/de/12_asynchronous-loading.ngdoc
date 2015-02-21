@@ -85,7 +85,7 @@ Falls mehrere Dateien an verschiedenen Orten zusammengefügt werden sollen,
 kann alternativ auch ein Array von Dateien definiert werden:
 
 <pre>
-$translateProvider.useStaticFilesLoader(
+$translateProvider.useStaticFilesLoader({
     files: [{
         prefix: 'locale-',
         suffix: '.json'
@@ -96,7 +96,7 @@ $translateProvider.useStaticFilesLoader(
         prefix: 'another/path/to/locales/',
         suffix: ''
     }]
-);
+});
 $translateProvider.preferredLanguage('en');
 </pre>
 
