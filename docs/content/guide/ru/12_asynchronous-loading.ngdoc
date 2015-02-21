@@ -81,11 +81,11 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('en');
 </pre>
 
-Кроме того, если у вас есть несколько файлов с переводами, которые находятся в разных местах, то 
+Кроме того, если у вас есть несколько файлов с переводами, которые находятся в разных местах, то
 можно предоставить загрузчику массив файлов:
 
 <pre>
-$translateProvider.useStaticFilesLoader(
+$translateProvider.useStaticFilesLoader({
     files: [{
         prefix: 'locale-',
         suffix: '.json'
@@ -96,7 +96,7 @@ $translateProvider.useStaticFilesLoader(
         prefix: 'another/path/to/locales/',
         suffix: ''
     }]
-);
+});
 $translateProvider.preferredLanguage('en');
 </pre>
 
