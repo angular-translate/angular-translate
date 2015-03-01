@@ -90,7 +90,7 @@ Alternativement, si vous avez plusieurs fichiers de traduction à des endroits
 distincts, vous pouvez plutôt fournir un tableau de fichiers au chargeur:
 
 <pre>
-$translateProvider.useStaticFilesLoader(
+$translateProvider.useStaticFilesLoader({
     files: [{
         prefix: 'locale-',
         suffix: '.json'
@@ -101,7 +101,7 @@ $translateProvider.useStaticFilesLoader(
         prefix: 'another/path/to/locales/',
         suffix: ''
     }]
-);
+});
 $translateProvider.preferredLanguage('fr');
 </pre>
 
