@@ -1,3 +1,14 @@
+<a name="2.6.1"></a>
+### 2.6.1 (2015-03-01)
+
+
+#### Bug Fixes
+
+* **static-files-loader:**
+  * fix multiple files definition (docu update) #923, pr #936 ([e637c01d](http://github.com/angular-translate/angular-translate/commit/e637c01df50afd506fa75bc2ce781aacf47ec777))
+  * fix multiple files definition #923 ([1b6256a8](http://github.com/angular-translate/angular-translate/commit/1b6256a8685ff344d75237d5f01cd32845315e54))
+
+
 <a name="2.6.0"></a>
 ## 2.6.0 (2015-02-08)
 
