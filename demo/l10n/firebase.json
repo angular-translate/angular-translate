@@ -1,0 +1,72 @@
+{
+  "en": {
+    "load" : {
+      "static" : {
+        "TITLE" : "How to load static files?",
+        "HEADER" : "The module can lazzy load a translations table when it's needed.",
+        "SUBHEADER" : "So, you can load only those languages, which will be used.",
+        "ONLY_EN": "only english",
+        "EN_RU": "EN and RU - EN Edition"
+      },
+      "predefined" : {
+        "TITLE" : "How to use lazzy loading without autoupload?",
+        "HEADER" : "You can predefine a default language while still using a lazzy loading.",
+        "SUBHEADER" : "This way module will not load a default language from server once more."
+      },
+      "dynamic" : {
+        "TITLE" : "How to load dynamic files?",
+        "HEADER" : "The module can lazzy load a translations table from the dynamic page.",
+        "SUBHEADER" : "It will use the \"lang\" request param passed into GET."
+      },
+      "partial" : {
+        "TITLE" : "How to load partial files?",
+        "HEADER" : "The module can lazzy load a translations table from the dynamic page.",
+        "SUBHEADER" : "It will use the \"lang\" request param passed into GET."
+      }
+    }
+  },
+  "en_US" : {
+    "load" : {
+      "static" : {
+        "TITLE" : "How to load static files?",
+        "HEADER" : "The module can lazzy load a translations table when it's needed!",
+        "SUBHEADER" : "So, you can load only those languages, which will be used.",
+        "TEXT" : "This is only some text to fill the space.",
+        "ONLY_EN": "only english",
+        "EN_RU": "EN and RU - EN Edition"
+      },
+      "predefined" : {
+        "TITLE" : "How to use lazzy loading without autoupload?",
+        "HEADER" : "You can predefine a default language while still using a lazzy loading.",
+        "SUBHEADER" : "This way module will not load a default language from server once more."
+      },
+      "dynamic" : {
+        "TITLE" : "How to load dynamic files?",
+        "HEADER" : "The module can lazzy load a translations table from the dynamic page!",
+        "SUBHEADER" : "It will use the \"lang\" request param passed into GET."
+      }
+    }
+  },
+  "ru": {
+    "load" : {
+      "static" : {
+        "TITLE" : "Как загрузить статические файлы?",
+        "HEADER" : "Модуль может отложенно загрузить таблицы переводов, когда они понадобятся!",
+        "SUBHEADER" : "Так Вы можете загрузить только те языки, которые будут использоваться.",
+        "TEXT" : "This is only some text to fill the space (RU).",
+        "ONLY_RU": "Blafasel",
+        "EN_RU": "EN and RU - IN RU"
+      },
+      "predefined" : {
+        "TITLE" : "Как использовать отложенную загрузку без автозагрузки?",
+        "HEADER" : "Вы можете задать изначально язык по умолчанию и при этом продолжать использовать отложенную загрузку.",
+        "SUBHEADER" : "Таким образом модуль не будет загружать язык по умолчанию с сервера еще раз."
+      },
+      "dynamic" : {
+        "TITLE" : "Как загрузить динамические файлы?",
+        "HEADER" : "Модуль может отложенно загрузить таблицы переводов из динамической страницы.",
+        "SUBHEADER" : "Он будет использовать параметр запроса \"lang\" переданный при помощи GET."
+      }
+    }
+  }
+}
