@@ -36,9 +36,9 @@ angular.module('pascalprecht.translate')
 
       $http(angular.extend({
         url: [
-          options.prefix,
+          file.prefix,
           options.key,
-          options.suffix
+          file.suffix
         ].join(''),
         method: 'GET',
         params: ''
