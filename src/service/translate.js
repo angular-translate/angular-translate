@@ -1657,7 +1657,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
               useLanguage($uses);
             }
             resolve();
-          });
+          }, reject);
 
         } else if ($translationTable[langKey]) {
 
