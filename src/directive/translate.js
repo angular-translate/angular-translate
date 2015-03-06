@@ -136,6 +136,16 @@ angular.module('pascalprecht.translate')
           }
 
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
+            // initially fetch all attributes if existing and fill the params
+            if (translateValueExist) {
+              for (var attr in tAttr) {
+                if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+                  var attributeName = angular.lowercase(attr.substr(14, 1)) + attr.substr(15);
+                  scope.interpolateParams[attributeName] = tAttr[attr];
+                }
+              }
+            }
+
             // Resolve translation id by inner html if required
             var interpolateMatches = trim.apply(iElement.text()).match(interpolateRegExp);
             // Interpolate translation id if required
