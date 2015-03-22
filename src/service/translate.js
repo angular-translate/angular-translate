@@ -1362,6 +1362,13 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return result;
       };
 
+      var clearNextLangAndPromise = function(key) {
+        if ($nextLang === key) {
+          $nextLang = undefined;
+        }
+        langPromises[key] = undefined;
+      };
+
       /**
        * @ngdoc function
        * @name pascalprecht.translate.$translate#preferredLanguage
@@ -1531,19 +1538,25 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           langPromises[key] = loadAsync(key).then(function (translation) {
             translations(translation.key, translation.table);
             deferred.resolve(translation.key);
-
             useLanguage(translation.key);
-            if ($nextLang === key) {
-              $nextLang = undefined;
-            }
+            clearNextLangAndPromise(translation.key);
             return translation;
           }, function (key) {
-            if ($nextLang === key) {
-              $nextLang = undefined;
-            }
+            clearNextLangAndPromise(key);
             $rootScope.$emit('$translateChangeError', {language: key});
             deferred.reject(key);
             $rootScope.$emit('$translateChangeEnd', {language: key});
+            return $q.reject(key);
+          });
+        } else if($nextLang === key && langPromises[key]) {
+          // we are already loading this asynchronously
+          // resolve our new deferred when the old langPromise is resolved
+          langPromises[key].then(function (translation) {
+            deferred.resolve(translation.key);
+            return translation;
+          }, function (key) {
+            deferred.reject(key);
+            return $q.reject(key);
           });
         } else {
           deferred.resolve(key);

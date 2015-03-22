@@ -599,6 +599,178 @@ describe('pascalprecht.translate', function () {
     }));
   });
 
+  describe('$translate#use() with async loading and two requests to the same key', function () {
+
+    var $translate, $httpBackend, $timeout;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.useStaticFilesLoader({
+        prefix : 'lang_',
+        suffix : '.json'
+      });
+    }));
+
+    beforeEach(inject(function (_$translate_, _$httpBackend_, _$timeout_) {
+      $httpBackend = _$httpBackend_;
+      $translate = _$translate_;
+      $timeout = _$timeout_;
+
+      $httpBackend.when('GET', 'lang_de_DE.json').respond({HEADER : 'Ueberschrift'});
+      $httpBackend.when('GET', 'lang_nt_VD.json').respond(404);
+    }));
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    describe('running the second request AFTER the first one was finished', function () {
+
+      it('should resolve the first promise, keep the result in cache and resolve the second promise', function() {
+        var wasResolved = false,
+          wasRejected = false,
+          promise = $translate.use('de_DE');
+        promise.then(resolved, rejected);
+
+        expect(wasResolved).toEqual(false);
+        expect(wasRejected).toEqual(false);
+
+        $httpBackend.flush();
+
+        expect(wasResolved).toEqual(true);
+        expect(wasRejected).toEqual(false);
+
+        promise = $translate.use('de_DE');
+        promise.then(resolved, rejected);
+        expect($httpBackend.flush).toThrowError('No pending request to flush !');
+
+        expect(wasResolved).toEqual(true);
+        expect(wasRejected).toEqual(false);
+
+        function resolved() {
+          wasResolved = true;
+        }
+
+        function rejected() {
+          wasRejected = true;
+        }
+      });
+
+      it('should reject the first promise, try to load the file again and reject the second promise', function() {
+        var wasResolved = false,
+          wasRejected = false,
+          promise = $translate.use('nt_VD');
+        promise.then(resolved, rejected);
+
+        expect(wasResolved).toEqual(false);
+        expect(wasRejected).toEqual(false);
+
+        $httpBackend.flush();
+
+        expect(wasResolved).toEqual(false);
+        expect(wasRejected).toEqual(true);
+
+        promise = $translate.use('nt_VD');
+        promise.then(resolved, rejected);
+        $httpBackend.flush();
+
+        expect(wasResolved).toEqual(false);
+        expect(wasRejected).toEqual(true);
+
+        function resolved() {
+          wasResolved = true;
+        }
+
+        function rejected() {
+          wasRejected = true;
+        }
+      });
+    });
+
+    describe('running the second request BEFORE the first one was finished', function () {
+
+      it('should resolve both promises', function(done) {
+        var wasResolved1 = false,
+          wasRejected1 = false,
+          wasResolved2 = false,
+          wasRejected2 = false,
+          promise1 = $translate.use('de_DE'),
+          promise2 = $translate.use('de_DE');
+
+        promise1.then(function() {
+          wasResolved1 = true;
+        }, function() {
+          wasRejected1 = true;
+        });
+
+        promise2.then(function() {
+          wasResolved2 = true;
+        }, function() {
+          wasRejected2 = true;
+        });
+
+        $timeout(function() {
+
+          expect(wasResolved1).toEqual(false);
+          expect(wasRejected1).toEqual(false);
+          expect(wasResolved2).toEqual(false);
+          expect(wasRejected2).toEqual(false);
+
+          $httpBackend.flush();
+
+          expect(wasResolved1).toEqual(true);
+          expect(wasRejected1).toEqual(false);
+          expect(wasResolved2).toEqual(true);
+          expect(wasRejected2).toEqual(false);
+
+          done();
+        }, 1000);
+
+        $timeout.flush();
+      });
+
+      it('should reject both promises', function(done) {
+        var wasResolved1 = false,
+          wasRejected1 = false,
+          wasResolved2 = false,
+          wasRejected2 = false,
+          promise1 = $translate.use('nt_VD'),
+          promise2 = $translate.use('nt_VD');
+
+        promise1.then(function() {
+          wasResolved1 = true;
+        }, function() {
+          wasRejected1 = true;
+        });
+
+        promise2.then(function() {
+          wasResolved2 = true;
+        }, function() {
+          wasRejected2 = true;
+        });
+
+        $timeout(function() {
+
+          expect(wasResolved1).toEqual(false);
+          expect(wasRejected1).toEqual(false);
+          expect(wasResolved2).toEqual(false);
+          expect(wasRejected2).toEqual(false);
+
+          $httpBackend.flush();
+
+          expect(wasResolved1).toEqual(false);
+          expect(wasRejected1).toEqual(true);
+          expect(wasResolved2).toEqual(false);
+          expect(wasRejected2).toEqual(true);
+
+          done();
+        }, 1000);
+
+        $timeout.flush();
+      });
+    });
+  });
+
   describe('$translate#storageKey()', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
