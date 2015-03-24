@@ -39,7 +39,9 @@ describe('pascalprecht.translate', function () {
     it('should return with translation id if translation doesn\'t exist', function () {
       expect($translate('WOOP')).toEqual('WOOP');
     });
-
+    it('should return with translation id if translation doesn\'t exist', function () {
+         expect($translate(null)).toEqual(null);
+    });
     it('should return translation if translation id exist', function () {
       expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
     });
