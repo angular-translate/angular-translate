@@ -142,6 +142,13 @@ describe('pascalprecht.translate', function () {
         expect(element.text()).toBe('TEXT');
       });
 
+      it('should return empty translation if translationId scope Variable does not exist and if its passed as interpolation', function () {
+        element = $compile('<div translate>{{translationIdNotExisting}}</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+
+
       it('should return translation prepended by additional content when passed as interpolation', function () {
         $rootScope.translationId = 'TRANSLATION_ID';
         element = $compile('<div translate>abc{{translationId}}')($rootScope);
