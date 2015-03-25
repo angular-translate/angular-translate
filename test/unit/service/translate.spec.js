@@ -69,6 +69,10 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant).toBeDefined();
     });
 
+    it('should have a method getTranslationTable()', function () {
+      expect($translate.getTranslationTable).toBeDefined();
+    });
+
     describe('$translate#preferredLanguage()', function () {
 
       it('should be a function', function () {
