@@ -1785,6 +1785,22 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
         return loaderCache;
       };
 
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#getTranslationTable
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns a promise that resolves to the translation table
+       * or is rejected if an error occurred.
+       *
+       * @param langKey
+       * @returns {Q.promise}
+       */
+      $translate.getTranslationTable = function(langKey) {
+        return getTranslationTable(langKey);
+      };
+
       // internal purpose only
       $translate.directivePriority = function () {
         return directivePriority;
