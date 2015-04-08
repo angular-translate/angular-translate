@@ -33,11 +33,16 @@ angular.module('pascalprecht.translate')
    * Returns a parsed url template string and replaces given target lang
    * and part name it.
    *
-   * @param {string} urlTemplate Url pattern to use.
-   * @param {string} targetLang Language key for language to be used.
+   * @param {string|function} urlTemplate - Either a string containing an url pattern (with
+   *                                        '{part}' and '{lang}') or a function(part, lang)
+   *                                        returning a string.
+   * @param {string} targetLang - Language key for language to be used.
    * @return {string} Parsed url template string
    */
   Part.prototype.parseUrl = function(urlTemplate, targetLang) {
+    if (angular.isFunction(urlTemplate)) {
+      return urlTemplate(this.name, targetLang);
+    }
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
@@ -272,8 +277,8 @@ angular.module('pascalprecht.translate')
         throw new TypeError('Unable to load data, a key is not a non-empty string.');
       }
 
-      if (!isStringValid(options.urlTemplate)) {
-        throw new TypeError('Unable to load data, a urlTemplate is not a non-empty string.');
+      if (!isStringValid(options.urlTemplate) && !angular.isFunction(options.urlTemplate)) {
+        throw new TypeError('Unable to load data, a urlTemplate is not a non-empty string or not a function.');
       }
 
       var errorHandler = options.loadFailureHandler;
