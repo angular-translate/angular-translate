@@ -1454,8 +1454,8 @@ describe('pascalprecht.translate', function () {
         .useMissingTranslationHandler('customHandler');
 
       $provide.factory('customHandler', function () {
-        return function (translationId, language) {
-          missingTranslations[translationId] = { lang: language };
+        return function (translationId, language, params) {
+          missingTranslations[translationId] = { lang: language, params: params };
         };
       });
 
@@ -1473,10 +1473,23 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should invoke missingTranslationHandler if set and translation id doesn\'t exist', function () {
-      $translate('NOT_EXISTING_TRANSLATION_ID');
+      $translate('NOT_EXISTING_TRANSLATION_ID', {});
       expect(missingTranslations).toEqual({
         'NOT_EXISTING_TRANSLATION_ID': {
-          lang: 'en'
+          lang: 'en',
+          params: {}
+        }
+      });
+    });
+
+    it('should pass on interpolationParams to missingTranslationHandler', function () {
+      $translate('NOT_EXISTING_TRANSLATION_ID', {name: 'name'});
+      expect(missingTranslations).toEqual({
+        'NOT_EXISTING_TRANSLATION_ID': {
+          lang: 'en',
+          params: {
+            name: 'name'
+          }
         }
       });
     });
