@@ -175,4 +175,87 @@ describe('pascalprecht.translate', function () {
       expect($translate('FOO2')).toEqual('-+-+ FOO2 -+-+');
     }));
   });
+
+  describe('filter should be stateful', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': 'Hello'
+        })
+        .translations('de', {
+          'HELLO': 'Hallo'
+        })
+        .preferredLanguage('en');
+    }));
+
+    var $translate, $rootScope, $compile, $timeout;
+    beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_, _$timeout_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+      $translate = _$translate_;
+      $timeout = _$timeout_;
+    }));
+
+    it('filter should be re-evaluated on language change', function (done) {
+      var element = $compile(angular.element('<div>{{"HELLO" | translate}}</div>'))($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toEqual('Hello');
+      $translate.use('de');
+      setTimeout(function () {
+        $rootScope.$digest();
+        expect(element.html()).toEqual('Hallo');
+        done();
+      }, 100);
+    });
+  });
+
+  describe('filter can be optionally stateless', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': 'Hello'
+        })
+        .translations('de', {
+          'HELLO': 'Hallo'
+        })
+        .preferredLanguage('en')
+        .statefulFilter(false);
+    }));
+
+    var $translate, $rootScope, $compile, $timeout;
+    beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_, _$timeout_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+      $translate = _$translate_;
+      $timeout = _$timeout_;
+    }));
+
+    if (angular.version.major === 1 && angular.version.minor >= 3) {
+      it('filter should be not re-evaluated on language change', function (done) {
+        var element = $compile(angular.element('<div>{{"HELLO" | translate}}</div>'))($rootScope);
+        $rootScope.$digest();
+        expect(element.html()).toEqual('Hello');
+        $translate.use('de');
+        setTimeout(function () {
+          $rootScope.$digest();
+          expect(element.html()).toEqual('Hello'); // regardless the language change (scope)
+          done();
+        }, 100);
+      });
+    } else {
+      it('filter should be re-evaluated on language change', function (done) {
+        var element = $compile(angular.element('<div>{{"HELLO" | translate}}</div>'))($rootScope);
+        $rootScope.$digest();
+        expect(element.html()).toEqual('Hello');
+        $translate.use('de');
+        setTimeout(function () {
+          $rootScope.$digest();
+          expect(element.html()).toEqual('Hallo');
+          done();
+        }, 100);
+      });
+    }
+  });
 });

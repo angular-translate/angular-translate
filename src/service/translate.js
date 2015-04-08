@@ -32,7 +32,8 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       $postCompilingEnabled = false,
       NESTED_OBJECT_DELIMITER = '.',
       loaderCache,
-      directivePriority = 0;
+      directivePriority = 0,
+      statefulFilter = true;
 
   var version = 'x.y.z';
 
@@ -780,6 +781,31 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
     } else {
       // setter with chaining
       directivePriority = priority;
+      return this;
+    }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#statefulFilter
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Since AngularJS 1.3, filters which are not stateless (depending at the scope)
+   * have to explicit define this behavior.
+   * Sets whether the translate filter should be stateful or stateless. The standard value is `true`
+   * meaning being stateful.
+   * Calling this function without an argument will return the current value.
+   *
+   * @param {boolean} state - defines the state of the filter
+   */
+  this.statefulFilter = function (state) {
+    if (state === undefined) {
+      // getter
+      return statefulFilter;
+    } else {
+      // setter with chaining
+      statefulFilter = state;
       return this;
     }
   };
@@ -1802,6 +1828,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
       // internal purpose only
       $translate.directivePriority = function () {
         return directivePriority;
+      };
+
+      // internal purpose only
+      $translate.statefulFilter = function () {
+        return statefulFilter;
       };
 
       if ($loaderFactory) {
