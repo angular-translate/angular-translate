@@ -1179,11 +1179,11 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
        * @returns translation created by $missingTranslationHandler or translationId is $missingTranslationHandler is
        * absent
        */
-      var translateByHandler = function (translationId) {
+      var translateByHandler = function (translationId, interpolateParams) {
         // If we have a handler factory - we might also call it here to determine if it provides
         // a default text for a translationid that can't be found anywhere in our tables
         if ($missingTranslationHandlerFactory) {
-          var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+          var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses, interpolateParams);
           if (resultString !== undefined) {
             return resultString;
           } else {
@@ -1228,7 +1228,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           } else {
             // if no default translation is set and an error handler is defined, send it to the handler
             // and then return the result
-            deferred.resolve(translateByHandler(translationId));
+            deferred.resolve(translateByHandler(translationId, interpolateParams));
           }
         }
         return deferred.promise;
@@ -1309,7 +1309,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           var missingTranslationHandlerTranslation;
           // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            missingTranslationHandlerTranslation = translateByHandler(translationId);
+            missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams);
           }
 
           // since we couldn't translate the inital requested translation id,
@@ -1366,7 +1366,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           var missingTranslationHandlerTranslation;
           // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            missingTranslationHandlerTranslation = translateByHandler(translationId);
+            missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams);
           }
 
           // since we couldn't translate the inital requested translation id,
@@ -1790,7 +1790,7 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // Return translation of default interpolator if not found anything.
           result = defaultInterpolator.interpolate(translationId, interpolateParams);
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            result = translateByHandler(translationId);
+            result = translateByHandler(translationId, interpolateParams);
           }
         }
 
