@@ -38,6 +38,9 @@ angular.module('pascalprecht.translate')
    * @return {string} Parsed url template string
    */
   Part.prototype.parseUrl = function(urlTemplate, targetLang) {
+    if(angular.isFunction(urlTemplate)) {
+      return urlTemplate(this.name, targetLang);
+    }
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
@@ -272,8 +275,8 @@ angular.module('pascalprecht.translate')
         throw new TypeError('Unable to load data, a key is not a non-empty string.');
       }
 
-      if (!isStringValid(options.urlTemplate)) {
-        throw new TypeError('Unable to load data, a urlTemplate is not a non-empty string.');
+      if (!isStringValid(options.urlTemplate) && !angular.isFunction(options.urlTemplate)) {
+        throw new TypeError('Unable to load data, a urlTemplate is not a non-empty string or not a function.');
       }
 
       var errorHandler = options.loadFailureHandler;
