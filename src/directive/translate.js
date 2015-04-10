@@ -85,7 +85,8 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope', function ($translate, $q, $interpolate, $compile, $parse, $rootScope) {
+.directive('translate', translateDirective);
+function translateDirective($translate, $q, $interpolate, $compile, $parse, $rootScope) {
 
   /**
    * @name trim
@@ -218,7 +219,8 @@ angular.module('pascalprecht.translate')
         // Master update function
         var updateTranslations = function () {
           for (var key in translationIds) {
-            if (translationIds.hasOwnProperty(key)) {
+
+            if (translationIds.hasOwnProperty(key) && translationIds[key] !== undefined) {
               updateTranslation(key, translationIds[key], scope, scope.interpolateParams, scope.defaultText);
             }
           }
@@ -277,4 +279,7 @@ angular.module('pascalprecht.translate')
       };
     }
   };
-}]);
+}
+
+translateDirective.$inject = ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope'];
+translateDirective.displayName = 'translateDirective';

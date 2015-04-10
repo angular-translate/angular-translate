@@ -12,14 +12,16 @@ angular.module('pascalprecht.translate')
  *
  * @param {object} options Options object, which gets prefix, suffix and key.
  */
-.factory('$translateStaticFilesLoader', ['$q', '$http', function ($q, $http) {
+.factory('$translateStaticFilesLoader', $translateStaticFilesLoader);
+
+function $translateStaticFilesLoader($q, $http) {
 
   return function (options) {
 
     if (!options || (!angular.isArray(options.files) && (!angular.isString(options.prefix) || !angular.isString(options.suffix)))) {
       throw new Error('Couldn\'t load static files, no files and prefix or suffix specified!');
     }
-    
+
     if (!options.files) {
       options.files = [{
         prefix: options.prefix,
@@ -80,4 +82,7 @@ angular.module('pascalprecht.translate')
 
     return deferred.promise;
   };
-}]);
+}
+
+$translateStaticFilesLoader.$inject = ['$q', '$http'];
+$translateStaticFilesLoader.displayName = '$translateStaticFilesLoader';

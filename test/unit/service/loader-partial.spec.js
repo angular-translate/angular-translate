@@ -418,6 +418,26 @@ describe('pascalprecht.translate', function() {
       });
     });
 
+    it('should support function in url template', function() {
+      inject(function($translatePartialLoader, $httpBackend) {
+        var getUrlTemplate = jasmine.createSpy('getUrlTemplate')
+          .and.returnValue('/locales/data.json');
+
+        $httpBackend.expectGET('/locales/data.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : getUrlTemplate
+        });
+
+        $httpBackend.flush();
+        expect(getUrlTemplate).toHaveBeenCalledWith('part', 'en');
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+    });
+
     it('should parse url template with multiple pattern occurrences', function () {
       inject(function($translatePartialLoader, $httpBackend) {
         $httpBackend.expectGET('/locales/part/part-en.json').respond(200, '{}');

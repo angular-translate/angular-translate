@@ -10,6 +10,12 @@
  *
  * @return {object} $cacheFactory object.
  */
-angular.module('pascalprecht.translate').factory('$translationCache', ['$cacheFactory', function ($cacheFactory) {
-    return $cacheFactory('translations');
-}]);
+angular.module('pascalprecht.translate')
+.factory('$translationCache',$translationCache);
+
+function $translationCache($cacheFactory) {
+  return $cacheFactory('translations');
+}
+
+$translationCache.$inject = ['$cacheFactory'];
+$translationCache.displayName = '$translationCache'

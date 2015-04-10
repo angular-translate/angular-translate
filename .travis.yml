@@ -20,3 +20,4 @@ env:
   - TEST_SCOPE=
   - TEST_SCOPE=angular_1.2.x
   - TEST_SCOPE=angular_1.3.x
+  - TEST_SCOPE=angular_1.4.x

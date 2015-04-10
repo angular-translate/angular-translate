@@ -10,7 +10,9 @@ angular.module('pascalprecht.translate')
  * to use cookieStore as storage.
  *
  */
-.factory('$translateCookieStorage', ['$cookieStore', function ($cookieStore) {
+  .factory('$translateCookieStorage', $translateCookieStorageFactory);
+
+function $translateCookieStorageFactory($cookieStore) {
 
   var $translateCookieStorage = {
 
@@ -63,4 +65,7 @@ angular.module('pascalprecht.translate')
   };
 
   return $translateCookieStorage;
-}]);
+}
+
+$translateCookieStorageFactory.$inject = ['$cookieStore'];
+$translateCookieStorageFactory.displayName = '$translateCookieStorage';
