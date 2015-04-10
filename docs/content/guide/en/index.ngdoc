@@ -56,7 +56,7 @@ app.config(['$translateProvider', function ($translateProvider) {
 
   $translateProvider.translations('de', {
     'TITLE': 'Hallo',
-    'FOO': 'Dies ist ein Paragraph'
+    'FOO': 'Dies ist ein Absatz'
   });
 
   $translateProvider.preferredLanguage('en');
