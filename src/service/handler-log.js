@@ -11,9 +11,12 @@ angular.module('pascalprecht.translate')
  *
  * @returns {function} Handler function
  */
-.factory('$translateMissingTranslationHandlerLog', ['$log', function ($log) {
+.factory('$translateMissingTranslationHandlerLog', $translateMissingTranslationHandlerLog);
 
+function $translateMissingTranslationHandlerLog ($log) {
   return function (translationId) {
     $log.warn('Translation for ' + translationId + ' doesn\'t exist');
   };
-}]);
+}
+
+$translateMissingTranslationHandlerLog.displayName = '$translateMissingTranslationHandlerLog';

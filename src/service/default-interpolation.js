@@ -8,7 +8,9 @@
  *
  * @return {object} $translateInterpolator Interpolator service
  */
-angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation', ['$interpolate', function ($interpolate) {
+angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation', $translateDefaultInterpolation);
+
+function $translateDefaultInterpolation ($interpolate) {
 
   var $translateInterpolator = {},
       $locale,
@@ -93,4 +95,6 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
   };
 
   return $translateInterpolator;
-}]);
+}
+
+$translateDefaultInterpolation.displayName = '$translateDefaultInterpolation';

@@ -9,7 +9,9 @@ angular.module('pascalprecht.translate')
  * lifetime. All parts you add by using this provider would be loaded by
  * angular-translate at the startup as soon as possible.
  */
-.provider('$translatePartialLoader', function() {
+  .provider('$translatePartialLoader', $translatePartialLoader);
+
+function $translatePartialLoader() {
 
   /**
    * @constructor
@@ -171,7 +173,7 @@ angular.module('pascalprecht.translate')
    * of the wrong type. Please, note that the `lang` and `part` params have to be a
    * non-empty **string**s and the `table` param has to be an object.
    */
-  this.setPart = function(lang, part, table) {
+  this.setPart = function (lang, part, table) {
     if (!isStringValid(lang)) {
       throw new TypeError('Couldn\'t set part.`lang` parameter has to be a string!');
     }
@@ -207,7 +209,7 @@ angular.module('pascalprecht.translate')
    * @throws {TypeError} The method could throw a **TypeError** if you pass the param of the wrong
    * type. Please, note that the `name` param has to be a non-empty **string**.
    */
-  this.deletePart = function(name) {
+  this.deletePart = function (name) {
     if (!isStringValid(name)) {
       throw new TypeError('Couldn\'t delete part, first arg has to be string.');
     }
@@ -488,4 +490,6 @@ angular.module('pascalprecht.translate')
 
   }];
 
-});
+}
+
+$translatePartialLoader.displayName = '$translatePartialLoader';
