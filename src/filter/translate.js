@@ -50,7 +50,9 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.filter('translate', ['$parse', '$translate', function ($parse, $translate) {
+.filter('translate', translateFilterFactory);
+
+function translateFilterFactory($parse, $translate) {
   var translateFilter = function (translationId, interpolateParams, interpolation) {
 
     if (!angular.isObject(interpolateParams)) {
@@ -65,4 +67,7 @@ angular.module('pascalprecht.translate')
   }
 
   return translateFilter;
-}]);
+}
+
+translateFilterFactory.$inject = ['$parse', '$translate'];
+translateFilterFactory.displayName = 'translateFilterFactory';

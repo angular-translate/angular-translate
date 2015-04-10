@@ -20,7 +20,9 @@ angular.module('pascalprecht.translate')
  *                                  or hiding the cloak. Basically it relies on the translation
  *                                  resolve.
  */
-.directive('translateCloak', ['$rootScope', '$translate', function ($rootScope, $translate) {
+.directive('translateCloak', translateCloakDirective);
+
+function translateCloakDirective($rootScope, $translate) {
 
   return {
     compile: function (tElement) {
@@ -47,4 +49,7 @@ angular.module('pascalprecht.translate')
       };
     }
   };
-}]);
+}
+
+translateCloakDirective.$inject = ['$rootScope', '$translate'];
+translateCloakDirective.displayName = 'translateCloakDirective';

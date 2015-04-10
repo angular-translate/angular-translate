@@ -12,7 +12,9 @@ angular.module('pascalprecht.translate')
  *
  * @return {object} $translateInterpolator Interpolator service
  */
-.factory('$translateMessageFormatInterpolation', function ($cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
+.factory('$translateMessageFormatInterpolation', $translateMessageFormatInterpolation);
+
+function $translateMessageFormatInterpolation($cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
 
   var $translateInterpolator = {},
       $cache = $cacheFactory.get(TRANSLATE_MF_INTERPOLATION_CACHE),
@@ -116,4 +118,4 @@ angular.module('pascalprecht.translate')
   };
 
   return $translateInterpolator;
-});
+}
