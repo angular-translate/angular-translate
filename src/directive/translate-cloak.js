@@ -51,5 +51,4 @@ function translateCloakDirective($rootScope, $translate) {
   };
 }
 
-translateCloakDirective.$inject = ['$rootScope', '$translate'];
 translateCloakDirective.displayName = 'translateCloakDirective';

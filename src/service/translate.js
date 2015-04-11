@@ -1929,5 +1929,4 @@ function $translate($STORAGE_KEY, $windowProvider) {
   ];
 }
 
-$translate.$inject = ['$STORAGE_KEY', '$windowProvider'];
 $translate.displayName = 'displayName';

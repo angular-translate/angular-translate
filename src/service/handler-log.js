@@ -23,5 +23,4 @@ function $translateMissingTranslationHandlerLog ($log) {
   return handler;
 }
 
-$translateMissingTranslationHandlerLog.$inject = ['$log'];
 $translateMissingTranslationHandlerLog.displayName = '$translateMissingTranslationHandlerLog';

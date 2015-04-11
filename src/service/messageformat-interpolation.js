@@ -119,3 +119,5 @@ function $translateMessageFormatInterpolation($cacheFactory, TRANSLATE_MF_INTERP
 
   return $translateInterpolator;
 }
+
+$translateMessageFormatInterpolation.displayName = '$translateMessageFormatInterpolation';

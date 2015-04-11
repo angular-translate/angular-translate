@@ -525,3 +525,5 @@ function $translatePartialLoader() {
   }];
 
 }
+
+$translatePartialLoader.displayName = '$translatePartialLoader';

@@ -281,5 +281,4 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
   };
 }
 
-translateDirective.$inject = ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope'];
 translateDirective.displayName = 'translateDirective';

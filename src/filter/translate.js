@@ -69,5 +69,4 @@ function translateFilterFactory($parse, $translate) {
   return translateFilter;
 }
 
-translateFilterFactory.$inject = ['$parse', '$translate'];
 translateFilterFactory.displayName = 'translateFilterFactory';

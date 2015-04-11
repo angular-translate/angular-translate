@@ -37,5 +37,4 @@ function runTranslate($translate) {
   }
 }
 
-runTranslate.$inject = ['$translate'];
 runTranslate.displayName = 'runTranslate';

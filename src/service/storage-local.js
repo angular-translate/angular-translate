@@ -93,5 +93,4 @@ function $translateLocalStorageFactory($window, $translateCookieStorage) {
   return $translateLocalStorage;
 }
 
-$translateLocalStorageFactory.$inject = ['$window', '$translateCookieStorage'];
 $translateLocalStorageFactory.displayName = '$translateLocalStorageFactory';

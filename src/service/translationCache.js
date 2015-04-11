@@ -17,5 +17,4 @@ function $translationCache($cacheFactory) {
   return $cacheFactory('translations');
 }
 
-$translationCache.$inject = ['$cacheFactory'];
-$translationCache.displayName = '$translationCache'
+$translationCache.displayName = '$translationCache';

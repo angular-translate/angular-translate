@@ -97,5 +97,4 @@ function $translateDefaultInterpolation ($interpolate) {
   return $translateInterpolator;
 }
 
-$translateDefaultInterpolation.$inject = ['$interpolate'];
 $translateDefaultInterpolation.displayName = '$translateDefaultInterpolation';

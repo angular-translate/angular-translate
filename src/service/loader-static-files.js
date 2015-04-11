@@ -84,5 +84,4 @@ function $translateStaticFilesLoader($q, $http) {
   };
 }
 
-$translateStaticFilesLoader.$inject = ['$q', '$http'];
 $translateStaticFilesLoader.displayName = '$translateStaticFilesLoader';

@@ -67,5 +67,4 @@ function $translateCookieStorageFactory($cookieStore) {
   return $translateCookieStorage;
 }
 
-$translateCookieStorageFactory.$inject = ['$cookieStore'];
 $translateCookieStorageFactory.displayName = '$translateCookieStorage';

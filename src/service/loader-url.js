@@ -45,5 +45,4 @@ function $translateUrlLoader($q, $http) {
   };
 }
 
-$translateUrlLoader.$inject = ['$q', '$http'];
 $translateUrlLoader.displayName = '$translateUrlLoader';
