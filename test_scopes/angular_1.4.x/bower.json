@@ -11,13 +11,13 @@
   },
   "devDependencies": {
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
-    "angular": "1.4.0-beta.5",
+    "angular": "1.4.0-rc.0",
     "angular-translate-interpolation-messageformat": "2.4.1",
-    "angular-mocks": "1.4.0-beta.5",
-    "angular-cookies": "1.4.0-beta.5"
+    "angular-mocks": "1.4.0-rc.0",
+    "angular-cookies": "1.4.0-rc.0"
   },
   "resolutions": {
-    "angular": "1.4.0-beta.5"
+    "angular": "1.4.0-rc.0"
   },
   "licenses": [{
     "type": "MIT",
