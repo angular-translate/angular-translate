@@ -273,7 +273,12 @@ angular.module('pascalprecht.translate')
             if (!successful && typeof scope.defaultText !== 'undefined') {
               value = scope.defaultText;
             }
-            var attributeName = iAttr.$attr[translateAttr].substr(15);
+            var attributeName = iAttr.$attr[translateAttr];
+            if (attributeName.substr(0, 5) === 'data-') {
+              // ensure html5 data prefix is stripped
+              attributeName = attributeName.substr(5);
+            }
+            attributeName = attributeName.substr(15);
             iElement.attr(attributeName, value);
           }
         };

@@ -663,6 +663,12 @@ describe('pascalprecht.translate', function () {
       expect(element.attr('title')).toBe('foo');
     });
 
+    it('should make simple attribute translation (data prefixed)', function () {
+      element = $compile('<div translate data-translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('foo');
+    });
+
     it('should translate multiple attributes', function () {
       element = $compile('<div translate translate-attr-name="ANOTHER_ONE" translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
       $rootScope.$digest();
