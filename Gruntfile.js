@@ -10,22 +10,22 @@ module.exports = function (grunt) {
       return filename[0] !== '.';
     });
     var config = {
-      options : {
-        color : false,
-        interactive : false
+      options: {
+        color: false,
+        interactive: false
       }
     };
     // Create a sub config for each test scope
     for (var idx in scopes) {
       var scope = scopes[idx];
       config['test_scopes_' + scope] = {
-        options : {
-          cwd : 'test_scopes/' + scope,
-          production : false
+        options: {
+          cwd: 'test_scopes/' + scope,
+          production: false
         }
       };
     }
-    return  config;
+    return config;
   };
 
   grunt.initConfig({
