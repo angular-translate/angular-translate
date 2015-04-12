@@ -18,6 +18,10 @@
   <h1 translate="load.static.HEADER"></h1>
   <h2 translate="load.static.SUBHEADER"></h2>
 
+  <ul ng-init="items=[0, 1, 2]">
+  <li ng-repeat="item in items">{{'load.static.ARRAY.' + item | translate}}</li>
+  </ul>
+
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="../src/translate.js"></script>

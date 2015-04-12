@@ -6,7 +6,12 @@
     "SUBHEADER" : "Так Вы можете загрузить только те языки, которые будут использоваться.",
     "TEXT" : "This is only some text to fill the space (RU).",
     "ONLY_RU": "Blafasel",
-    "EN_RU": "EN and RU - IN RU"
+    "EN_RU": "EN and RU - IN RU",
+    "ARRAY": [
+      "пункт 1",
+      "пункт 2",
+      "пункт 3"
+    ]
   },
   "predefined" : {
     "TITLE" : "Как использовать отложенную загрузку без автозагрузки?",
