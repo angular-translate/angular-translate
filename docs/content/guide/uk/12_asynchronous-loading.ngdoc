@@ -264,10 +264,10 @@ UI Router.
 У будь-який завантажувач можна передати налаштування. для цього використовується такий синтаксис:
 
 <pre>
-$translationProvider.useLoader('customLoader', {
+$translateProvider.useLoader('customLoader', {
   settingA: 'foobar'
 });
-$translationProvider.useStaticFilesLoader({
+$translateProvider.useStaticFilesLoader({
   $http: {
     method: 'POST'
   }
@@ -286,19 +286,19 @@ $translationProvider.useStaticFilesLoader({
 Для увімкнення стандартного кешування використовується наступний метод:
 
 <pre>
-$translationProvider.useLoaderCache(true); // default is false which means disable
+$translateProvider.useLoaderCache(true); // default is false which means disable
 </pre>
 
 Якщо ж у Вас вже є єкземпляр кеша (спеціально налаштований), то прив'яжіть його так:
 
 <pre>
-$translationProvider.useLoaderCache(yourSpecialCacheService);
+$translateProvider.useLoaderCache(yourSpecialCacheService);
 </pre>
 
 Angular-Translate також підтримує ліниве зв'язування. Тому, такий варіант також буде працювати:
 
 <pre>
-$translationProvider.useLoaderCache('yourSpecialCacheService');
+$translateProvider.useLoaderCache('yourSpecialCacheService');
 </pre>
 
 Екземпляр під назвою `yourspecialCacheService` буде знайдено при необхідності.

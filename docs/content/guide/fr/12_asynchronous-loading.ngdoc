@@ -288,10 +288,10 @@ valable pour le constructeur `useLoader(name, options)` ainsi que pour les const
 tels que `useStaticFilesLoader(options)` :
 
 <pre>
-$translationProvider.useLoader('customLoader', {
+$translateProvider.useLoader('customLoader', {
   settingA: 'foobar'
 });
-$translationProvider.useStaticFilesLoader({
+$translateProvider.useStaticFilesLoader({
   $http: {
     method: 'POST'
   }
@@ -312,19 +312,19 @@ instance de cache. Vous pouvez voir plus de détails à ce sujet dans les
 Pour activer un cache standard, vous pouvez utiliser la technique suivante :
 
 <pre>
-$translationProvider.useLoaderCache(true); // Par défaut c'est à false, ce qui signifie que c'est désactivé
+$translateProvider.useLoaderCache(true); // Par défaut c'est à false, ce qui signifie que c'est désactivé
 </pre>
 
 Si vous avez déjà un exemple (de configuration avancée), vous pouvez la lier comme ceci :
 
 <pre>
-$translationProvider.useLoaderCache(yourSpecialCacheService);
+$translateProvider.useLoaderCache(yourSpecialCacheService);
 </pre>
 
 Angular-Translate supporte aussi le Lazy-Binding, de sorte que ceci fonctionne aussi :
 
 <pre>
-$translationProvider.useLoaderCache('yourSpecialCacheService');
+$translateProvider.useLoaderCache('yourSpecialCacheService');
 </pre>
 
 L'instance nommée avec l'ID `yourspecialCacheService` est chargé à la demande à partir du contexte.

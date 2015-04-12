@@ -265,10 +265,10 @@ app.run(function ($rootScope, $translate) {
 В каждый загрузчик могут быть переданы настройки. Для этого используется такой синтаксис:
 
 <pre>
-$translationProvider.useLoader('customLoader', {
+$translateProvider.useLoader('customLoader', {
   settingA: 'foobar'
 });
-$translationProvider.useStaticFilesLoader({
+$translateProvider.useStaticFilesLoader({
   $http: {
     method: 'POST'
   }
@@ -287,19 +287,19 @@ $translationProvider.useStaticFilesLoader({
 Для включения стандартного кэширования используйте следующий метод:
 
 <pre>
-$translationProvider.useLoaderCache(true); // default is false which means disable
+$translateProvider.useLoaderCache(true); // default is false which means disable
 </pre>
 
 Если же у Вас уже есть экземпляр кэша (специально настроенный), то привяжите его так:
 
 <pre>
-$translationProvider.useLoaderCache(yourSpecialCacheService);
+$translateProvider.useLoaderCache(yourSpecialCacheService);
 </pre>
 
 Angular-Translate также поддерживает ленивое связывание. Поэтому, такой вариант тоже будет работать:
 
 <pre>
-$translationProvider.useLoaderCache('yourSpecialCacheService');
+$translateProvider.useLoaderCache('yourSpecialCacheService');
 </pre>
 
 Экземпляр под названием `yourspecialCacheService` будет найден при необходимости.

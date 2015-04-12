@@ -287,10 +287,10 @@ Each loader can be applied a dedicated configuration `options`, both for the com
 `useLoader()` and `useStaticFilesLoader(options)`:
 
 <pre>
-$translationProvider.useLoader('customLoader', {
+$translateProvider.useLoader('customLoader', {
   settingA: 'foobar'
 });
-$translationProvider.useStaticFilesLoader({
+$translateProvider.useStaticFilesLoader({
   $http: {
     method: 'POST'
   }
@@ -309,19 +309,19 @@ cache instance. See more details about this at the
 In order to enable a standard cache, you can use following shortcut:
 
 <pre>
-$translationProvider.useLoaderCache(true); // default is false which means disable
+$translateProvider.useLoaderCache(true); // default is false which means disable
 </pre>
 
 If you have already an instance (i.e. advanced configuration), you can bind this:
 
 <pre>
-$translationProvider.useLoaderCache(yourSpecialCacheService);
+$translateProvider.useLoaderCache(yourSpecialCacheService);
 </pre>
 
 Angular-Translate also supports lazy binding for instances, so this will work, too:
 
 <pre>
-$translationProvider.useLoaderCache('yourSpecialCacheService');
+$translateProvider.useLoaderCache('yourSpecialCacheService');
 </pre>
 
 The instance named with ID `yourspecialCacheService` will be looked up on demand.

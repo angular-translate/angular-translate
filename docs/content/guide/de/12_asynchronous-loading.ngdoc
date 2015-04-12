@@ -272,10 +272,10 @@ gilt sowohl für den allgemeinen Konstructor `useLoader(name, options)` als auch
 die Shortcut-Konstruktoren wie `useStaticFilesLoader(options)`:
 
 <pre>
-$translationProvider.useLoader('customLoader', {
+$translateProvider.useLoader('customLoader', {
   settingA: 'foobar'
 });
-$translationProvider.useStaticFilesLoader({
+$translateProvider.useStaticFilesLoader({
   $http: {
     method: 'POST'
   }
@@ -294,19 +294,19 @@ Bei der Verwendung der Standard Loader kann man das Caching steuern. Weitere Inf
 Den Cache kann man sehr leicht mit folgender Konfiguration aktivieren:
 
 <pre>
-$translationProvider.useLoaderCache(true); // default ist false, also deaktiviert
+$translateProvider.useLoaderCache(true); // default ist false, also deaktiviert
 </pre>
 
 Falls Du bereits eine eigene Instanz konfiguriert hast, kannst Du diese auch direkt übergeben:
 
 <pre>
-$translationProvider.useLoaderCache(yourSpecialCacheService);
+$translateProvider.useLoaderCache(yourSpecialCacheService);
 </pre>
 
 Angular-Translate unterstützt auch das Lazy-Binding, so dass auch folgendes funktioniert:
 
 <pre>
-$translationProvider.useLoaderCache('yourSpecialCacheService');
+$translateProvider.useLoaderCache('yourSpecialCacheService');
 </pre>
 
 Die Instanz mit der ID `yourSpecialCacheService` wird erst bei Bedarf aus dem Kontext geladen.
