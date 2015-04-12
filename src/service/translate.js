@@ -879,15 +879,12 @@ function $translate($STORAGE_KEY, $windowProvider) {
             for (var i = 0, c = translationIds.length; i < c; i++) {
               promises.push(translate(translationIds[i]));
             }
-            // wait for all (including storing to results)
 
-            var waitForResults = function () {
+            // wait for all (including storing to results)
+            return $q.all(promises).then(function () {
               // return the results
               return results;
-            };
-            waitForResults.displayName = 'waitForResults';
-
-            return $q.all(promises).then(waitForResults);
+            });
           };
           return translateAll(translationId);
         }
@@ -1608,7 +1605,7 @@ function $translate($STORAGE_KEY, $windowProvider) {
             useLanguage(translation.key);
             return translation;
           };
-          languageLoadSuccess.dipslayName = 'languageLoadSuccess';
+          languageLoadSuccess.displayName = 'languageLoadSuccess';
 
           var languageLoadError = function (key) {
             $rootScope.$emit('$translateChangeError', {language: key});
@@ -1929,4 +1926,4 @@ function $translate($STORAGE_KEY, $windowProvider) {
   ];
 }
 
-$translate.displayName = 'displayName';
+$translate.displayName = '$translate';
