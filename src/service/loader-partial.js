@@ -9,7 +9,9 @@ angular.module('pascalprecht.translate')
  * lifetime. All parts you add by using this provider would be loaded by
  * angular-translate at the startup as soon as possible.
  */
-.provider('$translatePartialLoader', function() {
+  .provider('$translatePartialLoader', $translatePartialLoader);
+
+function $translatePartialLoader() {
 
   /**
    * @constructor
@@ -39,37 +41,51 @@ angular.module('pascalprecht.translate')
    * @param {string} targetLang - Language key for language to be used.
    * @return {string} Parsed url template string
    */
-  Part.prototype.parseUrl = function(urlTemplate, targetLang) {
+  Part.prototype.parseUrl = function (urlTemplate, targetLang) {
     if (angular.isFunction(urlTemplate)) {
       return urlTemplate(this.name, targetLang);
     }
     return urlTemplate.replace(/\{part\}/g, this.name).replace(/\{lang\}/g, targetLang);
   };
 
-  Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
+  Part.prototype.getTable = function (lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
     var deferred = $q.defer();
 
     if (!this.tables[lang]) {
       var self = this;
 
-      $http(angular.extend({
-        method : 'GET',
-        url: this.parseUrl(urlTemplate, lang)
-      }, $httpOptions)).success(function(data){
-        self.tables[lang] = data;
-        deferred.resolve(data);
-      }).error(function() {
-        if (errorHandler) {
-          errorHandler(self.name, lang).then(function(data) {
-            self.tables[lang] = data;
-            deferred.resolve(data);
-          }, function() {
-            deferred.reject(self.name);
-          });
-        } else {
+    var onTableFetchSuccess = function (data) {
+      self.tables[lang] = data;
+      deferred.resolve(data);
+    };
+    onTableFetchSuccess.displayName = 'onTableFetchSuccess';
+
+    var onTableFetchError = function () {
+      if (errorHandler) {
+        var onErrorHandlerSuccess = function (data) {
+          self.tables[lang] = data;
+          deferred.resolve(data);
+        };
+        onErrorHandlerSuccess.displayName = 'onErrorHandlerSuccess';
+
+        var onErrorHandlerFailure = function () {
           deferred.reject(self.name);
-        }
-      });
+        };
+        onErrorHandlerFailure.displayName = 'onErrorHandlerFailure';
+
+        errorHandler(self.name, lang).then(onErrorHandlerSuccess, onErrorHandlerFailure);
+      } else {
+        deferred.reject(self.name);
+      }
+    };
+    onTableFetchError.displayName = 'onTableFetchError';
+
+    $http(angular.extend({
+      method: 'GET',
+      url: this.parseUrl(urlTemplate, lang)
+    }, $httpOptions))
+      .success(onTableFetchSuccess)
+      .error(onTableFetchError);
 
     } else {
       deferred.resolve(this.tables[lang]);
@@ -110,14 +126,18 @@ angular.module('pascalprecht.translate')
 
   function getPrioritizedParts() {
     var prioritizedParts = [];
-    for(var part in parts) {
+    for (var part in parts) {
       if (parts[part].isActive) {
         prioritizedParts.push(parts[part]);
       }
     }
-    prioritizedParts.sort(function (a, b) {
+
+    var priorityComparator = function (a, b) {
       return a.priority - b.priority;
-    });
+    };
+    priorityComparator.displayName = 'priorityComparator';
+
+    prioritizedParts.sort(priorityComparator);
     return prioritizedParts;
   }
 
@@ -140,7 +160,7 @@ angular.module('pascalprecht.translate')
    * of the wrong type. Please, note that the `name` param has to be a
    * non-empty **string**.
    */
-  this.addPart = function(name, priority) {
+  this.addPart = function (name, priority) {
     if (!isStringValid(name)) {
       throw new TypeError('Couldn\'t add part, part name has to be a string!');
     }
@@ -171,7 +191,7 @@ angular.module('pascalprecht.translate')
    * of the wrong type. Please, note that the `lang` and `part` params have to be a
    * non-empty **string**s and the `table` param has to be an object.
    */
-  this.setPart = function(lang, part, table) {
+  this.setPart = function (lang, part, table) {
     if (!isStringValid(lang)) {
       throw new TypeError('Couldn\'t set part.`lang` parameter has to be a string!');
     }
@@ -207,7 +227,7 @@ angular.module('pascalprecht.translate')
    * @throws {TypeError} The method could throw a **TypeError** if you pass the param of the wrong
    * type. Please, note that the `name` param has to be a non-empty **string**.
    */
-  this.deletePart = function(name) {
+  this.deletePart = function (name) {
     if (!isStringValid(name)) {
       throw new TypeError('Couldn\'t delete part, first arg has to be string.');
     }
@@ -292,25 +312,34 @@ angular.module('pascalprecht.translate')
           deferred = $q.defer(),
           prioritizedParts = getPrioritizedParts();
 
-      angular.forEach(prioritizedParts, function(part, index) {
+      var eachPrioritizedPart = function (part, index) {
         loaders.push(
           part.getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
         );
         part.urlTemplate = options.urlTemplate;
-      });
+      };
+      eachPrioritizedPart.displayName = 'eachPrioritizedPart';
 
-      $q.all(loaders).then(
-        function() {
-          var table = {};
-          angular.forEach(prioritizedParts, function(part) {
-            deepExtend(table, part.tables[options.key]);
-          });
-          deferred.resolve(table);
-        },
-        function() {
-          deferred.reject(options.key);
-        }
-      );
+      angular.forEach(prioritizedParts, eachPrioritizedPart);
+
+      var onLoadersSuccess = function () {
+        var table = {};
+
+        var deepExtendEachPriritizedPart = function (part) {
+          deepExtend(table, part.tables[options.key]);
+        };
+
+        angular.forEach(prioritizedParts, deepExtendEachPriritizedPart);
+        deferred.resolve(table);
+      };
+      onLoadersSuccess.displayName = 'onLoadersSuccess';
+
+      var onLoadersError = function () {
+        deferred.reject(options.key);
+      };
+      onLoadersError.displayName = 'onLoadersError';
+
+      $q.all(loaders).then(onLoadersSuccess, onLoadersError);
 
       return deferred.promise;
     };
@@ -384,7 +413,7 @@ angular.module('pascalprecht.translate')
      * wrong type. Please, note that the `name` param has to be a non-empty **string** and
      * the `removeData` param has to be either **undefined** or **boolean**.
      */
-    service.deletePart = function(name, removeData) {
+    service.deletePart = function (name, removeData) {
       if (!isStringValid(name)) {
         throw new TypeError('Couldn\'t delete part, first arg has to be string');
       }
@@ -406,9 +435,12 @@ angular.module('pascalprecht.translate')
           }
           // Purging items from cache...
           if (typeof(cache) === 'object') {
-            angular.forEach(parts[name].tables, function(value, key) {
-                cache.remove(parts[name].parseUrl(parts[name].urlTemplate, key));
-            });
+            var eachTable = function(value, key) {
+              cache.remove(parts[name].parseUrl(parts[name].urlTemplate, key));
+            };
+            eachTable.displayName = 'eachTable';
+
+            angular.forEach(parts[name].tables, eachTable);
           }
           delete parts[name];
         } else {
@@ -454,11 +486,15 @@ angular.module('pascalprecht.translate')
      */
     service.getRegisteredParts = function() {
       var registeredParts = [];
-      angular.forEach(parts, function(p){
+      var eachPart = function(p){
         if(p.isActive) {
           registeredParts.push(p.name);
         }
-      });
+      };
+      eachPart.displayName = 'eachPart';
+
+      angular.forEach(parts, eachPart);
+
       return registeredParts;
     };
 
@@ -488,4 +524,6 @@ angular.module('pascalprecht.translate')
 
   }];
 
-});
+}
+
+$translatePartialLoader.displayName = '$translatePartialLoader';

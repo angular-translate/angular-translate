@@ -85,7 +85,8 @@ angular.module('pascalprecht.translate')
     </file>
    </example>
  */
-.directive('translate', ['$translate', '$q', '$interpolate', '$compile', '$parse', '$rootScope', function ($translate, $q, $interpolate, $compile, $parse, $rootScope) {
+.directive('translate', translateDirective);
+function translateDirective($translate, $q, $interpolate, $compile, $parse, $rootScope) {
 
   /**
    * @name trim
@@ -298,4 +299,6 @@ angular.module('pascalprecht.translate')
       };
     }
   };
-}]);
+}
+
+translateDirective.displayName = 'translateDirective';
