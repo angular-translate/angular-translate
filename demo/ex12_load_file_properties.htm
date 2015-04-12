@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+
+<head>
+  <meta charset="utf-8">
+  <title translate="load.properties.TITLE">Load lang.properties file</title>
+  <style>body { text-align: center; }</style>
+</head>
+
+<body ng-controller="ctrl">
+
+  <p>
+    <a href="#" ng-click="setLang('en_US')">English</a>
+    |
+    <a href="#" ng-click="setLang('de_DE')">German</a>
+  </p>
+
+  <h1 translate="load.properties.HEADER"></h1>
+  <p translate="load.properties.TEXT"></p>
+
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="../src/translate.js"></script>
+<script src="../src/service/default-interpolation.js"></script>
+<script src="../src/service/handler-log.js"></script>
+<script src="../src/service/loader-static-files.js"></script>
+
+
+<script src="../src/service/storage-key.js"></script>
+<script src="../src/service/storage-local.js"></script>
+<script src="../src/service/storage-cookie.js"></script>
+<script src="../src/service/translate.js"></script>
+<script src="../src/directive/translate.js"></script>
+<script src="../src/filter/translate.js"></script>
+
+<script>
+angular.module('app', ['pascalprecht.translate', 'ngCookies'])
+
+.config(['$translateProvider', function($translateProvider) {
+
+  var simpleJavaPropertiesReader = function (lines) {
+    var result = {};
+    var patterns = [
+      /^\s*([^=:]+)\s*[:|=]\s*(.*)$/ // anything before = or : (the key), then everything unitl the end
+    ];
+    var quotePattern = /^"(.*)"$/;
+    for (var i = 0; i < lines.length; i++) {
+      for (var j = 0; j < patterns.length; j++) {
+        var match = lines[i].match(patterns[j]);
+        if (match && match[0] && match[0].length > 0) {
+          var key = match[1], value = match[2];
+          if (value && value.length > 0) {
+            var quoteMatch = value.match(quotePattern);
+            if (quoteMatch && quoteMatch[0] && quoteMatch[0].length) {
+              value = quoteMatch[1];
+            }
+          }
+          result[key] = value;
+          break;
+        }
+      }
+    }
+    return result;
+  };
+
+  // Register a loader for the static files
+  // So, the module will search missing translation tables under the specified urls.
+  // Those urls are [prefix][langKey][suffix].
+  $translateProvider.useStaticFilesLoader({
+    prefix: 'l10n/',
+    suffix: '.properties',
+    $http: {
+      transformResponse: function (data, headersGetter, status) {
+        return simpleJavaPropertiesReader(data.split('\n'));
+      }
+    }
+  });
+
+  // Tell the module what language to use by default
+  $translateProvider.preferredLanguage('en_US');
+
+}])
+
+.controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
+
+  $scope.setLang = function(langKey) {
+    // You can change the language during runtime
+    $translate.use(langKey);
+  };
+
+}]);
+</script>
+
+</body>
+</html>
