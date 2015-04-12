@@ -334,6 +334,9 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('de');
 </pre>
 
+**Hinweis:** Ein Benutzer von Angular Translate eine schöne Lösung
+[mittels Grunt](https://github.com/angular-translate/angular-translate/issues/921) veröffentlicht.
+
 Okay, passen wir unsere App mit dem staticFilesLoader an. Als erstes ziehen wir
 die Übersetzungen aus dem Code und schreiben Sie in seperate Dateien:
 
