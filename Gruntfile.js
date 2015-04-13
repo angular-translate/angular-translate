@@ -568,6 +568,57 @@ module.exports = function (grunt) {
       }
     },
 
+    file_append: {
+      'core': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.core.dest %>'
+        } ]
+      },
+      'messageformat_interpolation': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.messageformat_interpolation.dest %>'
+        } ]
+      },
+      'handler_log': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.handler_log.dest %>'
+        } ]
+      },
+      'loader_partial': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.loader_partial.dest %>'
+        } ]
+      },
+      'loader_static_files': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.loader_static_files.dest %>'
+        } ]
+      },
+      'loader_url': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.loader_url.dest %>'
+        } ]
+      },
+      'storage_cookie': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.storage_cookie.dest %>'
+        } ]
+      },
+      'storage_local': {
+        files: [ {
+            append: "return 'pascalprecht.translate';",
+            input: '<%= concat.storage_local.dest %>'
+        } ]
+      }
+    },
+
     version: {
       options: {
         prefix: 'var version\\s+=\\s+[\'"]'
@@ -618,6 +669,7 @@ module.exports = function (grunt) {
     'jshint:core',
     'concat:core',
     'version',
+    'file_append:core',
     'umd:core',
     'ngAnnotate:core',
     'concat:banner_core',
@@ -627,6 +679,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:messageformat_interpolation', [
     'jshint:messageformat_interpolation',
     'concat:messageformat_interpolation',
+    'file_append:messageformat_interpolation',
     'umd:messageformat_interpolation',
     'ngAnnotate:messageformat_interpolation',
     'concat:banner_messageformat_interpolation',
@@ -636,6 +689,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:handler_log', [
     'jshint:handler_log',
     'concat:handler_log',
+    'file_append:handler_log',
     'umd:handler_log',
     'ngAnnotate:handler_log',
     'concat:banner_handler_log',
@@ -645,6 +699,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:loader_partial', [
     'jshint:loader_partial',
     'concat:loader_partial',
+    'file_append:loader_partial',
     'umd:loader_partial',
     'ngAnnotate:loader_partial',
     'concat:banner_loader_partial',
@@ -654,6 +709,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:loader_static_files', [
     'jshint:loader_static_files',
     'concat:loader_static_files',
+    'file_append:loader_static_files',
     'umd:loader_static_files',
     'ngAnnotate:loader_static_files',
     'concat:banner_loader_static_files',
@@ -663,6 +719,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:loader_url', [
     'jshint:loader_url',
     'concat:loader_url',
+    'file_append:loader_url',
     'umd:loader_url',
     'ngAnnotate:loader_url',
     'concat:banner_loader_url',
@@ -672,6 +729,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:storage_cookie', [
     'jshint:storage_cookie',
     'concat:storage_cookie',
+    'file_append:storage_cookie',
     'umd:storage_cookie',
     'ngAnnotate:storage_cookie',
     'concat:banner_storage_cookie',
@@ -681,6 +739,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:storage_local', [
     'jshint:storage_local',
     'concat:storage_local',
+    'file_append:storage_local',
     'umd:storage_local',
     'ngAnnotate:storage_local',
     'concat:banner_storage_local',
