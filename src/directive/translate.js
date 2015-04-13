@@ -291,7 +291,7 @@ angular.module('pascalprecht.translate')
 
         // ensure translation will be looked up at least one
         if (iElement.text().length) {
-          observeElementTranslation('');
+          observeElementTranslation('' + iAttr.translate);
         }
         updateTranslations();
         scope.$on('$destroy', unbind);
