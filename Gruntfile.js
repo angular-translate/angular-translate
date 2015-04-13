@@ -650,7 +650,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jshint:all',
-    'karma',
+    'karma:headless-unit',
+    'karma:headless-midway',
+    'karma:unit',
+    'karma:midway',
     'build-all'
   ]);
 
