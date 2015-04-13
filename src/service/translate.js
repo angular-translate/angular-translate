@@ -929,9 +929,9 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
           // We can just translate.
           determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText).then(deferred.resolve, deferred.reject);
         } else {
-          promiseToWaitFor.then(function () {
+          promiseToWaitFor['finally'](function () {
             determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText).then(deferred.resolve, deferred.reject);
-          }, deferred.reject);
+          });
         }
         return deferred.promise;
       };
