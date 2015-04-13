@@ -329,6 +329,9 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('de');
 </pre>
 
+**Примітка:** Користувач Angular-Translate поділився хорошим рішенням цієї проблеми
+[за допомогою Grunt](https://github.com/angular-translate/angular-translate/issues/921).
+
 Давайте оновимо наш навчальний застосунок таким чином, щоб використовувати асинхронний завантажувач!
 Скористаємося staticFilesLoader. Для початку ми повинні вилучити таблиці перекладів з коду і
 помістити їх в окремі файли:
