@@ -1852,7 +1852,10 @@ angular.module('pascalprecht.translate').provider('$translate', ['$STORAGE_KEY',
             return translation;
           };
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(processAsyncResult);
+            var fallbackLanguageId = $fallbackLanguage[i];
+            if (!$translationTable[fallbackLanguageId]) {
+              langPromises[fallbackLanguageId] = loadAsync(fallbackLanguageId).then(processAsyncResult);
+            }
           }
         }
       }
