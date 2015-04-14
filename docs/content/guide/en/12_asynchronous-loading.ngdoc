@@ -266,6 +266,45 @@ app.run(function ($rootScope, $translate) {
 Since `$translate.refresh()` returns a promise, it works beautifully together
 with either `ngRoute` module or UI Router.
 
+An interesting question is how to deal with loading errors. By default the partial
+loader rejects a whole loading process if any of the parts was not loaded from the
+server. But you can change this behavior a bit. The loader provides an ability to
+specify an error handler - a service which will be called if some part can not be
+loaded. In this service you are able to do anything to handle such situations.
+
+There are a few things you have to know before you'll be able to create your first
+error handler:
+
+1) The partial loader expects the error handler to have the following signature
+`function (part:String, langKey:String):Promise`
+2) You have to either resolve the promise with a translation table for the given
+part and language or reject it
+3) The partial loader will use the given translation table like it was successfully
+fetched from the server
+4) If you reject the promise, then the loader will reject the whole loading process
+
+Here is an example of a simple error handler:
+
+```js
+angular.module('translation')
+.factory('MyErrorHandler', function ($q, $log) {
+  return function (part, lang) {
+    $log.error('The "' + part + '/' + lang + '" part was not loaded.');
+    return $q.when({});
+  };
+});
+```
+
+So, now all we have to do is to tell the partial loader which service it has to
+use as an error handler:
+
+<pre>
+$translateProvider.useLoader('$translatePartialLoader', {
+  urlTemplate: '/i18n/{part}/{lang}.json',
+  loadFailureHandler: 'MyErrorHandler'
+});
+</pre>
+
 ## Lazy loading at runtime
 
 Once your app bootstraps, it'll load needed translation data asynchronously as
