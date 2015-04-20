@@ -1522,6 +1522,7 @@ describe('pascalprecht.translate', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
         $translateProvider
+          .translations('de_DE', translationMock)
           .translations('en_EN', translationMock)
           .preferredLanguage('en_EN')
           .useLoader('customLoader');
@@ -1577,6 +1578,40 @@ describe('pascalprecht.translate', function () {
         fetchTranslation();
         expect(oldValue).toEqual('EXISTING_TRANSLATION_ID'); // not found
         expect(newValue).toEqual('bar');
+      });
+
+      it('should clear completelly inactive translation tables', function () {
+        var value;
+
+        function setValue(answer) {
+          value = answer;
+        }
+
+        function fetchTranslation() {
+          $translate('EXISTING_TRANSLATION_ID').then(setValue, setValue);
+          $rootScope.$digest();
+        }
+
+        function changeLanguage(lang) {
+          $translate.use(lang);
+          $rootScope.$digest();
+        }
+
+        changeLanguage('de_DE');
+        fetchTranslation();
+        expect(value).toEqual('foo'); // found
+
+        changeLanguage('en_EN');
+        $translate.refresh();
+        $timeout.flush();
+        $rootScope.$digest();
+
+        changeLanguage('de_DE');
+        $timeout.flush(); // Expect the `de_DE` language to be loaded
+        $rootScope.$digest();
+
+        fetchTranslation();
+        expect(value).toEqual('EXISTING_TRANSLATION_ID'); // not found
       });
 
       it('should emit $translateRefreshStart event', function () {
