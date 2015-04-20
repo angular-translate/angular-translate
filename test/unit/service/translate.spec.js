@@ -1522,9 +1522,8 @@ describe('pascalprecht.translate', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
         $translateProvider
-          .translations('de_DE', translationMock)
+          .translations('en_EN', translationMock)
           .preferredLanguage('en_EN')
-          .fallbackLanguage('en_EN')
           .useLoader('customLoader');
 
         $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
@@ -1557,19 +1556,27 @@ describe('pascalprecht.translate', function () {
       });
 
       it('should refresh the translation table', function () {
-        var deferred = $q.defer(),
-            promise = deferred.promise,
-            value;
+        var oldvalue, newValue;
 
-        promise.then(function (translation) {
-          value = translation;
-        });
-        $translate('EXISTING_TRANSLATION_ID').then(function (translationId) {
-          deferred.resolve(translationId);
-        });
+        function fetchTranslation() {
+          $translate(['EXISTING_TRANSLATION_ID', 'FOO']).then(function (translations) {
+            oldValue = translations.EXISTING_TRANSLATION_ID;
+            newValue = translations.FOO;
+          });
+          $rootScope.$digest();
+        }
+
+        fetchTranslation();
+        expect(oldValue).toEqual('foo');
+        expect(newValue).toEqual('FOO'); // not found
+
         $translate.refresh();
         $timeout.flush();
-        expect(value).toEqual('EXISTING_TRANSLATION_ID');
+        $rootScope.$digest();
+
+        fetchTranslation();
+        expect(oldValue).toEqual('EXISTING_TRANSLATION_ID'); // not found
+        expect(newValue).toEqual('bar');
       });
 
       it('should emit $translateRefreshStart event', function () {
