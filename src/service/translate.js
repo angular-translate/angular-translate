@@ -1714,10 +1714,8 @@ function $translate($STORAGE_KEY, $windowProvider) {
           }
 
           var allTranslationsLoaded = function (tableData) {
+            $translationTable = {};
             angular.forEach(tableData, function (data) {
-              if ($translationTable[data.key]) {
-                delete $translationTable[data.key];
-              }
               translations(data.key, data.table);
             });
             if ($uses) {
