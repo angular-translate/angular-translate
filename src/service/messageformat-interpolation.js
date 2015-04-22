@@ -14,36 +14,13 @@ angular.module('pascalprecht.translate')
  */
 .factory('$translateMessageFormatInterpolation', $translateMessageFormatInterpolation);
 
-function $translateMessageFormatInterpolation($cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
+function $translateMessageFormatInterpolation($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
 
   var $translateInterpolator = {},
       $cache = $cacheFactory.get(TRANSLATE_MF_INTERPOLATION_CACHE),
       // instantiate with default locale (which is 'en')
       $mf = new MessageFormat('en'),
-      $identifier = 'messageformat',
-      $sanitizeValueStrategy = null,
-      // map of all sanitize strategies
-      sanitizeValueStrategies = {
-        escaped: function (params) {
-          var result = {};
-          for (var key in params) {
-            if (Object.prototype.hasOwnProperty.call(params, key)) {
-              result[key] = angular.element('<div></div>').text(params[key]).html();
-            }
-          }
-          return result;
-        }
-      };
-
-  var sanitizeParams = function (params) {
-    var result;
-    if (angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])) {
-      result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
-    } else {
-      result = params;
-    }
-    return result;
-  };
+      $identifier = 'messageformat';
 
   if (!$cache) {
     // create cache if it doesn't exist already
@@ -84,8 +61,11 @@ function $translateMessageFormatInterpolation($cacheFactory, TRANSLATE_MF_INTERP
     return $identifier;
   };
 
+  /**
+   * @deprecated ToDo: remove in 3.0
+   */
   $translateInterpolator.useSanitizeValueStrategy = function (value) {
-    $sanitizeValueStrategy = value;
+    $translateSanitization.useStrategy(value);
     return this;
   };
 
@@ -99,21 +79,20 @@ function $translateMessageFormatInterpolation($cacheFactory, TRANSLATE_MF_INTERP
    *
    * @returns {string} interpolated string.
    */
-  $translateInterpolator.interpolate = function (string, interpolateParams) {
+  $translateInterpolator.interpolate = function (string, interpolationParams) {
+    interpolationParams = interpolationParams || {};
+    interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params');
 
-    interpolateParams = interpolateParams || {};
-
-    if ($sanitizeValueStrategy) {
-      interpolateParams = sanitizeParams(interpolateParams);
-    }
-
-    var interpolatedText = $cache.get(string + angular.toJson(interpolateParams));
+    var interpolatedText = $cache.get(string + angular.toJson(interpolationParams));
 
     // if given string wasn't interpolated yet, we do so now and never have to do it again
     if (!interpolatedText) {
-      interpolatedText = $mf.compile(string)(interpolateParams);
-      $cache.put(string + angular.toJson(interpolateParams), interpolatedText);
+      interpolatedText = $mf.compile(string)(interpolationParams);
+      interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text');
+
+      $cache.put(string + angular.toJson(interpolationParams), interpolatedText);
     }
+
     return interpolatedText;
   };
 

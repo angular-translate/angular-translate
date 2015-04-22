@@ -72,16 +72,30 @@ describe('pascalprecht.translate', function () {
       expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }}', {value: 5})).toEqual('Foo bar 10');
     });
 
-    it('should evaluate interpolateParams with concrete values the right way when in escaped mode', function () {
-      $translateDefaultInterpolation.useSanitizeValueStrategy('escaped');
-      expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }}', {value: 5})).toEqual('Foo bar 10');
-    });
+    it('should sanitize the interpolation params', inject(function ($translateSanitization) {
+      var text = 'Foo bar {{value}}';
+      var params =  { value: '<span>Test</span>' };
+      var sanitizedText = 'Foo bar &lt;span&gt;Test&lt;/span&gt;';
 
-    it('should evaluate interpolateParams with values that contains html tags', function () {
-      $translateDefaultInterpolation.useSanitizeValueStrategy('escaped');
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateDefaultInterpolation.useSanitizeValueStrategy('escapeParameters');
 
-      expect($translateDefaultInterpolation.interpolate('Foo bar {{ value + value }} with {{name}}', {value: 5, name: 'CaTz <xss>'})).toEqual('Foo bar 10 with CaTz &lt;xss&gt;');
-    });
+      expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params');
+    }));
+
+    it('should sanitize the interpolation params', inject(function ($translateSanitization) {
+      var text = 'Foo <span>bar</span> {{value}}';
+      var params =  { value: 'value' };
+      var interPolatedText = 'Foo <span>bar</span> value';
+      var sanitizedText = 'Foo &lt;span&gt;bar&lt;/span&gt; value';
+
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateDefaultInterpolation.useSanitizeValueStrategy('escape');
+
+      expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text');
+    }));
   });
 
   describe('$translateDefaultInterpolation#useSanitizeValueStrategy', function () {
