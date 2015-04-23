@@ -231,7 +231,7 @@ $translateProvider.useStaticFilesL​​oader({
     'prefix': 'locale-',
     'suffix': '.json'
 });
-$translateProvider.preferredLanguage('de');
+$translateProvider.preferredLanguage('en');
 </pre>
 
 讓我們來使用相應的異步加載器來更新我們的示例應用程序！我們將使用 staticFilesL​​oader。首先，我們要從代碼中抽取翻譯轉換錶出來
