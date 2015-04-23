@@ -365,7 +365,7 @@ $translateProvider.useStaticFilesLoader({
     'prefix': 'locale-',
     'suffix': '.json'
 });
-$translateProvider.preferredLanguage('de');
+$translateProvider.preferredLanguage('en');
 </pre>
 
 **Заметка:** Пользователь Angular-Translate поделился хорошим решением этой проблемы

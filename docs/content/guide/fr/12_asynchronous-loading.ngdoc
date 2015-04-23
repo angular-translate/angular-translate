@@ -353,7 +353,7 @@ $translateProvider.useStaticFilesLoader({
     'prefix': 'locale-',
     'suffix': '.json'
 });
-$translateProvider.preferredLanguage('en');
+$translateProvider.preferredLanguage('fr');
 </pre>
 
 Mettons à jour notre exemple d'application en conséquence pour utiliser un chargeur asynchrone !
