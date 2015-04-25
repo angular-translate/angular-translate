@@ -1,3 +1,6 @@
+/* jshint camelcase: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   var module,

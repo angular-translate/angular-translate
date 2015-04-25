@@ -1,6 +1,9 @@
+// jshint camelcase: false, quotmark: false
+
 var fs = require('fs');
 
 module.exports = function (grunt) {
+  'use strict';
 
   require('load-grunt-tasks')(grunt);
 
@@ -99,10 +102,7 @@ module.exports = function (grunt) {
     jshint: {
 
       options: {
-        eqeqeq: true,
-        globals: {
-          angular: true
-        }
+        jshintrc: true
       },
 
       all: ['Gruntfile.js', '<%= lib_files.core %>', '<%= lib_files.ext.all %>', '<%= lib_files.test %>'],

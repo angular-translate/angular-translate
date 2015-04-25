@@ -53,6 +53,9 @@ angular.module('pascalprecht.translate')
 .filter('translate', translateFilterFactory);
 
 function translateFilterFactory($parse, $translate) {
+
+  'use strict';
+
   var translateFilter = function (translationId, interpolateParams, interpolation) {
 
     if (!angular.isObject(interpolateParams)) {

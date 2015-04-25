@@ -16,6 +16,8 @@ angular.module('pascalprecht.translate')
 
 function $translateStaticFilesLoader($q, $http) {
 
+  'use strict';
+
   return function (options) {
 
     if (!options || (!angular.isArray(options.files) && (!angular.isString(options.prefix) || !angular.isString(options.suffix)))) {
@@ -46,7 +48,7 @@ function $translateStaticFilesLoader($q, $http) {
         params: ''
       }, options.$http)).success(function (data) {
         deferred.resolve(data);
-      }).error(function (data) {
+      }).error(function () {
         deferred.reject(options.key);
       });
 

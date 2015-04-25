@@ -1,3 +1,7 @@
+/* jshint camelcase: false, quotmark: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateFilter', function () {

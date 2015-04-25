@@ -10,6 +10,8 @@ angular.module('pascalprecht.translate', ['ng'])
 
 function runTranslate($translate) {
 
+  'use strict';
+
   var key = $translate.storageKey(),
     storage = $translate.storage();
 

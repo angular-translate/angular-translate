@@ -1,8 +1,12 @@
+/* jshint camelcase: false, quotmark: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateDirective (single-lang)', function () {
 
-    var element;
+    var $compile, $rootScope, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -21,8 +25,6 @@ describe('pascalprecht.translate', function () {
         })
         .preferredLanguage('en');
     }));
-
-    var $compile, $rootScope;
 
     beforeEach(inject(function (_$compile_, _$rootScope_) {
       $compile = _$compile_;
@@ -327,7 +329,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-interpolation attribute', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -382,6 +384,8 @@ describe('pascalprecht.translate', function () {
   });
 
   describe('custom translate-value-* attributes', function () {
+
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -454,7 +458,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate sanitization', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -481,7 +485,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate sanitization (escaping)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -510,7 +514,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-compile extension (globally disabled)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element, $translate;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -567,7 +571,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-compile extension (globally enabled)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element, $translate;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -636,7 +640,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-attr-* attributes', function () {
 
-    var element;
+    var $compile, $rootScope, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -648,8 +652,6 @@ describe('pascalprecht.translate', function () {
         })
         .preferredLanguage('en');
     }));
-
-    var $compile, $rootScope;
 
     beforeEach(inject(function (_$compile_, _$rootScope_) {
       $compile = _$compile_;

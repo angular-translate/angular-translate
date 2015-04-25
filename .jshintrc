@@ -1,9 +1,9 @@
 {
   "node": true,
-  "es5": true,
+  "jasmine": true,
   "esnext": false,
   "bitwise": true,
-  "camelcase": true,
+  "camelcase": false,
   "curly": true,
   "eqeqeq": true,
   "immed": true,
@@ -17,5 +17,9 @@
   "unused": true,
   "strict": true,
   "trailing": true,
-  "smarttabs": true
+  "smarttabs": true,
+  "globals": {
+    "angular": false,
+    "MessageFormat": false
+  }
 }

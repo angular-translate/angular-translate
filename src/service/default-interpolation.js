@@ -12,6 +12,8 @@ angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation
 
 function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
 
+  'use strict';
+
   var $translateInterpolator = {},
       $locale,
       $identifier = 'default';

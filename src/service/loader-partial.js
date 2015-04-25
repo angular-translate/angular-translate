@@ -13,6 +13,8 @@ angular.module('pascalprecht.translate')
 
 function $translatePartialLoader() {
 
+  'use strict';
+
   /**
    * @constructor
    * @name Part
@@ -287,14 +289,16 @@ function $translatePartialLoader() {
       if (errorHandler !== undefined) {
         if (!angular.isString(errorHandler)) {
           throw new Error('Unable to load data, a loadFailureHandler is not a string.');
-        } else errorHandler = $injector.get(errorHandler);
+        } else {
+          errorHandler = $injector.get(errorHandler);
+        }
       }
 
       var loaders = [],
           deferred = $q.defer(),
           prioritizedParts = getPrioritizedParts();
 
-      angular.forEach(prioritizedParts, function(part, index) {
+      angular.forEach(prioritizedParts, function(part) {
         loaders.push(
           part.getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
         );

@@ -14,6 +14,8 @@ angular.module('pascalprecht.translate')
 
 function $translateCookieStorageFactory($cookieStore) {
 
+  'use strict';
+
   var $translateCookieStorage = {
 
     /**

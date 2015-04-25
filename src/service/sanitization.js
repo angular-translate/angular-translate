@@ -11,6 +11,8 @@ angular.module('pascalprecht.translate').provider('$translateSanitization', $tra
 
 function $translateSanitizationProvider () {
 
+  'use strict';
+
   var provider = this,
     $sanitize,
     currentStrategy = null, // TODO change to either 'sanitize', 'escape' or ['sanitize', 'escapeParameters'] in 3.0.

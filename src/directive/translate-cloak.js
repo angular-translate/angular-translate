@@ -24,6 +24,8 @@ angular.module('pascalprecht.translate')
 
 function translateCloakDirective($rootScope, $translate) {
 
+  'use strict';
+
   return {
     compile: function (tElement) {
       var applyCloak = function () {

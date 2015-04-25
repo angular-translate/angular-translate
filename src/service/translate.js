@@ -12,6 +12,8 @@ angular.module('pascalprecht.translate')
 
 function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvider) {
 
+  'use strict';
+
   var $translationTable = {},
       $preferredLanguage,
       $availableLanguageKeys = [],
@@ -474,7 +476,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     if (langKey) {
       if (!$translationTable[langKey] && (!$loaderFactory)) {
         // only throw an error, when not loading translation data asynchronously
-        throw new Error("$translateProvider couldn't find translationTable for langKey: '" + langKey + "'");
+        throw new Error('$translateProvider couldn\'t find translationTable for langKey: \'' + langKey + '\'');
       }
       $uses = langKey;
       return this;

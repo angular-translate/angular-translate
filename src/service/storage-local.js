@@ -15,6 +15,8 @@ angular.module('pascalprecht.translate')
 
 function $translateLocalStorageFactory($window, $translateCookieStorage) {
 
+  'use strict';
+
   // Setup adapter
   var localStorageAdapter = (function(){
     var langKey;

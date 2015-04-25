@@ -1,3 +1,7 @@
+/* jshint camelcase: false, quotmark: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   var translationMock = {
@@ -1557,7 +1561,7 @@ describe('pascalprecht.translate', function () {
       });
 
       it('should refresh the translation table', function () {
-        var oldvalue, newValue;
+        var oldValue, newValue;
 
         function fetchTranslation() {
           $translate(['EXISTING_TRANSLATION_ID', 'FOO']).then(function (translations) {

@@ -88,6 +88,8 @@ angular.module('pascalprecht.translate')
 .directive('translate', translateDirective);
 function translateDirective($translate, $q, $interpolate, $compile, $parse, $rootScope) {
 
+  'use strict';
+
   /**
    * @name trim
    * @private

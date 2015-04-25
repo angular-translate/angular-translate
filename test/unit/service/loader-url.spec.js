@@ -1,8 +1,12 @@
+/* jshint camelcase: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateUrlLoader', function () {
 
-    var $translate, $httpBackend, $translateUrlLoader;
+    var $translate, $httpBackend, $translateUrlLoader, $translationCache;
 
     beforeEach(module('pascalprecht.translate'));
 

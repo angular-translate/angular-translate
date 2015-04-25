@@ -20,6 +20,8 @@ angular.module('pascalprecht.translate')
 
 function $translateUrlLoader($q, $http) {
 
+  'use strict';
+
   return function (options) {
 
     if (!options || !options.url) {
@@ -37,7 +39,7 @@ function $translateUrlLoader($q, $http) {
       method: 'GET'
     }, options.$http)).success(function (data) {
       deferred.resolve(data);
-    }).error(function (data) {
+    }).error(function () {
       deferred.reject(options.key);
     });
 

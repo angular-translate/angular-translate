@@ -24,6 +24,8 @@ angular.module('pascalprecht.translate')
 
 function $translateMessageFormatInterpolation($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
 
+  'use strict';
+
   var $translateInterpolator = {},
       $cache = $cacheFactory.get(TRANSLATE_MF_INTERPOLATION_CACHE),
       // instantiate with default locale (which is 'en')
