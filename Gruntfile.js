@@ -51,6 +51,7 @@ module.exports = function (grunt) {
         'src/service/translate.js',
         'src/service/default-interpolation.js',
         'src/service/storage-key.js',
+        'src/service/sanitization.js',
         'src/directive/translate.js',
         'src/directive/translate-cloak.js',
         'src/filter/translate.js'

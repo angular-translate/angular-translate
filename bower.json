@@ -15,7 +15,8 @@
     "angular": "~1.2.26",
     "angular-translate-interpolation-messageformat": "2.6.1",
     "angular-mocks": "~1.2.26",
-    "angular-cookies": "~1.2.26"
+    "angular-cookies": "~1.2.26",
+    "angular-sanitize": "~1.2.26"
   },
   "resolutions": {
     "angular": "~1.2.26"

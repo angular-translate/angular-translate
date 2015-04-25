@@ -10,38 +10,11 @@
  */
 angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation', $translateDefaultInterpolation);
 
-function $translateDefaultInterpolation ($interpolate) {
+function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
 
   var $translateInterpolator = {},
       $locale,
-      $identifier = 'default',
-      $sanitizeValueStrategy = null,
-      // map of all sanitize strategies
-      sanitizeValueStrategies = {
-        escaped: function (params) {
-          var result = {};
-          for (var key in params) {
-            if (Object.prototype.hasOwnProperty.call(params, key)) {
-              if (angular.isNumber(params[key])) {
-                result[key] = params[key];
-              } else {
-                result[key] = angular.element('<div></div>').text(params[key]).html();
-              }
-            }
-          }
-          return result;
-        }
-      };
-
-  var sanitizeParams = function (params) {
-    var result;
-    if (angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])) {
-      result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
-    } else {
-      result = params;
-    }
-    return result;
-  };
+      $identifier = 'default';
 
   /**
    * @ngdoc function
@@ -71,8 +44,11 @@ function $translateDefaultInterpolation ($interpolate) {
     return $identifier;
   };
 
+  /**
+   * @deprecated ToDo: remove in 3.0
+   */
   $translateInterpolator.useSanitizeValueStrategy = function (value) {
-    $sanitizeValueStrategy = value;
+    $translateSanitization.useStrategy(value);
     return this;
   };
 
@@ -87,11 +63,14 @@ function $translateDefaultInterpolation ($interpolate) {
    *
    * @returns {string} interpolated string.
    */
-  $translateInterpolator.interpolate = function (string, interpolateParams) {
-    if ($sanitizeValueStrategy) {
-      interpolateParams = sanitizeParams(interpolateParams);
-    }
-    return $interpolate(string)(interpolateParams || {});
+  $translateInterpolator.interpolate = function (string, interpolationParams) {
+    interpolationParams = interpolationParams || {};
+    interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params');
+
+    var interpolatedText = $interpolate(string)(interpolationParams);
+    interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text');
+
+    return interpolatedText;
   };
 
   return $translateInterpolator;

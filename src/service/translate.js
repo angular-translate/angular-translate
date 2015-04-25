@@ -10,7 +10,7 @@
 angular.module('pascalprecht.translate')
 .provider('$translate', $translate);
 
-function $translate($STORAGE_KEY, $windowProvider) {
+function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvider) {
 
   var $translationTable = {},
       $preferredLanguage,
@@ -26,7 +26,6 @@ function $translate($STORAGE_KEY, $windowProvider) {
       $missingTranslationHandlerFactory,
       $interpolationFactory,
       $interpolatorFactories = [],
-      $interpolationSanitizationStrategy = false,
       $loaderFactory,
       $cloakClassName = 'translate-cloak',
       $loaderOptions,
@@ -325,7 +324,7 @@ function $translate($STORAGE_KEY, $windowProvider) {
    * @param {string} value Strategy type.
    */
   this.useSanitizeValueStrategy = function (value) {
-    $interpolationSanitizationStrategy = value;
+    $translateSanitizationProvider.useStrategy(value);
     return this;
   };
 
@@ -1074,11 +1073,6 @@ function $translate($STORAGE_KEY, $windowProvider) {
         }
       }
 
-      // apply additional settings
-      if (angular.isFunction(defaultInterpolator.useSanitizeValueStrategy)) {
-        defaultInterpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
-      }
-
       // if we have additional interpolations that were added via
       // $translateProvider.addInterpolation(), we have to map'em
       if ($interpolatorFactories.length) {
@@ -1086,10 +1080,6 @@ function $translate($STORAGE_KEY, $windowProvider) {
           var interpolator = $injector.get(interpolatorFactory);
           // setting initial locale for each interpolation service
           interpolator.setLocale($preferredLanguage || $uses);
-          // apply additional settings
-          if (angular.isFunction(interpolator.useSanitizeValueStrategy)) {
-            interpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
-          }
           // make'em recognizable through id
           interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
         };
