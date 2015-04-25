@@ -1,6 +1,6 @@
 /**
- * @ngdoc service
- * @name $translationCache
+ * @ngdoc object
+ * @name pascalprecht.translate.$translationCache
  * @requires $cacheFactory
  *
  * @description
