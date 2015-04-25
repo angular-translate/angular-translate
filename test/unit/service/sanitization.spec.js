@@ -208,7 +208,9 @@ describe('pascalprecht.translate', function () {
     describe('with the sanitize strategy', function () {
       it('should throw an error', function () {
         $translateSanitization.useStrategy('sanitize');
-        expect($translateSanitization.sanitize.bind($translateSanitization, '<span>test</span>', 'text')).toThrow();
+        expect(function () {
+          return $translateSanitization.sanitize('<span>test</span>', 'text');
+        }).toThrow(new Error('pascalprecht.translate.$translateSanitization: Error cannot find $sanitize service. Either include the ngSanitize module (https://docs.angularjs.org/api/ngSanitize) or use a sanitization strategy which does not depend on $sanitize, such as \'escape\'.'));
       });
     });
   });
