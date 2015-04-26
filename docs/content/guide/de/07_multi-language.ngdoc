@@ -98,6 +98,15 @@ Die Zuverlässigkeit der Funktion kann allerdings nicht 100% garantiert werden, 
 Browser unterschiedliche Werte in diese Parameter einträgt und diese nicht standardisiert
 sind.
 
+Ab Version `2.7` steht darüberhinaus `$translateProvider.uniformLanguageTag()` als
+Hilfsmittel zur Verfügung. Damit kann man jene so genannten "Language Tags" vereinheitlichen.
+
+<pre>
+$translateProvider
+  .uniformLanguageTag('bcp47') // enable BCP-47, must be before determinePreferredLanguage!
+  .determinePreferredLanguage();
+</pre>
+
 Falls die Werte unerwartet oder unpassend sind, kann eine eigene Funktion geschrieben werden,
 die entsprechende Werte ermittelt und zurückgibt.
 
