@@ -51,10 +51,10 @@ module.exports = function (grunt) {
 
       core: [
         'src/translate.js',
+        'src/service/sanitization.js',
         'src/service/translate.js',
         'src/service/default-interpolation.js',
         'src/service/storage-key.js',
-        'src/service/sanitization.js',
         'src/directive/translate.js',
         'src/directive/translate-cloak.js',
         'src/filter/translate.js'
