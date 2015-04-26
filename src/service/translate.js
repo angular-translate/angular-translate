@@ -695,7 +695,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    * Use this method at your own risk, since not all browsers return a valid
    * locale.
    *
-   * @param {object=} fn Function to determine a browser's locale
+   * @param {Function=} fn Function to determine a browser's locale
    */
   this.determinePreferredLanguage = function (fn) {
 
