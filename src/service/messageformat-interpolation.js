@@ -98,6 +98,19 @@ function $translateMessageFormatInterpolation($translateSanitization, $cacheFact
 
     // if given string wasn't interpolated yet, we do so now and never have to do it again
     if (!interpolatedText) {
+
+      // Ensure explicit type if possible
+      // MessageFormat checks the actual type (i.e. for amount based conditions)
+      for (var key in interpolationParams) {
+        if (interpolationParams.hasOwnProperty(key)) {
+          // ensure number
+          var number = parseInt(interpolationParams[key], 10);
+          if (angular.isNumber(number) && ('' + number) === interpolationParams[key]) {
+            interpolationParams[key] = number;
+          }
+        }
+      }
+
       interpolatedText = $mf.compile(string)(interpolationParams);
       interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text');
 
