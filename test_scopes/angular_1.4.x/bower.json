@@ -11,14 +11,14 @@
   },
   "devDependencies": {
     "ngMidwayTester": "yearofmoo/ngMidwayTester",
-    "angular": "1.4.0-rc.0",
+    "angular": "~1.4.0-rc",
     "angular-translate-interpolation-messageformat": "2.4.1",
-    "angular-mocks": "1.4.0-rc.0",
-    "angular-cookies": "1.4.0-rc.0",
-    "angular-sanitize": "1.4.0-rc.0"
+    "angular-mocks": "~1.4.0-rc",
+    "angular-cookies": "~1.4.0-rc",
+    "angular-sanitize": "~1.4.0-rc"
   },
   "resolutions": {
-    "angular": "1.4.0-rc.0"
+    "angular": "~1.4.0-rc"
   },
   "licenses": [{
     "type": "MIT",
