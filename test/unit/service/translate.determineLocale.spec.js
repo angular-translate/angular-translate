@@ -196,7 +196,149 @@ describe('pascalprecht.translate', function () {
           });
         });
       });
+
+      describe('using resolver "default"', function () {
+        describe('should resolve to en-US to en_US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            $translateProvider.determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en_US');
+          }));
+        });
+
+        describe('should resolve to en_US to en_US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            $translateProvider.determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en_US');
+          }));
+        });
+
+        describe('should resolve to en-us to en_us', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            $translateProvider.determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en_us');
+          }));
+        });
+
+        describe('should resolve to en to en using', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            $translateProvider.determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+      });
+
+      describe('using resolver "java"', function () {
+        describe('should resolve to en-US to en_US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            $translateProvider
+              .uniformLanguageTag('java')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en_US');
+          }));
+        });
+
+        describe('should resolve to en_US to en_US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            $translateProvider
+              .uniformLanguageTag('java')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en_US');
+          }));
+        });
+
+        describe('should resolve to en-us to en_US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            $translateProvider
+              .uniformLanguageTag('java')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en_US');
+          }));
+        });
+
+        describe('should resolve to en to en using', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            $translateProvider
+              .uniformLanguageTag('java')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+      });
+
+      describe('using resolver "bcp47"', function () {
+        describe('should resolve to en-US to en-US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en-US');
+          }));
+        });
+
+        describe('should resolve to en_US to en-US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en-US');
+          }));
+        });
+
+        describe('should resolve to en-us to en-US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en-US');
+          }));
+        });
+
+        describe('should resolve to en to en using', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+      });
+
     });
   });
-
 });
