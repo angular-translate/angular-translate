@@ -1756,7 +1756,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * @param {object} interpolateParams Params
        * @param {string} interpolationId The id of the interpolation to use
        *
-       * @return {string} translation
+       * @return {string|object} translation
        */
       $translate.instant = function (translationId, interpolateParams, interpolationId) {
 
