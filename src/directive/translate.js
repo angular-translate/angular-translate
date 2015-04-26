@@ -127,10 +127,21 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
         scope.postText = '';
         var translationIds = {};
 
-        // initial setup
-        if (iAttr.translateValues) {
-          angular.extend(scope.interpolateParams, $parse(iAttr.translateValues)(scope.$parent));
-        }
+        var initInterpolationParams = function (interpolateParams, iAttr, tAttr) {
+          // initial setup
+          if (iAttr.translateValues) {
+            angular.extend(interpolateParams, $parse(iAttr.translateValues)(scope.$parent));
+          }
+          // initially fetch all attributes if existing and fill the params
+          if (translateValueExist) {
+            for (var attr in tAttr) {
+              if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+                var attributeName = angular.lowercase(attr.substr(14, 1)) + attr.substr(15);
+                interpolateParams[attributeName] = tAttr[attr];
+              }
+            }
+          }
+        };
 
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
@@ -144,16 +155,6 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
           }
 
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
-            // initially fetch all attributes if existing and fill the params
-            if (translateValueExist) {
-              for (var attr in tAttr) {
-                if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
-                  var attributeName = angular.lowercase(attr.substr(14, 1)) + attr.substr(15);
-                  scope.interpolateParams[attributeName] = tAttr[attr];
-                }
-              }
-            }
-
             // Resolve translation id by inner html if required
             var interpolateMatches = trim.apply(iElement.text()).match(interpolateRegExp);
             // Interpolate translation id if required
@@ -183,6 +184,9 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
             updateTranslations();
           });
         };
+
+        // initial setup with values
+        initInterpolationParams(scope.interpolateParams, iAttr, tAttr);
 
         var firstAttributeChangedEvent = true;
         iAttr.$observe('translate', function (translationId) {
