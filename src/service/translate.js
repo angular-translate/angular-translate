@@ -39,9 +39,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       loaderCache,
       directivePriority = 0,
       statefulFilter = true,
-      uniformLanguageTagResolver = 'standard',
+      uniformLanguageTagResolver = 'default',
       languageTagResolver = {
-        standard: function (tag) {
+        'default': function (tag) {
           return (tag || '').split('-').join('_');
         },
         java: function (tag) {
