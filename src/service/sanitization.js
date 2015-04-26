@@ -13,13 +13,13 @@ function $translateSanitizationProvider () {
 
   'use strict';
 
-  var provider = this,
-    $sanitize,
-    currentStrategy = null, // TODO change to either 'sanitize', 'escape' or ['sanitize', 'escapeParameters'] in 3.0.
-    hasConfiguredStrategy = false,
-    hasShownNoStrategyConfiguredWarning = false;
+  var $sanitize,
+      currentStrategy = null, // TODO change to either 'sanitize', 'escape' or ['sanitize', 'escapeParameters'] in 3.0.
+      hasConfiguredStrategy = false,
+      hasShownNoStrategyConfiguredWarning = false,
+      strategies;
 
-  provider.strategies = {
+  strategies = {
     /**
      * Sanitizes HTML in the translation text using $sanitize.
      */
@@ -59,23 +59,23 @@ function $translateSanitizationProvider () {
   };
   // Support legacy strategy name 'escaped' for backwards compatibility.
   // TODO should be removed in 3.0
-  provider.strategies.escaped = provider.strategies.escapeParameters;
+  strategies.escaped = strategies.escapeParameters;
 
   /**
    * Adds a sanitization strategy to the list of known strategies.
    * @param {string} strategyName
    * @param {Function} strategyFunction
    */
-  provider.addStrategy = function (strategyName, strategyFunction) {
-    provider.strategies[strategyName] = strategyFunction;
+  this.addStrategy = function (strategyName, strategyFunction) {
+    strategies[strategyName] = strategyFunction;
   };
 
   /**
    * Removes a sanitization strategy from the list of known strategies.
    * @param {string} strategyName
    */
-  provider.removeStrategy = function (strategyName) {
-    delete provider.strategies[strategyName];
+  this.removeStrategy = function (strategyName) {
+    delete strategies[strategyName];
   };
 
   /**
@@ -83,22 +83,22 @@ function $translateSanitizationProvider () {
    * @param {string|Function|Array<string|Function>} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
    * @returns {$translateSanitizationProvider}
    */
-  provider.useStrategy = function (strategy) {
+  this.useStrategy = function (strategy) {
     hasConfiguredStrategy = true;
     currentStrategy = strategy;
     return this;
   };
 
-  provider.$get = function ($injector, $log) {
+  this.$get = function ($injector, $log) {
 
-    var applyStrategies = function (value, mode, strategies) {
-      angular.forEach(strategies, function (strategy) {
-        if (angular.isFunction(strategy)) {
-          value = strategy(value, mode);
-        } else if (angular.isFunction(provider.strategies[strategy])) {
-          value = provider.strategies[strategy](value, mode);
+    var applyStrategies = function (value, mode, selectedStrategies) {
+      angular.forEach(selectedStrategies, function (selectedStrategy) {
+        if (angular.isFunction(selectedStrategy)) {
+          value = selectedStrategy(value, mode);
+        } else if (angular.isFunction(strategies[selectedStrategy])) {
+          value = strategies[selectedStrategy](value, mode);
         } else {
-          throw new Error('pascalprecht.translate.$translateSanitization: Unknown sanitization strategy: \'' + strategy + '\'');
+          throw new Error('pascalprecht.translate.$translateSanitization: Unknown sanitization strategy: \'' + selectedStrategy + '\'');
         }
       });
       return value;
@@ -122,7 +122,7 @@ function $translateSanitizationProvider () {
        * @param {string|Function|Array<string|Function>} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
        * @returns {$translateSanitizationProvider}
        */
-      useStrategy: provider.useStrategy,
+      useStrategy: this.useStrategy,
       /**
        * Sanitizes a value.
        * @param {*} value The value which should be sanitized.
@@ -143,8 +143,8 @@ function $translateSanitizationProvider () {
           return value;
         }
 
-        var strategies = angular.isArray(strategy) ? strategy : [strategy];
-        return applyStrategies(value, mode, strategies);
+        var selectedStrategies = angular.isArray(strategy) ? strategy : [strategy];
+        return applyStrategies(value, mode, selectedStrategies);
       }
     };
   };
