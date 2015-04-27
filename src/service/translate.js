@@ -714,7 +714,13 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    * Tells angular-translate which language tag should be used as a result when determining
    * the current browser language.
    *
-   * This setting must be set before invoking determinePreferredLanguage.
+   * This setting must be set before invoking {@link pascalprecht.translate.$translateProvider#methods_determinePreferredLanguage determinePreferredLanguage()}.
+   *
+   * <pre>
+   * $translateProvider
+   *   .uniformLanguageTag('bcp47')
+   *   .determinePreferredLanguage()
+   * </pre>
    *
    * The resolver currently supports:
    * * default
@@ -770,7 +776,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    * `[lang]` depending on what the browser provides.
    *
    * Use this method at your own risk, since not all browsers return a valid
-   * locale (note: have a look at #uniformLanguageTag().
+   * locale (see {@link pascalprecht.translate.$translateProvider#methods_uniformLanguageTag uniformLanguageTag()}).
    *
    * @param {Function=} fn Function to determine a browser's locale
    */
