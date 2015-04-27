@@ -26,37 +26,47 @@ function $translateSanitizationProvider () {
    * @return {string|object}
    */
 
+  /**
+   * @ngdoc property
+   * @name strategies
+   * @propertyOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
+   * Following strategies are built-in:
+   * <dl>
+   *   <dt>sanitize</dt>
+   *   <dd>Sanitizes HTML in the translation text using $sanitize</dd>
+   *   <dt>escape</dt>
+   *   <dd>Escapes HTML in the translation</dd>
+   *   <dt>sanitizeParameters</dt>
+   *   <dd>Sanitizes HTML in the values of the interpolation parameters using $sanitize</dd>
+   *   <dt>escapeParameters</dt>
+   *   <dd>Escapes HTML in the values of the interpolation parameters</dd>
+   *   <dt>escaped</dt>
+   *   <dd>Support legacy strategy name 'escaped' for backwards compatibility (will be removed in 3.0)</dd>
+   * </dl>
+   *
+   */
+
   strategies = {
-    /**
-     * Sanitizes HTML in the translation text using $sanitize.
-     */
     sanitize: function (value, mode) {
       if (mode === 'text') {
         value = htmlSanitizeValue(value);
       }
       return value;
     },
-    /**
-     * Escapes HTML in the translation.
-     */
     escape: function (value, mode) {
       if (mode === 'text') {
         value = htmlEscapeValue(value);
       }
       return value;
     },
-    /**
-     * Sanitizes HTML in the values of the interpolation parameters using $sanitize.
-     */
     sanitizeParameters: function (value, mode) {
       if (mode === 'params') {
         value = mapInterpolationParameters(value, htmlSanitizeValue);
       }
       return value;
     },
-    /**
-     * Escapes HTML in the values of the interpolation parameters.
-     */
     escapeParameters: function (value, mode) {
       if (mode === 'params') {
         value = mapInterpolationParameters(value, htmlEscapeValue);
