@@ -507,16 +507,18 @@ module.exports = function (grunt) {
         imageLink: 'http://angular-translate.github.io',
         startPage: '/guide',
         scripts: [
-          '//getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js',
-          '//rawgithub.com/SlexAxton/messageformat.js/master/messageformat.js',
-          '//code.angularjs.org/1.1.5/angular.min.js',
-          '//rawgithub.com/angular/bower-angular-cookies/master/angular-cookies.min.js',
-          '//rawgithub.com/angular-translate/bower-angular-translate/master/angular-translate.min.js',
-          '//rawgithub.com/angular-translate/bower-angular-translate-interpolation-messageformat/master/angular-translate-interpolation-messageformat.min.js',
-          '//rawgithub.com/angular-translate/bower-angular-translate-storage-cookie/master/angular-translate-storage-cookie.min.js',
-          '//rawgithub.com/angular-translate/bower-angular-translate-storage-local/master/angular-translate-storage-local.min.js',
-          '//rawgithub.com/angular-translate/bower-angular-translate-loader-static-files/master/angular-translate-loader-static-files.min.js',
-          '//rawgithub.com/angular-translate/bower-angular-translate-handler-log/master/angular-translate-handler-log.min.js'
+          'https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-cookies.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-sanitize.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.6.1/angular-translate.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.6.1/angular-translate-interpolation-messageformat.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.6.1/angular-translate-storage-cookie.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.6.1/angular-translate-storage-local.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.6.1/angular-translate-loader-url.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.6.1/angular-translate-loader-static-files.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.6.1/angular-translate-handler-log.js'
         ],
         styles: ['docs/css/styles.css']
       },
