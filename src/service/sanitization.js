@@ -1,11 +1,10 @@
 /**
  * @ngdoc object
- * @name pascalprecht.translate.$translateSanitization
+ * @name pascalprecht.translate.$translateSanitizationProvider
  *
  * @description
- * Sanitizes interpolation parameters and translated texts.
  *
- * @return {object} $translateSanitization sanitization service
+ * Configurations for $translateSanitization
  */
 angular.module('pascalprecht.translate').provider('$translateSanitization', $translateSanitizationProvider);
 
@@ -18,6 +17,14 @@ function $translateSanitizationProvider () {
       hasConfiguredStrategy = false,
       hasShownNoStrategyConfiguredWarning = false,
       strategies;
+
+  /**
+   * Definition of a sanitization strategy function
+   * @callback StrategyFunction
+   * @param {string|object} value - value to be sanitized (either a string or an interpolated value map)
+   * @param {string} mode - either 'text' for a string (translation) or 'params' for the interpolated params
+   * @return {string|object}
+   */
 
   strategies = {
     /**
@@ -62,26 +69,48 @@ function $translateSanitizationProvider () {
   strategies.escaped = strategies.escapeParameters;
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateSanitizationProvider#addStrategy
+   * @methodOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
    * Adds a sanitization strategy to the list of known strategies.
-   * @param {string} strategyName
-   * @param {Function} strategyFunction
+   *
+   * @param {string} strategyName - unique key for a strategy
+   * @param {StrategyFunction} strategyFunction - strategy function
+   * @returns {object} this
    */
   this.addStrategy = function (strategyName, strategyFunction) {
     strategies[strategyName] = strategyFunction;
+    return this;
   };
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateSanitizationProvider#removeStrategy
+   * @methodOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
    * Removes a sanitization strategy from the list of known strategies.
-   * @param {string} strategyName
+   *
+   * @param {string} strategyName - unique key for a strategy
+   * @returns {object} this
    */
   this.removeStrategy = function (strategyName) {
     delete strategies[strategyName];
+    return this;
   };
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateSanitizationProvider#useStrategy
+   * @methodOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
    * Selects a sanitization strategy. When an array is provided the strategies will be executed in order.
-   * @param {string|Function|Array<string|Function>} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
-   * @returns {$translateSanitizationProvider}
+   *
+   * @param {string|StrategyFunction|array} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
+   * @returns {object} this
    */
   this.useStrategy = function (strategy) {
     hasConfiguredStrategy = true;
@@ -89,6 +118,16 @@ function $translateSanitizationProvider () {
     return this;
   };
 
+  /**
+   * @ngdoc object
+   * @name pascalprecht.translate.$translateSanitization
+   * @requires $injector
+   * @requires $log
+   *
+   * @description
+   * Sanitizes interpolation parameters and translated texts.
+   *
+   */
   this.$get = function ($injector, $log) {
 
     var applyStrategies = function (value, mode, selectedStrategies) {
@@ -118,17 +157,33 @@ function $translateSanitizationProvider () {
 
     return {
       /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateSanitization#useStrategy
+       * @methodOf pascalprecht.translate.$translateSanitization
+       *
+       * @description
        * Selects a sanitization strategy. When an array is provided the strategies will be executed in order.
-       * @param {string|Function|Array<string|Function>} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
-       * @returns {$translateSanitizationProvider}
+       *
+       * @param {string|StrategyFunction|array} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
        */
-      useStrategy: this.useStrategy,
+      useStrategy: (function (self) {
+        return function (strategy) {
+          self.useStrategy(strategy);
+        };
+      })(this),
+
       /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateSanitization#sanitize
+       * @methodOf pascalprecht.translate.$translateSanitization
+       *
+       * @description
        * Sanitizes a value.
-       * @param {*} value The value which should be sanitized.
+       *
+       * @param {string|object} value The value which should be sanitized.
        * @param {string} mode The current sanitization mode, either 'params' or 'text'.
-       * @param {string|Function|Array<string|Function>} [strategy] Optional custom strategy which should be used instead of the currently selected strategy.
-       * @returns {*}
+       * @param {string|StrategyFunction|array} [strategy] Optional custom strategy which should be used instead of the currently selected strategy.
+       * @returns {string|object} sanitized value
        */
       sanitize: function (value, mode, strategy) {
         if (!currentStrategy) {
@@ -169,11 +224,9 @@ function $translateSanitizationProvider () {
       });
 
       return result;
-    }
-    else if (angular.isNumber(value)) {
+    } else if (angular.isNumber(value)) {
       return value;
-    }
-    else {
+    } else {
       return iteratee(value);
     }
   };
