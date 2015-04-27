@@ -6,6 +6,11 @@
  * @description
  * Uses angular's `$interpolate` services to interpolate strings against some values.
  *
+ * Be aware to configure a proper sanitization strategy.
+ *
+ * See also:
+ * * {@link pascalprecht.translate.$translateSanitization}
+ *
  * @return {object} $translateDefaultInterpolation Interpolator service
  */
 angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation', $translateDefaultInterpolation);

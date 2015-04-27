@@ -18,6 +18,12 @@ angular.module('pascalprecht.translate')
  * @description
  * Uses MessageFormat.js to interpolate strings against some values.
  *
+ * Be aware to configure a proper sanitization strategy.
+ *
+ * See also:
+ * * {@link pascalprecht.translate.$translateSanitization}
+ * * {@link https://github.com/SlexAxton/messageformat.js}
+ *
  * @return {object} $translateMessageFormatInterpolation Interpolator service
  */
 .factory('$translateMessageFormatInterpolation', $translateMessageFormatInterpolation);
