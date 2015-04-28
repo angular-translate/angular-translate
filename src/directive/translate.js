@@ -290,7 +290,9 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
           }
         };
 
-        scope.$watch('interpolateParams', updateTranslations, true);
+        if (translateValuesExist || translateValueExist || iAttr.translateDefault) {
+          scope.$watch('interpolateParams', updateTranslations, true);
+        }
 
         // Ensures the text will be refreshed after the current language was changed
         // w/ $translate.use(...)
