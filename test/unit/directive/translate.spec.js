@@ -21,7 +21,12 @@ describe('pascalprecht.translate', function () {
           'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
           'HOW_ABOUT_THIS': '{{value}} + {{value}}',
           'AND_THIS': '{{value + value}}',
-          'BLANK_VALUE': ''
+          'BLANK_VALUE': '',
+          'NAMESPACE': {
+            'SUBNAMESPACE': {
+              'TRANSLATION_ID': 'Namespaced translation'
+            }
+          }
         })
         .preferredLanguage('en');
     }));
@@ -192,6 +197,23 @@ describe('pascalprecht.translate', function () {
         element = $compile('<translate>BLANK_VALUE</translate>')($rootScope);
         $rootScope.$digest();
         expect(element.text()).toBe('');
+      });
+
+      describe('when id starts with a dot and translate namespace given', function () {
+        it('should return translation', function () {
+          $rootScope.translateNamespace = "NAMESPACE.SUBNAMESPACE";
+          element = $compile('<h4 translate>.TRANSLATION_ID</h4>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Namespaced translation');
+        });
+
+        it('should work with isolated scopes', function () {
+          $rootScope.translateNamespace = "NAMESPACE.SUBNAMESPACE";
+          var isolatedScope = $rootScope.$new({});
+          element = $compile('<h4 translate>.TRANSLATION_ID</h4>')(isolatedScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Namespaced translation');
+        });
       });
     });
 
@@ -648,7 +670,12 @@ describe('pascalprecht.translate', function () {
           'ANOTHER_ONE': 'bar',
           'TRANSLATION_ID': 'foo',
           'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-          'ANOTHER_TEXT_WITH_VALUE': 'And here is another value: {{another_value}}'
+          'ANOTHER_TEXT_WITH_VALUE': 'And here is another value: {{another_value}}',
+          'NAMESPACE': {
+            'SUBNAMESPACE': {
+              'TRANSLATION_ID': 'Namespaced translation'
+            }
+          }
         })
         .preferredLanguage('en');
     }));
@@ -704,6 +731,12 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       expect(element.attr('title')).toBe('Helloo there!');
     });
-  });
 
+    it('should return translation for prefixed id when translate namespace given and translation id starts with a dot', function () {
+      $rootScope.translateNamespace = "NAMESPACE.SUBNAMESPACE";
+      element = $compile('<div translate translate-attr-title=".TRANSLATION_ID"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('Namespaced translation');
+    });
+  });
 });
