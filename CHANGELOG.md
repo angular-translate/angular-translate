@@ -1,3 +1,50 @@
+<a name="2.7.0"></a>
+## 2.7.0 (2015-05-02)
+
+
+#### Bug Fixes
+
+* **directive:**
+  * fix translate-value-* weren't be available on init ([98e82798](http://github.com/angular-translate/angular-translate/commit/98e827980ec491152ab6108f5fd5eac28010e89e))
+  * fix wrong initial translation causing overloading ([657ed8a6](http://github.com/angular-translate/angular-translate/commit/657ed8a6e8d09cbf5fd53a26ea98cbcf928637cd))
+  * fix issue with `data-` prefixed attributes #954 ([ee253bc3](http://github.com/angular-translate/angular-translate/commit/ee253bc397aa70b8688893430ea814c0e2387344))
+  * make translate-values interpolate correctly with newer MessageFormat.js ([887dc1b4](http://github.com/angular-translate/angular-translate/commit/887dc1b4c0e928fbfd595a1d03cb292fcd536839))
+  * Make interpolate message format work smoothly also on message format > 0.1.7 - f ([2533f2d0](http://github.com/angular-translate/angular-translate/commit/2533f2d0b2e9f21007335c510772418a4c7a3962))
+  * handle interpolation of undefined keys correctly in updateTranslations, fixes is ([3f7cf4cf](http://github.com/angular-translate/angular-translate/commit/3f7cf4cf6eecb0487da2dc4dd8cb805500cb1aff))
+* **docs:**
+  * fix invalid link in directive ([985cfd5b](http://github.com/angular-translate/angular-translate/commit/985cfd5bedec12043e5f24b16b86394150c6182e))
+  * typo in module type ([f0527b14](http://github.com/angular-translate/angular-translate/commit/f0527b1431f7b426584e32b5f17bc181d409ce41))
+  * bug in "Flash of untranslated content" section ([af5d746a](http://github.com/angular-translate/angular-translate/commit/af5d746a6476d82f31968d608ebc21227212cd7e))
+* **feat:** export module name improving usage module loaders #944 ([cb33f63b](http://github.com/angular-translate/angular-translate/commit/cb33f63b8869aff386718c7d3b18365d2483d3eb))
+* **messageformat:** add duck type check for numbers #789 ([bbc1cbef](http://github.com/angular-translate/angular-translate/commit/bbc1cbefb69e80579f15f7da59ac5c5536388fc2))
+* **refresh:** it has to clear all tables if no language key is specified ([3cce7950](http://github.com/angular-translate/angular-translate/commit/3cce795022e790bc31656ab946ed63bba6c238c3))
+* **service:**
+  * fix possible npe ([1aaab980](http://github.com/angular-translate/angular-translate/commit/1aaab980760f8863551598ed748d200f1f03d9c6))
+  * do not try to load a predefined fallback language ([3be14df8](http://github.com/angular-translate/angular-translate/commit/3be14df809d3c162f4a1aecffb90d62b5296b4d9))
+  * fix an issue resolving after missing translations ([a13899fc](http://github.com/angular-translate/angular-translate/commit/a13899fcf677588e0c56b780c57f9aaba6d6e976))
+  * always remove stored ref for lang promises ([dbd5be93](http://github.com/angular-translate/angular-translate/commit/dbd5be936d0588a1ec6f29e5ce52a4e0f096ea36), closes [#824](http://github.com/angular-translate/angular-translate/issues/824), [#969](http://github.com/angular-translate/angular-translate/issues/969))
+
+
+#### Features
+
+* **$translatePartialLoader:** accept function in urlTemplate ([401204aa](http://github.com/angular-translate/angular-translate/commit/401204aade22e4729de5349a03689b02f9e6d20b))
+* **build:** introduce module definition ([00b73ff6](http://github.com/angular-translate/angular-translate/commit/00b73ff6f40daeabc54afade7b5e6217722b70e8))
+* **filter:** add new option `$translate.statefulFilter()` ([dec4bf34](http://github.com/angular-translate/angular-translate/commit/dec4bf34b7bb30bba4ca80df263df1858b3e68f5))
+* **missingTranslationHandlerFactory:** pass interpolationParams to missingTranslationHandlerFactory ([a361fd05](http://github.com/angular-translate/angular-translate/commit/a361fd050f490e550b7e2e5fbfea91b85ba3e879))
+* **sanitization:** refactored, fixed and extended sanitization #993 ([12dbc575](http://github.com/angular-translate/angular-translate/commit/12dbc5754c8315d41144794918f1ec8ca34c601e))
+* **service:** add uniformLanguageTagResolver ([b534e1a3](http://github.com/angular-translate/angular-translate/commit/b534e1a3c7e43f27b00a2579750d8136aebc57fd))
+
+
+#### Breaking Changes
+
+* You will get a warning message when using the default security option (not escaping the content).
+
+You can fix (and remove) this warning by explicit set a sanitization strategy
+within your config phase configuring $translateProvider. Even configuring the `null` mode will let the
+warning disapper. You are highly encouraged specifing any mode except `null` because of security concerns.
+ ([12dbc575](http://github.com/angular-translate/angular-translate/commit/12dbc5754c8315d41144794918f1ec8ca34c601e))
+
+
 <a name="2.6.1"></a>
 ### 2.6.1 (2015-03-01)
 
