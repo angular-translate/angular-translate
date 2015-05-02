@@ -171,10 +171,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       }
     }
 
-    var parts = preferred.split('_');
+    if (preferred) {
+      var parts = preferred.split('_');
 
-    if (parts.length > 1 && indexOf(avail, angular.lowercase(parts[0])) > -1) {
-      return parts[0];
+      if (parts.length > 1 && indexOf(avail, angular.lowercase(parts[0])) > -1) {
+        return parts[0];
+      }
     }
 
     // If everything fails, just return the preferred, unchanged.
