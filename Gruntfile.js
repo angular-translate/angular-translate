@@ -504,7 +504,7 @@ module.exports = function (grunt) {
         html5Mode: false,
         title: false,
         image: 'identity/logo/angular-translate-alternative/angular-translate_alternative_small2.png',
-        imageLink: 'http://angular-translate.github.io',
+        imageLink: 'https://angular-translate.github.io',
         startPage: '/guide',
         scripts: [
           'https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js',
