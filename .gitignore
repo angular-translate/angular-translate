@@ -3,6 +3,7 @@
 /bower_components/
 /test_scopes/angular_1.2.x/bower_components/
 /test_scopes/angular_1.3.x/bower_components/
+/test_scopes/angular_1.4.x/bower_components/
 /dist/
 /demo/js/angular-translate-latest.js
 /build/

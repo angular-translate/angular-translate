@@ -1,3 +1,7 @@
+/* jshint camelcase: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function() {
 
   var counter,
@@ -9,11 +13,6 @@ describe('pascalprecht.translate', function() {
     resolveHandlerCounter = 0;
     rejectHandlerCounter = 0;
   });
-
-
-  function ThrowErrorHttpInterceptor(data) {
-    throw new Error('$http service was used!');
-  }
 
   function CounterHttpInterceptor(data) {
     ++counter;
@@ -418,6 +417,26 @@ describe('pascalprecht.translate', function() {
       });
     });
 
+    it('should support function in url template', function() {
+      inject(function($translatePartialLoader, $httpBackend) {
+        var getUrlTemplate = jasmine.createSpy('getUrlTemplate')
+          .and.returnValue('/locales/data.json');
+
+        $httpBackend.expectGET('/locales/data.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : getUrlTemplate
+        });
+
+        $httpBackend.flush();
+        expect(getUrlTemplate).toHaveBeenCalledWith('part', 'en');
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+    });
+
     it('should parse url template with multiple pattern occurrences', function () {
       inject(function($translatePartialLoader, $httpBackend) {
         $httpBackend.expectGET('/locales/part/part-en.json').respond(200, '{}');
@@ -789,7 +808,7 @@ describe('pascalprecht.translate', function() {
 
       inject(function($translatePartialLoader, $httpBackend) {
         var table;
-        
+
         $httpBackend.whenGET('/locales/part1-en.json').respond(200, '{"key1":"value1","key2":"value2","key3":"value3","key4":"value4"}');
         $httpBackend.whenGET('/locales/part2-en.json').respond(200, '{"key2" : "overridenby2","key4":"overridenby2"}');
         $httpBackend.whenGET('/locales/part3-en.json').respond(200, '{"key3" : "overridenby3","key4":"overridenby3"}');

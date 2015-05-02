@@ -245,6 +245,44 @@ app.run(function ($rootScope, $translate) {
 Так как `$translate.refresh()` возвращает обещание, это отлично работает как с модулем `ngRoute`,
 так и с UI Router.
 
+Интересным является вопрос борьбы с ошибками загрузки. По умолчанию загрузчик отвергает весь
+процесс загрузки, если любая из частей не была загружена с сервера. Но вы можете немного изменить
+это поведение. Загрузчик позволяет указать обработчик ошибок - сервис, который будет вызываться,
+если какая-либо часть не может быть загружена. В данном сервисе вы можете делать все, чтобы
+обрабатывать такие ситуации.
+
+Есть несколько вещей, которые вы должны знать, прежде чем вы сможете создать ваш первый обработчик
+ошибок:
+
+1) Загрузчик рассчитывает, что обработчик ошибок имеет следующую сигнатуру
+`function (part:String, langKey:String):Promise`
+2) Вы должны либо разрешить обещание с таблицей перевода для данных части и языка или отклонить его
+3) Загрузчик будет использовать данную таблицу перевода так же, как если бы она была успешно
+получена с сервера
+4) Если вы отвергнете обещание, то загрузчик отвергнет весь процесс загрузки
+
+Вот пример простого обработчика ошибок:
+
+```js
+angular.module('translation')
+.factory('MyErrorHandler', function ($q, $log) {
+  return function (part, lang) {
+    $log.error('The "' + part + '/' + lang + '" part was not loaded.');
+    return $q.when({});
+  };
+});
+```
+
+Итак, теперь все, что мы должны сделать, это сказать загрузчику название сервиса, который он должен
+использовать в качестве обработчика ошибок:
+
+<pre>
+$translateProvider.useLoader('$translatePartialLoader', {
+  urlTemplate: '/i18n/{part}/{lang}.json',
+  loadFailureHandler: 'MyErrorHandler'
+});
+</pre>
+
 ## Отложенная загрузка во время выполнения
 
 Как только ваше приложение загрузится, то оно асинхронно загрузит необходимые данные переводов.
@@ -265,10 +303,10 @@ app.run(function ($rootScope, $translate) {
 В каждый загрузчик могут быть переданы настройки. Для этого используется такой синтаксис:
 
 <pre>
-$translationProvider.useLoader('customLoader', {
+$translateProvider.useLoader('customLoader', {
   settingA: 'foobar'
 });
-$translationProvider.useStaticFilesLoader({
+$translateProvider.useStaticFilesLoader({
   $http: {
     method: 'POST'
   }
@@ -287,19 +325,19 @@ $translationProvider.useStaticFilesLoader({
 Для включения стандартного кэширования используйте следующий метод:
 
 <pre>
-$translationProvider.useLoaderCache(true); // default is false which means disable
+$translateProvider.useLoaderCache(true); // default is false which means disable
 </pre>
 
 Если же у Вас уже есть экземпляр кэша (специально настроенный), то привяжите его так:
 
 <pre>
-$translationProvider.useLoaderCache(yourSpecialCacheService);
+$translateProvider.useLoaderCache(yourSpecialCacheService);
 </pre>
 
 Angular-Translate также поддерживает ленивое связывание. Поэтому, такой вариант тоже будет работать:
 
 <pre>
-$translationProvider.useLoaderCache('yourSpecialCacheService');
+$translateProvider.useLoaderCache('yourSpecialCacheService');
 </pre>
 
 Экземпляр под названием `yourspecialCacheService` будет найден при необходимости.
@@ -327,8 +365,11 @@ $translateProvider.useStaticFilesLoader({
     'prefix': 'locale-',
     'suffix': '.json'
 });
-$translateProvider.preferredLanguage('de');
+$translateProvider.preferredLanguage('en');
 </pre>
+
+**Заметка:** Пользователь Angular-Translate поделился хорошим решением этой проблемы
+[при помощи Grunt](https://github.com/angular-translate/angular-translate/issues/921).
 
 Давайте обновим наше учебное приложение таким образом, чтобы использовать асинхронный загрузчик!
 Воспользуемся staticFilesLoader. Для начала, мы должны изъять таблицы переводов из кода и поместить

@@ -16,7 +16,11 @@ angular.module('pascalprecht.translate')
  * @param {object} options Options object, which gets the url, key and
  * optional queryParameter ('lang' is used by default).
  */
-.factory('$translateUrlLoader', ['$q', '$http', function ($q, $http) {
+.factory('$translateUrlLoader', $translateUrlLoader);
+
+function $translateUrlLoader($q, $http) {
+
+  'use strict';
 
   return function (options) {
 
@@ -35,10 +39,12 @@ angular.module('pascalprecht.translate')
       method: 'GET'
     }, options.$http)).success(function (data) {
       deferred.resolve(data);
-    }).error(function (data) {
+    }).error(function () {
       deferred.reject(options.key);
     });
 
     return deferred.promise;
   };
-}]);
+}
+
+$translateUrlLoader.displayName = '$translateUrlLoader';

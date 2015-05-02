@@ -1,3 +1,6 @@
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateModule#run', function () {
@@ -87,11 +90,12 @@ describe('pascalprecht.translate', function () {
             return function(options) {
               if(options.key === 'en') {
                 return $q.reject('en');
-              } else if(options.key === 'de')
-              return $q.when({
-                key: 'de',
-                table: {}
-              });
+              } else if(options.key === 'de') {
+                return $q.when({
+                  key : 'de',
+                  table : {}
+                });
+              }
             };
           });
 

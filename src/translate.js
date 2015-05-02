@@ -6,13 +6,16 @@
  * The main module which holds everything together.
  */
 angular.module('pascalprecht.translate', ['ng'])
+  .run(runTranslate);
 
-.run(['$translate', function ($translate) {
+function runTranslate($translate) {
+
+  'use strict';
 
   var key = $translate.storageKey(),
-      storage = $translate.storage();
+    storage = $translate.storage();
 
-  var fallbackFromIncorrectStorageValue = function() {
+  var fallbackFromIncorrectStorageValue = function () {
     var preferred = $translate.preferredLanguage();
     if (angular.isString(preferred)) {
       $translate.use(preferred);
@@ -23,6 +26,8 @@ angular.module('pascalprecht.translate', ['ng'])
     }
   };
 
+  fallbackFromIncorrectStorageValue.displayName = 'fallbackFromIncorrectStorageValue';
+
   if (storage) {
     if (!storage.get(key)) {
       fallbackFromIncorrectStorageValue();
@@ -32,4 +37,6 @@ angular.module('pascalprecht.translate', ['ng'])
   } else if (angular.isString($translate.preferredLanguage())) {
     $translate.use($translate.preferredLanguage());
   }
-}]);
+}
+
+runTranslate.displayName = 'runTranslate';

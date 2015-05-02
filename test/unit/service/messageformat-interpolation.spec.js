@@ -1,3 +1,7 @@
+/* jshint camelcase: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   var $translateMessageFormatInterpolation;
@@ -126,27 +130,29 @@ describe('pascalprecht.translate', function () {
         })).toEqual('You and 2 others added this to their profiles.');
     });
 
-    describe('should support sanitize strategies', function () {
+    it('should sanitize the interpolation params', inject(function ($translateSanitization) {
+      var text = 'Foo bar {value}';
+      var params =  { value: '<span>Test</span>' };
+      var sanitizedText = 'Foo bar &lt;span&gt;Test&lt;/span&gt;';
 
-      it('disabled by default', function () {
-        expect($translateMessageFormatInterpolation.interpolate('The Doctor is a citizen of {world}!', {
-          world: 'Gallifrey'
-        })).toEqual('The Doctor is a citizen of Gallifrey!');
-        expect($translateMessageFormatInterpolation.interpolate('The Doctor is a citizen of {world}!', {
-          world: 'Gallifrey <span onclick="alert(\"EXTERMINATE\")">click me</span>'
-        })).toEqual('The Doctor is a citizen of Gallifrey <span onclick="alert("EXTERMINATE")">click me</span>!');
-      });
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateMessageFormatInterpolation.useSanitizeValueStrategy('escapeParameters');
 
-      it('with strategy="escaped"', function () {
-        $translateMessageFormatInterpolation.useSanitizeValueStrategy('escaped');
+      expect($translateMessageFormatInterpolation.interpolate(text, params)).toBe(sanitizedText);
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params');
+    }));
 
-        expect($translateMessageFormatInterpolation.interpolate('The Doctor is a citizen of {world}!', {
-          world: 'Gallifrey <span onclick="alert(\"EXTERMINATE\")">click me</span>'
-        })).toEqual('The Doctor is a citizen of Gallifrey &lt;span onclick="alert("EXTERMINATE")"&gt;click me&lt;/span&gt;!');
-        $translateMessageFormatInterpolation.useSanitizeValueStrategy();
+    it('should sanitize the interpolated text', inject(function ($translateSanitization) {
+      var text = 'Foo <span>bar</span> {value}';
+      var params =  { value: 'value' };
+      var interPolatedText = 'Foo <span>bar</span> value';
+      var sanitizedText = 'Foo &lt;span&gt;bar&lt;/span&gt; value';
 
-      });
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateMessageFormatInterpolation.useSanitizeValueStrategy('escape');
 
-    });
+      expect($translateMessageFormatInterpolation.interpolate(text, params)).toBe(sanitizedText);
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text');
+    }));
   });
 });

@@ -1,8 +1,12 @@
+/* jshint camelcase: false, quotmark: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateDirective (single-lang)', function () {
 
-    var element;
+    var $compile, $rootScope, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -21,8 +25,6 @@ describe('pascalprecht.translate', function () {
         })
         .preferredLanguage('en');
     }));
-
-    var $compile, $rootScope;
 
     beforeEach(inject(function (_$compile_, _$rootScope_) {
       $compile = _$compile_;
@@ -141,6 +143,13 @@ describe('pascalprecht.translate', function () {
         $rootScope.$digest();
         expect(element.text()).toBe('TEXT');
       });
+
+      it('should return empty translation if translationId scope Variable does not exist and if its passed as interpolation', function () {
+        element = $compile('<div translate>{{translationIdNotExisting}}</div>')($rootScope);
+        $rootScope.$digest();
+        expect(element.text()).toBe('');
+      });
+
 
       it('should return translation prepended by additional content when passed as interpolation', function () {
         $rootScope.translationId = 'TRANSLATION_ID';
@@ -320,7 +329,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-interpolation attribute', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -375,6 +384,8 @@ describe('pascalprecht.translate', function () {
   });
 
   describe('custom translate-value-* attributes', function () {
+
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -447,7 +458,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate sanitization', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -474,7 +485,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate sanitization (escaping)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -503,7 +514,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-compile extension (globally disabled)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element, $translate;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -560,7 +571,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-compile extension (globally enabled)', function () {
 
-    var $rootScope, $compile;
+    var $rootScope, $compile, element, $translate;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
@@ -629,7 +640,7 @@ describe('pascalprecht.translate', function () {
 
   describe('translate-attr-* attributes', function () {
 
-    var element;
+    var $compile, $rootScope, element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
@@ -642,8 +653,6 @@ describe('pascalprecht.translate', function () {
         .preferredLanguage('en');
     }));
 
-    var $compile, $rootScope;
-
     beforeEach(inject(function (_$compile_, _$rootScope_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
@@ -652,6 +661,12 @@ describe('pascalprecht.translate', function () {
 
     it('should make simple attribute translation', function () {
       element = $compile('<div translate translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('foo');
+    });
+
+    it('should make simple attribute translation (data prefixed)', function () {
+      element = $compile('<div translate data-translate-attr-title="TRANSLATION_ID"></div>')($rootScope);
       $rootScope.$digest();
       expect(element.attr('title')).toBe('foo');
     });

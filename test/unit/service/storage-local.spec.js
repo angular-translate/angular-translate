@@ -1,3 +1,7 @@
+/* jshint camelcase: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   var $translateLocalStorage, $window;

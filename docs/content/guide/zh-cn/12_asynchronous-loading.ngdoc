@@ -231,7 +231,7 @@ $translateProvider.useStaticFilesLoader({
     'prefix': 'locale-',
     'suffix': '.json'
 });
-$translateProvider.preferredLanguage('de');
+$translateProvider.preferredLanguage('en');
 </pre>
 
 让我们来使用相应的异步加载器来更新我们的示例应用程序！我们将使用 staticFilesLoader。首先，我们要从代码中抽取翻译转换表出来

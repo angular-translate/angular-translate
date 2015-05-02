@@ -1,47 +1,42 @@
 angular.module('pascalprecht.translate')
 
+/**
+ * @ngdoc property
+ * @name pascalprecht.translate.TRANSLATE_MF_INTERPOLATION_CACHE
+ * @requires TRANSLATE_MF_INTERPOLATION_CACHE
+ *
+ * @description
+ * Uses MessageFormat.js to interpolate strings against some values.
+ */
 .constant('TRANSLATE_MF_INTERPOLATION_CACHE', '$translateMessageFormatInterpolation')
 
 /**
  * @ngdoc object
  * @name pascalprecht.translate.$translateMessageFormatInterpolation
- * @requires TRANSLATE_MF_INTERPOLATION_CACHE
+ * @requires pascalprecht.translate.TRANSLATE_MF_INTERPOLATION_CACHE
  *
  * @description
  * Uses MessageFormat.js to interpolate strings against some values.
  *
- * @return {object} $translateInterpolator Interpolator service
+ * Be aware to configure a proper sanitization strategy.
+ *
+ * See also:
+ * * {@link pascalprecht.translate.$translateSanitization}
+ * * {@link https://github.com/SlexAxton/messageformat.js}
+ *
+ * @return {object} $translateMessageFormatInterpolation Interpolator service
  */
-.factory('$translateMessageFormatInterpolation', function ($cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
+.factory('$translateMessageFormatInterpolation', $translateMessageFormatInterpolation);
+
+function $translateMessageFormatInterpolation($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
+
+  'use strict';
 
   var $translateInterpolator = {},
       $cache = $cacheFactory.get(TRANSLATE_MF_INTERPOLATION_CACHE),
       // instantiate with default locale (which is 'en')
       $mf = new MessageFormat('en'),
-      $identifier = 'messageformat',
-      $sanitizeValueStrategy = null,
-      // map of all sanitize strategies
-      sanitizeValueStrategies = {
-        escaped: function (params) {
-          var result = {};
-          for (var key in params) {
-            if (Object.prototype.hasOwnProperty.call(params, key)) {
-              result[key] = angular.element('<div></div>').text(params[key]).html();
-            }
-          }
-          return result;
-        }
-      };
-
-  var sanitizeParams = function (params) {
-    var result;
-    if (angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])) {
-      result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
-    } else {
-      result = params;
-    }
-    return result;
-  };
+      $identifier = 'messageformat';
 
   if (!$cache) {
     // create cache if it doesn't exist already
@@ -82,8 +77,12 @@ angular.module('pascalprecht.translate')
     return $identifier;
   };
 
+  /**
+   * @deprecated will be removed in 3.0
+   * @see {@link pascalprecht.translate.$translateSanitization}
+   */
   $translateInterpolator.useSanitizeValueStrategy = function (value) {
-    $sanitizeValueStrategy = value;
+    $translateSanitization.useStrategy(value);
     return this;
   };
 
@@ -97,23 +96,37 @@ angular.module('pascalprecht.translate')
    *
    * @returns {string} interpolated string.
    */
-  $translateInterpolator.interpolate = function (string, interpolateParams) {
+  $translateInterpolator.interpolate = function (string, interpolationParams) {
+    interpolationParams = interpolationParams || {};
+    interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params');
 
-    interpolateParams = interpolateParams || {};
-
-    if ($sanitizeValueStrategy) {
-      interpolateParams = sanitizeParams(interpolateParams);
-    }
-
-    var interpolatedText = $cache.get(string + angular.toJson(interpolateParams));
+    var interpolatedText = $cache.get(string + angular.toJson(interpolationParams));
 
     // if given string wasn't interpolated yet, we do so now and never have to do it again
     if (!interpolatedText) {
-      interpolatedText = $mf.compile(string)(interpolateParams);
-      $cache.put(string + angular.toJson(interpolateParams), interpolatedText);
+
+      // Ensure explicit type if possible
+      // MessageFormat checks the actual type (i.e. for amount based conditions)
+      for (var key in interpolationParams) {
+        if (interpolationParams.hasOwnProperty(key)) {
+          // ensure number
+          var number = parseInt(interpolationParams[key], 10);
+          if (angular.isNumber(number) && ('' + number) === interpolationParams[key]) {
+            interpolationParams[key] = number;
+          }
+        }
+      }
+
+      interpolatedText = $mf.compile(string)(interpolationParams);
+      interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text');
+
+      $cache.put(string + angular.toJson(interpolationParams), interpolatedText);
     }
+
     return interpolatedText;
   };
 
   return $translateInterpolator;
-});
+}
+
+$translateMessageFormatInterpolation.displayName = '$translateMessageFormatInterpolation';

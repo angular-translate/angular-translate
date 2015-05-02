@@ -1,8 +1,12 @@
+/* jshint camelcase: false, unused: false */
+/* global inject: false */
+'use strict';
+
 describe('pascalprecht.translate', function () {
 
   describe('$translateStaticFilesLoader', function () {
 
-    var $translate, $httpBackend, $translateStaticFilesLoader;
+    var $translate, $httpBackend, $translateStaticFilesLoader, $translationCache;
 
     beforeEach(module('pascalprecht.translate'));
 
@@ -108,7 +112,7 @@ describe('pascalprecht.translate', function () {
     it('should be a function', function () {
       expect(typeof $translateStaticFilesLoader).toBe('function');
     });
-    
+
     it('should throw an error when called without files and prefix or suffix', function () {
       expect(function () {
         $translateStaticFilesLoader({

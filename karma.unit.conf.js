@@ -17,6 +17,7 @@ module.exports = function (config) {
       shared.injectByScope(scope, 'messageformat/messageformat.js'),
       shared.injectByScope(scope, 'angular/angular.js'),
       shared.injectByScope(scope, 'angular-cookies/angular-cookies.js'),
+      shared.injectByScope(scope, 'angular-sanitize/angular-sanitize.js'),
       shared.injectByScope(scope, 'angular-mocks/angular-mocks.js'),
       'src/translate.js',
       'src/**/*.js',

@@ -6,7 +6,12 @@
     "SUBHEADER" : "So, you can load only those languages, which will be used.",
     "TEXT" : "This is only some text to fill the space.",
     "ONLY_EN": "only english",
-    "EN_RU": "EN and RU - EN Edition"
+    "EN_RU": "EN and RU - EN Edition",
+    "ARRAY": [
+      "Item 1",
+      "Item 2",
+      "Item 3"
+    ]
   },
   "predefined" : {
     "TITLE" : "How to use lazzy loading without autoupload?",

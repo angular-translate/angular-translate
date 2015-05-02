@@ -98,6 +98,15 @@ $translateProvider.determinePreferredLanguage();
 Please use this method on your own risk! Be aware that each browser can return
 different values on these properties.
 
+Another helping setting is available since `2.7`: `$translateProvider.uniformLanguageTag()`.
+With this you can decide into which language tag the resolved ones should be transformed.
+
+<pre>
+$translateProvider
+  .uniformLanguageTag('bcp47') // enable BCP-47, must be before determinePreferredLanguage!
+  .determinePreferredLanguage();
+</pre>
+
 If this doesn't fit to your needs, you can also pass in a custom function, that
 determines the preferred language key for you.
 
