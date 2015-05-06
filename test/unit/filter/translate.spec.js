@@ -89,6 +89,10 @@ describe('pascalprecht.translate', function () {
       expect(value[5]).toEqual('10');
       expect(value[6]).toEqual('55');
     });
+	  
+	it('should not throw errors when translation id is a number', function() {
+		expect($translate(4.5)).toEqual('4.5');
+	});
 
     if (angular.version.major === 1 && angular.version.minor <= 2) {
       // Until and including AJS 1.2, a filter was bound to a context (current scope). This was removed in AJS 1.3

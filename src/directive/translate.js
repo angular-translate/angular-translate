@@ -100,7 +100,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
    * @returns {string} The string stripped of whitespace from both ends
    */
   var trim = function() {
-    return this.replace(/^\s+|\s+$/g, '');
+    return this.toString().replace(/^\s+|\s+$/g, '');
   };
 
   return {
