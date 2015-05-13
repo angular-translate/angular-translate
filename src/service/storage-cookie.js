@@ -3,7 +3,7 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc object
  * @name pascalprecht.translate.$translateCookieStorage
- * @requires $cookieStore
+ * @requires $cookies
  *
  * @description
  * Abstraction layer for cookieStore. This service is used when telling angular-translate
@@ -12,7 +12,7 @@ angular.module('pascalprecht.translate')
  */
   .factory('$translateCookieStorage', $translateCookieStorageFactory);
 
-function $translateCookieStorageFactory($cookieStore) {
+function $translateCookieStorageFactory($cookies) {
 
   'use strict';
 
@@ -30,7 +30,7 @@ function $translateCookieStorageFactory($cookieStore) {
      * @return {string} Value of item name
      */
     get: function (name) {
-      return $cookieStore.get(name);
+      return $cookies.get(name);
     },
 
     /**
@@ -47,7 +47,7 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} value Item value
      */
     set: function (name, value) {
-      $cookieStore.put(name, value);
+      $cookies.put(name, value);
     },
 
     /**
@@ -62,7 +62,7 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} value Item value
      */
     put: function (name, value) {
-      $cookieStore.put(name, value);
+      $cookies.put(name, value);
     }
   };
 
