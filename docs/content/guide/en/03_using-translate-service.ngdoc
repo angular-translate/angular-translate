@@ -95,7 +95,7 @@ However, this doesn't mean that it knows when a languages has been changed. And 
 of that, translations translated through a directive `$translate` call, don't get
 updated when changing the language at runtime.
 
-You can fix that by simply wrapping your `$translate` call into a `$translateChangeSucces`
+You can fix that by simply wrapping your `$translate` call into a `$translateChangeSuccess`
 callback on `$rootScope`, which gets fired every time a translation change was successful.
 Once it's changed, you can simply re-execute the code, that gives you your needed translations.
 

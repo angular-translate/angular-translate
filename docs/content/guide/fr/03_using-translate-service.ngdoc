@@ -94,7 +94,7 @@ Toutefois, cela ne veut pas dire qu'il sait quand une langue a été modifiée. 
 les traductions traduites par un appel de `$translate` dans une directive, ne se mettent pas à jour
 en cas de changement de la langue lors de l'exécution.
 
-Vous pouvez résoudre ce problème en enveloppant simplement votre appel `$translate` dans un callback `$translateChangeSucces`
+Vous pouvez résoudre ce problème en enveloppant simplement votre appel `$translate` dans un callback `$translateChangeSuccess`
 sur `$rootScope`, qui se déclenchera à chaque fois qu'un changement de traductiona été fait avec succès.
 Une fois qu'elle a changé, il vous suffit de ré-exécuter le code, qui vous donne vos traductions nécessaires.
 
