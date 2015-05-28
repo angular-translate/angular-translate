@@ -381,6 +381,32 @@ $translateProvider.preferredLanguage('en');
 $translateProvider.useLocalStorage();
 </pre>
 
+## Asynchrones Laden erzwingen
+
+Wenn eine Kombination von `$translateProvider.translations()` und `$translateProvider.{{whatever}}Loader`
+genutzt wird, erfolgt KEIN Aufruf des asynchrone Lademechanismus für alle Sprachen, bei denen schon
+Übersetzungen per `$translateProvider.translations()` erzeugt wurden.
+
+Um dieses Verhalten zu verhindern, muss `$translateProvider.forceAsyncReload()` initialisiert werden:
+
+<pre>
+$translateProvider.translations('en', {
+    'HELLO_TEXT': 'Hello World!'
+});
+$translateProvider.useStaticFilesLoader({
+    'prefix': 'locale-',
+    'suffix': '.json'
+});
+$translateProvider.preferredLanguage('en');
+$translateProvider.forceAsyncReload(true);
+</pre>
+
+Durch diese Änderung wird bewirkt, das beide Datenquellen / Sprachtabellen genutzt werden und somit
+der asynchrone Lademechanismus aufgerufen wird. Das Ergebnis ist eine zusammengesetzte Sprachtabelle.
+
+**Anmerkung:** Falls derselbe Sprachschlüssel in beiden Quellen definiert ist, wird ausschließlich der
+Schlüssel aus der asynchronen Datenquelle genutzt!
+
 Da wir keine Änderungen im HTML oder unseren Controllern machen müssen, sind wir
 schon fertig! Hier ist die funktionierende App:
 
