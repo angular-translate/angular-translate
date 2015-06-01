@@ -215,7 +215,9 @@ function $translateSanitizationProvider () {
   };
 
   var htmlEscapeValue = function (value) {
-    return angular.element('<div></div>').text(value).html();
+    var element = angular.element('<div></div>');
+    element.text(value); // not chainable, see #1044
+    return element.html();
   };
 
   var htmlSanitizeValue = function (value) {

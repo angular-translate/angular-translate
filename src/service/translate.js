@@ -532,6 +532,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       return $storageKey;
     }
     $storageKey = key;
+    return this;
   };
 
   this.storageKey = storageKey;
@@ -1841,7 +1842,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           };
           allTranslationsLoaded.displayName = 'refreshPostProcessor';
 
-          $q.all(tables).then(allTranslationsLoaded);
+          $q.all(tables).then(allTranslationsLoaded, reject);
 
         } else if ($translationTable[langKey]) {
 

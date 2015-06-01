@@ -305,6 +305,9 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
           } else {
             observeElementTranslation('');
           }
+        } else if (iAttr.translate) {
+          // ensure attribute will be not skipped
+          observeElementTranslation(iAttr.translate);
         }
         updateTranslations();
         scope.$on('$destroy', unbind);

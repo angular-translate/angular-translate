@@ -1655,6 +1655,58 @@ describe('pascalprecht.translate', function () {
         expect($rootScope.$emit).toHaveBeenCalledWith('$translateChangeSuccess', {language: 'en_EN'});
       });
     });
+
+    describe('loader registered:', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $translateProvider
+          .preferredLanguage('en_EN')
+          .useLoader('customLoader');
+        $provide.factory('customLoader', function ($q, $timeout) {
+          var alreadyLoaded = {};
+          return function (options) {
+            var deferred = $q.defer();
+            $timeout(function () {
+              if (options.key === 'en_EN' || !alreadyLoaded[options.key]) {
+                alreadyLoaded[options.key] = true;
+                deferred.resolve({
+                  'FOO': 'bar:' + options.key
+                });
+              } else {
+                deferred.reject({});
+              }
+            });
+            return deferred.promise;
+          };
+        });
+      }));
+
+      var $translate, $timeout, $rootScope, $q;
+
+      beforeEach(inject(function (_$translate_, _$timeout_, _$rootScope_, _$q_) {
+        $translate = _$translate_;
+        $timeout = _$timeout_;
+        $rootScope = _$rootScope_;
+        $q = _$q_;
+      }));
+
+      it('2 refresh job succeed, 0 refresh job failed', function () {
+        var results = {ok: 0, err: 0};
+        $translate.refresh().then(function () {results.ok++;}, function () {results.err++;});
+        $timeout.flush();
+        expect(results.ok).toEqual(1);
+        expect(results.err).toEqual(0);
+      });
+
+      it('1 refresh job succeed, 1 refresh job failed', function () {
+        var results = {ok: 0, err: 0};
+        $translate.use('notavalidone');
+        $timeout.flush();
+        $translate.refresh().then(function () {results.ok++;}, function () {results.err++;});
+        $timeout.flush();
+        expect(results.ok).toEqual(0);
+        expect(results.err).toEqual(1);
+      });
+    });
   });
 
   describe('$translate.instant', function () {
