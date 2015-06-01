@@ -1,3 +1,5 @@
+angular.module('pascalprecht.translate')
+
 /**
  * @ngdoc object
  * @name pascalprecht.translate.$translationCache
@@ -10,10 +12,12 @@
  *
  * @return {object} $cacheFactory object.
  */
-angular.module('pascalprecht.translate')
-.factory('$translationCache', $translationCache);
+  .factory('$translationCache', $translationCache);
 
 function $translationCache($cacheFactory) {
+
+  'use strict';
+
   return $cacheFactory('translations');
 }
 

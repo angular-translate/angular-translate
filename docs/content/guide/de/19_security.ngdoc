@@ -15,7 +15,16 @@ Applikation (siehe auch: [OWASP](https://www.owasp.org/index.php/Cross-site_Scri
 Grundsätzlich konfiguriert man die Ausgabeform mittels `useSanitizeValueStrategy(strategy)`
 und einer gewünschte Security-Strategy; dies gilt dann für die gesamte Applikation.
 
-Derzeit gibt es nur zwei Strategien: `null` (keine) und `escaped` (für HTML).
+Derzeit gibt es folgende Standardstrategien:
+
+* `sanitize`: bereinigt HTML in den Übersetzungen mittels `$sanitize`
+* `escape`: escaped HTML in den Übersetzungen
+* `sanitizeParameters`: bereinigt HTML der Inhalte von Interpolation Parametern mittels `$sanitize`
+* `escapeParameters`: escaped HTML der Inhalte von Interpolation Parametern
+
+Darüberhinaus gibt es noch folgende, welche aber nur noch für Version zur Verfügung stehen:
+* `null`: nichts, unsicherer Standard (wird in 3.0 entfernt)
+* `escaped`: Synonym für 'escapeParameters' (seit 2.7.0, wird in 3.0 entfernt)
 
 Um eine vollständige Rückwärtskompatibilität zu gewährleisten, ist das Feature derzeit
 deaktiviert:
@@ -28,8 +37,11 @@ Selbstverständlich empfehlen wir aber das aktivierte Escaping (in einer später
 Version wird dies Standard sein):
 
 ```javascript
-$translateProvider.useSanitizeValueStrategy('escaped');
+$translateProvider.useSanitizeValueStrategy('sanitize');
 ```
+
+Wir empfehlen dringlich eine sichere Strategie zu aktivieren. Daher zeigen wir
+einen Warnhinweis an, so lange nicht explizit eine Strategie gewählt wurde.
 
 ## Anwendungsbeispiele
 

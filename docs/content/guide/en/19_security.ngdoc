@@ -14,7 +14,16 @@ escaped correctly. This means your app is vulnerable for serious attacks
 The method `useSanitizeValueStrategy(strategy)` defines which strategy for escaping
 will be used; this is global.
 
-At the moment, two options are available: `null` (nothing) and `escaped` (for HTML).
+At the moment, following strategies are built-in:
+
+* `sanitize`: sanitizes HTML in the translation text using `$sanitize`
+* `escape`: escapes HTML in the translation
+* `sanitizeParameters`: sanitizes HTML in the values of the interpolation parameters using `$sanitize`
+* `escapeParameters`: escapes HTML in the values of the interpolation parameters
+
+Additionally, there are this defaults only valid for version 2:
+* `null`: nothing, unsecure default (will be removed in 3.0)
+* `escaped`: alias for 'escapeParameters' for backwards compatibility (since 2.7.0, will be removed in 3.0)
 
 We enforce being completely backwards compatible, which means the escaping is disabled
 by default.
@@ -23,11 +32,14 @@ by default.
 $translateProvider.useSanitizeValueStrategy(null);
 ```
 
-However, we will enable the more secure variant `escaped` in the future by default.
+However, we will enable the more secure variant `sanitize` in the future by default.
 
 ```javascript
-$translateProvider.useSanitizeValueStrategy('escaped');
+$translateProvider.useSanitizeValueStrategy('sanitize');
 ```
+
+We strongly recommend a secure strategy. Therefore a warning will be displayed
+as long as no strategy has been chosen explicitly.
 
 ## Demonstrations
 

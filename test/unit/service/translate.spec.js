@@ -73,6 +73,22 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant).toBeDefined();
     });
 
+    it('should have a method isForceAsyncReloadEnabled()', function () {
+      expect($translate.isForceAsyncReloadEnabled).toBeDefined();
+    });
+
+    describe('$translate#isForceAsyncReloadEnabled()', function () {
+
+      it('should be a function', function () {
+        expect(typeof $translate.isForceAsyncReloadEnabled).toBe('function');
+      });
+
+      it('should return false by default', function () {
+        expect($translate.isForceAsyncReloadEnabled()).toBe(false);
+      });
+
+    });
+
     describe('$translate#preferredLanguage()', function () {
 
       it('should be a function', function () {
@@ -1815,6 +1831,128 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('NAMESPACE1.FALLBACK')).toBe('Translation1 Francais');
     });
 
+  });
+
+  describe('$translateProvider.forceAsyncReload', function () {
+
+    describe('Enabled', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $translateProvider
+          .translations('en', {
+            'FOO': 'bar'
+          })
+          .forceAsyncReload(true)
+          .useLoader('customLoader');
+
+        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+          return function (options) {
+            var deferred = $q.defer();
+
+            $timeout(function () {
+              deferred.resolve({
+                'BAR': 'foo'
+              });
+            });
+
+            return deferred.promise;
+          };
+        }]);
+      }));
+
+      var $translate, $timeout, $rootScope;
+
+      beforeEach(inject(function (_$translate_, _$timeout_, _$rootScope_) {
+        $translate = _$translate_;
+        $timeout = _$timeout_;
+        $rootScope = _$rootScope_;
+      }));
+
+      it('should have forceAsyncReload enabled', function () {
+        expect($translate.isForceAsyncReloadEnabled()).toBe(true);
+      });
+
+      it('should return translation if translation id exist', function () {
+        var firstValue, secondValue;
+
+        function fetchTranslation() {
+          $translate(['FOO', 'BAR']).then(function (translations) {
+            firstValue = translations.FOO;
+            secondValue = translations.BAR;
+          });
+        }
+
+        function changeLanguage(lang) {
+          $translate.use(lang);
+        }
+
+        changeLanguage('en');
+        $timeout.flush(); // Expect the `en` language to be loaded
+        $rootScope.$digest();
+
+        fetchTranslation();
+        $rootScope.$digest();
+        expect(firstValue).toEqual('bar'); // found
+        expect(secondValue).toEqual('foo'); // found
+      });
+    });
+
+    describe('Disabled (default)', function () {
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $translateProvider
+          .translations('en', {
+            'FOO': 'bar'
+          })
+          .useLoader('customLoader');
+
+        $provide.factory('customLoader', ['$q', '$timeout', function ($q, $timeout) {
+          return function (options) {
+            var deferred = $q.defer();
+
+            $timeout(function () {
+              deferred.resolve({
+                'BAR': 'foo'
+              });
+            });
+
+            return deferred.promise;
+          };
+        }]);
+      }));
+
+      var $translate, $rootScope;
+
+      beforeEach(inject(function (_$translate_, _$rootScope_) {
+        $translate = _$translate_;
+        $rootScope = _$rootScope_;
+      }));
+
+      it('should have forceAsyncReload disabled', function () {
+        expect($translate.isForceAsyncReloadEnabled()).toBe(false);
+      });
+
+      it('should return translation if translation id exist', function () {
+        var firstValue, secondValue;
+
+        function fetchTranslation() {
+          $translate(['FOO', 'BAR']).then(function (translations) {
+            firstValue = translations.FOO;
+            secondValue = translations.BAR;
+          });
+        }
+
+        function changeLanguage(lang) {
+          $translate.use(lang);
+        }
+
+        changeLanguage('en');
+        $rootScope.$digest();
+
+        fetchTranslation();
+        $rootScope.$digest();
+        expect(firstValue).toEqual('bar'); // found
+        expect(secondValue).toEqual('BAR'); // not found
+      });
+    });
   });
 
 });
