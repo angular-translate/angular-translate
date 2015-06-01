@@ -1,3 +1,20 @@
+<a name="2.7.1"></a>
+### 2.7.1 (2015-06-01)
+
+
+#### Bug Fixes
+
+* **docs:** fix typo in $translateChangeSuccess ([89e25692](http://github.com/angular-translate/angular-translate/commit/89e2569217e15809c11bf9dd845532780a9bdc12))
+* **service:**
+  * integrate translationCache into service distribution file ([2fcbc601](http://github.com/angular-translate/angular-translate/commit/2fcbc601e3da82655c263b974448cc1300805f1e))
+  * handle error "this.replace is not a function" ([8616dcad](http://github.com/angular-translate/angular-translate/commit/8616dcad89cc42ab89219c76eb67c616a4c585d6))
+
+
+#### Features
+
+* **$translateProvider:** add a new option to force async reload ([bdee77ff](http://github.com/angular-translate/angular-translate/commit/bdee77ffdbf5e7394c214a5a051097d969501cf9))
+
+
 <a name="2.7.0"></a>
 ## 2.7.0 (2015-05-02)
 
