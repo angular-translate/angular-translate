@@ -1,3 +1,16 @@
+<a name="2.7.2"></a>
+### 2.7.2 (2015-06-01)
+
+
+#### Bug Fixes
+
+* **directive:** ensure value of `translate` will be translated always ([454d7029](http://github.com/angular-translate/angular-translate/commit/454d70290aef706929c4894b70aef6d4a0dba0be))
+* **sanitization:** fix/workaround issue when jQuery is not available ([ef1b10a3](http://github.com/angular-translate/angular-translate/commit/ef1b10a3e3b113831b251a696dd19c7f9d240db3))
+* **service:**
+  * fix silence on error, add missing catch on `refresh()` ([5a85a64a](http://github.com/angular-translate/angular-translate/commit/5a85a64a4a9631afda73b71ce0509c06e0644189))
+  * make provider's storageKey chainable ([de8c253b](http://github.com/angular-translate/angular-translate/commit/de8c253b49f793ea85644610ca0cdef0cf4d024a))
+
+
 <a name="2.7.1"></a>
 ### 2.7.1 (2015-06-01)
 
