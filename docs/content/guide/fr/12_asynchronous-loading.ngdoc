@@ -404,6 +404,35 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('fr');
 </pre>
 
+## Forcer le rechargement asynchrone
+
+Lors de l'utilisation d'une combinaison de `$translateProvider.translations()` et
+`$translateProvider.{{peu importe}}Loader`, pour chaque clé de langue déclarée à
+l'aide de `$translateProvider.translations()`, le chargeur asynchrone ne sera
+jamais appelé.
+
+Pour contourner ce problème, vous pouvez activer `$translateProvider.forceAsyncReload()`
+comme ceci:
+
+<pre>
+$translateProvider.translations('en', {
+    'HELLO_TEXT': 'Salut tout le monde !!'
+});
+$translateProvider.useStaticFilesLoader({
+    'prefix': 'locale-',
+    'suffix': '.json'
+});
+$translateProvider.preferredLanguage('fr');
+$translateProvider.forceAsyncReload(true);
+</pre>
+
+De cette façon, même si la clé de la langue est déjà déclarée à l'aide de
+`$translateProvider.translations()` le chargeur asynchrone sera appelé
+et les traductions des deux sources seront fusionnés.
+
+**Note:** Si un même identifiant de traduction est déclaré dans les deux sources,
+la traduction du chargeur asynchrone sera utilisée.
+
 Étant donné que nous n'avons pas à faire de changements dans nos contrôleurs ou notre HTML,
 nous avons fini ! Jetez un oeil à l'application :
 

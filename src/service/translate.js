@@ -35,6 +35,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       $notFoundIndicatorLeft,
       $notFoundIndicatorRight,
       $postCompilingEnabled = false,
+      $forceAsyncReloadEnabled = false,
       NESTED_OBJECT_DELIMITER = '.',
       loaderCache,
       directivePriority = 0,
@@ -704,6 +705,30 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    */
   this.usePostCompiling = function (value) {
     $postCompilingEnabled = !(!value);
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#forceAsyncReload
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If force async reload is enabled, async loader will always be called
+   * even if $translationTable already contains the language key, adding
+   * possible new entries to the $translationTable.
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.forceAsyncReload(true);
+   *  });
+   * </pre>
+   *
+   * @param {boolean} value - valid values are true or false
+   */
+  this.forceAsyncReload = function (value) {
+    $forceAsyncReloadEnabled = !(!value);
     return this;
   };
 
@@ -1663,7 +1688,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
-        if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
+        if (($forceAsyncReloadEnabled || !$translationTable[key]) && $loaderFactory && !langPromises[key]) {
           $nextLang = key;
           langPromises[key] = loadAsync(key).then(function (translation) {
             translations(translation.key, translation.table);
@@ -1723,6 +1748,20 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        */
       $translate.isPostCompilingEnabled = function () {
         return $postCompilingEnabled;
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#isForceAsyncReloadEnabled
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns whether force async reload is enabled or not
+       *
+       * @return {boolean} forceAsyncReload value
+       */
+      $translate.isForceAsyncReloadEnabled = function () {
+        return $forceAsyncReloadEnabled;
       };
 
       /**
@@ -1961,7 +2000,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           };
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
             var fallbackLanguageId = $fallbackLanguage[i];
-            if (!$translationTable[fallbackLanguageId]) {
+            if ($forceAsyncReloadEnabled || !$translationTable[fallbackLanguageId]) {
               langPromises[fallbackLanguageId] = loadAsync(fallbackLanguageId).then(processAsyncResult);
             }
           }

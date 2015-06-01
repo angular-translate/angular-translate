@@ -442,6 +442,35 @@ $translateProvider.useStaticFilesLoader({
 $translateProvider.preferredLanguage('en');
 </pre>
 
+## Force asynchronous reloading
+
+When using a combination of `$translateProvider.translations()` and
+`$translateProvider.{{whatever}}Loader`, for each language keys declared
+using `$translateProvider.translations()`, the asynchronous loader will
+not be called.
+
+To get around this, you can enable the `$translateProvider.forceAsyncReload()`
+like this:
+
+<pre>
+$translateProvider.translations('en', {
+    'HELLO_TEXT': 'Hello World!'
+});
+$translateProvider.useStaticFilesLoader({
+    'prefix': 'locale-',
+    'suffix': '.json'
+});
+$translateProvider.preferredLanguage('en');
+$translateProvider.forceAsyncReload(true);
+</pre>
+
+This way, even if the language key is already declared using
+`$translateProvider.translations()` the asynchronous loader will be called
+and translations from both sources will be merged.
+
+**Note:** If a same translation id is declared in both sources, the translation
+from the asynchronous loader will be used.
+
 Since we don't have to make any changes in our controllers or HTML, we are done!
 Take a look at the working app:
 
