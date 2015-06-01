@@ -532,6 +532,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       return $storageKey;
     }
     $storageKey = key;
+    return this;
   };
 
   this.storageKey = storageKey;
