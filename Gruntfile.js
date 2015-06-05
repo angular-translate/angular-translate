@@ -543,6 +543,14 @@ module.exports = function (grunt) {
         dest: '<%= concat.core.dest %>'
       },
       'messageformat_interpolation': {
+        options: {
+          deps: {
+            'default': ['MessageFormat'],
+            amd: ['messageformat'],
+            cjs: ['messageformat'],
+            global: ['MessageFormat']
+          }
+        },
         src: '<%= concat.messageformat_interpolation.dest %>',
         dest: '<%= concat.messageformat_interpolation.dest %>'
       },
