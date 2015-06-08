@@ -562,6 +562,164 @@ describe('pascalprecht.translate', function () {
   });
 
   // Spec for edge case: while preferred language is still loading,
+  //                     another language will be requested and
+  //                     is returning before the preferred one
+  // t0 ~ 0.0s           (request ab_CD)
+  // t1 ~ 0.5s           (request en_US)
+  // t2 ~ 1.5s           (response en_US)
+  // t3 ~ 2.0s           (response ab_CD)
+  describe('$translate#use() with async loading and two unordered requests aborting the previous', function () {
+
+    var fastButRequestedSecond = 'en_US',
+        slowButRequestedFirst = 'ab_CD',
+        expectedTranslation = 'Hello World',
+        notExpectedTranslation = 'foo bar bork bork bork',
+        fastRequestTime = 1000,
+        firstLanguageResponded = false,
+        secondLanguageResponded = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.useStaticFilesLoader({
+        prefix: 'foo/bar/',
+        suffix: '.json'
+      });
+
+      $provide.decorator('$httpBackend', function($delegate, $timeout) {
+        var oldHttpBackend = $delegate;
+        var asincDefinitions = [];
+
+
+        var httpBackend = function(method, url, data, callback, headers, timeout, withCredentials){
+          var match = matchRequest(),
+            cancelled = false;
+          if(match){
+            if (timeout) {
+              if (timeout.then) {
+                timeout.then(handleTimeout);
+              } else {
+                $timeout(handleTimeout, timeout);
+              }
+            }
+            match.response.promise
+              //promise resolution: success
+              .then(function(response){
+                if (!cancelled) {
+                  callback(response[0], response[1], match.response.headers, match.response.status );
+                }
+              },
+              //promise.resolution: fail
+              function(response){
+                if (!cancelled) {
+                  callback(response[0], response[1], match.response.headers, match.response.status);
+                }
+              });
+          }else{
+            oldHttpBackend(method, url, data, callback, headers, timeout, withCredentials);
+          }
+
+          function matchRequest() {
+            var matches = asincDefinitions
+              .filter(function(definition) {
+                return (definition.url === url);
+              })
+              .filter(function(definition){
+                return (definition.method === method);
+              });
+            return matches.length ? matches[0] : false;
+          }
+
+          function handleTimeout() {
+            cancelled = true;
+            callback(-1, undefined, '');
+          }
+        };
+
+        httpBackend.whenAsync = function(method, url, data, headers) {
+          var definition = { method: method, url: url, data: data, headers: headers },
+              chain = {
+                respond: function(promise, headers, status) {
+                  definition.response = { promise: promise, headers: headers, status: status};
+                  return chain;
+                }
+              };
+          asincDefinitions.push(definition);
+          return chain;
+        };
+
+        for (var key in oldHttpBackend) {
+          httpBackend[key] = oldHttpBackend[key];
+        }
+
+        return httpBackend;
+      });
+
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope, $httpBackend, $q) {
+      $translate = _$translate_;
+
+      var firstDeferred = $q.defer();
+      $httpBackend.whenAsync('GET', 'foo/bar/ab_CD.json').respond(firstDeferred.promise);
+      $timeout(function () {
+          firstLanguageResponded = true;
+          // t1
+          firstDeferred.resolve([200, {
+          greeting: notExpectedTranslation
+        }]);
+      }, fastRequestTime * 2);
+
+      var secondDeferred = $q.defer();
+      $httpBackend.whenAsync('GET', 'foo/bar/en_US.json').respond(secondDeferred.promise);
+      $timeout(function () {
+        secondLanguageResponded = true;
+          // t2
+        secondDeferred.resolve([200, {
+          greeting: expectedTranslation
+        }]);
+      }, fastRequestTime);
+
+      $timeout(function () {
+        // t0
+        $translate.use(slowButRequestedFirst);
+      });
+
+      $timeout(function () {
+        // t1
+        $translate.use(fastButRequestedSecond);
+      });
+
+      // t2
+      $timeout.flush(fastRequestTime);
+
+      // t3
+      $timeout.flush(fastRequestTime);
+    }));
+
+    it('should be requested the first language', function () {
+      expect(firstLanguageResponded).toEqual(true);
+    });
+
+    it('should be requested the second language', function () {
+      expect(secondLanguageResponded).toEqual(true);
+    });
+
+    it('should set the language to be the most recently requested one, not the most recently responded one', inject(function($rootScope, $q) {
+
+      var value;
+
+      $translate('greeting').then(function (translation) {
+        value = translation;
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual(expectedTranslation);
+    }));
+  });
+
+  // Spec for edge case: while preferred language is still loading,
   //                     another language will be requested as fallback
   //                     and is returning before the preferred one
   // t0 ~ 0.0s           (request ab_CD)
