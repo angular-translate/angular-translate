@@ -1168,7 +1168,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           abortLoader.resolve();
         }
         abortLoader = $q.defer();
-
+        
         var loaderOptions = angular.extend({}, $loaderOptions, {
           key: key,
           $http: angular.extend({}, {
