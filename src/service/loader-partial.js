@@ -51,34 +51,32 @@ function $translatePartialLoader() {
   };
 
   Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
-    var deferred = $q.defer();
 
     if (!this.tables[lang]) {
       var self = this;
 
-      $http(angular.extend({
+      return $http(angular.extend({
         method : 'GET',
         url: this.parseUrl(urlTemplate, lang)
-      }, $httpOptions)).success(function(data){
-        self.tables[lang] = data;
-        deferred.resolve(data);
-      }).error(function() {
+      }, $httpOptions)).then(function(result){
+        self.tables[lang] = result.data;
+        return result.data;
+      }, function() {
         if (errorHandler) {
-          errorHandler(self.name, lang).then(function(data) {
+          return errorHandler(self.name, lang).then(function(data) {
             self.tables[lang] = data;
-            deferred.resolve(data);
+            return data;
           }, function() {
-            deferred.reject(self.name);
+            return $q.reject(self.name);
           });
         } else {
-          deferred.reject(self.name);
+          return $q.reject(self.name);
         }
       });
 
     } else {
-      deferred.resolve(this.tables[lang]);
+      return $q.when(this.tables[lang]);
     }
-    return deferred.promise;
   };
 
   var parts = {};
