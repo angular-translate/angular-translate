@@ -32,7 +32,7 @@ Ahora, para traducir sus contenidos con `$translate`, lo únique que usted tiene
 pasar una "translation ID" (clave de traducción), la cual debería haber sido registrada anteriormente
  con `$translateProvider`. Como puede ser que esté habiendo alguna carga asincrónica mientras esto pasa
  (luego cubriremos eso más en detalle), el servicio `$translate` se comporta de manera asincrónica y devuelve
- una "promise" (promesa) que, para la clave deda, o bien se resuelve con la traducción, o bien es
+ una "promise" (promesa) que, para la clave dada, o bien se resuelve con la traducción, o bien es
  rechazada.
 Entonces, el uso básico de `$translate` en la capa de servicios o de controladores, quedaría así:
 
