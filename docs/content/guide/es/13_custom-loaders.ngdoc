@@ -4,17 +4,17 @@
 
 # Cargadores personalizados
 
-angular-translate no sería angular-translate si no le permitiera a usted construir sus propios cargadores asincrónicos personalizados.
-En [Carga asincrónica](#/guide/10_asynchronous-loading) usted aprendió cómo usar los cargadores ya provistos, para cargar sus datos de radución asincrónicamente desde un servicio, usando ciertos patrones.
+angular-translate no sería angular-translate si no le permitiera  construir sus propios cargadores asincrónicos personalizados.
+En [Carga asincrónica](#/guide/10_asynchronous-loading) usted aprendió cómo usar los cargadores ya provistos, para cargar sus datos de tradución asincrónicamente desde un servicio, usando ciertos patrones.
 
-De todos modos, en algunos casos esto no es suficiente. Tal vez usted almacena sus datos de traducción en un lugar totalmente diferente, o tal vez ni siquiera desee cargarlos desde un servidor remoto.
+De todos modos, en algunos casos esto no es suficiente. Tal vez usted almacene sus datos de traducción en un lugar totalmente diferente, o tal vez ni siquiera desee cargarlos desde un servidor remoto.
 Aquí es donde intervienen los cargadores personalizados. Usted puede construir sus propios cargadores muy fácilmente. Este capítulo le muestra cómo hacerlo.
 
 ## Construcción de un servicio personalizado de carga
 
 Si ninguno de los cargadores porvistos se ajusta a sus necesidades, usted puede registrar un cargador personalizado asincrónico como "factory" (fábrica). La "factory" tiene que devolver una función, la cual espera un objeto en el cual al menos exista la clave de lenguaje. Con esta arquitectura, usted es tan libre como es posible serlo, y tiene total control sobre cómo debería comportarse su cargador asincrónico.
 
-Una factory de cargarod personalizado podría verse así:
+Una factory de cargador personalizado podría verse así:
 
 <pre>
 app.factory('customLoader', function ($http, $q) {
@@ -35,7 +35,7 @@ app.factory('customLoader', function ($http, $q) {
 });
 </pre>
 
-Tiene que asegurarse de que la función de su cargador devuelva una promesa. Esta debería on bien ser resuelta con sus datos de traducción, o bien ser rechazada con la clave de lenguaje. Como puede ver, hay una propiedad `key` en el objeto `options`, la cual tiene el valor de la clave de lenguaje con la que el cargador asincrónico es invocado.
+Tiene que asegurarse de que la función de su cargador devuelva una promesa. Esta debería o bien ser resuelta con sus datos de traducción, o bien ser rechazada con la clave de lenguaje. Como puede ver, hay una propiedad `key` en el objeto `options`, la cual tiene el valor de la clave de lenguaje con la que el cargador asincrónico es invocado.
 
 ## Haga uso de un cargador asincrónico
 
@@ -46,9 +46,7 @@ Usted sabe que `$translateProvider` provee métodos como `useStaticFilesLoader()
 $translateProvider.useLoader('customLoader');
 </pre>
 
-angular-translate access accede a la factory de su cargador personalizado con el servicio `$injector`, y se encarga de todo el resto por usted.
-does the rest for you.
-
+angular-translate accede a la factory de su cargador personalizado con el servicio `$injector`, y se encarga de todo el resto por usted.
 ## Agregado de opciones adicionales
 
 La propiedad `options.key` nos dice que `options` es simplemente un objeto, el cual se podría extender con propiedades adicionales según sus necesidades. Por ejemplo, si usted necesita una propiedad `foo` en el objeto `options`, todo lo que tiene que hacer es proveer dicha propiedad cuando registre su factory de carga personalizada.

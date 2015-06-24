@@ -4,19 +4,19 @@
 
 # Interpoladores personalizados
 
-Si ustes es lo suficientemente inteligente como para implementar una biblioteca como MessageFormat, pero más pequeña, o si necesita algún otro tipo de interpolación, puede simplemente crear su propio servicio, e incorporarlo a angular-translate. Todo lo que tiene que hacer, es ser fiel a ua interfaz específica que angular-translate espera de cualquier servicio de interpolación. ¡Veamos cómo funcionaría!
+Si ustes es lo suficientemente inteligente como para implementar una biblioteca como MessageFormat, pero más pequeña, o si necesita algún otro tipo de interpolación, puede simplemente crear su propio servicio, e incorporarlo a angular-translate. Todo lo que tiene que hacer, es ser fiel a una interfaz específica que angular-translate espera de cualquier servicio de interpolación. ¡Veamos cómo funcionaría!
 
 
 ## Crear un servicio de interpolación personalizado
 
-Cuando cree un serivcio de interpolación personalizado, hay muchas cosa que ya le debe resultar conocidas, si ha leído [Almacenamientos Personalizados](#/guide/11_custom-storages) y
-[Cargadores Personalizads](#/guide/13_custom-loaders). Se empieza por construir una factory que devuelva un objeto que implemente cierta interfaz. Tiene que porveer los siguientes métodos:
+Cuando cree un serivcio de interpolación personalizado, hay muchas cosa que ya le deben resultar conocidas, si ha leído [Almacenamientos Personalizados](#/guide/11_custom-storages) y
+[Cargadores Personalizados](#/guide/13_custom-loaders). Se empieza por construir una factory que devuelva un objeto que implemente cierta interfaz. Tiene que porveer los siguientes métodos:
 
 - `setLocale(langKey)` - configura el lenguaje usado actualmente
 - `getInterpolationIdentifier()` - devuelve una clave para identificar la interpolación
 - `interpolate(string, interpolateParams)` - interpola cadenas contra parámetros de interpolación
 
-Veamos cómo se vería si implementáramos un servicio de interpolación personalizado. Primero, simplemente implementamos la interfaz:
+Veamos cómo se vería si implementáramos un servicio de interpolación personalizado. Primero, simplemente implementemos la interfaz:
 
 <pre>
 app.factory('customInterpolation', function () {
@@ -38,7 +38,7 @@ app.factory('customInterpolation', function () {
 });
 </pre>
 
-Muy bien, esta es la estructura básica del servicio de interpolación. Ahora, agreguemos algo de lógica, de manera que angular-translate pueda hacer uso de ella una vez que inciorporemos nuestro serrvicio de interpolación:
+Muy bien, esta es la estructura básica del servicio de interpolación. Ahora, agreguemos algo de lógica, de manera que angular-translate pueda hacer uso de ella una vez que incorporemos nuestro serrvicio de interpolación:
 
 <pre>
 app.factory('customInterpolation', function ($interpolate) {
@@ -62,12 +62,12 @@ app.factory('customInterpolation', function ($interpolate) {
 });
 </pre>
 
-Entonces, lo que hicimos aquí: `setLocale()` simplemente almacena el valor del lenguaje actualmente usado,  `getInterpolationIdentifier()` devuelve una cadena `custom`. ¿Para qué sirve en realidad? ¿Se acuerda de cómo [Temporariamente sustituir el tipo de interpolación](#/guide/14_pluralization#overridinginterpolationtemporarily)?
-Exactamente. Este es el identificador que está mapeado a nuestro servicio, de manera que angular-translate sabe qué servicios de interpolación usarm cuando explícitamente se sustituye (override) la el servicio de interpolación en tiempo de ejecución. `interpolate()`  simplemente utiliza el servicio de interpolación `$interpolate` de Angular. Además, agrega como sufijo y prefijo la localización (local) actuales a la cadena dada.
+Entonces, esto es lo que hicimos aquí: `setLocale()` simplemente almacena el valor del lenguaje actualmente usado,  `getInterpolationIdentifier()` devuelve una cadena `custom`. ¿Para qué sirve en realidad? ¿Se acuerda de cómo [Temporariamente sustituir el tipo de interpolación](#/guide/14_pluralization#overridinginterpolationtemporarily)?
+Exactamente. Este es el identificador que está mapeado a nuestro servicio, de manera que angular-translate sabe qué servicios de interpolación usar cuando explícitamente se sustituye (override) el servicio de interpolación en tiempo de ejecución. `interpolate()`  simplemente utiliza el servicio de interpolación `$interpolate` de Angular. Además, agrega como sufijo y prefijo la localización (locale) actual a la cadena dada.
 
 ## Uso de sus servicio personalizado de interpolación
 
-Así como hay métods para almacenamientos (`useStorage()`) y  cargadores (`useLoader()`), también hay un método para interpolaciones personalizadas: `$translateProvider.useInterpolation()` es su amigo, cuando se trata de integrar su servicio de intepolación personalizado
+Así como hay métodos para almacenamientos (`useStorage()`) y  cargadores (`useLoader()`), también hay un método para interpolaciones personalizadas: `$translateProvider.useInterpolation()` es su amigo, cuando se trata de integrar su servicio de intepolación personalizado
 en su aplicación.
 
 <pre>
