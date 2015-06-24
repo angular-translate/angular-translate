@@ -2,28 +2,19 @@
 @name Custom Loaders
 @description
 
-# Customer Loaders
+# Cargadores personalizados
 
-angular-translate wouldn't be angular-translate if it wouldn't provide you a way
-to build your custom asynchronous loaders.
-In [Asynchronous loading](#/guide/10_asynchronous-loading) you've learned how to
-use the provided loaders to load your translation data asynchronously from a
-service, using certain patterns.
+angular-translate no sería angular-translate si no le permitiera a usted construir sus propios cargadores asincrónicos personalizados.
+En [Carga asincrónica](#/guide/10_asynchronous-loading) usted aprendió cómo usar los cargadores ya provistos, para cargar sus datos de radución asincrónicamente desde un servicio, usando ciertos patrones.
 
-However in some cases this isn't enough. Maybe you want to have a totally
-different place to store your translation data and don't even want to load them
-from a remote server. This is where custom loaders come in. You can build your
-own loaders very easily. This chapter shows you how to do it!
+De todos modos, en algunos casos esto no es suficiente. Tal vez usted almacena sus datos de traducción en un lugar totalmente diferente, o tal vez ni siquiera desee cargarlos desde un servidor remoto.
+Aquí es donde intervienen los cargadores personalizados. Usted puede construir sus propios cargadores muy fácilmente. Este capítulo le muestra cómo hacerlo.
 
-## Building a custom loader service
+## Construcción de un servicio personalizado de carga
 
-If none of the provided loaders fits your needs, you can register a custom
-asynchronous loader as a factory. The factory has to return a function, which
-expects an object where at least the language key property exists. With this
-architecture you're as free as possible and have full control of how your
-asynchronous loader should behave.
+Si ninguno de los cargadores porvistos se ajusta a sus necesidades, usted puede registrar un cargador personalizado asincrónico como "factory" (fábrica). La "factory" tiene que devolver una función, la cual espera un objeto en el cual al menos exista la clave de lenguaje. Con esta arquitectura, usted es tan libre como es posible serlo, y tiene total control sobre cómo debería comportarse su cargador asincrónico.
 
-A custom loader factory could look like this:
+Una factory de cargarod personalizado podría verse así:
 
 <pre>
 app.factory('customLoader', function ($http, $q) {
@@ -44,44 +35,33 @@ app.factory('customLoader', function ($http, $q) {
 });
 </pre>
 
-You have to make sure that your loader function returns a promise. It should either
-get resolved with your translation data, or rejected with the language key. As
-you can see, there's a `key` property on the `options` object. It has the value
-of the language key with which the asynchronous loader is invoked.
+Tiene que asegurarse de que la función de su cargador devuelva una promesa. Esta debería on bien ser resuelta con sus datos de traducción, o bien ser rechazada con la clave de lenguaje. Como puede ver, hay una propiedad `key` en el objeto `options`, la cual tiene el valor de la clave de lenguaje con la que el cargador asincrónico es invocado.
 
-## Make use of a custom loader
+## Haga uso de un cargador asincrónico
 
-You know `$translateProvider` provides methods like `useStaticFilesLoader()` or
-`useUrlLoader()`. Both of them use `useLoader()` internally to register a loader
-factory which gets later invoked by `$injector`. You can use the same method for
-you custom service. So, to register the custom service simply do:
+Usted sabe que `$translateProvider` provee métodos como `useStaticFilesLoader()` o
+`useUrlLoader()`, y que ambos usan `useLoader()` internamente para registrar una "factory" de carga, la cual luego es invocada por el `$injector`. Puede usar el mismo mecanismo para su servicio personalizado; así que, para registrar su servicio personalizado, simplemente ponga:
 
 <pre>
 $translateProvider.useLoader('customLoader');
 </pre>
 
-angular-translate access your custom loader factory with `$injector` service and
+angular-translate access accede a la factory de su cargador personalizado con el servicio `$injector`, y se encarga de todo el resto por usted.
 does the rest for you.
 
-## Adding additional options
+## Agregado de opciones adicionales
 
-The `options.key` property indicates that `options` is just an object. You can
-extend it with additional properties to fit your own needs. For example you could
-expect a property `foo` on the `options` object, all you have to do is to provide
-the property when registering your custom loader factory.
+La propiedad `options.key` nos dice que `options` es simplemente un objeto, el cual se podría extender con propiedades adicionales según sus necesidades. Por ejemplo, si usted necesita una propiedad `foo` en el objeto `options`, todo lo que tiene que hacer es proveer dicha propiedad cuando registre su factory de carga personalizada.
 
-So, if we need a property `foo` with a value `bar` we can pass it like this:
+Así que, si nuestra propiedad `foo` necesita un valor `bar`, podemos pasarlo así:
 
 <pre>
 $translateProvider.useLoader('customLoader', { foo: 'bar'});
 </pre>
 
-Then, in your loader factory, you can access the property via `options.foo`. You
-don't have to worry about `options.key` since it gets added by angular-translate
-internally before invoking the loader.
+Entonces, en su factory de carga, se puede acceder a esta propiedad via `options.foo`. No se preocupe por `options.key`, dado que esta última es agregada internamente por angular-translate antes de invocar el cargador.
 
-Let's make use of a custom loader in our sample app to show how things work! First,
-we build the loader like this:
+Hagamos uso del cargador personalizado en nuestra aplicación de ejemplo, para demostrar cómo funcionan las cosas. Primero construimos nuestro cargador así:
 
 <pre>
 app.factory('asyncLoader', function ($q, $timeout) {
@@ -123,15 +103,15 @@ app.factory('asyncLoader', function ($q, $timeout) {
 });
 </pre>
 
-So what does it do? It uses `$timeout` service to wait two seconds and resolves
-our promise with either the english or the german translation table, depending
-on the language key. Now use `$translateProvider.useLoader()` to make use of it:
+¿Qué es lo que hace, esto? Utiliza el servicio `$timeout` para esperar 2 segundos, y luego resuelve la promesa con la tabla de traducción inglesa o la alemana, dependiendo de la clave de lenguaje.
+
+Ahora utulice `$translateProvider.useLoader()` para hacer uso de nuestro servicio:
 
 <pre>
 $translateProvider.useLoader('asyncLoader');
 </pre>
 
-Easy! Here's our working app with a custom loader!
+¡Sencillísimo! ¡Aquí está nuestra aplicación en funcionamiento, con un cargador personalizado!
 
 <doc:example module="myApp">
   <doc:source>
@@ -204,9 +184,8 @@ Easy! Here's our working app with a custom loader!
   </doc:source>
 </doc:example>
 
-When changing the language by clicking the `german` button, you see the app waits
-2 seconds until it resolves with the new translation data. Isn't that cool?
+Cuando se cambia el lenguaje apretando en el botón `alemán`, se puede ver que la aplicación espera 2 segundos hasta que se resuelve con los nuevos datos de traducción. ¿No está genial?
 
 <br>
 <hr>
-<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
+<center>Hecho con &hearts; de unicornio y con amor por [PascalPrecht](http://github.com/PascalPrecht)</center>
