@@ -4,7 +4,7 @@
 
 # Tests unitarios con angular-translate
 
-AngularJS ha sido creado con la "testabilidad" en mente. Y eso nos encanta. Es por eso que le hemos practicado tests unitarios a angular-translate desde su mismo comienzo. Sin embargo, cuando cree sus aplicaciones AngularJS con soporte i18n usando angular-translate, testear puede volverse un tanto Complicado. Esta guía le muestra cómo evitar problemas comunes cuando esriva sus tests unitarios que usen angular-translate.
+AngularJS ha sido creado con la "testabilidad" en mente. Y eso nos encanta. Es por eso que le hemos practicado tests unitarios a angular-translate desde su mismo comienzo. Sin embargo, cuando cree sus aplicaciones AngularJS con soporte i18n usando angular-translate, testear puede volverse un tanto complicado. Esta guía le muestra cómo evitar problemas comunes cuando escriba tests unitarios que usen angular-translate.
 
 ## ¿Cuál es el problema?
 
@@ -41,17 +41,15 @@ Muy bien. Eso es todo. Repasemos mentalmente qué pasa cuando ejecutamos esta ap
 - definimos nuestro lenguaje preferido
 - el servicio `$translate` es instanciado la primera vez que es inyectado
 - angular-translate se da cuenta de que no hay un lenguaje disponible localmente
-- comprueba su hay algún cargador asincrónico
+- comprueba si hay algún cargador asincrónico
 - el cargador asincrónico es invocado con la localización (locale) del lenguaje preferido
 - los datos de traducción son cargados y están listos para ser usados
 
 Es importante entender cómo angular-translate maneja el flujo, para hacerse una idea de qué problemas pueden surgir. Entonces, considerando estos pasos, hay una cosa en particular que tiene un impacto significativo: cuando el cargador asincrónico se registra y aún no hay ninguna tabla de traducción en el caché, angular-translate llama al cargador registrado **implícitamente**. ¿Por qué esto puede causar problemas cuando se le practican tests unitarios a su aplicación?
 
- Bueno, pare entender eso, tenemos que echarle un vistazo a cómo 
+ Bueno, pare entender eso, tenemos que echarle un vistazo a cómo efectuaríamos tests unitarios correctos, por ejemplo, con Jasmine.
+ Empezamos con un bloque `describe()` y cargarmos nuestra aplicación angular para cada spec:
 
-Well, to understand that, we have to take a look how we would right unit tests with
-for example, Jasmine. We start with a `describe()` block and load our angular app
-for each spec:
 
 <pre>
 describe('myApp', function () {
@@ -61,9 +59,7 @@ describe('myApp', function () {
 });
 </pre>
 
-Okay, so what this does, it makes sure that on every following spec our app module
-is instantiated. Next, we set up our `LanguageController` with a mocked scope like
-this:
+OK, lo que esto hace, es asegurarse de que nuesta aplicación sea instanciada para cada uno de los siguientes specs. Seguidamente, configuramos un `LanguageController` con un scope simulado (mocked) así:
 
 <pre>
 describe('myApp', function () {
@@ -86,23 +82,17 @@ describe('myApp', function () {
 });
 </pre>
 
-When we run this test, we'll get the following error:
+Cuando ejecutemos este test, obtendremos el siguiente error:
 
 ```
 Error: Unexpected request: GET locale-en.json
 ```
 
-So why do we get this error? So problem here is, that angular-translate calls the
-asynchronous loader implicitly. Which means, when `$translate` service is instantiated
-through DI, there's a XHR happening without us doing anything about it.
+Y ¿por qué? El problema aquí es que angular-translate llama al cargador asincrónico implícitamente. Lo cual significa que, cuando el servicio `$translate` es instanciado mediante DI, hay un XHR que ocurre sin que nosotros hayamos intervenido para nada.
 
-When writing tests and there are XHRs, one has to explicitly say that one expects
-a XHR in a certain spec. This is part of proper testing. In other words,
-when we explicitly say that there's a XHR happening, this error shouldn't occur,
-right?
+Cuando estemos escribiendo tests y haya XHRs, se tiene que indicar explícitamente que se espera un XHR en un spec determinado. Esto es parte de una buena práctica de testeo. En otras palabras, cuando decimos explícitamente que está ocurriendo un XHR, ese error no debería ocurrir, ¿no?
 
-So let's try to get around this error by injecting the `$httpBackend` service to
-expect XHRs and mock responses:
+Asi que, intentemos evitarlo inyectando el servicio  `$httpBackend` para esperar XHRs y respuestas simuladas:
 
 <pre>
 describe('myApp', function () {
@@ -128,24 +118,16 @@ describe('myApp', function () {
 });
 </pre>
 
-It turns out, that this doesn't work either, because at the time when `expectGET()`
-is called, the asynchronous loader has already been executed. Hell, is there no
-way to get around this issue?
+He aquí que esto tampoco funciona, porque en el momento en que `expectGET()` es invocado, el cargador asincrónico ya ha sido ejecutado. Caray, ¿es que no hay manera de evitar este problema?
 
-## The solution
+## La solución
 
-Unfortunately, this issue is caused by the design of angular-translate. To get
-around these errors, all we can do is to overwrite our module configuration in
-our test suite, that it **doesn't** use asynchronous loader at all. When there's
-no asynchronous loader, there's no XHR and therefore no error.
+Desafortunadamente, el problema es causado por el diseño mismo de angular-translate. Para evitar estos errores, todo lo que podemos hacer es sobreescribir la configuración de nuestro módulo en otra "test suite" que **no** use cargadores asincrónicos en absoluto. Cuando no hay cargadores asincrónicos, no hay XHR y por lo tanto no hay error.
 
-So how do we overwrite our module configuration at runtime for our test suite?
-When instantiating an angular module, we can always apply a inline function which
-is executed as configuration function. This configuration function can be used
-to overwrite the modules configuration since we have access to all providers.
+Así que, ¿cómo sobreescribimos un módulo en tiempo de ejecución para nuestra "test suite"?
+Cuando se instancia un módulo angular, siempre se puede aplicar una función "inline", la cual es ejecutada como "función de configuración". Esta función de configuración puede usar para sobreescribir la configuración del módulo, dado que tenemos acceso a todos los proveedores (providers).
 
-Using the `$provide` provider, we can build a custom loader factory, which should
-then be used instead of the static files loader.
+Utilizando el proveedor `$provider`, podemos construir una factory de cargadores personalizados, la cual debería entonces ser utilizada, en lugar del cargador estático de archivos.
 
 <pre>
 beforeEach(module('myApp', function ($provide, $translateProvider) {
@@ -159,9 +141,7 @@ beforeEach(module('myApp', function ($provide, $translateProvider) {
 }));
 </pre>
 
-This code is executed **before** each spec, so in other words, we overwrite the used
-loader just for the test specs. Now all we have to do, is to build a loader that doesn't
-make a XHR:
+Este código es ejecutado **antes** de cada spec, así que, en otras palabras, estamos sobreescribiendo el cargador utilizado, sólo para los specs de test. Ahora todo lo que tenemos que hacer, es crear un cargador que no haga una XHR.
 
 <pre>
 beforeEach(module('myApp', function ($provide, $translateProvider) {
@@ -179,8 +159,7 @@ beforeEach(module('myApp', function ($provide, $translateProvider) {
 }));
 </pre>
 
-That's it! Another option would be to always provide the preferred language of your
-app as static JSON:
+¡Listo! Otra opción sería siempre proveer un lenguaje preferido para su aplicación como JSON estático:
 
 <pre>
 beforeEach(module('myApp', function ($translateProvider) {
