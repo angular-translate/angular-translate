@@ -1,6 +1,6 @@
 {
   "name": "angular-translate",
-  "version": "2.6.0",
+  "version": "2.7.2",
   "description": "A translation module for AngularJS",
   "main": "dist/angular-translate.js",
   "repository": {
@@ -41,16 +41,22 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-jshint": "~0.11.x",
     "grunt-contrib-uglify": "~0.2.x",
-    "grunt-contrib-jshint": "~0.4.x",
-    "grunt-bump": "0.0.2",
+    "grunt-contrib-watch": "~0.4.2",
     "grunt-conventional-changelog": "~1.1.0",
     "grunt-express": "~0.3.3",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-ngmin": "0.0.2",
-    "express": "~3.2.4",
-    "grunt-contrib-clean": "~0.5.0",
-    "load-grunt-tasks": "~0.2.0",
-    "grunt-ngdocs": "~0.1.11",
-    "grunt-version": "~0.3.0"
+    "grunt-file-append": "0.0.6",
+    "grunt-karma": "~0.9.0",
+    "grunt-ng-annotate": "^0.8.0",
+    "grunt-ngdocs": "~0.2.5",
+    "grunt-umd": "^2.3.3",
+    "grunt-version": "~0.3.0",
+    "jasmine-core": "^2.1.3",
+    "karma": "~0.12.28",
+    "karma-chrome-launcher": "~0.1.5",
+    "karma-coverage": "^0.2.7",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-jasmine": "^0.3.2",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "load-grunt-tasks": "~0.2.0"
   }
 }
