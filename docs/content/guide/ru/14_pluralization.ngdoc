@@ -130,7 +130,7 @@ MessageFormat, вы должны пройтись по всем своим пе�
 
 Для начала, мы снова удалим `$translateProvider.useMessageFormatInterpolation()`. Теперь приложение
 использует стандартную интерполяцию. Хорошо. Теперь, нам нужно сделать интерполяцию MessageFormat
-доступной в качестве альтернативного типа интерполяции. В `$translateProvider` есть метод
+доступной в кач����стве альтернативного типа интерполяции. В `$translateProvider` есть метод
 `addInterpolation()`, который первым параметром принимает название фабрики сервиса интерполяции.
 
 Давайте добавим MessageFormat как 'альтернативный' тип интерполяции:
@@ -211,8 +211,8 @@ $translate('PLURAL', { GENDER: 'male' }, 'messageformat');
           HEADLINE: 'I\'m a headline',
           TEXT: 'I\'m using default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
-          BUTTON_LANG_EN: 'english',
-          BUTTON_LANG_DE: 'german'
+          BUTTON_LANG_EN: 'English',
+          BUTTON_LANG_DE: 'German'
         });
 
         $translateProvider.translations('de', {

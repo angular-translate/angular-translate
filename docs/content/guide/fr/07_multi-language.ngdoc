@@ -158,8 +158,8 @@ var translationsEN = {
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_FR: 'french',
-  BUTTON_LANG_EN: 'english'
+  BUTTON_LANG_FR: 'French',
+  BUTTON_LANG_EN: 'English'
 };
 </pre>
 
@@ -220,8 +220,8 @@ Et voilà! Nous avons maintenant une application avec le support Multilingue !
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
         // MISSING_TRANSLATION est ... oublié :)
-        BUTTON_LANG_FR: 'french',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_FR: 'French',
+        BUTTON_LANG_EN: 'English'
 
       };
 
