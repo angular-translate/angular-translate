@@ -96,8 +96,8 @@ la langue de l'utilisateur. Mettons à jour notre application pour utiliser ains
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_FR: 'french',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_FR: 'French',
+        BUTTON_LANG_EN: 'English'
       };
 
       var app = angular.module('monApp', ['ngCookies', 'pascalprecht.translate']);

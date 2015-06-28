@@ -96,8 +96,8 @@ app.factory('asyncLoader', function ($q, $timeout) {
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
     } else {
       translations = {
@@ -155,8 +155,8 @@ $translateProvider.useLoader('asyncLoader');
               PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
               PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
               VARIABLE_REPLACEMENT: 'Hi {{name}}',
-              BUTTON_LANG_DE: 'german',
-              BUTTON_LANG_EN: 'english'
+              BUTTON_LANG_DE: 'German',
+              BUTTON_LANG_EN: 'English'
             };
           } else {
             translations = {
@@ -202,8 +202,8 @@ $translateProvider.useLoader('asyncLoader');
   </doc:source>
 </doc:example>
 
-При зміні мови натисканням на кнопку `german`, застосунок чекає 2 секунди поки обіцянка не буде
-вирішена з новими даними перекладів. Як вам таке?
+При зміні мови натисканням на кнопку `German`, застосунок чекає 2 секунди поки обіцянка не буде
+вирішена з новими даними перекладів. Як вам т����ке?
 
 <br>
 <hr>
