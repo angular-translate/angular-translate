@@ -19,8 +19,3 @@
 
 # Auto-added patterns
 
-#site and grunt
-site/**
-package.json
-tmp/**
-
