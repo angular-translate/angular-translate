@@ -249,8 +249,8 @@ JSON因为JSON不是纯文本格式！
   "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
   "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
   "VARIABLE_REPLACEMENT": "Hi {{name}}",
-  "BUTTON_LANG_DE": "german",
-  "BUTTON_LANG_EN": "english"
+  "BUTTON_LANG_DE": "German",
+  "BUTTON_LANG_EN": "English"
 }
 </pre>
 
@@ -296,8 +296,8 @@ $translateProvider.preferredLanguage('en');
           "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
           "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
           "VARIABLE_REPLACEMENT": "Hi {{name}}",
-          "BUTTON_LANG_DE": "german",
-          "BUTTON_LANG_EN": "english"
+          "BUTTON_LANG_DE": "German",
+          "BUTTON_LANG_EN": "English"
         });
         // configures staticFilesLoader
         $translateProvider.useStaticFilesLoader({

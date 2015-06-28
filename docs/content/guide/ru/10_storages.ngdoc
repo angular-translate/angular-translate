@@ -8,7 +8,7 @@
 [сделать переводы динамичными](#/guide/06_variable-replacement), изучили
 [как добавить много языков](#/guide/07_multi-language). Но все же есть одна вещь, которая смотрится
 глупо при использовании нашего приложения. Каждый раз, заходя в приложение, мы должны нажимать на
-эту 'german' кнопку снова и снова (конечно, если вы немецкий пользователь как и я!).
+эту 'German' кнопку снова и снова (конечно, если вы немецкий пользователь как и я!).
 
 Итак, проблема состоит в том, что наше приложение не может запомнить язык, который был выбран вами
 при последнем посещении. Эта глава покажет как научить ваше приложение запоминать выбранный
@@ -84,8 +84,8 @@ $translateProvider.useLocalStorage();
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
 
       var translationsDE= {
