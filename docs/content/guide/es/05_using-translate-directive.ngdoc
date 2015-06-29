@@ -1,8 +1,8 @@
 @ngdoc overview
-@name Using translate directive
+@name Uso de la directiva translate
 @description
 
-#Uso de la directiva translate
+# Uso de la directiva translate
 
 Otra forma de traducir contenido en la capa de vista, es mediante la directiva `translate`.
 Usar es filtro `translate` está muy bien, pero la directiva `translate` es aún mejor.
