@@ -1,0 +1,104 @@
+@ngdoc overview
+@name Seguridad
+@description
+
+# Códigos de escape (escape sequences) al usar contenido variable
+
+En lo referente al output o salida normales, AgularJS se asegura de que la salida haya sido procesada con códigos de escape, como corresponde. Sin embargo, cuando se usa `angular-translate`, el resultado no será "escapado" correctamente. Esto significa que su aplicación es vulnerable contra graves ataques.
+(véase: [OWASP](https://www.owasp.org/index.php/Cross_site_scripting)).
+
+## Uso general
+
+El método `useSanitizeValueStrategy(strategy)` define qué estrategia de "códigos de escape" será utilizada. Es global.
+Hasta el momento, las estrategias de escape son las siguientes:
+
+* `sanitize`: sanea el código HTML en la traducción, utilizando `$sanitize`
+* `escape`: reemplaza los caracteres HTML  por códigos de escape en la traducción
+* `sanitizeParameters`: sanea el HTML en los valores de los parámetros interpolados, usando `$sanitize`
+* `escapeParameters`: reemplaza los caracteres HTML por códigos de escape en los valores de los parámetros interpolados.
+
+
+Además, hay 2 valores por defecto (sólo para la versión 2):
+
+* `null`: nada, valor por defecto inseguro (será quitado en la versión 3.0)
+* `escaped`: alias por  'escapeParameters' (parámetros con escape), para compatibilidad retroactiva (desde 2.7.0, será quitado en 3.0)
+
+Cumplimos estrictamente con la compatibilidad retroactiva (backwards compatibility), lo cual significa que el escape está inhabilitado por defecto.
+
+```javascript
+$translateProvider.useSanitizeValueStrategy(null);
+```
+
+De todos modos, en el futuro habilitaremos por defecto la variante más segura, `sanitize`.
+
+```javascript
+$translateProvider.useSanitizeValueStrategy('sanitize');
+```
+
+Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un aviso (warning)
+ en la consola hasta tanto una estrategia específica no haya sido elegida.
+
+## Demonstraciones
+
+### Sin escape
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+        // Using standard escaping (nothing)
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Con escape
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+        // Enable escaping of HTML
+        $translateProvider.useSanitizeValueStrategy('escaped');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
