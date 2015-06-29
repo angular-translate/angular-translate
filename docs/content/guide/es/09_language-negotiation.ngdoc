@@ -23,7 +23,7 @@ $translateProvider
   .determinePreferredLanguage();
 </pre>
 
-En [Determina el lenguaje preferido automáticamente](#/guide/07_multi-language#multi-language_determining-preferred-language-automatically)
+En [Determinar el lenguaje preferido automáticamente](#/guide/07_multi-language#multilenguaje_determinar-el-lenguaje-preferido-automáticamente)
 aprendimos que al usar este método sin parámetros angular-translate tratatá de determinar el lenguaje preferido accediendo a propiedades del navegador.
 
 Ahora bien, ¿qué pasa si si navegador devuelve `en_US` en lugar de `en`?

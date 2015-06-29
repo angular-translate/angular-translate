@@ -88,7 +88,7 @@ Exactamente. MessageFormat usa un formato diferente para interpolar. Esto signif
 Además, con esto nos estamos perdiento todas las útiles funcionalidades de Angular, como la evaluación de expresiones o el uso de filtros, dado que MessageFormat simplemente no los soporta.
 Entonces, ¿cómo evitamos todo esto? Necesitamos una forma de usar la interpolación por defecto de angular-translate, para tener a mano todas sus útiles funcionalidaes, y al mismo tiempo, necesitamos el poder pluralizador de MessageFormat.
 
-## Sustitución temporaria (Override) de la interpolación
+## Sustitución temporaria de la interpolación
 
 Como sería un despropósito reimplementar la funcionalidad de MesssagFormar dentro de angular-translate, no podemos usar ambos tipos de interpolación en una misma traducción. Pero _podemos_ usar un tipo de interpolación globalmente, para toda la aplicación, y otra la otra para casos específicos, es como decir: "Por favor, use la interpolación por defecto para todas las traducciones, excepto para A, B y C".
 

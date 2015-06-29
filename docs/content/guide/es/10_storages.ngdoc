@@ -12,7 +12,7 @@ Así que el problema es que nuestra aplicación no puede recordar qué lenguaje 
 
 ## Haga que su aplicación recuerde su elección
 
-Para hacer que su aplicación recuerde el lenguaje que los usuarios elijan, angular-translate viene con soporte para ^^storages** (almacenamientos). Cualquiera sea el almacenamiento que usted use, angular-translare grabará ahí una clave de lenguaje con un identificador específico, de manera que podamos pedirlo la próxima vez que ejecutemos la aplicación.
+Para hacer que su aplicación recuerde el lenguaje que los usuarios elijan, angular-translate viene con soporte para **storages** (almacenamientos). Cualquiera sea el almacenamiento que usted use, angular-translare grabará ahí una clave de lenguaje con un identificador específico, de manera que podamos pedirlo la próxima vez que ejecutemos la aplicación.
 
 angular-translate viene con soporte incorporado para dos tipos de almacenamiento: **localStorage** y
 **cookieStorage**. localStorage se retrotrae a  cookieStorage  si no es soportado por el navegador que usted esté usando. Para usar cualquiera de estos almacenamientos, se debe instalar el paquete de extensión correspondiente.

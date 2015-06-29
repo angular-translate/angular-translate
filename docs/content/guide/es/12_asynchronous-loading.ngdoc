@@ -262,7 +262,7 @@ La propiedad `$http` será utilizada internamente por los cargadores, excepto qu
 ## Uso del caché
 
 A fin de controlar el comportamiento del caché para los crgadores presentes, se puede usar una instancia de caché. Vea más detalle sobre esto en los
-[Documentos oficiales de AngularJs](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
+[Documentación oficial de AngularJs](https://docs.angularjs.org/api/ng/type/$cacheFactory.Cache).
 
 Para habilitar el caché estándar, se puede utilizar el siguiente atajo:
 

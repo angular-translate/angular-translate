@@ -4,7 +4,8 @@
 
 # Tests unitarios con angular-translate
 
-AngularJS ha sido creado con la "testabilidad" en mente. Y eso nos encanta. Es por eso que le hemos practicado tests unitarios a angular-translate desde su mismo comienzo. Sin embargo, cuando cree sus aplicaciones AngularJS con soporte i18n usando angular-translate, testear puede volverse un tanto complicado. Esta guía le muestra cómo evitar problemas comunes cuando escriba tests unitarios que usen angular-translate.
+AngularJS ha sido creado con la capacidad de ser testeado en mente.
+Y eso nos encanta. Es por eso que le hemos practicado tests unitarios a angular-translate desde su mismo comienzo. Sin embargo, cuando cree sus aplicaciones AngularJS con soporte i18n usando angular-translate, testear puede volverse un tanto complicado. Esta guía le muestra cómo evitar problemas comunes cuando escriba tests unitarios que usen angular-translate.
 
 ## ¿Cuál es el problema?
 

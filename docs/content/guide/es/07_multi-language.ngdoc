@@ -16,7 +16,7 @@ lenguaje (lo cual es la razón para usar este módulo, en realidad).
 
 ## Enseñarle varios lenguajes a su aplicación
 
-En [Getting Started](#/guide/02_getting-started) usted aprendió cómo agregarle una tabla de traducción a su
+En [Comienzo](#/guide/02_getting-started) usted aprendió cómo agregarle una tabla de traducción a su
   applicación, usando el método `translations()` de `$translateProvider`. El mismo método
 puede ser usado para agregar varias tablas de traducción a la vez. Las tablas dadas sólo tienen que especificar una
  clave de lenguaje, para que angular-translate sea capaz de reconocer qué tabla corresponde a qué lenguaje.
@@ -67,7 +67,7 @@ puede ocurrir que angular-translate tenga que hacer 2 llamadas asincrónicas.
 Entraremos en detalle sobre esto más adelante. Para evitar esto, hemos introducido `preferredLanguage()`.
 Con `$translateProvider()`, se debería utilizar siempre `preferredLanguage()` en lugar de `use()`.
 
-## Dererminar el lenguaje preferido de manera automática
+## Determinar el lenguaje preferido automáticamente
 
 A partir de la versión `2.0` también hay un método `determinePreferredLanguage()` en
 `$translateProvider`. Este método trata de determinar por sí mismo cuál sería el lenguaje preferido;
@@ -117,7 +117,7 @@ Para cambiar el lenguaje en tiempo de ejecución, el servicio `$translate` tiene
  devuelve el lenguaje actual, o, si se le pasa un argumento, le dice a angular-translate qué lenguaje usar.
  `translate.use()` también invoca internamente los cargadores asincrónicos, si se trata de usar un lenguaje cuya
  tabla de traducción aún no haya sido cargada. Más sobre esto en
-[Carga asincrónica](#/guide/10_asynchronous_loading).
+[Carga asincrónica](#/guide/12_asynchronous-loading).
 
 Un buen uso de  `$translate.use()` sería en un controlador que controle los cambios de lenguaje.
 Usted simplemete tendría que implementar una función en el "scope", y luego usarla para indicarle a angular-translate que

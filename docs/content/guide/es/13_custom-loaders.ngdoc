@@ -5,7 +5,7 @@
 # Cargadores personalizados
 
 angular-translate no sería angular-translate si no le permitiera  construir sus propios cargadores asincrónicos personalizados.
-En [Carga asincrónica](#/guide/10_asynchronous-loading) usted aprendió cómo usar los cargadores ya provistos, para cargar sus datos de tradución asincrónicamente desde un servicio, usando ciertos patrones.
+En [Carga asincrónica](#/guide/12_asynchronous-loading) usted aprendió cómo usar los cargadores ya provistos, para cargar sus datos de tradución asincrónicamente desde un servicio, usando ciertos patrones.
 
 De todos modos, en algunos casos esto no es suficiente. Tal vez usted almacene sus datos de traducción en un lugar totalmente diferente, o tal vez ni siquiera desee cargarlos desde un servidor remoto.
 Aquí es donde intervienen los cargadores personalizados. Usted puede construir sus propios cargadores muy fácilmente. Este capítulo le muestra cómo hacerlo.

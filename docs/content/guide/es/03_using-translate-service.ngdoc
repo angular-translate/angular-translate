@@ -18,7 +18,7 @@
 ## Uso general
 Ahí es donde interviene `$translate`. Usar el servicio `$translate` es muy fácil. Primero, tiene que inyectarlo
 mediante "dependency injection" (inyección de dependencias), como cualquier otro servicio que se use en código
-Angular. Digamos que usted quiere extender la aplicación que hemos comenzado a construir en [Getting Started](#/guide/02_getting-started).
+Angular. Digamos que usted quiere extender la aplicación que hemos comenzado a construir en [Comienzo](#/guide/02_getting-started).
 
 Nuestro codigo se vería más o menos así:
 
@@ -31,13 +31,7 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 Ahora, para traducir sus contenidos con `$translate`, lo únique que usted tiene que hacer, es
 pasar una "translation ID" (clave de traducción), la cual debería haber sido registrada anteriormente
  con `$translateProvider`. Como puede ser que esté habiendo alguna carga asincrónica mientras esto pasa
- (luego cubriremos eso más en detalle), el servicio `$translate` se comporta de manera asincrónica y devuelve
-<<<<<<< HEAD
- una "promise" (promesa) que, para la clave dada, o bien se resuelve con la traducción, o bien es
-=======
- una "promise" (promesa) que, para la clave deda, o bien se resuelve con la traducción, o bien es
->>>>>>> #1086 - translating 'use translate filter' page
- rechazada.
+ (luego cubriremos eso más en detalle), el servicio `$translate` se comporta de manera asincrónica y devuelve una "promise" (promesa) que, para la clave dada, o bien se resuelve con la traducción, o bien es rechazada.
 Entonces, el uso básico de `$translate` en la capa de servicios o de controladores, quedaría así:
 
 <pre>

@@ -62,7 +62,7 @@ app.factory('customInterpolation', function ($interpolate) {
 });
 </pre>
 
-Entonces, esto es lo que hicimos aquí: `setLocale()` simplemente almacena el valor del lenguaje actualmente usado,  `getInterpolationIdentifier()` devuelve una cadena `custom`. ¿Para qué sirve en realidad? ¿Se acuerda de cómo [Temporariamente sustituir el tipo de interpolación](#/guide/14_pluralization#overridinginterpolationtemporarily)?
+Entonces, esto es lo que hicimos aquí: `setLocale()` simplemente almacena el valor del lenguaje actualmente usado,  `getInterpolationIdentifier()` devuelve una cadena `custom`. ¿Para qué sirve en realidad? ¿Se acuerda de [Sustituición temporaria de la interpolación](#/guide/14_pluralization#pluralización_sustitución-temporaria-de-la-interpolación)?
 Exactamente. Este es el identificador que está mapeado a nuestro servicio, de manera que angular-translate sabe qué servicios de interpolación usar cuando explícitamente se sustituye (override) el servicio de interpolación en tiempo de ejecución. `interpolate()`  simplemente utiliza el servicio de interpolación `$interpolate` de Angular. Además, agrega como sufijo y prefijo la localización (locale) actual a la cadena dada.
 
 ## Uso de sus servicio personalizado de interpolación

@@ -5,7 +5,7 @@
 # Códigos de escape (escape sequences) al usar contenido variable
 
 En lo referente al output o salida normales, AgularJS se asegura de que la salida haya sido procesada con códigos de escape, como corresponde. Sin embargo, cuando se usa `angular-translate`, el resultado no será "escapado" correctamente. Esto significa que su aplicación es vulnerable contra graves ataques.
-(véase: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+(véase: [OWASP](https://www.owasp.org/index.php/Cross_site_scripting)).
 
 ## Uso general
 
@@ -18,7 +18,7 @@ Hasta el momento, las estrategias de escape son las siguientes:
 * `escapeParameters`: reemplaza los caracteres HTML por códigos de escape en los valores de los parámetros interpolados.
 
 
-Además, hay 2 valores por defecto (sólo para la versión 2): 
+Además, hay 2 valores por defecto (sólo para la versión 2):
 
 * `null`: nada, valor por defecto inseguro (será quitado en la versión 3.0)
 * `escaped`: alias por  'escapeParameters' (parámetros con escape), para compatibilidad retroactiva (desde 2.7.0, será quitado en 3.0)
