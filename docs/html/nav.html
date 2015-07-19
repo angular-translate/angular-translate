@@ -1,6 +1,7 @@
 <script>
 function langLink(locale) {
-  return 'https://angular-translate.github.io/docs/' + locale + '/' + window.location.hash;
+  var origin = location.origin || 'https://angular-translate.github.io';
+  return origin + '/docs/' + locale + '/' + window.location.hash;
 }
 </script>
 
