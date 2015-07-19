@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-mkdir -p site/docs/en site/docs/ru site/docs/de site/docs/uk site/docs/zh-cn site/docs/zh-tw site/docs/fr
+mkdir -p site/docs/en site/docs/ru site/docs/de site/docs/uk site/docs/zh-cn site/docs/zh-tw site/docs/fr site/docs/es
 
 grunt ngdocs $@
 grunt copy:logos
@@ -42,6 +42,12 @@ grunt ngdocs --lang=fr $@
 grunt copy:logos
 grunt copy:docs_assets
 mv tmp/* site/docs/fr
+rm -rf tmp
+
+grunt ngdocs --lang=es $@
+grunt copy:logos
+grunt copy:docs_assets
+mv tmp/* site/docs/es
 rm -rf tmp
 
 
