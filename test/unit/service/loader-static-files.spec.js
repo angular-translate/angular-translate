@@ -82,6 +82,26 @@ describe('pascalprecht.translate', function () {
       $httpBackend.flush();
       expect($translationCache.info().size).toEqual(1);
     });
+
+    it('should call with query string params', function() {
+      var response = {
+        HEADER: 'Ueberschrift'
+      };
+
+      $httpBackend.when('GET', 'lang_de_DE.json?foo=bar').respond(response);
+      $httpBackend.expectGET('lang_de_DE.json?foo=bar').respond(200, response);
+
+      $translateStaticFilesLoader({
+        key: 'de_DE',
+        prefix: 'lang_',
+        suffix: '.json',
+        params: {
+          foo: 'bar'
+        }
+      });
+
+      $httpBackend.flush();
+    });
   });
 
   describe('$translateStaticFilesLoader with custom options (method=POST)', function () {
