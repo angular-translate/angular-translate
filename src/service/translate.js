@@ -1489,11 +1489,16 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             // If using a link inside of translated string, rerun $translate with linked translationId
             // and replace translation string with linked value
             if (translation.indexOf('@:') > 0) {
-              var atIndex = translation.indexOf('@:'),
-                linkTranslationId = translation.substr(atIndex, translation.indexOf(' ', atIndex) - atIndex),
-                translatedLink = determineTranslationInstant(linkTranslationId.substr(2), interpolateParams, interpolationId).toLowerCase();
+              var regex = /\!|\s|\?|\,|\:|\;|\-|(\.\W)/;
 
-              translation = translation.replace(linkTranslationId, translatedLink);
+              var atIndex = translation.indexOf('@:'),
+              linkTranslationIdRaw = translation.substr(atIndex);
+              var match = regex.exec(linkTranslationIdRaw.substr(2));
+
+              var linkTranslationId = translation.substr(atIndex, match.index + 2); // Because we trimmed away @: at the start of the string when running regex.exec()
+              var translatedString = determineTranslationInstant(linkTranslationId.substr(2), interpolateParams, interpolationId).toLowerCase();
+              
+              translation = translation.replace(linkTranslationId, translatedString);
             }
 
           // If using link, rerun $translate with linked translationId and return it
