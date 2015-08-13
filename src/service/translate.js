@@ -1486,6 +1486,16 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if (table && Object.prototype.hasOwnProperty.call(table, translationId)) {
           var translation = table[translationId];
 
+            // If using a link inside of translated string, rerun $translate with linked translationId
+            // and replace translation string with linked value
+            if (translation.indexOf('@:') > 0) {
+              var atIndex = translation.indexOf('@:'),
+                linkTranslationId = translation.substr(atIndex, translation.indexOf(' ', atIndex) - atIndex),
+                translatedLink = determineTranslationInstant(linkTranslationId.substr(2), interpolateParams, interpolationId).toLowerCase();
+
+              translation = translation.replace(linkTranslationId, translatedLink);
+            }
+
           // If using link, rerun $translate with linked translationId and return it
           if (translation.substr(0, 2) === '@:') {
             result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId);
