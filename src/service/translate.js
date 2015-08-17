@@ -391,12 +391,13 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    * only that it says which language to **prefer**.
    *
    * @param {string} langKey A language key.
-   *
    */
   this.preferredLanguage = function(langKey) {
-    setupPreferredLanguage(langKey);
-    return this;
-
+    if (langKey) {
+      setupPreferredLanguage(langKey);
+      return this;
+    }
+    return $preferredLanguage;
   };
   var setupPreferredLanguage = function (langKey) {
     if (langKey) {
