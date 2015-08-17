@@ -836,6 +836,23 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('$translateProvider#preferredLanguage()', function () {
+    var translateProvider;
+
+    beforeEach(module('pascalprecht.translate', function($translateProvider) {
+      translateProvider = $translateProvider;
+      translateProvider.preferredLanguage('de_DE');
+    }));
+
+    it('should return a string if language is specified', inject(function () {
+      expect(typeof translateProvider.preferredLanguage()).toBe('string');
+    }));
+
+    it('should return a correct language code', inject(function () {
+      expect(translateProvider.preferredLanguage()).toEqual('de_DE');
+    }));
+  });
+
   describe('$translate#fallbackLanguage()', function () {
 
     describe('single fallback language', function () {
