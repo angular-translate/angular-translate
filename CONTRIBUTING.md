@@ -117,4 +117,4 @@ at [demo/server_routes.js](demo/server_routes.js).
   - Make sure you send the PR to the <code>canary</code> branch
   - Travis CI is watching you!
 
-If you follow these instructions, your PR will land pretty safety in the main repo!
+If you follow these instructions, your PR will land pretty safely in the main repo!
