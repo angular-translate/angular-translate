@@ -123,6 +123,17 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('$translate#nestedObjectDelimeter()', function () {
+
+      it('should be a function', function () {
+        expect(typeof $translate.nestedObjectDelimeter).toBe('function');
+      });
+
+      it('should return \'.\' if no delimiter is specified', function () {
+        expect($translate.nestedObjectDelimeter()).toEqual('.');
+      });
+    });
+
     it('should return a promise', function () {
       expect($translate('FOO').then).toBeDefined();
       expect(typeof $translate('FOO').then).toEqual('function');
