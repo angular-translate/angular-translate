@@ -36,7 +36,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       $notFoundIndicatorRight,
       $postCompilingEnabled = false,
       $forceAsyncReloadEnabled = false,
-      NESTED_OBJECT_DELIMITER = '.',
+      $nestedObjectDelimeter = '.',
       loaderCache,
       directivePriority = 0,
       statefulFilter = true,
@@ -262,6 +262,26 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
   };
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#nestedObjectDelimeter
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   *
+   * Let's you change the delimiter for namespaced translations.
+   * Default delimiter is `.`.
+   *
+   * @param {string} delimiter namespace separator
+   */
+  this.nestedObjectDelimeter = function (delimiter) {
+    if (!delimiter) {
+      return $nestedObjectDelimeter;
+    }
+    $nestedObjectDelimeter = delimiter;
+    return this;
+  };
+
+  /**
    * @name flatObject
    * @private
    *
@@ -286,10 +306,10 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       if (angular.isObject(val)) {
         flatObject(val, path.concat(key), result, key);
       } else {
-        keyWithPath = path.length ? ('' + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key) : key;
+        keyWithPath = path.length ? ('' + path.join($nestedObjectDelimeter) + $nestedObjectDelimeter + key) : key;
         if(path.length && key === prevKey){
           // Create shortcut path (foo.bar == foo.bar.bar)
-          keyWithShortPath = '' + path.join(NESTED_OBJECT_DELIMITER);
+          keyWithShortPath = '' + path.join($nestedObjectDelimeter);
           // Link it to original path
           result[keyWithShortPath] = '@:' + keyWithPath;
         }
@@ -1556,6 +1576,20 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        */
       $translate.cloakClassName = function () {
         return $cloakClassName;
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#nestedObjectDelimeter
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns the configured delimiter for nested namespaces.
+       *
+       * @return {string} nestedObjectDelimeter
+       */
+      $translate.nestedObjectDelimeter = function () {
+        return $nestedObjectDelimeter;
       };
 
       /**

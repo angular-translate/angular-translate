@@ -123,6 +123,17 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('$translate#nestedObjectDelimeter()', function () {
+
+      it('should be a function', function () {
+        expect(typeof $translate.nestedObjectDelimeter).toBe('function');
+      });
+
+      it('should return \'.\' if no delimiter is specified', function () {
+        expect($translate.nestedObjectDelimeter()).toEqual('.');
+      });
+    });
+
     it('should return a promise', function () {
       expect($translate('FOO').then).toBeDefined();
       expect(typeof $translate('FOO').then).toEqual('function');
@@ -301,6 +312,23 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       expect(value[0]).toEqual('Header');
       expect(value[1]).toEqual('2. Header');
+    });
+  });
+
+  describe('$translate#nestedObjectDelimeter()', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.nestedObjectDelimeter('_');
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should return \'_\' if such delimiter is specified', function () {
+      expect($translate.nestedObjectDelimeter()).toEqual('_');
     });
   });
 
