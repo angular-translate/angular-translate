@@ -84,7 +84,7 @@ Just call it this way:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, $translate, $rootScope) {
-  $rooScope.$on('$translateChangeSuccess', function () {
+  $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
     });
