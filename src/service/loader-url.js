@@ -36,11 +36,12 @@ function $translateUrlLoader($q, $http) {
       url: options.url,
       params: requestParams,
       method: 'GET'
-    }, options.$http)).then(function(result) {
-      return result.data;
-    }, function () {
-      return $q.reject(options.key);
-    });
+    }, options.$http))
+      .then(function(result) {
+        return result.data;
+      }, function () {
+        return $q.reject(options.key);
+      });
   };
 }
 

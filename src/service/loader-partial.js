@@ -58,21 +58,23 @@ function $translatePartialLoader() {
       return $http(angular.extend({
         method : 'GET',
         url: this.parseUrl(urlTemplate, lang)
-      }, $httpOptions)).then(function(result){
-        self.tables[lang] = result.data;
-        return result.data;
-      }, function() {
-        if (errorHandler) {
-          return errorHandler(self.name, lang).then(function(data) {
-            self.tables[lang] = data;
-            return data;
-          }, function() {
+      }, $httpOptions))
+        .then(function(result){
+          self.tables[lang] = result.data;
+          return result.data;
+        }, function() {
+          if (errorHandler) {
+            return errorHandler(self.name, lang)
+              .then(function(data) {
+                self.tables[lang] = data;
+                return data;
+              }, function() {
+                return $q.reject(self.name);
+              });
+          } else {
             return $q.reject(self.name);
-          });
-        } else {
-          return $q.reject(self.name);
-        }
-      });
+          }
+        });
 
     } else {
       return $q.when(this.tables[lang]);
@@ -303,15 +305,14 @@ function $translatePartialLoader() {
         part.urlTemplate = options.urlTemplate;
       });
 
-      $q.all(loaders).then(
-        function() {
+      $q.all(loaders)
+        .then(function() {
           var table = {};
           angular.forEach(prioritizedParts, function(part) {
             deepExtend(table, part.tables[options.key]);
           });
           deferred.resolve(table);
-        },
-        function() {
+        }, function() {
           deferred.reject(options.key);
         }
       );
