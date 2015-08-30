@@ -41,7 +41,7 @@ module.exports = function (grunt) {
       banner: '/*!\n * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
         ' * <%= pkg.homepage %>\n' +
-        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+        ' * Copyright (c) <%= grunt.template.today("yyyy") %> The <%= pkg.title || pkg.name %> team, <%= pkg.author.name %>;' +
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n'
     },
 
