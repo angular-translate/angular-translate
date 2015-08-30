@@ -444,9 +444,14 @@ module.exports = function (grunt) {
       }
     },
 
-    changelog: {
-      options: {
-        dest: 'CHANGELOG.md'
+    conventionalChangelog : {
+      options : {
+        changelogOpts : {
+          preset : 'angular'
+        }
+      },
+      release : {
+        src : 'CHANGELOG.md'
       }
     },
 
@@ -765,4 +770,7 @@ module.exports = function (grunt) {
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit', 'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
+
+  // Legacy support
+  grunt.registerTask('changelog', ['conventionalChangelog']);
 };
