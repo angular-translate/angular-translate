@@ -7,7 +7,7 @@ It also covers provided grunt tasks, that help you developing on <code>angular-t
 
 ## Dependencies
 
-To make sure, that the following instructions work, please install the following dependecies
+To make sure, that the following instructions work, please install the following dependencies
 on you machine:
 
 - Node.js
@@ -17,9 +17,9 @@ on you machine:
 If you install node through the binary installation file, **npm** will be already there.
 When **npm** is installed, use it to install the needed npm packages:
 
-- bower <code>npm install -g bower</code>
+- bower <code>npm install -g bower</code> (only required when running bower manually)
 - grunt-cli <code>npm install -g grunt-cli</code>
-- karma <code>npm install -g karma</code>
+- karma <code>npm install -g karma</code> (only required when running karma manually)
 
 ## Installation
 
@@ -35,6 +35,8 @@ and install all needed dependencies via **npm**:
 ````
 $ npm install
 ````
+
+(This will invoke a `bower install` automatically.)
 
 <code>angular-translate</code> is now installed and ready to be built.
 
@@ -71,7 +73,7 @@ dist/angular-translate-x.x.x.min.js
 
 This task will watch all relevant files. When it notice a change, it'll run the
 **lint** and **test** task. Use this task while developing on the source
-to make sure, everytime you make a change you get notified if your code is incosistent
+to make sure, every time you make a change you get notified if your code is inconsistent
 or doesn't pass the tests.
 
 #### <code>grunt dev</code>
@@ -106,15 +108,16 @@ at [demo/server_routes.js](demo/server_routes.js).
     ````
   - Use one branch per fix/feature
 - Make your changes
-  - Make sure to provide a spec for unit tests
-  - Run your tests with either <code>karma start</code> or <code>grunt test</code>
-  - When all tests pass, everything's fine
+  - Make sure to provide a spec for unit tests.
+  - Run your tests with either <code>karma start</code> or <code>grunt test</code>.
+  - In order to verify everything will work in the other test scopes (different AngularJS version), please run `npm run test-scopes`. If you are getting dependency resolution issue, run `npm run clean-test-scopes` and try again.
+  - When all tests pass, everything's fine.
 - Commit your changes
-  - Please provide a git message which explains what you've done
+  - Please provide a git message which explains what you've done.
   - ngTranslate uses [Brian's conventional-changelog task](https://github.com/btford/grunt-conventional-changelog) so please make sure your commits follow the [conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit)
-  - Commit to the forked repository
+  - Commit to the forked repository.
 - Make a pull request
-  - Make sure you send the PR to the <code>canary</code> branch
+  - Make sure you send the PR to the <code>canary</code> branch.
   - Travis CI is watching you!
 
 If you follow these instructions, your PR will land pretty safely in the main repo!
