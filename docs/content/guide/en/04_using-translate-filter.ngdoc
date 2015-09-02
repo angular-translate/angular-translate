@@ -29,7 +29,7 @@ just by transfering the controller logic to our view layer. Basically the
 `translate` filter works like this:
 
 ```
-<ANY>{{ TRANSLATION_ID | translate }}</ANY>
+<ANY>{{'TRANSLATION_ID' | translate}}</ANY>
 ```
 
 So, to update our example, we remove the usage of `$translate` service within
