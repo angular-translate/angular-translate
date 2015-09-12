@@ -46,9 +46,9 @@ function $translateStaticFilesLoader($q, $http) {
         ].join(''),
         method: 'GET',
         params: ''
-      }, options.$http)).success(function (data) {
-        deferred.resolve(data);
-      }).error(function () {
+      }, options.$http)).then(function (response) {
+        deferred.resolve(response.data);
+      }, function () {
         deferred.reject(options.key);
       });
 

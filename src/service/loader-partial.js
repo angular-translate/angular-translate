@@ -59,10 +59,10 @@ function $translatePartialLoader() {
       $http(angular.extend({
         method : 'GET',
         url: this.parseUrl(urlTemplate, lang)
-      }, $httpOptions)).success(function(data){
-        self.tables[lang] = data;
-        deferred.resolve(data);
-      }).error(function() {
+      }, $httpOptions)).then(function(response){
+        self.tables[lang] = response.data;
+        deferred.resolve(response.data);
+      }, function() {
         if (errorHandler) {
           errorHandler(self.name, lang).then(function(data) {
             self.tables[lang] = data;

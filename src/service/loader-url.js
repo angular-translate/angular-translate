@@ -37,9 +37,9 @@ function $translateUrlLoader($q, $http) {
       url: options.url,
       params: requestParams,
       method: 'GET'
-    }, options.$http)).success(function (data) {
-      deferred.resolve(data);
-    }).error(function () {
+    }, options.$http)).then(function (response) {
+      deferred.resolve(response.data);
+    }, function () {
       deferred.reject(options.key);
     });
 
