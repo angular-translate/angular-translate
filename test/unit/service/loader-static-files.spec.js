@@ -8,7 +8,11 @@ describe('pascalprecht.translate', function () {
 
     var $translate, $httpBackend, $translateStaticFilesLoader, $translationCache;
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_, _$translationCache_) {
       $httpBackend = _$httpBackend_;
@@ -24,6 +28,17 @@ describe('pascalprecht.translate', function () {
     afterEach(function() {
       $httpBackend.verifyNoOutstandingExpectation();
       $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should return a promise 2', function () {
+      var promise = $translateStaticFilesLoader({
+        key: 'de_DE',
+        prefix: 'lang_',
+        suffix: '.json'
+      });
+      expect(promise.then).toBeDefined();
+      expect(typeof promise.then).toBe('function');
+      $httpBackend.flush();
     });
 
     it('should be defined', function () {
@@ -88,7 +103,11 @@ describe('pascalprecht.translate', function () {
 
     var $translate, $httpBackend, $translateStaticFilesLoader;
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_) {
       $httpBackend = _$httpBackend_;
