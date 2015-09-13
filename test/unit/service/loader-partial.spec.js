@@ -261,7 +261,11 @@ describe('pascalprecht.translate', function() {
 
   describe('$translatePartialLoader', function () {
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function ($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     var $translatePartialLoader, $rootScope;
 
@@ -457,7 +461,11 @@ describe('pascalprecht.translate', function() {
 
   describe('$translatePartialLoader', function () {
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function ($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     it('should use error handler if it is specified', function() {
       inject(function($translatePartialLoader, $httpBackend) {
@@ -513,6 +521,9 @@ describe('pascalprecht.translate', function() {
       counter = 0;
 
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -536,6 +547,9 @@ describe('pascalprecht.translate', function() {
       counter = 0;
 
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -564,6 +578,9 @@ describe('pascalprecht.translate', function() {
     it('shouldn\'t load a part if it was loaded, deleted and added again', function() {
       counter = 0;
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -594,6 +611,9 @@ describe('pascalprecht.translate', function() {
       counter = 0;
 
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -621,6 +641,9 @@ describe('pascalprecht.translate', function() {
 
     it('should put a part into a cache and remove from the cache if the part was deleted', function() {
       module(function($httpProvider, $translateProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
         $translateProvider.useLoaderCache();
       });
@@ -656,6 +679,9 @@ describe('pascalprecht.translate', function() {
       counter = 0;
 
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -682,6 +708,9 @@ describe('pascalprecht.translate', function() {
       counter = 0;
 
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -716,6 +745,9 @@ describe('pascalprecht.translate', function() {
     it('shouldn\'t load a part if it was loaded, deleted and added again', function() {
       counter = 0;
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 
@@ -752,6 +784,9 @@ describe('pascalprecht.translate', function() {
       counter = 0;
 
       module(function($httpProvider) {
+        if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+          $httpProvider.useLegacyPromiseExtensions(false);
+        }
         $httpProvider.defaults.transformRequest.push(CounterHttpInterceptor);
       });
 

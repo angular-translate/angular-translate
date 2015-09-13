@@ -8,7 +8,11 @@ describe('pascalprecht.translate', function () {
 
     var $translate, $httpBackend, $translateStaticFilesLoader, $translationCache;
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function ($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_, _$translationCache_) {
       $httpBackend = _$httpBackend_;
@@ -88,7 +92,11 @@ describe('pascalprecht.translate', function () {
 
     var $translate, $httpBackend, $translateStaticFilesLoader;
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function ($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateStaticFilesLoader_) {
       $httpBackend = _$httpBackend_;
