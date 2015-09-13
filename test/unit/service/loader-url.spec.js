@@ -8,7 +8,11 @@ describe('pascalprecht.translate', function () {
 
     var $translate, $httpBackend, $translateUrlLoader, $translationCache;
 
-    beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('pascalprecht.translate', function ($httpProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
+    }));
 
     beforeEach(inject(function (_$translate_, _$httpBackend_, _$translateUrlLoader_, _$translationCache_) {
       $translate = _$translate_;
@@ -88,7 +92,10 @@ describe('pascalprecht.translate', function () {
   });
 
   describe('$translateProvider#useUrlLoader', function () {
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($httpProvider, $translateProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
       $translateProvider.useUrlLoader('foo/bar.json');
     }));
 
@@ -114,7 +121,10 @@ describe('pascalprecht.translate', function () {
   });
 
   describe('$translateProvider#useUrlLoader with custom $http options (method=POST)', function () {
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($httpProvider, $translateProvider) {
+      if (angular.isDefined($httpProvider.useLegacyPromiseExtensions)) {
+        $httpProvider.useLegacyPromiseExtensions(false);
+      }
       $translateProvider.useUrlLoader('foo/bar.json', {
         $http: {
           method: 'POST'
