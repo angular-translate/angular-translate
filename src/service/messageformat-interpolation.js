@@ -92,7 +92,7 @@ function $translateMessageFormatInterpolation($translateSanitization, $cacheFact
    * @methodOf pascalprecht.translate.$translateMessageFormatInterpolation
    *
    * @description
-   * Interpolates given string agains given interpolate params using MessageFormat.js.
+   * Interpolates given string against given interpolate params using MessageFormat.js.
    *
    * @returns {string} interpolated string.
    */
