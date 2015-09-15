@@ -252,20 +252,20 @@ describe('pascalprecht.translate', function () {
           $rootScope.translationId = 'TD_WITH_VALUE';
           element = $compile('<div translate="{{translationId}}"></div>')($rootScope);
           $rootScope.$digest();
-          expect(element.text()).toBe('Lorem Ipsum ');
+          expect(element.text()).toBe('Lorem Ipsum');
        });
 
         it('should replace interpolation directive with empty string if translation id is in content', function () {
           element = $compile('<div translate>TD_WITH_VALUE</div>')($rootScope);
           $rootScope.$digest();
-          expect(element.text()).toBe('Lorem Ipsum ');
+          expect(element.text()).toBe('Lorem Ipsum');
         });
 
         it('should replace interpolation directive with empty string if td id is in content and interpolation', function () {
           $rootScope.translationId = 'TD_WITH_VALUE';
           element = $compile('<div translate>{{translationId}}</div>')($rootScope);
           $rootScope.$digest();
-          expect(element.text()).toBe('Lorem Ipsum ');
+          expect(element.text()).toBe('Lorem Ipsum');
         });
       });
 

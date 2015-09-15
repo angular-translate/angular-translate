@@ -276,7 +276,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
             if (!successful && typeof scope.defaultText !== 'undefined') {
               value = scope.defaultText;
             }
-            iElement.html(scope.preText + value + scope.postText);
+            iElement.empty().append(scope.preText + value + scope.postText);
             var globallyEnabled = $translate.isPostCompilingEnabled();
             var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
             var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
