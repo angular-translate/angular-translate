@@ -876,7 +876,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    *
    * @description
    * Registers a cache for internal $http based loaders.
-   * {@link pascalprecht.translate.$translateProvider#determinePreferredLanguage determinePreferredLanguage}.
+   * {@link pascalprecht.translate.$translationCache $translationCache}.
    * When false the cache will be disabled (default). When true or undefined
    * the cache will be a default (see $cacheFactory). When an object it will
    * be treat as a cache object itself: the usage is $http({cache: cache})
