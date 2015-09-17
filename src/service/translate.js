@@ -37,6 +37,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       $postCompilingEnabled = false,
       $forceAsyncReloadEnabled = false,
       $nestedObjectDelimeter = '.',
+      $isReady = false,
       loaderCache,
       directivePriority = 0,
       statefulFilter = true,
@@ -1167,7 +1168,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           abortLoader.resolve();
         }
         abortLoader = $q.defer();
-        
+
         var loaderOptions = angular.extend({}, $loaderOptions, {
           key: key,
           $http: angular.extend({}, {
@@ -2031,12 +2032,72 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         return statefulFilter;
       };
 
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#isReady
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns whether the service is "ready" to translate (i.e. loading 1st language).
+       *
+       * See also {@link pascalprecht.translate.$translate#methods_onReady onReady()}.
+       *
+       * @return {boolean} current value of ready
+       */
+      $translate.isReady = function () {
+        return $isReady;
+      };
+
+      var $onReadyDeferred = $q.defer();
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#onReady
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns whether the service is "ready" to translate (i.e. loading 1st language).
+       *
+       * See also {@link pascalprecht.translate.$translate#methods_isReady isReady()}.
+       *
+       * @param {Function=} fn Function to invoke when service is ready
+       * @return {object} Promise resolved when service is ready
+       */
+      $translate.onReady = function (fn) {
+        var deferred = $q.defer();
+        if (angular.isFunction(fn)) {
+          deferred.promise.then(fn);
+        }
+        if ($isReady) {
+          deferred.resolve();
+        } else {
+          $onReadyDeferred.promise.then(function () {
+            deferred.resolve();
+          });
+        }
+        return deferred.promise;
+      };
+
+      // Whenever $translateReady is being fired, this will ensure the state of $isReady
+      var globalOnReadyListener = $rootScope.$on('$translateReady', function () {
+        $onReadyDeferred.resolve();
+        globalOnReadyListener(); // one time only
+        globalOnReadyListener = null;
+      });
+      var globalOnChangeListener = $rootScope.$on('$translateChangeEnd', function () {
+        $onReadyDeferred.resolve();
+        globalOnChangeListener(); // one time only
+        globalOnChangeListener = null;
+      });
+
       if ($loaderFactory) {
 
         // If at least one async loader is defined and there are no
         // (default) translations available we should try to load them.
         if (angular.equals($translationTable, {})) {
-          $translate.use($translate.use());
+          if ($translate.use()) {
+            $translate.use($translate.use());
+          }
         }
 
         // Also, if there are any fallback language registered, we start
@@ -2054,6 +2115,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             }
           }
         }
+      } else {
+        $rootScope.$emit('$translateReady', { language: $translate.use() });
       }
 
       return $translate;
