@@ -45,9 +45,9 @@ einen Warnhinweis an, so lange nicht explizit eine Strategie gewählt wurde.
 
 ## Anwendungsbeispiele
 
-### Ausgabe von dynamischen Variablen nicht escaped
+### Weder Escaping noch Sanitizing der Übersetzungen
 
-<doc:example module="myApp">
+<doc:example module="myApp_not_escaped">
   <doc:source>
     <script>
       var translations = {
@@ -55,10 +55,11 @@ einen Warnhinweis an, so lange nicht explizit eine Strategie gewählt wurde.
         PARAGRAPH: 'Hello {{username}}!',
       };
 
-      var app = angular.module('myApp', ['pascalprecht.translate']);
+      var app = angular.module('myApp_not_escaped', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.translations(translations);
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
         // Using standard escaping (nothing)
       }]);
 
@@ -73,9 +74,9 @@ einen Warnhinweis an, so lange nicht explizit eine Strategie gewählt wurde.
   </doc:source>
 </doc:example>
 
-### Ausgabe von dynamischen Variablen escaped
+### Escaping der gesamten Übersetzung
 
-<doc:example module="myApp2">
+<doc:example module="myApp_escaped">
   <doc:source>
     <script>
       var translations = {
@@ -83,12 +84,73 @@ einen Warnhinweis an, so lange nicht explizit eine Strategie gewählt wurde.
         PARAGRAPH: 'Hello {{username}}!',
       };
 
-      var app = angular.module('myApp2', ['pascalprecht.translate']);
+      var app = angular.module('myApp_escaped', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.translations(translations);
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
         // Enable escaping of HTML
-        $translateProvider.useSanitizeValueStrategy('escaped');
+        $translateProvider.useSanitizeValueStrategy('escape');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Escaping nur der dynamischen Parameter
+
+<doc:example module="myApp_escape_params">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: '<span style=\'color:green\'>Hello</span> {{username}}!',
+      };
+
+      var app = angular.module('myApp_escape_params', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+        // Enable escaping of HTML
+        $translateProvider.useSanitizeValueStrategy('escapeParameters');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Sanitizing der gesamten Übersetzung
+
+<doc:example module="myApp_sanitize">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp_sanitize', ['pascalprecht.translate', 'ngSanitize']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+        // Enable escaping of HTML
+        $translateProvider.useSanitizeValueStrategy('sanitize');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {
