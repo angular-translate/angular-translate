@@ -1,3 +1,32 @@
+<a name="2.8.0"></a>
+# [2.8.0](https://github.com/angular-translate/angular-translate/compare/2.7.2...v2.8.0) (2015-09-18)
+
+
+### Bug Fixes
+
+* **build:** ensure MessageFormat will be added correctly when using UMD ([f5e039c](https://github.com/angular-translate/angular-translate/commit/f5e039c))
+* **directive:** Fix behavior of translate-cloak timing ([a6adf47](https://github.com/angular-translate/angular-translate/commit/a6adf47)), closes [#929](https://github.com/angular-translate/angular-translate/issues/929) [#1175](https://github.com/angular-translate/angular-translate/issues/1175)
+* **directive:** Fix special IE11 issue #925 ([c4b16d3](https://github.com/angular-translate/angular-translate/commit/c4b16d3)), closes [#925](https://github.com/angular-translate/angular-translate/issues/925)
+* **docs:** avoid using absolute links in lang chooser #1136 ([2cdc902](https://github.com/angular-translate/angular-translate/commit/2cdc902))
+* **docs:** Fix more typos in CONTRIBUTING.md, add some infos about tests ([e88b990](https://github.com/angular-translate/angular-translate/commit/e88b990))
+* **docs:** Fix typo in CONTRIBUTING.md ([1c2ac47](https://github.com/angular-translate/angular-translate/commit/1c2ac47))
+* **docs:** Fix typo in zh-cn docs ([2a16eb6](https://github.com/angular-translate/angular-translate/commit/2a16eb6))
+* **service:** abort the last loader if not finished #1070 ([dd4a8b4](https://github.com/angular-translate/angular-translate/commit/dd4a8b4))
+* **service:** update storage before triggering $translateChangeSuccess ([77dd5a2](https://github.com/angular-translate/angular-translate/commit/77dd5a2))
+* **service provider:** change/fix return of preferredLanguage() ([6014a81](https://github.com/angular-translate/angular-translate/commit/6014a81))
+
+### Features
+
+* **directive:** translate-namespace directive ([45523bb](https://github.com/angular-translate/angular-translate/commit/45523bb))
+* **loaders:** addition to e7516dc #1080 (disable legacy $http cbs) ([233a012](https://github.com/angular-translate/angular-translate/commit/233a012))
+* **loaders:** remove use of legacy methods on $http promises #1080 ([e7516dc](https://github.com/angular-translate/angular-translate/commit/e7516dc))
+* **meta:** enrich copyright header with a leagl person ([21da61c](https://github.com/angular-translate/angular-translate/commit/21da61c))
+* **sanitize:** Allow sanitize strategy defined as a service ([8a6cc07](https://github.com/angular-translate/angular-translate/commit/8a6cc07))
+* **service:** add option to customize the nested delimiter ([78161f8](https://github.com/angular-translate/angular-translate/commit/78161f8))
+* **service:** introduce `isReady()` and `onReady()` with event ([9a4bd0d](https://github.com/angular-translate/angular-translate/commit/9a4bd0d))
+
+
+
 <a name="2.7.2"></a>
 ### 2.7.2 (2015-06-01)
 
