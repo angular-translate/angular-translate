@@ -103,7 +103,7 @@ personnalisée, qui détermine la clé de la langue préférée pour vous.
 
 <pre>
 $translateProvider.determinePreferredLanguage(function () {
-  var preferredlangKey = '';
+  var preferredLangKey = '';
   // Une logique personnalisée qui se passe ici
   return preferredLangKey;
 });

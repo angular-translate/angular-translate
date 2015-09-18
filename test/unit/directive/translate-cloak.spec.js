@@ -46,14 +46,14 @@ describe('pascalprecht.translate', function () {
       });
 
       describe('an element added after the first translation', function () {
-        it('should still have translate-cloak', function () {
+        it('should have not translate-cloak', function () {
           element = $compile('<div translate-cloak></div>')($rootScope);
           $rootScope.$digest();
           expect(element.hasClass('translate-cloak')).toBe(false);
           $timeout(function () {
             var element2 = $compile('<div translate-cloak></div>')($rootScope);
             $rootScope.$digest();
-            expect(element2.hasClass('translate-cloak')).toBe(true);
+            expect(element2.hasClass('translate-cloak')).toBe(false);
           }, 100);
           $timeout.flush();
         });

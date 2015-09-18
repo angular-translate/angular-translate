@@ -108,7 +108,7 @@ Voici à quoi cela ressemble :
 
       app.config(['$translateProvider', function ($translateProvider) {
         $translateProvider.preferredLanguage('fr');
-        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+        $translateProvider.addInterpolation('customInterpolation');
 
         $translateProvider.translations('fr', {
           HEADLINE: 'Je suis l\'entête',

@@ -1,6 +1,7 @@
 <script>
 function langLink(locale) {
-  return 'https://angular-translate.github.io/docs/' + locale + '/' + window.location.hash;
+  var origin = location.origin || 'https://angular-translate.github.io';
+  return origin + '/docs/' + locale + '/' + window.location.hash;
 }
 </script>
 
@@ -16,6 +17,7 @@ function langLink(locale) {
   <li class="dropdown">
   <a href="#" class="dropdown-toggle"><i class="icon-align-justify"></i> Language</a>
     <ul class="dropdown-menu">
+      <li><a href="" onClick="window.location = langLink('es');"><img src="img/flags/es.png"> Spanish</a></li>
       <li><a href="" onClick="window.location = langLink('en');"><img src="img/flags/en.png"> English</a></li>
       <li><a href="" onClick="window.location = langLink('ru');"><img src="img/flags/ru.png"> Russian</a></li>
       <li><a href="" onClick="window.location = langLink('de');"><img src="img/flags/de.png"> German</a></li>

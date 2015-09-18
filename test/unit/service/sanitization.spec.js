@@ -190,6 +190,35 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('$translateSanitization', function () {
+    var $translateSanitization;
+
+    beforeEach(module('ngSanitize'));
+    beforeEach(module('pascalprecht.translate', function ($provide, $translateSanitizationProvider) {
+      $provide.factory('mySanitizeService', function () {
+        return function (value, mode) {
+          return '1' + value + '2' + mode;
+        };
+      });
+      $translateSanitizationProvider.addStrategy('mySanitize', 'mySanitizeService');
+      $translateSanitizationProvider.useStrategy('mySanitize');
+    }));
+    beforeEach(inject(function (_$translateSanitization_) {
+      $translateSanitization = _$translateSanitization_;
+    }));
+
+    describe('should allow specifying a different strategy which is the alias of an existing service', function () {
+      it('for text', function () {
+        expect($translateSanitization.sanitize('Donald <strong>Duck</strong>', 'text')).toEqual('1Donald <strong>Duck</strong>2text');
+      });
+
+      it('for params', function () {
+        expect($translateSanitization.sanitize('Donald <strong>Duck</strong>', 'params')).toEqual('1Donald <strong>Duck</strong>2params');
+      });
+    });
+
+  });
+
   describe('$translateSanitization#sanitize without ngSanitize', function () {
     var $translateSanitization;
 

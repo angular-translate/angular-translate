@@ -112,7 +112,7 @@ determines the preferred language key for you.
 
 <pre>
 $translateProvider.determinePreferredLanguage(function () {
-  var preferredlangKey = '';
+  var preferredLangKey = '';
   // some custom logic's going on in here
   return preferredLangKey;
 });

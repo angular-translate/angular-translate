@@ -60,7 +60,23 @@ $translateProvider
 </pre>
 
 Falls der Browser nun 'en_US' oder 'en_UK' zurückgibt, wird angular-translate 'en' als
-präferierte Sprache setzen. Diese Funktionalität ergibt nur Sinn in Kombination mit
+präferierte Sprache setzen.
+
+Zusätzlich werden auch Teilausdrücke (sprich: Wildcards) unterstützt, damit unterschiedliche Länder unter der
+gleichen Sprache angenommen werden:
+
+<pre>
+$translateProvider
+  .translations('en', { /* ... */ })
+  .translations('de', { /* ... */ })
+  .registerAvailableLanguageKeys(['en', 'de'], {
+    'en_*': 'en',
+    'de_*': 'de'
+  })
+  .determinePreferredLanguage();
+</pre>
+
+Diese Funktionalität ergibt nur Sinn in Kombination mit
 'determinePreferredLanguage()'!
 
 <br>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+
+<head>
+  <meta charset="utf-8">
+  <title translate="TITLE">Translate namespace directive</title>
+  <style>body { text-align: center; }</style>
+</head>
+
+<body ng-controller="ctrl">
+
+  <p>
+    <a href="#" ng-click="setLang('en_US')">English</a>
+    |
+    <a href="#" ng-click="setLang('ru_RU')">Русский</a>
+  </p>
+
+  <div translate-namespace="ns1">
+    <h1 translate>.HEADER</h1>
+    <h2 translate>.SUBHEADER</h2>
+  </div>
+
+  <hr>
+
+  <div translate-namespace="ns2">
+    <h1 translate>.HEADER</h1>
+    <h2 translate>.SUBHEADER</h2>
+  </div>
+
+  <div translate-namespace="ns3">
+    <div translate-namespace=".HEADERS">
+      <h1 translate>
+        .HELLO
+      </h1>
+    </div>
+    <div>
+      <h1 translate>ns4.HEADERS.HELLO</h1>
+    </div>
+  </div>
+
+  <div translate-namespace="ns5">
+    <h1 translate>.HEADERS.HELLO</h1>
+  </div>
+
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="../dist/angular-translate.js"></script>
+<script src="../dist/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+
+<script>
+angular.module('app', ['pascalprecht.translate', 'ngCookies'])
+
+.config(['$translateProvider', function($translateProvider){
+
+  // Adding a translation table for the English language
+  $translateProvider.translations('en_US', {
+    "TITLE"     : "How to use translate namespace directive",
+    "ns1" : {
+      "HEADER"    : "A translations table supports namespaces.",
+      "SUBHEADER" : "So you can to structurize your translation table well."
+    },
+    "ns2" : {
+      "HEADER"    : "Do you want to have a structured translations table?",
+      "SUBHEADER" : "You can to use namespaces now."
+    },
+    "ns3": {
+      "HEADERS": {
+        "HELLO": "Hello"
+      }
+    },
+    "ns4": {
+      "HEADERS": {
+        "HELLO": "Hello from ns4"
+      }
+    },
+    "ns5.HEADERS.HELLO": "Also works for simple keys with dots"
+  });
+
+  // Adding a translation table for the Russian language
+  $translateProvider.translations('ru_RU', {
+    "TITLE"     : "Как использовать директиву перевести имен",
+    "ns1" : {
+      "HEADER"    : "Таблица переводов поддерживает пространства имен.",
+      "SUBHEADER" : "Таким образом, Вы можете хорошо структурировать ваши переводы."
+    },
+    "ns2" : {
+      "HEADER"    : "Вы хотите иметь структурированную таблицу переводов?",
+      "SUBHEADER" : "Теперь Вы можете использовать пространства имен."
+    },
+    "ns3": {
+      "HEADERS": {
+        "HELLO": "здравствуйте"
+      }
+    },
+    "ns4": {
+      "HEADERS": {
+        "HELLO": "Привет из ns4"
+      }
+    },
+    "ns5.HEADERS.HELLO": "Также работает для простых ключей с точками"
+  });
+
+  // Tell the module what language to use by default
+  $translateProvider.preferredLanguage('en_US');
+
+  // Tell the module to store the language in the cookies
+  $translateProvider.useCookieStorage();
+
+}])
+
+.controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
+
+  $scope.setLang = function(langKey) {
+    // You can change the language during runtime
+    $translate.use(langKey);
+  };
+
+}]);
+</script>
+
+</body>
+</html>

@@ -28,22 +28,20 @@ function $translateUrlLoader($q, $http) {
       throw new Error('Couldn\'t use urlLoader since no url is given!');
     }
 
-    var deferred = $q.defer(),
-        requestParams = {};
+    var requestParams = {};
 
     requestParams[options.queryParameter || 'lang'] = options.key;
 
-    $http(angular.extend({
+    return $http(angular.extend({
       url: options.url,
       params: requestParams,
       method: 'GET'
-    }, options.$http)).success(function (data) {
-      deferred.resolve(data);
-    }).error(function () {
-      deferred.reject(options.key);
-    });
-
-    return deferred.promise;
+    }, options.$http))
+      .then(function(result) {
+        return result.data;
+      }, function () {
+        return $q.reject(options.key);
+      });
   };
 }
 

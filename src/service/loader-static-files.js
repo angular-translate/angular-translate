@@ -36,9 +36,7 @@ function $translateStaticFilesLoader($q, $http) {
         throw new Error('Couldn\'t load static file, no prefix or suffix specified!');
       }
 
-      var deferred = $q.defer();
-
-      $http(angular.extend({
+      return $http(angular.extend({
         url: [
           file.prefix,
           options.key,
@@ -46,13 +44,12 @@ function $translateStaticFilesLoader($q, $http) {
         ].join(''),
         method: 'GET',
         params: ''
-      }, options.$http)).success(function (data) {
-        deferred.resolve(data);
-      }).error(function () {
-        deferred.reject(options.key);
-      });
-
-      return deferred.promise;
+      }, options.$http))
+        .then(function(result) {
+          return result.data;
+        }, function () {
+          return $q.reject(options.key);
+        });
     };
 
     var deferred = $q.defer(),
@@ -67,20 +64,21 @@ function $translateStaticFilesLoader($q, $http) {
       }));
     }
 
-    $q.all(promises).then(function (data) {
-      var length = data.length,
-          mergedData = {};
+    $q.all(promises)
+      .then(function (data) {
+        var length = data.length,
+            mergedData = {};
 
-      for (var i = 0; i < length; i++) {
-        for (var key in data[i]) {
-          mergedData[key] = data[i][key];
+        for (var i = 0; i < length; i++) {
+          for (var key in data[i]) {
+            mergedData[key] = data[i][key];
+          }
         }
-      }
 
-      deferred.resolve(mergedData);
-    }, function (data) {
-      deferred.reject(data);
-    });
+        deferred.resolve(mergedData);
+      }, function (data) {
+        deferred.reject(data);
+      });
 
     return deferred.promise;
   };

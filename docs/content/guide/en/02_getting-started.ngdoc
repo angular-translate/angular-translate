@@ -169,10 +169,10 @@ following translation table:
 }
 ```
 
-So as you can see we have to introduced namespaces here, but both of them kind of need
+So, as you can see, we have introduced two namespaces here, but both of them kind of need
 a text that probably just says "OK". This case isn't unusual if you just think about
 a confirmation button or similar in your app. However, it isn't hard to recognize
-that we have a redundancy here and we as developers don't like redundancy right?
+that we have a redundancy here and we as developers don't like redundancy, right?
 
 If there's a translation id that will always have the same concrete text as another
 one you can just link to it. To link to another translation id, all you have to do

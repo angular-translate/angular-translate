@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
 
-    pkg: grunt.file.readJSON('bower.json'),
+    pkg: grunt.file.readJSON('package.json'),
 
     language: grunt.option('lang') || 'en',
 
@@ -41,8 +41,8 @@ module.exports = function (grunt) {
       banner: '/*!\n * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
         ' * <%= pkg.homepage %>\n' +
-        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n'
+        ' * Copyright (c) <%= grunt.template.today("yyyy") %> The <%= pkg.title || pkg.name %> team, <%= pkg.author.name %>;' +
+        ' Licensed <%= pkg.license %>\n */\n'
     },
 
     build_dir: 'dist',
@@ -57,6 +57,7 @@ module.exports = function (grunt) {
         'src/service/storage-key.js',
         'src/directive/translate.js',
         'src/directive/translate-cloak.js',
+        'src/directive/translate-namespace.js',
         'src/filter/translate.js',
         'src/service/translationCache.js'
       ],
@@ -444,9 +445,14 @@ module.exports = function (grunt) {
       }
     },
 
-    changelog: {
-      options: {
-        dest: 'CHANGELOG.md'
+    conventionalChangelog : {
+      options : {
+        changelogOpts : {
+          preset : 'angular'
+        }
+      },
+      release : {
+        src : 'CHANGELOG.md'
       }
     },
 
@@ -513,13 +519,13 @@ module.exports = function (grunt) {
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-cookies.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-sanitize.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.6.1/angular-translate.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.6.1/angular-translate-interpolation-messageformat.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.6.1/angular-translate-storage-cookie.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.6.1/angular-translate-storage-local.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.6.1/angular-translate-loader-url.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.6.1/angular-translate-loader-static-files.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.6.1/angular-translate-handler-log.js'
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.7.2/angular-translate-interpolation-messageformat.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.7.2/angular-translate-storage-cookie.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.7.2/angular-translate-storage-local.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.7.2/angular-translate-loader-url.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.7.2/angular-translate-loader-static-files.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.7.2/angular-translate-handler-log.js'
         ],
         styles: ['docs/css/styles.css']
       },
@@ -543,6 +549,14 @@ module.exports = function (grunt) {
         dest: '<%= concat.core.dest %>'
       },
       'messageformat_interpolation': {
+        options: {
+          deps: {
+            'default': ['MessageFormat'],
+            amd: ['messageformat'],
+            cjs: ['messageformat'],
+            global: ['MessageFormat']
+          }
+        },
         src: '<%= concat.messageformat_interpolation.dest %>',
         dest: '<%= concat.messageformat_interpolation.dest %>'
       },
@@ -757,4 +771,7 @@ module.exports = function (grunt) {
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit', 'concat', 'copy:demo', 'watch:livereload']);
   grunt.registerTask('server', ['express', 'express-keepalive']);
+
+  // Legacy support
+  grunt.registerTask('changelog', ['conventionalChangelog']);
 };
