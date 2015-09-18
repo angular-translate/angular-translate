@@ -7,7 +7,7 @@
 Lorsqu'on parle de restitution normale, AngularJS garantit que la restitution sera échappée correctement.
 Toutefois, lorsque vous utilisez `angular-translate` et un contenu de variable, le résultat ne sera pas
 échappé correctement. Cela signifie que votre application est vulnérable aux attaques graves
-(voir : [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)).
+(voir : <a href="https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)">OWASP</a>.
 
 ## Utilisation générale
 

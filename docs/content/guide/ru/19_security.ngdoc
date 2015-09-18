@@ -7,7 +7,7 @@
 Говоря об обычном выводе, AngularJS гарантирует, что он будет правильно экранирован. Тем не менее,
 при использовании `angular-translate` и динамического контента, результат не будет экранирован
 правильно. Это означает, что ваше приложение является уязвимым для серьезных атак
-(см: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+(см: <a href="https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)">OWASP</a>).
 
 ## Использование
 

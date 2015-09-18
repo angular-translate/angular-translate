@@ -5,7 +5,7 @@
 # 转义的变量内容
 
 说到常规输出，AngularJS 确保输出将被正确转义。 然而，当使用 `angular-translate` 和可变内容时，结果将不会是正确转义。
-这意味着你的应用程序很容易受到严重的攻击(参见: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)))。
+这意味着你的应用程序很容易受到严重的攻击(参见: <a href="https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)">OWASP</a>)。
 
 ## 一般使用
 
