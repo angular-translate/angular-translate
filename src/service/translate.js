@@ -845,6 +845,25 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
   /**
    * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#getProposedLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Retrieves the language will initially be fetched, this could have been set through the use method or determined
+   * by {@link pascalprecht.translate.$translateProvider#determinePreferredLanguage determinePreferredLanguage}.
+   *
+   * This language may not be available and another fallback will actually be used, but that cannot be determined until
+   * runtime. The intent of this method is to give a hint at config time as to what language should be used, mostly so
+   * other libraries that are translated outside of angular-translate can stay in lock step with angular-translate's language.
+   *
+   * @returns {string} A key in the format `[lang]_[country]` or `[lang]` depending on what the browser provides.
+   */
+  this.getProposedLanguage = function() {
+    return $uses || $preferredLanguage;
+  };
+
+  /**
+   * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#registerAvailableLanguageKeys
    * @methodOf pascalprecht.translate.$translateProvider
    *
