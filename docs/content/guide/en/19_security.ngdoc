@@ -7,7 +7,7 @@
 Speaking of regular output, AngularJS ensures the output will be escaped correctly.
 However, when using `angular-translate` and variable content, the result will not be
 escaped correctly. This means your app is vulnerable for serious attacks
-(see: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+(see: <a href="https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)">OWASP</a>).
 
 ## General use
 

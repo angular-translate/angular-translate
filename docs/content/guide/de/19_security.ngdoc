@@ -8,7 +8,7 @@ Für reguläre Ausgaben sorgt bereits AngularJS im Allgemeinen intern dafür, da
 die Ausgabe korrekt escaped ausgegeben wird. Allerdings kann es bei der Verwendung
 `angular-translate` dazu führen, dass dynamische Inhalte im Ergebnis nicht korrekt
 escaped werden. Dies führt zu ernsthaften Sicherheitslücken innerhalb der eigenen
-Applikation (siehe auch: [OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))).
+Applikation (siehe auch: <a href="https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)">OWASP</a>).
 
 ## Allgemeine Benutzung
 
