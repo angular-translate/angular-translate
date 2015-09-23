@@ -987,8 +987,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           interpolatorHashMap = {},
           langPromises = {},
           fallbackIndex,
-          startFallbackIteration,
-          abortLoader;
+          startFallbackIteration;
 
       var $translate = function (translationId, interpolateParams, interpolationId, defaultTranslationText) {
 
@@ -1164,16 +1163,10 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           cache = $injector.get(cache);
         }
 
-        if (pendingLoader && abortLoader) {
-          abortLoader.resolve();
-        }
-        abortLoader = $q.defer();
-        
         var loaderOptions = angular.extend({}, $loaderOptions, {
           key: key,
           $http: angular.extend({}, {
-            cache: cache,
-            timeout: abortLoader.promise
+            cache: cache
           }, $loaderOptions.$http)
         });
 
@@ -1743,7 +1736,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           langPromises[key] = loadAsync(key).then(function (translation) {
             translations(translation.key, translation.table);
             deferred.resolve(translation.key);
-            useLanguage(translation.key);
+            if ($nextLang === key) {
+              useLanguage(translation.key);
+            }
             return translation;
           }, function (key) {
             $rootScope.$emit('$translateChangeError', {language: key});
