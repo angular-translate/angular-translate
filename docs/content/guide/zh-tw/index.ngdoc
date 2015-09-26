@@ -75,7 +75,7 @@ $translateProvider.preferredLanguage('en');
 以下是網路上一些非常有用的資源，所以一定要看看這個清單。
 
 - [在ng-newsletter.com的教程](HTTP://www.ng-newsletter.com/posts/angular-translate.html)
-- [angular-translate 和部分載入](HTTP://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
+- [angular-translate 和部分載入](HTTP://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/)
 - [例子和演示](https://github.com/angular-translate/angular-translate/wiki/Demos) - 目前在 plnkr.co 上
 - [在 angularjs.de 上的教程](HTTP://angularjs.de/artikel/angularjs-i18n-ng-translate) - 德語文章
 - [在 GitHub 上的 angular-translate](https://github.com/angular-translate/angular-translate.git) - The GitHub repository
