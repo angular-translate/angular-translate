@@ -81,7 +81,6 @@ app.config(['$translateProvider', function ($translateProvider) {
 - [angular-translate і завантаження по частинах](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
 - [Приклади і демо](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - Зараз на plnkr.co
 - [Підручник на angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - Стаття на німецькій
-- [Підручник на neoskop.de](http://www.neoskop.de/blog/angular-translate) - Стаття на німецькій
 - [angular-translate на GitHub](http://github.com/PascalPrecht/angular-translate) - Репозиторій на GitHub
 - [angular-translate на ngmodules.org](http://ngmodules.org/modules/angular-translate)
 - [angular-translate mailinglist](https://groups.google.com/forum/#!forum/angular-translate) - Обговорення, питання та ін.

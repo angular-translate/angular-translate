@@ -27,7 +27,6 @@ so make sure to check this list.
 - [Tutorial on ng-newsletter.com](http://ng-newsletter.com/posts/angular-translate.html)
 - [Examples and demos](https://github.com/angular-translate/angular-translate/wiki/Demos) - Currently on plnkr.co
 - [Tutorial on angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - German article
-- [Tutorial on neoskop.de](http://www.neoskop.de/blog/angular-translate) - German article
 - [angular-translate on GitHub](https://github.com/angular-translate/angular-translate) - The GitHub repository
 - [angular-translate on ngmodules.org](http://ngmodules.org/modules/angular-translate)
 - [angular-translate mailinglist](https://groups.google.com/forum/#!forum/angular-translate) - Discuss, ask et al!
