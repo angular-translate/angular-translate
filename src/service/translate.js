@@ -2049,6 +2049,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       };
 
       var $onReadyDeferred = $q.defer();
+      $onReadyDeferred.promise.then(function () {
+        $isReady = true;
+      });
 
       /**
        * @ngdoc function
