@@ -2074,9 +2074,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if ($isReady) {
           deferred.resolve();
         } else {
-          $onReadyDeferred.promise.then(function () {
-            deferred.resolve();
-          });
+          $onReadyDeferred.promise.then(deferred.resolve);
         }
         return deferred.promise;
       };
