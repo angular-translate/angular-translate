@@ -7,7 +7,7 @@
 ####Найпростіший спосіб додати i18n і l10n у ваші застосунки!
 
 <br>
-Ви бажаєте додати **i18n** і **l10n** у ваші застосунки і не можете знайти простий спосіб, як це 
+Ви бажаєте додати **i18n** і **l10n** у ваші застосунки і не можете знайти простий спосіб, як це
 зробити? Вам допоможе angular-translate. Він надається з дуже корисними функціями та розширеннями, а
 також проявляє ультра гнучкість, коли діло доходить до налаштування. Ось лише деякі з його чудових
 можливостей:
@@ -20,7 +20,7 @@
 - Розширюваність через прості в застосуванні інтерфейси
 
 Якщо вам сподобався цей модуль і ви використовуєте його у своїх проектах, будь ласка, оприлюдніть
-його на [ngmodules](http://ngmodules.org/modules/angular-translate) і натисніть на кнопку 
+його на [ngmodules](http://ngmodules.org/modules/angular-translate) і натисніть на кнопку
 "_I use it_"! angular-translate легко встановити і ще простіше використовувати! Прочитавши це
 керівництво, ви навчитеся користуватися angular-translate і чудовими функціями! Давайте ж почнемо!
 
@@ -78,10 +78,9 @@ app.config(['$translateProvider', function ($translateProvider) {
 з цим списком:
 
 - [Підручник на ng-newsletter.com](http://www.ng-newsletter.com/posts/angular-translate.html)
-- [angular-translate і завантаження по частинах](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
+- [angular-translate і завантаження по частинах](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/)
 - [Приклади і демо](https://github.com/PascalPrecht/angular-translate/wiki/Demos) - Зараз на plnkr.co
 - [Підручник на angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - Стаття на німецькій
-- [Підручник на neoskop.de](http://www.neoskop.de/blog/angular-translate) - Стаття на німецькій
 - [angular-translate на GitHub](http://github.com/PascalPrecht/angular-translate) - Репозиторій на GitHub
 - [angular-translate на ngmodules.org](http://ngmodules.org/modules/angular-translate)
 - [angular-translate mailinglist](https://groups.google.com/forum/#!forum/angular-translate) - Обговорення, питання та ін.

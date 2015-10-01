@@ -1,6 +1,6 @@
 {
   "name": "angular-translate",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "A translation module for AngularJS",
   "main": "dist/angular-translate.js",
   "repository": {
@@ -11,7 +11,11 @@
     "prepublish": "bower install",
     "shipit": "bower install && bower update && grunt prepare-release",
     "test": "grunt install-test && grunt test",
-    "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done"
+    "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
+    "build-site": "npm run -q build-site-all-languages; npm run -q build-site-plato-report",
+    "build-site-all-languages": "./build_tools/generate_site.sh",
+    "build-site-by-language": "./build_tools/generate_site_by_language.sh",
+    "build-site-plato-report": "rm -rf ./site/plato && plato -d plato -l .jshintrc src/*.js src/**/*.js && mv plato site"
   },
   "author": {
     "name": "Pascal Precht"
@@ -57,6 +61,7 @@
     "karma-firefox-launcher": "~0.1.3",
     "karma-jasmine": "^0.3.2",
     "karma-phantomjs-launcher": "~0.1.4",
-    "load-grunt-tasks": "~0.2.0"
+    "load-grunt-tasks": "~0.2.0",
+    "plato": "^1.5.0"
   }
 }

@@ -20,6 +20,74 @@ describe('pascalprecht.translate', function () {
     }
   };
 
+  var asyncHttpBackend = function($delegate, $timeout) {
+    var oldHttpBackend = $delegate;
+    var asincDefinitions = [];
+
+    var httpBackend = function(method, url, data, callback, headers, timeout, withCredentials){
+      var match = matchRequest(),
+        cancelled = false;
+      if(match){
+        if (timeout) {
+          if (timeout.then) {
+            timeout.then(handleTimeout);
+          } else {
+            $timeout(handleTimeout, timeout);
+          }
+        }
+        match.response.promise
+          //promise resolution: success
+          .then(function(response){
+            if (!cancelled) {
+              callback(response[0], response[1], match.response.headers, match.response.status );
+            }
+          },
+          //promise.resolution: fail
+          function(response){
+            if (!cancelled) {
+              callback(response[0], response[1], match.response.headers, match.response.status);
+            }
+          });
+      }else{
+        oldHttpBackend(method, url, data, callback, headers, timeout, withCredentials);
+      }
+
+      function matchRequest() {
+        var matches = asincDefinitions
+          .filter(function(definition) {
+            return (definition.url === url);
+          })
+          .filter(function(definition){
+            return (definition.method === method);
+          });
+        return matches.length ? matches[0] : false;
+      }
+
+      function handleTimeout() {
+        cancelled = true;
+        callback(-1, undefined, '');
+      }
+    };
+
+    httpBackend.whenAsync = function(method, url, data, headers) {
+      var definition = { method: method, url: url, data: data, headers: headers },
+          chain = {
+            respond: function(promise, headers, status) {
+              definition.response = { promise: promise, headers: headers, status: status};
+              return chain;
+            }
+          };
+      asincDefinitions.push(definition);
+      return chain;
+    };
+
+    for (var key in oldHttpBackend) {
+      httpBackend[key] = oldHttpBackend[key];
+    }
+
+    return httpBackend;
+  };
+
   describe('$translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
@@ -678,74 +746,7 @@ describe('pascalprecht.translate', function () {
         suffix: '.json'
       });
 
-      $provide.decorator('$httpBackend', function($delegate, $timeout) {
-        var oldHttpBackend = $delegate;
-        var asincDefinitions = [];
-
-
-        var httpBackend = function(method, url, data, callback, headers, timeout, withCredentials){
-          var match = matchRequest(),
-            cancelled = false;
-          if(match){
-            if (timeout) {
-              if (timeout.then) {
-                timeout.then(handleTimeout);
-              } else {
-                $timeout(handleTimeout, timeout);
-              }
-            }
-            match.response.promise
-              //promise resolution: success
-              .then(function(response){
-                if (!cancelled) {
-                  callback(response[0], response[1], match.response.headers, match.response.status );
-                }
-              },
-              //promise.resolution: fail
-              function(response){
-                if (!cancelled) {
-                  callback(response[0], response[1], match.response.headers, match.response.status);
-                }
-              });
-          }else{
-            oldHttpBackend(method, url, data, callback, headers, timeout, withCredentials);
-          }
-
-          function matchRequest() {
-            var matches = asincDefinitions
-              .filter(function(definition) {
-                return (definition.url === url);
-              })
-              .filter(function(definition){
-                return (definition.method === method);
-              });
-            return matches.length ? matches[0] : false;
-          }
-
-          function handleTimeout() {
-            cancelled = true;
-            callback(-1, undefined, '');
-          }
-        };
-
-        httpBackend.whenAsync = function(method, url, data, headers) {
-          var definition = { method: method, url: url, data: data, headers: headers },
-              chain = {
-                respond: function(promise, headers, status) {
-                  definition.response = { promise: promise, headers: headers, status: status};
-                  return chain;
-                }
-              };
-          asincDefinitions.push(definition);
-          return chain;
-        };
-
-        for (var key in oldHttpBackend) {
-          httpBackend[key] = oldHttpBackend[key];
-        }
-
-        return httpBackend;
-      });
+      $provide.decorator('$httpBackend', asyncHttpBackend);
 
     }));
 
@@ -1376,6 +1377,83 @@ describe('pascalprecht.translate', function () {
         expect(resolvedValue).toEqual('KA');
       });
     });
+
+    describe('fallback if preferred language is low to respond and fails', function () {
+
+      var preferredButFails = 'ab_CD',
+          notPreferredButSucceeds = 'en_US',
+          expectedTranslation = 'Hello World',
+          fastRequestTime = 1000,
+          preferredLanguageResponded = false,
+          fallbackLanguageResponded = false;
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'foo/bar/',
+          suffix: '.json'
+        });
+
+        $translateProvider
+          .preferredLanguage(preferredButFails)
+          .fallbackLanguage(notPreferredButSucceeds);
+
+        $provide.decorator('$httpBackend', asyncHttpBackend);
+      }));
+
+      var $translate;
+
+      beforeEach(inject(function ($timeout, _$translate_, $rootScope, $httpBackend, $q) {
+        $translate = _$translate_;
+
+        var firstDeferred = $q.defer();
+        $httpBackend.whenAsync('GET', 'foo/bar/ab_CD.json').respond(firstDeferred.promise);
+        $timeout(function () {
+          preferredLanguageResponded = true;
+          // t1
+          firstDeferred.resolve([404, {
+            msg: 'this language does not exist'
+          }]);
+        }, fastRequestTime * 2);
+
+        var secondDeferred = $q.defer();
+        $httpBackend.whenAsync('GET', 'foo/bar/en_US.json').respond(secondDeferred.promise);
+        $timeout(function () {
+          fallbackLanguageResponded = true;
+            // t2
+          secondDeferred.resolve([200, {
+            greeting: expectedTranslation
+          }]);
+        }, fastRequestTime);
+
+        // t2
+        $timeout.flush(fastRequestTime);
+
+        // t3
+        $timeout.flush(fastRequestTime);
+      }));
+
+      it('should be requested the preferred language', function () {
+        expect(preferredLanguageResponded).toEqual(true);
+      });
+
+      it('should be requested the fallback language', function () {
+        expect(fallbackLanguageResponded).toEqual(true);
+      });
+
+      it('should set the fallback language as the preferred one failed', inject(function($rootScope) {
+
+        var value;
+
+        $translate('greeting').then(function (translation) {
+          value = translation;
+        });
+
+        $rootScope.$digest();
+        expect(value).toEqual(expectedTranslation);
+      }));
+    });
+
   });
 
   describe('$translateProvider#translationNotFoundIndicator', function () {

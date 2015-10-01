@@ -75,10 +75,9 @@ app.config(['$translateProvider', function ($translateProvider) {
 以下是网络上一些非常有用的资源，所以一定要看看这个列表。
 
 - [在ng-newsletter.com的教程](http://www.ng-newsletter.com/posts/angular-translate.html)
-- [angular-translate 和部分加载](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/#comment-773)
+- [angular-translate 和部分加载](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/)
 - [例子和演示](https://github.com/angular-translate/angular-translate/wiki/Demos) - 目前在 plnkr.co 上
 - [在 angularjs.de 上的教程](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - 德语文章
-- [在 neoskop.de 上的教程](http://www.neoskop.de/blog/angular-translate) - 德语文章
 - [在 GitHub 上的 angular-translate](https://github.com/angular-translate/angular-translate.git) - The GitHub repository
 - [在 ngmodules.org 上的 angular-translate](http://ngmodules.org/modules/angular-translate)
 - [angular-translate 邮件列表](https://groups.google.com/forum/#!forum/angular-translate) - 讨论和其他一切有意思的对话!

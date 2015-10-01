@@ -1,4 +1,5 @@
 /bower_components/
+/build_tools/
 /demo/
 /docs/
 /identity/
@@ -14,7 +15,6 @@
 /*.sh
 /*.js
 /*.png
-/update-docs
 /build/
 
 # IntelliJ stuff
