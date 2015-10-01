@@ -1,3 +1,14 @@
+<a name="2.8.1"></a>
+## [2.8.1](https://github.com/angular-translate/angular-translate/compare/2.8.0...v2.8.1) (2015-10-01)
+
+
+### Bug Fixes
+
+* **service:** Fix `$translate.isReady()` won't return true if ready ([b40a344](https://github.com/angular-translate/angular-translate/commit/b40a344)), closes [#1239](https://github.com/angular-translate/angular-translate/issues/1239)
+* **service:** should not abort fallback languages (feature #1070) ([cc410b1](https://github.com/angular-translate/angular-translate/commit/cc410b1)), closes [#1070](https://github.com/angular-translate/angular-translate/issues/1070)
+
+
+
 <a name="2.8.0"></a>
 # [2.8.0](https://github.com/angular-translate/angular-translate/compare/2.7.2...2.8.0) (2015-09-18)
 
