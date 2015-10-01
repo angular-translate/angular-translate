@@ -42,13 +42,6 @@ describe('pascalprecht.translate', function () {
       expect(element.text()).toBe('TEXT');
     });
 
-    it('should return translation id if translation doesn\'t exist and if its passed as interpolation', function () {
-      $rootScope.translationIds = 'TEXT';
-      element = $compile('<div translate="{{translationIds}}"></div>')($rootScope);
-      $rootScope.$digest();
-      expect(element.text()).toBe('TEXT');
-    });
-
     it('should return default text if translation doesn\'t exist', function () {
       element = $compile('<div translate="TEXT" translate-default="Not translated"></div>')($rootScope);
       $rootScope.$digest();
