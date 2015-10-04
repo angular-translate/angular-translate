@@ -81,8 +81,8 @@ app.factory('asyncLoader', function ($q, $timeout) {
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
     } else {
       translations = {
@@ -92,8 +92,8 @@ app.factory('asyncLoader', function ($q, $timeout) {
         PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'deutsch',
-        BUTTON_LANG_EN: 'englisch'
+        BUTTON_LANG_DE: 'Deutsch',
+        BUTTON_LANG_EN: 'Englisch'
       };
     }
 
@@ -138,8 +138,8 @@ $translateProvider.useLoader('asyncLoader');
               PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
               PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
               VARIABLE_REPLACEMENT: 'Hi {{name}}',
-              BUTTON_LANG_DE: 'german',
-              BUTTON_LANG_EN: 'english'
+              BUTTON_LANG_DE: 'German',
+              BUTTON_LANG_EN: 'English'
             };
           } else {
             translations = {
@@ -149,8 +149,8 @@ $translateProvider.useLoader('asyncLoader');
               PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
               PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
               VARIABLE_REPLACEMENT: 'Hi {{name}}',
-              BUTTON_LANG_DE: 'deutsch',
-              BUTTON_LANG_EN: 'englisch'
+              BUTTON_LANG_DE: 'Deutsch',
+              BUTTON_LANG_EN: 'Englisch'
             };
           }
 

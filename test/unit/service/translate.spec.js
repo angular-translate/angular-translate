@@ -2238,7 +2238,7 @@ describe('pascalprecht.translate', function () {
       expect(value).toEqual('Subtrans');
     });
 
-    it('should invoke the translation fallback stack and return the resolved french shortcut', function () {
+    it('should invoke the translation fallback stack and return the resolved French shortcut', function () {
       var deferred = $q.defer(),
         promise = deferred.promise,
         value;

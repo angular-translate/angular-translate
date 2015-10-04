@@ -8,7 +8,7 @@ Wir haben viel über angular-translate in den letzten Kapiteln gelern. Wir wisse
 wie wir unsere [Übersetzungen dynamisieren](#/guide/06_variable-replacement) können.
 Wir haben auch gelernt, wie man [einer App mehrere Sprachen beibringt](#/guide/07_multi-language).
 Aber da ist immer noch etwas, was sich komisch anfühlt, wenn wir unsere App
-aufrufen. Jedes Mal, wenn wir unsere App starten, müssen wir den 'deutsch'- Button
+aufrufen. Jedes Mal, wenn wir unsere App starten, müssen wir den 'Deutsch'- Button
 klicken.
 
 Unsere App kann sich also einfach nicht merken, welche Sprache wir gewählt hatten,
@@ -86,8 +86,8 @@ Das war's! Updaten wir unsere Beispiel App!
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
 
       var translationsDE= {
@@ -97,8 +97,8 @@ Das war's! Updaten wir unsere Beispiel App!
         PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'deutsch',
-        BUTTON_LANG_EN: 'englisch'
+        BUTTON_LANG_DE: 'Deutsch',
+        BUTTON_LANG_EN: 'Englisch'
       };
 
       var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);

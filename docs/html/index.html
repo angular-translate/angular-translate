@@ -28,14 +28,14 @@
         $translateProvider.translations('en', {
           TITLE: 'Hello',
           FOO: 'This is a paragraph.',
-          BUTTON_LANG_EN: 'english',
-          BUTTON_LANG_DE: 'german'
+          BUTTON_LANG_EN: 'English',
+          BUTTON_LANG_DE: 'German'
         });
         $translateProvider.translations('de', {
           TITLE: 'Hallo',
           FOO: 'Dies ist ein Absatz.',
-          BUTTON_LANG_EN: 'englisch',
-          BUTTON_LANG_DE: 'deutsch'
+          BUTTON_LANG_EN: 'Englisch',
+          BUTTON_LANG_DE: 'Deutsch'
         });
         $translateProvider.preferredLanguage('en');
         $translateProvider.useSanitizeValueStrategy('escape');
@@ -114,14 +114,14 @@ app.config(function ($translateProvider) {
   $translateProvider.translations('en', {
     TITLE: 'Hello',
     FOO: 'This is a paragraph.',
-    BUTTON_LANG_EN: 'english',
-    BUTTON_LANG_DE: 'german'
+    BUTTON_LANG_EN: 'English',
+    BUTTON_LANG_DE: 'German'
   });
   $translateProvider.translations('de', {
     TITLE: 'Hallo',
     FOO: 'Dies ist ein Absatz.',
-    BUTTON_LANG_EN: 'englisch',
-    BUTTON_LANG_DE: 'deutsch'
+    BUTTON_LANG_EN: 'Englisch',
+    BUTTON_LANG_DE: 'Deutsch'
   });
   $translateProvider.preferredLanguage('en');
 });
@@ -138,8 +138,8 @@ app.controller('Ctrl', function ($scope, $translate) {
                   <p translate="FOO">This is a paragraph</p>
               </div>
               <div ng-controller="Ctrl">
-                <button class="btn" ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN" class="ng-scope">english</button>
-                <button class="btn" ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE" class="ng-scope">german</button>
+                <button class="btn" ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN" class="ng-scope">English</button>
+                <button class="btn" ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE" class="ng-scope">German</button>
               </div>
             </div>
           </div>

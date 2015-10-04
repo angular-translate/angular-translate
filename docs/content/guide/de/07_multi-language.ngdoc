@@ -63,7 +63,7 @@ hast. Um deiner App also zu sagen, sie soll deutsch anstatt englisch als
 Standardsprache bevorzugen, muss der Code wie folgt erweitert werden:
 
 <pre>
-// tells angular-translate to use the german language
+// tells angular-translate to use the German language
 $translateProvider.preferredLanguage('de');
 </pre>
 
@@ -133,8 +133,8 @@ Fallback-Sprache konfigurieren lässt. Sie erwartet genau wie `preferredLanguage
 einen Sprachschlüssel. `angular-translate` kümmert sich dann um den Rest.
 
 <pre>
-// tells angular-translate to use the english language if translations are not
-// available in german
+// tells angular-translate to use the English language if translations are not
+// available in German
 $translateProvider.fallbackLanguage('en');
 </pre>
 
@@ -183,8 +183,8 @@ var translationsEN = {
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'german',
-  BUTTON_LANG_EN: 'english'
+  BUTTON_LANG_DE: 'German',
+  BUTTON_LANG_EN: 'English'
 };
 
 var translationsDE= {
@@ -194,8 +194,8 @@ var translationsDE= {
   PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
   PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'deutsch',
-  BUTTON_LANG_EN: 'englisch'
+  BUTTON_LANG_DE: 'Deutsch',
+  BUTTON_LANG_EN: 'Englisch'
 };
 </pre>
 
@@ -244,9 +244,9 @@ Et vóila! Schon haben wir Unterstützung für Mehrsprachigkeit!
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        MISSING_TRANSLATION: 'Oops! I have not been translated into German...',
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
 
       var translationsDE= {
@@ -257,8 +257,8 @@ Et vóila! Schon haben wir Unterstützung für Mehrsprachigkeit!
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
         // MISSING_TRANSLATION is ... missing :)
-        BUTTON_LANG_DE: 'deutsch',
-        BUTTON_LANG_EN: 'englisch'
+        BUTTON_LANG_DE: 'Deutsch',
+        BUTTON_LANG_EN: 'Englisch'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
