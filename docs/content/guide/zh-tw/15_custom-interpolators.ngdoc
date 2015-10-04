@@ -107,8 +107,8 @@ $translateProvider.addInterpolation('customInterpolation');
           HEADLINE: 'Ich bin eine Überschrift',
           TEXT: 'Ich benutze default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
-          BUTTON_LANG_EN: 'englisch',
-          BUTTON_LANG_DE: 'deutsch'
+          BUTTON_LANG_EN: 'Englisch',
+          BUTTON_LANG_DE: 'Deutsch'
         });
       }]);
 
