@@ -12,7 +12,7 @@ your app a fallback language. The answer is **yes**.
 
 Teaching your app a fallback language is as easy as just calling a method on the
 `$translateProvider`. Yep right, that sounds too easy, but that's the way it is.
-Let's say we have an app and we register a translation table for the german language.
+Let's say we have an app and we register a translation table for the German language.
 
 <pre>
 $translateProvider
@@ -20,7 +20,7 @@ $translateProvider
 </pre>
 
 Now let's say there are some translation ids, that **are** available in an English
-translation table, but not in the german translation table. angular-translate
+translation table, but not in the German translation table. angular-translate
 would generally return the given translation id, if it can't find a translation
 for it in the translation table. If you register a fallback language that has the
 translation id in it, angular-translate will return this translation instead.
@@ -43,7 +43,7 @@ $translateProvider
   .fallbackLanguage('en');
 </pre>
 
-That's it. If there isn't a translation id in the german translation table,
+That's it. If there isn't a translation id in the German translation table,
 angular-translate will search for it in the English translation table. Easy huh?
 
 ## Registering a fallback stack
@@ -69,9 +69,9 @@ many fallback language as you want.
 
 Oh yes even **that** is possible! There are some cases where you might want to switch
 your fallback language at runtime too. Or even the entire fallback stack! For example
-imagine the case where you set german as preferred language and you want to make sure
+imagine the case where you set German as preferred language and you want to make sure
 that English is the fallback language. No problem. We can do that already. Now imagine,
-the actual language is switched to English and you want to fallback to french, but
+the actual language is switched to English and you want to fallback to French, but
 English is already registered as fallback language.
 
 You can switch the fallback language at runtime with the `fallbackLanguage()` method

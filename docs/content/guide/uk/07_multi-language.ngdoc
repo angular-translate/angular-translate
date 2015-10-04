@@ -56,7 +56,7 @@ angular-translate не віддасть переваги якій-небудь �
 розширте код наступним чином:
 
 <pre>
-// tells angular-translate to use the german language
+// tells angular-translate to use the German language
 $translateProvider.preferredLanguage('de');
 </pre>
 
@@ -193,7 +193,7 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
+        MISSING_TRANSLATION: 'Oops! I have not been translated into German...',
         BUTTON_LANG_DE: 'German',
         BUTTON_LANG_EN: 'English'
       };

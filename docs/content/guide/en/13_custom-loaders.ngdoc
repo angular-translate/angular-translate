@@ -124,7 +124,7 @@ app.factory('asyncLoader', function ($q, $timeout) {
 </pre>
 
 So what does it do? It uses `$timeout` service to wait two seconds and resolves
-our promise with either the English or the german translation table, depending
+our promise with either the English or the German translation table, depending
 on the language key. Now use `$translateProvider.useLoader()` to make use of it:
 
 <pre>

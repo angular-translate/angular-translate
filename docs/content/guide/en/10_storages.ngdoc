@@ -8,8 +8,8 @@ We learned much about angular-translate in the last chapters. We know how we can
 [dynamize our translations](#/guide/06_variable-replacement). We also learned
 [how to add more than one language](#/guide/07_multi-language). But there's still
 a thing which feels kinda silly when opening our web app. Everytime we launch our
-app, we have to click that 'german' button again and again and again (of course
-only if you are a german user - I am!).
+app, we have to click that 'German' button again and again and again (of course
+only if you are a German user - I am!).
 
 So the problem is that our app just can't remember which language you've chosen
 the last time you opened it. This chapter shows you how to teach your app

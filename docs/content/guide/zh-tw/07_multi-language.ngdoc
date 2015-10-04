@@ -44,7 +44,7 @@ $translateProvider.translations('de', {
 它指向一個特定的變換錶的值。所以要告訴一個應用程序應該使用德語而不是英語作為第一語言，延長代碼如此：
 
 <pre>
-// tells angular-translate to use the german language
+// tells angular-translate to use the German language
 $translateProvider.preferredLanguage('de');
 </pre>
 
@@ -169,7 +169,7 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
+        MISSING_TRANSLATION: 'Oops! I have not been translated into German...',
         BUTTON_LANG_DE: 'German',
         BUTTON_LANG_EN: 'English'
       };
