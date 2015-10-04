@@ -58,7 +58,7 @@ has to know which one to use. This is where a new method of `$translateProvider`
 comes in. `preferredLanguage()` tells angular-translate which of the registered
 languages is the one that should be used by default. It expects an argument with
 the value of the language key, which points to a certain translation table. So,
-to tell an app it should use german rather than english as first language, extend
+to tell an app it should use German rather than English as first language, extend
 the code like this:
 
 <pre>
@@ -155,8 +155,8 @@ var translationsEN = {
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'german',
-  BUTTON_LANG_EN: 'english'
+  BUTTON_LANG_DE: 'German',
+  BUTTON_LANG_EN: 'English'
 };
 
 var translationsDE= {
@@ -171,8 +171,8 @@ var translationsDE= {
 };
 </pre>
 
-After that, we update the registration of the english translation table, that it
-has a corresponding language key and tell angular-translate to use english as
+After that, we update the registration of the English translation table, that it
+has a corresponding language key and tell angular-translate to use English as
 default language:
 
 <pre>
@@ -216,8 +216,8 @@ Et voilà! We now have an app with multi language support!
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
         MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
 
       var translationsDE= {
