@@ -24,3 +24,7 @@ env:
   - TEST_SCOPE=angular_1.3.x
   - TEST_SCOPE=angular_1.4.x
   - TEST_SCOPE=angular_1.5.x
+
+matrix:
+  allow_failures:
+    - env: TEST_SCOPE=angular_1.5.x
