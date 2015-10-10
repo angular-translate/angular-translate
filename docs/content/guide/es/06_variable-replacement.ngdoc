@@ -29,7 +29,7 @@ Cuando se usa el servicio de interpolación por defacto de `angular-translate`, 
 
 ```
 {
-  "TRANSLATION_ID": "{{username}} is logged in."
+  "CLAVE_DE_TRADUCCION": "{{nombreUsuario}} se conectó."
 }
 ```
 
@@ -44,16 +44,16 @@ Como segundo parámetro, el servicio  `$translate` espera un objeto hash de Java
 se interpola la traducción. De modo que, si tenemos una traducción como la descrita arriba, para pasarle valores de
 `username` tendríamos que hacer lo siguiente:
 <pre>
-$translate('TRANSLATION_ID', { username: 'PascalPrecht' });
+$translate('CLAVE_DE_TRADUCCION', { nombreUsuario: 'PascalPrecht' });
 </pre>
 
 Si hay una clave de traducción que requiera más de un valor, simplemente extienda el objeto hash que se
 pasa, con los pares clave-valor correspondientes.
 
 <pre>
-$translate('TRANSLATION_ID', {
-  username: 'PascalPrecht',
-  lastLogin: '2013-07-21 6:50PM'
+$translate('CLAVE_DE_TRADUCCION, {
+  nombreUsuario: 'PascalPrecht',
+  ultimaConexion: '2013-07-21 6:50PM'
 });
 </pre>
 
@@ -69,7 +69,7 @@ como un objeto hash. Para lograr esto se requiere una sintaxis especial, porque 
  `$translate`.
 
 <pre>
-{{ 'TRANSLATION_ID' | translate:'{ username: "PascalPrecht" }' }}
+{{ 'CLAVE_DE_TRADUCCION' | translate:'{ nombreUsuario: "PascalPrecht" }' }}
 </pre>
 
 No es muy difícil ¿verdad? Pero ese `username` ¿no debería tener un valor constante, y a su vez ser interpolado
@@ -81,7 +81,7 @@ No es muy difícil ¿verdad? Pero ese `username` ¿no debería tener un valor co
 angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 
   $scope.translationData = {
-    username: 'PascalPrecht'
+    nombreUsuario: 'PascalPrecht'
   };
 }]);
 </pre>
@@ -89,7 +89,7 @@ angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 y recién después pasarlos como expresión a través del filtro:
 
 <pre>
-{{ 'TRANSLATION_ID' | translate:translationData }}
+{{ 'CLAVE_DE_TRADUCCION' | translate: datosDeLaTraduccion }}
 </pre>
 
 ## Reemplazo de variables en la directiva translate
@@ -104,22 +104,22 @@ sale es un viejo y querido objeto Javascript, el cual a su vez le es pasado al s
 
 
 <pre>
-<ANY translate="TRANSLATION_ID"
-     translate-values='{ username: "PascalPrect"}'></ANY>
+<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"
+     translate-values='{ nombreUsuario: "PascalPrect"}'></CUALQUIERTAG>
 </pre>
 
 o bien
 
 <pre>
-<ANY translate="TRANSLATION_ID"
-     translate-values="{ username: someScopeObject.username }"></ANY>
+<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"
+     translate-values="{ nombreUsuario: someScopeObject.nombreUsuario }"></CUALQUIERTAG>
 </pre>
 
 o bien
 
 <pre>
-<ANY translate="TRANSLATION_ID"
-     translate-values="{{translationData}}"></ANY>
+<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"
+     translate-values="{{datosDeLaTradducion}}"></CUALQUIERTAG>
 </pre>
 
 ## Atributos personalizados (custom) para valores de traducción
@@ -138,7 +138,7 @@ Supongamos que tenemos la siguiente clave de traducción:
 
 <pre>
 {
-  "GREETING": "Hi, my name is {{name}}"
+  "SALUDO": "Hola, me llamo {{nombre}}"
 }
 </pre>
 
@@ -146,7 +146,7 @@ Y queremos traducirla mediante la impresionante directiva `translate`. Podemos h
  esta vez usaremos un atributo personalizado `translate-value-*` para pasar el valor. Así que haríamos lo siguiente:
 
 <pre>
-<p translate="GREETING" translate-value-name="Pascal"></p>
+<p translate="SALUDO" translate-value-nombre="Pascal"></p>
 </pre>
 
 Todo lo que hay que hacer, es usar el prefijo `translate-value-` y agregar el nombre del identificador de la
@@ -155,7 +155,7 @@ Todo lo que hay que hacer, es usar el prefijo `translate-value-` y agregar el no
 Ah, por supuesto, también se puede usar con valores interpolados:
 
 <pre>
-<p translate="GREETING" translate-value-name="{{name}}"></p>
+<p translate="SALUDO" translate-value-nombre="{{nombre}}"></p>
 </pre>
 
 Si esta no es una funcionalidad "cool", entonces ninguna lo es.
@@ -164,19 +164,19 @@ Si esta no es una funcionalidad "cool", entonces ninguna lo es.
 
 <pre>
 var translations = {
-  HEADLINE: 'What an awesome module!',
-  PARAGRAPH: 'Srsly!',
-  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-  VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+  ENCABEZADO: '¡Qué módulo asombroso!',
+  PARRAFO: '¡En serio!',
+  PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
+  PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
+  PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
+  REEMPLAZO_DE_VARIABLE: 'Hola, {{nombre}}'
 };
 </pre>
 
 Seguidamente, pasemos un nombre mediante la directiva `translate`:
 
 <pre>
-<p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+<p translate="REEMPLAZO_DE_VARIABLE" translate-values="{ nombre: 'PascalPrecht' }"></p>
 </pre>
 
 Y nuestro código en funcionamiento, ahora se ve así:
@@ -185,21 +185,21 @@ Y nuestro código en funcionamiento, ahora se ve así:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
-        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-        VARIABLE_REPLACEMENT: 'Hi, {{name}}'
+        ENCABEZADO: '¡Qué módulo asombroso!',
+        PARRAFO: '¡En serio!'
+        PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
+        PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
+        PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
+        REEMPLAZO_DE_VARIABLE: 'Hola, {{nombre}}'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        // add translation table
+        // agregar la tabla de traducción
         $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+          .translations('es', translations)
+          .preferredLanguage('es');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {
@@ -207,15 +207,15 @@ Y nuestro código en funcionamiento, ahora se ve así:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <p>{{ 'HEADLINE' | translate }}</p>
-      <p>{{ 'PARAGRAPH' | translate }}</p>
+      <p>{{ 'ENCABEZADO' | translate }}</p>
+      <p>{{ 'PARRAFO' | translate }}</p>
 
-      <p translate>PASSED_AS_TEXT</p>
-      <p translate="PASSED_AS_ATTRIBUTE"></p>
-      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
-      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
-      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
-      <p translate="VARIABLE_REPLACEMENT" translate-value-name="PascalPrecht"></p>
+      <p translate>PASADO_COMO_TEXTO</p>
+      <p translate="PASADO_COMO_ATRIBUTO"></p>
+      <p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
+      <p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
+      <p translate="REEMPLAZO_DE_VARIABLE" translate-values="{ nombre: 'PascalPrecht'}"></p>
+      <p translate="REEMPLAZO_DE_VARIABLE" translate-value-nombre="PascalPrecht"></p>
     </div>
   </doc:source>
 </doc:example>

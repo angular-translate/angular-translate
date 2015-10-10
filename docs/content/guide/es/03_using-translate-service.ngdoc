@@ -36,19 +36,19 @@ Entonces, el uso básico de `$translate` en la capa de servicios o de controlado
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $translate('HEADLINE').then(function (headline) {
+  $translate('ENCABEZADO').then(function (headline) {
     $scope.headline = headline;
   });
-  $translate('PARAGRAPH').then(function (paragraph) {
+  $translate('PARRAFO').then(function (paragraph) {
     $scope.paragraph = paragraph;
   });
-  $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
+  $translate('NAMESPACE.PARRAFO').then(function (anotherOne) {
     $scope.namespaced_paragraph = anotherOne;
   });
 }]);
 </pre>
 
-**Nota:** a las traducciones con "namespace" se accede como si fueran propiedades JSON, por ejemplo, 'NAMESPACE.PARAGRAPH'`.
+**Nota:** a las traducciones con "namespace" se accede como si fueran propiedades JSON, por ejemplo, 'NAMESPACE.PARRAFO'`.
 
 Y eso es todo. Ahora, cuando piense en traducir los contenidos de un `<title>`, lo puede hacer dentro del código
 de su controlador.
@@ -59,10 +59,10 @@ El servicio de traducción acepta requests con varias claves a la vez.
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
-    $scope.headline = translations.HEADLINE;
-    $scope.paragraph = translations.PARAGRAPH;
-    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  $translate(['ENCABEZADO', 'PARRAFO', 'NAMESPACE.PARRAFO']).then(function (translations) {
+    $scope.headline = translations.ENCABEZADO;
+    $scope.paragraph = translations.PARRAFO;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARRAFO'];
   });
 }]);
 </pre>
@@ -79,7 +79,7 @@ Simplemente invóquela así:
 
 <pre>
   $translate.versionInfo();
-  // returns e.g. "2.1.0"
+  // devuelve, por ejemplo "2.1.0"
 </pre>
 
 ## Cosas a tener en cuenta
@@ -103,7 +103,7 @@ Eso se vería así:
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, $translate, $rootScope) {
   $rootScope.$on('$translateChangeSuccess', function () {
-    $translate('HEADLINE').then(function (translation) {
+    $translate('ENCABEZADO').then(function (translation) {
       $scope.headline = translation;
     });
   });
@@ -120,10 +120,10 @@ Este es un ejemplo que anda:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
+        ENCABEZADO: '¡Qué módulo asombroso!',
+        PARRAFO: '¡En serio!',
         NAMESPACE: {
-          PARAGRAPH: 'And it comes with awesome features!'
+          PARRAFO: '¡Y viene con funcionalidades extraordinarias!'
         }
       };
 
@@ -132,27 +132,27 @@ Este es un ejemplo que anda:
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
         $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+          .translations('es', translations)
+          .preferredLanguage('es');
       }]);
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
         // expose translation via `$translate` service
-        $translate('HEADLINE').then(function (headline) {
-          $scope.headline = headline;
+        $translate('ENCABEZADO').then(function (headline) {
+          $scope.encabezado = headline;
         });
-        $translate('PARAGRAPH').then(function (paragraph) {
-          $scope.paragraph = paragraph;
+        $translate('PARRAFO').then(function (paragraph) {
+          $scope.parrafo = paragraph;
         });
-        $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
-          $scope.namespaced_paragraph = anotherOne;
+        $translate('NAMESPACE.PARRAFO').then(function (anotherOne) {
+          $scope.parrafoConNamespace = anotherOne;
         });
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h1>{{headline}}</h1>
-      <p>{{paragraph}}</p>
-      <p>{{namespaced_paragraph}}</p>
+      <h1>{{encabezado}}</h1>
+      <p>{{parrafo}}</p>
+      <p>{{parrafoConNamespace}}</p>
     </div>
   </doc:source>
 </doc:example>

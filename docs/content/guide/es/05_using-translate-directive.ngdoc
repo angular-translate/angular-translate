@@ -14,14 +14,14 @@ una directiva para traducir conenidos en la vista.
 La directiva `translate` puede utilizarse de muchas maneras distintas. Un
  uso general sería:
 ```
-<ANY translate>TRANSLATION_ID</ANY>
+<CUALQUIERTAG translate>CLAVE_DE_TRADUCCION<CUALQUIERTAG>
 ```
 
 También se puede pasar la clave de traducción como parámetro de una directiva `translate` que esté
  funcionando como atributo, de esta manera:
 
 ```
-<ANY translate="TRANSLATION_ID"></ANY>
+<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"></CUALQUIERTAG>
 ```
 
 Incluso si éstas son ya maneras muy flexibles de usar una directiva, angular-translate ofrece
@@ -33,13 +33,13 @@ Incluso si éstas son ya maneras muy flexibles de usar una directiva, angular-tr
 
 
 ```
-<ANY translate="{{toBeInterpolated}}"></ANY>
+<CUALQUIERTAG translate="{{claveAInterpolar}}"></CUALQUIERTAG>
 ```
 
 ¿No está bueno? Ah, y angular-translate no sería angular-translate si no pudiera también
 manipular de la misma forma nuestro primer ejemplo. Esto también funcionaría:
 ```
-<ANY translate>{{toBeInterpolated}}</ANY>
+<CUALQUIERTAG translate>{{claveAInterpolar}}</CUALQUIERTAG>
 ```
 
 ¡Elija la forma que más le convenga!
@@ -52,7 +52,7 @@ la traducción en sí, no funcionará como debería.
 Este comportamiento puede ser habilitado con directivas:
 
 ```
-<ANY translate="TRANSLATION_ID" translate-compile></ANY>
+<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION" translate-compile></CUALQUIERTAG>
 ```
 
 Además, se puede habilitar esta funcionalidad de manera global, utilizando:
@@ -64,7 +64,7 @@ $translateProvider.usePostCompiling(true);
 ... y entonces, aún se puede inhabilitar la funcionalidad directiva-por-directiva según haga falta:
 
 ```
-<ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
+<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION" translate-compile="false"></CUALQUIERTAG>
 ```
 
 ## Ejemplo
@@ -75,24 +75,24 @@ podría verse así:
 
 <pre>
 var translations = {
-  HEADLINE: 'What an awesome module!',
-  PARAGRAPH: 'Srsly!',
-  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+  ENCABEZADO: '¡Qué módulo asombroso!',
+  PARRAFO: '¡En serio!'
+  PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
+  PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
+  PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
 };
 </pre>
 
 Luego de lo cual, actualizamos nuesta vista con las nuevas claves de traducción:
 
 <pre>
-<p>{{ 'HEADLINE' | translate }}</p>
-<p>{{ 'PARAGRAPH' | translate }}</p>
+<p>{{ 'ENCABEZADO' | translate }}</p>
+<p>{{ 'PARRAFO' | translate }}</p>
 
-<p translate>PASSED_AS_TEXT</p>
-<p translate="PASSED_AS_ATTRIBUTE"></p>
-<p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
-<p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+<p translate>PASADO_COMO_TEXTO</p>
+<p translate="PASADO_COMO_ATRIBUTO"></p>
+<p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
+<p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
 </pre>
 
 Nuestra aplicación actualizada ahora luce así:
@@ -101,11 +101,11 @@ Nuestra aplicación actualizada ahora luce así:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
-        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+        ENCABEZADO: '¡Qué módulo asombroso!',
+        PARRAFO: '¡En serio!'
+        PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
+        PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
+        PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
@@ -113,8 +113,8 @@ Nuestra aplicación actualizada ahora luce así:
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
         $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+          .translations('es', translations)
+          .preferredLanguage('es');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {
@@ -122,13 +122,13 @@ Nuestra aplicación actualizada ahora luce así:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <p>{{ 'HEADLINE' | translate }}</p>
-      <p>{{ 'PARAGRAPH' | translate }}</p>
+      <p>{{ 'ENCABEZADO' | translate }}</p>
+      <p>{{ 'PARRAFO' | translate }}</p>
 
-      <p translate>PASSED_AS_TEXT</p>
-      <p translate="PASSED_AS_ATTRIBUTE"></p>
-      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
-      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate>PASADO_COMO_TEXTO</p>
+      <p translate="PASADO_COMO_ATRIBUTO"></p>
+      <p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
+      <p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
     </div>
   </doc:source>
 </doc:example>
