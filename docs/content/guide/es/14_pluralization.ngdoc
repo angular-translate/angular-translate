@@ -139,15 +139,15 @@ Se puede obtener el mismo resultado con el filtro `translate`. Como se explicó 
 La directiva `translate` espera un nuevo atributo llamado `translate-interpolation`, el cual controla cuál servicio de interpolación se usa para una clave de traducción determinada:
 
 <pre>
-<CUALQUIERTAG
+<ANY
   translate="TEXT"
-  translate-values="{ val: 5 }"></CUALQUIERTAG>
+  translate-values="{ val: 5 }"></ANY>
 // "Estoy usando la interpolación por defecto 10"
 
-<CUALQUIERTAG
+<ANY
   translate="PLURAL"
   translate-values="{ GENDER: 'male' }"
-  translate-interpolation="messageformat"></CUALQUIERTAG>
+  translate-interpolation="messageformat"></ANY>
 // "A él le gusta esto."
 </pre>
 

@@ -104,22 +104,22 @@ sale es un viejo y querido objeto Javascript, el cual a su vez le es pasado al s
 
 
 <pre>
-<CUALQUIERTAG translate="TRANSLATION_ID"
-     translate-values='{ nombreUsuario: "PascalPrect"}'></CUALQUIERTAG>
+<ANY translate="TRANSLATION_ID"
+     translate-values='{ nombreUsuario: "PascalPrect"}'></ANY>
 </pre>
 
 o bien
 
 <pre>
-<CUALQUIERTAG translate="TRANSLATION_ID"
-     translate-values="{ nombreUsuario: someScopeObject.nombreUsuario }"></CUALQUIERTAG>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{ nombreUsuario: someScopeObject.nombreUsuario }"></ANY>
 </pre>
 
 o bien
 
 <pre>
-<CUALQUIERTAG translate="TRANSLATION_ID"
-     translate-values="{{datosDeLaTradducion}}"></CUALQUIERTAG>
+<ANY translate="TRANSLATION_ID"
+     translate-values="{{datosDeLaTradducion}}"></ANY>
 </pre>
 
 ## Atributos personalizados (custom) para valores de traducción
