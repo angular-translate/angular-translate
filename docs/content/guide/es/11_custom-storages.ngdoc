@@ -16,11 +16,11 @@ Digamos que usted quiere usar un servicio de almacenamiento personalizado en nue
 <pre>
 app.factory('almacenamientoPersonalizado', function () {
   return {
-    put: function (nombre, valor) {
-      // almacenar `valor` bajo  `nombre` de alguna manera
+    put: function (name, value) {
+      // almacenar `value` bajo  `name` de alguna manera
     },
     get: function (name) {
-      // pedir el valor de `nombre` de alguna manera
+      // pedir el valor de `name` de alguna manera
     }
   };
 });
@@ -50,7 +50,7 @@ angular-translate usará `$injector` para obtener una isntancia de la "factory" 
 		  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
 		  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
 		  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-		  VARIABLE_REPLACEMENT: 'Hi {{nombre}}',
+		  VARIABLE_REPLACEMENT: 'Hi {{name}}',
 		  BUTTON_LANG_ES: 'Spanish',
 		  BUTTON_LANG_EN: 'English'
 		};
@@ -61,7 +61,7 @@ angular-translate usará `$injector` para obtener una isntancia de la "factory" 
 		  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
 		  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
 		  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
-		  VARIABLE_REPLACEMENT: 'Hola {{nombre}}',
+		  VARIABLE_REPLACEMENT: 'Hola {{name}}',
 		  BUTTON_LANG_ES: 'Español',
 		  BUTTON_LANG_EN: 'Inglés'
 		};
@@ -80,10 +80,10 @@ angular-translate usará `$injector` para obtener una isntancia de la "factory" 
 		app.factory('almacenamientoPersonalizado', function () {
 		  return {
 			  put: function (name, value) {
-				// almacenar `valor` bajo  `nombre` de alguna manera
+				// almacenar `value` bajo  `name` de alguna manera
 			  },
 			  get: function (name) {
-				// pedir el valor de `nombre` de alguna manera
+				// pedir el valor de `name` de alguna manera
 			  }
 		  };
 		});
@@ -103,7 +103,7 @@ angular-translate usará `$injector` para obtener una isntancia de la "factory" 
       <p translate="PASSED_AS_ATTRIBUTE"></p>
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
-      <p translate="VARIABLE_REPLACEMENT" translate-values="{ nombre: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
 
       <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
