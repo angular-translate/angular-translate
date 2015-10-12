@@ -29,7 +29,7 @@ Cuando se usa el servicio de interpolación por defacto de `angular-translate`, 
 
 ```
 {
-  "CLAVE_DE_TRADUCCION": "{{nombreUsuario}} se conectó."
+  "TRANSLATION_ID": "{{nombreUsuario}} se conectó."
 }
 ```
 
@@ -44,14 +44,14 @@ Como segundo parámetro, el servicio  `$translate` espera un objeto hash de Java
 se interpola la traducción. De modo que, si tenemos una traducción como la descrita arriba, para pasarle valores de
 `username` tendríamos que hacer lo siguiente:
 <pre>
-$translate('CLAVE_DE_TRADUCCION', { nombreUsuario: 'PascalPrecht' });
+$translate('TRANSLATION_ID', { nombreUsuario: 'PascalPrecht' });
 </pre>
 
 Si hay una clave de traducción que requiera más de un valor, simplemente extienda el objeto hash que se
 pasa, con los pares clave-valor correspondientes.
 
 <pre>
-$translate('CLAVE_DE_TRADUCCION, {
+$translate('TRANSLATION_ID, {
   nombreUsuario: 'PascalPrecht',
   ultimaConexion: '2013-07-21 6:50PM'
 });
@@ -69,7 +69,7 @@ como un objeto hash. Para lograr esto se requiere una sintaxis especial, porque 
  `$translate`.
 
 <pre>
-{{ 'CLAVE_DE_TRADUCCION' | translate:'{ nombreUsuario: "PascalPrecht" }' }}
+{{ 'TRANSLATION_ID' | translate:'{ nombreUsuario: "PascalPrecht" }' }}
 </pre>
 
 No es muy difícil ¿verdad? Pero ese `username` ¿no debería tener un valor constante, y a su vez ser interpolado
@@ -89,7 +89,7 @@ angular.module('myApp').controller('Ctrl', ['$scope', function ($scope) {
 y recién después pasarlos como expresión a través del filtro:
 
 <pre>
-{{ 'CLAVE_DE_TRADUCCION' | translate: datosDeLaTraduccion }}
+{{ 'TRANSLATION_ID' | translate: datosDeLaTraduccion }}
 </pre>
 
 ## Reemplazo de variables en la directiva translate
@@ -104,21 +104,21 @@ sale es un viejo y querido objeto Javascript, el cual a su vez le es pasado al s
 
 
 <pre>
-<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"
+<CUALQUIERTAG translate="TRANSLATION_ID"
      translate-values='{ nombreUsuario: "PascalPrect"}'></CUALQUIERTAG>
 </pre>
 
 o bien
 
 <pre>
-<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"
+<CUALQUIERTAG translate="TRANSLATION_ID"
      translate-values="{ nombreUsuario: someScopeObject.nombreUsuario }"></CUALQUIERTAG>
 </pre>
 
 o bien
 
 <pre>
-<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"
+<CUALQUIERTAG translate="TRANSLATION_ID"
      translate-values="{{datosDeLaTradducion}}"></CUALQUIERTAG>
 </pre>
 

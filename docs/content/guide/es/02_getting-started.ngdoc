@@ -90,7 +90,7 @@ o, si se los carga remotamente, como objetos JSON. Así es como se vería una ta
 
 ```json
 {
-  "CLAVE_DE_TRADUCCION": "Una traducción en concreto, para un lenguaje en particular."
+  "TRANSLATION_ID": "Una traducción en concreto, para un lenguaje en particular."
 }
 ```
 
@@ -104,7 +104,7 @@ crear objetos JSON anidados:
 {
   "NAMESPACE": {
     "SUB_NAMESPACE": {
-       "OTRA_CLAVE_DE_TRADUCCION": "Esta es una traducción con namespace."
+       "OTRA_TRANSLATION_ID": "Esta es una traducción con namespace."
     }
   }
 }

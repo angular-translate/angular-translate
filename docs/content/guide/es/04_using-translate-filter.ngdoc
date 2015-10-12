@@ -25,7 +25,7 @@ simplemente transfiriendo la lógica desde el controlador hacia nuestro filtro `
 El filtro funcionaría así:
 
 ```
-<ANY>{{ CLAVE_DE_TRADUCCION | translate }}</ANY>
+<ANY>{{ TRANSLATION_ID | translate }}</ANY>
 ```
 
 Así que, para actualizar nuestro ejemplo, quitamos el uso del servicio `$translate` de nuestro

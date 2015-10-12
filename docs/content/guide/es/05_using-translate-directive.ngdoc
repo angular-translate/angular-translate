@@ -14,14 +14,14 @@ una directiva para traducir conenidos en la vista.
 La directiva `translate` puede utilizarse de muchas maneras distintas. Un
  uso general sería:
 ```
-<CUALQUIERTAG translate>CLAVE_DE_TRADUCCION<CUALQUIERTAG>
+<CUALQUIERTAG translate>TRANSLATION_ID<CUALQUIERTAG>
 ```
 
 También se puede pasar la clave de traducción como parámetro de una directiva `translate` que esté
  funcionando como atributo, de esta manera:
 
 ```
-<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION"></CUALQUIERTAG>
+<CUALQUIERTAG translate="TRANSLATION_ID"></CUALQUIERTAG>
 ```
 
 Incluso si éstas son ya maneras muy flexibles de usar una directiva, angular-translate ofrece
@@ -52,7 +52,7 @@ la traducción en sí, no funcionará como debería.
 Este comportamiento puede ser habilitado con directivas:
 
 ```
-<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION" translate-compile></CUALQUIERTAG>
+<CUALQUIERTAG translate="TRANSLATION_ID" translate-compile></CUALQUIERTAG>
 ```
 
 Además, se puede habilitar esta funcionalidad de manera global, utilizando:
@@ -64,7 +64,7 @@ $translateProvider.usePostCompiling(true);
 ... y entonces, aún se puede inhabilitar la funcionalidad directiva-por-directiva según haga falta:
 
 ```
-<CUALQUIERTAG translate="CLAVE_DE_TRADUCCION" translate-compile="false"></CUALQUIERTAG>
+<CUALQUIERTAG translate="TRANSLATION_ID" translate-compile="false"></CUALQUIERTAG>
 ```
 
 ## Ejemplo
