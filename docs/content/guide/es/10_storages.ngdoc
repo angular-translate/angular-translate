@@ -65,25 +65,25 @@ Y listo. Su aplicación ahora usará localStorage para recordar el lenguaje del 
   <doc:source>
     <script>
 		var translationsEN = {
-		  ENCABEZADO: 'What an awesome module!',
-		  PARRAFO: 'Srsly!',
-		  PASADO_COMO_TEXTO: 'Hey there! I\'m passed as text value!',
-		  PASADO_COMO_ATRIBUTO: 'I\'m passed as attribute value, cool ha?',
-		  PASADO_COMO_INTERPOLACION: 'Beginners! I\'m interpolated!',
-		  REEMPLAZO_DE_VARIABLE: 'Hi {{name}}',
-		  BOTON_LENGUAGJE_ES: 'Spanish',
-		  BOTON_LENGUAGJE_EN: 'English'
+		  HEADLINE: 'What an awesome module!',
+		  PARAGRAPH: 'Srsly!',
+		  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+		  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+		  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+		  VARIABLE_REPLACEMENT: 'Hi {{nombre}}',
+		  BUTTON_LANG_ES: 'Spanish',
+		  BUTTON_LANG_EN: 'English'
 		};
 
 		var translationsES= {
-		  ENCABEZADO: '¡Qué módulo asombroso!',
-		  PARRAFO: '¡En serio!',
-		  PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
-		  PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
-		  PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
-		  REEMPLAZO_DE_VARIABLE: 'Hola {{nombre}}',
-		  BOTON_LENGUAGJE_ES: 'Español',
-		  BOTON_LENGUAGJE_EN: 'Inglés'
+		  HEADLINE: '¡Qué módulo asombroso!',
+		  PARAGRAPH: '¡En serio!',
+		  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+		  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+		  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
+		  VARIABLE_REPLACEMENT: 'Hola {{nombre}}',
+		  BUTTON_LANG_ES: 'Español',
+		  BUTTON_LANG_EN: 'Inglés'
 		};
 
 		var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
@@ -105,18 +105,18 @@ Y listo. Su aplicación ahora usará localStorage para recordar el lenguaje del 
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <p>{{ 'ENCABEZADO' | translate }}</p>
-      <p>{{ 'PARRRAFO' | translate }}</p>
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
       
-      <p translate>PASADO_COMO_TEXTO</p>
-      <p translate="PASADO_COMO_ATRIBUTO"></p>
-      <p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
-      <p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
-      <p translate="REEMPLAZO_DE_VARIABLE" translate-values="{ nombre: 'PascalPrecht'}"></p>
-      <p translate="REEMPLAZO_DE_VARIABLE" translate-value-nombre="PascalPrecht"></p>
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ nombre: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-nombre="PascalPrecht"></p>
       
-      <button ng-click="changeLanguage('es')" translate="BOTON_LENGUAJE_ES"></button>
-      <button ng-click="changeLanguage('en')" translate="BOTON_LENGUAJE_EN"></button>      
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>      
     </div>
   </doc:source>
 </doc:example>

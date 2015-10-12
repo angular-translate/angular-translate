@@ -91,7 +91,7 @@ Si seleccionamos una clave de lenguaje que no esté al principio de la pila, est
 Por ejemplo, si en el código siguiente configuramos 'en' como lenguaje de respaldo con `useFallbackLanguage()`, entonces 'es' será ignorado, nuestra pila comenzará a ser iterada a partir de 'en'.
 
 <pre>
-  // langKey is 'en'
+  // la clave de lenguaje (langKey) es 'en'
   $scope.changeLanguage = function (langKey) {
   $translate.fallbackLanguage(['es', 'en', 'fr']);
   $translate.useFallbackLanguage(langKey);

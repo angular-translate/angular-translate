@@ -36,15 +36,15 @@ Aquí hay un ejemplo en funcionamiento:
           TEXT: 'I\'m using default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
           BUTTON_LANG_EN: 'English',
-          BUTTON_LANG_DE: 'German'
+          BUTTON_LANG_ES: 'Spanish'
         });
 
-        $translateProvider.translations('de', {
-          HEADLINE: 'Ich bin eine Überschrift',
-          TEXT: 'Ich benutze default interpolation {{ val + val }}',
-          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
-          BUTTON_LANG_EN: 'Englisch',
-          BUTTON_LANG_DE: 'Deutsch'
+        $translateProvider.translations('es', {
+          HEADLINE: 'Soy un encabezado',
+          TEXT: 'Estoy usando la interpolación por defecto {{ val + val }}',
+          PLURAL: '{GENDER, select, male{A él le} female{A ella le} other{A ellos les}} gusta esto.',
+          BUTTON_LANG_EN: 'Inglés',
+          BUTTON_LANG_ES: 'Español'
         });
       }]);
 
@@ -59,7 +59,7 @@ Aquí hay un ejemplo en funcionamiento:
       <p translate="NOT_EXISTING"></p>
       <p translate="ALSO_NOT_EXISTING"></p>
 
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
     </div>
   </doc:source>

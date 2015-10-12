@@ -36,19 +36,19 @@ Entonces, el uso básico de `$translate` en la capa de servicios o de controlado
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $translate('ENCABEZADO').then(function (headline) {
+  $translate('HEADLINE').then(function (headline) {
     $scope.headline = headline;
   });
-  $translate('PARRAFO').then(function (paragraph) {
+  $translate('PARAGRAPH').then(function (paragraph) {
     $scope.paragraph = paragraph;
   });
-  $translate('NAMESPACE.PARRAFO').then(function (anotherOne) {
+  $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
     $scope.namespaced_paragraph = anotherOne;
   });
 }]);
 </pre>
 
-**Nota:** a las traducciones con "namespace" se accede como si fueran propiedades JSON, por ejemplo, 'NAMESPACE.PARRAFO'`.
+**Nota:** a las traducciones con "namespace" se accede como si fueran propiedades JSON, por ejemplo, 'NAMESPACE.PARAGRAPH'`.
 
 Y eso es todo. Ahora, cuando piense en traducir los contenidos de un `<title>`, lo puede hacer dentro del código
 de su controlador.
@@ -59,10 +59,10 @@ El servicio de traducción acepta requests con varias claves a la vez.
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-  $translate(['ENCABEZADO', 'PARRAFO', 'NAMESPACE.PARRAFO']).then(function (translations) {
-    $scope.headline = translations.ENCABEZADO;
-    $scope.paragraph = translations.PARRAFO;
-    $scope.namespaced_paragraph = translations['NAMESPACE.PARRAFO'];
+  $translate(['HEADLINE', 'PARAGRAPH', 'NAMESPACE.PARAGRAPH']).then(function (translations) {
+    $scope.headline = translations.HEADLINE;
+    $scope.paragraph = translations.PARAGRAPH;
+    $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
   });
 }]);
 </pre>
@@ -103,7 +103,7 @@ Eso se vería así:
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, $translate, $rootScope) {
   $rootScope.$on('$translateChangeSuccess', function () {
-    $translate('ENCABEZADO').then(function (translation) {
+    $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
     });
   });
@@ -120,10 +120,10 @@ Este es un ejemplo que anda:
   <doc:source>
     <script>
       var translations = {
-        ENCABEZADO: '¡Qué módulo asombroso!',
-        PARRAFO: '¡En serio!',
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
         NAMESPACE: {
-          PARRAFO: '¡Y viene con funcionalidades extraordinarias!'
+          PARAGRAPH: '¡Y viene con funcionalidades extraordinarias!'
         }
       };
 
@@ -137,14 +137,14 @@ Este es un ejemplo que anda:
       }]);
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-        // expose translation via `$translate` service
-        $translate('ENCABEZADO').then(function (headline) {
+        // exponer la traducción vía el servicio `$translate` 
+        $translate('HEADLINE').then(function (headline) {
           $scope.encabezado = headline;
         });
-        $translate('PARRAFO').then(function (paragraph) {
+        $translate('PARAGRAPH').then(function (paragraph) {
           $scope.parrafo = paragraph;
         });
-        $translate('NAMESPACE.PARRAFO').then(function (anotherOne) {
+        $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
           $scope.parrafoConNamespace = anotherOne;
         });
       }]);

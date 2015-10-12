@@ -164,19 +164,19 @@ Si esta no es una funcionalidad "cool", entonces ninguna lo es.
 
 <pre>
 var translations = {
-  ENCABEZADO: '¡Qué módulo asombroso!',
-  PARRAFO: '¡En serio!',
-  PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
-  PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
-  PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
-  REEMPLAZO_DE_VARIABLE: 'Hola, {{nombre}}'
+  HEADLINE: '¡Qué módulo asombroso!',
+  PARAGRAPH: '¡En serio!',
+  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...'
+  VARIABLE_REPLACEMENT: 'Hola, {{nombre}}'
 };
 </pre>
 
 Seguidamente, pasemos un nombre mediante la directiva `translate`:
 
 <pre>
-<p translate="REEMPLAZO_DE_VARIABLE" translate-values="{ nombre: 'PascalPrecht' }"></p>
+<p translate="VARIABLE_REPLACEMENT" translate-values="{ nombre: 'PascalPrecht' }"></p>
 </pre>
 
 Y nuestro código en funcionamiento, ahora se ve así:
@@ -185,12 +185,12 @@ Y nuestro código en funcionamiento, ahora se ve así:
   <doc:source>
     <script>
       var translations = {
-        ENCABEZADO: '¡Qué módulo asombroso!',
-        PARRAFO: '¡En serio!'
-        PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
-        PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
-        PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
-        REEMPLAZO_DE_VARIABLE: 'Hola, {{nombre}}'
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
+        PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+        PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+        PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
+        VARIABLE_REPLACEMENT: 'Hola, {{nombre}}'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
@@ -207,15 +207,15 @@ Y nuestro código en funcionamiento, ahora se ve así:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <p>{{ 'ENCABEZADO' | translate }}</p>
-      <p>{{ 'PARRAFO' | translate }}</p>
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
 
-      <p translate>PASADO_COMO_TEXTO</p>
-      <p translate="PASADO_COMO_ATRIBUTO"></p>
-      <p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
-      <p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
-      <p translate="REEMPLAZO_DE_VARIABLE" translate-values="{ nombre: 'PascalPrecht'}"></p>
-      <p translate="REEMPLAZO_DE_VARIABLE" translate-value-nombre="PascalPrecht"></p>
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ nombre: 'PascalPrecht'}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-value-nombre="PascalPrecht"></p>
     </div>
   </doc:source>
 </doc:example>

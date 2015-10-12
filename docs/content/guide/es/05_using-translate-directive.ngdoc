@@ -75,24 +75,24 @@ podría verse así:
 
 <pre>
 var translations = {
-  ENCABEZADO: '¡Qué módulo asombroso!',
-  PARRAFO: '¡En serio!'
-  PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
-  PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
-  PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
+  HEADLINE: '¡Qué módulo asombroso!',
+  PARAGRAPH: '¡En serio!'
+  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...'
 };
 </pre>
 
 Luego de lo cual, actualizamos nuesta vista con las nuevas claves de traducción:
 
 <pre>
-<p>{{ 'ENCABEZADO' | translate }}</p>
-<p>{{ 'PARRAFO' | translate }}</p>
+<p>{{ 'HEADLINE' | translate }}</p>
+<p>{{ 'PARAGRAPH' | translate }}</p>
 
-<p translate>PASADO_COMO_TEXTO</p>
-<p translate="PASADO_COMO_ATRIBUTO"></p>
-<p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
-<p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
+<p translate>PASSED_AS_TEXT</p>
+<p translate="PASSED_AS_ATTRIBUTE"></p>
+<p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+<p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
 </pre>
 
 Nuestra aplicación actualizada ahora luce así:
@@ -101,11 +101,11 @@ Nuestra aplicación actualizada ahora luce así:
   <doc:source>
     <script>
       var translations = {
-        ENCABEZADO: '¡Qué módulo asombroso!',
-        PARRAFO: '¡En serio!'
-        PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
-        PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
-        PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
+        PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+        PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+        PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
@@ -122,13 +122,13 @@ Nuestra aplicación actualizada ahora luce así:
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <p>{{ 'ENCABEZADO' | translate }}</p>
-      <p>{{ 'PARRAFO' | translate }}</p>
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
 
-      <p translate>PASADO_COMO_TEXTO</p>
-      <p translate="PASADO_COMO_ATRIBUTO"></p>
-      <p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
-      <p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
     </div>
   </doc:source>
 </doc:example>

@@ -88,7 +88,7 @@ $translateProvider.preferredLanguage('en');
 angular-translate concatenará la información dada con
 `{{prefix}}{{langKey}}{{suffix}}`. De manera que eso producirá `locale-en.json`. Y, de nuevo, como no hay ningún dato de traducción disponible todavía, se cargará automáticamente tan pronto sea posible.
 
-##Uso del partialLoader (cargador parcial)
+## Uso del partialLoader (cargador parcial)
 
 Cuando se tiene una aplicación grande y compleja, normalmente se la subdivide en varios submódulos. Por ejemplo, usted podría tener un módulo `appPrincipal`, el cual dependa de submódulos como `inicio` y `contactos`. Estos son sólo 2 submódulos, pero imagínese una aplicación realmente grande, que dependiere de 10 o 20 submódulos.
 
@@ -315,28 +315,28 @@ Vamos a usar staticFilesLoader. Primero, tenemos que extraer las tablas de tradu
 <pre>
 // locale-en.json
 {
-	ENCABEZADO: 'What an awesome module!',
-	PARRAFO: 'Srsly!',
-	PASADO_COMO_TEXTO: 'Hey there! I\'m passed as text value!',
-	PASADO_COMO_ATRIBUTO: 'I\'m passed as attribute value, cool ha?',
-	PASADO_COMO_INTERPOLACION: 'Beginners! I\'m interpolated!',
-	REEMPLAZO_DE_VARIABLE: 'Hi {{nombre}}',
-	BOTON_LENGUAJE_ES: 'Spanish',
-	BOTON_LENGUAJE_EN: 'English'
+	HEADLINE: 'What an awesome module!',
+	PARAGRAPH: 'Srsly!',
+	PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+	PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+	PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+	VARIABLE_REPLACEMENT: 'Hi {{nombre}}',
+	BUTTON_LANG_ES: 'Spanish',
+	BUTTON_LANG_EN: 'English'
 }
 </pre>
 
 <pre>
 // locale-de.json
 {
-	ENCABEZADO: '¡Qué módulo asombroso!',
-	PARRAFO: '¡En serio!',
-	PASADO_COMO_TEXTO: 'Hola, me están pasando como un texto',
-	PASADO_COMO_ATRIBUTO: 'Me están pasando como atributo, ¡qué bueno!',
-	PASADO_COMO_INTERPOLACION: '¡Aprendices! A mí me están interpolando ...'
-	REEMPLAZO_DE_VARIABLE: 'Hola {{nombre}}',
-	BOTON_LENGUAJE_ES: 'Español',
-	BOTON_LENGUAJE_EN: 'Inglés'
+	HEADLINE: '¡Qué módulo asombroso!',
+	PARAGRAPH: '¡En serio!',
+	PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+	PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+	PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
+	VARIABLE_REPLACEMENT: 'Hola {{nombre}}',
+	BUTTON_LANG_ES: 'Español',
+	BUTTON_LANG_EN: 'Inglés'
 }
 </pre>
 
@@ -387,14 +387,14 @@ Como no tenemos que hacer ningún cambio en nuestros controladores ni en nuestro
 
       app.config(['$translateProvider', function ($translateProvider) {
         $translateProvider.translations('en', {
-			ENCABEZADO: 'What an awesome module!',
-			PARRAFO: 'Srsly!',
-			PASADO_COMO_TEXTO: 'Hey there! I\'m passed as text value!',
-			PASADO_COMO_ATRIBUTO: 'I\'m passed as attribute value, cool ha?',
-			PASADO_COMO_INTERPOLACION: 'Beginners! I\'m interpolated!',
-			REEMPLAZO_DE_VARIABLE: 'Hi {{nombre}}',
-			BOTON_LENGUAJE_ES: 'Spanish',
-			BOTON_LENGUAJE_EN: 'English'
+			HEADLINE: 'What an awesome module!',
+			PARAGRAPH: 'Srsly!',
+			PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+			PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+			PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+			VARIABLE_REPLACEMENT: 'Hi {{nombre}}',
+			BUTTON_LANG_ES: 'Spanish',
+			BUTTON_LANG_EN: 'English'
 		});
         // configures staticFilesLoader
         $translateProvider.useStaticFilesLoader({
@@ -412,17 +412,17 @@ Como no tenemos que hacer ningún cambio en nuestros controladores ni en nuestro
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <p>{{ 'ENCABEZADO' | translate }}</p>
-      <p>{{ 'PARRRAFO' | translate }}</p>
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
       
-      <p translate>PASADO_COMO_TEXTO</p>
-      <p translate="PASADO_COMO_ATRIBUTO"></p>
-      <p translate>{{ 'PASADO_COMO_INTERPOLACION' }}</p>
-      <p translate="{{ 'PASADO_COMO_INTERPOLACION' }}"></p>
-      <p translate="REEMPLAZO_DE_VARIABLE" translate-values="{ nombre: 'PascalPrecht'}"></p>
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ nombre: 'PascalPrecht'}"></p>
 
-      <button ng-click="changeLanguage('es')" translate="BOTON_LENGUAJE_ES"></button>
-      <button ng-click="changeLanguage('en')" translate="BOTON_LENGUAJE_EN"></button>
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
     </div>
   </doc:source>
 </doc:example>

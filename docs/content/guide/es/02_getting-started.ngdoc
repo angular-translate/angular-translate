@@ -90,7 +90,7 @@ o, si se los carga remotamente, como objetos JSON. Así es como se vería una ta
 
 ```json
 {
-  "TRANSLATION_ID": "Una traducción en concreto, para un lenguaje en particular."
+  "CLAVE_DE_TRADUCCION": "Una traducción en concreto, para un lenguaje en particular."
 }
 ```
 
@@ -104,7 +104,7 @@ crear objetos JSON anidados:
 {
   "NAMESPACE": {
     "SUB_NAMESPACE": {
-       "TRANSLATION_ID1": "Esta es una traducción con namespace."
+       "OTRA_CLAVE_DE_TRADUCCION": "Esta es una traducción con namespace."
     }
   }
 }
@@ -170,10 +170,10 @@ Supongamos que tenemos una tabla de traducción como esta:
 
 <pre>
 var translations = {
-  ENCABEZADO: '¡Qué módulo asombroso!',
-  PARRAFO: '¡En serio!',
+  HEADLINE: '¡Qué módulo asombroso!',
+  PARAGRAPH: '¡En serio!',
   NAMESPACE: {
-    PARRAFO: '¡Y viene con funcionalidades extraordinarias!'
+    PARAGRAPH: '¡Y viene con funcionalidades extraordinarias!'
   }
 };
 </pre>
@@ -197,10 +197,10 @@ ha sido instanciado y usado. Este es el código en funcionamiento:
   <doc:source>
     <script>
       var translations = {
-        ENCABEZADO: '¡Qué módulo asombroso!',
-        PARRAFO: '¡En serio!',
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
         NAMESPACE: {
-          PARRAFO: '¡Y viene con funcionalidades extraordinarias!'
+          PARAGRAPH: '¡Y viene con funcionalidades extraordinarias!'
         }
       };
 

@@ -19,7 +19,7 @@ Cuando cree un serivcio de interpolación personalizado, hay muchas cosa que ya 
 Veamos cómo se vería si implementáramos un servicio de interpolación personalizado. Primero, simplemente implementemos la interfaz:
 
 <pre>
-app.factory('customInterpolation', function () {
+app.factory('interpolacionPersonalizada', function () {
 
   return {
 
@@ -38,10 +38,10 @@ app.factory('customInterpolation', function () {
 });
 </pre>
 
-Muy bien, esta es la estructura básica del servicio de interpolación. Ahora, agreguemos algo de lógica, de manera que angular-translate pueda hacer uso de ella una vez que incorporemos nuestro serrvicio de interpolación:
+Muy bien, esta es la estructura básica del servicio de interpolación. Ahora, agreguemos algo de lógica, de manera que angular-translate pueda hacer uso de ella una vez que incorporemos nuestro servicio de interpolación:
 
 <pre>
-app.factory('customInterpolation', function ($interpolate) {
+app.factory('interpolacionPersonalizada', function ($interpolate) {
 
   var $locale;
 
@@ -71,13 +71,13 @@ Así como hay métodos para almacenamientos (`useStorage()`) y  cargadores (`use
 en su aplicación.
 
 <pre>
-$translateProvider.useInterpolation('customInterpolation');
+$translateProvider.useInterpolation('interpolacionPersonalizada');
 </pre>
 
 Ahora su aplicación utiliza su interpolación personalizada por defecto. Sin embargo, como aprendió en capítulos anteriores, puede agregar su interpolación personalizada como opcional, para no perder las útiles funcionalidades de Angular:
 
 <pre>
-$translateProvider.addInterpolation('customInterpolation');
+$translateProvider.addInterpolation('interpolacionPersonalizada');
 </pre>
 
 Así es como se vería:
@@ -89,22 +89,22 @@ Así es como se vería:
 
       app.config(['$translateProvider', function ($translateProvider) {
         $translateProvider.preferredLanguage('en');
-        $translateProvider.useInterpolation('customInterpolation');
+        $translateProvider.useInterpolation('interpolacionPersonalizada');
 
         $translateProvider.translations('en', {
           HEADLINE: 'I\'m a headline',
           TEXT: 'I\'m using default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
           BUTTON_LANG_EN: 'English',
-          BUTTON_LANG_DE: 'German'
+          BUTTON_LANG_ES: 'Spanish'
         });
 
-        $translateProvider.translations('de', {
-          HEADLINE: 'Ich bin eine Überschrift',
-          TEXT: 'Ich benutze default interpolation {{ val + val }}',
-          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
-          BUTTON_LANG_EN: 'Englisch',
-          BUTTON_LANG_DE: 'Deutsch'
+        $translateProvider.translations('es', {
+          HEADLINE: 'Soy un encabezado',
+          TEXT: 'Uso la interpolación por defecto {{ val + val }}',
+          PLURAL: '{GENDER, select, male{A él le} female{A ella le} other{A ellos les}} gusta esto.',
+          BUTTON_LANG_EN: 'Inglés',
+          BUTTON_LANG_ES: 'Español'
         });
       }]);
 
@@ -115,7 +115,7 @@ Así es como se vería:
         };
       }]);
 
-      app.factory('customInterpolation', function ($interpolate) {
+      app.factory('interpolacionPersonalizada', function ($interpolate) {
 
         var $locale;
 
@@ -140,7 +140,7 @@ Así es como se vería:
       <p translate="HEADLINE"></p>
       <p translate="TEXT" translate-values="{ val: 5 }"></p>
 
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
     </div>
   </doc:source>
