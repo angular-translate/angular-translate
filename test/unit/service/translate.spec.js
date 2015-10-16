@@ -92,6 +92,9 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
+        .registerAvailableLanguageKeys(['en', 'en_EN'], {
+          'en_US': 'en_EN'
+        })
         .translations('en', translationMock)
         .translations('en', {
           'FOO': 'bar',
@@ -139,6 +142,10 @@ describe('pascalprecht.translate', function () {
 
     it('should have a method instant()', function () {
       expect($translate.instant).toBeDefined();
+    });
+
+    it('should have a method negotiateLocale()', function () {
+      expect($translate.negotiateLocale).toBeDefined();
     });
 
     it('should have a method isForceAsyncReloadEnabled()', function () {
@@ -199,6 +206,29 @@ describe('pascalprecht.translate', function () {
 
       it('should return \'.\' if no delimiter is specified', function () {
         expect($translate.nestedObjectDelimeter()).toEqual('.');
+      });
+    });
+
+    describe('$translate#negotiateLocale()', function() {
+
+      it('should return undefined if no key is specified', function () {
+        expect($translate.negotiateLocale()).toEqual(undefined);
+      });
+
+      it('should return language key if registered', function () {
+        expect($translate.negotiateLocale('en')).toEqual('en');
+      });
+
+      it('should return resolved alias', function () {
+        expect($translate.negotiateLocale('en_US')).toEqual('en_EN');
+      });
+
+      it('should return matching registered language if lang_REGION doesn\'t match', function () {
+        expect($translate.negotiateLocale('en_GB')).toEqual('en');
+      });
+
+      it('should return undefined if key doesn\'t resolve to an alias or registered language', function () {
+        expect($translate.negotiateLocale('foo')).toEqual(undefined);
       });
     });
 
