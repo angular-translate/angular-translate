@@ -19,7 +19,7 @@ claves en la capa de vista, sin que el controlador sepa nada sobre ellas. Esto, 
 Usar un filtro en Angular es bastante simple. Se puede leer todo lo que hace falta
 [aquí](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters).
 
-Lo mismo corre para el filtro `translate` de angular-translate. Ahora podemos actualizar nuestro
+Lo mismo ocurre para el filtro `translate` de angular-translate. Ahora podemos actualizar nuestro
 ejemplo en [Uso del servicio $translate](#/guide/03_using-translate-service#generalusage)
 simplemente transfiriendo la lógica desde el controlador hacia nuestro filtro `translate`.
 El filtro funcionaría así:
