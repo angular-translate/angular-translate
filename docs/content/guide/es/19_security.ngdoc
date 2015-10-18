@@ -4,7 +4,7 @@
 
 # Códigos de escape (escape sequences) al usar contenido variable
 
-En lo referente al output o salida normales, AgularJS se asegura de que la salida haya sido procesada con códigos de escape, como corresponde. Sin embargo, cuando se usa `angular-translate`, el resultado no será "escapado" correctamente. Esto significa que su aplicación es vulnerable contra graves ataques.
+En lo referente al output o salida normales, AngularJS se asegura de que la salida haya sido procesada con códigos de escape, como corresponde. Sin embargo, cuando se usa `angular-translate`, el resultado no será "escapado" correctamente. Esto significa que su aplicación es vulnerable contra graves ataques.
 (véase: [OWASP](https://www.owasp.org/index.php/Cross_site_scripting)).
 
 ## Uso general

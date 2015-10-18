@@ -28,7 +28,7 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 }]);
 </pre>
 
-Ahora, para traducir sus contenidos con `$translate`, lo únique que usted tiene que hacer, es
+Ahora, para traducir sus contenidos con `$translate`, lo único que usted tiene que hacer, es
 pasar una "translation ID" (clave de traducción), la cual debería haber sido registrada anteriormente
  con `$translateProvider`. Como puede ser que esté habiendo alguna carga asincrónica mientras esto pasa
  (luego cubriremos eso más en detalle), el servicio `$translate` se comporta de manera asincrónica y devuelve una "promise" (promesa) que, para la clave dada, o bien se resuelve con la traducción, o bien es rechazada.
@@ -93,7 +93,7 @@ que hayan sido hechas invocando `$translate` directamente, no se actualizarán c
 de ejecución.
 
 Esto se puede arreglar, simplemente envolviendo el llamado a `$translate` en el callback de un evento
-`$translateChangeSuccess` del objeto `$rootScope`, el cual se dispara cada vez que un canbio en la traducción
+`$translateChangeSuccess` del objeto `$rootScope`, el cual se dispara cada vez que un cambio en la traducción
 se produce exitosamente.
 Una vez que se cambió, usted puede simplemente volver a ejecutar el código que da las traducciones deseadas.
 
@@ -111,7 +111,7 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
 </pre>
 
 ¿Por qué utilizar `$rootScope` en lugar de simplemente `$scope`? angular-translate sólo efectúa sus
- `$emit`a nivel de `$rootScope`, por razones de performance.
+ `$emit`a nivel de `$rootScope`, por razones de rendimiento.
  Vea [StackOverflow](http://stackoverflow.com/a/19498009/288703) para más información.
 
 Este es un ejemplo que anda:
