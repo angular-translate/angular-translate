@@ -345,7 +345,7 @@ describe('pascalprecht.translate', function () {
           it('test', inject(function ($window, $translate) {
             $translateProvider.determinePreferredLanguage(function(locale) {
               if (local === 'en-us') {
-                return 'en_US'
+                return 'en_US';
               }
             });
             expect($translate.use()).toEqual('en_US');
