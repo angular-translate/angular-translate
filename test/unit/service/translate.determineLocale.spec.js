@@ -337,6 +337,20 @@ describe('pascalprecht.translate', function () {
             expect($translate.use()).toEqual('en');
           }));
         });
+        
+        describe('should pass the locale to the custom func', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+          }));
+          it('test', inject(function ($window, $translate) {
+            $translateProvider.determinePreferredLanguage(function(locale) {
+              if (local === 'en-us') {
+                return 'en_US'
+              }
+            });
+            expect($translate.use()).toEqual('en_US');
+          }));
+        });
       });
 
     });
