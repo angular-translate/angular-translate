@@ -41,7 +41,6 @@ Since angular-translate has some dependencies when developing it, you can just i
 
 `
 $ npm install
-
 $ bower install
 `
 
