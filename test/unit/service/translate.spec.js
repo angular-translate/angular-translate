@@ -1950,8 +1950,8 @@ describe('pascalprecht.translate', function () {
         .useMissingTranslationHandler('customHandler');
 
       $provide.factory('customHandler', function () {
-        return function (translationId, language, params) {
-          missingTranslations[translationId] = { lang: language, params: params };
+        return function (translationId, language, params, defaultTranslation) {
+          missingTranslations[translationId] = { lang: language, params: params, defaultTranslation: defaultTranslation };
         };
       });
 
@@ -1973,7 +1973,8 @@ describe('pascalprecht.translate', function () {
       expect(missingTranslations).toEqual({
         'NOT_EXISTING_TRANSLATION_ID': {
           lang: 'en',
-          params: {}
+          params: {},
+          defaultTranslation: undefined
         }
       });
     });
@@ -1985,7 +1986,21 @@ describe('pascalprecht.translate', function () {
           lang: 'en',
           params: {
             name: 'name'
-          }
+          },
+          defaultTranslation: undefined
+        }
+      });
+    });
+
+    it('should pass on defaultTranslationText to missingTranslationHandler', function () {
+      $translate('NOT_EXISTING_TRANSLATION_ID', {name: 'name'}, '', 'DEFAULT');
+      expect(missingTranslations).toEqual({
+        'NOT_EXISTING_TRANSLATION_ID': {
+          lang: 'en',
+          params: {
+            name: 'name'
+          },
+          defaultTranslation: 'DEFAULT'
         }
       });
     });
