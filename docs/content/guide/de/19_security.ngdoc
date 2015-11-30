@@ -22,6 +22,8 @@ Derzeit gibt es folgende Standardstrategien:
 * `sanitizeParameters`: bereinigt HTML der Inhalte von Interpolation Parametern mittels `$sanitize`
 * `escapeParameters`: escaped HTML der Inhalte von Interpolation Parametern
 
+**Momentan gibt es einen Defekt mit der `sanitize` Strategie, durch den UTF-8 Entities doppelt encodiert werden. Empfehlung: Die `escape` Strategie verwenden, solange bis dies behoben ist.**
+
 Darüberhinaus gibt es noch folgende, welche aber nur noch für Version zur Verfügung stehen:
 * `null`: nichts, unsicherer Standard (wird in 3.0 entfernt)
 * `escaped`: Synonym für 'escapeParameters' (seit 2.7.0, wird in 3.0 entfernt)
