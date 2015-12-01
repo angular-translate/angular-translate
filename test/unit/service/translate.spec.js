@@ -2175,6 +2175,50 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('$translate.instant (with fallback and not found indicators)', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      $translateProvider
+        .useLoader('customLoader')
+        .translations('en', {
+          'FOO': 'bar'
+        })
+        .translations('de', {
+          'FOO2': 'bar2'
+        })
+        .preferredLanguage('de')
+        .fallbackLanguage('en')
+        .translationNotFoundIndicator('-+-+');
+
+      $provide.factory('customLoader', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+
+          $timeout(function () {
+            deferred.resolve({});
+          }, 1000);
+
+          return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should return translation if translation id exist', function () {
+      expect($translate.instant('FOO')).toEqual('bar');
+      expect($translate.instant('FOO2')).toEqual('bar2');
+    });
+
+    it('should return translation id wrapped into not found indicators if translation id does not exist', function () {
+      expect($translate.instant('FOO3')).toEqual('-+-+ FOO3 -+-+');
+    });
+  });
+
   describe('$translate#determineTranslation with fallback for shortcuts', function () {
 
     var missingTranslations = {};
