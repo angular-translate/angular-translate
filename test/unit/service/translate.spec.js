@@ -92,13 +92,16 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
-        .registerAvailableLanguageKeys(['en', 'en_EN'], {
+        .registerAvailableLanguageKeys(['en', 'en_EN', 'de'], {
           'en_US': 'en_EN'
         })
         .translations('en', translationMock)
         .translations('en', {
           'FOO': 'bar',
           'BAR': 'foo'
+        })
+        .translations('de', {
+          'FOO': 'faa'
         })
         .preferredLanguage('en');
     }));
@@ -411,6 +414,42 @@ describe('pascalprecht.translate', function () {
       expect(value[0]).toEqual('Header');
       expect(value[1]).toEqual('2. Header');
     });
+
+    it('should use forceLanguage', function() {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $q.all([
+        $translate("FOO"),
+        $translate("FOO", null, null, null, 'de')
+      ]).then(function (translations) {
+        deferred.resolve(translations);
+      });
+
+      $rootScope.$digest();
+      expect(value[0]).toEqual('bar');
+      expect(value[1]).toEqual('faa');
+    });
+
+    it('should use forceLanguage with multiple trannslation ids', function() {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate(["FOO"], null, null, null, 'de').then(deferred.resolve);
+
+      $rootScope.$digest();
+      expect(value.FOO).toEqual('faa');
+    });
   });
 
   describe('$translate#nestedObjectDelimeter()', function () {
@@ -476,6 +515,23 @@ describe('pascalprecht.translate', function () {
       });
       $rootScope.$digest();
       expect(value).toEqual('Hello there!');
+    });
+
+    it('should be overriden by forceLanguage', function () {
+      var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+      $translate.use('en_EN');
+      $translate('YET_ANOTHER', null, null, null, 'de_DE').then(function (translation) {
+        deferred.resolve(translation);
+      });
+      $rootScope.$digest();
+      expect(value).toEqual('Hallo da!');
     });
 
   });
@@ -1200,6 +1256,22 @@ describe('pascalprecht.translate', function () {
           value = translation;
         });
         $translate('TRANSLATION__ID').then(function (translation) {
+          deferred.resolve(translation);
+        });
+
+        $rootScope.$digest();
+        expect(value).toEqual('bazinga');
+      });
+
+      it('should use fallback language when forceLanguage if translation id doesn\'t exist', function () {
+        var deferred = $q.defer(),
+            promise = deferred.promise,
+            value;
+
+        promise.then(function (translation) {
+          value = translation;
+        });
+        $translate('TRANSLATION__ID', null, null, null, 'de_DE').then(function (translation) {
           deferred.resolve(translation);
         });
 
@@ -2122,6 +2194,9 @@ describe('pascalprecht.translate', function () {
           'FOO': 'bar',
           'BAR': 'foo'
         })
+        .translations('de', {
+          'FOO': 'faa'
+        })
         .preferredLanguage('en');
     }));
 
@@ -2146,11 +2221,19 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('BLANK_VALUE')).toEqual('');
     });
 
-   it('should return translations of multiple translation ids', function () {
+    it('should return translations of multiple translation ids', function () {
       var result = $translate.instant(['FOO', 'FOO2', 'BLANK_VALUE']);
       expect(result.FOO).toEqual('bar');
       expect(result.FOO2).toEqual('FOO2');
       expect(result.BLANK_VALUE).toEqual('');
+    });
+
+    it('should use forceLanguage', function() {
+      expect($translate.instant('FOO', null, null, 'de')).toEqual('faa');
+    });
+
+    it('should use forceLanguage with multiple translation ids', function() {
+      expect($translate.instant(['FOO'], null, null, 'de').FOO).toEqual('faa');
     });
   });
 
@@ -2202,6 +2285,10 @@ describe('pascalprecht.translate', function () {
 
     it('should return translation id with default interpolator if translation id nost exist', function () {
       expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
+    });
+
+    it('should return translation id if translation id exist with forceLanguage', function () {
+      expect($translate.instant('FOO', null, null, 'de')).toEqual('bar');
     });
   });
 
@@ -2297,7 +2384,7 @@ describe('pascalprecht.translate', function () {
       $rootScope = _$rootScope_;
     }));
 
-    it('should invoke the translation method and return the sh1ortcut translation value', function () {
+    it('should invoke the translation method and return the shortcut translation value', function () {
       var deferred = $q.defer(),
         promise = deferred.promise,
         value;
