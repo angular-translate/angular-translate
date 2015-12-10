@@ -739,4 +739,45 @@ describe('pascalprecht.translate', function () {
       expect(element.attr('title')).toBe('Namespaced translation');
     });
   });
+
+  describe('translateLanguage forces language', function () {
+
+    var $compile, $rootScope, element;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': "Hello"
+        })
+        .translations('de', {
+          'HELLO': "Hallo"
+        })
+        .preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should use preferred without override', function () {
+      element = $compile('<translate>HELLO</translate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Hello');
+    });
+
+    it('should use forced language with override', function () {
+      $rootScope.translateLanguage = 'de';
+      element = $compile('<translate>HELLO</translate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Hallo');
+    });
+
+    it('should use forced language with translate-attr-*', function() {
+      $rootScope.translateLanguage = 'de';
+      element = $compile('<div translate translate-attr-title="HELLO" />')($rootScope);
+      $rootScope.$digest();
+      expect(element.attr('title')).toBe('Hallo');
+    });
+  });
 });

@@ -89,28 +89,28 @@ describe('pascalprecht.translate', function () {
       expect(value[5]).toEqual('10');
       expect(value[6]).toEqual('55');
     });
-	  
-	it('should not throw errors when translation id is not a string', function() {
-		var value = [
-			$translate(4.5),
-			$translate(4),
-			$translate([]),
-			$translate({}),
-			$translate(true),
-			$translate(null),
-			$translate(undefined)	
-		];
-		
-		expect(value[0]).toEqual('4.5');
-		expect(value[1]).toEqual('4');
-		/* I don't care what these values are, as long as $translate doesn't throw an error.
-		expect(value[2]).toEqual({});
-		expect(value[3]).toEqual('[object Object]');	
-		expect(value[4]).toEqual('true');
-		expect(value[5]).toEqual(null);
-		expect(value[6]).toEqual(undefined);
-		*/
-	});
+
+  it('should not throw errors when translation id is not a string', function() {
+    var value = [
+      $translate(4.5),
+      $translate(4),
+      $translate([]),
+      $translate({}),
+      $translate(true),
+      $translate(null),
+      $translate(undefined)
+    ];
+
+    expect(value[0]).toEqual('4.5');
+    expect(value[1]).toEqual('4');
+    /* I don't care what these values are, as long as $translate doesn't throw an error.
+    expect(value[2]).toEqual({});
+    expect(value[3]).toEqual('[object Object]');
+    expect(value[4]).toEqual('true');
+    expect(value[5]).toEqual(null);
+    expect(value[6]).toEqual(undefined);
+    */
+  });
 
     if (angular.version.major === 1 && angular.version.minor <= 2) {
       // Until and including AJS 1.2, a filter was bound to a context (current scope). This was removed in AJS 1.3
@@ -283,5 +283,38 @@ describe('pascalprecht.translate', function () {
         }, 100);
       });
     }
+  });
+
+  describe('filter can receive a forced language', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': 'Hello'
+        })
+        .translations('de', {
+          'HELLO': 'Hallo'
+        })
+        .preferredLanguage('en');
+    }));
+
+    var $translate, $rootScope, $compile;
+    beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+      $translate = _$translate_;
+    }));
+
+    it('should use preferred without override', function () {
+      var element = $compile('<div>{{"HELLO" | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Hello');
+    });
+
+    it('should use forced with override', function () {
+      var element = $compile('<div>{{"HELLO" | translate:null:null:"de"}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Hallo');
+    });
   });
 });

@@ -58,6 +58,7 @@ module.exports = function (grunt) {
         'src/directive/translate.js',
         'src/directive/translate-cloak.js',
         'src/directive/translate-namespace.js',
+        'src/directive/translate-language.js',
         'src/filter/translate.js',
         'src/service/translationCache.js'
       ],
