@@ -10,8 +10,8 @@
 請安裝以下工具：
 
 - [Grunt](HTTP://gruntjs.com)
-- [Karma Testrunner](HTTP://karma-runner.github.com/0.8/index.html)
-- [Bower](HTTPs://github.com/twitter/bower)
+- [Karma Testrunner](https://karma-runner.github.io/)
+- [Bower](http://bower.io/)
 
 ## 通過 Bower 安裝
 

@@ -11,8 +11,8 @@ envisager de les installer sur votre machine pour s'assurer que tout fonctionne 
 Veuillez installer les outils suivants :
 
 - [Grunt](http://gruntjs.com)
-- [Karma Testrunner](http://karma-runner.github.com/0.8/index.html)
-- [Bower](https://github.com/twitter/bower)
+- [Karma Testrunner](https://karma-runner.github.io/)
+- [Bower](http://bower.io/)
 
 
 ## Installation via Bower
@@ -25,7 +25,7 @@ $ bower install angular-translate
 ```
 
 Ceci installera un package dans votre répertoire de composant. Vous pouvez regarder le
-dépôt du package de bower [ici](https://github.com/PascalPrecht/bower-angular-translate).
+dépôt du package de bower [ici](https://github.com/angular-translate/bower-angular-translate).
 Comme vous pouvez le voir, le contenu est réduit au plus important : le code source
 à des fins de développement et bien sur une version pour la production.
 
@@ -35,7 +35,7 @@ Une autre façon d'obtenir la source de angular-translate, c'est de cloner l'ens
 du dépôt depuis GitHub.
 
 ```
-$ git clone git://github.com/PascalPrecht/angular-translate.git
+$ git clone git://github.com/angular-translate/angular-translate.git
 ```
 Ainsi vous avez maintenant un clone complet du dépôt, ainsi que l'historique
 de toute l'évolution du développement de angular-translate. Avec le code, faites ce
