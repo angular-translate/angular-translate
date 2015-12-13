@@ -7,6 +7,9 @@
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
   },
+  "engines": {
+    "node": ">=4.2"
+  },
   "scripts": {
     "prepublish": "bower install",
     "shipit": "bower install && bower update && grunt prepare-release",
