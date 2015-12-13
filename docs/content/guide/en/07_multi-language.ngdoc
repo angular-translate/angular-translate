@@ -36,7 +36,7 @@ $translateProvider.translations('en', {
 });
 </pre>
 
-Now, to add a second translation table for another language, let's say german, just
+Now, to add a second translation table for another language, let's say German, just
 do the same with a different language key:
 
 <pre>
@@ -58,11 +58,11 @@ has to know which one to use. This is where a new method of `$translateProvider`
 comes in. `preferredLanguage()` tells angular-translate which of the registered
 languages is the one that should be used by default. It expects an argument with
 the value of the language key, which points to a certain translation table. So,
-to tell an app it should use german rather than english as first language, extend
+to tell an app it should use German rather than English as first language, extend
 the code like this:
 
 <pre>
-// tells angular-translate to use the german language
+// tells angular-translate to use the German language
 $translateProvider.preferredLanguage('de');
 </pre>
 
@@ -144,7 +144,7 @@ angular.module('myApp').controller('Ctrl', ['$translate', '$scope', function ($t
 </pre>
 
 To get a feeling for how it would work in a sample app, we update our app
-accordingly. First, we add another translation table for the german language and
+accordingly. First, we add another translation table for the German language and
 add two new translation IDs for buttons we want to add later:
 
 <pre>
@@ -155,8 +155,8 @@ var translationsEN = {
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'german',
-  BUTTON_LANG_EN: 'english'
+  BUTTON_LANG_DE: 'German',
+  BUTTON_LANG_EN: 'English'
 };
 
 var translationsDE= {
@@ -166,13 +166,13 @@ var translationsDE= {
   PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
   PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'deutsch',
-  BUTTON_LANG_EN: 'englisch'
+  BUTTON_LANG_DE: 'Deutsch',
+  BUTTON_LANG_EN: 'Englisch'
 };
 </pre>
 
-After that, we update the registration of the english translation table, that it
-has a corresponding language key and tell angular-translate to use english as
+After that, we update the registration of the English translation table, that it
+has a corresponding language key and tell angular-translate to use English as
 default language:
 
 <pre>
@@ -215,9 +215,9 @@ Et voilà! We now have an app with multi language support!
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        MISSING_TRANSLATION: 'Oops! I have not been translated into German...',
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
 
       var translationsDE= {
@@ -228,8 +228,8 @@ Et voilà! We now have an app with multi language support!
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
         // MISSING_TRANSLATION is ... missing :)
-        BUTTON_LANG_DE: 'deutsch',
-        BUTTON_LANG_EN: 'englisch'
+        BUTTON_LANG_DE: 'Deutsch',
+        BUTTON_LANG_EN: 'Englisch'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);

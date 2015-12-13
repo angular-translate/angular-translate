@@ -44,7 +44,7 @@ $translateProvider.translations('de', {
 它指向一個特定的變換錶的值。所以要告訴一個應用程序應該使用德語而不是英語作為第一語言，延長代碼如此：
 
 <pre>
-// tells angular-translate to use the german language
+// tells angular-translate to use the German language
 $translateProvider.preferredLanguage('de');
 </pre>
 
@@ -112,8 +112,8 @@ var translationsEN = {
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'german',
-  BUTTON_LANG_EN: 'english'
+  BUTTON_LANG_DE: 'German',
+  BUTTON_LANG_EN: 'English'
 };
 
 var translationsDE= {
@@ -123,8 +123,8 @@ var translationsDE= {
   PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
   PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
   VARIABLE_REPLACEMENT: 'Hi {{name}}',
-  BUTTON_LANG_DE: 'deutsch',
-  BUTTON_LANG_EN: 'englisch'
+  BUTTON_LANG_DE: 'Deutsch',
+  BUTTON_LANG_EN: 'Englisch'
 };
 </pre>
 
@@ -169,9 +169,9 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        MISSING_TRANSLATION: 'Oops! I have not been translated into german...',
-        BUTTON_LANG_DE: 'german',
-        BUTTON_LANG_EN: 'english'
+        MISSING_TRANSLATION: 'Oops! I have not been translated into German...',
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
       };
 
       var translationsDE= {
@@ -182,8 +182,8 @@ app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
         VARIABLE_REPLACEMENT: 'Hi {{name}}',
         // MISSING_TRANSLATION is ... missing :)
-        BUTTON_LANG_DE: 'deutsch',
-        BUTTON_LANG_EN: 'englisch'
+        BUTTON_LANG_DE: 'Deutsch',
+        BUTTON_LANG_EN: 'Englisch'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);

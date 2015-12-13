@@ -34,16 +34,16 @@ $translateProvider.useMissingTranslationHandlerLog();
           HEADLINE: 'I\'m a headline',
           TEXT: 'I\'m using default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
-          BUTTON_LANG_EN: 'english',
-          BUTTON_LANG_DE: 'german'
+          BUTTON_LANG_EN: 'English',
+          BUTTON_LANG_DE: 'German'
         });
 
         $translateProvider.translations('de', {
           HEADLINE: 'Ich bin eine Überschrift',
           TEXT: 'Ich benutze default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
-          BUTTON_LANG_EN: 'englisch',
-          BUTTON_LANG_DE: 'deutsch'
+          BUTTON_LANG_EN: 'Englisch',
+          BUTTON_LANG_DE: 'Deutsch'
         });
       }]);
 
