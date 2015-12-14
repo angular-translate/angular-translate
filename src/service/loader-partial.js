@@ -307,6 +307,7 @@ function $translatePartialLoader() {
       return $q.all(loaders)
         .then(function() {
           var table = {};
+          prioritizedParts = getPrioritizedParts();
           angular.forEach(prioritizedParts, function(part) {
             deepExtend(table, part.tables[options.key]);
           });
