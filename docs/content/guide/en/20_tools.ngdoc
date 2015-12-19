@@ -15,6 +15,11 @@ Take a look!
 
 [grunt-angular-translate on GitHub](http://github.com/angular-translate/grunt-angular-translate)
 
+## webpack-angular-translate 
+
+Webpack loader that extracts the translation id's (with the default text) from javascript and html files and creates a json-export. 
+[webpack-angular-translate on GitHub](https://github.com/DatenMetzgerX/webpack-angular-translate)
+
 ## grunt-po2json-angular-translate
 
 This is a grunt task created to help you to convert your po-formatted strings into a format compatible with angular-translate.
