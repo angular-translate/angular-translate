@@ -52,8 +52,7 @@ function $translateStaticFilesLoader($q, $http) {
         });
     };
 
-    var deferred = $q.defer(),
-        promises = [],
+    var promises = [],
         length = options.files.length;
 
     for (var i = 0; i < length; i++) {
@@ -64,7 +63,7 @@ function $translateStaticFilesLoader($q, $http) {
       }));
     }
 
-    $q.all(promises)
+    return $q.all(promises)
       .then(function (data) {
         var length = data.length,
             mergedData = {};
@@ -75,12 +74,8 @@ function $translateStaticFilesLoader($q, $http) {
           }
         }
 
-        deferred.resolve(mergedData);
-      }, function (data) {
-        deferred.reject(data);
+        return mergedData;
       });
-
-    return deferred.promise;
   };
 }
 
