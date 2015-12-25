@@ -295,7 +295,6 @@ function $translatePartialLoader() {
       }
 
       var loaders = [],
-          deferred = $q.defer(),
           prioritizedParts = getPrioritizedParts();
 
       angular.forEach(prioritizedParts, function(part) {
@@ -305,19 +304,16 @@ function $translatePartialLoader() {
         part.urlTemplate = options.urlTemplate;
       });
 
-      $q.all(loaders)
+      return $q.all(loaders)
         .then(function() {
           var table = {};
           angular.forEach(prioritizedParts, function(part) {
             deepExtend(table, part.tables[options.key]);
           });
-          deferred.resolve(table);
+          return table;
         }, function() {
-          deferred.reject(options.key);
-        }
-      );
-
-      return deferred.promise;
+          return $q.reject(options.key);
+        });
     };
 
     /**
