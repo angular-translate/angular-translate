@@ -126,7 +126,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
         scope.preText = '';
         scope.postText = '';
         scope.translateNamespace = getTranslateNamespace(scope);
-        var translationIds = {};
+        scope.translationIds = {};
 
         var initInterpolationParams = function (interpolateParams, iAttr, tAttr) {
           // initial setup
@@ -164,26 +164,26 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
             if (angular.isArray(interpolateMatches)) {
               scope.preText = interpolateMatches[1];
               scope.postText = interpolateMatches[3];
-              translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
+              scope.translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
               var watcherMatches = iElementText.match(watcherRegExp);
               if (angular.isArray(watcherMatches) && watcherMatches[2] && watcherMatches[2].length) {
                 observeElementTranslation._unwatchOld = scope.$watch(watcherMatches[2], function (newValue) {
-                  translationIds.translate = newValue;
+                  scope.translationIds.translate = newValue;
                   updateTranslations();
                 });
               }
             } else {
-              translationIds.translate = iElementText;
+              scope.translationIds.translate = iElementText;
             }
           } else {
-            translationIds.translate = translationId;
+            scope.translationIds.translate = translationId;
           }
           updateTranslations();
         };
 
         var observeAttributeTranslation = function (translateAttr) {
           iAttr.$observe(translateAttr, function (translationId) {
-            translationIds[translateAttr] = translationId;
+            scope.translationIds[translateAttr] = translationId;
             updateTranslations();
           });
         };
@@ -199,7 +199,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
           } else {
             // case of regular attribute
             if (translationId !== '' || !firstAttributeChangedEvent) {
-              translationIds.translate = translationId;
+              scope.translationIds.translate = translationId;
               updateTranslations();
             }
           }
@@ -243,10 +243,10 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
 
         // Master update function
         var updateTranslations = function () {
-          for (var key in translationIds) {
+          for (var key in scope.translationIds) {
 
-            if (translationIds.hasOwnProperty(key) && translationIds[key] !== undefined) {
-              updateTranslation(key, translationIds[key], scope, scope.interpolateParams, scope.defaultText, scope.translateNamespace);
+            if (scope.translationIds.hasOwnProperty(key) && scope.translationIds[key] !== undefined) {
+              updateTranslation(key, scope.translationIds[key], scope, scope.interpolateParams, scope.defaultText, scope.translateNamespace);
             }
           }
         };
