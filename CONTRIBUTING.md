@@ -48,8 +48,8 @@ the development process. The following grunt tasks are provided:
 #### <code>grunt</code>
 
 Running <code>grunt</code> without any parameters will actually execute the registered
-default task. This task is currently nothing more than a **lint task**, to make sure
-that your JavaScript code is written well.
+default task. This task is running both a **lint task** and a **test task**. Both tasks
+make sure your JavaScript is written well.
 
 #### <code>grunt test</code>
 
