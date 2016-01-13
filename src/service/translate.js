@@ -1484,7 +1484,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             if (defaultTranslationText) {
               deferred.resolve(defaultTranslationText);
               } else {
-                deferred.resolve(missingTranslationHandlerTranslation);
+                deferred.reject(missingTranslationHandlerTranslation);
               }
           } else {
             if (defaultTranslationText) {
