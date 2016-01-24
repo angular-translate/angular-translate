@@ -10,8 +10,8 @@
 при разработке `angular-translate`:
 
 - [Grunt](http://gruntjs.com)
-- [Karma Testrunner](http://karma-runner.github.com/0.8/index.html)
-- [Bower](https://github.com/twitter/bower)
+- [Karma Testrunner](https://karma-runner.github.io/)
+- [Bower](http://bower.io/)
 
 
 ## Установка при помощи Bower
@@ -24,7 +24,7 @@ $ bower install angular-translate
 ```
 
 Эта команда установит пакет в вашу директорию для компонентов.
-[Тут](https://github.com/PascalPrecht/bower-angular-translate) вы можете следить за репозиторием
+[Тут](https://github.com/angular-translate/bower-angular-translate) вы можете следить за репозиторием
 пакета bower. Как видите, он разбит на значимые части: сырые исходники, для разработки и конечного
 использования.
 
@@ -33,14 +33,14 @@ $ bower install angular-translate
 Исходный код angular-translate также можно получить путем клонирования с GitHub целого репозитория.
 
 ```
-$ git clone git://github.com/PascalPrecht/angular-translate.git
+$ git clone git://github.com/angular-translate/angular-translate.git
 ```
 
 Теперь у вас есть полноценный клон репозитория, включающий историю и все, что когда-либо происходило
 при разработке angular-translate. Делайте с кодом все, что хотите.
 
 Так как angular-translate при разработке требует некоторые зависимости, вы легко можете установить
-их все вместе. Для установки всех необходимых зависимостей просто запустите следующие команды в 
+их все вместе. Для установки всех необходимых зависимостей просто запустите следующие команды в
 клоне репозитория angular-translate.
 
 ```

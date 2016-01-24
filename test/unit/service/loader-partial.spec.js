@@ -868,6 +868,61 @@ describe('pascalprecht.translate', function() {
         $httpBackend.flush();
       });
     });
+
+    it('should handle the parts being resolve out of the order which they were called', function() {
+      var $q,
+        requests = [];
+
+      module(function($provide) {
+        $provide.value('$http', function() {
+          var request = $q.defer();
+
+          requests.push(request);
+
+          return request.promise;
+        });
+      });
+
+      inject(function($translatePartialLoader, _$q_, $rootScope) {
+        var table;
+
+        $q = _$q_;
+
+        $translatePartialLoader.addPart('part1');
+        $translatePartialLoader.addPart('part2');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json'
+        }).then(function(data) {
+          table = data;
+        }, function() {
+          table = {};
+        });
+
+        $translatePartialLoader.addPart('part3');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate : '/locales/{part}-{lang}.json'
+        }).then(function(data) {
+          table = data;
+        }, function() {
+          table = {};
+        });
+
+        requests[2].resolve({data: {key1: 'value1'}});
+        requests[3].resolve({data: {key2: 'value2'}});
+        requests[4].resolve({data: {key3: 'value3'}});
+        $rootScope.$digest();
+
+        requests[0].resolve({data: {key1: 'value1'}});
+        requests[1].resolve({data: {key2: 'value2'}});
+        $rootScope.$digest();
+
+        expect(table.key1).toEqual('value1');
+        expect(table.key2).toEqual('value2');
+        expect(table.key3).toEqual('value3');
+      });
+    });
   });
 
 });

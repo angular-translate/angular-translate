@@ -1,17 +1,21 @@
 {
   "name": "angular-translate",
-  "version": "2.8.1",
+  "version": "2.9.0",
   "description": "A translation module for AngularJS",
   "main": "dist/angular-translate.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
   },
+  "engines": {
+    "node": ">=4.2"
+  },
   "scripts": {
     "prepublish": "bower install",
     "shipit": "bower install && bower update && grunt prepare-release",
     "test": "grunt install-test && grunt test",
     "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
+    "clean-test-scopes": "for f in test_scopes/*; do (cd $f; rm -rf bower_components); done",
     "build-site": "npm run -q build-site-all-languages; npm run -q build-site-plato-report",
     "build-site-all-languages": "./build_tools/generate_site.sh",
     "build-site-by-language": "./build_tools/generate_site_by_language.sh",
@@ -63,5 +67,8 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "load-grunt-tasks": "~0.2.0",
     "plato": "^1.5.0"
+  },
+  "dependencies": {
+    "angular": ">=1.2.26 <=1.5"
   }
 }

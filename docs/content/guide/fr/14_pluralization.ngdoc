@@ -229,8 +229,8 @@ Voici un exemple de travail (Veuillez noter : Il y a aussi un fichier intégré 
           HEADLINE: 'I\'m a headline',
           TEXT: 'I\'m using default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
-          BUTTON_LANG_FR: 'french',
-          BUTTON_LANG_EN: 'english'
+          BUTTON_LANG_FR: 'French',
+          BUTTON_LANG_EN: 'English'
         });
       }]);
 

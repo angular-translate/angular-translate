@@ -387,8 +387,8 @@ laissez votre serveur envoyer le JSON comme JSON et non comme du texte brut !
   "PASSED_AS_ATTRIBUTE": "I'm passed as attribute value, cool ha?",
   "PASSED_AS_INTERPOLATION": "Beginners! I'm interpolated!",
   "VARIABLE_REPLACEMENT": "Hi {{name}}",
-  "BUTTON_LANG_EN": "french",
-  "BUTTON_LANG_FR": "english"
+  "BUTTON_LANG_EN": "French",
+  "BUTTON_LANG_FR": "English"
 }
 </pre>
 

@@ -5,7 +5,7 @@
     "HEADER" : "The module can lazzy load a translations table when it's needed.",
     "SUBHEADER" : "So, you can load only those languages, which will be used.",
     "TEXT" : "This is only some text to fill the space.",
-    "ONLY_EN": "only english",
+    "ONLY_EN": "only English",
     "EN_RU": "EN and RU - EN Edition",
     "ARRAY": [
       "Item 1",
