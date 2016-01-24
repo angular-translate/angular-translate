@@ -1,3 +1,28 @@
+<a name="2.9.0"></a>
+# [2.9.0](https://github.com/angular-translate/angular-translate/compare/2.8.1...v2.9.0) (2016-01-24)
+
+
+### Bug Fixes
+
+* **$translate:** apply notFoundIndicators only when all configured language checked in $translate ([25b13c4](https://github.com/angular-translate/angular-translate/commit/25b13c4)), closes [#1314](https://github.com/angular-translate/angular-translate/issues/1314)
+* **directive:** add additional watcher validating cloak ([e7536b5](https://github.com/angular-translate/angular-translate/commit/e7536b5)), closes [#1287](https://github.com/angular-translate/angular-translate/issues/1287)
+* **directive:** enforce update on default text change only ([ea94acd](https://github.com/angular-translate/angular-translate/commit/ea94acd))
+* **docs:** correct all occurrences of language names PR #1243 ([5f89d55](https://github.com/angular-translate/angular-translate/commit/5f89d55))
+* **docs:** fix broken link ([e641fe4](https://github.com/angular-translate/angular-translate/commit/e641fe4))
+* **docs:** Fix some typos in spanish ([830a84b](https://github.com/angular-translate/angular-translate/commit/830a84b))
+* **docs:** refresh outdated link ([392cab0](https://github.com/angular-translate/angular-translate/commit/392cab0))
+* **package:** add missing run-scriptlet "clean-test-scopes" ([c22c727](https://github.com/angular-translate/angular-translate/commit/c22c727))
+* **service:** partial loader service refetches list of parts ([069eafd](https://github.com/angular-translate/angular-translate/commit/069eafd)), closes [#1326](https://github.com/angular-translate/angular-translate/issues/1326)
+
+### Features
+
+* **build:** update test scope "AJS 1.5" using rc0 ([26cdc05](https://github.com/angular-translate/angular-translate/commit/26cdc05))
+* **dependencies:** add `angular` as the required dependency ([475a9b6](https://github.com/angular-translate/angular-translate/commit/475a9b6))
+* **service:** expose `$translate.negotiateLocale` being public ([9247000](https://github.com/angular-translate/angular-translate/commit/9247000))
+* **service:** force language used for translating ([e591462](https://github.com/angular-translate/angular-translate/commit/e591462))
+
+
+
 <a name="2.8.1"></a>
 ## [2.8.1](https://github.com/angular-translate/angular-translate/compare/2.8.0...v2.8.1) (2015-10-01)
 
