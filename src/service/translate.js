@@ -1083,7 +1083,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           };
           promiseResolved.displayName = 'promiseResolved';
 
-          promiseToWaitFor['finally'](promiseResolved, deferred.reject);
+          promiseToWaitFor['finally'](promiseResolved);
         }
         return deferred.promise;
       };
