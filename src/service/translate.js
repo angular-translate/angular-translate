@@ -1776,15 +1776,22 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           langPromises[key]['finally'](function () {
             clearNextLangAndPromise(key);
           });
-        } else if ($nextLang === key && langPromises[key]) {
+        } else if (langPromises[key]) {
           // we are already loading this asynchronously
           // resolve our new deferred when the old langPromise is resolved
           langPromises[key].then(function (translation) {
+            if (!$uses) {
+              useLanguage(translation.key);
+            }
             deferred.resolve(translation.key);
             return translation;
           }, function (key) {
-            deferred.reject(key);
-            return $q.reject(key);
+            // find first available fallback language if that request has failed
+            if (!$uses && $fallbackLanguage && $fallbackLanguage.length > 0) {
+              return $translate.use($fallbackLanguage[0]).then(deferred.resolve, deferred.reject);
+            } else {
+              return deferred.reject(key);
+            }
           });
         } else {
           deferred.resolve(key);
