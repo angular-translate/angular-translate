@@ -1543,7 +1543,7 @@ describe('pascalprecht.translate', function () {
         expect(fallbackLanguageResponded).toEqual(true);
       });
 
-      it('should set the fallback language as the preferred one failed', inject(function($rootScope) {
+      it('should set the fallback language as the preferred one', inject(function($rootScope) {
 
         var value;
 
