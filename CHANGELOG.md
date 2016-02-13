@@ -1,3 +1,13 @@
+<a name="2.9.1"></a>
+## [2.9.1](https://github.com/angular-translate/angular-translate/compare/2.9.0...v2.9.1) (2016-02-13)
+
+
+### Bug Fixes
+
+* **package:** redefine dependency version range (AJS 1.5) ([9ccce6b](https://github.com/angular-translate/angular-translate/commit/9ccce6b)), closes [#1394](https://github.com/angular-translate/angular-translate/issues/1394) [#1395](https://github.com/angular-translate/angular-translate/issues/1395) [#1397](https://github.com/angular-translate/angular-translate/issues/1397)
+
+
+
 <a name="2.9.0"></a>
 # [2.9.0](https://github.com/angular-translate/angular-translate/compare/2.8.1...v2.9.0) (2016-01-24)
 
