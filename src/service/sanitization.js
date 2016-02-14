@@ -247,7 +247,8 @@ function $translateSanitizationProvider () {
         stack = [];
       } else {
         if (stack.indexOf(value) > -1) {
-          throw new Error('pascalprecht.translate.$translateSanitization: Error cannot interpolate parameter due recursive object');
+          // Replace recursive object refs with undefined
+          return;
         }
       }
 

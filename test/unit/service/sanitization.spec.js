@@ -28,14 +28,21 @@ describe('pascalprecht.translate', function () {
     });
 
     describe('#sanitize', function () {
-      var parameters = {
+      var parameters, text, expectedParameters, expectedText, recursiveObj;
+      
+      beforeEach(function() {
+        parameters = {
           array: [
             {value: 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>'}
           ]
-        },
-        text = 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>',
-        expectedParameters,
-        expectedText;
+        };
+        expectedParameters = expectedText = undefined;
+        text = 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>';
+        recursiveObj = {
+          text: text
+        };
+        recursiveObj.self = recursiveObj;
+      });
 
       describe('with the default strategy', function () {
         it('should return params unchanged', function () {
@@ -90,40 +97,52 @@ describe('pascalprecht.translate', function () {
       describe('with the sanitizeParameters strategy', function () {
         beforeEach(function () {
           $translateSanitization.useStrategy('sanitizeParameters');
-        });
-
-        it('should $sanitize params', function () {
           expectedParameters = {
             array: [
               {value: 'This is <b>only an example with a <span>xss attack</span>!</b>'}
             ]
           };
+        });
+
+        it('should $sanitize params', function () {
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
 
         it('should return text unchanged', function () {
           expectedText = text;
           expect($translateSanitization.sanitize(text, 'text')).toEqual(expectedText);
+        });
+
+        it('should $sanitize recursive objects', function() {
+          parameters.self = parameters;
+          expectedParameters.self = undefined;
+          expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
       });
 
       describe('with the escapeParameters strategy', function () {
         beforeEach(function () {
           $translateSanitization.useStrategy('escapeParameters');
-        });
-
-        it('should htmlEscape params', function () {
           expectedParameters = {
             array: [
               {value: 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
             ]
           };
+        });
+
+        it('should htmlEscape params', function () {
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
 
         it('should return text unchanged', function () {
           expectedText = text;
           expect($translateSanitization.sanitize(text, 'text')).toEqual(expectedText);
+        });
+
+        it('should htmlEscape recursive objects', function() {
+          parameters.self = parameters;
+          expectedParameters.self = undefined;
+          expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
       });
 
