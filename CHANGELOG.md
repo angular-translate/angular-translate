@@ -1,3 +1,17 @@
+<a name="2.9.2"></a>
+## [2.9.2](https://github.com/angular-translate/angular-translate/compare/2.9.1...v2.9.2) (2016-02-21)
+
+
+### Bug Fixes
+
+* **package:** redefine dependency version range (AJS 1.5) ([94eb844](https://github.com/angular-translate/angular-translate/commit/94eb844)), closes [#1394](https://github.com/angular-translate/angular-translate/issues/1394) [#1395](https://github.com/angular-translate/angular-translate/issues/1395) [#1397](https://github.com/angular-translate/angular-translate/issues/1397)
+* **package:** redefine dependency version range (AJS 1.5) (fixup) ([20da73d](https://github.com/angular-translate/angular-translate/commit/20da73d)), closes [#1394](https://github.com/angular-translate/angular-translate/issues/1394) [#1395](https://github.com/angular-translate/angular-translate/issues/1395) [#1397](https://github.com/angular-translate/angular-translate/issues/1397)
+* **service:** avoid call stack size error, print proper message ([73ea6e3](https://github.com/angular-translate/angular-translate/commit/73ea6e3))
+* **service:** ensure fallback language can be selected as `$uses` ([40ad523](https://github.com/angular-translate/angular-translate/commit/40ad523))
+* **service:** remove invalid argument for promise.finally ([2d72908](https://github.com/angular-translate/angular-translate/commit/2d72908))
+
+
+
 <a name="2.9.1"></a>
 ## [2.9.1](https://github.com/angular-translate/angular-translate/compare/2.9.0...v2.9.1) (2016-02-13)
 
