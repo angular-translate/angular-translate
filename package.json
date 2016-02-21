@@ -1,6 +1,6 @@
 {
   "name": "angular-translate",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "description": "A translation module for AngularJS",
   "main": "dist/angular-translate.js",
   "repository": {
@@ -69,6 +69,6 @@
     "plato": "^1.5.0"
   },
   "dependencies": {
-    "angular": ">=1.2.26 <=1.5.0"
+    "angular": ">=1.2.26 <=1.6"
   }
 }
