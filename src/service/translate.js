@@ -41,6 +41,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       loaderCache,
       directivePriority = 0,
       statefulFilter = true,
+      postProcessFn,
+      $postProcessEnabledState,
       uniformLanguageTagResolver = 'default',
       languageTagResolver = {
         'default': function (tag) {
@@ -952,6 +954,50 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
   };
 
   /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translateProvider#postProcess
+     * @methodOf pascalprecht.translate.$translateProvider
+     *
+     * @description
+     * In some very special cases, a developer or translation agency might need an easy way
+     * to see the contexts, they're translating content for. To mark the keys and translations
+     * inside a page, the postProcessor gives the application developer the possibility to
+     * have such a behavior
+     *
+     * @param {Function=} fn Function to be called after the translation value has been set / resolved. The function
+     * itself will enrich every value being processed and then continue the normal resolver process
+     */
+  this.postProcess = function (fn) {
+    if (fn) {
+      postProcessFn = fn;
+    } else {
+      postProcessFn = undefined;
+    }
+    return this;
+  };
+
+  /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateProvider#postProcessEnabled
+       * @methodOf pascalprecht.translate.$translateProvider
+       *
+       * @description
+       * Additional function to trigger the functionality for the postProcessing (enabling / disabling)
+       * This is useful if you want to enable / disable this feature depending on the environment / stage
+       * your application is running on
+       *
+       * @param {boolean} sets the postProcess function to enabled or disabled (true / false) or a default false
+       */
+  this.postProcessEnable = function (flag) {
+    if (flag === undefined) {
+      $postProcessEnabledState = false;
+    } else {
+      $postProcessEnabledState = flag;
+    }
+    return this;
+  };
+
+  /**
    * @ngdoc object
    * @name pascalprecht.translate.$translate
    * @requires $interpolate
@@ -1291,7 +1337,13 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
               getFallbackTranslation(langKey, translation.substr(2), interpolateParams, Interpolator)
                 .then(deferred.resolve, deferred.reject);
             } else {
-              deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
+              var interpolatedValue = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+              if (postProcessFn && $postProcessEnabledState) {
+                interpolatedValue = postProcessFn(translationId, translationTable[translationId], interpolatedValue, interpolateParams, langKey);
+              }
+
+              deferred.resolve(interpolatedValue);
+
             }
             Interpolator.setLocale($uses);
           } else {
@@ -1379,7 +1431,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if (fallbackLanguageIndex < $fallbackLanguage.length) {
           var langKey = $fallbackLanguage[fallbackLanguageIndex];
           getFallbackTranslation(langKey, translationId, interpolateParams, Interpolator).then(
-            deferred.resolve,
+            function (data) {
+                deferred.resolve(data);
+            },
             function () {
               // Look in the next fallback language for a translation.
               // It delays the resolving by passing another promise to resolve.
@@ -1469,7 +1523,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             $translate(translation.substr(2), interpolateParams, interpolationId, defaultTranslationText, uses)
               .then(deferred.resolve, deferred.reject);
           } else {
-            deferred.resolve(Interpolator.interpolate(translation, interpolateParams));
+            //
+            var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams);
+            if (postProcessFn && $postProcessEnabledState) {
+              resolvedTranslation = postProcessFn(translationId, translation, resolvedTranslation, interpolateParams, uses);
+            }
+            deferred.resolve(resolvedTranslation);
           }
         } else {
           var missingTranslationHandlerTranslation;
