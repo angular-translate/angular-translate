@@ -2668,4 +2668,75 @@ describe('pascalprecht.translate', function () {
 
   });
 
+  describe('$translate#postprocess() with an enabled fallback language', function () {
+
+    describe('single post processDemo', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider
+        //.translations('de_DE', translationMock)
+          .translations('de_DE', {'ONLY_GERMAN' : 'DE_TRANS', 'BOTH' : 'BOTH_DE'})
+          .translations('en_EN', {'TRANSLATION__ID' : 'bazinga', 'BOTH' : 'BOTH_EN'})
+          .preferredLanguage('de_DE')
+          .fallbackLanguage('en_EN')
+          .postProcess(function (translationId, translation, interpolatedTranslation, params, lang) {
+            return translationId + ',' + lang + ',' + (interpolatedTranslation ? interpolatedTranslation : translation);
+          });
+      }));
+
+      var $translate, $q, $rootScope;
+
+      beforeEach(inject(function (_$translate_, _$q_, _$rootScope_) {
+        $translate = _$translate_;
+        $q = _$q_;
+        $rootScope = _$rootScope_;
+      }));
+
+      it('should return a formatted postprocessed string on fallback language', function () {
+        var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+        promise.then(function (translation) {
+          value = translation;
+        });
+        $translate('TRANSLATION__ID').then(function (translation) {
+          deferred.resolve(translation);
+        });
+
+        $rootScope.$digest();
+        expect(value).toEqual('TRANSLATION__ID,en_EN,bazinga');
+      });
+      it('should return a formatted postprocessed string on preferred language', function () {
+        var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+        promise.then(function (translation) {
+          value = translation;
+        });
+        $translate('ONLY_GERMAN').then(function (translation) {
+          deferred.resolve(translation);
+        });
+
+        $rootScope.$digest();
+        expect(value).toEqual('ONLY_GERMAN,de_DE,DE_TRANS');
+      });
+      it('should return a formatted postprocessed string on preferred language', function () {
+        var deferred = $q.defer(),
+          promise = deferred.promise,
+          value;
+
+        promise.then(function (translation) {
+          value = translation;
+        });
+        $translate('BOTH').then(function (translation) {
+          deferred.resolve(translation);
+        });
+
+        $rootScope.$digest();
+        expect(value).toEqual('BOTH,de_DE,BOTH_DE');
+      });
+    });
+  });
 });

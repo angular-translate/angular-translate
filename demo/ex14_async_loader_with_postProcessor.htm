@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+
+<head>
+  <meta charset="utf-8">
+  <title translate="load.predefined.TITLE">lazy load files together with postProcessor</title>
+  <style>body { text-align: center; }</style>
+</head>
+
+<body ng-controller="ctrl">
+
+  <p>
+    <a href="#" ng-click="setLang('en_US')">English</a>
+    |
+    <a href="#" ng-click="setLang('ru_RU')">Русский</a>
+  </p>
+
+  <h1 translate>load.predefined.HEADER</h1>
+  <h2 translate>load.predefined.SUBHEADER</h2>
+  <h3 translate>load.static.ONLY_RU</h3>
+  <script src="../bower_components/angular/angular.js"></script>
+  <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="../src/translate.js"></script>
+  <script src="../src/service/default-interpolation.js"></script>
+  <script src="../src/service/sanitization.js"></script>
+  <script src="../src/service/loader-static-files.js"></script>
+  <script src="../src/service/storage-key.js"></script>
+  <script src="../src/service/storage-cookie.js"></script>
+  <script src="../src/service/translate.js"></script>
+  <script src="../src/directive/translate.js"></script>
+  <script src="../src/filter/translate.js"></script>
+<script>
+angular.module('app', ['pascalprecht.translate', 'ngCookies'])
+
+.config(['$translateProvider', function($translateProvider) {
+
+  // Register a loader for the static files
+  // So, the module will search missing translation tables under the specified urls.
+  // Those urls are [prefix][langKey][suffix].
+  $translateProvider.useStaticFilesLoader({
+    prefix: 'l10n/',
+    suffix: '.json'
+  });
+
+  // Tell the module what language to use by default
+  $translateProvider.preferredLanguage('en_US');
+  $translateProvider.fallbackLanguage('ru_RU');
+
+  // Tell the module to store the language in the cookies
+  $translateProvider.useCookieStorage();
+
+  // Tell the module to postprocess the translations in success cases
+  $translateProvider.postProcess(function (translationId, translation, interpolatedTranslation, params, lang) {
+    return '<span style="color: #cccccc">' + translationId + '(' + lang + '):</span> ' +
+      (interpolatedTranslation ? interpolatedTranslation : translation);
+  });
+
+}])
+
+.controller('ctrl', ['$scope', '$translate', function($scope, $translate) {
+
+  $scope.setLang = function(langKey) {
+    // You can change the language during runtime
+    $translate.use(langKey);
+  };
+
+}]);
+</script>
+
+</body>
+</html>
