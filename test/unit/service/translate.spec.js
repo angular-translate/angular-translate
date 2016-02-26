@@ -2076,7 +2076,7 @@ describe('pascalprecht.translate', function () {
         expect(newValue).toEqual('bar');
       });
 
-      it('should clear completelly inactive translation tables', function () {
+      it('should clear completely inactive translation tables', function () {
         var value;
 
         function setValue(answer) {
@@ -2540,6 +2540,108 @@ describe('pascalprecht.translate', function () {
         expect(secondValue).toEqual('BAR'); // not found
       });
     });
+  });
+
+  describe('$translate#use() being changed to a fallback while having a fallback stack also async loaded', function () {
+
+    var fastButRequestedSecond = 'en_US',
+        slowButRequestedFirst = 'ab_CD',
+        expectedTranslation = 'Hello World',
+        notExpectedTranslation = 'foo bar bork bork bork',
+        onlyFirstTranslation = 'Only In First',
+        onlySecondTranslation = 'Only In Second',
+        fastRequestTime = 1000,
+        firstLanguageResponded = false,
+        secondLanguageResponded = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        $translateProvider.useLoader('customLoader');
+
+        $translateProvider.preferredLanguage(slowButRequestedFirst);
+        $translateProvider.fallbackLanguage(fastButRequestedSecond);
+
+        $provide.service('customLoader', function ($q, $timeout) {
+          return function (options) {
+            var deferred = $q.defer();
+            var locale = options.key;
+
+            if (locale === fastButRequestedSecond) {
+                $timeout(function () {
+                    secondLanguageResponded = true;
+                    deferred.resolve({
+                        greeting: expectedTranslation,
+                        onlySecond: onlySecondTranslation
+                    });
+                }, fastRequestTime);
+            }
+
+            if (locale === slowButRequestedFirst) {
+                $timeout(function() {
+                    firstLanguageResponded = true;
+                    deferred.resolve({
+                        greeting: notExpectedTranslation,
+                        onlyFirst: onlyFirstTranslation
+                    });
+                }, fastRequestTime * 4);
+            }
+
+            return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope) {
+      $translate = _$translate_;
+
+      $timeout(function () {
+        $translate.use(slowButRequestedFirst);
+      }, fastRequestTime / 2);
+
+      $timeout.flush();
+      $rootScope.$digest();
+    }));
+
+    it('should be requested the first language', function () {
+      expect(firstLanguageResponded).toEqual(true);
+    });
+
+    it('should be requested the second language', function () {
+      expect(secondLanguageResponded).toEqual(true);
+    });
+
+    it('should set the language to be the most recently requested one, not the most recently responded one', inject(function($rootScope, $q, $timeout) {
+
+        var value, firstValue, secondValue;
+
+      $timeout(function () {
+        $translate.use(fastButRequestedSecond).then(function (result) {
+          $translate('greeting').then(function (translation) {
+            value = translation;
+          });
+
+          $translate('onlyFirst').then(function (translation) {
+            firstValue = translation;
+          });
+
+          $translate('onlySecond').then(function (translation) {
+            secondValue = translation;
+          });
+        });
+
+
+
+      }, fastRequestTime / 2);
+      $timeout.flush();
+      $rootScope.$digest();
+
+      $rootScope.$digest();
+      expect(value).toEqual(expectedTranslation);
+      expect(firstValue).toEqual(onlyFirstTranslation);
+      expect(secondValue).toEqual(onlySecondTranslation);
+    }));
   });
 
 });

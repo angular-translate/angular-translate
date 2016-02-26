@@ -1758,8 +1758,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         // if there isn't a translation table for the language we've requested,
         // we load it asynchronously
+        $nextLang = key;
         if (($forceAsyncReloadEnabled || !$translationTable[key]) && $loaderFactory && !langPromises[key]) {
-          $nextLang = key;
           langPromises[key] = loadAsync(key).then(function (translation) {
             translations(translation.key, translation.table);
             deferred.resolve(translation.key);
@@ -1780,10 +1780,10 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           // we are already loading this asynchronously
           // resolve our new deferred when the old langPromise is resolved
           langPromises[key].then(function (translation) {
-            if (!$uses) {
-              useLanguage(translation.key);
+            if ($nextLang === key) {
+              useLanguage(key);
             }
-            deferred.resolve(translation.key);
+            deferred.resolve(key);
             return translation;
           }, function (key) {
             // find first available fallback language if that request has failed
