@@ -1,3 +1,13 @@
+<a name="2.10.0"></a>
+# [2.10.0](https://github.com/angular-translate/angular-translate/compare/2.9.2...v2.10.0) (2016-02-28)
+
+
+### Bug Fixes
+
+* **service:** make the fallback $uses / $translate.use work in a correct manner ([7e71a5a](https://github.com/angular-translate/angular-translate/commit/7e71a5a))
+
+
+
 <a name="2.9.2"></a>
 ## [2.9.2](https://github.com/angular-translate/angular-translate/compare/2.9.1...v2.9.2) (2016-02-21)
 
