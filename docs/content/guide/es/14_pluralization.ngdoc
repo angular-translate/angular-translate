@@ -4,9 +4,9 @@
 
 # Pluralización
 
-¡Guau, que hemos llegado lejos! Hemos aprendido todo acerca de los componentes que angular-translate provee, y sabemos cómo introducir varias tablas de traducción a la vez. También hemos hecho uso de distintos tipos de almacenamiento para que nuestra aplicación recuerde el lenguaje a lo largo de varios llamados http, y, finalmente pero no en último lugar, hemos usado cargadores asincrónicos, para cargar nuestros datos de traducción asincrónicamente desde un servidor. ¡Guau!
+¡Guau, hemos llegado lejos! Hemos aprendido todo acerca de los componentes que angular-translate provee, y sabemos cómo introducir varias tablas de traducción a la vez. También hemos hecho uso de distintos tipos de almacenamiento para que nuestra aplicación recuerde el lenguaje a lo largo de varios llamados http, y, finalmente pero no en último lugar, hemos usado cargadores asincrónicos, para cargar nuestros datos de traducción asincrónicamente desde un servidor. ¡Guau!
 
-Pero hay algo de lo que no hemos hablado todavía: **pluralización**. 
+Pero hay algo de lo que no hemos hablado todavía: **pluralización**.
 La pluralización es un tema bastante difícil cuando se trata de localización (l10n) e internationalización (i18n).
 Diferentes culturas y lenguajes tienen intepretaciones distintas acerca de cómo un lenguaje de comporta en determinadas situaciones. Por fortuna, hay un
 [estándar](http://userguide.icu-project.org/formatparse/messages) que especifica todo este asunto. Lo cual no quita que es un desafío implementarlo.
@@ -121,19 +121,19 @@ El servicio `$translate` espera el tipo de interpolación como tercer parámetro
 
 <pre>
 $translate('TEXT', { val: 5 });
-// "I'm using default interpolation 10"
+// "Estoy usando la interpolación por defecto 10"
 
 $translate('PLURAL', { GENDER: 'male' }, 'messageformat');
-// "He liked this."
+// "A él le gusta esto."
 </pre>
 
 Se puede obtener el mismo resultado con el filtro `translate`. Como se explicó antes, el tercer argumento es un identificador del tipo de servicio de interpolación:
 
 <pre>
 {{ 'TEXT' | translate:"{ val: 5 }" }}
-// "I'm using default interpolation 10"
+// "Estoy usando la interpolación por defecto 10"
 {{ 'PLURAL' | translate:"{ GENDER: 'male' }":"messageformat" }}
-// "He liked this."
+// "A él le gusta esto."
 </pre>
 
 La directiva `translate` espera un nuevo atributo llamado `translate-interpolation`, el cual controla cuál servicio de interpolación se usa para una clave de traducción determinada:
@@ -142,16 +142,16 @@ La directiva `translate` espera un nuevo atributo llamado `translate-interpolati
 <ANY
   translate="TEXT"
   translate-values="{ val: 5 }"></ANY>
-// "I'm using default interpolation 10"
+// "Estoy usando la interpolación por defecto 10"
 
 <ANY
   translate="PLURAL"
   translate-values="{ GENDER: 'male' }"
   translate-interpolation="messageformat"></ANY>
-// "He liked this."
+// "A él le gusta esto."
 </pre>
 
-Aquí hay un ejemplo en funcionamiento (por favor, note que también hay un archivo embebido para la localización 'de' en alemán):
+Aquí hay un ejemplo en funcionamiento (por favor, note que también hay un archivo embebido para la localización 'es' en castellano):
 
 <doc:example module="myApp">
   <doc:source>
@@ -164,18 +164,18 @@ Aquí hay un ejemplo en funcionamiento (por favor, note que también hay un arch
 
         $translateProvider.translations('en', {
           HEADLINE: 'I\'m a headline',
-          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          TEXTO: 'I\'m using default interpolation {{ val + val }}',
           PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
           BUTTON_LANG_EN: 'English',
-          BUTTON_LANG_DE: 'German'
+          BUTTON_LANG_ES: 'Spanish'
         });
 
-        $translateProvider.translations('de', {
-          HEADLINE: 'Ich bin eine Überschrift',
-          TEXT: 'Ich benutze default interpolation {{ val + val }}',
-          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
-          BUTTON_LANG_EN: 'Englisch',
-          BUTTON_LANG_DE: 'Deutsch'
+        $translateProvider.translations('es', {
+          HEADLINE: 'Soy un encabezado',
+          TEXTO: 'Estoy usando la interpolación por defecto {{ val + val }}',
+          PLURAL: '{GENDER, select, male{A él le} female{A ella le} other{A ellos les}} gusta esto.',
+          BUTTON_LANG_EN: 'Inglés',
+          BUTTON_LANG_ES: 'Español'
         });
       }]);
 
@@ -188,11 +188,11 @@ Aquí hay un ejemplo en funcionamiento (por favor, note que también hay un arch
     </script>
     <div ng-controller="Ctrl">
       <p translate="HEADLINE"></p>
-      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+      <p translate="TEXTO" translate-values="{ val: 5 }"></p>
 
       <p translate="PLURAL" translate-values="{ GENDER: 'other' }" translate-interpolation="messageformat"></p>
 
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
     </div>
   </doc:source>

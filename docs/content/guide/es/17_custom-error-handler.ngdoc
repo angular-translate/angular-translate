@@ -8,15 +8,15 @@ Por supuesto que usted querrá ser capaz de usar su propio manejo de errores per
 
 <pre>
 var app = angular.module('myApp', ['pascalprecht.translate'], function ($translateProvider) {
-  // tell angular-translate to use your custom handler
+  // decirle a angular-translate que use su propio manejo de errores
   $translateProvider.useMissingTranslationHandler('myCustomHandlerFactory');
 });
 
-// define custom handler
+// definir un manejo personalizado
 app.factory('myCustomHandlerFactory', function (dep1, dep2) {
-  // has to return a function which gets a tranlation ID
+  // tiene que utilizar una función que devuelva la una clave de traducción
   return function (translationID) {
-    // do something with dep1 and dep2
+    // hacer algo con dep1 y dep2
   };
 });
 
@@ -32,9 +32,9 @@ Simplemente devuélvale un valor al framework de angular-translate desde dentro 
 <pre>
 app.factory('customTranslationHandler', function () {
   return function (translationID, uses) {
-    // return the following text as a translation 'result' - this will be
-    // displayed instead of the language key.
-    return 'NO DEFAULT KEY';
+    // devolver el texto siguiente como "resultado" de la traducción - esto será
+    // mostrado en lugar de la clave de traducción
+    return 'NO HAY CLAVE POR DEFECTO';
   };
 });
 </pre>

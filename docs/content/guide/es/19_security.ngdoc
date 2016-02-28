@@ -40,7 +40,7 @@ Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un
 
 ## Demonstraciones
 
-### Neither escaped nor sanitized
+### Ni codificado (escaped) ni saneado (sanitized)
 
 <doc:example module="myApp_not_escaped">
   <doc:source>
@@ -69,7 +69,7 @@ Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un
   </doc:source>
 </doc:example>
 
-### Escaped
+### Codificado (escaped)
 
 <doc:example module="myApp_escaped">
   <doc:source>
@@ -99,7 +99,7 @@ Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un
   </doc:source>
 </doc:example>
 
-### Escaped (parameters only)
+### Sólo los parámetros codificados (escaped)
 
 <doc:example module="myApp_escape_params">
   <doc:source>
@@ -114,7 +114,7 @@ Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un
       app.config(['$translateProvider', function ($translateProvider) {
         $translateProvider.translations('en', translations);
         $translateProvider.preferredLanguage('en');
-        // Enable escaping of HTML
+        // Permitir la codificación  del HTML
         $translateProvider.useSanitizeValueStrategy('escapeParameters');
       }]);
 
@@ -129,7 +129,7 @@ Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un
   </doc:source>
 </doc:example>
 
-### Sanitized
+### Contenido saneado (sanitized)
 
 <doc:example module="myApp_sanitize">
   <doc:source>
@@ -144,7 +144,7 @@ Recomendamos encarecidamente una estrategia segura. Por lo tanto, mostraremos un
       app.config(['$translateProvider', function ($translateProvider) {
         $translateProvider.translations('en', translations);
         $translateProvider.preferredLanguage('en');
-        // Enable escaping of HTML
+        // Permitir la codificación del HTML
         $translateProvider.useSanitizeValueStrategy('sanitize');
       }]);
 

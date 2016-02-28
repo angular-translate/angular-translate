@@ -79,7 +79,7 @@ Simplemente invóquela así:
 
 <pre>
   $translate.versionInfo();
-  // returns e.g. "2.1.0"
+  // devuelve, por ejemplo "2.1.0"
 </pre>
 
 ## Cosas a tener en cuenta
@@ -120,10 +120,10 @@ Este es un ejemplo que anda:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
         NAMESPACE: {
-          PARAGRAPH: 'And it comes with awesome features!'
+          PARAGRAPH: '¡Y viene con funcionalidades extraordinarias!'
         }
       };
 
@@ -132,27 +132,27 @@ Este es un ejemplo que anda:
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
         $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+          .translations('es', translations)
+          .preferredLanguage('es');
       }]);
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-        // expose translation via `$translate` service
+        // exponer la traducción vía el servicio `$translate` 
         $translate('HEADLINE').then(function (headline) {
-          $scope.headline = headline;
+          $scope.encabezado = headline;
         });
         $translate('PARAGRAPH').then(function (paragraph) {
-          $scope.paragraph = paragraph;
+          $scope.parrafo = paragraph;
         });
         $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
-          $scope.namespaced_paragraph = anotherOne;
+          $scope.parrafoConNamespace = anotherOne;
         });
       }]);
     </script>
     <div ng-controller="Ctrl">
-      <h1>{{headline}}</h1>
-      <p>{{paragraph}}</p>
-      <p>{{namespaced_paragraph}}</p>
+      <h1>{{encabezado}}</h1>
+      <p>{{parrafo}}</p>
+      <p>{{parrafoConNamespace}}</p>
     </div>
   </doc:source>
 </doc:example>

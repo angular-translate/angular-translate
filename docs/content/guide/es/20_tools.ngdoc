@@ -42,10 +42,11 @@ grunt.initConfig({
     },
     your_target: {
                  files: {
-                     // This will generate a single json file with all the specified strings
+                     // Esto generará un único archivo json con todas las cadenas especificadas
                      'tmp/dest.json' : ['test/fixtures/*.po'],
 
-                     //this will create several json files, the names of them will be the same than in the .po files
+                     // esto generará varios archivos json, cuyos nombres serán los 
+                     // mismos que los de los archivos  .po 
                      'tmp/dest' : ['test/fixtures/*.po']
                   }
     },

@@ -102,7 +102,7 @@ update our app to use localStorage as well!
         PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
         PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
         PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        VARIABLE_REPLACEMENT: 'Hallo {{name}}',
         BUTTON_LANG_DE: 'Deutsch',
         BUTTON_LANG_EN: 'Englisch'
       };

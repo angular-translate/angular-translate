@@ -17,19 +17,19 @@ Si ninguno de los cargadores porvistos se ajusta a sus necesidades, usted puede 
 Una factory de cargador personalizado podría verse así:
 
 <pre>
-app.factory('customLoader', function ($http, $q) {
+app.factory('cargadorPersonalizado', function ($http, $q) {
     // return loaderFn
     return function (options) {
         var deferred = $q.defer();
-        // do something with $http, $q and key to load localization files
+        // hacer algo con $http, $q y la clave, para cargar archivos de localización
 
         var data = {
-            'TEXT': 'Fooooo'
+            'TEXTO': 'Algo ...'
         };
 
-        // resolve with translation data
+        // resolver con datos de traducción
         return deferred.resolve(data);
-        // or reject with language key
+        // o rechazar, con la clave de traducción
         return deferred.reject(options.key);
     };
 });
@@ -43,18 +43,19 @@ Usted sabe que `$translateProvider` provee métodos como `useStaticFilesLoader()
 `useUrlLoader()`, y que ambos usan `useLoader()` internamente para registrar una "factory" de carga, la cual luego es invocada por el `$injector`. Puede usar el mismo mecanismo para su servicio personalizado; así que, para registrar su servicio personalizado, simplemente ponga:
 
 <pre>
-$translateProvider.useLoader('customLoader');
+$translateProvider.useLoader('cargadorPersonalizado');
 </pre>
 
 angular-translate accede a la factory de su cargador personalizado con el servicio `$injector`, y se encarga de todo el resto por usted.
+
 ## Agregado de opciones adicionales
 
 La propiedad `options.key` nos dice que `options` es simplemente un objeto, el cual se podría extender con propiedades adicionales según sus necesidades. Por ejemplo, si usted necesita una propiedad `foo` en el objeto `options`, todo lo que tiene que hacer es proveer dicha propiedad cuando registre su factory de carga personalizada.
 
-Así que, si nuestra propiedad `foo` necesita un valor `bar`, podemos pasarlo así:
+Así que, si nuestra propiedad `juan` necesita un valor `perico`, podemos pasarlo así:
 
 <pre>
-$translateProvider.useLoader('customLoader', { foo: 'bar'});
+$translateProvider.useLoader('cargadorPersonalizado', { juan: 'perico'});
 </pre>
 
 Entonces, en su factory de carga, se puede acceder a esta propiedad via `options.foo`. No se preocupe por `options.key`, dado que esta última es agregada internamente por angular-translate antes de invocar el cargador.
@@ -62,7 +63,7 @@ Entonces, en su factory de carga, se puede acceder a esta propiedad via `options
 Hagamos uso del cargador personalizado en nuestra aplicación de ejemplo, para demostrar cómo funcionan las cosas. Primero construimos nuestro cargador así:
 
 <pre>
-app.factory('asyncLoader', function ($q, $timeout) {
+app.factory('cargadorAsincronico', function ($q, $timeout) {
 
   return function (options) {
     var deferred = $q.defer(),
@@ -70,25 +71,25 @@ app.factory('asyncLoader', function ($q, $timeout) {
 
     if (options.key === 'en') {
       translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
-        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'German',
-        BUTTON_LANG_EN: 'English'
+      	HEADLINE: 'What an awesome module!',
+      	PARAGRAPH: 'Srsly!',
+      	PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+      	PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+      	PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+      	VARIABLE_REPLACEMENT: 'Hi {{nombre}}',
+      	BUTTON_LANG_ES: 'Spanish',
+      	BUTTON_LANG_EN: 'English'
       };
     } else {
       translations = {
-        HEADLINE: 'Was für ein großartiges Modul!',
-        PARAGRAPH: 'Ernsthaft!',
-        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
-        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
-        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'Deutsch',
-        BUTTON_LANG_EN: 'Englisch'
+      	HEADLINE: '¡Qué módulo asombroso!',
+      	PARAGRAPH: '¡En serio!',
+      	PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+      	PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+      	PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
+      	VARIABLE_REPLACEMENT: 'Hola {{nombre}}',
+      	BUTTON_LANG_ES: 'Español',
+      	BUTTON_LANG_EN: 'Inglés'
       };
     }
 
@@ -101,7 +102,7 @@ app.factory('asyncLoader', function ($q, $timeout) {
 });
 </pre>
 
-¿Qué es lo que hace, esto? Utiliza el servicio `$timeout` para esperar 2 segundos, y luego resuelve la promesa con la tabla de traducción inglesa o la alemana, dependiendo de la clave de lenguaje.
+¿Qué es lo que hace, esto? Utiliza el servicio `$timeout` para esperar 2 segundos, y luego resuelve la promesa con la tabla de traducción inglesa o castellana, dependiendo de la clave de lenguaje.
 
 Ahora utulice `$translateProvider.useLoader()` para hacer uso de nuestro servicio:
 
@@ -121,7 +122,7 @@ $translateProvider.useLoader('asyncLoader');
         $translateProvider.useLoader('asyncLoader');
       }]);
 
-      app.factory('asyncLoader', function ($q, $timeout) {
+      app.factory('cargadorAsincronico', function ($q, $timeout) {
 
         return function (options) {
           var deferred = $q.defer(),
@@ -129,25 +130,25 @@ $translateProvider.useLoader('asyncLoader');
 
           if (options.key === 'en') {
             translations = {
-              HEADLINE: 'What an awesome module!',
-              PARAGRAPH: 'Srsly!',
-              PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-              PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-              PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-              VARIABLE_REPLACEMENT: 'Hi {{name}}',
-              BUTTON_LANG_DE: 'German',
-              BUTTON_LANG_EN: 'English'
+      			  HEADLINE: 'What an awesome module!',
+      			  PARAGRAPH: 'Srsly!',
+      			  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+      			  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+      			  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+      			  VARIABLE_REPLACEMENT: 'Hi {{nombre}}',
+      			  BUTTON_LANG_ES: 'Spanish',
+      			  BUTTON_LANG_EN: 'English'
             };
           } else {
             translations = {
-              HEADLINE: 'Was für ein großartiges Modul!',
-              PARAGRAPH: 'Ernsthaft!',
-              PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
-              PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
-              PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
-              VARIABLE_REPLACEMENT: 'Hi {{name}}',
-              BUTTON_LANG_DE: 'Deutsch',
-              BUTTON_LANG_EN: 'Englisch'
+      			  HEADLINE: '¡Qué módulo asombroso!',
+      			  PARAGRAPH: '¡En serio!',
+      			  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+      			  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+      			  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...'
+      			  VARIABLE_REPLACEMENT: 'Hola {{nombre}}',
+      			  BUTTON_LANG_ES: 'Español',
+      			  BUTTON_LANG_EN: 'Inglés'
             };
           }
 
@@ -169,20 +170,19 @@ $translateProvider.useLoader('asyncLoader');
     <div ng-controller="Ctrl">
       <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
-
       <p translate>PASSED_AS_TEXT</p>
       <p translate="PASSED_AS_ATTRIBUTE"></p>
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
-      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ nombre: 'PascalPrecht'}"></p>
 
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
     </div>
   </doc:source>
 </doc:example>
 
-Cuando se cambia el lenguaje apretando en el botón `alemán`, se puede ver que la aplicación espera 2 segundos hasta que se resuelve con los nuevos datos de traducción. ¿No está genial?
+Cuando se cambia el lenguaje apretando en el botón `Español`, se puede ver que la aplicación espera 2 segundos hasta que se resuelve con los nuevos datos de traducción. ¿No está genial?
 
 <br>
 <hr>
