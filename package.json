@@ -8,7 +8,7 @@
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "engines": {
-    "node": ">=4.2"
+    "node": ">=4.3"
   },
   "scripts": {
     "prepublish": "bower install",
