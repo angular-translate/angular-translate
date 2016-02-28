@@ -38,8 +38,7 @@ from GitHub.
 $ git clone git://github.com/angular-translate/angular-translate.git
 ```
 You now have a full clone of the repository including the history and everything
-else that ever happened during the development of angular-translate. Do with the code
-what ever the fuck you want.
+else that ever happened during the development of angular-translate.
 
 Since angular-translate has some dependencies when developing it, you can just install
 all of them at once. To install all needed dependencies, simply run the following
