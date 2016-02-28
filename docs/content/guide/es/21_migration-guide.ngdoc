@@ -12,7 +12,7 @@ Por favor, asegúrese de que su aplicación no contenga código como este:
 ```js
 $translateProvider.translations({
   'greetings' : 'Hello',
-  // some other keys
+  // otras claves ...
 });
 ```
 
@@ -22,7 +22,7 @@ Para arreglarlo, simplemente agregue una clave de lenguaje como primer argumento
 ```js
 $translateProvider.translations('en', {
   'greetings' : 'Hello',
-  // some other keys
+  // otras claves ...
 });
 $translateProvider.use('en');
 ```
@@ -48,7 +48,7 @@ var stringFromService;
 $translate('translationId').then(function(translation) {
   stringFromService = translation;
 }, function(translationId){
-  // Unable to translate given translationId
+  // incapaz de traducir la clave dada
   stringFromService = translationId;
 });
 ```

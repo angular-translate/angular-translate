@@ -14,7 +14,7 @@ una directiva para traducir conenidos en la vista.
 La directiva `translate` puede utilizarse de muchas maneras distintas. Un
  uso general sería:
 ```
-<ANY translate>TRANSLATION_ID</ANY>
+<ANY translate>TRANSLATION_ID<ANY>
 ```
 
 También se puede pasar la clave de traducción como parámetro de una directiva `translate` que esté
@@ -33,13 +33,13 @@ Incluso si éstas son ya maneras muy flexibles de usar una directiva, angular-tr
 
 
 ```
-<ANY translate="{{toBeInterpolated}}"></ANY>
+<ANY translate="{{claveAInterpolar}}"></ANY>
 ```
 
 ¿No está bueno? Ah, y angular-translate no sería angular-translate si no pudiera también
 manipular de la misma forma nuestro primer ejemplo. Esto también funcionaría:
 ```
-<ANY translate>{{toBeInterpolated}}</ANY>
+<ANY translate>{{claveAInterpolar}}</ANY>
 ```
 
 ¡Elija la forma que más le convenga!
@@ -75,11 +75,11 @@ podría verse así:
 
 <pre>
 var translations = {
-  HEADLINE: 'What an awesome module!',
-  PARAGRAPH: 'Srsly!',
-  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+  HEADLINE: '¡Qué módulo asombroso!',
+  PARAGRAPH: '¡En serio!'
+  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...'
 };
 </pre>
 
@@ -101,11 +101,11 @@ Nuestra aplicación actualizada ahora luce así:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
-        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
+        PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+        PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+        PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
@@ -113,8 +113,8 @@ Nuestra aplicación actualizada ahora luce así:
       app.config(['$translateProvider', function ($translateProvider) {
         // add translation table
         $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+          .translations('es', translations)
+          .preferredLanguage('es');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {

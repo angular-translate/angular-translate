@@ -1,6 +1,6 @@
 {
   "name": "angular-translate",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "description": "A translation module for AngularJS",
   "main": "dist/angular-translate.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "engines": {
-    "node": ">=4.2"
+    "node": ">=4.3"
   },
   "scripts": {
     "prepublish": "bower install",
@@ -44,6 +44,7 @@
     "grunt": "~0.4.1",
     "grunt-bower-install-simple": "^1.0.3",
     "grunt-bump": "0.0.2",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.x",
     "grunt-contrib-copy": "~0.4.1",

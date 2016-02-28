@@ -4,14 +4,14 @@
 
 # Negociación de lenguajes
 
-angular-translate soporta una funcionalidad llamada "Negociación de lenguajes" (Language Negotiation), con la cual se puede declarar relaciones entre claves de lenguaje similares (por ejemplo, 'en_US' en lugar de 'en').
+angular-translate soporta una funcionalidad llamada "Negociación de lenguajes" (Language Negotiation), con la cual se puede declarar relaciones entre claves de lenguaje similares (por ejemplo, 'en_US', inglés de Estados Unidos, en lugar de 'en').
 
-¿Qué significa esto? Supongamos que usted tiene tablas de traducción con las claves de lenguaaje `en` y `de`.
+¿Qué significa esto? Supongamos que usted tiene tablas de traducción con las claves de lenguaaje `en` y `es`.
 
 <pre>
 $translateProvider
   .translations('en', { /* ... */ })
-  .translations('de', { /* ... */ });
+  .translations('es', { /* ... */ });
 </pre>
 
 .. y que también le dice a angular-translate que debería tratar de determinar el lenguaje preferido de su aplicación por sí solo, usando el método `.determinePreferredLanguage()`.
@@ -19,7 +19,7 @@ $translateProvider
 <pre>
 $translateProvider
   .translations('en', { /* ... */ })
-  .translations('de', { /* ... */ })
+  .translations('es', { /* ... */ })
   .determinePreferredLanguage();
 </pre>
 
@@ -38,11 +38,11 @@ Para el caso de uso que discutíamos anteriormente, el código quedaría así:
 $translateProvider
   .translations('en', { /* ... */ })
   .translations('de', { /* ... */ })
-  .registerAvailableLanguageKeys(['en', 'de'], {
+  .registerAvailableLanguageKeys(['en', 'es'], {
     'en_US': 'en',
     'en_UK': 'en',
-    'de_DE': 'de',
-    'de_CH': 'de'
+    'es_ES': 'es',
+    'es_AR': 'es'
   })
   .determinePreferredLanguage();
 </pre>

@@ -64,38 +64,38 @@ Y listo. Su aplicación ahora usará localStorage para recordar el lenguaje del 
 <doc:example module="myApp">
   <doc:source>
     <script>
-      var translationsEN = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
-        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'German',
-        BUTTON_LANG_EN: 'English'
-      };
+		var translationsEN = {
+		  HEADLINE: 'What an awesome module!',
+		  PARAGRAPH: 'Srsly!',
+		  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+		  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+		  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+		  VARIABLE_REPLACEMENT: 'Hi {{name}}',
+		  BUTTON_LANG_ES: 'Spanish',
+		  BUTTON_LANG_EN: 'English'
+		};
 
-      var translationsDE= {
-        HEADLINE: 'Was für ein großartiges Modul!',
-        PARAGRAPH: 'Ernsthaft!',
-        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
-        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
-        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'Deutsch',
-        BUTTON_LANG_EN: 'Englisch'
-      };
+		var translationsES= {
+		  HEADLINE: '¡Qué módulo asombroso!',
+		  PARAGRAPH: '¡En serio!',
+		  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+		  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+		  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
+		  VARIABLE_REPLACEMENT: 'Hola {{name}}',
+		  BUTTON_LANG_ES: 'Español',
+		  BUTTON_LANG_EN: 'Inglés'
+		};
 
-      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+		var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
 
-      app.config(['$translateProvider', function ($translateProvider) {
-        // add translation tables
-        $translateProvider.translations('en', translationsEN);
-        $translateProvider.translations('de', translationsDE);
-        $translateProvider.preferredLanguage('en');
-        // remember language
-        $translateProvider.useLocalStorage();
-      }]);
+		app.config(['$translateProvider', function ($translateProvider) {
+		  // agregar las tablas de traducción
+		  $translateProvider.translations('en', translationsEN);
+		  $translateProvider.translations('es', translationsES);
+		  $translateProvider.preferredLanguage('en');
+		  // recordar el idioma
+		  $translateProvider.useLocalStorage();
+		}]);
 
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
@@ -107,15 +107,15 @@ Y listo. Su aplicación ahora usará localStorage para recordar el lenguaje del 
     <div ng-controller="Ctrl">
       <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
-
+      
       <p translate>PASSED_AS_TEXT</p>
       <p translate="PASSED_AS_ATTRIBUTE"></p>
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
-      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
-
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
-      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
+      
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>      
     </div>
   </doc:source>
 </doc:example>

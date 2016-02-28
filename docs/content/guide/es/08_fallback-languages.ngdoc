@@ -8,20 +8,20 @@ Ahora que ha leído que puede configurar un lenguaje preferido, y a la vez regis
 
 ## Registrar  un lenguaje de respaldo
 
-Enseñarle a su aplicación un lenguaje de respaldo es fácil: simplemente hay que invocar un método en `$translateProvider`. Sí, tan fácil como suena. Digamos que tenemos una aplicación y hemos registrado una tabla de traducción para el idioma alemán.
+Enseñarle a su aplicación un lenguaje de respaldo es fácil: simplemente hay que invocar un método en `$translateProvider`. Sí, tan fácil como suena. Digamos que tenemos una aplicación y hemos registrado una tabla de traducción para el idioma castellano.
 
 <pre>
 $translateProvider
-  .translations('de', { /* ... */ });
+  .translations('es', { /* ... */ });
 </pre>
 
-Ahora, digamos que existen algunas claves de traducción que **están** disponibles en inglés, pero no en  la tabla alemana. angular-translate normalmente devolvería sólo la clave si no puede encontrar una traducción. Pero si usted registra un lenguaje de respaldo que contenga la clave de traducción en su tabla, angular-translate devolverá esa traducción en lugar de la otra.
+Ahora, digamos que existen algunas claves de traducción que **están** disponibles en inglés, pero no en  la tabla española. angular-translate normalmente devolvería sólo la clave si no puede encontrar una traducción. Pero si usted registra un lenguaje de respaldo que contenga la clave de traducción en su tabla, angular-translate devolverá esa traducción en lugar de la otra.
 
-Así que, registremos inglés como el lenguaje de respaldo. Primero tenemos que registrar el lenguaje mismo, desde ya.
+Así que, registremos inglés como el lenguaje de respaldo. Primero tenemos que registrar el lenguaje mismo, desde luego.
 
 <pre>
 $translateProvider
-  .translations('de', { /* ... */ })
+  .translations('es', { /* ... */ })
   .translations('en', { /* ... */ });
 </pre>
 
@@ -29,12 +29,12 @@ Ahora le decimos a angular-translate que use inglés como lenguaje de respaldo:
 
 <pre>
 $translateProvider
-  .translations('de', { /* ... */ })
+  .translations('es', { /* ... */ })
   .translations('en', { /* ... */ })
   .fallbackLanguage('en');
 </pre>
 
-Y listo. Si no existe determinada clave en la tabla alemana, angular-translate buscará la misma clave en la tabla inglesa. Fácil, ¿no?
+Y listo. Si no existe determinada clave en la tabla castellana, angular-translate buscará la misma clave en la tabla inglesa. Fácil, ¿no?
 
 ## Registrar una pila de respaldo
 
@@ -43,7 +43,7 @@ Todo lo que hay que hacer, es registrar los lenguajes de respaldo como un array:
 
 <pre>
 $translateProvider
-  .translations('de', { /* ... */ })
+  .translations('es', { /* ... */ })
   .translations('en', { /* ... */ })
   .translations('fr', { /* ... */ })
   .fallbackLanguage(['en', 'fr']);
@@ -70,7 +70,7 @@ $scope.changeLanguage = function (langKey) {
 };
 </pre>
 
-Si usted hace cambios en la conjunto de lenguajes de respaldo en tiempo de ejecución, angular-translate se guiará por el orden en que las claves de lenguaje hayan sido especificadas para saber cómo iterar. Por ejemplo, si usted configuró `en, fr, de` como lenguajes de respaldo, y cambia el lenguaje de respaldo a `fr`, en este caso el lenguaje de respaldo de `fr` será `de`.
+Si usted hace cambios en la conjunto de lenguajes de respaldo en tiempo de ejecución, angular-translate se guiará por el orden en que las claves de lenguaje hayan sido especificadas para saber cómo iterar. Por ejemplo, si usted configuró `en, fr, es` como lenguajes de respaldo, y cambia el lenguaje de respaldo a `fr`, en este caso el lenguaje de respaldo de `fr` será `es`.
 
 ## Cambiar la pila entera de lenguajes de respaldo en tiempo de ejecución
 
@@ -78,7 +78,7 @@ Igual que antes, hay que hacer esto:
 
 <pre>
 $scope.changeLanguage = function (langKey) {
-  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.fallbackLanguage(['es', 'en', 'fr']);
   $translate.use(langKey);
 };
 </pre>
@@ -88,12 +88,12 @@ Cuando se cambia la pila entera de lenguajes de respaldo, se está cambiando el 
 ## Limitar los lenguajes de respaldo a través de los que se itera
 
 Si seleccionamos una clave de lenguaje que no esté al principio de la pila, estaremos efectivamente limitando los lenguajes por los que se itere.
-Por ejemplo, si en el código siguiente configuramos 'en' como lenguaje de respaldo con `useFallbackLanguage()`, entonces 'de' será ignorado, nuestra pila comenzará a ser iterada a partir de 'en'.
+Por ejemplo, si en el código siguiente configuramos 'en' como lenguaje de respaldo con `useFallbackLanguage()`, entonces 'es' será ignorado, nuestra pila comenzará a ser iterada a partir de 'en'.
 
 <pre>
-  // langKey is 'en'
+  // la clave de lenguaje (langKey) es 'en'
   $scope.changeLanguage = function (langKey) {
-  $translate.fallbackLanguage(['de', 'en', 'fr']);
+  $translate.fallbackLanguage(['es', 'en', 'fr']);
   $translate.useFallbackLanguage(langKey);
 };
 </pre>

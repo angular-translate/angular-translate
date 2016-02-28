@@ -53,9 +53,9 @@ O, tal vez, la configuración del servicio `$route`:
 
 <pre>
 app.config(function ($routeProvider) {
-  $routeProvider.when('/something', {
-    templateUrl: 'url/to/template',
-    controller: 'SomeFancyCtrl'
+  $routeProvider.when('/algoPasa', {
+    templateUrl: 'url/al/template',
+    controller: 'UnControladorCualquiera'
   });
 });
 </pre>
@@ -90,7 +90,7 @@ o, si se los carga remotamente, como objetos JSON. Así es como se vería una ta
 
 ```json
 {
-  "TRANSLATION_ID": "This is a concrete translation for a specific language."
+  "TRANSLATION_ID": "Una traducción en concreto, para un lenguaje en particular."
 }
 ```
 
@@ -104,7 +104,7 @@ crear objetos JSON anidados:
 {
   "NAMESPACE": {
     "SUB_NAMESPACE": {
-       "TRANSLATION_ID1": "This is a namespaced translation."
+       "OTRA_TRANSLATION_ID": "Esta es una traducción con namespace."
     }
   }
 }
@@ -119,7 +119,7 @@ Una funcionalidad muy útil, disponible desde `1.1.1`, es el uso de Atajos y Ví
 {
   "bar": {
     "foo": {
-      "foo": "This is my text."
+      "foo": "Acá está mi texto"
     }
   }
 }
@@ -136,10 +136,10 @@ siguiente tabla:
 
 ```json
 {
-  "SOME_NAMESPACE": {
+  "UN_NAMESPACE": {
     "OK_TEXT": "OK"
   },
-  "ANOTHER_NAMESPACE": {
+  "OTRO_NAMESPACE": {
     "OK_TEXT": "OK"
   }
 }
@@ -154,11 +154,11 @@ una arroba y dos puntos `@:`, seguidos por la clave de traducción con la que se
 
 ```json
 {
-  "SOME_NAMESPACE": {
+  "UN_NAMESPACE": {
     "OK_TEXT": "OK"
   },
-  "ANOTHER_NAMESPACE": {
-    "OK_TEXT": "@:SOME_NAMESPACE.OK_TEXT"
+  "OTRO_NAMESPACE": {
+    "OK_TEXT": "@:UN_NAMESPACE.OK_TEXT"
   }
 }
 ```
@@ -170,10 +170,10 @@ Supongamos que tenemos una tabla de traducción como esta:
 
 <pre>
 var translations = {
-  HEADLINE: 'What an awesome module!',
-  PARAGRAPH: 'Srsly!',
+  HEADLINE: '¡Qué módulo asombroso!',
+  PARAGRAPH: '¡En serio!',
   NAMESPACE: {
-    PARAGRAPH: 'And it comes with awesome features!'
+    PARAGRAPH: '¡Y viene con funcionalidades extraordinarias!'
   }
 };
 </pre>
@@ -182,10 +182,10 @@ Podemos agregarla con  `$translateProvider.translations()`:
 
 <pre>
 app.config(['$translateProvider', function ($translateProvider) {
-  // add translation table
+  // agregar la tabla de traducción
   $translateProvider
-    .translations('en', translations)
-    .preferredLanguage('en');
+    .translations('es', translations)
+    .preferredLanguage('es');
 }]);
 </pre>
 
@@ -197,25 +197,25 @@ ha sido instanciado y usado. Este es el código en funcionamiento:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!',
         NAMESPACE: {
-          PARAGRAPH: 'And it comes with awesome features!'
+          PARAGRAPH: '¡Y viene con funcionalidades extraordinarias!'
         }
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        // add translation table
-        $translateProvider
-          .translations('en', translations)
-          .preferredLanguage('en');
+      // agregar la tabla de traducción
+      $translateProvider
+        .translations('es', translations)
+        .preferredLanguage('es');
       }]);
     </script>
     <div>
-      <h1>Nothing to see here yet!</h1>
-      <p>But we'll change it now</p>
+      <h1>Todavía no se ve nada</h1>
+      <p>Pero enseguida lo vamos a arreglar ...</p>
     </div>
   </doc:source>
 </doc:example>

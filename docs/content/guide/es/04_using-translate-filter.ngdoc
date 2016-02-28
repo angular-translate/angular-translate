@@ -43,16 +43,16 @@ Fácil ¿no? Por supuesto, se puede ver una muestra andando aquí:
   <doc:source>
     <script>
       var translations = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!'
+        HEADLINE: '¡Qué módulo asombroso!',
+        PARAGRAPH: '¡En serio!'
       };
 
       var app = angular.module('myApp', ['pascalprecht.translate']);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        // add translation table
-        $translateProvider.translations('en', translations);
-        $translateProvider.preferredLanguage('en');
+        // agregar tabla de traducción
+        $translateProvider.translations('es', translations);
+        $translateProvider.preferredLanguage('es');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {

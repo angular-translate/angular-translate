@@ -14,13 +14,13 @@ Si usted quiere usar un servicio de almacenamiento personalizado en su aplicaci�
 Digamos que usted quiere usar un servicio de almacenamiento personalizado en nuestra aplicación de ejemplo. Podemos fácilmente extenderla con un nuevo servicio. Sólo tenemos que asegurarnos de devolver un objeto con los métodos `get()` y `put()` method. Dicho servicio personalizado puede ser algo así:
 
 <pre>
-app.factory('customStorage', function () {
+app.factory('almacenamientoPersonalizado', function () {
   return {
     put: function (name, value) {
-      // store `value` under `name` somehow
+      // almacenar `value` bajo  `name` de alguna manera
     },
     get: function (name) {
-      // request value of `name` somehow
+      // pedir el valor de `name` de alguna manera
     }
   };
 });
@@ -35,58 +35,58 @@ Una vez que haya construido su servicio personalizado de almacenamiento, tiene q
 `useStorage()` internamente. También este último método puede usarse para informarle a angular-translate acerca de nuestro almacenamiento personalizado:
 
 <pre>
-$translateProvider.useStorage('customStorage');
+$translateProvider.useStorage('almacenamientoPersonalizado');
 </pre>
 
-angular-translate usará `$injector` para obtener una isntancia de la "factory" por su nombre, el cual en nuestro caso es `customStorage`, y luego será capaz de acceder a los métodos de ésta en tiempo de ejecución, para almacenar el último idioma elegido.
+angular-translate usará `$injector` para obtener una isntancia de la "factory" por su nombre, el cual en nuestro caso es `almacenamientoPersonalizado`, y luego será capaz de acceder a los métodos de ésta en tiempo de ejecución, para almacenar el último idioma elegido.
 
 
 <doc:example module="myApp">
   <doc:source>
     <script>
-      var translationsEN = {
-        HEADLINE: 'What an awesome module!',
-        PARAGRAPH: 'Srsly!',
-        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
-        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
-        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'German',
-        BUTTON_LANG_EN: 'English'
-      };
+		var translationsEN = {
+		  HEADLINE: 'What an awesome module!',
+		  PARAGRAPH: 'Srsly!',
+		  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+		  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+		  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+		  VARIABLE_REPLACEMENT: 'Hi {{name}}',
+		  BUTTON_LANG_ES: 'Spanish',
+		  BUTTON_LANG_EN: 'English'
+		};
 
-      var translationsDE= {
-        HEADLINE: 'Was für ein großartiges Modul!',
-        PARAGRAPH: 'Ernsthaft!',
-        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
-        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
-        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
-        VARIABLE_REPLACEMENT: 'Hi {{name}}',
-        BUTTON_LANG_DE: 'Deutsch',
-        BUTTON_LANG_EN: 'Englisch'
-      };
+		var translationsES= {
+		  HEADLINE: '¡Qué módulo asombroso!',
+		  PARAGRAPH: '¡En serio!',
+		  PASSED_AS_TEXT: 'Hola, me están pasando como un texto',
+		  PASSED_AS_ATTRIBUTE: 'Me están pasando como atributo, ¡qué bueno!',
+		  PASSED_AS_INTERPOLATION: '¡Aprendices! A mí me están interpolando ...',
+		  VARIABLE_REPLACEMENT: 'Hola {{name}}',
+		  BUTTON_LANG_ES: 'Español',
+		  BUTTON_LANG_EN: 'Inglés'
+		};
 
-      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+		var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
 
-      app.config(['$translateProvider', function ($translateProvider) {
-        // add translation tables
-        $translateProvider.translations('en', translationsEN);
-        $translateProvider.translations('de', translationsDE);
-        $translateProvider.preferredLanguage('en');
-        // remember language
-        $translateProvider.useStorage('customStorage');
-      }]);
+		app.config(['$translateProvider', function ($translateProvider) {
+		  // agregar las tablas de traducción
+		  $translateProvider.translations('en', translationsEN);
+		  $translateProvider.translations('es', translationsES);
+		  $translateProvider.preferredLanguage('en');
+		  // recordar el idioma
+		  $translateProvider.useLocalStorage();
+		}]);
 
-      app.factory('customStorage', function () {
-        return {
-          put: function (name, value) {
-            // store `value` under `name` somehow
-          },
-          get: function (name) {
-            // request value of `name` somehow
-          }
-        };
-      });
+		app.factory('almacenamientoPersonalizado', function () {
+		  return {
+			  put: function (name, value) {
+				// almacenar `value` bajo  `name` de alguna manera
+			  },
+			  get: function (name) {
+				// pedir el valor de `name` de alguna manera
+			  }
+		  };
+		});
 
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 
@@ -98,14 +98,14 @@ angular-translate usará `$injector` para obtener una isntancia de la "factory" 
     <div ng-controller="Ctrl">
       <p>{{ 'HEADLINE' | translate }}</p>
       <p>{{ 'PARAGRAPH' | translate }}</p>
-
+      
       <p translate>PASSED_AS_TEXT</p>
       <p translate="PASSED_AS_ATTRIBUTE"></p>
       <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
       <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
-      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht'}"></p>
 
-      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('es')" translate="BUTTON_LANG_ES"></button>
       <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
     </div>
   </doc:source>
