@@ -11,6 +11,10 @@
 | master        | [![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=master)](https://travis-ci.org/angular-translate/angular-translate) |
 | canary        |[![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=canary)](https://travis-ci.org/angular-translate/angular-translate)     |
 
+### Installation
+
+Visit our documentation site and have a look into the chapter [Installation](http://angular-translate.github.io/docs/#/guide/00_installation).
+
 ### Presentation
 [![angular-translate Talk](presentation.png)](https://www.youtube.com/watch?v=9CWifOK_Wi8)
 
