@@ -4,7 +4,7 @@
 
 # Installation
 
-## Dependencies installieren
+## Abhängigkeiten installieren
 
 Diese Tools werden während der Entwicklung von `angular-translate` benutzt, du solltest
 also sicherstellen, dass sie auf deiner Maschine installiert sind, damit alles
@@ -44,7 +44,7 @@ Damit hast du jetzt einen vollständigen Klon von angular-translate, inklusive
 der kompletten History und alles Weitere was jemals in der Entwicklung von
 angular-translate passiert ist.
 
-Um alle nötigen Dependencies zu installieren müssen nur folgende Befehle auf der
+Um alle nötigen Abhängigkeiten zu installieren müssen nur folgende Befehle auf der
 Kommandozeile ausgeführt werden:
 
 ```
