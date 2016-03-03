@@ -1416,7 +1416,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             function () {
               // Look in the next fallback language for a translation.
               // It delays the resolving by passing another promise to resolve.
-              resolveForFallbackLanguage(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator, defaultTranslationText).then(deferred.resolve);
+              return resolveForFallbackLanguage(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator, defaultTranslationText).then(deferred.resolve, deferred.reject);
             }
           );
         } else {
@@ -1427,7 +1427,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           } else {
             // if no default translation is set and an error handler is defined, send it to the handler
             // and then return the result
-            deferred.resolve(translateByHandler(translationId, interpolateParams, defaultTranslationText));
+            if ($missingTranslationHandlerFactory) {
+              deferred.resolve(translateByHandler(translationId, interpolateParams));
+            } else {
+              deferred.reject(translateByHandler(translationId, interpolateParams));
+            }
+
           }
         }
         return deferred.promise;
