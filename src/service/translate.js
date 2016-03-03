@@ -2115,6 +2115,25 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         return deferred.promise;
       };
 
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#getAvailableLanguageKeys
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * This function simply returns the registered language keys being defined before in the config phase
+       * With this, an application can use the array to provide a language selection dropdown or similar
+       * without any additional effort
+       *
+       * @returns {object} returns the list of possibly registered language keys and mapping or null if not defined
+       */
+      $translate.getAvailableLanguageKeys = function () {
+        if ($availableLanguageKeys.length > 0) {
+          return $availableLanguageKeys;
+        }
+        return null;
+      };
+
       // Whenever $translateReady is being fired, this will ensure the state of $isReady
       var globalOnReadyListener = $rootScope.$on('$translateReady', function () {
         $onReadyDeferred.resolve();
