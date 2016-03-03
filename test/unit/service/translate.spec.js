@@ -2644,4 +2644,28 @@ describe('pascalprecht.translate', function () {
     }));
   });
 
+  describe('$translate#getAvailableLanguageKeys()', function () {
+
+    var availKeys = [
+      {'de-de': 'DE'},
+      {'en-gb': 'EN'},
+      {'*': 'EN'}
+    ];
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.registerAvailableLanguageKeys(availKeys);
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should have the configured array as a return value', function () {
+      expect($translate.getAvailableLanguageKeys()).toEqual(availKeys);
+    });
+
+  });
+
 });
