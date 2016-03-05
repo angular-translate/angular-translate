@@ -1280,6 +1280,41 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('even if fallback translation is an empty string', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+        $translateProvider
+          .translations('de_DE', translationMock)
+          .translations('en_EN', {'FALLBACK' : ''})
+          .preferredLanguage('de_DE')
+          .fallbackLanguage('en_EN');
+      }));
+
+      var $translate, $q, $rootScope;
+
+      beforeEach(inject(function (_$translate_, _$q_, _$rootScope_) {
+        $translate = _$translate_;
+        $q = _$q_;
+        $rootScope = _$rootScope_;
+      }));
+
+      it('should use translation of fallback language', function () {
+        var deferred = $q.defer(),
+            promise = deferred.promise,
+            value = 'NOT_VALID';
+
+        promise.then(function (translation) {
+          value = translation;
+        });
+        $translate('FALLBACK', null, null, null, 'de_DE').then(function (translation) {
+          deferred.resolve(translation);
+        });
+
+        $rootScope.$digest();
+        expect(value).toEqual('');
+      });
+    });
+
     describe('translate returns handler result', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
