@@ -10,7 +10,6 @@
     "url": "git://github.com/angular-translate/angular-translate"
   },
   "devDependencies": {
-    "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular": "~1.5.0-rc.0",
     "angular-translate-interpolation-messageformat": "2.8.1",
     "angular-mocks": "~1.5.0-rc.0",

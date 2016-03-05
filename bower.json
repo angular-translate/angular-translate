@@ -11,7 +11,6 @@
   },
   "main": "./dist/angular-translate.js",
   "devDependencies": {
-    "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular": "~1.2.26",
     "angular-translate-interpolation-messageformat": "2.9.2",
     "angular-mocks": "~1.2.26",
