@@ -11,10 +11,10 @@
   },
   "devDependencies": {
     "angular": "~1.5.0-rc.0",
-    "angular-translate-interpolation-messageformat": "2.8.1",
     "angular-mocks": "~1.5.0-rc.0",
     "angular-cookies": "~1.5.0-rc.0",
-    "angular-sanitize": "~1.5.0-rc.0"
+    "angular-sanitize": "~1.5.0-rc.0",
+    "messageformat": "~0.3.0"
   },
   "resolutions": {
     "angular": "~1.5.0-rc.0"

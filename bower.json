@@ -12,10 +12,10 @@
   "main": "./dist/angular-translate.js",
   "devDependencies": {
     "angular": "~1.2.26",
-    "angular-translate-interpolation-messageformat": "2.9.2",
     "angular-mocks": "~1.2.26",
     "angular-cookies": "~1.2.26",
-    "angular-sanitize": "~1.2.26"
+    "angular-sanitize": "~1.2.26",
+    "messageformat": "~0.3.0"
   },
   "resolutions": {
     "angular": "~1.2.26"
