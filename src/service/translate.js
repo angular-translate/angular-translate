@@ -55,7 +55,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           var temp = (tag || '').split('_').join('-');
           var parts = temp.split('-');
           return parts.length > 1 ? (parts[0].toLowerCase() + '-' + parts[1].toUpperCase()) : temp;
-        }
+        },
+        lang_only: function(tag) {
+  			  var temp = (tag || '').split('_').join('-');
+  			  var parts = temp.split('-');
+  			  return parts[0].toLowerCase();
+  		  }
       };
 
   var version = 'x.y.z';
