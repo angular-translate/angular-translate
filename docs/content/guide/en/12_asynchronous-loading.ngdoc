@@ -393,6 +393,7 @@ $translateProvider.preferredLanguage('en');
 </pre>
 
 **Note:** An Angular Translate user has been posted a nice solution [using Grunt](https://github.com/angular-translate/angular-translate/issues/921).
+Another user has published a solution [using Gulp](https://www.npmjs.com/package/gulp-ng-lang2js).
 
 Let's update our sample app accordingly to use an asynchronous loader! We'll use
 the staticFilesLoader. First, we have to pull the translation tables out of the

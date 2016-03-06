@@ -336,6 +336,7 @@ $translateProvider.preferredLanguage('en');
 
 **Hinweis:** Ein Benutzer von Angular Translate eine schöne Lösung
 [mittels Grunt](https://github.com/angular-translate/angular-translate/issues/921) veröffentlicht.
+Ein anderer Benutzer hat eine Lösung [mittels Gulp](https://www.npmjs.com/package/gulp-ng-lang2js) veröffentlicht.
 
 Okay, passen wir unsere App mit dem staticFilesLoader an. Als erstes ziehen wir
 die Übersetzungen aus dem Code und schreiben Sie in seperate Dateien:
