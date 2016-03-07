@@ -2789,4 +2789,65 @@ describe('pascalprecht.translate', function () {
       });
     });
   });
+
+  // Spec for edge case: preferred language is not found
+  //                     but another fallback language has a translation file available
+  //                     or any other async case
+  describe('$translate with async loading having an invalid preferredLang and one fallbackLang existing', function () {
+
+    var theFallbackLangKey = 'en_US',
+      thePreferredLangKey = 'ab_CD',
+      expectedTranslation = 'foo bar bork bork bork',
+      firstLanguageResponded = false,
+      secondLanguageResponded = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.useLoader('customLoader');
+
+      $translateProvider.preferredLanguage(thePreferredLangKey);
+      $translateProvider.fallbackLanguage(theFallbackLangKey);
+
+      $provide.service('customLoader', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+          var locale = options.key;
+
+          if (locale === theFallbackLangKey) {
+            secondLanguageResponded = true;
+            deferred.resolve({
+              greeting: expectedTranslation
+            });
+          }
+
+          if (locale === thePreferredLangKey) {
+            deferred.reject(thePreferredLangKey);
+          }
+
+          return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope) {
+      $translate = _$translate_;
+      $rootScope.$digest();
+
+    }));
+
+    it('should set the language to be the most recently requested one, not the most recently responded one', inject(function ($rootScope, $q) {
+
+      var value;
+
+      $translate('greeting').then(function (translation) {
+        value = translation;
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual(expectedTranslation);
+      expect(secondLanguageResponded).toEqual(true);
+    }));
+  });
 });

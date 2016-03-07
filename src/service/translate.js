@@ -1021,7 +1021,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           startFallbackIteration;
 
       var $translate = function (translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage) {
-
+        if (!$uses && $preferredLanguage) {
+          $uses = $preferredLanguage;
+        }
         var uses = (forceLanguage && forceLanguage !== $uses) ? // we don't want to re-negotiate $uses
               (negotiateLocale(forceLanguage) || forceLanguage) : $uses;
 
