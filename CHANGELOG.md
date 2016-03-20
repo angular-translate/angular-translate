@@ -1,3 +1,28 @@
+<a name="2.11.0"></a>
+# [2.11.0](https://github.com/angular-translate/angular-translate/compare/2.10.0...v2.11.0) (2016-03-20)
+
+
+### Bug Fixes
+
+* **directive:** reduced number of watchers by applying translateLanguage watcher only when direc ([961fc92](https://github.com/angular-translate/angular-translate/commit/961fc92))
+* **service:** add missing hasOwnProperty check ([823afc0](https://github.com/angular-translate/angular-translate/commit/823afc0))
+* **service:** avoid try to load languages which are explicitly not wanted ([bde935e](https://github.com/angular-translate/angular-translate/commit/bde935e)), closes [#1390](https://github.com/angular-translate/angular-translate/issues/1390)
+* **service:** fix edge-case with .use() and .preferredLanguage() ([02688f2](https://github.com/angular-translate/angular-translate/commit/02688f2))
+* **service:** translations for `forceLanguage` will be loaded on demand ([14bc956](https://github.com/angular-translate/angular-translate/commit/14bc956)), closes [#1389](https://github.com/angular-translate/angular-translate/issues/1389)
+
+### Features
+
+* **depenceny:** Update messageformat.js to current 0.3.0 release ([fb48f78](https://github.com/angular-translate/angular-translate/commit/fb48f78))
+* **directive:** introduce attr translate-keep-content ([b2cf8a3](https://github.com/angular-translate/angular-translate/commit/b2cf8a3))
+* **service:** add `$translate.resolveClientLocale()` (also at provider) ([d0469ac](https://github.com/angular-translate/angular-translate/commit/d0469ac))
+* **service:** add support for uniformLanguageTag('iso639-1') ([1e037ec](https://github.com/angular-translate/angular-translate/commit/1e037ec)), closes [#1181](https://github.com/angular-translate/angular-translate/issues/1181)
+* **service:** improve messageformat.js output caching ([cb31608](https://github.com/angular-translate/angular-translate/commit/cb31608))
+* **service:** introduce getter returning available languages ([3988af0](https://github.com/angular-translate/angular-translate/commit/3988af0)), closes [#1304](https://github.com/angular-translate/angular-translate/issues/1304)
+* **service:** introduce post processing for translations ([f0c4874](https://github.com/angular-translate/angular-translate/commit/f0c4874))
+* **service:** support for default translation in missingTranslationHandler ([8c5044c](https://github.com/angular-translate/angular-translate/commit/8c5044c))
+
+
+
 <a name="2.10.0"></a>
 # [2.10.0](https://github.com/angular-translate/angular-translate/compare/2.9.2...v2.10.0) (2016-02-28)
 
