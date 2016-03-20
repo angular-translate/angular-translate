@@ -92,7 +92,7 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
-        .registerAvailableLanguageKeys(['en', 'en_EN', 'de'], {
+        .registerAvailableLanguageKeys(['en', 'en_EN', 'de', 'de_DE'], {
           'en_US': 'en_EN'
         })
         .translations('en', translationMock)
@@ -153,6 +153,28 @@ describe('pascalprecht.translate', function () {
 
     it('should have a method isForceAsyncReloadEnabled()', function () {
       expect($translate.isForceAsyncReloadEnabled).toBeDefined();
+    });
+
+    it('should not try to load a language which has not been registered yet', function () {
+      // ensure initial language is en (preferred one)
+      expect($translate.use()).toBe('en');
+
+      var result = {
+        successHandler: false,
+        failureHandler: false
+      };
+      $translate.use('it').then(function (lang) {
+        result.successHandler = true;
+      }, function (lang) {
+        result.failureHandler = true;
+      });
+
+      $rootScope.$digest();
+      // ensure initial language is still en (preferred one)
+      expect($translate.use()).toBe('en');
+      // ensure result handlers has been called correctly
+      expect(result.successHandler).toBe(false);
+      expect(result.failureHandler).toBe(true);
     });
 
     describe('$translate#isForceAsyncReloadEnabled()', function () {

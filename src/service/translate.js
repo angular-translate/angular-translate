@@ -1814,6 +1814,11 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         // Try to get the aliased language key
         var aliasedKey = negotiateLocale(key);
+        // Ensure only registered language keys will be loaded
+        if ($availableLanguageKeys.length > 0 && !aliasedKey) {
+          return $q.reject(key);
+        }
+
         if (aliasedKey) {
           key = aliasedKey;
         }
