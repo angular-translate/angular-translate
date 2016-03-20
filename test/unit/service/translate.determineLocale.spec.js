@@ -339,6 +339,56 @@ describe('pascalprecht.translate', function () {
         });
       });
 
+      describe('using resolver "iso639-1"', function () {
+        describe('should resolve to en-US to en-US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            $translateProvider
+              .uniformLanguageTag('iso639-1')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+
+        describe('should resolve to en_US to en-US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            $translateProvider
+              .uniformLanguageTag('iso639-1')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+
+        describe('should resolve to en-us to en-US', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            $translateProvider
+              .uniformLanguageTag('iso639-1')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+
+        describe('should resolve to en to en using', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            $translateProvider
+              .uniformLanguageTag('iso639-1')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+      });
+
     });
   });
 });

@@ -13,6 +13,20 @@
 
 ### Installation
 
+#### via NPM
+
+```
+npm install --save-dev angular-translate
+```
+
+#### via Bower
+
+```
+bower install --save-dev angular-translate
+```
+
+#### Others and details
+
 Visit our documentation site and have a look into the chapter [Installation](http://angular-translate.github.io/docs/#/guide/00_installation).
 
 ### Presentation (Dutch AngularJS Meetup 2013)

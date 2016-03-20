@@ -10,12 +10,11 @@
     "url": "git://github.com/angular-translate/angular-translate"
   },
   "devDependencies": {
-    "ngMidwayTester": "yearofmoo/ngMidwayTester",
     "angular": "~1.4.0",
-    "angular-translate-interpolation-messageformat": "2.8.0",
     "angular-mocks": "~1.4.0",
     "angular-cookies": "~1.4.0",
-    "angular-sanitize": "~1.4.0"
+    "angular-sanitize": "~1.4.0",
+    "messageformat": "~0.3.0"
   },
   "resolutions": {
     "angular": "~1.4.0"

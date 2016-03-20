@@ -805,4 +805,51 @@ describe('pascalprecht.translate', function () {
       expect(element.attr('title')).toBe('Hallo');
     });
   });
+
+  describe('fallback, translateKeepContent and no missing translation handler', function () {
+
+    var $compile, $rootScope, element;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': "Hello"
+        })
+        .translations('de', {
+          'HELLO': "Hallo",
+          'ONLY_DE': "Ich bin deutsch"
+        })
+        .preferredLanguage('en')
+        .fallbackLanguage('de');
+    }));
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should use preferred without override', function () {
+      element = $compile('<translate translate-keep-content>HELLO</translate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Hello');
+    });
+
+    it('should use leave the inner content without change', function () {
+      element = $compile('<translate translate-keep-content>HELLONOTFOUND</translate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('HELLONOTFOUND');
+    });
+
+    it('should use leave the inner content without change if key provided as attribute', function () {
+      element = $compile('<div translate="HELLO" translate-keep-content>My template content</translate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Hello');
+    });
+
+    it('should show fallback translation', function () {
+      element = $compile('<div translate translate-keep-content>ONLY_DE</divtranslate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('Ich bin deutsch');
+    });
+  });
 });

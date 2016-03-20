@@ -15,9 +15,7 @@ module.exports = function (config) {
 
     files: [
       shared.injectByScope(scope, 'angular/angular.js'),
-      shared.injectByScope(scope, 'ngMidwayTester/src/ngMidwayTester.js'),
       'src/translate.js',
-      shared.injectByScope(scope, 'angular-translate-interpolation-default/angular-translate-interpolation-default.js'),
       'src/**/*.js',
       'test/midway/**/*Spec.js'
     ],

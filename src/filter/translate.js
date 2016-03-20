@@ -57,7 +57,6 @@ function translateFilterFactory($parse, $translate) {
   'use strict';
 
   var translateFilter = function (translationId, interpolateParams, interpolation, forceLanguage) {
-
     if (!angular.isObject(interpolateParams)) {
       interpolateParams = $parse(interpolateParams)(this);
     }

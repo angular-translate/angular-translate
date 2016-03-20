@@ -54,8 +54,13 @@ function translateLanguageDirective() {
     scope: true,
     compile: function () {
       return function linkFn(scope, iElement, iAttrs) {
+
         iAttrs.$observe('translateLanguage', function (newTranslateLanguage) {
           scope.translateLanguage = newTranslateLanguage;
+        });
+
+        scope.$watch('translateLanguage', function(){
+          scope.$broadcast('translateLanguageChanged');
         });
       };
     }
@@ -63,4 +68,3 @@ function translateLanguageDirective() {
 }
 
 translateLanguageDirective.displayName = 'translateLanguageDirective';
-
