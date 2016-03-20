@@ -1027,6 +1027,11 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         var uses = (forceLanguage && forceLanguage !== $uses) ? // we don't want to re-negotiate $uses
               (negotiateLocale(forceLanguage) || forceLanguage) : $uses;
 
+        // Check forceLanguage is present
+        if (forceLanguage) {
+          loadTranslationsIfMissing(forceLanguage);
+        }
+
         // Duck detection: If the first argument is an array, a bunch of translations was requested.
         // The result is an object.
         if (angular.isArray(translationId)) {
@@ -1623,6 +1628,14 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         return resolvedTranslation;
       };
 
+      var loadTranslationsIfMissing = function (key) {
+        if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
+          langPromises[key] = loadAsync(key).then(function (translation) {
+            translations(translation.key, translation.table);
+          });
+        }
+      };
+
       /**
        * @ngdoc function
        * @name pascalprecht.translate.$translate#preferredLanguage
@@ -2038,6 +2051,11 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         // Detect undefined and null values to shorten the execution and prevent exceptions
         if (translationId === null || angular.isUndefined(translationId)) {
           return translationId;
+        }
+
+        // Check forceLanguage is present
+        if (forceLanguage) {
+          loadTranslationsIfMissing(forceLanguage);
         }
 
         // Duck detection: If the first argument is an array, a bunch of translations was requested.
