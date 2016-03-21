@@ -14,7 +14,7 @@ angular.module('pascalprecht.translate')
 function $translatePartialLoader() {
 
   'use strict';
-
+  var loadedParts = []; //-> holds the already loaded parts to make sure we won't load them again.
   /**
    * @constructor
    * @name Part
@@ -298,10 +298,13 @@ function $translatePartialLoader() {
           prioritizedParts = getPrioritizedParts();
 
       angular.forEach(prioritizedParts, function(part) {
-        loaders.push(
-          part.getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
-        );
-        part.urlTemplate = options.urlTemplate;
+        if(!_.contains(loadedParts, part.name)){ //-> check if translation was loaded before, if not go ahead and load
+          loaders.push(
+            part.getTable(options.key, $q, $http, options.$http, options.urlTemplate, errorHandler)
+          );
+          loadedParts.push(part.name); //-> register the loaded part so it won't get loaded again
+          part.urlTemplate = options.urlTemplate;
+        }
       });
 
       return $q.all(loaders)
