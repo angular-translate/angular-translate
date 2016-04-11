@@ -26,7 +26,7 @@ has to load translation data asynchronously first.
 **`$translateChangeSuccess`**
 
 As the event name says, this gets fired once a translation change was successful.
-When not using an asynchronous loader, this event gets usually fired immediatly
+When not using an asynchronous loader, this event gets usually fired immediately
 after `$translateChangeStart` event. This event gets also fired after an
 asynchronous loader had to load translation data first.
 
