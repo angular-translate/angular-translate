@@ -1086,9 +1086,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         }
 
         var promiseToWaitFor = (function () {
-          var promise = $preferredLanguage ?
-            langPromises[$preferredLanguage] :
-            langPromises[uses];
+          var promise = langPromises[uses];
 
           fallbackIndex = 0;
 
