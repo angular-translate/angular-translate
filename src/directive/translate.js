@@ -34,6 +34,7 @@ angular.module('pascalprecht.translate')
         <pre translate="WITH_VALUES" translate-values="{{values}}"></pre>
         <pre translate translate-values="{{values}}">WITH_VALUES</pre>
         <pre translate translate-attr-title="WITH_VALUES" translate-values="{{values}}"></pre>
+        <pre translate="WITH_CAMEL_CASE_KEY" translate-value-camel-case-key="Hi"></pre>
 
       </div>
     </file>
@@ -44,7 +45,8 @@ angular.module('pascalprecht.translate')
 
         $translateProvider.translations('en',{
           'TRANSLATION_ID': 'Hello there!',
-          'WITH_VALUES': 'The following value is dynamic: {{value}}'
+          'WITH_VALUES': 'The following value is dynamic: {{value}}',
+          'WITH_CAMEL_CASE_KEY': 'The interpolation key is camel cased: {{camelCaseKey}}'
         }).preferredLanguage('en');
 
       });
@@ -81,6 +83,10 @@ angular.module('pascalprecht.translate')
           element = $compile('<p translate translate-attr-title="TRANSLATION_ID"></p>')($rootScope);
           $rootScope.$digest();
           expect(element.attr('title')).toBe('Hello there!');
+
+          element = $compile('<p translate="WITH_CAMEL_CASE_KEY" translate-value-camel-case-key="Hello"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('The interpolation key is camel cased: Hello');
         });
       });
     </file>
