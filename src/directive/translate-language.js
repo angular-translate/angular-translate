@@ -36,7 +36,7 @@ angular.module('pascalprecht.translate')
           .translations('de',{
             'HELLO': 'Hallo Welt!'
           })
-          .translations(.preferredLanguage('en');
+          .preferredLanguage('en');
 
       });
 
