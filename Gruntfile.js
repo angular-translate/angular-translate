@@ -282,7 +282,7 @@ module.exports = function (grunt) {
     uglify: {
 
       options: {
-        preserveComments: 'some'
+        preserveComments: /(?:^!|@(?:license|preserve|cc_on))/
       },
 
       core: {
