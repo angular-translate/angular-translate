@@ -159,9 +159,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       avail.push(angular.lowercase($availableLanguageKeys[i]));
     }
 
-    // Check for an exact match in our list of available keys
+    // Check for an exact (lowercase) match in our list of available keys
     if (indexOf(avail, locale) > -1) {
-      return preferred;
+      return $availableLanguageKeys[indexOf(avail, locale)];
     }
 
     if ($languageKeyAliases) {
