@@ -1403,6 +1403,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
           result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+          result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey);
           if (result.substr(0, 2) === '@:') {
             return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator);
           }
@@ -1617,6 +1618,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses);
           } else {
             result = Interpolator.interpolate(translation, interpolateParams);
+            result = applyPostProcessing(translationId, translation, result, interpolateParams, uses);
           }
         } else {
           var missingTranslationHandlerTranslation;

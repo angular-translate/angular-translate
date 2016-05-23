@@ -2809,6 +2809,11 @@ describe('pascalprecht.translate', function () {
         $rootScope.$digest();
         expect(value).toEqual('BOTH,de_DE,BOTH_DE');
       });
+      it('should return a formatted postprocessed string on preferred language with instant', function () {
+        var value;
+        value = $translate.instant('BOTH');
+        expect(value).toEqual('BOTH,de_DE,BOTH_DE');
+      });
     });
   });
 
