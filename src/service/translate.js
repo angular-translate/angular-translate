@@ -38,6 +38,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       $forceAsyncReloadEnabled = false,
       $nestedObjectDelimeter = '.',
       $isReady = false,
+      $keepContent = false,
       loaderCache,
       directivePriority = 0,
       statefulFilter = true,
@@ -989,6 +990,29 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     } else {
       postProcessFn = undefined;
     }
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#keepContent
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If keepContent is set to true than translate directive will always use innerHTML
+   * as a default translation
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.keepContent(true);
+   *  });
+   * </pre>
+   *
+   * @param {boolean} value - valid values are true or false
+   */
+  this.keepContent = function (value) {
+    $keepContent = !(!value);
     return this;
   };
 
@@ -1949,6 +1973,20 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        */
       $translate.isForceAsyncReloadEnabled = function () {
         return $forceAsyncReloadEnabled;
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#isKeepContent
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns whether keepContent or not
+       *
+       * @return {boolean} keepContent value
+       */
+      $translate.isKeepContent = function () {
+        return $keepContent;
       };
 
       /**
