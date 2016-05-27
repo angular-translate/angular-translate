@@ -286,7 +286,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
           }
           if (translateAttr === 'translate') {
             // default translate into innerHTML
-            if (successful || (!successful && typeof iAttr.translateKeepContent === 'undefined')) {
+            if (successful || (!successful && !$translate.isKeepContent() && typeof iAttr.translateKeepContent === 'undefined')) {
               iElement.empty().append(scope.preText + value + scope.postText);
             }
             var globallyEnabled = $translate.isPostCompilingEnabled();

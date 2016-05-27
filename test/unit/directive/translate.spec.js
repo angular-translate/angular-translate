@@ -852,4 +852,29 @@ describe('pascalprecht.translate', function () {
       expect(element.html()).toBe('Ich bin deutsch');
     });
   });
+
+  describe('set keepContent globally', function () {
+
+    var $compile, $rootScope, element;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': "Hello"
+        })
+        .keepContent(true)
+        .preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should use leave the inner content without change', function () {
+      element = $compile('<div translate="UNKNOWN">My content</divtranslate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('My content');
+    });
+  });
 });
