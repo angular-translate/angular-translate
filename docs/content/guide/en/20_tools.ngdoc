@@ -15,9 +15,9 @@ Take a look!
 
 [grunt-angular-translate on GitHub](http://github.com/angular-translate/grunt-angular-translate)
 
-## webpack-angular-translate 
+## webpack-angular-translate
 
-Webpack loader that extracts the translation id's (with the default text) from javascript and html files and creates a json-export. 
+Webpack loader that extracts the translation ids (with the default text) from javascript and html files and creates a json-export.
 [webpack-angular-translate on GitHub](https://github.com/DatenMetzgerX/webpack-angular-translate)
 
 ## ngTranslateEditor
