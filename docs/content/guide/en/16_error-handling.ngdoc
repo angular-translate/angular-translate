@@ -71,6 +71,30 @@ Here's a working sample
 
 Now, take a look at the browser's console and see what have been logged!
 
+## Using Post processing functionality
+
+Since version 2.11, you're able to take advantage of a special post processing feature.
+This enables you to e.g. get valuable debug information in case your translators need further information on
+which key belongs to which translation value or why is the wrong value shown on screen.
+
+To use this feature, you have to enable it by configuring it in the config part of your application module:
+
+<pre>
+ $translateProvider.postProcess(function (translationId, translation, interpolatedTranslation, params, lang) {
+    return '<span style="color: #cccccc">' + translationId + '(' + lang + '):</span> ' +
+      (interpolatedTranslation ? interpolatedTranslation : translation);
+  });
+</pre>
+
+The function contains five parameters:
+
+- translationId
+- translation
+- interpolatedTranslation
+- params
+- lang
+
+
 <br>
 <hr>
-<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
+<center>Made with unicorn &hearts; love by the angular-translate team (http://github.com/angular-translate)</center>

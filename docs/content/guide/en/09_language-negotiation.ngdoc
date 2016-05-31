@@ -76,8 +76,18 @@ $translateProvider
   .determinePreferredLanguage();
 </pre>
 
+If you want to be sure, that "non mapped" translation files are fetched or tried to be fetched in conjunction
+with automatic language detection, add a
+
+<pre>
+  '*': 'de'
+</pre>
+
+at the end of your registerAvailableLanguageKeys - configuration. This will cause all other language keys to be
+mapped to your "de" language table.
+
 We should also mention that this method only makes sense to use when
 `determinePreferredLanguage()` is also used.
 <br>
 <hr>
-<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
+<center>Made with unicorn &hearts; love by the angular-translate team (http://github.com/angular-translate)</center>
