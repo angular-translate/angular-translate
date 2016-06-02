@@ -1040,6 +1040,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    *                                     is the translation id and the value the translation.
    * @param {object=} interpolateParams An object hash for dynamic values
    * @param {string} interpolationId The id of the interpolation to use
+   * @param {string} defaultTranslationText the optional default translation text that is written as
+   *                                        as default text in case it is not found in any configured language
    * @param {string} forceLanguage A language to be used instead of the current language
    * @returns {object} promise
    */
@@ -1193,7 +1195,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * language and informs registered interpolators to also use the given
        * key as locale.
        *
-       * @param {key} Locale key.
+       * @param {string} key Locale key.
        */
       var useLanguage = function (key) {
         $uses = key;
