@@ -35,7 +35,7 @@ Now to translate your contents with `$translate` service, all you have to do is
 to pass a translation ID which was registered with `$translateProvider` before.
 Since it could be that there's some asynchronous loading going on (we'll get into
 this later), `$translate` service behaves asynchronous too and returns a promise,
-that either gets resolved with the translatoin of the given translation ID, or
+that either gets resolved with the translation of the given translation ID, or
 rejected with the translation ID. So the basic usage of `$translate` service
 on a controller (or service) level, would look like this:
 
