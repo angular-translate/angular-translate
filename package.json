@@ -14,6 +14,7 @@
     "prepublish": "bower install",
     "shipit": "bower install && bower update && grunt prepare-release",
     "test": "grunt install-test && grunt test",
+    "test-headless": "grunt test-headless",
     "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
     "clean-test-scopes": "for f in test_scopes/*; do (cd $f; rm -rf bower_components); done",
     "compile": "grunt compile",
