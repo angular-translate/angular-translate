@@ -38,12 +38,18 @@ Entonces, el uso básico de `$translate` en la capa de servicios o de controlado
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
   $translate('HEADLINE').then(function (headline) {
     $scope.headline = headline;
+  }, function (translationId) {
+    $scope.headline = translationId;
   });
   $translate('PARAGRAPH').then(function (paragraph) {
     $scope.paragraph = paragraph;
+  }, function (translationId) {
+    $scope.paragraph = translationId;
   });
   $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
     $scope.namespaced_paragraph = anotherOne;
+  }, function (translationId) {
+    $scope.namespaced_paragraph = translationId;
   });
 }]);
 </pre>
@@ -63,6 +69,10 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
     $scope.headline = translations.HEADLINE;
     $scope.paragraph = translations.PARAGRAPH;
     $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  }, function (translationIds) {
+    $scope.headline = translationIds.headline;
+    $scope.paragraph = translationIds.paragraph;
+    $scope.namespaced_paragraph = translationIds.namespaced_paragraph;
   });
 }]);
 </pre>
@@ -105,6 +115,8 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
   $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
+    }, function (translationId) {
+      $scope.headline = translationId;
     });
   });
 }]);
@@ -137,15 +149,21 @@ Este es un ejemplo que anda:
       }]);
 
       app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
-        // exponer la traducción vía el servicio `$translate` 
+        // expose translation via `$translate` service
         $translate('HEADLINE').then(function (headline) {
-          $scope.encabezado = headline;
+          $scope.headline = headline;
+        }, function (translationId) {
+          $scope.headline = translationId;
         });
         $translate('PARAGRAPH').then(function (paragraph) {
-          $scope.parrafo = paragraph;
+          $scope.paragraph = paragraph;
+        }, function (translationId) {
+          $scope.paragraph = translationId;
         });
         $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
-          $scope.parrafoConNamespace = anotherOne;
+          $scope.namespaced_paragraph = anotherOne;
+        }, function (translationId) {
+          $scope.namespaced_paragraph = translationId;
         });
       }]);
     </script>

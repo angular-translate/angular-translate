@@ -32,12 +32,18 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
   $translate('HEADLINE').then(function (headline) {
     $scope.headline = headline;
+  }, function (error) {
+    $scope.headline = error;
   });
   $translate('PARAGRAPH').then(function (paragraph) {
     $scope.paragraph = paragraph;
+  }, function (error) {
+    $scope.paragraph = error;
   });
   $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
     $scope.namespaced_paragraph = anotherOne;
+  }, function (error) {
+    $scope.namespaced_paragraph = error;
   });
 }]);
 </pre>
@@ -55,6 +61,10 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
     $scope.headline = translations.HEADLINE;
     $scope.paragraph = translations.PARAGRAPH;
     $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  }, function (error) {
+    $scope.headline = error;
+    $scope.paragraph = error;
+    $scope.namespaced_paragraph = error;
   });
 }]);
 </pre>
@@ -87,6 +97,8 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
   $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
+    }, function (error) {
+      $scope.headline = error;
     });
   });
 }]);
@@ -122,12 +134,18 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
         // expose translation via `$translate` service
         $translate('HEADLINE').then(function (headline) {
           $scope.headline = headline;
+        }, function (error) {
+          $scope.headline = error;
         });
         $translate('PARAGRAPH').then(function (paragraph) {
           $scope.paragraph = paragraph;
+        }, function (error) {
+          $scope.paragraph = error;
         });
         $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
           $scope.namespaced_paragraph = anotherOne;
+        }, function (error) {
+          $scope.namespaced_paragraph = error;
         });
       }]);
     </script>
