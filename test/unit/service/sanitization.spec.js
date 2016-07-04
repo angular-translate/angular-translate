@@ -125,6 +125,32 @@ describe('pascalprecht.translate', function () {
           expectedText = text;
           expect($translateSanitization.sanitize(text, 'text')).toEqual(expectedText);
         });
+
+        it('should not escape functions', function () {
+
+          var sanitizedUser;
+          var user = {
+            firstName: '<b>Foo</b>',
+            save: angular.noop
+          };
+
+          var spyAngularElementReturnValue = jasmine.createSpyObj('angularElement', ['html', 'off', 'text']);
+
+          spyOn(angular, 'element').and.returnValue(spyAngularElementReturnValue);
+
+          /* Sanitized user should not have a save property. */
+
+          sanitizedUser = $translateSanitization.sanitize({user: user}, 'params').user;
+
+          expect('firstName' in sanitizedUser).toEqual(true);
+          expect('save' in sanitizedUser).toEqual(false);
+
+          /* `user.save` should not be called. */
+          expect(spyAngularElementReturnValue.text.calls.count()).toEqual(1);
+          expect(spyAngularElementReturnValue.text.calls.argsFor(0)).toEqual(['<b>Foo</b>']);
+
+        });
+
       });
 
       describe('with the (legacy, deprecated) escaped strategy', function () {
