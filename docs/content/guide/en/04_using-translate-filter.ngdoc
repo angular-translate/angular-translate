@@ -20,7 +20,7 @@ business logic code.
 ## General usage
 Using a filter in Angular is pretty straight forward. You can read everything about
 Angular filters right
-[here](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters).
+[here](https://docs.angularjs.org/guide/filter).
 
 The same goes for angular-translate's `translate` filter. We can update our
 example from

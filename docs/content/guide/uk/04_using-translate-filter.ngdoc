@@ -17,7 +17,7 @@ angular-translate надає фільтр, з допомогою якого ви
 
 ## Використання
 Використовувати фільтри в Angular досить просто. Ви можете прочитати все про фільтри Angular
-[тут](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters).
+[тут](https://docs.angularjs.org/guide/filter).
 
 Те ж саме відноситься і до фільтру `translate` модуля angular-translate. Ми можемо оновити наш
 приклад з розділу [Використання сервісу $translate](#/guide/03_using-translate-service#generalusage)
