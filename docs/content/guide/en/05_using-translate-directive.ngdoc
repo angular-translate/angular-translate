@@ -67,6 +67,21 @@ $translateProvider.usePostCompiling(true);
 ```
 <ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
 ```
+## Translate HTML Attributes
+You can already translate any HTML element's attribute using the `translate` filter, 
+but as mentioned above this can create a ton of unnecessary watches on your pages. 
+Here's a better way to translate those attributes using the `translate` directive!
+
+```
+<ANY translate translate-attr-ATTRIBUTE_NAME="TRANSLATION_ID></ANY>
+```
+
+Substitute the HTML element attribute's name for `ATTRIBUTE_NAME` and you will get
+all the benefits of the `translate` directive used for that attribute!
+
+```
+<img src="mylogo.png" translate translate-attr-alt="LOGO"></img>
+```
 
 ## Example
 
@@ -78,6 +93,7 @@ could look like this:
 var translations = {
   HEADLINE: 'What an awesome module!',
   PARAGRAPH: 'Srsly!',
+  LOGO: 'My cool logo',
   PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
   PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
   PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
@@ -88,6 +104,7 @@ After that we update our view with our new translation IDs:
 
 <pre>
 <p>{{ 'HEADLINE' | translate }}</p>
+<img src="mylogo.png" translate translate-attr-alt="LOGO"></img>
 <p>{{ 'PARAGRAPH' | translate }}</p>
 
 <p translate>PASSED_AS_TEXT</p>
@@ -104,6 +121,7 @@ Our updated app then looks like this:
       var translations = {
         HEADLINE: 'What an awesome module!',
         PARAGRAPH: 'Srsly!',
+        LOGO: 'My cool logo',
         PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
         PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
         PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
@@ -124,6 +142,7 @@ Our updated app then looks like this:
     </script>
     <div ng-controller="Ctrl">
       <p>{{ 'HEADLINE' | translate }}</p>
+      <img src="mylogo.png" translate translate-attr-alt="LOGO"></img>
       <p>{{ 'PARAGRAPH' | translate }}</p>
 
       <p translate>PASSED_AS_TEXT</p>
