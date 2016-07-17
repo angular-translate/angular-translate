@@ -1,3 +1,24 @@
+<a name="2.11.1"></a>
+## [2.11.1](https://github.com/angular-translate/angular-translate/compare/2.11.0...v2.11.1) (2016-07-17)
+
+
+### Bug Fixes
+
+* **dependencies:** Update messageformat to ~0.3.1 ([04e11c9](https://github.com/angular-translate/angular-translate/commit/04e11c9))
+* **grunt:** add work-around for uglify preserveComments as expected ([32cdedb](https://github.com/angular-translate/angular-translate/commit/32cdedb)), closes [#1461](https://github.com/angular-translate/angular-translate/issues/1461)
+* **service:** allow instant function to also take care of post process configuration ([b7d7907](https://github.com/angular-translate/angular-translate/commit/b7d7907))
+* **service:** avoid sanitizing of functions ([492d8e5](https://github.com/angular-translate/angular-translate/commit/492d8e5)), closes [#1529](https://github.com/angular-translate/angular-translate/issues/1529)
+* **service:** Correct descriptive ngdocs to match parameters on the service calls ([91711f7](https://github.com/angular-translate/angular-translate/commit/91711f7))
+* **service:** fix interpolation issue with non-string as input ([fa4a80e](https://github.com/angular-translate/angular-translate/commit/fa4a80e)), closes [#1511](https://github.com/angular-translate/angular-translate/issues/1511)
+* **service:** fix lost of data in async loader / error in runtime ([5ee0c3e](https://github.com/angular-translate/angular-translate/commit/5ee0c3e))
+
+
+### Features
+
+* **directive:** introduce a global keepContent setting ([2015f79](https://github.com/angular-translate/angular-translate/commit/2015f79))
+
+
+
 <a name="2.11.0"></a>
 # [2.11.0](https://github.com/angular-translate/angular-translate/compare/2.10.0...v2.11.0) (2016-03-20)
 
