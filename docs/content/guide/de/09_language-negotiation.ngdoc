@@ -76,9 +76,18 @@ $translateProvider
   .determinePreferredLanguage();
 </pre>
 
-Diese Funktionalität ergibt nur Sinn in Kombination mit
-'determinePreferredLanguage()'!
+Wenn man sicher gehen will, dass auch Sprachschlüssel, die nicht explizit erwähnt werden, auf eine der unterstützten
+Sprachen verweisen, so muss am Ende der registerAvailableLanguageKeys
+
+<pre>
+  '*': 'de'
+</pre>
+
+hinzugefügt werden. Das ist vor allem sinnvoll in Kombination mit der automatischen Browser-Spracherkennung.
+Durch diese Zuweisung werden alle nicht explizit konfigurierten Sprachen auf die Sprachtabelle von 'de' zeigen.
+
+Diese Funktionalität ergibt nur Sinn in Kombination mit 'determinePreferredLanguage()'!
 
 <br>
 <hr>
-<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
+<center>Made with unicorn &hearts; love by the angular-translate team (http://github.com/angular-translate)</center>

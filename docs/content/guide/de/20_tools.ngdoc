@@ -15,6 +15,17 @@ Folgende Tools existieren derzeit:
 
 [grunt-angular-translate on GitHub](http://github.com/angular-translate/grunt-angular-translate)
 
+## webpack-angular-translate
+
+Ein Webpack-Loader zum Extrahieren aller Übersetzungsschlüssel ("translationId", jeweils mit dem Default-Text) aus den JavaScript- und HTML-Dateien. Am Ende wird als Export ein JSON erstellt.
+[webpack-angular-translate on GitHub](https://github.com/DatenMetzgerX/webpack-angular-translate)
+
+## ngTranslateEditor
+
+[ngTranslateEditor](http://mrhieu.github.io/ngTranslateEditor)
+
+Dieses kleine handliche Werkzeug liest und schreibt JSON-Dateien, welche die Standard-Loader von Haus aus nutzen können. Für kleine und mittelgroße Übersetzungstabellen kann es ein sinnvolles Werkzeug sein.
+
 ## grunt-po2json-angular-translate
 
 Mit diesem grunt task können po-foramtierte Zeichenketten in ein angular-translate-kompatibles Format gebracht werden.

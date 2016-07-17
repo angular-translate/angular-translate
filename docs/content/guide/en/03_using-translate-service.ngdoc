@@ -34,21 +34,27 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 Now to translate your contents with `$translate` service, all you have to do is
 to pass a translation ID which was registered with `$translateProvider` before.
 Since it could be that there's some asynchronous loading going on (we'll get into
-this later), `$translate` service behaves asynchronous too and returns a promise,
-that either gets resolved with the translatoin of the given translation ID, or
-rejected with the translation ID. So the basic usage of `$translate` service
-on a controller (or service) level, would look like this:
+this later), `$translate` service behaves asynchronously too and returns a promise,
+that either gets resolved with the translation of the given translation ID, or
+rejected with the translation ID as the error info. So the basic usage of `$translate`
+service on a controller (or service) level, would look like this:
 
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
   $translate('HEADLINE').then(function (headline) {
     $scope.headline = headline;
+  }, function (translationId) {
+    $scope.headline = translationId;
   });
   $translate('PARAGRAPH').then(function (paragraph) {
     $scope.paragraph = paragraph;
+  }, function (translationId) {
+    $scope.paragraph = translationId;
   });
   $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
     $scope.namespaced_paragraph = anotherOne;
+  }, function (translationId) {
+    $scope.namespaced_paragraph = translationId;
   });
 }]);
 </pre>
@@ -67,6 +73,10 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
     $scope.headline = translations.HEADLINE;
     $scope.paragraph = translations.PARAGRAPH;
     $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  }, function (translationIds) {
+    $scope.headline = translationIds.headline;
+    $scope.paragraph = translationIds.paragraph;
+    $scope.namespaced_paragraph = translationIds.namespaced_paragraph;
   });
 }]);
 </pre>
@@ -89,7 +99,7 @@ Just call it this way:
 Please keep in mind that the usage of the `$translate` service doesn't provide a two-way
 data binding default! `$translate` service works asynchronously, which means
 it returns the translation for the given translation id, as soon as it could determine
-it. If it doesn't exist it'll probably just return the translation id.
+it. If it doesn't exist the promise will fail with the translation id.
 
 However, this doesn't mean that it knows when a languages has been changed. And because
 of that, translations translated through a directive `$translate` call, don't get
@@ -106,6 +116,8 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
   $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
+    }, function (translationId) {
+      $scope.headline = translationId;
     });
   });
 }]);
@@ -141,12 +153,18 @@ Here's a working sample:
         // expose translation via `$translate` service
         $translate('HEADLINE').then(function (headline) {
           $scope.headline = headline;
+        }, function (translationId) {
+          $scope.headline = translationId;
         });
         $translate('PARAGRAPH').then(function (paragraph) {
           $scope.paragraph = paragraph;
+        }, function (translationId) {
+          $scope.paragraph = translationId;
         });
         $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
           $scope.namespaced_paragraph = anotherOne;
+        }, function (translationId) {
+          $scope.namespaced_paragraph = translationId;
         });
       }]);
     </script>

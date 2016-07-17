@@ -458,7 +458,7 @@ describe('pascalprecht.translate', function () {
       expect(value[1]).toEqual('faa');
     });
 
-    it('should use forceLanguage with multiple trannslation ids', function() {
+    it('should use forceLanguage with multiple translation ids', function() {
       var deferred = $q.defer(),
           promise = deferred.promise,
           value;
@@ -2807,6 +2807,11 @@ describe('pascalprecht.translate', function () {
         });
 
         $rootScope.$digest();
+        expect(value).toEqual('BOTH,de_DE,BOTH_DE');
+      });
+      it('should return a formatted postprocessed string on preferred language with instant', function () {
+        var value;
+        value = $translate.instant('BOTH');
         expect(value).toEqual('BOTH,de_DE,BOTH_DE');
       });
     });

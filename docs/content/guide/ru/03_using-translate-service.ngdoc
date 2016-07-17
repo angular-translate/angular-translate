@@ -7,16 +7,16 @@
 `angular-translate` предоставляет несколько вариантов перевода контента вашего приложения. Одним из
 них является непосредственное использование предоставляемого сервиса `$translate`. Скорее всего, вы
 не будете использовать этот подход, так как он сильно привязывает контроллеры и сервисы вашего
-приложения к переводимому контенту. Однако оказалось, что есть случаи, когда может понадобиться 
+приложения к переводимому контенту. Однако оказалось, что есть случаи, когда может понадобиться
 возможность перевода содержимого с помощью сервиса `$translate`.
 
 Просто представьте случай, что вам нужно перевести содержимое тега `<title>` в вашем HTML документе.
-`<title>` никогда не будет находиться внутри директивы `ng-app`, а это значит, что он находится за 
+`<title>` никогда не будет находиться внутри директивы `ng-app`, а это значит, что он находится за
 пределами мира Angular. Тогда, для решения этой задачи вам необходимо изменить заголовок приложения
 в коде контроллера или сервиса.
 
 ### Использование
-Тут вам поможет сервис `$translate`. Использовать этот сервис очень просто. Прежде всего, 
+Тут вам поможет сервис `$translate`. Использовать этот сервис очень просто. Прежде всего,
 нужно внедрить его при помощи внедрения зависимостей (как и любой другой сервис, который вы хотите
 использовать в вашем Angular коде). Предположим, что мы хотим расширить приложение, созданное в
 главе [Начало работы](#/guide/02_getting-started).
@@ -40,13 +40,19 @@ app.controller('Ctrl', ['$translate', function ($translate) {
 <pre>
 app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
   $translate('HEADLINE').then(function (headline) {
-   $scope.headline = headline;
+    $scope.headline = headline;
+  }, function (translationId) {
+    $scope.headline = translationId;
   });
   $translate('PARAGRAPH').then(function (paragraph) {
     $scope.paragraph = paragraph;
+  }, function (translationId) {
+    $scope.paragraph = translationId;
   });
   $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
     $scope.namespaced_paragraph = anotherOne;
+  }, function (translationId) {
+    $scope.namespaced_paragraph = translationId;
   });
 }]);
 </pre>
@@ -64,6 +70,10 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
     $scope.headline = translations.HEADLINE;
     $scope.paragraph = translations.PARAGRAPH;
     $scope.namespaced_paragraph = translations['NAMESPACE.PARAGRAPH'];
+  }, function (translationIds) {
+    $scope.headline = translationIds.headline;
+    $scope.paragraph = translationIds.paragraph;
+    $scope.namespaced_paragraph = translationIds.namespaced_paragraph;
   });
 }]);
 </pre>
@@ -102,6 +112,8 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
   $rootScope.$on('$translateChangeSuccess', function () {
     $translate('HEADLINE').then(function (translation) {
       $scope.headline = translation;
+    }, function (translationId) {
+      $scope.headline = translationId;
     });
   });
 }]);
@@ -137,12 +149,18 @@ app.controller('Ctrl', ['$scope', '$translate', '$rootScope', function ($scope, 
         // expose translation via `$translate` service
         $translate('HEADLINE').then(function (headline) {
           $scope.headline = headline;
+        }, function (translationId) {
+          $scope.headline = translationId;
         });
         $translate('PARAGRAPH').then(function (paragraph) {
           $scope.paragraph = paragraph;
+        }, function (translationId) {
+          $scope.paragraph = translationId;
         });
         $translate('NAMESPACE.PARAGRAPH').then(function (anotherOne) {
           $scope.namespaced_paragraph = anotherOne;
+        }, function (translationId) {
+          $scope.namespaced_paragraph = translationId;
         });
       }]);
     </script>

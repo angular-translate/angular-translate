@@ -253,6 +253,12 @@ function $translateSanitizationProvider () {
 
       stack.push(value);
       angular.forEach(value, function (propertyValue, propertyKey) {
+
+        /* Skipping function properties. */
+        if (angular.isFunction(propertyValue)) {
+          return;
+        }
+
         result[propertyKey] = mapInterpolationParameters(propertyValue, iteratee, stack);
       });
       stack.splice(-1, 1); // remove last

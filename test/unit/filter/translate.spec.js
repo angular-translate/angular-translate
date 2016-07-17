@@ -317,4 +317,64 @@ describe('pascalprecht.translate', function () {
       expect(element.html()).toBe('Hallo');
     });
   });
+
+  describe('filter handling a falsy value', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'HELLO': 'Hello'
+        })
+        .translations('de', {
+          'HELLO': 'Hallo'
+        })
+        .preferredLanguage('en');
+    }));
+
+    var $translate, $rootScope, $compile;
+    beforeEach(inject(function (_$rootScope_, _$compile_, _$translate_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+      $translate = _$translate_;
+    }));
+
+    it('should work with "0"', function () {
+      var element = $compile('<div>{{0 | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('0');
+    });
+
+    it('should work with "false"', function () {
+      var element = $compile('<div>{{false | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('');
+    });
+
+    it('should work with "null"', function () {
+      var element = $compile('<div>{{null | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('');
+    });
+
+    it('should work with "0" (by scope)', function () {
+      $rootScope.x = 0;
+      var element = $compile('<div>{{x | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('0');
+    });
+
+    it('should work with "false" (by scope)', function () {
+      $rootScope.x = false;
+      var element = $compile('<div>{{x | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('');
+    });
+
+    it('should work with "null" (by scope)', function () {
+      $rootScope.x = null;
+      var element = $compile('<div>{{x | translate}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.html()).toBe('');
+    });
+  });
 });

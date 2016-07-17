@@ -38,6 +38,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       $forceAsyncReloadEnabled = false,
       $nestedObjectDelimeter = '.',
       $isReady = false,
+      $keepContent = false,
       loaderCache,
       directivePriority = 0,
       statefulFilter = true,
@@ -993,6 +994,29 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
   };
 
   /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#keepContent
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If keepContent is set to true than translate directive will always use innerHTML
+   * as a default translation
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.keepContent(true);
+   *  });
+   * </pre>
+   *
+   * @param {boolean} value - valid values are true or false
+   */
+  this.keepContent = function (value) {
+    $keepContent = !(!value);
+    return this;
+  };
+
+  /**
    * @ngdoc object
    * @name pascalprecht.translate.$translate
    * @requires $interpolate
@@ -1016,6 +1040,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    *                                     is the translation id and the value the translation.
    * @param {object=} interpolateParams An object hash for dynamic values
    * @param {string} interpolationId The id of the interpolation to use
+   * @param {string} defaultTranslationText the optional default translation text that is written as
+   *                                        as default text in case it is not found in any configured language
    * @param {string} forceLanguage A language to be used instead of the current language
    * @returns {object} promise
    */
@@ -1169,7 +1195,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * language and informs registered interpolators to also use the given
        * key as locale.
        *
-       * @param {key} Locale key.
+       * @param {string} key Locale key.
        */
       var useLanguage = function (key) {
         $uses = key;
@@ -1377,6 +1403,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
           result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+          result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey);
           if (result.substr(0, 2) === '@:') {
             return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator);
           }
@@ -1591,6 +1618,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses);
           } else {
             result = Interpolator.interpolate(translation, interpolateParams);
+            result = applyPostProcessing(translationId, translation, result, interpolateParams, uses);
           }
         } else {
           var missingTranslationHandlerTranslation;
@@ -1646,6 +1674,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
           langPromises[key] = loadAsync(key).then(function (translation) {
             translations(translation.key, translation.table);
+            return translation;
           });
         }
       };
@@ -1953,6 +1982,20 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
       /**
        * @ngdoc function
+       * @name pascalprecht.translate.$translate#isKeepContent
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns whether keepContent or not
+       *
+       * @return {boolean} keepContent value
+       */
+      $translate.isKeepContent = function () {
+        return $keepContent;
+      };
+
+      /**
+       * @ngdoc function
        * @name pascalprecht.translate.$translate#refresh
        * @methodOf pascalprecht.translate.$translate
        *
@@ -2038,6 +2081,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
               useLanguage($uses);
             }
             resolve();
+            return data;
           };
           oneTranslationsLoaded.displayName = 'refreshPostProcessor';
 

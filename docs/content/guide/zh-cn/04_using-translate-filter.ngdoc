@@ -12,7 +12,7 @@ angular-translate 提供了一个过滤器组件,这样你就可以在你的视�
 
 
 ## 一般用法
-在 Angular 中使用过滤器是非常简单的。你可以在[这里](http://docs.angularjs.org/guide/dev_guide.templates.filters.using_filters)阅读有关的一切信息。
+在 Angular 中使用过滤器是非常简单的。你可以在[这里](https://docs.angularjs.org/guide/filter)阅读有关的一切信息。
 
 同样通过 angular-translate 的 `translate` 过滤器， 我们可以简单的将控制器的逻辑转化到视图层。
 [使用 $translate 服务](#/guide/03_using-translate-service#generalusage)。
