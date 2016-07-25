@@ -2,14 +2,16 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translate
- * @requires $compile
- * @requires $filter
- * @requires $interpolate
+ * @requires $q, 
+ * @requires $interpolate, 
+ * @requires $compile, 
+ * @requires $parse, 
+ * @requires $rootScope
  * @restrict AE
  *
  * @description
  * Translates given translation id either through attribute or DOM content.
- * Internally it uses `translate` filter to translate translation id. It possible to
+ * Internally it uses $translate service to translate the translation id. It possible to
  * pass an optional `translate-values` object literal as string into translation id.
  *
  * @param {string=} translate Translation id which could be either string or interpolated string.
