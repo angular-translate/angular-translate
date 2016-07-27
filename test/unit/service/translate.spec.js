@@ -2264,11 +2264,13 @@ describe('pascalprecht.translate', function () {
         .translations('en', translationMock)
         .translations('en', {
           'FOO': 'bar',
-          'BAR': 'foo'
+          'BAR': 'foo',
+          'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
           'FOO': 'faa'
         })
+        .useSanitizeValueStrategy('escape')
         .preferredLanguage('en');
     }));
 
@@ -2307,6 +2309,11 @@ describe('pascalprecht.translate', function () {
     it('should use forceLanguage with multiple translation ids', function() {
       expect($translate.instant(['FOO'], null, null, 'de').FOO).toEqual('faa');
     });
+
+    it('should override sanitize strategy for one call', function() {
+      expect($translate.instant('FOOBAR', { value: '<p>value</p>' }, null, null, null))
+        .toEqual('Foo bar <p>value</p>');
+    });
   });
 
   describe('$translate.instant (with fallback)', function () {
@@ -2316,11 +2323,13 @@ describe('pascalprecht.translate', function () {
         .useLoader('customLoader')
         .translations('en', {
           'FOO': 'bar',
-          'BAR': 'foo'
+          'BAR': 'foo',
+          'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
           'FOO2': 'bar2'
         })
+        .useSanitizeValueStrategy('escape')
         .preferredLanguage('de')
         .fallbackLanguage('en');
 
@@ -2351,6 +2360,12 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO2')).toEqual('bar2');
     });
 
+    it('should return translation if translation id exist' +
+       'in a fallback language and skip sanitize if a' +
+       'null value is passed', function () {
+      expect($translate.instant('FOOBAR', { value: '<p>value</p>' }, null, null, null)).toEqual('Foo bar <p>value</p>');
+    });
+
     it('should return translation id if translation id nost exist', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
     });
@@ -2359,8 +2374,19 @@ describe('pascalprecht.translate', function () {
       expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
     });
 
+    it('should return translation id with default interpolator' +
+       'if translation id nost exist and don\'t sanitize if' +
+       'the sanitize strategy is overriden', function () {
+      expect($translate.instant('FOO4 {{value}}', { value: '<p>value</p>'}, null, null, null)).toEqual('FOO4 <p>value</p>');
+    });
+
     it('should return translation id if translation id exist with forceLanguage', function () {
       expect($translate.instant('FOO', null, null, 'de')).toEqual('bar');
+    });
+
+    it('should return translation id if translation id exist with forceLanguage' +
+       'and don\'t sanitize when sanitize strategy is overriden to null', function () {
+      expect($translate.instant('FOOBAR', { value: '<p>value</p>'}, null, 'de', null)).toEqual('Foo bar <p>value</p>');
     });
   });
 

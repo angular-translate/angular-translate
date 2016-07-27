@@ -1395,17 +1395,19 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * @param translationId
        * @param interpolateParams
        * @param Interpolator
+       * @param sanitizeStrategy sanitize strategy override
+       *
        * @returns {string} translation
        */
-      var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator) {
+      var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy) {
         var result, translationTable = $translationTable[langKey];
 
         if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
-          result = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'filter');
-          result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey);
+          result = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'filter', sanitizeStrategy);
+          result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey, sanitizeStrategy);
           if (result.substr(0, 2) === '@:') {
-            return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator);
+            return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator, sanitizeStrategy);
           }
           Interpolator.setLocale($uses);
         }
@@ -1423,14 +1425,16 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * @param translationId
        * @param interpolateParams
        * @param defaultTranslationText
+       * @param sanitizeStrategy sanitize strategy override
+       *
        * @returns translation created by $missingTranslationHandler or translationId is $missingTranslationHandler is
        * absent
        */
-      var translateByHandler = function (translationId, interpolateParams, defaultTranslationText) {
+      var translateByHandler = function (translationId, interpolateParams, defaultTranslationText, sanitizeStrategy) {
         // If we have a handler factory - we might also call it here to determine if it provides
         // a default text for a translationid that can't be found anywhere in our tables
         if ($missingTranslationHandlerFactory) {
-          var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses, interpolateParams, defaultTranslationText);
+          var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses, interpolateParams, defaultTranslationText, sanitizeStrategy);
           if (resultString !== undefined) {
             return resultString;
           } else {
@@ -1499,16 +1503,17 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * @param translationId
        * @param interpolateParams
        * @param Interpolator
+       * @param sanitizeStrategy
        * @returns {string} translation
        */
-      var resolveForFallbackLanguageInstant = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator) {
+      var resolveForFallbackLanguageInstant = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator, sanitizeStrategy) {
         var result;
 
         if (fallbackLanguageIndex < $fallbackLanguage.length) {
           var langKey = $fallbackLanguage[fallbackLanguageIndex];
-          result = getFallbackTranslationInstant(langKey, translationId, interpolateParams, Interpolator);
+          result = getFallbackTranslationInstant(langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy);
           if (!result) {
-            result = resolveForFallbackLanguageInstant(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
+            result = resolveForFallbackLanguageInstant(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator, sanitizeStrategy);
           }
         }
         return result;
@@ -1535,9 +1540,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * @param Interpolator
        * @returns {String} translation
        */
-      var fallbackTranslationInstant = function (translationId, interpolateParams, Interpolator) {
+      var fallbackTranslationInstant = function (translationId, interpolateParams, Interpolator, sanitizeStrategy) {
         // Start with the fallbackLanguage with index 0
-        return resolveForFallbackLanguageInstant((startFallbackIteration>0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator);
+        return resolveForFallbackLanguageInstant((startFallbackIteration>0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator, sanitizeStrategy);
       };
 
       var determineTranslation = function (translationId, interpolateParams, interpolationId, defaultTranslationText, uses) {
@@ -1599,7 +1604,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         return deferred.promise;
       };
 
-      var determineTranslationInstant = function (translationId, interpolateParams, interpolationId, uses) {
+      var determineTranslationInstant = function (translationId, interpolateParams, interpolationId, uses, sanitizeStrategy) {
 
         var result, table = uses ? $translationTable[uses] : $translationTable,
             Interpolator = defaultInterpolator;
@@ -1615,16 +1620,16 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
           // If using link, rerun $translate with linked translationId and return it
           if (translation.substr(0, 2) === '@:') {
-            result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses);
+            result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses, sanitizeStrategy);
           } else {
-            result = Interpolator.interpolate(translation, interpolateParams, 'filter');
-            result = applyPostProcessing(translationId, translation, result, interpolateParams, uses);
+            result = Interpolator.interpolate(translation, interpolateParams, 'filter', sanitizeStrategy);
+            result = applyPostProcessing(translationId, translation, result, interpolateParams, uses, sanitizeStrategy);
           }
         } else {
           var missingTranslationHandlerTranslation;
           // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
           if ($missingTranslationHandlerFactory && !pendingLoader) {
-            missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams);
+            missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
           }
 
           // since we couldn't translate the inital requested translation id,
@@ -1632,7 +1637,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           // configured.
           if (uses && $fallbackLanguage && $fallbackLanguage.length) {
             fallbackIndex = 0;
-            result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator);
+            result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator, sanitizeStrategy);
           } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
             // looks like the requested translation id doesn't exists.
             // Now, if there is a registered handler for missing translations and no
@@ -1653,7 +1658,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         langPromises[key] = undefined;
       };
 
-      var applyPostProcessing = function (translationId, translation, resolvedTranslation, interpolateParams, uses) {
+      var applyPostProcessing = function (translationId, translation, resolvedTranslation, interpolateParams, uses, sanitizeStrategy) {
         var fn = postProcessFn;
 
         if (fn) {
@@ -1663,7 +1668,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             fn = $injector.get(fn);
           }
           if (fn) {
-            return fn(translationId, translation, resolvedTranslation, interpolateParams, uses);
+            return fn(translationId, translation, resolvedTranslation, interpolateParams, uses, sanitizeStrategy);
           }
         }
 
@@ -2111,10 +2116,11 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        * @param {object} interpolateParams Params
        * @param {string} interpolationId The id of the interpolation to use
        * @param {string} forceLanguage A language to be used instead of the current language
+       * @param {string} sanitizeStrategy force sanitize strategy for this call instead of using the configured one
        *
        * @return {string|object} translation
        */
-      $translate.instant = function (translationId, interpolateParams, interpolationId, forceLanguage) {
+      $translate.instant = function (translationId, interpolateParams, interpolationId, forceLanguage, sanitizeStrategy) {
 
         // we don't want to re-negotiate $uses
         var uses = (forceLanguage && forceLanguage !== $uses) ? // we don't want to re-negotiate $uses
@@ -2135,7 +2141,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if (angular.isArray(translationId)) {
           var results = {};
           for (var i = 0, c = translationId.length; i < c; i++) {
-            results[translationId[i]] = $translate.instant(translationId[i], interpolateParams, interpolationId, forceLanguage);
+            results[translationId[i]] = $translate.instant(translationId[i], interpolateParams, interpolationId, forceLanguage, sanitizeStrategy);
           }
           return results;
         }
@@ -2164,7 +2170,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           var possibleLangKey = possibleLangKeys[j];
           if ($translationTable[possibleLangKey]) {
             if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
-              result = determineTranslationInstant(translationId, interpolateParams, interpolationId, uses);
+              result = determineTranslationInstant(translationId, interpolateParams, interpolationId, uses, sanitizeStrategy);
             }
           }
           if (typeof result !== 'undefined') {
@@ -2177,9 +2183,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             result = applyNotFoundIndicators(translationId);
           } else {
             // Return translation of default interpolator if not found anything.
-            result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter');
+            result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter', sanitizeStrategy);
             if ($missingTranslationHandlerFactory && !pendingLoader) {
-              result = translateByHandler(translationId, interpolateParams);
+              result = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
             }
           }
         }
