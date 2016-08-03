@@ -70,17 +70,32 @@ $translateProvider.usePostCompiling(true);
 ## Translate HTML Attributes
 You can already translate any HTML element's attribute using the `translate` filter, 
 but as mentioned above this can create a ton of unnecessary watches on your pages. 
-Here's a better way to translate those attributes using the `translate` directive!
+Here's a better way to translate those attributes using the `translate-attr` directive (starting version 2.12)!
 
 ```
-<ANY translate translate-attr-ATTRIBUTE_NAME="TRANSLATION_ID></ANY>
+<ANY translate-attr="{ ATTRIBUTE_NAME: 'TRANSLATION_ID' }"></ANY>
 ```
 
 Substitute the HTML element attribute's name for `ATTRIBUTE_NAME` and you will get
 all the benefits of the `translate` directive used for that attribute!
 
 ```
-<img src="mylogo.png" translate translate-attr-alt="LOGO"></img>
+<img src="mylogo.png" translate-attr="{ alt: 'LOGO' }"></img>
+```
+
+This attribute is parsed and watched, so you can also supply a controller-provided object,
+and you can use one-time binding by prefixing your statement with `::`. Here's an example of both:
+
+```
+// given a scope variable attrTranslations = { alt: 'LOGO', title: 'TITLE' }
+<img src="mylogo.png" translate-attr="::attrTranslations">
+```
+
+If your angular-translate did not reach version 2.12, you can use the deprecated way to translate attributes
+using the `translate` directive:
+
+```
+<ANY translate translate-attr-ATTRIBUTE_NAME="TRANSLATION_ID"></ANY>
 ```
 
 ## Example
@@ -104,7 +119,7 @@ After that we update our view with our new translation IDs:
 
 <pre>
 <p>{{ 'HEADLINE' | translate }}</p>
-<img src="mylogo.png" translate translate-attr-alt="LOGO"></img>
+<img src="mylogo.png" translate-attr="{ alt: 'LOGO' }"></img>
 <p>{{ 'PARAGRAPH' | translate }}</p>
 
 <p translate>PASSED_AS_TEXT</p>
@@ -142,7 +157,7 @@ Our updated app then looks like this:
     </script>
     <div ng-controller="Ctrl">
       <p>{{ 'HEADLINE' | translate }}</p>
-      <img src="mylogo.png" translate translate-attr-alt="LOGO"></img>
+      <img src="mylogo.png" translate-attr="{ alt: 'LOGO' }"></img>
       <p>{{ 'PARAGRAPH' | translate }}</p>
 
       <p translate>PASSED_AS_TEXT</p>
