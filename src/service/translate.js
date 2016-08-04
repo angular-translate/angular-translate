@@ -1680,6 +1680,13 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       };
 
       /**
+      * @ngdoc function
+      * @description
+      * update messages with this function at runtime 
+      */      
+      $translate.translations = translations;
+
+      /**
        * @ngdoc function
        * @name pascalprecht.translate.$translate#preferredLanguage
        * @methodOf pascalprecht.translate.$translate
