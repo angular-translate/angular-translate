@@ -2130,6 +2130,11 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           loadTranslationsIfMissing(forceLanguage);
         }
 
+        // Detect undefined and null values to shorten the execution and prevent exceptions
+        if (translationId === null || angular.isUndefined(translationId)) {
+          return translationId;
+        }
+
         // Duck detection: If the first argument is an array, a bunch of translations was requested.
         // The result is an object.
         if (angular.isArray(translationId)) {
