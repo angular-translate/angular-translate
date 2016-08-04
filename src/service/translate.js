@@ -2063,6 +2063,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             $translationTable = {};
             angular.forEach(tableData, function (data) {
               translations(data.key, data.table);
+              useLanguage(data.key);
             });
             if ($uses) {
               useLanguage($uses);
