@@ -89,6 +89,10 @@ describe('pascalprecht.translate', function () {
       expect(value[5]).toEqual('10');
       expect(value[6]).toEqual('55');
     });
+	  
+	it('should not throw errors when translation id is a number', function() {
+		expect($translate(4.5)).toEqual('4.5');
+	});
 
   it('should not throw errors when translation id is not a string', function() {
     var value = [
