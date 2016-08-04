@@ -2877,4 +2877,31 @@ describe('pascalprecht.translate', function () {
       expect(secondLanguageResponded).toEqual(true);
     }));
   });
+
+  describe('$translate.versionString', function () {
+
+    var $translate, $STORAGE_KEY, $q, $rootScope;
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      $translateProvider
+        .translations('en', translationMock)
+        .translations('en', {
+          'FOO': 'bar',
+          'BAR': 'foo'
+        })
+        .preferredLanguage('en');
+    }));
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+
+    }));
+
+    it('should return a version string', function () {
+      expect(typeof $translate.versionString()).toBe('string');
+
+    });
+
+    it('should return a version codename having a name', function () {
+      expect($translate.versionInfo.codename.length).toBeGreaterThan(1);
+    });
+  });
 });

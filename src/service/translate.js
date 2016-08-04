@@ -15,6 +15,25 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
   'use strict';
 
+  /**
+   * @ngdoc property
+   * @name pascalprecht.translate.version
+   * @description
+   * Object to contain version information on the current angular-translate module
+   * following properties:
+   *
+   * - `major` – `{number}` – Major version number, such as "0".
+   * - `minor` – `{number}` – Minor version number, such as "9".
+   * - `dot` – `{number}` – Dot version number, such as "18".
+   * - `codeName` – `{string}` – Code name of the release, e.g. "animal-farm".
+   */
+  var version = {
+    major: 2,
+    minor: 0,
+    dot: 1,
+    codename: 'northsea'
+  };
+
   var $translationTable = {},
       $preferredLanguage,
       $availableLanguageKeys = [],
@@ -1803,6 +1822,37 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       $translate.proposedLanguage = function () {
         return $nextLang;
       };
+
+      /**
+       * @ngdoc property
+       * @name pascalprecht.translate.$translate#versionInfo
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns the current version of the angular-translate library
+       *
+       * @return {array} language version information
+       */
+      $translate.versionInfo = {
+        major: version.major,
+        minor: version.minor,
+        dot: version.dot,
+        codename: version.codename
+      };
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#versionInfo
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns the current version of the angular-translate library as complete String
+       *
+       * @return {string} complete language version information
+       */
+      $translate.versionString = function () {
+        return [version.major, version.minor, version.dot, version.codename].join('.');
+      }
 
       /**
        * @ngdoc function
