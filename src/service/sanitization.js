@@ -240,7 +240,9 @@ function $translateSanitizationProvider () {
   };
 
   var mapInterpolationParameters = function (value, iteratee, stack) {
-    if (angular.isObject(value)) {
+    if (angular.isDate(value)) {
+      return value;
+    } else if (angular.isObject(value)) {
       var result = angular.isArray(value) ? [] : {};
 
       if (!stack) {

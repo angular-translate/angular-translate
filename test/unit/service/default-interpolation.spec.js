@@ -123,6 +123,19 @@ describe('pascalprecht.translate', function () {
       expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
       expect($translateSanitization.sanitize).toHaveBeenCalledWith(interpolatedText, 'text');
     }));
+
+    it('should ignore a date param', inject(function ($translateSanitization) {
+      var text = 'Day is: {{day | date:"dd.MM.yyyy"}}';
+      var params = {
+        day: new Date('2016-08-21')
+      };
+      var sanitizedText = 'Day is: 21.08.2016';
+
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateSanitization.useStrategy('escapeParameters');
+      expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
+      //expect()
+    }));
   });
 
   describe('$translateDefaultInterpolation#useSanitizeValueStrategy', function () {
