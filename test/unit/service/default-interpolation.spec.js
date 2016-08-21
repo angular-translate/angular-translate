@@ -84,7 +84,7 @@ describe('pascalprecht.translate', function () {
       spyOn($translateSanitization, 'sanitize').and.callThrough();
 
       expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params');
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params', undefined, undefined);
     }));
 
     it('should sanitize the interpolation params', inject(function ($translateSanitization) {
@@ -96,7 +96,7 @@ describe('pascalprecht.translate', function () {
       $translateDefaultInterpolation.useSanitizeValueStrategy('escapeParameters');
 
       expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params');
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params', undefined, undefined);
     }));
 
     it('should not sanitize the interpolation params (defaults)', inject(function ($translateSanitization) {
@@ -108,7 +108,7 @@ describe('pascalprecht.translate', function () {
       spyOn($translateSanitization, 'sanitize').and.callThrough();
 
       expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interpolatedText, 'text');
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interpolatedText, 'text', undefined, undefined);
     }));
 
     it('should sanitize the interpolation params', inject(function ($translateSanitization) {
@@ -121,7 +121,7 @@ describe('pascalprecht.translate', function () {
       $translateDefaultInterpolation.useSanitizeValueStrategy('escape');
 
       expect($translateDefaultInterpolation.interpolate(text, params)).toBe(sanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interpolatedText, 'text');
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interpolatedText, 'text', undefined, undefined);
     }));
 
     it('should ignore a date param', inject(function ($translateSanitization) {

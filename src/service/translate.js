@@ -1365,7 +1365,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
               getFallbackTranslation(langKey, translation.substr(2), interpolateParams, Interpolator)
                 .then(deferred.resolve, deferred.reject);
             } else {
-              var interpolatedValue = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+              var interpolatedValue = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'service');
               interpolatedValue = applyPostProcessing(translationId, translationTable[translationId], interpolatedValue, interpolateParams, langKey);
 
               deferred.resolve(interpolatedValue);
@@ -1402,7 +1402,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
           Interpolator.setLocale(langKey);
-          result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+          result = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'filter');
           result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey);
           if (result.substr(0, 2) === '@:') {
             return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator);
@@ -1558,7 +1558,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
               .then(deferred.resolve, deferred.reject);
           } else {
             //
-            var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams);
+            var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams, 'service');
             resolvedTranslation = applyPostProcessing(translationId, translation, resolvedTranslation, interpolateParams, uses);
             deferred.resolve(resolvedTranslation);
           }
@@ -1617,7 +1617,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           if (translation.substr(0, 2) === '@:') {
             result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses);
           } else {
-            result = Interpolator.interpolate(translation, interpolateParams);
+            result = Interpolator.interpolate(translation, interpolateParams, 'filter');
             result = applyPostProcessing(translationId, translation, result, interpolateParams, uses);
           }
         } else {
@@ -2177,7 +2177,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             result = applyNotFoundIndicators(translationId);
           } else {
             // Return translation of default interpolator if not found anything.
-            result = defaultInterpolator.interpolate(translationId, interpolateParams);
+            result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter');
             if ($missingTranslationHandlerFactory && !pendingLoader) {
               result = translateByHandler(translationId, interpolateParams);
             }
