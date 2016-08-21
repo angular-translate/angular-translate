@@ -464,11 +464,11 @@ describe('pascalprecht.translate', function () {
     });
 
     // addresses [issue #433](https://github.com/angular-translate/angular-translate/issues/433)
-    it('should interpolate variables inside ng-if directives', function () {
-      var markup = '<div ng-if="true"><p translate="FOO" translate-value-name="{{name}}"></p></div>';
+    fit('should interpolate variables inside ng-if directives', function () {
+      var markup = '<div><div ng-if="true"><p translate="FOO" translate-value-name="{{name}}"></p></div></div>';
       element = $compile(markup)($rootScope);
       $rootScope.$digest();
-      expect(element.next().text()).toEqual('hello my name is Pascal');
+      expect(angular.element(element[0].getElementsByTagName('div')[0]).text()).toEqual('hello my name is Pascal');
     });
 
     it('should interpolate variables inside ng-repeat directives', function () {
