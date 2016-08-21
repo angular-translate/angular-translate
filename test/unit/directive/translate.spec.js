@@ -464,7 +464,7 @@ describe('pascalprecht.translate', function () {
     });
 
     // addresses [issue #433](https://github.com/angular-translate/angular-translate/issues/433)
-    fit('should interpolate variables inside ng-if directives', function () {
+    it('should interpolate variables inside ng-if directives', function () {
       var markup = '<div><div ng-if="true"><p translate="FOO" translate-value-name="{{name}}"></p></div></div>';
       element = $compile(markup)($rootScope);
       $rootScope.$digest();
