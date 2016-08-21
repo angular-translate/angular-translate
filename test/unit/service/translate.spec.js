@@ -709,11 +709,11 @@ describe('pascalprecht.translate', function () {
       }, fastRequestTime / 2);
 
       // t2
-      $timeout.flush();
+      $timeout.flush(10000);
       $rootScope.$digest();
 
       // t3
-      $timeout.flush();
+      $timeout.flush(10000);
     }));
 
     it('should be requested the first language', function () {
