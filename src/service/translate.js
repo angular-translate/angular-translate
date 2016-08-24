@@ -1910,7 +1910,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             return translation;
           }, function (key) {
             // find first available fallback language if that request has failed
-            if (!$uses && $fallbackLanguage && $fallbackLanguage.length > 0) {
+            if (!$uses && $fallbackLanguage && $fallbackLanguage.length > 0 && $fallbackLanguage[0] !== key) {
               return $translate.use($fallbackLanguage[0]).then(deferred.resolve, deferred.reject);
             } else {
               return deferred.reject(key);
