@@ -62,9 +62,9 @@ function $translatePartialLoader() {
         .then(function(result){
           self.tables[lang] = result.data;
           return result.data;
-        }, function() {
+        }, function(response) {
           if (errorHandler) {
-            return errorHandler(self.name, lang)
+            return errorHandler(self.name, lang, response)
               .then(function(data) {
                 self.tables[lang] = data;
                 return data;
