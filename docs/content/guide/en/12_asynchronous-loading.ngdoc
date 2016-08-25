@@ -276,7 +276,7 @@ There are a few things you have to know before you'll be able to create your fir
 error handler:
 
 1) The partial loader expects the error handler to have the following signature
-`function (part:String, langKey:String):Promise`
+`function (part:String, langKey:String, response: Response):Promise`
 2) You have to either resolve the promise with a translation table for the given
 part and language or reject it
 3) The partial loader will use the given translation table like it was successfully
@@ -288,7 +288,7 @@ Here is an example of a simple error handler:
 ```js
 angular.module('translation')
 .factory('MyErrorHandler', function ($q, $log) {
-  return function (part, lang) {
+  return function (part, lang, response) {
     $log.error('The "' + part + '/' + lang + '" part was not loaded.');
     return $q.when({});
   };
