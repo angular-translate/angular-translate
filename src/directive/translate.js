@@ -2,14 +2,15 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translate
- * @requires $compile
- * @requires $filter
- * @requires $interpolate
+ * @requires $interpolate, 
+ * @requires $compile, 
+ * @requires $parse, 
+ * @requires $rootScope
  * @restrict AE
  *
  * @description
  * Translates given translation id either through attribute or DOM content.
- * Internally it uses `translate` filter to translate translation id. It possible to
+ * Internally it uses $translate service to translate the translation id. It possible to
  * pass an optional `translate-values` object literal as string into translation id.
  *
  * @param {string=} translate Translation id which could be either string or interpolated string.
@@ -93,7 +94,7 @@ angular.module('pascalprecht.translate')
    </example>
  */
 .directive('translate', translateDirective);
-function translateDirective($translate, $q, $interpolate, $compile, $parse, $rootScope) {
+function translateDirective($translate, $interpolate, $compile, $parse, $rootScope) {
 
   'use strict';
 
@@ -215,7 +216,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
         });
 
         for (var translateAttr in iAttr) {
-          if (iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr') {
+          if (iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr' && translateAttr.length > 13) {
             observeAttributeTranslation(translateAttr);
           }
         }
@@ -312,7 +313,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
         }
 
         // Replaced watcher on translateLanguage with event listener
-        var unbindTranslateLanguage = scope.$on('translateLanguageChanged', updateTranslations);
+        scope.$on('translateLanguageChanged', updateTranslations);
 
         // Ensures the text will be refreshed after the current language was changed
         // w/ $translate.use(...)
@@ -330,10 +331,7 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
           observeElementTranslation(iAttr.translate);
         }
         updateTranslations();
-        scope.$on('$destroy', function(){
-          unbindTranslateLanguage();
-          unbind();
-        });
+        scope.$on('$destroy', unbind);
       };
     }
   };

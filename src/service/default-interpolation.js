@@ -73,9 +73,9 @@ function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
    *
    * @returns {string} interpolated string.
    */
-  $translateInterpolator.interpolate = function (value, interpolationParams) {
+  $translateInterpolator.interpolate = function (value, interpolationParams, context) {
     interpolationParams = interpolationParams || {};
-    interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params');
+    interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params', undefined, context);
 
     var interpolatedText;
     if (angular.isNumber(value)) {
@@ -84,7 +84,7 @@ function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
     } else if (angular.isString(value)) {
       // strings must be interpolated (that's the job here)
       interpolatedText = $interpolate(value)(interpolationParams);
-      interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text');
+      interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text', undefined, context);
     } else {
       // neither a number or a string, cant interpolate => empty string
       interpolatedText = '';

@@ -96,7 +96,7 @@ function $translateMessageFormatInterpolation($translateSanitization, $cacheFact
    *
    * @returns {string} interpolated string.
    */
-  $translateInterpolator.interpolate = function (string, interpolationParams) {
+  $translateInterpolator.interpolate = function (string, interpolationParams/*, context*/) {
     interpolationParams = interpolationParams || {};
     interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params');
 

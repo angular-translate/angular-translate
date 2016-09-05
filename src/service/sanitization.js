@@ -13,6 +13,7 @@ function $translateSanitizationProvider () {
   'use strict';
 
   var $sanitize,
+      $sce,
       currentStrategy = null, // TODO change to either 'sanitize', 'escape' or ['sanitize', 'escapeParameters'] in 3.0.
       hasConfiguredStrategy = false,
       hasShownNoStrategyConfiguredWarning = false,
@@ -49,27 +50,44 @@ function $translateSanitizationProvider () {
    */
 
   strategies = {
-    sanitize: function (value, mode) {
+    sanitize: function (value, mode/*, context*/) {
       if (mode === 'text') {
         value = htmlSanitizeValue(value);
       }
       return value;
     },
-    escape: function (value, mode) {
+    escape: function (value, mode/*, context*/) {
       if (mode === 'text') {
         value = htmlEscapeValue(value);
       }
       return value;
     },
-    sanitizeParameters: function (value, mode) {
+    sanitizeParameters: function (value, mode/*, context*/) {
       if (mode === 'params') {
         value = mapInterpolationParameters(value, htmlSanitizeValue);
       }
       return value;
     },
-    escapeParameters: function (value, mode) {
+    escapeParameters: function (value, mode/*, context*/) {
       if (mode === 'params') {
         value = mapInterpolationParameters(value, htmlEscapeValue);
+      }
+      return value;
+    },
+    sce: function (value, mode, context) {
+      if (mode === 'text') {
+        value = htmlTrustValue(value);
+      } else if (mode === 'params') {
+        if (context !== 'filter') {
+          // do html escape in filter context #1101
+          value = mapInterpolationParameters(value, htmlEscapeValue);
+        }
+      }
+      return value;
+    },
+    sceParameters: function (value, mode/*, context*/) {
+      if (mode === 'params') {
+        value = mapInterpolationParameters(value, htmlTrustValue);
       }
       return value;
     }
@@ -142,12 +160,12 @@ function $translateSanitizationProvider () {
 
     var cachedStrategyMap = {};
 
-    var applyStrategies = function (value, mode, selectedStrategies) {
+    var applyStrategies = function (value, mode, context, selectedStrategies) {
       angular.forEach(selectedStrategies, function (selectedStrategy) {
         if (angular.isFunction(selectedStrategy)) {
-          value = selectedStrategy(value, mode);
+          value = selectedStrategy(value, mode, context);
         } else if (angular.isFunction(strategies[selectedStrategy])) {
-          value = strategies[selectedStrategy](value, mode);
+          value = strategies[selectedStrategy](value, mode, context);
         } else if (angular.isString(strategies[selectedStrategy])) {
           if (!cachedStrategyMap[strategies[selectedStrategy]]) {
             try {
@@ -157,7 +175,7 @@ function $translateSanitizationProvider () {
               throw new Error('pascalprecht.translate.$translateSanitization: Unknown sanitization strategy: \'' + selectedStrategy + '\'');
             }
           }
-          value = cachedStrategyMap[strategies[selectedStrategy]](value, mode);
+          value = cachedStrategyMap[strategies[selectedStrategy]](value, mode, context);
         } else {
           throw new Error('pascalprecht.translate.$translateSanitization: Unknown sanitization strategy: \'' + selectedStrategy + '\'');
         }
@@ -175,6 +193,9 @@ function $translateSanitizationProvider () {
 
     if ($injector.has('$sanitize')) {
       $sanitize = $injector.get('$sanitize');
+    }
+    if ($injector.has('$sce')) {
+      $sce = $injector.get('$sce');
     }
 
     return {
@@ -205,14 +226,15 @@ function $translateSanitizationProvider () {
        * @param {string|object} value The value which should be sanitized.
        * @param {string} mode The current sanitization mode, either 'params' or 'text'.
        * @param {string|StrategyFunction|array} [strategy] Optional custom strategy which should be used instead of the currently selected strategy.
+       * @param {string} [context] The context of this call: filter, service. Default is service
        * @returns {string|object} sanitized value
        */
-      sanitize: function (value, mode, strategy) {
+      sanitize: function (value, mode, strategy, context) {
         if (!currentStrategy) {
           showNoStrategyConfiguredWarning();
         }
 
-        if (arguments.length < 3) {
+        if (!strategy && strategy !== null) {
           strategy = currentStrategy;
         }
 
@@ -220,8 +242,12 @@ function $translateSanitizationProvider () {
           return value;
         }
 
+        if (!context) {
+          context = 'service';
+        }
+
         var selectedStrategies = angular.isArray(strategy) ? strategy : [strategy];
-        return applyStrategies(value, mode, selectedStrategies);
+        return applyStrategies(value, mode, context, selectedStrategies);
       }
     };
   };
@@ -239,8 +265,17 @@ function $translateSanitizationProvider () {
     return $sanitize(value);
   };
 
+  var htmlTrustValue = function (value) {
+    if (!$sce) {
+      throw new Error('pascalprecht.translate.$translateSanitization: Error cannot find $sce service.');
+    }
+    return $sce.trustAsHtml(value);
+  };
+
   var mapInterpolationParameters = function (value, iteratee, stack) {
-    if (angular.isObject(value)) {
+    if (angular.isDate(value)) {
+      return value;
+    } else if (angular.isObject(value)) {
       var result = angular.isArray(value) ? [] : {};
 
       if (!stack) {

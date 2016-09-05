@@ -709,11 +709,11 @@ describe('pascalprecht.translate', function () {
       }, fastRequestTime / 2);
 
       // t2
-      $timeout.flush();
+      $timeout.flush(10000);
       $rootScope.$digest();
 
       // t3
-      $timeout.flush();
+      $timeout.flush(10000);
     }));
 
     it('should be requested the first language', function () {
@@ -2875,6 +2875,47 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       expect(value).toEqual(expectedTranslation);
       expect(secondLanguageResponded).toEqual(true);
+    }));
+  });
+
+  // Spec for edge case: preferred and fallback language are not found
+  describe('$translate with async loading having an invalid preferredLang and one fallbackLang existing', function () {
+
+    var theFallbackLangKey = 'ef_GH',
+      thePreferredLangKey = 'ab_CD';
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.useLoader('customLoader');
+
+      $translateProvider.preferredLanguage(thePreferredLangKey);
+      $translateProvider.fallbackLanguage(theFallbackLangKey);
+
+      $provide.service('customLoader', function ($q) {
+        return function (options) {
+          var locale = options.key;
+          return $q.reject(locale);
+        };
+      });
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope) {
+      $translate = _$translate_;
+      $rootScope.$digest();
+    }));
+
+    it('should fail without going into infinite loop', inject(function ($rootScope) {
+
+      var failed = false;
+
+      $translate('greeting').catch(function () {
+        failed = true;
+      });
+
+      $rootScope.$digest();
+      expect(failed).toEqual(true);
     }));
   });
 });
