@@ -1,3 +1,22 @@
+<a name="2.12.0"></a>
+# [2.12.0](https://github.com/angular-translate/angular-translate/compare/2.11.1...v2.12.0) (2016-09-05)
+
+
+### Bug Fixes
+
+* **service:** fix infinite loop when fallback language async loading fails ([233f30c](https://github.com/angular-translate/angular-translate/commit/233f30c))
+* **service:** treat date param as-is (no sanitize/escape) ([ab1ecce](https://github.com/angular-translate/angular-translate/commit/ab1ecce)), closes [#1560](https://github.com/angular-translate/angular-translate/issues/1560)
+
+
+### Features
+
+* **directive:** introduce standalone translate-attr directive ([bcb0f2c](https://github.com/angular-translate/angular-translate/commit/bcb0f2c))
+* **partial loader:** add error response to errorHandler ([e3aba1c](https://github.com/angular-translate/angular-translate/commit/e3aba1c))
+* **service:** introduce new sanitize strategies: sce/sceParameters ([1624df5](https://github.com/angular-translate/angular-translate/commit/1624df5))
+* **service:** provide for sanitize/escape strategy 3rd argument context ([8504c60](https://github.com/angular-translate/angular-translate/commit/8504c60))
+
+
+
 <a name="2.11.1"></a>
 ## [2.11.1](https://github.com/angular-translate/angular-translate/compare/2.11.0...v2.11.1) (2016-07-17)
 
