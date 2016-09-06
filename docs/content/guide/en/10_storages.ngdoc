@@ -17,7 +17,7 @@ to remember the language users choose.
 
 ## Let your app remember the language
 
-To let you app remember the language users choose, angular-translate comes with a
+To let your app remember the language users choose, angular-translate comes with a
 support for **Storages**. What ever storage you use, angular-translate will save
 a language key with a specific identifier in it, so it can ask for it next time
 the user launches the app.
