@@ -155,6 +155,10 @@ describe('pascalprecht.translate', function () {
       expect($translate.isForceAsyncReloadEnabled).toBeDefined();
     });
 
+    it('should have a method getTranslationTable()', function () {
+      expect($translate.getTranslationTable).toBeDefined();
+    });
+
     it('should not try to load a language which has not been registered yet', function () {
       // ensure initial language is en (preferred one)
       expect($translate.use()).toBe('en');
@@ -2739,6 +2743,41 @@ describe('pascalprecht.translate', function () {
     });
 
   });
+
+  describe('$translate#getTranslationTable()', function () {
+    var ru_RU_transaltionMock = {'HI': 'Всем  привет!'};
+    var en_EN_transaltionMock = {'HI': 'Hello there!'};
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('ru_RU', ru_RU_transaltionMock)
+        .translations('en_EN', en_EN_transaltionMock)
+        .preferredLanguage('ru_RU');
+    }));
+
+    var $translate, $rootScope, $STORAGE_KEY, $q;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_, _$STORAGE_KEY_, _$q_) {
+      $translate = _$translate_;
+      $rootScope = _$rootScope_;
+      $STORAGE_KEY = _$STORAGE_KEY_;
+      $q = _$q_;
+    }));
+
+    it('should return transaltion table which is curently in use if no params', function () {
+      expect(angular.equals($translate.getTranslationTable(), ru_RU_transaltionMock)).toBe(true);
+    });
+
+    it('should return transaltion table by transaltion Id', function () {
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_transaltionMock)).toBe(true);
+    });
+
+    it('should return null if transaltion table with transaltion Id does not exist', function () {
+      expect($translate.getAvailableLanguageKeys('NOT_EXISTING_TRANSLATION_ID')).toEqual(null);
+    });
+
+  });
+
 
   describe('$translate#postprocess() with an enabled fallback language', function () {
 
