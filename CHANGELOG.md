@@ -1,3 +1,14 @@
+<a name="2.12.1"></a>
+## [2.12.1](https://github.com/angular-translate/angular-translate/compare/2.12.0...v2.12.1) (2016-09-15)
+
+
+### Bug Fixes
+
+* **build:** Add missing translate-attr directive to Gruntfile.js ([e70e9ad](https://github.com/angular-translate/angular-translate/commit/e70e9ad)), closes [#1577](https://github.com/angular-translate/angular-translate/issues/1577)
+* **style:** fix code style issues in ~-attr directive ([1848bc8](https://github.com/angular-translate/angular-translate/commit/1848bc8))
+
+
+
 <a name="2.12.0"></a>
 # [2.12.0](https://github.com/angular-translate/angular-translate/compare/2.11.1...v2.12.0) (2016-09-05)
 
