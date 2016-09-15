@@ -70,9 +70,11 @@ function translateAttrDirective($translate, $rootScope) {
           previousAttributes = {};
 
       // Main update translations function
-      var updateTranslations = function() {
+      var updateTranslations = function () {
         angular.forEach(translateAttr, function (translationId, attributeName) {
-          if (!translationId) return;
+          if (!translationId) {
+            return;
+          }
           previousAttributes[attributeName] = true;
 
           // if translation id starts with '.' and translateNamespace given, prepend namespace
@@ -94,23 +96,26 @@ function translateAttrDirective($translate, $rootScope) {
             delete previousAttributes[attributeName];
           }
         });
-      }
+      };
 
       // Watch for attribute changes
       watchAttribute(
-        scope, attr.translateAttr,
+        scope,
+        attr.translateAttr,
         function (newValue) { translateAttr = newValue; },
-        function() { updateTranslations() }
+        updateTranslations
       );
       // Watch for value changes
       watchAttribute(
-        scope, attr.translateValues,
+        scope,
+        attr.translateValues,
         function (newValue) { translateValues = newValue; },
-        function() { updateTranslations() }
+        updateTranslations
       );
 
-      if (attr.translateValues)
+      if (attr.translateValues) {
         scope.$watch(attr.translateValues, updateTranslations, true);
+      }
 
       // Replaced watcher on translateLanguage with event listener
       scope.$on('translateLanguageChanged', updateTranslations);
@@ -126,7 +131,10 @@ function translateAttrDirective($translate, $rootScope) {
 }
 
 function watchAttribute(scope, attribute, valueCallback, changeCallback) {
-  if (!attribute) return;
+  'use strict';
+  if (!attribute) {
+    return;
+  }
   if (attribute.substr(0, 2) === '::') {
     attribute = attribute.substr(2);
   } else {
