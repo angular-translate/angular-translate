@@ -36,12 +36,18 @@ function $translateStaticFilesLoader($q, $http) {
         throw new Error('Couldn\'t load static file, no prefix or suffix specified!');
       }
 
+      var fileUrl = [
+        file.prefix,
+        options.key,
+        file.suffix
+      ].join('');
+
+      if(options.fileMap && options.fileMap[fileUrl]) {
+        fileUrl = options.fileMap[fileUrl];
+      }
+
       return $http(angular.extend({
-        url: [
-          file.prefix,
-          options.key,
-          file.suffix
-        ].join(''),
+        url: fileUrl,
         method: 'GET',
         params: ''
       }, options.$http))
