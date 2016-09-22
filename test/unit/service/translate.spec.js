@@ -2316,10 +2316,14 @@ describe('pascalprecht.translate', function () {
         .useLoader('customLoader')
         .translations('en', {
           'FOO': 'bar',
-          'BAR': 'foo'
+          'BAR': 'foo',
+          'BARE': ''
         })
         .translations('de', {
           'FOO2': 'bar2'
+        })
+        .translations('fr', {
+          'BARE': 'bare'
         })
         .preferredLanguage('de')
         .fallbackLanguage('en');
@@ -2349,10 +2353,15 @@ describe('pascalprecht.translate', function () {
     it('should return translation if translation id exist', function () {
       expect($translate.instant('FOO')).toEqual('bar');
       expect($translate.instant('FOO2')).toEqual('bar2');
+      expect($translate.instant('BARE')).toEqual('');
     });
 
     it('should return translation id if translation id nost exist', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
+    });
+
+    it('should return the first translation if multiple fallbacks exist', function () {
+      expect($translate.instant('BARE')).toEqual('');
     });
 
     it('should return translation id with default interpolator if translation id nost exist', function () {
