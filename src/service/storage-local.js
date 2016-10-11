@@ -11,7 +11,7 @@ angular.module('pascalprecht.translate')
  * to use localStorage as storage.
  *
  */
-.factory('$translateLocalStorage', $translateLocalStorageFactory);
+.factory('$translateLocalStorage', ['$window', '$translateCookieStorage', $translateLocalStorageFactory]);
 
 function $translateLocalStorageFactory($window, $translateCookieStorage) {
 
