@@ -2018,10 +2018,12 @@ describe('pascalprecht.translate', function () {
 
     }));
 
-    var $translate;
+    var $translate,
+      $rootScope;
 
-    beforeEach(inject(function (_$translate_) {
+    beforeEach(inject(function (_$translate_, _$rootScope_) {
       $translate = _$translate_;
+      $rootScope = _$rootScope_;
     }));
 
     it('should not invoke missingTranslationHandler if translation id exists', function () {
@@ -2064,6 +2066,25 @@ describe('pascalprecht.translate', function () {
           defaultTranslation: 'DEFAULT'
         }
       });
+    });
+
+    it('should reject promise if translation doesn\'t exist and handler returns undefined', function () {
+      var wasResolved = false,
+        wasRejected = false,
+        promise = $translate('NOT_EXISTING_TRANSLATION_ID');
+      promise.then(resolved, rejected);
+
+      $rootScope.$digest();
+      expect(wasResolved).toEqual(false);
+      expect(wasRejected).toEqual(true);
+
+      function resolved() {
+        wasResolved = true;
+      }
+
+      function rejected() {
+        wasRejected = true;
+      }
     });
   });
 
