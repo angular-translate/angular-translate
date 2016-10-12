@@ -1434,12 +1434,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         // If we have a handler factory - we might also call it here to determine if it provides
         // a default text for a translationid that can't be found anywhere in our tables
         if ($missingTranslationHandlerFactory) {
-          var resultString = $injector.get($missingTranslationHandlerFactory)(translationId, $uses, interpolateParams, defaultTranslationText, sanitizeStrategy);
-          if (resultString !== undefined) {
-            return resultString;
-          } else {
-            return translationId;
-          }
+          return $injector.get($missingTranslationHandlerFactory)(translationId, $uses, interpolateParams, defaultTranslationText, sanitizeStrategy);
         } else {
           return translationId;
         }
@@ -1479,12 +1474,14 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           if (defaultTranslationText) {
             deferred.resolve(defaultTranslationText);
           } else {
+            var missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, defaultTranslationText);
+
             // if no default translation is set and an error handler is defined, send it to the handler
-            // and then return the result
-            if ($missingTranslationHandlerFactory) {
-              deferred.resolve(translateByHandler(translationId, interpolateParams));
+            // and then return the result if it isn't undefined
+            if ($missingTranslationHandlerFactory && missingTranslationHandlerTranslation) {
+              deferred.resolve(missingTranslationHandlerTranslation);
             } else {
-              deferred.reject(translateByHandler(translationId, interpolateParams));
+              deferred.reject(applyNotFoundIndicators(translationId));
             }
 
           }
@@ -2184,8 +2181,17 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           } else {
             // Return translation of default interpolator if not found anything.
             result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter', sanitizeStrategy);
+
+            // looks like the requested translation id doesn't exists.
+            // Now, if there is a registered handler for missing translations and no
+            // asyncLoader is pending, we execute the handler
+            var missingTranslationHandlerTranslation;
             if ($missingTranslationHandlerFactory && !pendingLoader) {
-              result = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
+              missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
+            }
+
+            if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+              result = missingTranslationHandlerTranslation;
             }
           }
         }
