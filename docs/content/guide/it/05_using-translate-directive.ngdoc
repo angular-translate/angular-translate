@@ -1,0 +1,173 @@
+@ngdoc overview
+@name Using translate directive
+@description
+
+# Using translate directive
+
+Another way to translate contents within the view layer is to use the `translate`
+directive. Using `translate` filter is great, but using `translate` directive is
+better. It turned out that having too many filters in a view sets up too many watch
+expressions, which is why `angular-translate` also provides a directive to translate
+your contents in view layer.
+
+## General usage
+You can use `translate` directive in many different ways. This is how the general
+usage looks like:
+
+```
+<ANY translate>TRANSLATION_ID</ANY>
+```
+
+You can also pass a translation ID as attribute value of the `translate` directive
+like this:
+
+```
+<ANY translate="TRANSLATION_ID"></ANY>
+```
+
+Even if that's already a very flexible way of using a directive, angular-translate
+offers **another** way of using it. Let's say a translation ID isn't available
+as a concrete identifier, because e.g. one is looping over a dataset which contains
+a translation ID in each iterator. In that case a translation ID is only dynamically
+available. You actually have to interpolate the ID itself first. angular-translate
+got you covered. This is also possible:
+
+```
+<ANY translate="{{toBeInterpolated}}"></ANY>
+```
+
+Isn't that cool? And yeah, angular-translate wouldn't be angular-translate if it
+couldn't handle it the same way with our first usage example. This also works:
+
+```
+<ANY translate>{{toBeInterpolated}}</ANY>
+```
+
+Choose what works best for you!
+
+## Post compiling
+Starting with version 2, the translation itself can be post processed in context of the
+current scope (using `$compile`). This means any directive used in a translation value
+itself will now work as expected.
+
+This behavior can be enabled per directive:
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile></ANY>
+```
+
+In addition to it, you can also enable the feature globally with...
+
+```
+$translateProvider.usePostCompiling(true);
+```
+
+... and even then you can disable the feature again per directive:
+
+```
+<ANY translate="TRANSLATION_ID" translate-compile="false"></ANY>
+```
+## Translate HTML Attributes
+You can already translate any HTML element's attribute using the `translate` filter, 
+but as mentioned above this can create a ton of unnecessary watches on your pages. 
+Here's a better way to translate those attributes using the `translate-attr` directive (starting version 2.12)!
+
+```
+<ANY translate-attr="{ ATTRIBUTE_NAME: 'TRANSLATION_ID' }"></ANY>
+```
+
+Substitute the HTML element attribute's name for `ATTRIBUTE_NAME` and you will get
+all the benefits of the `translate` directive used for that attribute!
+
+```
+<img src="mylogo.png" translate-attr="{ alt: 'LOGO' }"></img>
+```
+
+This attribute is parsed and watched, so you can also supply a controller-provided object,
+and you can use one-time binding by prefixing your statement with `::`. Here's an example of both:
+
+```
+// given a scope variable attrTranslations = { alt: 'LOGO', title: 'TITLE' }
+<img src="mylogo.png" translate-attr="::attrTranslations">
+```
+
+If your angular-translate did not reach version 2.12, you can use the deprecated way to translate attributes
+using the `translate` directive:
+
+```
+<ANY translate translate-attr-ATTRIBUTE_NAME="TRANSLATION_ID"></ANY>
+```
+
+## Example
+
+Let's update our example app and add some new translations. How about texts which
+represents each possible way of using `translate` directive? Our translation table
+could look like this:
+
+<pre>
+var translations = {
+  HEADLINE: 'What an awesome module!',
+  PARAGRAPH: 'Srsly!',
+  LOGO: 'My cool logo',
+  PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+  PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+  PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+};
+</pre>
+
+After that we update our view with our new translation IDs:
+
+<pre>
+<p>{{ 'HEADLINE' | translate }}</p>
+<img src="mylogo.png" translate-attr="{ alt: 'LOGO' }"></img>
+<p>{{ 'PARAGRAPH' | translate }}</p>
+
+<p translate>PASSED_AS_TEXT</p>
+<p translate="PASSED_AS_ATTRIBUTE"></p>
+<p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+<p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+</pre>
+
+Our updated app then looks like this:
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        LOGO: 'My cool logo',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!'
+      };
+
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation table
+        $translateProvider
+          .translations('en', translations)
+          .preferredLanguage('en');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <img src="mylogo.png" translate-attr="{ alt: 'LOGO' }"></img>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

@@ -1,0 +1,135 @@
+@ngdoc overview
+@name Custom Storages
+@description
+
+# Custom Storages
+
+If you've read [Storages](#/guide/10_storages), you know how to use either
+cookiesStorage, or localStorage, to let your app remember the last chosen
+language over cross http requests. If neither localStorage nor cookieStorage
+fits your needs, you can simply build your own storage service and use that
+instead.
+
+## Building a custom storage service
+
+If you want to use your own custom storage in your app, you have to build a
+service which has to implement some methods, so angular-translate can make use
+of them. The interface for a storage service is pretty straight forward. All you
+need is to provide a `put()` and a `get()` method on your custom storage service.
+
+Let's say we want to use a custom storage service within our sample app. We can
+easily extend it with a new service. We just have to make sure that we return an
+object with a `get()` and a `put()` method. A custom service could look like this:
+
+<pre>
+app.factory('customStorage', function () {
+  return {
+    put: function (name, value) {
+      // store `value` under `name` somehow
+    },
+    get: function (name) {
+      // request value of `name` somehow
+    }
+  };
+});
+</pre>
+
+Easy, right? As you can see, `put()` expects two arguments. A name and a value. So
+you work with simple key-value pairs. On the other side, `get()` just needs a name
+to request a value. Providing a custom storage as a separate service gives you high
+flexibility when it comes to using this service in a different place. In addition
+to that, testing this service is pretty easy, since it's isolated.
+
+## Using the custom storage service
+
+Once you've build your custom storage service, you have to tell angular-translate
+to make use of it. `$translateProvider` methods `useCookieStorage()` and
+`useLocalStorage()` are actually shortcut methods. They both use a method
+`useStorage()` internally. You can also use this method to let angular-translate
+know of your custom storage service by simply doing:
+
+<pre>
+$translateProvider.useStorage('customStorage');
+</pre>
+
+angular-translate will use `$injector` to get an instance of the given factory
+name, which is in our case `customStorage`, and is then able to access its methods
+at runtime to save the last chosen language.
+
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var translationsEN = {
+        HEADLINE: 'What an awesome module!',
+        PARAGRAPH: 'Srsly!',
+        PASSED_AS_TEXT: 'Hey there! I\'m passed as text value!',
+        PASSED_AS_ATTRIBUTE: 'I\'m passed as attribute value, cool ha?',
+        PASSED_AS_INTERPOLATION: 'Beginners! I\'m interpolated!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'German',
+        BUTTON_LANG_EN: 'English'
+      };
+
+      var translationsDE= {
+        HEADLINE: 'Was für ein großartiges Modul!',
+        PARAGRAPH: 'Ernsthaft!',
+        PASSED_AS_TEXT: 'Hey! Ich wurde als text übergeben!',
+        PASSED_AS_ATTRIBUTE: 'Ich wurde als Attribut übergeben, cool oder?',
+        PASSED_AS_INTERPOLATION: 'Anfänger! Ich bin interpoliert!',
+        VARIABLE_REPLACEMENT: 'Hi {{name}}',
+        BUTTON_LANG_DE: 'Deutsch',
+        BUTTON_LANG_EN: 'Englisch'
+      };
+
+      var app = angular.module('myApp', ['ngCookies', 'pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        // add translation tables
+        $translateProvider.translations('en', translationsEN);
+        $translateProvider.translations('de', translationsDE);
+        $translateProvider.preferredLanguage('en');
+        // remember language
+        $translateProvider.useStorage('customStorage');
+      }]);
+
+      app.factory('customStorage', function () {
+        return {
+          put: function (name, value) {
+            // store `value` under `name` somehow
+          },
+          get: function (name) {
+            // request value of `name` somehow
+          }
+        };
+      });
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p>{{ 'PARAGRAPH' | translate }}</p>
+
+      <p translate>PASSED_AS_TEXT</p>
+      <p translate="PASSED_AS_ATTRIBUTE"></p>
+      <p translate>{{ 'PASSED_AS_INTERPOLATION' }}</p>
+      <p translate="{{ 'PASSED_AS_INTERPOLATION' }}"></p>
+      <p translate="VARIABLE_REPLACEMENT" translate-values="{ name: 'PascalPrecht' }"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+Of course, our custom service doesn't do anything, which is why you can refresh
+the browser as often as you want, the app won't remember the language.
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>

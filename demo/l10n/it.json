@@ -1,0 +1,26 @@
+{
+"load" : {
+  "static" : {
+    "TITLE" : "Come caricare file statici?",
+    "HEADER" : "Il modulo può effetture il lazy load di tabelle per la traduzione, quando necessario.",
+    "SUBHEADER" : "Quindi puoi caricare solo quelle lingue, che saranno usate.",
+    "ONLY_EN": "solo Itiano",
+    "EN_RU": "EN e IT - in IT"
+  },
+  "predefined" : {
+    "TITLE" : "Come usare il lazy load senza autoupload?",
+    "HEADER" : "Puoi predefinire una lingua di default mentre usi il lazy loading.",
+    "SUBHEADER" : "In questo modo il modulo non caricherà una lingua di default più di una volta."
+  },
+  "dynamic" : {
+    "TITLE" : "Come caricare file dinamici?",
+    "HEADER" : "Il modulo può effettuare il lazy load di una tabella di traduzioni da pagine dinamiche.",
+    "SUBHEADER" : "Userà il parametro \"lang\" passatogli nella richiesta GET."
+  },
+  "partial" : {
+    "TITLE" : "Come caricare file parziali?",
+    "HEADER" : "Il modulo può effettuare il lazy load di una tabella di traduzioni da pagine dinamiche.",
+    "SUBHEADER" : "Userà il parametro \"lang\" passatogli nella richiesta GET."
+  }
+}
+}

@@ -1,0 +1,76 @@
+@ngdoc overview
+@name Migration Guide
+@description
+
+# 1.1.1 -> 2.0.0
+
+## Anonymous translation tables are no longer supported
+
+Since version 2.0.0 anonymous translation tables are not supported by angular-translate. This is
+done to increase consistency of the code.
+
+Please, ensure, that your application doesn't contain a code like this:
+
+```js
+$translateProvider.translations({
+  'greetings' : 'Hello',
+  // some other keys
+});
+```
+
+To fix it you just have to add a language key as a first argument:
+
+```js
+$translateProvider.translations('en', {
+  'greetings' : 'Hello',
+  // some other keys
+});
+$translateProvider.use('en');
+```
+
+## uses -> use
+
+In terms of consistency we decided to rename the `.uses()` method to `.use()`. It is done for both
+$translate and $translateProvider. So, please, ensure that you have updated all occurrences of
+these methods to the new style.
+
+## $translate() is now async
+
+$translate service is promise based now. So you can't use it in synchronous manner anymore. Please,
+update this code:
+
+```js
+var stringFromService = $translate('translationId');
+```
+
+to
+
+```js
+var stringFromService;
+$translate('translationId').then(function(translation) {
+  stringFromService = translation;
+}, function(translationId){
+  // Unable to translate given translationId
+  stringFromService = translationId;
+});
+```
+
+If you still want to use the service in sync manner then use
+`$translate.instant(translationId, interpolateParams, interpolationId)` method instead of direct service
+call. But note that `instant` method doesn't wait until async loading is done. So, be careful using
+it.
+
+## Events are now only emitted on $rootScope
+
+All angular-translate events are now emitted on $rootScope level, which means you can't simply
+listen with `$scope.$on()` anymore. You have to use `$rootScope.$on()` for that now. This is done
+to gain a better performance when broadcasting events.
+
+## WTFPL -> MIT
+
+angular-translate is no longer licensed under WTFPL license. It is now licensed under MIT.
+
+## Structural changes
+
+The entire angular-translate project is now an organization on github, which means all repositories
+have been moved there. (https://github.com/angular-translate)

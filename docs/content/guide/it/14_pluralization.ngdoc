@@ -1,0 +1,259 @@
+@ngdoc overview
+@name Pluralization
+@description
+
+# Pluralization
+
+Wow, we've come far! We have learned all about the different components angular-translate
+provides and we know how to introduce many translation tables at a time. Also we
+made use of different kind of storages to let our app remember the language over
+cross http requests and, last but not least, we used asynchronous loaders to
+load our translation data asynchronously from a server! Wow!
+
+But there's still a thing we haven't talked about yet: **pluralization**. Pluralization
+is a pretty hard topic when it comes to localization (l10n) and internationalization (i18n).
+Different languages and cultures use different interpretations of how a language
+behaves in certain situations. Fortunately, there is a
+[standard](http://userguide.icu-project.org/formatparse/messages) which specifies
+all that kind of stuff. However, this doesn't change the fact that it's a challenge
+to implement.
+
+Luckily, [Alex Sexton](https://github.com/SlexAxton) did the job already and built a JavaScript
+library that implements the _ICU User Guide_ spec. It's called MessageFormat and
+you can find it right [here](https://github.com/SlexAxton/messageformat.js).
+
+## angular-translate meets MessageFormat
+
+In our opinion, the best way to bring pluralization to angular-translate is to adapt
+the functionality of MessageFormat, since it solves all the problems including
+[simple variable replacement](https://github.com/SlexAxton/messageformat.js#simple-variable-replacement),
+[SelectFormat](https://github.com/SlexAxton/messageformat.js#selectformat),
+and [PluralFormat](https://github.com/SlexAxton/messageformat.js#pluralformat).
+So, how can we use MessageFormat with angular-translate to take advantage of its full
+functionality within our apps?
+
+Of course, there is a corresponding extension for it. Simply install the MessageFormat
+interpolation service via Bower like this:
+
+```
+$ bower install angular-translate-interpolation-messageformat
+```
+
+Okay, easy. Don't forget to embed it in your HTML document, so we have access to the provided
+service. Don't forget to embed MessageFormat.js itself first:
+
+<pre>
+<script src="path/to/messageformat.js"></script>
+<script src="path/to/angular-translate-interpolation-messageformat"></script>
+</pre>
+
+**Note: Please make sure to embed a corresponding locale file provided by MessageFormat.
+These files provide locale rules for a specific locale this is required to get
+proper pluralization!**
+
+Once everything is there, we can use `$translateProvider` to tell angular-translate
+to use the MessageFormat interpolation, instead of the default one.
+`$translateProvider` provides a method called `useMessageFormatInterpolation()`
+which does the trick. We also have to use `$translateProvider.preferredLanguage()`
+again, to let MessageFormat know which locale to use for
+[named keys](https://github.com/SlexAxton/messageformat.js#named-keys).
+
+<pre>
+$translateProvider.useMessageFormatInterpolation();
+$translateProvider.preferredLanguage('en');
+</pre>
+
+That's basically it! Your app now uses MessageFormat to interpolate your translations
+against possible values. So what does that mean? Since you are now relying on
+MessageFormat interpolation rather then default interpolation, you can now use
+the syntax MessageFormat.js expects to interpolate your translations.
+
+Let's take some of MessageFormat's examples provided in its README file. This is
+how some translations could look like:
+
+```
+{
+  "LIKE_TEXT": "{GENDER, select, male{He} female{She} other{They}} liked this."
+}
+```
+
+As you can see, MessageFormat supports `SelectFormat` to interpolate texts depending
+on a given gender for example. We can use `$translate` service, as well as
+`translate` directive and filter, to translate the `LIKE_TEXT` translation ID, like
+we always do:
+
+<pre>
+// using `$translate` service
+$translate('LIKE_TEXT', { GENDER: 'male' });
+// using `translate` filter
+{{ 'LIKE_TEXT' | translate:"{ GENDER: 'male' }" }}
+// using `translate` directive
+<ANY translate="LIKE_TEXT" translate-values="{ GENDER: 'male' }"></ANY>
+</pre>
+
+Is that cool? You can just plug MessageFormat's functionality onto angular-translate
+and use high level pluralization within your translations!
+
+## The drawback
+
+Actually it's pretty cool that we are able to use MessageFormat as our interpolation
+engine. Unfortunately, when replacing MessageFormat interpolation with angular-translate's
+default interpolation, there's a big problem. Take a look at the following code:
+Do you see any difference?
+
+```
+{
+  "DEFAULT_INTERPOLATION": "This is a translation that uses default interpolation with a dynamic value: {{value}}",
+  "MF_INTERPOLATION": "This is a translation that uses MessageFormat interpolation with a dynamic value: {value}"
+}
+```
+
+Exactly. MessageFormat uses a different syntax for its interpolation. This means,
+when using MessageFormat interpolation, you have to rock over all of your translations,
+check if they use any kind of variable replacement and update them to match the
+right interpolation syntax. This isn't a cool thing.
+
+In addition to that, we are also loosing all of Angular's cool features like
+expression evaluation or the use of filters, since MessageFormat just don't support
+them. So, how do we get around this? We need a way to use angular-translate's
+default interpolation, to have all the cool features and at the same time, we need
+MessageFormat interpolation to have full featured pluralization support.
+
+## Overriding interpolation temporarily
+
+Since it's a bit silly to re-implement MessageFormat's functionality within
+angular-translate, we can't really use both interpolation types in a single translation.
+But we _can_ use one interpolation type application-wide
+and other interpolation types in specific cases. This means you would say for example:
+"_Please use default interpolation for all of my translations, except for translation
+A, B and C_".
+
+With that construct you're able to use all the cool features Angular provides
+with its interpolation service and in addition you can use MessageFormat interpolation
+for translation IDs containing pluralization.
+
+So how do we get this working? It's easy. Seriously. Once you have installed
+MessageFormat and its interpolation service, you actually have
+everything you need. All you have to do, is to say you don't want to use
+MessageFormat interpolation for all of your translations, but for specific
+translations only.
+
+At first, we remove `$translateProvider.useMessageFormatInterpolation()` again. Now our app
+uses default interpolation. Alright. Next, we have to make MessageFormat
+interpolation available as optional interpolation type. `$translateProvider`
+has a method `addInterpolation()` which expects a factory name for an interpolation
+service as first argument.
+
+Let's add MessageFormat interpolation service as an 'optional' interpolation type:
+
+<pre>
+$translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+</pre>
+
+Okay, now, our app is configured using the default interpolation, but is also aware
+that there's another interpolation service that could be used for specific
+translations. We setup a new translation table with translations that use default
+interpolation and MessageFormat interpolation:
+
+<pre>
+$translateProvider.translations('en', {
+  HEADLINE: 'I\'m a headline',
+  TEXT: 'I\'m using default interpolation {{ val + val }}',
+  PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.'
+});
+</pre>
+
+Okay, our translation table now contains translations that use either default
+interpolation or MessageFormat interpolation. In order to tell angular-translate
+which interpolation type should be used when using `$translate` service , we can
+pass an additional parameter to angular-translate's components.
+
+The `$translate` service expects an interpolation type as third argument. If you want
+to configure the `$translate` service to use MessageFormat interpolation for the given
+translation ID, you have to pass `messageformat` as interpolation type, like this:
+
+<pre>
+$translate('TEXT', { val: 5 });
+// "I'm using default interpolation 10"
+
+$translate('PLURAL', { GENDER: 'male' }, 'messageformat');
+// "He liked this."
+</pre>
+
+We can achieve the same with `translate` filter. As explained earlier, the third
+argument is an identifier for the interpolation service:
+
+<pre>
+{{ 'TEXT' | translate:"{ val: 5 }" }}
+// "I'm using default interpolation 10"
+{{ 'PLURAL' | translate:"{ GENDER: 'male' }":"messageformat" }}
+// "He liked this."
+</pre>
+
+`translate` directive expects a new attribute called `translate-interpolation`
+with which you can control which interpolation service to use for a specific
+translation ID:
+
+<pre>
+<ANY
+  translate="TEXT"
+  translate-values="{ val: 5 }"></ANY>
+// "I'm using default interpolation 10"
+
+<ANY
+  translate="PLURAL"
+  translate-values="{ GENDER: 'male' }"
+  translate-interpolation="messageformat"></ANY>
+// "He liked this."
+</pre>
+
+Here is a working example (please note: There is also an embedded file for locale 'de'):
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'English',
+          BUTTON_LANG_DE: 'German'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'Englisch',
+          BUTTON_LANG_DE: 'Deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="HEADLINE"></p>
+      <p translate="TEXT" translate-values="{ val: 5 }"></p>
+
+      <p translate="PLURAL" translate-values="{ GENDER: 'other' }" translate-interpolation="messageformat"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
