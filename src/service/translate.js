@@ -1406,7 +1406,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           Interpolator.setLocale(langKey);
           result = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'filter', sanitizeStrategy);
           result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey, sanitizeStrategy);
-          if (result.substr(0, 2) === '@:') {
+          if (typeof result === 'string' && result.substr(0, 2) === '@:') {
             return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator, sanitizeStrategy);
           }
           Interpolator.setLocale($uses);
