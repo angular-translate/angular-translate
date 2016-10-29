@@ -2745,34 +2745,37 @@ describe('pascalprecht.translate', function () {
   });
 
   describe('$translate#getTranslationTable()', function () {
-    var ru_RU_transaltionMock = {'HI': 'Всем  привет!'};
-    var en_EN_transaltionMock = {'HI': 'Hello there!'};
+    var ru_RU_translationMock = {'HI': 'Всем  привет!'};
+    var en_EN_translationMock = {'HI': 'Hello there!'};
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
-        .translations('ru_RU', ru_RU_transaltionMock)
-        .translations('en_EN', en_EN_transaltionMock)
+        .translations('ru_RU', ru_RU_translationMock)
+        .translations('en_EN', en_EN_translationMock)
         .preferredLanguage('ru_RU');
     }));
 
-    var $translate, $rootScope, $STORAGE_KEY, $q;
+    var $translate;
 
-    beforeEach(inject(function (_$translate_, _$rootScope_, _$STORAGE_KEY_, _$q_) {
+    beforeEach(inject(function (_$translate_) {
       $translate = _$translate_;
-      $rootScope = _$rootScope_;
-      $STORAGE_KEY = _$STORAGE_KEY_;
-      $q = _$q_;
     }));
 
-    it('should return transaltion table which is curently in use if no params', function () {
-      expect(angular.equals($translate.getTranslationTable(), ru_RU_transaltionMock)).toBe(true);
+    it('should return translation table which is curently in use if no params', function () {
+      expect(angular.equals($translate.getTranslationTable(), ru_RU_translationMock)).toBe(true);
     });
 
-    it('should return transaltion table by transaltion Id', function () {
-      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_transaltionMock)).toBe(true);
+    it('should return translation table by translation Id', function () {
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_translationMock)).toBe(true);
     });
 
-    it('should return null if transaltion table with transaltion Id does not exist', function () {
+    it('should return a copy of translation table', function () {
+      var copy = $translate.getTranslationTable('en_EN');
+      copy.HI = "what's up";
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_translationMock)).toBe(true);
+    });
+
+    it('should return null if translation table with translation Id does not exist', function () {
       expect($translate.getAvailableLanguageKeys('NOT_EXISTING_TRANSLATION_ID')).toEqual(null);
     });
 
