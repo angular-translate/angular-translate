@@ -155,6 +155,10 @@ describe('pascalprecht.translate', function () {
       expect($translate.isForceAsyncReloadEnabled).toBeDefined();
     });
 
+    it('should have a method getTranslationTable()', function () {
+      expect($translate.getTranslationTable).toBeDefined();
+    });
+
     it('should not try to load a language which has not been registered yet', function () {
       // ensure initial language is en (preferred one)
       expect($translate.use()).toBe('en');
@@ -2774,6 +2778,44 @@ describe('pascalprecht.translate', function () {
     });
 
   });
+
+  describe('$translate#getTranslationTable()', function () {
+    var ru_RU_translationMock = {'HI': 'Всем  привет!'};
+    var en_EN_translationMock = {'HI': 'Hello there!'};
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('ru_RU', ru_RU_translationMock)
+        .translations('en_EN', en_EN_translationMock)
+        .preferredLanguage('ru_RU');
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should return translation table which is curently in use if no params', function () {
+      expect(angular.equals($translate.getTranslationTable(), ru_RU_translationMock)).toBe(true);
+    });
+
+    it('should return translation table by translation Id', function () {
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_translationMock)).toBe(true);
+    });
+
+    it('should return a copy of translation table', function () {
+      var copy = $translate.getTranslationTable('en_EN');
+      copy.HI = "what's up";
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_translationMock)).toBe(true);
+    });
+
+    it('should return null if translation table with translation Id does not exist', function () {
+      expect($translate.getAvailableLanguageKeys('NOT_EXISTING_TRANSLATION_ID')).toEqual(null);
+    });
+
+  });
+
 
   describe('$translate#postprocess() with an enabled fallback language', function () {
 

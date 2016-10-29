@@ -2297,6 +2297,28 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         return null;
       };
 
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translate#getTranslationTable
+       * @methodOf pascalprecht.translate.$translate
+       *
+       * @description
+       * Returns translation table by a key of the locale
+       * if key is not provided it returns translation table which currently
+       * in use. If translation dictionary is in process of dowloading it returns
+       * null.
+       *
+       * @param {string} translationId A token which represents a translation id
+       *
+       * @return {object} a copy of angular-translate $translationTable
+       */
+      $translate.getTranslationTable = function (translationId) {
+        if(!translationId) {
+          return angular.copy($translationTable[$translate.use()]);
+        }
+        return angular.copy($translationTable[translationId]);
+      };
+
       // Whenever $translateReady is being fired, this will ensure the state of $isReady
       var globalOnReadyListener = $rootScope.$on('$translateReady', function () {
         $onReadyDeferred.resolve();
