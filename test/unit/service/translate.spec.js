@@ -3015,4 +3015,25 @@ describe('pascalprecht.translate', function () {
       expect(failed).toEqual(true);
     }));
   });
+
+  describe('$translate with sce activated', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'FOO' : 'foo',
+          'BAR': 'Bar'
+        })
+        .translations('de', {
+          'FOO' : 'foo'
+        })
+        .useSanitizeValueStrategy('sce')
+        .preferredLanguage('de')
+        .fallbackLanguage('en');
+    }));
+
+    it('should handle TrustedValueHolderType inner-results', inject(function ($translate) {
+      expect($translate.instant('BAR').$$unwrapTrustedValue()).toEqual('Bar');
+    }));
+  });
 });
