@@ -20,7 +20,7 @@ die ein Objekt zurück gibt, die folgendes Interface implementiert:
 
 - `setLocale(langKey)` - Setzt die Sprache mit Sprachschlüssel
 - `getInterpolationIdentifier()` - Gibt einen Identifier für den Service zurück
-- `interpolate(string, interpolateParams)` - Interpoliert Strings gegen Interpolationparamter
+- `interpolate(string, interpolateParams, sanitizeStrategy)` - Interpoliert Strings gegen Interpolationparamter
 
 So könnte ein custom Interpolation-Service aussehen:
 
@@ -37,7 +37,7 @@ app.factory('customInterpolation', function () {
 
     },
 
-    interpolate: function (string, interpolateParams) {
+    interpolate: function (string, interpolateParams, sanitizeStrategy) {
 
     }
   };
@@ -62,8 +62,8 @@ app.factory('customInterpolation', function ($interpolate) {
       return 'custom';
     },
 
-    interpolate: function (string, interpolateParams) {
-      return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+      return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
     }
   };
 });
@@ -144,8 +144,8 @@ So siehts aus:
             return 'custom';
           },
 
-          interpolate: function (string, interpolateParams) {
-            return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
+          interpolate: function (string, interpolateParams, sanitizeStrategy) {
+            return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
           }
         };
       });

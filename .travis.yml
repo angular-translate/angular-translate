@@ -1,14 +1,13 @@
 sudo: false
 language: node_js
 node_js:
-  - "4.4"
+  - "6.9"
 
 addons:
   code_climate:
     repo_token: 4b5723ff9465849b4e16754fb9b7995730eac35434375e9a38779cdc0d781bcf
 
 before_install:
-  - npm install -qg npm
   - npm install -qg grunt-cli karma-cli codeclimate-test-reporter
 
 before_script:

@@ -5,6 +5,7 @@
 /dist/
 /demo/js/angular-translate-latest.js
 /build/
+/tmp
 
 # OS X
 .DS_Store

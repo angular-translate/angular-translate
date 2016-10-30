@@ -139,7 +139,21 @@ describe('pascalprecht.translate', function () {
       $translateMessageFormatInterpolation.useSanitizeValueStrategy('escapeParameters');
 
       expect($translateMessageFormatInterpolation.interpolate(text, params)).toBe(sanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params');
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params', undefined);
+    }));
+
+    it('should not sanitize the interpolation params when a null strategy value is passed',
+       inject(function ($translateSanitization) {
+      var text = 'Foo bar {value}';
+      var paramValue = '<span>Test</span>';
+      var params =  { value: paramValue };
+      var unsanitizedText = 'Foo bar <span>Test</span>';
+
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateMessageFormatInterpolation.useSanitizeValueStrategy('escapeParameters');
+
+      expect($translateMessageFormatInterpolation.interpolate(text, params, 'service', null)).toBe(unsanitizedText);
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params', null);
     }));
 
     it('should sanitize the interpolated text', inject(function ($translateSanitization) {
@@ -152,7 +166,51 @@ describe('pascalprecht.translate', function () {
       $translateMessageFormatInterpolation.useSanitizeValueStrategy('escape');
 
       expect($translateMessageFormatInterpolation.interpolate(text, params)).toBe(sanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text');
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text', undefined);
+    }));
+
+    it('should not sanitize the interpolated text when a null strategy value is passed',
+       inject(function ($translateSanitization) {
+      var text = 'Foo <span>bar</span> {value}';
+      var params =  { value: 'value' };
+      var interPolatedText = 'Foo <span>bar</span> value';
+
+      spyOn($translateSanitization, 'sanitize').and.callThrough();
+      $translateMessageFormatInterpolation.useSanitizeValueStrategy('escape');
+
+      expect($translateMessageFormatInterpolation.interpolate(text, params, 'service', null)).toBe(interPolatedText);
+      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text', null);
     }));
   });
+});
+
+describe('pascalprecht.translate', function () {
+
+  var $provider;
+  var called = false;
+  var calledWithPayload = false;
+
+  beforeEach(module('pascalprecht.translate', function ($translateMessageFormatInterpolationProvider) {
+    $provider = $translateMessageFormatInterpolationProvider;
+    $provider.messageFormatConfigurer(function (mf) {
+      called = true;
+      calledWithPayload = !!mf;
+    });
+  }));
+
+  describe('$translateMessageFormatInterpolationProvider', function () {
+
+    describe('$translateMessageFormatInterpolationProvider#configurer', function () {
+
+      it('should be invoked', function () {
+        inject(function ($translateMessageFormatInterpolation) {
+          expect($translateMessageFormatInterpolation).toBeDefined();
+          expect(called).toBe(true);
+          expect(calledWithPayload).toBe(true);
+        });
+      });
+
+    });
+  });
+
 });

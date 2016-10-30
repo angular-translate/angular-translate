@@ -155,6 +155,10 @@ describe('pascalprecht.translate', function () {
       expect($translate.isForceAsyncReloadEnabled).toBeDefined();
     });
 
+    it('should have a method getTranslationTable()', function () {
+      expect($translate.getTranslationTable).toBeDefined();
+    });
+
     it('should not try to load a language which has not been registered yet', function () {
       // ensure initial language is en (preferred one)
       expect($translate.use()).toBe('en');
@@ -2014,10 +2018,12 @@ describe('pascalprecht.translate', function () {
 
     }));
 
-    var $translate;
+    var $translate,
+      $rootScope;
 
-    beforeEach(inject(function (_$translate_) {
+    beforeEach(inject(function (_$translate_, _$rootScope_) {
       $translate = _$translate_;
+      $rootScope = _$rootScope_;
     }));
 
     it('should not invoke missingTranslationHandler if translation id exists', function () {
@@ -2060,6 +2066,25 @@ describe('pascalprecht.translate', function () {
           defaultTranslation: 'DEFAULT'
         }
       });
+    });
+
+    it('should reject promise if translation doesn\'t exist and handler returns undefined', function () {
+      var wasResolved = false,
+        wasRejected = false,
+        promise = $translate('NOT_EXISTING_TRANSLATION_ID');
+      promise.then(resolved, rejected);
+
+      $rootScope.$digest();
+      expect(wasResolved).toEqual(false);
+      expect(wasRejected).toEqual(true);
+
+      function resolved() {
+        wasResolved = true;
+      }
+
+      function rejected() {
+        wasRejected = true;
+      }
     });
   });
 
@@ -2264,11 +2289,13 @@ describe('pascalprecht.translate', function () {
         .translations('en', translationMock)
         .translations('en', {
           'FOO': 'bar',
-          'BAR': 'foo'
+          'BAR': 'foo',
+          'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
           'FOO': 'faa'
         })
+        .useSanitizeValueStrategy('escape')
         .preferredLanguage('en');
     }));
 
@@ -2307,6 +2334,11 @@ describe('pascalprecht.translate', function () {
     it('should use forceLanguage with multiple translation ids', function() {
       expect($translate.instant(['FOO'], null, null, 'de').FOO).toEqual('faa');
     });
+
+    it('should override sanitize strategy for one call', function() {
+      expect($translate.instant('FOOBAR', { value: '<p>value</p>' }, null, null, null))
+        .toEqual('Foo bar <p>value</p>');
+    });
   });
 
   describe('$translate.instant (with fallback)', function () {
@@ -2316,11 +2348,17 @@ describe('pascalprecht.translate', function () {
         .useLoader('customLoader')
         .translations('en', {
           'FOO': 'bar',
-          'BAR': 'foo'
+          'BAR': 'foo',
+          'BARE': '',
+          'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
           'FOO2': 'bar2'
         })
+        .translations('fr', {
+          'BARE': 'bare'
+        })
+        .useSanitizeValueStrategy('escape')
         .preferredLanguage('de')
         .fallbackLanguage('en');
 
@@ -2349,18 +2387,40 @@ describe('pascalprecht.translate', function () {
     it('should return translation if translation id exist', function () {
       expect($translate.instant('FOO')).toEqual('bar');
       expect($translate.instant('FOO2')).toEqual('bar2');
+      expect($translate.instant('BARE')).toEqual('');
+    });
+
+    it('should return translation if translation id exist' +
+       'in a fallback language and skip sanitize if a' +
+       'null value is passed', function () {
+      expect($translate.instant('FOOBAR', { value: '<p>value</p>' }, null, null, null)).toEqual('Foo bar <p>value</p>');
     });
 
     it('should return translation id if translation id nost exist', function () {
       expect($translate.instant('FOO3')).toEqual('FOO3');
     });
 
+    it('should return the first translation if multiple fallbacks exist', function () {
+      expect($translate.instant('BARE')).toEqual('');
+    });
+
     it('should return translation id with default interpolator if translation id nost exist', function () {
       expect($translate.instant('FOO4 {{value}}', {'value': 'PARAM'})).toEqual('FOO4 PARAM');
     });
 
+    it('should return translation id with default interpolator' +
+       'if translation id nost exist and don\'t sanitize if' +
+       'the sanitize strategy is overriden', function () {
+      expect($translate.instant('FOO4 {{value}}', { value: '<p>value</p>'}, null, null, null)).toEqual('FOO4 <p>value</p>');
+    });
+
     it('should return translation id if translation id exist with forceLanguage', function () {
       expect($translate.instant('FOO', null, null, 'de')).toEqual('bar');
+    });
+
+    it('should return translation id if translation id exist with forceLanguage' +
+       'and don\'t sanitize when sanitize strategy is overriden to null', function () {
+      expect($translate.instant('FOOBAR', { value: '<p>value</p>'}, null, 'de', null)).toEqual('Foo bar <p>value</p>');
     });
   });
 
@@ -2740,6 +2800,43 @@ describe('pascalprecht.translate', function () {
 
   });
 
+  describe('$translate#getTranslationTable()', function () {
+    var ru_RU_translationMock = {'HI': 'Всем  привет!'};
+    var en_EN_translationMock = {'HI': 'Hello there!'};
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('ru_RU', ru_RU_translationMock)
+        .translations('en_EN', en_EN_translationMock)
+        .preferredLanguage('ru_RU');
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should return translation table which is curently in use if no params', function () {
+      expect(angular.equals($translate.getTranslationTable(), ru_RU_translationMock)).toBe(true);
+    });
+
+    it('should return translation table by translation Id', function () {
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_translationMock)).toBe(true);
+    });
+
+    it('should return a copy of translation table', function () {
+      var copy = $translate.getTranslationTable('en_EN');
+      copy.HI = "what's up";
+      expect(angular.equals($translate.getTranslationTable('en_EN'), en_EN_translationMock)).toBe(true);
+    });
+
+    it('should return null if translation table with translation Id does not exist', function () {
+      expect($translate.getAvailableLanguageKeys('NOT_EXISTING_TRANSLATION_ID')).toEqual(null);
+    });
+
+  });
+
   describe('$translate#postprocess() with an enabled fallback language', function () {
 
     describe('single post processDemo', function () {
@@ -2916,6 +3013,27 @@ describe('pascalprecht.translate', function () {
 
       $rootScope.$digest();
       expect(failed).toEqual(true);
+    }));
+  });
+
+  describe('$translate with sce activated', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'FOO' : 'foo',
+          'BAR': 'Bar'
+        })
+        .translations('de', {
+          'FOO' : 'foo'
+        })
+        .useSanitizeValueStrategy('sce')
+        .preferredLanguage('de')
+        .fallbackLanguage('en');
+    }));
+
+    it('should handle TrustedValueHolderType inner-results', inject(function ($translate) {
+      expect($translate.instant('BAR').$$unwrapTrustedValue()).toEqual('Bar');
     }));
   });
 });
