@@ -1,3 +1,23 @@
+<a name="2.13.0"></a>
+# [2.13.0](https://github.com/angular-translate/angular-translate/compare/2.12.1...v2.13.0) (2016-10-30)
+
+
+### Bug Fixes
+
+* **service:** fix .instant() not handling TrustedValueHolderType correctly ([1ede55e](https://github.com/angular-translate/angular-translate/commit/1ede55e)), closes [#1618](https://github.com/angular-translate/angular-translate/issues/1618)
+* **service:** reject promise if handler returns undefined ([8fe6f23](https://github.com/angular-translate/angular-translate/commit/8fe6f23)), closes [#1600](https://github.com/angular-translate/angular-translate/issues/1600)
+* **service:** return empty string when found in fallback ([d76227e](https://github.com/angular-translate/angular-translate/commit/d76227e))
+
+
+### Features
+
+* **sanitize:** sanitize override on instant call ([01fecd0](https://github.com/angular-translate/angular-translate/commit/01fecd0))
+* **service:** add $translate.getTranslationTable(langKey) ([40f9e35](https://github.com/angular-translate/angular-translate/commit/40f9e35))
+* **service:** add file map lookup into static-files loader ([132e49a](https://github.com/angular-translate/angular-translate/commit/132e49a))
+* **service:** add mf configurer [#1619](https://github.com/angular-translate/angular-translate/issues/1619) ([676114b](https://github.com/angular-translate/angular-translate/commit/676114b))
+
+
+
 <a name="2.12.1"></a>
 ## [2.12.1](https://github.com/angular-translate/angular-translate/compare/2.12.0...v2.12.1) (2016-09-15)
 
