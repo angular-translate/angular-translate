@@ -14,6 +14,7 @@ angular.module('pascalprecht.translate')
  * @ngdoc object
  * @name pascalprecht.translate.$translateMessageFormatInterpolationProvider
  *
+ * @description
  * Configurations for $translateMessageFormatInterpolation
  */
 .provider('$translateMessageFormatInterpolation', $translateMessageFormatInterpolationProvider);
