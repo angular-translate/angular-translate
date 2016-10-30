@@ -183,3 +183,34 @@ describe('pascalprecht.translate', function () {
     }));
   });
 });
+
+describe('pascalprecht.translate', function () {
+
+  var $provider;
+  var called = false;
+  var calledWithPayload = false;
+
+  beforeEach(module('pascalprecht.translate', function ($translateMessageFormatInterpolationProvider) {
+    $provider = $translateMessageFormatInterpolationProvider;
+    $provider.messageFormatConfigurer(function (mf) {
+      called = true;
+      calledWithPayload = !!mf;
+    });
+  }));
+
+  describe('$translateMessageFormatInterpolationProvider', function () {
+
+    describe('$translateMessageFormatInterpolationProvider#configurer', function () {
+
+      it('should be invoked', function () {
+        inject(function ($translateMessageFormatInterpolation) {
+          expect($translateMessageFormatInterpolation).toBeDefined();
+          expect(called).toBe(true);
+          expect(calledWithPayload).toBe(true);
+        });
+      });
+
+    });
+  });
+
+});

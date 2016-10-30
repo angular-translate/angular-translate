@@ -12,23 +12,57 @@ angular.module('pascalprecht.translate')
 
 /**
  * @ngdoc object
- * @name pascalprecht.translate.$translateMessageFormatInterpolation
- * @requires pascalprecht.translate.TRANSLATE_MF_INTERPOLATION_CACHE
+ * @name pascalprecht.translate.$translateMessageFormatInterpolationProvider
  *
- * @description
- * Uses MessageFormat.js to interpolate strings against some values.
- *
- * Be aware to configure a proper sanitization strategy.
- *
- * See also:
- * * {@link pascalprecht.translate.$translateSanitization}
- * * {@link https://github.com/SlexAxton/messageformat.js}
- *
- * @return {object} $translateMessageFormatInterpolation Interpolator service
+ * Configurations for $translateMessageFormatInterpolation
  */
-.factory('$translateMessageFormatInterpolation', $translateMessageFormatInterpolation);
+.provider('$translateMessageFormatInterpolation', $translateMessageFormatInterpolationProvider);
 
-function $translateMessageFormatInterpolation($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
+function $translateMessageFormatInterpolationProvider() {
+
+  'use strict';
+
+  var configurer;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateMessageFormatInterpolationProvider#messageFormatConfigurer
+   * @methodOf pascalprecht.translate.$translateMessageFormatInterpolationProvider
+   *
+   * @description
+   * Defines an optional configurer for the MessageFormat instance.
+   *
+   * Note: This hook will be called whenever a new instance of MessageFormat will be created.
+   *
+   * @param {function} fn callback with the instance as argument
+   */
+  this.messageFormatConfigurer = function (fn) {
+    configurer = fn;
+  };
+
+  /**
+   * @ngdoc object
+   * @name pascalprecht.translate.$translateMessageFormatInterpolation
+   * @requires pascalprecht.translate.TRANSLATE_MF_INTERPOLATION_CACHE
+   *
+   * @description
+   * Uses MessageFormat.js to interpolate strings against some values.
+   *
+   * Be aware to configure a proper sanitization strategy.
+   *
+   * See also:
+   * * {@link pascalprecht.translate.$translateSanitization}
+   * * {@link https://github.com/SlexAxton/messageformat.js}
+   *
+   * @return {object} $translateMessageFormatInterpolation Interpolator service
+   */
+  this.$get = function ($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE) {
+    return $translateMessageFormatInterpolation($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE, configurer);
+  };
+
+}
+
+function $translateMessageFormatInterpolation($translateSanitization, $cacheFactory, TRANSLATE_MF_INTERPOLATION_CACHE, messageFormatConfigurer) {
 
   'use strict';
 
@@ -37,6 +71,10 @@ function $translateMessageFormatInterpolation($translateSanitization, $cacheFact
       // instantiate with default locale (which is 'en')
       $mf = new MessageFormat('en'),
       $identifier = 'messageformat';
+
+  if (angular.isFunction(messageFormatConfigurer)) {
+    messageFormatConfigurer($mf);
+  }
 
   if (!$cache) {
     // create cache if it doesn't exist already
@@ -59,6 +97,9 @@ function $translateMessageFormatInterpolation($translateSanitization, $cacheFact
     $mf = $cache.get(locale);
     if (!$mf) {
       $mf = new MessageFormat(locale);
+      if (angular.isFunction(messageFormatConfigurer)) {
+        messageFormatConfigurer($mf);
+      }
       $cache.put(locale, $mf);
     }
   };
