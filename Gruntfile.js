@@ -516,7 +516,7 @@ module.exports = function (grunt) {
         imageLink: 'https://angular-translate.github.io',
         startPage: '/guide',
         scripts: [
-          'https://cdn.rawgit.com/SlexAxton/messageformat.js/v0.3.0/messageformat.js',
+          'https://cdn.rawgit.com/SlexAxton/messageformat.js/v0.3.1/messageformat.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-cookies.js',
