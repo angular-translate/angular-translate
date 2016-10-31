@@ -47,10 +47,6 @@ service. Don't forget to embed MessageFormat.js itself first:
 <script src="path/to/angular-translate-interpolation-messageformat"></script>
 </pre>
 
-**Note: Please make sure to embed a corresponding locale file provided by MessageFormat.
-These files provide locale rules for a specific locale this is required to get
-proper pluralization!**
-
 Once everything is there, we can use `$translateProvider` to tell angular-translate
 to use the MessageFormat interpolation, instead of the default one.
 `$translateProvider` provides a method called `useMessageFormatInterpolation()`
@@ -207,7 +203,7 @@ translation ID:
 // "He liked this."
 </pre>
 
-Here is a working example (please note: There is also an embedded file for locale 'de'):
+Here is a working example:
 
 <doc:example module="myApp">
   <doc:source>
