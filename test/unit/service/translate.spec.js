@@ -1913,6 +1913,70 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('$translateProvider#addInterpolation', function () {
+
+    var customInterpolatorFactory = function () {
+
+      var interpolator = {},
+        $locale;
+
+      // provide a method to set locale
+      interpolator.setLocale = function (locale) {
+        $locale = locale;
+      };
+
+      // provide a method to return an interpolation identifier
+      interpolator.getInterpolationIdentifier = function () {
+        return 'custom';
+      };
+
+      // defining the actual interpolate function
+      interpolator.interpolate = function (value, interpolationParams, context, sanitizeStrategy, translationId) {
+        console.log(arguments);
+        if ($locale === 'de') {
+          return 'foo';
+        } else {
+          return 'custom interpolation';
+        }
+      };
+
+      return interpolator;
+    };
+
+    var customInterpolator = customInterpolatorFactory();
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      enableUnhandledRejectionTracing($provide);
+
+      spyOn(customInterpolator, 'interpolate');
+      $provide.factory('customInterpolation', function () {
+        return customInterpolator;
+      });
+
+      // tell angular-translate to optionally use customInterpolation
+      $translateProvider
+        .addInterpolation('customInterpolation')
+        .translations('en', {'FOO' : 'Some text'})
+        .preferredLanguage('en');
+    }));
+
+    var $translate, $rootScope, $q;
+
+    beforeEach(inject(function (_$translate_, _$rootScope_, _$q_) {
+      $translate = _$translate_;
+      $rootScope = _$rootScope_;
+      $q = _$q_;
+      $rootScope.$apply();
+    }));
+    it('should provide correct arguments in interpolate()', function () {
+      $translate('FOO', {x: 1}, 'custom').then(function () {
+      });
+      $rootScope.$digest();
+      expect(customInterpolator.interpolate).toHaveBeenCalledWith('Some text', Object({ x: 1 }), 'service', undefined, 'FOO');
+    });
+  });
+
   describe('$translate#proposedLanguage', function () {
 
     var $translate;

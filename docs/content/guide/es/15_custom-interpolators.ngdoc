@@ -14,7 +14,7 @@ Cuando cree un serivcio de interpolación personalizado, hay muchas cosa que ya 
 
 - `setLocale(langKey)` - configura el lenguaje usado actualmente
 - `getInterpolationIdentifier()` - devuelve una clave para identificar la interpolación
-- `interpolate(string, interpolateParams, sanitizeStrategy)` - interpola cadenas contra parámetros de interpolación
+- `interpolate(string, interpolateParams, context, sanitizeStrategy, translationId)` - interpola cadenas contra parámetros de interpolación
 
 Veamos cómo se vería si implementáramos un servicio de interpolación personalizado. Primero, simplemente implementemos la interfaz:
 
@@ -31,7 +31,7 @@ app.factory('interpolacionPersonalizada', function () {
 
     },
 
-    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+    interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
 
     }
   };
@@ -55,7 +55,7 @@ app.factory('interpolacionPersonalizada', function ($interpolate) {
       return 'custom';
     },
 
-    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+    interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
       return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
     }
   };

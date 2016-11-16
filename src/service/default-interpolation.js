@@ -71,9 +71,15 @@ function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
    *
    * Since AngularJS 1.5, `value` must not be a string but can be anything input.
    *
-   * @returns {string} interpolated string.
+   * @param value translation
+   * @param interpolationParams interpolation params
+   * @param context current context (filter, directive, service)
+   * @param sanitizeStrategy sanitize strategy
+   * @param translationId current translationId
+   *
+   * @returns {string} interpolated string
    */
-  $translateInterpolator.interpolate = function (value, interpolationParams, context, sanitizeStrategy) {
+  $translateInterpolator.interpolate = function (value, interpolationParams, context, sanitizeStrategy, translationId) {
     interpolationParams = interpolationParams || {};
     interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params', sanitizeStrategy, context);
 
