@@ -18,7 +18,7 @@
 
 - `setLocale(langKey)` - встановлює поточну мову
 - `getInterpolationIdentifier()` - повертає ідентифікатор інтерполяції
-- `interpolate(string, interpolateParams, sanitizeStrategy)` - інтерполює рядки з параметрами інтерполяції
+- `interpolate(string, interpolateParams, context, sanitizeStrategy, translationId)` - інтерполює рядки з параметрами інтерполяції
 
 Давайте подивимося, як це виглядає при створенні користувацького сервісу інтерполяції. По-перше, ми
 реалізуємо інтерфейс:
@@ -36,7 +36,7 @@ app.factory('customInterpolation', function () {
 
     },
 
-    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+    interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
 
     }
   };
@@ -62,7 +62,7 @@ app.factory('customInterpolation', function ($interpolate) {
       return 'custom';
     },
 
-    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+    interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
       return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
     }
   };
