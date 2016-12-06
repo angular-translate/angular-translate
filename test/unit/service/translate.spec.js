@@ -1731,8 +1731,7 @@ describe('pascalprecht.translate', function () {
           'SELECT_FORMAT': '{GENDER, select, male{He} female{She} other{They}} liked this.',
           'PLURAL_FORMAT': 'There {NUM_RESULTS, plural, one{is one result} other{are # results}}.',
           'PLURAL_FORMAT_OFFSET': 'You {NUM_ADDS, plural, offset:1' +
-                                    '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
-                                    'zero{added this to your profile}' +   //   the offset value
+                                    '=0{didnt add this to your profile}' +
                                     'one{and one other person added this to their profile}' +
                                     'other{and # others added this to their profiles}' +
                                   '}.'

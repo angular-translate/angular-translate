@@ -14,7 +14,7 @@
     "angular-mocks": "~1.4.0",
     "angular-cookies": "~1.4.0",
     "angular-sanitize": "~1.4.0",
-    "messageformat": "~0.3.1"
+    "messageformat": "~1.0.2"
   },
   "resolutions": {
     "angular": "~1.4.0"

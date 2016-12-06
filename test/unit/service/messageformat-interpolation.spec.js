@@ -98,8 +98,7 @@ describe('pascalprecht.translate', function () {
     it('should support PluralFormat - offset extension', function () {
       expect($translateMessageFormatInterpolation.interpolate(
         'You {NUM_ADDS, plural, offset:1' +
-                    '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
-                'zero{added this to your profile}' +   //   the offset value
+                    '=0{didnt add this to your profile}' +
                 'one{and one other person added this to their profile}' +
                 'other{and # others added this to their profiles}' +
             '}.',
@@ -109,8 +108,7 @@ describe('pascalprecht.translate', function () {
 
       expect($translateMessageFormatInterpolation.interpolate(
         'You {NUM_ADDS, plural, offset:1' +
-                    '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
-                'zero{added this to your profile}' +   //   the offset value
+                    '=0{didnt add this to your profile}' +
                 'one{and one other person added this to their profile}' +
                 'other{and # others added this to their profiles}' +
             '}.',
@@ -120,8 +118,7 @@ describe('pascalprecht.translate', function () {
 
       expect($translateMessageFormatInterpolation.interpolate(
         'You {NUM_ADDS, plural, offset:1' +
-                    '=0{didnt add this to your profile}' + // Number literals, with a `=` do **NOT** use
-                'zero{added this to your profile}' +   //   the offset value
+                    '=0{didnt add this to your profile}' +
                 'one{and one other person added this to their profile}' +
                 'other{and # others added this to their profiles}' +
             '}.',
