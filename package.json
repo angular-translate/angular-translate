@@ -8,17 +8,22 @@
     "url": "http://github.com/angular-translate/angular-translate"
   },
   "engines": {
-    "node": ">=6.9"
+    "node": "*"
+  },
+  "devEngines": {
+    "node": ">=6.9",
+    "npm": ">=3"
   },
   "scripts": {
     "prepublish": "bower install",
-    "shipit": "bower install && bower update && grunt prepare-release",
-    "test": "grunt install-test && grunt test",
-    "test-headless": "grunt test-headless",
-    "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
+    "check-env": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
+    "shipit": "npm run-script -q check-env && bower install && bower update && grunt prepare-release",
+    "test": "npm run-script -q check-env && grunt install-test && grunt test",
+    "test-headless": "npm run-script -q check-env && grunt test-headless",
+    "test-scopes": "npm run-script -q check-env && grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
     "clean-test-scopes": "for f in test_scopes/*; do (cd $f; rm -rf bower_components); done",
-    "compile": "grunt compile",
-    "build": "grunt build",
+    "compile": "npm run-script -q check-env && grunt compile",
+    "build": "npm run-script -q check-env && grunt build",
     "build-site": "npm run -q build-site-all-languages; npm run -q build-site-plato-report",
     "build-site-all-languages": "./build_tools/generate_site.sh",
     "build-site-by-language": "./build_tools/generate_site_by_language.sh",
@@ -44,6 +49,7 @@
   "devDependencies": {
     "bower": "^1.7.9",
     "express": "^4.13.4",
+    "fbjs-scripts": "^0.7.1",
     "grunt": "~1.0.1",
     "grunt-bower-install-simple": "^1.0.3",
     "grunt-bump": "^0.8.0",
