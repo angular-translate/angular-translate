@@ -1612,7 +1612,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       }
 
       // if the translation id exists, we can just interpolate it
-      if (table && Object.prototype.hasOwnProperty.call(table, translationId)) {
+      if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null) {
         var translation = table[translationId];
 
         // If using link, rerun $translate with linked translationId and return it

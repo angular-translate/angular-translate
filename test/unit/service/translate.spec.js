@@ -2290,6 +2290,7 @@ describe('pascalprecht.translate', function () {
         .translations('en', {
           'FOO': 'bar',
           'BAR': 'foo',
+          'NULL':null,
           'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
@@ -2318,6 +2319,10 @@ describe('pascalprecht.translate', function () {
 
     it('should return empty string if translated string is empty', function () {
       expect($translate.instant('BLANK_VALUE')).toEqual('');
+    });
+
+    it('should handle null values as if not exists', function () {
+      expect($translate.instant('NULL')).toEqual('NULL');
     });
 
     it('should return translations of multiple translation ids', function () {
