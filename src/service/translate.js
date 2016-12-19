@@ -1353,7 +1353,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       var deferred = $q.defer();
 
       var onResolve = function (translationTable) {
-        if (Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
+        if (Object.prototype.hasOwnProperty.call(translationTable, translationId) && translationTable[translationId] !== null) {
           Interpolator.setLocale(langKey);
           var translation = translationTable[translationId];
           if (translation.substr(0, 2) === '@:') {
@@ -1397,7 +1397,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy) {
       var result, translationTable = $translationTable[langKey];
 
-      if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId)) {
+      if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId) && translationTable[translationId] !== null) {
         Interpolator.setLocale(langKey);
         result = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'filter', sanitizeStrategy);
         result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey, sanitizeStrategy);
@@ -1550,7 +1550,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
 
       // if the translation id exists, we can just interpolate it
-      if (table && Object.prototype.hasOwnProperty.call(table, translationId)) {
+      if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null ) {
         var translation = table[translationId];
 
         // If using link, rerun $translate with linked translationId and return it
