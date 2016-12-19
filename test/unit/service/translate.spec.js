@@ -297,7 +297,7 @@ describe('pascalprecht.translate', function () {
       });
 
 
-      $q.all($translate('NULL')).then(null, function (translations) {
+      $translate('NULL').then(null, function (translations) {
         deferred.resolve(translations);
       });
 
