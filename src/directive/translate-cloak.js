@@ -45,7 +45,7 @@ function translateCloakDirective($translate, $rootScope) {
           iAttr.$observe('translateCloak', function (translationId) {
             $translate(translationId).then(iRemoveCloak, iApplyCloak);
           });
-          // Register for change events as this is another indicator revalidating the cloak)
+          // Register for change events, as this is another indicator revalidating the cloak
           $rootScope.$on('$translateChangeSuccess', function () {
             $translate(iAttr.translateCloak).then(iRemoveCloak, iApplyCloak);
           });
