@@ -2051,14 +2051,17 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         // reload registered fallback languages
         if ($fallbackLanguage && $fallbackLanguage.length) {
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            tables.push(loadAsync($fallbackLanguage[i]));
-            loadingKeys[$fallbackLanguage[i]] = true;
+            var currentLanguage = $fallbackLanguage[i];
+            var currentPromise = langPromises[currentLanguage] = loadAsync(currentLanguage);
+            tables.push(currentPromise);
+            loadingKeys[currentLanguage] = true;
           }
         }
 
         // reload currently used language
         if ($uses && !loadingKeys[$uses]) {
-          tables.push(loadAsync($uses));
+          var langPromise = langPromises[$uses] = loadAsync($uses);
+          tables.push(langPromise);
         }
 
         var allTranslationsLoaded = function (tableData) {
@@ -2087,7 +2090,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         };
         oneTranslationsLoaded.displayName = 'refreshPostProcessor';
 
-        loadAsync(langKey).then(oneTranslationsLoaded, reject);
+        langPromises[langKey] = loadAsync(langKey).then(oneTranslationsLoaded, reject);
 
       } else {
         reject();
