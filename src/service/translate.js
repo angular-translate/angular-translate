@@ -1220,7 +1220,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
      * @private
      *
      * @description
-     * Kicks of registered async loader using `$injector` and applies existing
+     * Kicks off registered async loader using `$injector` and applies existing
      * loader options. When resolved, it updates translation tables accordingly
      * or rejects with given language key.
      *
