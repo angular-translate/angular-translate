@@ -7,6 +7,12 @@
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
   },
+  "keywords": [
+    "angular-translate",
+    "angular",
+    "AngularJS",
+    "translation"
+  ],
   "engines": {
     "node": "*"
   },
