@@ -47,10 +47,6 @@ au service fourni. N'oubliez pas d'intégrer aussi MessageFormat.js en premier :
 <script src="path/to/angular-translate-interpolation-messageformat"></script>
 </pre>
 
-**Remarque : Veuillez vous assurer d'intégrer un fichier locale prévu par MessageFormat correspondant.
-Ces fichiers contiennent des règles régionales pour une locale spécifique, cela est
-nécessaire pour obtenir une pluralisation propre !**
-
 Une fois que tout est là, nous pouvons utiliser `$translateProvider` pour dire à angular-translate
 d'utiliser l'interpolation de MessageFormat à la place de celui par défaut.
 `$translateProvider` fournit une méthode appelée `useMessageFormatInterpolation()`

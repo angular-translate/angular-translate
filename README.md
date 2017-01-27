@@ -51,6 +51,7 @@ so make sure to check this list.
 - [angular-translate on GitHub](https://github.com/angular-translate/angular-translate) - The GitHub repository
 - [angular-translate on ngmodules.org](http://ngmodules.org/modules/angular-translate)
 - [angular-translate mailinglist](https://groups.google.com/forum/#!forum/angular-translate) - Discuss, ask et al!
+- [angular-translate-quality](https://www.npmjs.com/package/angular-translate-quality) - Quality check at build time
 
 ### Thank you, community!
 We got a lot of great feedback from the community so far! More and more people
