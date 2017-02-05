@@ -496,16 +496,6 @@ module.exports = function (grunt) {
       }
     },
 
-    express: {
-      server: {
-        options: {
-          port: 3005,
-          bases: '.',
-          server: __dirname + '/server.js'
-        }
-      }
-    },
-
     ngdocs: {
       options: {
         dest: 'tmp',
@@ -776,7 +766,6 @@ module.exports = function (grunt) {
 
   // For development purpose.
   grunt.registerTask('dev', ['jshint', 'karma:unit', 'concat', 'copy:demo', 'watch:livereload']);
-  grunt.registerTask('server', ['express', 'express-keepalive']);
 
   // Legacy support
   grunt.registerTask('changelog', ['conventionalChangelog']);
