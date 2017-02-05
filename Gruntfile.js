@@ -521,13 +521,13 @@ module.exports = function (grunt) {
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-cookies.js',
           'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-sanitize.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.10.0/angular-translate.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.10.0/angular-translate-interpolation-messageformat.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.10.0/angular-translate-storage-cookie.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.10.0/angular-translate-storage-local.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.10.0/angular-translate-loader-url.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.10.0/angular-translate-loader-static-files.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.10.0/angular-translate-handler-log.js'
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.13.1/angular-translate.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.13.1/angular-translate-interpolation-messageformat.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.13.1/angular-translate-storage-cookie.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.13.1/angular-translate-storage-local.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.13.1/angular-translate-loader-url.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.13.1/angular-translate-loader-static-files.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.13.1/angular-translate-handler-log.js'
         ],
         styles: ['docs/css/styles.css']
       },
