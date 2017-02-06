@@ -1152,7 +1152,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         };
         promiseResolved.displayName = 'promiseResolved';
 
-        promiseToWaitFor['finally'](promiseResolved);
+        promiseToWaitFor['finally'](promiseResolved)
+          .catch(angular.noop); // we don't care about errors here, already handled
       }
       return deferred.promise;
     };
@@ -1901,7 +1902,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         });
         langPromises[key]['finally'](function () {
           clearNextLangAndPromise(key);
-        });
+        }).catch(angular.noop); // we don't care about errors (clearing)
       } else if (langPromises[key]) {
         // we are already loading this asynchronously
         // resolve our new deferred when the old langPromise is resolved

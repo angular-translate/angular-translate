@@ -4,6 +4,41 @@
 
 describe('pascalprecht.translate', function () {
 
+  // https://github.com/angular-ui/ui-router/issues/2889#issuecomment-273944742
+  var enableUnhandledRejectionTracing = function (module) {
+
+    if (angular.version.minor < 3) {
+      // will work w/ AngularJS 1.3+
+      return;
+    }
+
+    /* jshint ignore:start */
+    // Decorate the $q service when app starts
+    module.decorator('$q', ["$delegate", function ($delegate) {
+      // Create a new promise object
+      var promise = $delegate.when();
+
+      // Access the `Promise` prototype (nonstandard, but works in Chrome)
+      var proto = promise.__proto__;
+
+      // Define a setter for `$$state` that creates a stacktrace
+      // (string) and assigns it as a property of the internal `$$state` object.
+      Object.defineProperty(proto, '$$state', {
+        enumerable : true,
+        set : function (val) {
+          val.stack = new Error().stack;
+          this._$$state = val;
+        },
+        get : function () {
+          return this._$$state;
+        }
+      });
+
+      return $delegate;
+    }]);
+    /* jshint ignore:end */
+  };
+
   beforeEach(module('ngMockE2EAsync'));
 
   var translationMock = {
@@ -622,6 +657,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
+        enableUnhandledRejectionTracing($provide);
+
         $translateProvider.useLoader('customLoader');
 
         $translateProvider.preferredLanguage(slowButRequestedFirst);
@@ -714,6 +751,8 @@ describe('pascalprecht.translate', function () {
         secondLanguageResponded = false;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        enableUnhandledRejectionTracing($provide);
 
         $translateProvider.useLoader('customLoader');
 
@@ -808,6 +847,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
+      enableUnhandledRejectionTracing($provide);
+
       $translateProvider.useStaticFilesLoader({
         prefix: 'foo/bar/',
         suffix: '.json'
@@ -897,6 +938,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
+        enableUnhandledRejectionTracing($provide);
+
         $translateProvider.useLoader('customLoader');
 
         $translateProvider.preferredLanguage(slowButRequestedFirst);
@@ -968,7 +1011,8 @@ describe('pascalprecht.translate', function () {
 
     var $translate, $httpBackend, $timeout;
 
-    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+    beforeEach(module('pascalprecht.translate', function ($provide, $translateProvider) {
+      enableUnhandledRejectionTracing($provide);
       $translateProvider.useStaticFilesLoader({
         prefix : 'lang_',
         suffix : '.json'
@@ -1258,6 +1302,9 @@ describe('pascalprecht.translate', function () {
     describe('translate returns handler result', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        enableUnhandledRejectionTracing($provide);
+
         $translateProvider
             .translations('de_DE', translationMock)
             .preferredLanguage('de_DE');
@@ -1288,6 +1335,7 @@ describe('pascalprecht.translate', function () {
     describe('multi fallback language', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        enableUnhandledRejectionTracing($provide);
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', { 'TRANSLATION__ID': 'bazinga' })
@@ -1406,6 +1454,7 @@ describe('pascalprecht.translate', function () {
     describe('registered loader', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        enableUnhandledRejectionTracing($provide);
         $translateProvider
           .useLoader('customLoader')
           .preferredLanguage('en_EN')
@@ -1465,7 +1514,7 @@ describe('pascalprecht.translate', function () {
           fallbackLanguageResponded = false;
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
-
+        enableUnhandledRejectionTracing($provide);
         $translateProvider.useStaticFilesLoader({
           prefix: 'foo/bar/',
           suffix: '.json'
@@ -1631,6 +1680,7 @@ describe('pascalprecht.translate', function () {
   describe('$translateProvider#useLoader', function () {
 
     beforeEach(module('pascalprecht.translate', function($translateProvider, $provide) {
+      enableUnhandledRejectionTracing($provide);
       $translateProvider
         .useLoader('customLoader')
         .preferredLanguage('en');
@@ -1765,6 +1815,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
+      enableUnhandledRejectionTracing($provide);
+
       $provide.factory('customInterpolation', function () {
 
         var translateInterpolator = {},
@@ -1868,6 +1920,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
+      enableUnhandledRejectionTracing($provide);
+
       $provide.factory('customLoader', function ($q, $timeout) {
         return function (options) {
           var deferred = $q.defer();
@@ -1918,6 +1972,7 @@ describe('pascalprecht.translate', function () {
     var missingTranslations = {};
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      enableUnhandledRejectionTracing($provide);
       $translateProvider
         .translations('en', translationMock)
         .preferredLanguage('en')
@@ -2027,6 +2082,7 @@ describe('pascalprecht.translate', function () {
     describe('loader registered', function () {
 
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        enableUnhandledRejectionTracing($provide);
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', translationMock)
@@ -2144,6 +2200,7 @@ describe('pascalprecht.translate', function () {
 
     describe('loader registered:', function () {
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        enableUnhandledRejectionTracing($provide);
         $translateProvider
           .preferredLanguage('en_EN')
           .useLoader('customLoader');
@@ -2262,6 +2319,7 @@ describe('pascalprecht.translate', function () {
   describe('$translate.instant (with fallback)', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      enableUnhandledRejectionTracing($provide);
       $translateProvider
         .useLoader('customLoader')
         .translations('en', {
@@ -2346,6 +2404,7 @@ describe('pascalprecht.translate', function () {
   describe('$translate.instant (with fallback and not found indicators)', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      enableUnhandledRejectionTracing($provide);
       $translateProvider
         .useLoader('customLoader')
         .translations('en', {
@@ -2392,6 +2451,7 @@ describe('pascalprecht.translate', function () {
     var missingTranslations = {};
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+      enableUnhandledRejectionTracing($provide);
       $translateProvider
         .translations('en', {
           'NAMESPACE1':
@@ -2475,6 +2535,7 @@ describe('pascalprecht.translate', function () {
 
     describe('Enabled', function () {
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        enableUnhandledRejectionTracing($provide);
         $translateProvider
           .translations('en', {
             'FOO': 'bar'
@@ -2536,6 +2597,7 @@ describe('pascalprecht.translate', function () {
 
     describe('Disabled (default)', function () {
       beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        enableUnhandledRejectionTracing($provide);
         $translateProvider
           .translations('en', {
             'FOO': 'bar'
@@ -2606,6 +2668,8 @@ describe('pascalprecht.translate', function () {
         secondLanguageResponded = false;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+        enableUnhandledRejectionTracing($provide);
 
         $translateProvider.useLoader('customLoader');
 
@@ -2846,6 +2910,8 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
+      enableUnhandledRejectionTracing($provide);
+
       $translateProvider.useLoader('customLoader');
 
       $translateProvider.preferredLanguage(thePreferredLangKey);
@@ -2901,6 +2967,8 @@ describe('pascalprecht.translate', function () {
       thePreferredLangKey = 'ab_CD';
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      enableUnhandledRejectionTracing($provide);
 
       $translateProvider.useLoader('customLoader');
 
