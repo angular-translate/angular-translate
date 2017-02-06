@@ -34,8 +34,6 @@ OK, fácil. No olvide embeberlo en su documento HTML, de manera que tengamos acc
 <script src="path/to/angular-translate-interpolation-messageformat"></script>
 </pre>
 
-**Nota: Asegúrese de embeber el archivo de localización (locale) correspondiente, provisto por MessageFormat. ¡Estos archivos proveen reglas de localización específicas que son indispensables para pluralizar correctamente!**
-
 
 
 Una vez que todo está ahí, podemos usar el `$translateProvider` para indicarte a angular-translate
