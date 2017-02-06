@@ -36,9 +36,6 @@ $ bower install angular-translate-interpolation-messageformat
 <script src="path/to/angular-translate-interpolation-messageformat"></script>
 </pre>
 
-**注：請務必通過嵌入MessageFormat中提供相應的語言環境的文件。這些文件提供了需要到特定區域設置區域設置規則
-適當的多元化！ **
-
 萬事俱備後， 我們可以用`$translateProvider` 來告訴angular-translate 去使用MessageFormat 插值服務，而不是用缺省的。
 `$translateProvider` 提供一個叫做`useMessageFormatInterpolation()` 的方法來實現這個功能。
 我們還必須再次使用`$translateProvider.preferredLanguage()`， 這是為了讓MessageFormat知道用什麼語言環境

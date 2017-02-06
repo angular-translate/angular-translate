@@ -48,8 +48,7 @@ function $translateStaticFilesLoader($q, $http) {
 
       return $http(angular.extend({
         url: fileUrl,
-        method: 'GET',
-        params: ''
+        method: 'GET'
       }, options.$http))
         .then(function(result) {
           return result.data;

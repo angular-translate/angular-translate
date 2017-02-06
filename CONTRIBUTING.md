@@ -81,9 +81,9 @@ This task extends `watch`. In addition, it will lint, test and copy the result i
 After this, just like `watch`, it will run these steps every time a file has changed.
 On top of that, this task supports **live reloading** (on default port).
 
-This task works in harmony with `grunt server`.
+This task works in harmony with `npm run start-demo`.
 
-#### <code>grunt server</code>
+#### <code>npm run start-demo</code>
 
 This task provides a simple http server on port `3005`. If you start it on your machine, you
 have access to the project`s demos with real XHR operations.
