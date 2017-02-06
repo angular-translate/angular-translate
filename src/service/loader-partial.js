@@ -55,7 +55,7 @@ function $translatePartialLoader() {
     if (!this.tables[lang]) {
       var self = this;
 
-      return $http(angular.extend({
+      this.tables[lang] = $http(angular.extend({
         method : 'GET',
         url: this.parseUrl(urlTemplate, lang)
       }, $httpOptions))
@@ -75,7 +75,7 @@ function $translatePartialLoader() {
             return $q.reject(self.name);
           }
         });
-
+      return this.tables[lang];
     } else {
       return $q.when(this.tables[lang]);
     }
