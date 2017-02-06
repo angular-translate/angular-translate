@@ -2026,28 +2026,13 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
      * process is finished successfully, and reject if not.
      */
     $translate.refresh = function (langKey) {
-      if (!$loaderFactory) {
-        throw new Error('Couldn\'t refresh translation table, no loader registered!');
-      }
+        if (!$loaderFactory) {
+          throw new Error('Couldn\'t refresh translation table, no loader registered!');
+        }
 
-      var deferred = $q.defer();
+        $rootScope.$emit('$translateRefreshStart', {language: langKey});
 
-      function resolve() {
-        deferred.resolve();
-        $rootScope.$emit('$translateRefreshEnd', {language : langKey});
-      }
-
-      function reject() {
-        deferred.reject();
-        $rootScope.$emit('$translateRefreshEnd', {language : langKey});
-      }
-
-      $rootScope.$emit('$translateRefreshStart', {language : langKey});
-
-      if (!langKey) {
-        // if there's no language key specified we refresh ALL THE THINGS!
-        var tables = [], loadingKeys = {};
-
+<<<<<<< Updated upstream
         // reload registered fallback languages
         if ($fallbackLanguage && $fallbackLanguage.length) {
           for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
@@ -2055,48 +2040,65 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             var currentPromise = langPromises[currentLanguage] = loadAsync(currentLanguage);
             tables.push(currentPromise);
             loadingKeys[currentLanguage] = true;
+=======
+        var deferred = $q.defer();
+        deferred.promise.then(
+          function () {
+            if ($uses) {
+              useLanguage($uses);
+            }
+>>>>>>> Stashed changes
           }
-        }
+        ).finally(
+          function () {
+            $rootScope.$emit('$translateRefreshEnd', {language: langKey});
+          }
+        );
 
+<<<<<<< Updated upstream
         // reload currently used language
         if ($uses && !loadingKeys[$uses]) {
           var langPromise = langPromises[$uses] = loadAsync($uses);
           tables.push(langPromise);
+=======
+        //private helper
+        function loadNewData(languageKey) {
+          var promise = loadAsync(languageKey);
+          //update the load promise cache for this language
+          langPromises[languageKey] = promise;
+          //register a data handler for the promise
+          promise.then(function (data) {
+            //clear the cache for this language
+            $translationTable[languageKey] = {};
+            //add the new data for this language
+            translations(languageKey, data.table);
+          });
+          return promise;
+>>>>>>> Stashed changes
         }
 
-        var allTranslationsLoaded = function (tableData) {
-          $translationTable = {};
-          angular.forEach(tableData, function (data) {
-            translations(data.key, data.table);
-          });
-          if ($uses) {
-            useLanguage($uses);
+        if (!langKey) {
+          // if there's no language key specified we refresh ALL THE THINGS!
+          var languagesToReload = $fallbackLanguage.slice() || [];
+          if ($uses && languagesToReload.indexOf($uses) === -1) {
+            languagesToReload.push($uses);
           }
-          resolve();
-        };
-        allTranslationsLoaded.displayName = 'refreshPostProcessor';
+          $q.all(languagesToReload.map(loadNewData)).then(deferred.resolve, deferred.reject);
 
-        $q.all(tables).then(allTranslationsLoaded, reject);
+        } else if ($translationTable[langKey]) {
+          //just refresh the specified language cache
+          loadNewData(langKey).then(deferred.resolve, deferred.reject);
 
-      } else if ($translationTable[langKey]) {
-
-        var oneTranslationsLoaded = function (data) {
-          translations(data.key, data.table);
-          if (langKey === $uses) {
-            useLanguage($uses);
-          }
-          resolve();
-          return data;
-        };
-        oneTranslationsLoaded.displayName = 'refreshPostProcessor';
-
+<<<<<<< Updated upstream
         langPromises[langKey] = loadAsync(langKey).then(oneTranslationsLoaded, reject);
+=======
+        } else {
+          deferred.reject();
+        }
+>>>>>>> Stashed changes
 
-      } else {
-        reject();
-      }
-      return deferred.promise;
-    };
+        return deferred.promise;
+      };
 
     /**
      * @ngdoc function
