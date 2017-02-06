@@ -19,6 +19,7 @@ module.exports = function (config) {
       shared.injectByScope(scope, 'angular-cookies/angular-cookies.js'),
       shared.injectByScope(scope, 'angular-sanitize/angular-sanitize.js'),
       shared.injectByScope(scope, 'angular-mocks/angular-mocks.js'),
+      'test/3rd/angular-mocks-async.js',
       'src/translate.js',
       'src/**/*.js',
       'test/unit/**/*.spec.js'

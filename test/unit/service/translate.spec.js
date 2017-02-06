@@ -4,6 +4,8 @@
 
 describe('pascalprecht.translate', function () {
 
+  beforeEach(module('ngMockE2EAsync'));
+
   var translationMock = {
     'EXISTING_TRANSLATION_ID': 'foo',
     'BLANK_VALUE': '',
@@ -19,74 +21,6 @@ describe('pascalprecht.translate', function () {
         'TITLE': '2. Header'
       }
     }
-  };
-
-  var asyncHttpBackend = function($delegate, $timeout) {
-    var oldHttpBackend = $delegate;
-    var asincDefinitions = [];
-
-    var httpBackend = function(method, url, data, callback, headers, timeout, withCredentials){
-      var match = matchRequest(),
-        cancelled = false;
-      if(match){
-        if (timeout) {
-          if (timeout.then) {
-            timeout.then(handleTimeout);
-          } else {
-            $timeout(handleTimeout, timeout);
-          }
-        }
-        match.response.promise
-          //promise resolution: success
-          .then(function(response){
-            if (!cancelled) {
-              callback(response[0], response[1], match.response.headers, match.response.status );
-            }
-          },
-          //promise.resolution: fail
-          function(response){
-            if (!cancelled) {
-              callback(response[0], response[1], match.response.headers, match.response.status);
-            }
-          });
-      }else{
-        oldHttpBackend(method, url, data, callback, headers, timeout, withCredentials);
-      }
-
-      function matchRequest() {
-        var matches = asincDefinitions
-          .filter(function(definition) {
-            return (definition.url === url);
-          })
-          .filter(function(definition){
-            return (definition.method === method);
-          });
-        return matches.length ? matches[0] : false;
-      }
-
-      function handleTimeout() {
-        cancelled = true;
-        callback(-1, undefined, '');
-      }
-    };
-
-    httpBackend.whenAsync = function(method, url, data, headers) {
-      var definition = { method: method, url: url, data: data, headers: headers },
-          chain = {
-            respond: function(promise, headers, status) {
-              definition.response = { promise: promise, headers: headers, status: status};
-              return chain;
-            }
-          };
-      asincDefinitions.push(definition);
-      return chain;
-    };
-
-    for (var key in oldHttpBackend) {
-      httpBackend[key] = oldHttpBackend[key];
-    }
-
-    return httpBackend;
   };
 
   describe('$translate', function () {
@@ -879,8 +813,6 @@ describe('pascalprecht.translate', function () {
         suffix: '.json'
       });
 
-      $provide.decorator('$httpBackend', asyncHttpBackend);
-
     }));
 
     var $translate;
@@ -1059,147 +991,107 @@ describe('pascalprecht.translate', function () {
 
     describe('running the second request AFTER the first one was finished', function () {
 
-      it('should resolve the first promise, keep the result in cache and resolve the second promise', function() {
-        var wasResolved = false,
-          wasRejected = false,
-          promise = $translate.use('de_DE');
-        promise.then(resolved, rejected);
+      it('should resolve the first promise, keep the result in cache and resolve the second promise', function () {
+        var fn = {
+          resolved1 : jasmine.createSpy('1st request resolved'),
+          rejected1 : jasmine.createSpy('1st request rejected'),
+          resolved2 : jasmine.createSpy('2nd request resolved'),
+          rejected2 : jasmine.createSpy('2nd request rejected')
+        };
 
-        expect(wasResolved).toEqual(false);
-        expect(wasRejected).toEqual(false);
+        expect(fn.resolved1).not.toHaveBeenCalled();
+        expect(fn.rejected1).not.toHaveBeenCalled();
 
-        $httpBackend.flush();
+        $translate.use('de_DE').then(fn.resolved1, fn.rejected1);
+        $timeout.flush();
+        expect(fn.resolved1).toHaveBeenCalled();
+        expect(fn.rejected1).not.toHaveBeenCalled();
 
-        expect(wasResolved).toEqual(true);
-        expect(wasRejected).toEqual(false);
-
-        promise = $translate.use('de_DE');
-        promise.then(resolved, rejected);
-        expect($httpBackend.flush).toThrowError('No pending request to flush !');
-
-        expect(wasResolved).toEqual(true);
-        expect(wasRejected).toEqual(false);
-
-        function resolved() {
-          wasResolved = true;
-        }
-
-        function rejected() {
-          wasRejected = true;
-        }
+        $translate.use('de_DE').then(fn.resolved2, fn.rejected2);
+        $timeout.flush();
+        expect(fn.resolved2).toHaveBeenCalled();
+        expect(fn.rejected2).not.toHaveBeenCalled();
       });
 
-      it('should reject the first promise, try to load the file again and reject the second promise', function() {
-        var wasResolved = false,
-          wasRejected = false,
-          promise = $translate.use('nt_VD');
-        promise.then(resolved, rejected);
+      it('should reject the first promise, try to load the file again and reject the second promise', function () {
+        var fn = {
+          resolved1 : jasmine.createSpy('1st request resolved'),
+          rejected1 : jasmine.createSpy('1st request rejected'),
+          resolved2 : jasmine.createSpy('2nd request resolved'),
+          rejected2 : jasmine.createSpy('2nd request rejected')
+        };
 
-        expect(wasResolved).toEqual(false);
-        expect(wasRejected).toEqual(false);
+        expect(fn.resolved1).not.toHaveBeenCalled();
+        expect(fn.rejected1).not.toHaveBeenCalled();
 
-        $httpBackend.flush();
+        $translate.use('nt_VD').then(fn.resolved1, fn.rejected1);
+        $timeout.flush();
+        expect(fn.resolved1).not.toHaveBeenCalled();
+        expect(fn.rejected1).toHaveBeenCalled();
 
-        expect(wasResolved).toEqual(false);
-        expect(wasRejected).toEqual(true);
-
-        promise = $translate.use('nt_VD');
-        promise.then(resolved, rejected);
-        $httpBackend.flush();
-
-        expect(wasResolved).toEqual(false);
-        expect(wasRejected).toEqual(true);
-
-        function resolved() {
-          wasResolved = true;
-        }
-
-        function rejected() {
-          wasRejected = true;
-        }
+        $translate.use('nt_VD').then(fn.resolved2, fn.rejected2);
+        $timeout.flush();
+        expect(fn.resolved2).not.toHaveBeenCalled();
+        expect(fn.rejected2).toHaveBeenCalled();
       });
     });
 
     describe('running the second request BEFORE the first one was finished', function () {
 
-      it('should resolve both promises', function(done) {
-        var wasResolved1 = false,
-          wasRejected1 = false,
-          wasResolved2 = false,
-          wasRejected2 = false,
-          promise1 = $translate.use('de_DE'),
-          promise2 = $translate.use('de_DE');
+      it('should resolve both promises', function () {
+        var fn = {
+          resolved1 : jasmine.createSpy('1st request resolved'),
+          rejected1 : jasmine.createSpy('1st request rejected'),
+          resolved2 : jasmine.createSpy('2nd request resolved'),
+          rejected2 : jasmine.createSpy('2nd request rejected')
+        };
 
-        promise1.then(function() {
-          wasResolved1 = true;
-        }, function() {
-          wasRejected1 = true;
-        });
+        $translate
+          .use('de_DE')
+          .then(fn.resolved1, fn.rejected1);
+        $translate
+          .use('de_DE')
+          .then(fn.resolved2, fn.rejected2);
 
-        promise2.then(function() {
-          wasResolved2 = true;
-        }, function() {
-          wasRejected2 = true;
-        });
-
-        $timeout(function() {
-
-          expect(wasResolved1).toEqual(false);
-          expect(wasRejected1).toEqual(false);
-          expect(wasResolved2).toEqual(false);
-          expect(wasRejected2).toEqual(false);
-
-          $httpBackend.flush();
-
-          expect(wasResolved1).toEqual(true);
-          expect(wasRejected1).toEqual(false);
-          expect(wasResolved2).toEqual(true);
-          expect(wasRejected2).toEqual(false);
-
-          done();
-        }, 1000);
+        expect(fn.resolved1).not.toHaveBeenCalled();
+        expect(fn.rejected1).not.toHaveBeenCalled();
+        expect(fn.resolved2).not.toHaveBeenCalled();
+        expect(fn.rejected2).not.toHaveBeenCalled();
 
         $timeout.flush();
+
+        expect(fn.resolved1).toHaveBeenCalled();
+        expect(fn.rejected1).not.toHaveBeenCalled();
+        expect(fn.resolved2).toHaveBeenCalled();
+        expect(fn.rejected2).not.toHaveBeenCalled();
       });
 
-      it('should reject both promises', function(done) {
-        var wasResolved1 = false,
-          wasRejected1 = false,
-          wasResolved2 = false,
-          wasRejected2 = false,
-          promise1 = $translate.use('nt_VD'),
-          promise2 = $translate.use('nt_VD');
+      it('should reject both promises', function () {
+        var fn = {
+          resolved1 : jasmine.createSpy('1st request resolved'),
+          rejected1 : jasmine.createSpy('1st request rejected'),
+          resolved2 : jasmine.createSpy('2nd request resolved'),
+          rejected2 : jasmine.createSpy('2nd request rejected')
+        };
 
-        promise1.then(function() {
-          wasResolved1 = true;
-        }, function() {
-          wasRejected1 = true;
-        });
+        $translate
+          .use('nt_VD')
+          .then(fn.resolved1, fn.rejected1);
+        $translate
+          .use('nt_VD')
+          .then(fn.resolved2, fn.rejected2);
 
-        promise2.then(function() {
-          wasResolved2 = true;
-        }, function() {
-          wasRejected2 = true;
-        });
-
-        $timeout(function() {
-
-          expect(wasResolved1).toEqual(false);
-          expect(wasRejected1).toEqual(false);
-          expect(wasResolved2).toEqual(false);
-          expect(wasRejected2).toEqual(false);
-
-          $httpBackend.flush();
-
-          expect(wasResolved1).toEqual(false);
-          expect(wasRejected1).toEqual(true);
-          expect(wasResolved2).toEqual(false);
-          expect(wasRejected2).toEqual(true);
-
-          done();
-        }, 1000);
+        expect(fn.resolved1).not.toHaveBeenCalled();
+        expect(fn.rejected1).not.toHaveBeenCalled();
+        expect(fn.resolved2).not.toHaveBeenCalled();
+        expect(fn.rejected2).not.toHaveBeenCalled();
 
         $timeout.flush();
+
+        expect(fn.resolved1).not.toHaveBeenCalled();
+        expect(fn.rejected1).toHaveBeenCalled();
+        expect(fn.resolved2).not.toHaveBeenCalled();
+        expect(fn.rejected2).toHaveBeenCalled();
       });
     });
   });
@@ -1583,7 +1475,6 @@ describe('pascalprecht.translate', function () {
           .preferredLanguage(preferredButFails)
           .fallbackLanguage(notPreferredButSucceeds);
 
-        $provide.decorator('$httpBackend', asyncHttpBackend);
       }));
 
       var $translate;

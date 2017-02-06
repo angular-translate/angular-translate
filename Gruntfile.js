@@ -83,7 +83,10 @@ module.exports = function (grunt) {
         ]
       },
 
-      test: ['test/**/*.js']
+      test: [
+        'test/**/*.js',
+        '!test/3rd/**/*'
+      ]
     },
 
     watch: {
