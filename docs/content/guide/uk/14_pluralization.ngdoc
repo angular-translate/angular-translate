@@ -43,10 +43,6 @@ $ bower install angular-translate-interpolation-messageformat
 <script src="path/to/angular-translate-interpolation-messageformat"></script>
 </pre>
 
-**Увага: Будь ласка, не забудьте підключити відповідний файл локалі, що надається разом з
-MessageFormat. Ці файли визначають правила локалізації, що необхідно для досягнення правильної
-плюралізації!**
-
 Коли все зроблено, ми можемо використати `$translateProvider`, щоб сказати angular-translate
 використовувати інтерполяцію MessageFormat замість стандартної. `$translateProvider` надає для цього
 метод під назвою `useMessageFormatInterpolation()`. Також ми знову повинні скористатися

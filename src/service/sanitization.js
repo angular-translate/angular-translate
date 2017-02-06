@@ -301,8 +301,10 @@ function $translateSanitizationProvider () {
       return result;
     } else if (angular.isNumber(value)) {
       return value;
-    } else {
+    } else if (!angular.isUndefined(value) && value !== null) {
       return iteratee(value);
+    } else {
+      return value;
     }
   };
 }

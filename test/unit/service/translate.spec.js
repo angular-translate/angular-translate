@@ -7,6 +7,7 @@ describe('pascalprecht.translate', function () {
   var translationMock = {
     'EXISTING_TRANSLATION_ID': 'foo',
     'BLANK_VALUE': '',
+    'NULL': null,
     'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
     'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
     'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
@@ -98,7 +99,8 @@ describe('pascalprecht.translate', function () {
         .translations('en', translationMock)
         .translations('en', {
           'FOO': 'bar',
-          'BAR': 'foo'
+          'BAR': 'foo',
+          'NULL': null,
         })
         .translations('de', {
           'FOO': 'faa'
@@ -284,6 +286,25 @@ describe('pascalprecht.translate', function () {
       $rootScope.$digest();
       expect(value).toEqual(translationId);
     });
+
+    it('should return translation id if translation is null', function () {
+      var deferred = $q.defer(),
+        promise = deferred.promise,
+        value;
+
+      promise.then(function (translation) {
+        value = translation;
+      });
+
+
+      $translate('NULL').then(null, function (translations) {
+        deferred.resolve(translations);
+      });
+
+      $rootScope.$digest();
+      expect(value).toEqual('NULL');
+    });
+
 
     it('should return translation if translation id if exists', function () {
       var deferred = $q.defer(),
@@ -1252,7 +1273,7 @@ describe('pascalprecht.translate', function () {
       beforeEach(module('pascalprecht.translate', function ($translateProvider) {
         $translateProvider
           .translations('de_DE', translationMock)
-          .translations('en_EN', { 'TRANSLATION__ID': 'bazinga' })
+          .translations('en_EN', { 'TRANSLATION__ID': 'bazinga', 'NULL': 'yowza' })
           .preferredLanguage('de_DE')
           .fallbackLanguage('en_EN');
       }));
@@ -1281,12 +1302,13 @@ describe('pascalprecht.translate', function () {
         promise.then(function (translation) {
           value = translation;
         });
-        $translate('TRANSLATION__ID').then(function (translation) {
+        $translate(['TRANSLATION__ID','NULL']).then(function (translation) {
           deferred.resolve(translation);
         });
 
         $rootScope.$digest();
-        expect(value).toEqual('bazinga');
+        expect(value.TRANSLATION__ID).toEqual('bazinga');
+        expect(value.NULL).toEqual('yowza');
       });
 
       it('should use fallback language when forceLanguage if translation id doesn\'t exist', function () {
@@ -2290,6 +2312,7 @@ describe('pascalprecht.translate', function () {
         .translations('en', {
           'FOO': 'bar',
           'BAR': 'foo',
+          'NULL': null,
           'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
@@ -2318,6 +2341,10 @@ describe('pascalprecht.translate', function () {
 
     it('should return empty string if translated string is empty', function () {
       expect($translate.instant('BLANK_VALUE')).toEqual('');
+    });
+
+    it('should handle null values as if not exists', function () {
+      expect($translate.instant('NULL')).toEqual('NULL');
     });
 
     it('should return translations of multiple translation ids', function () {
@@ -2350,6 +2377,7 @@ describe('pascalprecht.translate', function () {
           'FOO': 'bar',
           'BAR': 'foo',
           'BARE': '',
+          'NULL': null,
           'FOOBAR': 'Foo bar {{value}}',
         })
         .translations('de', {
