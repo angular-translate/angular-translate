@@ -1867,6 +1867,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       }
 
       var deferred = $q.defer();
+      deferred.promise.then(null, angular.noop); // AJS "Possibly unhandled rejection"
 
       $rootScope.$emit('$translateChangeStart', {language : key});
 
