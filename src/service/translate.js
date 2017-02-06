@@ -2032,22 +2032,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         $rootScope.$emit('$translateRefreshStart', {language: langKey});
 
-<<<<<<< Updated upstream
-        // reload registered fallback languages
-        if ($fallbackLanguage && $fallbackLanguage.length) {
-          for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            var currentLanguage = $fallbackLanguage[i];
-            var currentPromise = langPromises[currentLanguage] = loadAsync(currentLanguage);
-            tables.push(currentPromise);
-            loadingKeys[currentLanguage] = true;
-=======
         var deferred = $q.defer();
         deferred.promise.then(
           function () {
             if ($uses) {
               useLanguage($uses);
             }
->>>>>>> Stashed changes
           }
         ).finally(
           function () {
@@ -2055,12 +2045,6 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           }
         );
 
-<<<<<<< Updated upstream
-        // reload currently used language
-        if ($uses && !loadingKeys[$uses]) {
-          var langPromise = langPromises[$uses] = loadAsync($uses);
-          tables.push(langPromise);
-=======
         //private helper
         function loadNewData(languageKey) {
           var promise = loadAsync(languageKey);
@@ -2074,7 +2058,6 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             translations(languageKey, data.table);
           });
           return promise;
->>>>>>> Stashed changes
         }
 
         if (!langKey) {
@@ -2089,13 +2072,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           //just refresh the specified language cache
           loadNewData(langKey).then(deferred.resolve, deferred.reject);
 
-<<<<<<< Updated upstream
-        langPromises[langKey] = loadAsync(langKey).then(oneTranslationsLoaded, reject);
-=======
         } else {
           deferred.reject();
         }
->>>>>>> Stashed changes
 
         return deferred.promise;
       };
