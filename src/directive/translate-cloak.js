@@ -37,21 +37,15 @@ function translateCloakDirective($translate, $rootScope) {
       applyCloak(tElement);
 
       return function linkFn(scope, iElement, iAttr) {
-		// Create bound functions that incorporate the active DOM element.
+		//Create bound functions that incorporate the active DOM element.
 		var iRemoveCloak = removeCloak.bind(this, iElement), iApplyCloak = applyCloak.bind(this, iElement);
-		// Check if a specific translation ID has been configured for controlling the cloak.
         if (iAttr.translateCloak && iAttr.translateCloak.length) {
           // Register a watcher for the defined translation allowing a fine tuned cloak
           iAttr.$observe('translateCloak', function (translationId) {
             $translate(translationId).then(iRemoveCloak, iApplyCloak);
           });
-          // Register for change events, as this is another indicator revalidating the cloak
-          $rootScope.$on('$translateChangeSuccess', function () {
-            $translate(iAttr.translateCloak).then(iRemoveCloak, iApplyCloak);
-          });
         }
         else {
-          // Just remove the cloak as soon as the translate module is ready.
           $translate.onReady(iRemoveCloak);
         }
       };
