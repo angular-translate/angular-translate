@@ -36,8 +36,8 @@ function translateCloakDirective($translate) {
       applyCloak(tElement);
 
       return function linkFn(scope, iElement, iAttr) {
-		//Create bound functions that incorporate the active DOM element.
-		var iRemoveCloak = removeCloak.bind(this, iElement), iApplyCloak = applyCloak.bind(this, iElement);
+        //Create bound functions that incorporate the active DOM element.
+        var iRemoveCloak = removeCloak.bind(this, iElement), iApplyCloak = applyCloak.bind(this, iElement);
         if (iAttr.translateCloak && iAttr.translateCloak.length) {
           // Register a watcher for the defined translation allowing a fine tuned cloak
           iAttr.$observe('translateCloak', function (translationId) {
