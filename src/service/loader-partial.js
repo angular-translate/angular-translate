@@ -87,12 +87,18 @@ function $translatePartialLoader() {
     }
     //locals
     var self = this, lastLangPromise = this.langPromises[lang], langDeferred = $q.defer();
-    //promise chaining logic
-    if (!lastLangPromise) {
-      tryGettingThisTable();
+    if (this.tables[lang]) {
+      //the part must have been set statically
+      langDeferred.resolve(this.tables[lang]);
     }
-    else {
-      lastLangPromise.then(langDeferred.resolve, tryGettingThisTable);
+    else {      
+      if (!lastLangPromise) {
+        tryGettingThisTable();
+      }
+      else {
+        //promise chaining logic
+        lastLangPromise.then(langDeferred.resolve, tryGettingThisTable);
+      }
     }
     lastLangPromise = this.langPromises[lang] = langDeferred.promise;
     return lastLangPromise;
