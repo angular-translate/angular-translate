@@ -2045,8 +2045,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             $translationTable[languageKey] = {};
             //add the new data for this language
             translations(languageKey, data.table);
-		    //track that we updated this language
-		    updatedLanguages[languageKey] = true;
+            //track that we updated this language
+            updatedLanguages[languageKey] = true;
           });
           return promise;
         }
@@ -2069,12 +2069,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 		
 		deferred.promise.then(
           function () {
-			for (key in $translationTable) {
-				//delete cache entries that were not updated
-				if (!(key in updatedLanguages)) {
-					delete $translationTable[key];
-				}
-			}
+            for (key in $translationTable) {
+              //delete cache entries that were not updated
+              if (!(key in updatedLanguages)) {
+                delete $translationTable[key];
+              }
+            }
             if ($uses) {
               useLanguage($uses);
             }
