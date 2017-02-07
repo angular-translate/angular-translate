@@ -59,7 +59,7 @@ function $translatePartialLoader() {
     else {
       lastLangPromise.then(langDeferred.resolve, tryGettingThisTable);
     }
-    lastLangPromise = this.langPromises[lang] = langDeferred.promise
+    lastLangPromise = this.langPromises[lang] = langDeferred.promise;
     return lastLangPromise;
   };
 
