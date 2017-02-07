@@ -2,7 +2,6 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translateCloak
- * @requires $rootScope
  * @requires $translate
  * @restrict A
  *
@@ -22,7 +21,7 @@ angular.module('pascalprecht.translate')
  */
 .directive('translateCloak', translateCloakDirective);
 
-function translateCloakDirective($translate, $rootScope) {
+function translateCloakDirective($translate) {
 
   'use strict';
 
