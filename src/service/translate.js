@@ -2032,18 +2032,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         $rootScope.$emit('$translateRefreshStart', {language: langKey});
 
-        var deferred = $q.defer();
-        deferred.promise.then(
-          function () {
-            if ($uses) {
-              useLanguage($uses);
-            }
-          }
-        ).finally(
-          function () {
-            $rootScope.$emit('$translateRefreshEnd', {language: langKey});
-          }
-        );
+        var deferred = $q.defer(), updatedLanguages = {};
 
         //private helper
         function loadNewData(languageKey) {
@@ -2056,6 +2045,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             $translationTable[languageKey] = {};
             //add the new data for this language
             translations(languageKey, data.table);
+			//track that we updated this language
+			updatedLanguages[languageKey] = true;
           });
           return promise;
         }
@@ -2075,6 +2066,24 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         } else {
           deferred.reject();
         }
+		
+		deferred.promise.then(
+          function () {
+			//delete cache entries that were not updated
+			for (key in $translationTable) {
+				if (!(key in updatedLanguages)) {
+					delete $translationTable[key];
+				}
+			}
+            if ($uses) {
+              useLanguage($uses);
+            }
+          }
+        ).finally(
+          function () {
+            $rootScope.$emit('$translateRefreshEnd', {language: langKey});
+          }
+        );
 
         return deferred.promise;
       };
