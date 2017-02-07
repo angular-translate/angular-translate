@@ -2045,8 +2045,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             $translationTable[languageKey] = {};
             //add the new data for this language
             translations(languageKey, data.table);
-			//track that we updated this language
-			updatedLanguages[languageKey] = true;
+		    //track that we updated this language
+		    updatedLanguages[languageKey] = true;
           });
           return promise;
         }
