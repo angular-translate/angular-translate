@@ -2047,7 +2047,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             translations(languageKey, data.table);
             //track that we updated this language
             updatedLanguages[languageKey] = true;
-          });
+          },
+          //appease $q?
+          angular.noop);
           return promise;
         }
         
