@@ -51,8 +51,42 @@ function $translatePartialLoader() {
   };
 
   Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
-    var lastLangPromise = this.langPromises[lang], langDeferred = $q.defer(),
-        tryGettingThisTable = tryGetTable.bind(this, urlTemplate, lang, langDeferred, errorHandler, $http, $httpOptions);
+    //private helper
+    function tryGettingThisTable () {
+      //private helper helpers
+      function fetchData () {
+        return $http(
+          angular.extend({
+              method : 'GET',
+              url: self.parseUrl(urlTemplate, lang)
+            },
+            $httpOptions)
+          );
+      }
+      function handleNewData(data) {
+        self.tables[lang] = data;
+        langDeferred.resolve(data);
+      }
+      function rejectDeferredWithPartName() {
+        langDeferred.reject(self.name);
+      }
+      //data fetching logic
+      fetchData().then(
+        function(result){
+          handleNewData(result.data);
+        },
+        function(errorResponse) {
+          if (errorHandler) {
+            errorHandler(self.name, lang, errorResponse).then(handleNewData, rejectDeferredWithPartName);
+          }
+          else {
+            rejectDeferredWithPartName();
+          }
+        });
+    }
+    //locals
+    var self = this, lastLangPromise = this.langPromises[lang], langDeferred = $q.defer();
+    //promise chaining logic
     if (!lastLangPromise) {
       tryGettingThisTable();
     }
@@ -62,44 +96,6 @@ function $translatePartialLoader() {
     lastLangPromise = this.langPromises[lang] = langDeferred.promise;
     return lastLangPromise;
   };
-
-  //These are private helper functions for getTable. They must be used from the Part's context
-  //with function.bind(this), function.call(this, ...), or function.apply(this, args).
-  function tryGetTable (urlTemplate, lang, langDeferred, errorHandler, $http, $httpOptions) {
-    var self = this, handleData = handleNewData.bind(this, lang, langDeferred),
-        handleFailure = rejectDeferredWithName.bind(this, langDeferred);
-    fetchData.call(this, urlTemplate, lang, $http, $httpOptions).then(
-      function(result){
-        handleData(result.data);
-      },
-      function(response) {
-        if (errorHandler) {
-          errorHandler(self.name, lang, response).then(handleData, handleFailure);
-        }
-        else {
-          handleFailure();
-        }
-      });
-  }
-
-  function fetchData (urlTemplate, lang, $http, $httpOptions) {
-    return $http(
-      angular.extend({
-          method : 'GET',
-          url: this.parseUrl(urlTemplate, lang)
-        },
-        $httpOptions)
-      );
-  }
-
-  function handleNewData(lang, langDeferred, data) {
-    this.tables[lang] = data;
-    langDeferred.resolve(data);
-  }
-
-  function rejectDeferredWithName(deferred) {
-    deferred.reject(this.name);
-  }
 
   var parts = {};
 
