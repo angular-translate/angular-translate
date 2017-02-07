@@ -2069,8 +2069,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 		
 		deferred.promise.then(
           function () {
-			//delete cache entries that were not updated
 			for (key in $translationTable) {
+				//delete cache entries that were not updated
 				if (!(key in updatedLanguages)) {
 					delete $translationTable[key];
 				}
