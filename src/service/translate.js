@@ -2067,7 +2067,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           deferred.reject();
         }
 		
-		deferred.promise.then(
+        deferred.promise.then(
           function () {
             for (key in $translationTable) {
               //delete cache entries that were not updated
