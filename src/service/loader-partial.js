@@ -27,6 +27,7 @@ function $translatePartialLoader() {
     this.isActive = true;
     this.tables = {};
     this.priority = priority || 0;
+    this.langPromises = {};
   }
 
   /**
