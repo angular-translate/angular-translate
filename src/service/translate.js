@@ -2062,7 +2062,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         if (!langKey) {
           // if there's no language key specified we refresh ALL THE THINGS!
-          var languagesToReload = $fallbackLanguage.slice() || [];
+          var languagesToReload = $fallbackLanguage && $fallbackLanguage.slice() || [];
           if ($uses && languagesToReload.indexOf($uses) === -1) {
             languagesToReload.push($uses);
           }
