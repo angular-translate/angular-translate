@@ -2050,6 +2050,27 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
           });
           return promise;
         }
+        
+        //set up post-processing
+        deferred.promise.then(
+          function () {
+            for (var key in $translationTable) {
+              //delete cache entries that were not updated
+              if (!(key in updatedLanguages)) {
+                delete $translationTable[key];
+              }
+            }
+            if ($uses) {
+              useLanguage($uses);
+            }
+          },
+          //handle rejection to appease the $q validation
+          angular.noop
+        ).finally(
+          function () {
+            $rootScope.$emit('$translateRefreshEnd', {language: langKey});
+          }
+        );
 
         if (!langKey) {
           // if there's no language key specified we refresh ALL THE THINGS!
@@ -2066,24 +2087,6 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         } else {
           deferred.reject();
         }
-		
-        deferred.promise.then(
-          function () {
-            for (var key in $translationTable) {
-              //delete cache entries that were not updated
-              if (!(key in updatedLanguages)) {
-                delete $translationTable[key];
-              }
-            }
-            if ($uses) {
-              useLanguage($uses);
-            }
-          }
-        ).finally(
-          function () {
-            $rootScope.$emit('$translateRefreshEnd', {language: langKey});
-          }
-        );
 
         return deferred.promise;
       };
