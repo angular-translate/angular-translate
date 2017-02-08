@@ -869,7 +869,7 @@ describe('pascalprecht.translate', function() {
       });
     });
 
-    it('should handle the parts being resolve out of the order which they were called', function() {
+    it('should only make one HTTP request per language and part', function() {
       var $q,
         requests = [];
 
@@ -909,18 +909,36 @@ describe('pascalprecht.translate', function() {
           table = {};
         });
 
-        requests[2].resolve({data: {key1: 'value1'}});
-        requests[3].resolve({data: {key2: 'value2'}});
-        requests[4].resolve({data: {key3: 'value3'}});
-        $rootScope.$digest();
-
+        expect(requests.length).toEqual(3);
+        
         requests[0].resolve({data: {key1: 'value1'}});
         requests[1].resolve({data: {key2: 'value2'}});
+        requests[2].resolve({data: {key3: 'value3'}});
         $rootScope.$digest();
 
         expect(table.key1).toEqual('value1');
         expect(table.key2).toEqual('value2');
         expect(table.key3).toEqual('value3');
+        
+        $translatePartialLoader({
+          key : 'en_x',
+          urlTemplate : '/locales/{part}-{lang}.json'
+        }).then(function(data) {
+          table = data;
+        }, function() {
+          table = {};
+        });
+        
+        expect(requests.length).toEqual(6);
+        
+        requests[3].resolve({data: {key1: 'value4'}});
+        requests[4].resolve({data: {key2: 'value5'}});
+        requests[5].resolve({data: {key3: 'value6'}});
+        $rootScope.$digest();
+        
+        expect(table.key1).toEqual('value4');
+        expect(table.key2).toEqual('value5');
+        expect(table.key3).toEqual('value6');
       });
     });
   });
