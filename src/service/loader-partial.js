@@ -88,12 +88,7 @@ function $translatePartialLoader() {
     //locals
     var self = this, lastLangPromise = this.langPromises[lang], langDeferred = $q.defer();
     //loading logic
-    if (this.tables[lang]) {
-      //the part has already been loaded - if this is the first call to getTable and lastLangPromise is also undefined then the table has been populated using setPart
-      //this breaks the promise chain because we're not attaching langDeferred's outcome to a previous call's promise, but we don't care because there's no asynchronous execution context to keep track of anymore
-      langDeferred.resolve(this.tables[lang]);
-    }
-    else {
+    if (!this.tables[lang]) {
       //let's try loading the data
       if (!lastLangPromise) {
         //this is the first request - just go ahead and hit the server
@@ -105,10 +100,16 @@ function $translatePartialLoader() {
         //if the previous request succeeds then the result will be passed through, but if it fails then this request will try again and hit the server
         lastLangPromise.then(langDeferred.resolve, tryGettingThisTable);
       }
+      //retain a reference to the last promise so we can continue the chain if another request is made before any succeed
+      //you can picture the promise chain as a singly-linked list (formed by the .then handler queues) that's traversed by the execution context
+      this.langPromises[lang] = langDeferred.promise;
     }
-    //picture the promise chain as a singly-linked list (formed by the .then handler queues) that's traversed by the execution context - we just retain a reference to the last promise so we can continue the chain if another request is made before any succeed
-    lastLangPromise = this.langPromises[lang] = langDeferred.promise;
-    return lastLangPromise;
+    else {
+      //the part has already been loaded - if lastLangPromise is also undefined then the table has been populated using setPart
+      //this breaks the promise chain because we're not tying langDeferred's outcome to a previous call's promise handler queues, but we don't care because there's no asynchronous execution context to keep track of anymore
+      langDeferred.resolve(this.tables[lang]);
+    }
+    return langDeferred.promise;
   };
 
   var parts = {};
