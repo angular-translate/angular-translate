@@ -2,7 +2,6 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translateCloak
- * @requires $rootScope
  * @requires $translate
  * @restrict A
  *
@@ -22,33 +21,31 @@ angular.module('pascalprecht.translate')
  */
 .directive('translateCloak', translateCloakDirective);
 
-function translateCloakDirective($translate, $rootScope) {
+function translateCloakDirective($translate) {
 
   'use strict';
 
   return {
     compile: function (tElement) {
-      var applyCloak = function () {
-        tElement.addClass($translate.cloakClassName());
+      var applyCloak = function (element) {
+        element.addClass($translate.cloakClassName());
       },
-      removeCloak = function () {
-        tElement.removeClass($translate.cloakClassName());
+      removeCloak = function (element) {
+        element.removeClass($translate.cloakClassName());
       };
-      $translate.onReady(function () {
-        removeCloak();
-      });
-      applyCloak();
+      applyCloak(tElement);
 
       return function linkFn(scope, iElement, iAttr) {
+        //Create bound functions that incorporate the active DOM element.
+        var iRemoveCloak = removeCloak.bind(this, iElement), iApplyCloak = applyCloak.bind(this, iElement);
         if (iAttr.translateCloak && iAttr.translateCloak.length) {
           // Register a watcher for the defined translation allowing a fine tuned cloak
           iAttr.$observe('translateCloak', function (translationId) {
-            $translate(translationId).then(removeCloak, applyCloak);
+            $translate(translationId).then(iRemoveCloak, iApplyCloak);
           });
-          // Register for change events as this is being another indicicator revalidating the cloak)
-          $rootScope.$on('$translateChangeSuccess', function () {
-            $translate(iAttr.translateCloak).then(removeCloak, applyCloak);
-          });
+        }
+        else {
+          $translate.onReady(iRemoveCloak);
         }
       };
     }
