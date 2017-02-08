@@ -27,6 +27,7 @@ function $translatePartialLoader() {
     this.isActive = true;
     this.tables = {};
     this.priority = priority || 0;
+    this.langPromises = {};
   }
 
   /**
@@ -51,34 +52,64 @@ function $translatePartialLoader() {
   };
 
   Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
-
-    if (!this.tables[lang]) {
-      var self = this;
-
-      return $http(angular.extend({
-        method : 'GET',
-        url: this.parseUrl(urlTemplate, lang)
-      }, $httpOptions))
-        .then(function(result){
-          self.tables[lang] = result.data;
-          return result.data;
-        }, function(response) {
+    //private helper
+    function tryGettingThisTable () {
+      //private helper helpers
+      function fetchData () {
+        return $http(
+          angular.extend({
+              method : 'GET',
+              url: self.parseUrl(urlTemplate, lang)
+            },
+            $httpOptions)
+          );
+      }
+      function handleNewData(data) {
+        self.tables[lang] = data;
+        langDeferred.resolve(data);
+      }
+      function rejectDeferredWithPartName() {
+        langDeferred.reject(self.name);
+      }
+      //data fetching logic
+      fetchData().then(
+        function(result){
+          handleNewData(result.data);
+        },
+        function(errorResponse) {
           if (errorHandler) {
-            return errorHandler(self.name, lang, response)
-              .then(function(data) {
-                self.tables[lang] = data;
-                return data;
-              }, function() {
-                return $q.reject(self.name);
-              });
-          } else {
-            return $q.reject(self.name);
+            errorHandler(self.name, lang, errorResponse).then(handleNewData, rejectDeferredWithPartName);
+          }
+          else {
+            rejectDeferredWithPartName();
           }
         });
-
-    } else {
-      return $q.when(this.tables[lang]);
     }
+    //locals
+    var self = this, lastLangPromise = this.langPromises[lang], langDeferred = $q.defer();
+    //loading logic
+    if (!this.tables[lang]) {
+      //let's try loading the data
+      if (!lastLangPromise) {
+        //this is the first request - just go ahead and hit the server
+        tryGettingThisTable();
+      }
+      else {
+        //this is an additional request after one or more unfinished or failed requests
+        //chain the deferred off the previous request's promise so that this request conditionally executes
+        //if the previous request succeeds then the result will be passed through, but if it fails then this request will try again and hit the server
+        lastLangPromise.then(langDeferred.resolve, tryGettingThisTable);
+      }
+      //retain a reference to the last promise so we can continue the chain if another request is made before any succeed
+      //you can picture the promise chain as a singly-linked list (formed by the .then handler queues) that's traversed by the execution context
+      this.langPromises[lang] = langDeferred.promise;
+    }
+    else {
+      //the part has already been loaded - if lastLangPromise is also undefined then the table has been populated using setPart
+      //this breaks the promise chain because we're not tying langDeferred's outcome to a previous call's promise handler queues, but we don't care because there's no asynchronous execution context to keep track of anymore
+      langDeferred.resolve(this.tables[lang]);
+    }
+    return langDeferred.promise;
   };
 
   var parts = {};
