@@ -2032,68 +2032,66 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         throw new Error('Couldn\'t refresh translation table, no loader registered!');
       }
 
-      var deferred = $q.defer();
+      $rootScope.$emit('$translateRefreshStart', {language: langKey});
 
-      function resolve() {
-        deferred.resolve();
-        $rootScope.$emit('$translateRefreshEnd', {language : langKey});
+      var deferred = $q.defer(), updatedLanguages = {};
+
+      //private helper
+      function loadNewData(languageKey) {
+        var promise = loadAsync(languageKey);
+        //update the load promise cache for this language
+        langPromises[languageKey] = promise;
+        //register a data handler for the promise
+        promise.then(function (data) {
+          //clear the cache for this language
+          $translationTable[languageKey] = {};
+          //add the new data for this language
+          translations(languageKey, data.table);
+          //track that we updated this language
+          updatedLanguages[languageKey] = true;
+        },
+        //handle rejection to appease the $q validation
+        angular.noop);
+        return promise;
       }
-
-      function reject() {
-        deferred.reject();
-        $rootScope.$emit('$translateRefreshEnd', {language : langKey});
-      }
-
-      $rootScope.$emit('$translateRefreshStart', {language : langKey});
-
-      if (!langKey) {
-        // if there's no language key specified we refresh ALL THE THINGS!
-        var tables = [], loadingKeys = {};
-
-        // reload registered fallback languages
-        if ($fallbackLanguage && $fallbackLanguage.length) {
-          for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            tables.push(loadAsync($fallbackLanguage[i]));
-            loadingKeys[$fallbackLanguage[i]] = true;
+      
+      //set up post-processing
+      deferred.promise.then(
+        function () {
+          for (var key in $translationTable) {
+            //delete cache entries that were not updated
+            if (!(key in updatedLanguages)) {
+              delete $translationTable[key];
+            }
           }
-        }
-
-        // reload currently used language
-        if ($uses && !loadingKeys[$uses]) {
-          tables.push(loadAsync($uses));
-        }
-
-        var allTranslationsLoaded = function (tableData) {
-          $translationTable = {};
-          angular.forEach(tableData, function (data) {
-            translations(data.key, data.table);
-          });
           if ($uses) {
             useLanguage($uses);
           }
-          resolve();
-        };
-        allTranslationsLoaded.displayName = 'refreshPostProcessor';
+        },
+        //handle rejection to appease the $q validation
+        angular.noop
+      ).finally(
+        function () {
+          $rootScope.$emit('$translateRefreshEnd', {language: langKey});
+        }
+      );
 
-        $q.all(tables).then(allTranslationsLoaded, reject);
+      if (!langKey) {
+        // if there's no language key specified we refresh ALL THE THINGS!
+        var languagesToReload = $fallbackLanguage && $fallbackLanguage.slice() || [];
+        if ($uses && languagesToReload.indexOf($uses) === -1) {
+          languagesToReload.push($uses);
+        }
+        $q.all(languagesToReload.map(loadNewData)).then(deferred.resolve, deferred.reject);
 
       } else if ($translationTable[langKey]) {
-
-        var oneTranslationsLoaded = function (data) {
-          translations(data.key, data.table);
-          if (langKey === $uses) {
-            useLanguage($uses);
-          }
-          resolve();
-          return data;
-        };
-        oneTranslationsLoaded.displayName = 'refreshPostProcessor';
-
-        loadAsync(langKey).then(oneTranslationsLoaded, reject);
+        //just refresh the specified language cache
+        loadNewData(langKey).then(deferred.resolve, deferred.reject);
 
       } else {
-        reject();
+        deferred.reject();
       }
+
       return deferred.promise;
     };
 
