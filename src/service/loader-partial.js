@@ -87,19 +87,26 @@ function $translatePartialLoader() {
     }
     //locals
     var self = this, lastLangPromise = this.langPromises[lang], langDeferred = $q.defer();
+    //loading logic
     if (this.tables[lang]) {
-      //the part must have been set statically
+      //the part has already been loaded - if this is the first call to getTable and lastLangPromise is also undefined then the table has been populated using setPart
       langDeferred.resolve(this.tables[lang]);
     }
-    else {      
+    else {
+      //let's try loading the data
       if (!lastLangPromise) {
+        //this is the first request - just go ahead and hit the server
         tryGettingThisTable();
       }
       else {
-        //promise chaining logic
+        //this is an additional request after one or more unfinished or failed requests
+        //chain the deferred off the previous request's promise so that this request conditionally executes
+        //if the previous request succeeds then the result will be passed through, but if it fails then this request will try again and hit the server
         lastLangPromise.then(langDeferred.resolve, tryGettingThisTable);
       }
     }
+    //picture the promise chain as a singly-linked list (formed by the .then handler queues) that's traversed by the execution context - we just retain a reference to the last promise so we can continue the chain if another request is made before any succeed
+    //the first call to getTable after a success breaks the chain - see the if (this.tables[lang]) branch - and should allow the promise chain to be garbage collected (assuming other references to the promises have been nulled)
     lastLangPromise = this.langPromises[lang] = langDeferred.promise;
     return lastLangPromise;
   };
