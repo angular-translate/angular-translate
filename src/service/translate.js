@@ -1551,7 +1551,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
 
       // if the translation id exists, we can just interpolate it
-      if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null ) {
+      if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null) {
         var translation = table[translationId];
 
         // If using link, rerun $translate with linked translationId and return it
@@ -2032,68 +2032,68 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         throw new Error('Couldn\'t refresh translation table, no loader registered!');
       }
 
-      var deferred = $q.defer();
-
-      function resolve() {
-        deferred.resolve();
-        $rootScope.$emit('$translateRefreshEnd', {language : langKey});
-      }
-
-      function reject() {
-        deferred.reject();
-        $rootScope.$emit('$translateRefreshEnd', {language : langKey});
-      }
-
       $rootScope.$emit('$translateRefreshStart', {language : langKey});
 
-      if (!langKey) {
-        // if there's no language key specified we refresh ALL THE THINGS!
-        var tables = [], loadingKeys = {};
+      var deferred = $q.defer(), updatedLanguages = {};
 
-        // reload registered fallback languages
-        if ($fallbackLanguage && $fallbackLanguage.length) {
-          for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-            tables.push(loadAsync($fallbackLanguage[i]));
-            loadingKeys[$fallbackLanguage[i]] = true;
+      //private helper
+      function loadNewData(languageKey) {
+        var promise = loadAsync(languageKey);
+        //update the load promise cache for this language
+        langPromises[languageKey] = promise;
+        //register a data handler for the promise
+        promise.then(function (data) {
+            //clear the cache for this language
+            $translationTable[languageKey] = {};
+            //add the new data for this language
+            translations(languageKey, data.table);
+            //track that we updated this language
+            updatedLanguages[languageKey] = true;
+          },
+          //handle rejection to appease the $q validation
+          angular.noop);
+        return promise;
+      }
+
+      //set up post-processing
+      deferred.promise.then(
+        function () {
+          for (var key in $translationTable) {
+            if ($translationTable.hasOwnProperty(key)) {
+              //delete cache entries that were not updated
+              if (!(key in updatedLanguages)) {
+                delete $translationTable[key];
+              }
+            }
           }
-        }
-
-        // reload currently used language
-        if ($uses && !loadingKeys[$uses]) {
-          tables.push(loadAsync($uses));
-        }
-
-        var allTranslationsLoaded = function (tableData) {
-          $translationTable = {};
-          angular.forEach(tableData, function (data) {
-            translations(data.key, data.table);
-          });
           if ($uses) {
             useLanguage($uses);
           }
-          resolve();
-        };
-        allTranslationsLoaded.displayName = 'refreshPostProcessor';
+        },
+        //handle rejection to appease the $q validation
+        angular.noop
+      ).finally(
+        function () {
+          $rootScope.$emit('$translateRefreshEnd', {language : langKey});
+        }
+      );
 
-        $q.all(tables).then(allTranslationsLoaded, reject);
+      if (!langKey) {
+        // if there's no language key specified we refresh ALL THE THINGS!
+        var languagesToReload = $fallbackLanguage && $fallbackLanguage.slice() || [];
+        if ($uses && languagesToReload.indexOf($uses) === -1) {
+          languagesToReload.push($uses);
+        }
+        $q.all(languagesToReload.map(loadNewData)).then(deferred.resolve, deferred.reject);
 
       } else if ($translationTable[langKey]) {
-
-        var oneTranslationsLoaded = function (data) {
-          translations(data.key, data.table);
-          if (langKey === $uses) {
-            useLanguage($uses);
-          }
-          resolve();
-          return data;
-        };
-        oneTranslationsLoaded.displayName = 'refreshPostProcessor';
-
-        loadAsync(langKey).then(oneTranslationsLoaded, reject);
+        //just refresh the specified language cache
+        loadNewData(langKey).then(deferred.resolve, deferred.reject);
 
       } else {
-        reject();
+        deferred.reject();
       }
+
       return deferred.promise;
     };
 
