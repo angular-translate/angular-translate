@@ -12,7 +12,7 @@ angular.module('pascalprecht.translate')
  */
   .factory('$translateCookieStorage', $translateCookieStorageFactory);
 
-function $translateCookieStorageFactory($cookieStore) {
+function $translateCookieStorageFactory($injector) {
 
   'use strict';
 
@@ -30,7 +30,11 @@ function $translateCookieStorageFactory($cookieStore) {
      * @return {string} Value of item name
      */
     get: function (name) {
-      return $cookieStore.get(name);
+      try {
+        return $injector.get('$cookies').get(name);
+      } catch(e) {
+        return $injector.get('$cookieStore').get(name);
+      }
     },
 
     /**
@@ -47,7 +51,11 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} value Item value
      */
     set: function (name, value) {
-      $cookieStore.put(name, value);
+      try {
+        $injector.get('$cookies').put(name, value);
+      } catch(e) {
+        $injector.get('$cookieStore').put(name, value);
+      }
     },
 
     /**
@@ -62,7 +70,11 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} value Item value
      */
     put: function (name, value) {
-      $cookieStore.put(name, value);
+      try {
+        $injector.get('$cookies').put(name, value);
+      } catch(e) {
+        $injector.get('$cookieStore').put(name, value);
+      }
     }
   };
 
