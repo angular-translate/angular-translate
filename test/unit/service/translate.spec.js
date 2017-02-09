@@ -62,8 +62,9 @@ describe('pascalprecht.translate', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
-        .registerAvailableLanguageKeys(['en', 'en_EN', 'de', 'de_DE'], {
-          'en_US': 'en_EN'
+        .registerAvailableLanguageKeys(['en', 'en_EN', 'en-us', 'de', 'de_DE'], {
+          'en_US': 'en_EN',
+          'en-*': 'en-us'
         })
         .translations('en', translationMock)
         .translations('en', {
@@ -221,6 +222,14 @@ describe('pascalprecht.translate', function () {
 
       it('should return resolved alias', function () {
         expect($translate.negotiateLocale('en_US')).toEqual('en_EN');
+      });
+
+      it('should not be duped by capitalization', function () {
+        expect($translate.negotiateLocale('EN-US')).toEqual('en-us');
+      });
+
+      it('should not be duped by mixed capitalization', function () {
+        expect($translate.negotiateLocale('en-US')).toEqual('en-us');
       });
 
       it('should return matching registered language if lang_REGION doesn\'t match', function () {
