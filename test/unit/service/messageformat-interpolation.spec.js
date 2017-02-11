@@ -69,13 +69,13 @@ describe('pascalprecht.translate', function () {
     });
 
     it('should replace interpolateParams with concrete values', function () {
-      expect($translateMessageFormatInterpolation.interpolate('Foo bar {value}', { value: 5 })).toEqual('Foo bar 5');
+      expect($translateMessageFormatInterpolation.interpolate('Foo bar {value}', {value : 5})).toEqual('Foo bar 5');
     });
 
     it('should support SelectFormat', function () {
-      expect($translateMessageFormatInterpolation.interpolate('{GENDER, select, male{He} female{She} other{They}} liked this.', { GENDER: 'male'}))
+      expect($translateMessageFormatInterpolation.interpolate('{GENDER, select, male{He} female{She} other{They}} liked this.', {GENDER : 'male'}))
         .toEqual('He liked this.');
-      expect($translateMessageFormatInterpolation.interpolate('{GENDER, select, male{He} female{She} other{They}} liked this.', { GENDER: 'female'}))
+      expect($translateMessageFormatInterpolation.interpolate('{GENDER, select, male{He} female{She} other{They}} liked this.', {GENDER : 'female'}))
         .toEqual('She liked this.');
       expect($translateMessageFormatInterpolation.interpolate('{GENDER, select, male{He} female{She} other{They}} liked this.'))
         .toEqual('They liked this.');
@@ -83,53 +83,53 @@ describe('pascalprecht.translate', function () {
 
     it('should support PluralFormat', function () {
       expect($translateMessageFormatInterpolation.interpolate('There {NUM_RESULTS, plural, one{is one result} other{are # results}}.', {
-        'NUM_RESULTS': 0
+        'NUM_RESULTS' : 0
       })).toEqual('There are 0 results.');
 
       expect($translateMessageFormatInterpolation.interpolate('There {NUM_RESULTS, plural, one{is one result} other{are # results}}.', {
-        'NUM_RESULTS': 1
+        'NUM_RESULTS' : 1
       })).toEqual('There is one result.');
 
       expect($translateMessageFormatInterpolation.interpolate('There {NUM_RESULTS, plural, one{is one result} other{are # results}}.', {
-        'NUM_RESULTS': 100
+        'NUM_RESULTS' : 100
       })).toEqual('There are 100 results.');
     });
 
     it('should support PluralFormat - offset extension', function () {
       expect($translateMessageFormatInterpolation.interpolate(
         'You {NUM_ADDS, plural, offset:1' +
-                    '=0{didnt add this to your profile}' +
-                'one{and one other person added this to their profile}' +
-                'other{and # others added this to their profiles}' +
-            '}.',
+        '=0{didnt add this to your profile}' +
+        'one{and one other person added this to their profile}' +
+        'other{and # others added this to their profiles}' +
+        '}.',
         {
-          'NUM_ADDS': 0
+          'NUM_ADDS' : 0
         })).toEqual('You didnt add this to your profile.');
 
       expect($translateMessageFormatInterpolation.interpolate(
         'You {NUM_ADDS, plural, offset:1' +
-                    '=0{didnt add this to your profile}' +
-                'one{and one other person added this to their profile}' +
-                'other{and # others added this to their profiles}' +
-            '}.',
+        '=0{didnt add this to your profile}' +
+        'one{and one other person added this to their profile}' +
+        'other{and # others added this to their profiles}' +
+        '}.',
         {
-          'NUM_ADDS': 2
+          'NUM_ADDS' : 2
         })).toEqual('You and one other person added this to their profile.');
 
       expect($translateMessageFormatInterpolation.interpolate(
         'You {NUM_ADDS, plural, offset:1' +
-                    '=0{didnt add this to your profile}' +
-                'one{and one other person added this to their profile}' +
-                'other{and # others added this to their profiles}' +
-            '}.',
+        '=0{didnt add this to your profile}' +
+        'one{and one other person added this to their profile}' +
+        'other{and # others added this to their profiles}' +
+        '}.',
         {
-          'NUM_ADDS': 3
+          'NUM_ADDS' : 3
         })).toEqual('You and 2 others added this to their profiles.');
     });
 
     it('should sanitize the interpolation params', inject(function ($translateSanitization) {
       var text = 'Foo bar {value}';
-      var params =  { value: '<span>Test</span>' };
+      var params = {value : '<span>Test</span>'};
       var sanitizedText = 'Foo bar &lt;span&gt;Test&lt;/span&gt;';
 
       spyOn($translateSanitization, 'sanitize').and.callThrough();
@@ -140,22 +140,22 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should not sanitize the interpolation params when a null strategy value is passed',
-       inject(function ($translateSanitization) {
-      var text = 'Foo bar {value}';
-      var paramValue = '<span>Test</span>';
-      var params =  { value: paramValue };
-      var unsanitizedText = 'Foo bar <span>Test</span>';
+      inject(function ($translateSanitization) {
+        var text = 'Foo bar {value}';
+        var paramValue = '<span>Test</span>';
+        var params = {value : paramValue};
+        var unsanitizedText = 'Foo bar <span>Test</span>';
 
-      spyOn($translateSanitization, 'sanitize').and.callThrough();
-      $translateMessageFormatInterpolation.useSanitizeValueStrategy('escapeParameters');
+        spyOn($translateSanitization, 'sanitize').and.callThrough();
+        $translateMessageFormatInterpolation.useSanitizeValueStrategy('escapeParameters');
 
-      expect($translateMessageFormatInterpolation.interpolate(text, params, 'service', null)).toBe(unsanitizedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params', null);
-    }));
+        expect($translateMessageFormatInterpolation.interpolate(text, params, 'service', null)).toBe(unsanitizedText);
+        expect($translateSanitization.sanitize).toHaveBeenCalledWith(params, 'params', null);
+      }));
 
     it('should sanitize the interpolated text', inject(function ($translateSanitization) {
       var text = 'Foo <span>bar</span> {value}';
-      var params =  { value: 'value' };
+      var params = {value : 'value'};
       var interPolatedText = 'Foo <span>bar</span> value';
       var sanitizedText = 'Foo &lt;span&gt;bar&lt;/span&gt; value';
 
@@ -167,17 +167,17 @@ describe('pascalprecht.translate', function () {
     }));
 
     it('should not sanitize the interpolated text when a null strategy value is passed',
-       inject(function ($translateSanitization) {
-      var text = 'Foo <span>bar</span> {value}';
-      var params =  { value: 'value' };
-      var interPolatedText = 'Foo <span>bar</span> value';
+      inject(function ($translateSanitization) {
+        var text = 'Foo <span>bar</span> {value}';
+        var params = {value : 'value'};
+        var interPolatedText = 'Foo <span>bar</span> value';
 
-      spyOn($translateSanitization, 'sanitize').and.callThrough();
-      $translateMessageFormatInterpolation.useSanitizeValueStrategy('escape');
+        spyOn($translateSanitization, 'sanitize').and.callThrough();
+        $translateMessageFormatInterpolation.useSanitizeValueStrategy('escape');
 
-      expect($translateMessageFormatInterpolation.interpolate(text, params, 'service', null)).toBe(interPolatedText);
-      expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text', null);
-    }));
+        expect($translateMessageFormatInterpolation.interpolate(text, params, 'service', null)).toBe(interPolatedText);
+        expect($translateSanitization.sanitize).toHaveBeenCalledWith(interPolatedText, 'text', null);
+      }));
   });
 });
 

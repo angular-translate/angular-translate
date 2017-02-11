@@ -18,7 +18,7 @@ describe('pascalprecht.translate', function () {
             var deferred = $q.defer();
 
             deferred.resolve({
-              'foo': 'bar'
+              'foo' : 'bar'
             });
 
             return deferred.promise;
@@ -95,7 +95,7 @@ describe('pascalprecht.translate', function () {
             var deferred = $q.defer();
 
             deferred.resolve({
-              'foo': 'bar'
+              'foo' : 'bar'
             });
 
             return deferred.promise;

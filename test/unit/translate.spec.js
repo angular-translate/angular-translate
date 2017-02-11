@@ -5,41 +5,41 @@ describe('pascalprecht.translate', function () {
 
   describe('$translateModule#run', function () {
 
-    describe('with no storage', function() {
+    describe('with no storage', function () {
 
-      describe('and no preferred language', function() {
+      describe('and no preferred language', function () {
 
         beforeEach(module('pascalprecht.translate'));
 
-        it('should set used locale to undefined', inject(function($translate) {
+        it('should set used locale to undefined', inject(function ($translate) {
           expect($translate.use()).toBeUndefined();
         }));
       });
 
-      describe('but with a preferred language', function() {
+      describe('but with a preferred language', function () {
 
         beforeEach(module('pascalprecht.translate', function ($translateProvider) {
           $translateProvider.preferredLanguage('en');
         }));
 
-        it('should use preferredLanguage', inject(function($translate) {
+        it('should use preferredLanguage', inject(function ($translate) {
           expect($translate.use()).toEqual('en');
         }));
       });
     });
 
-    describe('with a storage', function() {
+    describe('with a storage', function () {
 
       var storage;
-      var storageMockCreator = function(storageValue) {
+      var storageMockCreator = function (storageValue) {
         var storage = {
-          get: function() {
+          get : function () {
             return storage.value;
           },
-          put: function(value) {
+          put : function (value) {
             storage.value = value;
           },
-          set: function(value) {
+          set : function (value) {
             storage.value = value;
           }
         };
@@ -47,7 +47,7 @@ describe('pascalprecht.translate', function () {
         return storage;
       };
 
-      describe('containing value', function() {
+      describe('containing value', function () {
 
         beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
           storage = storageMockCreator('en');
@@ -58,13 +58,13 @@ describe('pascalprecht.translate', function () {
             .preferredLanguage('de');
         }));
 
-        it('should use value from storage when provided', inject(function($translate) {
+        it('should use value from storage when provided', inject(function ($translate) {
           expect(storage.get).toHaveBeenCalled();
           expect($translate.use()).toEqual('en');
         }));
       });
 
-      describe('but not containing any value', function() {
+      describe('but not containing any value', function () {
 
         beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
           storage = storageMockCreator(undefined);
@@ -75,22 +75,22 @@ describe('pascalprecht.translate', function () {
             .preferredLanguage('de');
         }));
 
-        it('should fallback to preferred locale', inject(function($translate) {
+        it('should fallback to preferred locale', inject(function ($translate) {
           expect(storage.get).toHaveBeenCalled();
           expect($translate.use()).toEqual('de');
         }));
       });
 
-      describe('but with no loadable translations', function() {
+      describe('but with no loadable translations', function () {
 
         beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
           storage = storageMockCreator('en');
           $provide.value('storageMock', storage);
-          $provide.factory('loaderMock', function($q) {
-            return function(options) {
-              if(options.key === 'en') {
+          $provide.factory('loaderMock', function ($q) {
+            return function (options) {
+              if (options.key === 'en') {
                 return $q.reject('en');
-              } else if(options.key === 'de') {
+              } else if (options.key === 'de') {
                 return $q.when({
                   key : 'de',
                   table : {}
@@ -105,7 +105,7 @@ describe('pascalprecht.translate', function () {
             .preferredLanguage('de');
         }));
 
-        it('should fallback to preferred locale', inject(function($translate, $rootScope) {
+        it('should fallback to preferred locale', inject(function ($translate, $rootScope) {
           $rootScope.$digest();
           expect(storage.get).toHaveBeenCalled();
           expect($translate.use()).toEqual('de');

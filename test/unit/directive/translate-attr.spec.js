@@ -9,15 +9,15 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
         .translations('en', {
-          'message': 'Hello',
-          'second_message': 'Bye',
-          'with_value': 'This is {{value}}',
-          'namespace': {
-            'message': 'Namespaced',
+          'message' : 'Hello',
+          'second_message' : 'Bye',
+          'with_value' : 'This is {{value}}',
+          'namespace' : {
+            'message' : 'Namespaced',
           }
         }).translations('de', {
-          'message': 'Hallo'
-        }).preferredLanguage('en');
+        'message' : 'Hallo'
+      }).preferredLanguage('en');
     }));
 
     var $compile, $rootScope, $translate, element;
@@ -28,16 +28,16 @@ describe('pascalprecht.translate', function () {
       $translate = _$translate_;
     }));
 
-    describe('multiple attributes', function() {
-      it('should support inline', function() {
+    describe('multiple attributes', function () {
+      it('should support inline', function () {
         element = $compile('<div translate-attr="{ one: \'message\', two: \'second_message\' }" />')($rootScope);
         $rootScope.$digest();
         expect(element.attr('one')).toBe('Hello');
         expect(element.attr('two')).toBe('Bye');
       });
 
-      it('should support addition', function() {
-        $rootScope.attributes = { 'one': 'message' };
+      it('should support addition', function () {
+        $rootScope.attributes = {'one' : 'message'};
         element = $compile('<div translate-attr="attributes" />')($rootScope);
 
         $rootScope.$digest();
@@ -50,8 +50,8 @@ describe('pascalprecht.translate', function () {
         expect(element.attr('two')).toBe('Bye');
       });
 
-      it('should support remove', function() {
-        $rootScope.attributes = { 'one': 'message', 'two': 'second_message' };
+      it('should support remove', function () {
+        $rootScope.attributes = {'one' : 'message', 'two' : 'second_message'};
         element = $compile('<div translate-attr="attributes" />')($rootScope);
 
         $rootScope.$digest();
@@ -65,9 +65,9 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    describe('translation id', function() {
-      it('should support change', function() {
-        $rootScope.attributes = { 'attr': 'message' };
+    describe('translation id', function () {
+      it('should support change', function () {
+        $rootScope.attributes = {'attr' : 'message'};
         element = $compile('<div translate-attr="attributes" />')($rootScope);
 
         $rootScope.$digest();
@@ -78,8 +78,8 @@ describe('pascalprecht.translate', function () {
         expect(element.attr('attr')).toBe('Bye');
       });
 
-      it('should support remove', function() {
-        $rootScope.attributes = { 'attr': 'message' };
+      it('should support remove', function () {
+        $rootScope.attributes = {'attr' : 'message'};
         element = $compile('<div translate-attr="attributes" />')($rootScope);
 
         $rootScope.$digest();
@@ -91,8 +91,8 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    it('should support changed value', function() {
-      $rootScope.values = { 'value': 'some value' };
+    it('should support changed value', function () {
+      $rootScope.values = {'value' : 'some value'};
       element = $compile('<div translate-attr="{ attr: \'with_value\' }" translate-values="values" />')($rootScope);
 
       $rootScope.$digest();
@@ -103,8 +103,8 @@ describe('pascalprecht.translate', function () {
       expect(element.attr('attr')).toBe('This is another value');
     });
 
-    describe('language', function() {
-      it('should support change', function() {
+    describe('language', function () {
+      it('should support change', function () {
         element = $compile('<div translate-attr="{ attr: \'message\' }" />')($rootScope);
 
         $rootScope.$digest();
@@ -115,7 +115,7 @@ describe('pascalprecht.translate', function () {
         expect(element.attr('attr')).toBe('Hallo');
       });
 
-      it('should support translateLanguage', function() {
+      it('should support translateLanguage', function () {
         $rootScope.translateLanguage = 'de';
         element = $compile('<div translate-attr="{ attr: \'message\' }" />')($rootScope);
         $rootScope.$digest();
@@ -123,17 +123,19 @@ describe('pascalprecht.translate', function () {
       });
     });
 
-    it('should support translateNamespace', function() {
+    it('should support translateNamespace', function () {
       $rootScope.translateNamespace = 'namespace';
       element = $compile('<div translate-attr="{ attr: \'.message\' }" />')($rootScope);
       $rootScope.$digest();
       expect(element.attr('attr')).toBe('Namespaced');
     });
 
-    describe('bind', function() {
-      it('should watch', function() {
+    describe('bind', function () {
+      it('should watch', function () {
         var translation = "message";
-        $rootScope.generator = function() { return translation; };
+        $rootScope.generator = function () {
+          return translation;
+        };
         spyOn($rootScope, 'generator').and.callThrough();
 
         element = $compile('<div translate-attr="{ attr: generator() }" />')($rootScope);
@@ -149,9 +151,11 @@ describe('pascalprecht.translate', function () {
         expect($rootScope.generator).toHaveBeenCalled();
       });
 
-      it('should support one-time bind', function() {
+      it('should support one-time bind', function () {
         var translation = "message";
-        $rootScope.generator = function() { return translation; };
+        $rootScope.generator = function () {
+          return translation;
+        };
         spyOn($rootScope, 'generator').and.callThrough();
 
         element = $compile('<div translate-attr="::{ attr: generator() }" />')($rootScope);

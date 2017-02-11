@@ -9,14 +9,14 @@ describe('pascalprecht.translate', function () {
     var element;
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
-       $translateProvider
-         .translations('en', {
-           'message': 'Hello'
-         })
-         .translations('de', {
-           'message': 'Hallo'
-         })
-         .preferredLanguage('en');
+      $translateProvider
+        .translations('en', {
+          'message' : 'Hello'
+        })
+        .translations('de', {
+          'message' : 'Hallo'
+        })
+        .preferredLanguage('en');
     }));
 
     var $compile, $rootScope, $translate;
@@ -52,7 +52,7 @@ describe('pascalprecht.translate', function () {
       expect(element.html()).toBe('Hallo');
     });
 
-    it('should not be changed by parent scope language', function() {
+    it('should not be changed by parent scope language', function () {
       var element = angular.element('<span><p translate>message</p></span>');
       var isolatedElement = angular.element('<h5 translate-language="en" translate>message</h5>');
 
