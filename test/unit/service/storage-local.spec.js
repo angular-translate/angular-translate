@@ -11,9 +11,8 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', 'ngCookies'));
 
 
-
     beforeEach(inject(function (_$translateLocalStorage_, _$window_) {
-    //beforeEach(inject(function (_$translateLocalStorage_) {
+      //beforeEach(inject(function (_$translateLocalStorage_) {
       $translateLocalStorage = _$translateLocalStorage_;
       $window = _$window_;
     }));
@@ -55,12 +54,12 @@ describe('pascalprecht.translate', function () {
       $window.localStorage.clear();
       $translateProvider
         .translations('de_DE', {
-          'EXISTING_TRANSLATION_ID': 'foo',
-          'ANOTHER_ONE': 'bar',
-          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
-          'YET_ANOTHER': 'Hallo da!'
+          'EXISTING_TRANSLATION_ID' : 'foo',
+          'ANOTHER_ONE' : 'bar',
+          'TRANSLATION_ID' : 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2' : 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3' : 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER' : 'Hallo da!'
         })
         .preferredLanguage('de_DE')
         .useLocalStorage();

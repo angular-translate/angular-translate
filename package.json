@@ -1,12 +1,18 @@
 {
   "name": "angular-translate",
-  "version": "2.13.1",
+  "version": "2.14.0",
   "description": "A translation module for AngularJS",
   "main": "dist/angular-translate.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/angular-translate/angular-translate"
   },
+  "keywords": [
+    "angular-translate",
+    "angular",
+    "AngularJS",
+    "translation"
+  ],
   "engines": {
     "node": "*"
   },
@@ -17,17 +23,19 @@
   "scripts": {
     "prepublish": "bower install",
     "check-env": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
-    "shipit": "npm run-script -q check-env && bower install && bower update && grunt prepare-release",
-    "test": "npm run-script -q check-env && grunt install-test && grunt test",
-    "test-headless": "npm run-script -q check-env && grunt test-headless",
-    "test-scopes": "npm run-script -q check-env && grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
+    "shipit": "npm run-script -s check-env && bower install && bower update && grunt prepare-release",
+    "lint": "grunt lint",
+    "test": "npm run-script -s check-env && grunt install-test && grunt test",
+    "test-headless": "npm run-script -s check-env && grunt test-headless",
+    "test-scopes": "npm run-script -s check-env && grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
     "clean-test-scopes": "for f in test_scopes/*; do (cd $f; rm -rf bower_components); done",
-    "compile": "npm run-script -q check-env && grunt compile",
-    "build": "npm run-script -q check-env && grunt build",
-    "build-site": "npm run -q build-site-all-languages; npm run -q build-site-plato-report",
+    "compile": "npm run-script -s check-env && grunt compile",
+    "build": "npm run-script -s check-env && grunt build",
+    "build-site": "npm run -s build-site-all-languages; npm run -s build-site-plato-report",
     "build-site-all-languages": "./build_tools/generate_site.sh",
     "build-site-by-language": "./build_tools/generate_site_by_language.sh",
-    "build-site-plato-report": "rm -rf ./site/plato && plato -d plato -l .jshintrc src/*.js src/**/*.js && mv plato site"
+    "build-site-plato-report": "rm -rf ./site/plato && plato -d plato -l .jshintrc src/*.js src/**/*.js && mv plato site",
+    "start-demo": "node server.js"
   },
   "author": {
     "name": "Pascal Precht"
@@ -47,8 +55,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "body-parser": "^1.16.0",
     "bower": "^1.7.9",
-    "express": "^4.13.4",
+    "errorhandler": "^1.5.0",
+    "express": "^4.14.1",
+    "express-session": "^1.15.0",
     "fbjs-scripts": "^0.7.1",
     "grunt": "~1.0.1",
     "grunt-bower-install-simple": "^1.0.3",
@@ -61,7 +72,6 @@
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-conventional-changelog": "^6.1.0",
-    "grunt-express": "^1.4.1",
     "grunt-file-append": "0.0.6",
     "grunt-karma": "^2.0.0",
     "grunt-ng-annotate": "^3.0.0",
@@ -77,8 +87,14 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
     "load-grunt-tasks": "^3.4.1",
+    "local-web-server": "^1.2.6",
+    "method-override": "^2.3.7",
+    "morgan": "^1.8.0",
+    "multer": "^1.3.0",
     "phantomjs-prebuilt": "^2.1.4",
-    "plato": "^1.5.0"
+    "plato": "^1.5.0",
+    "pug": "^2.0.0-beta11",
+    "serve-favicon": "^2.3.2"
   },
   "dependencies": {
     "angular": ">=1.2.26 <=1.6"

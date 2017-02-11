@@ -9,17 +9,17 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
         .translations('en', {
-          'EXISTING_TRANSLATION_ID': 'foo',
-          'ANOTHER_ONE': 'bar',
-          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
-          'YET_ANOTHER': 'Hallo da!',
-          'TEXT': 'this is a text',
-          'TEXT_WITH_VALUE': 'This is a text with given value: {{value}}',
-          'HOW_ABOUT_THIS': '{{value}} + {{value}}',
-          'AND_THIS': '{{value + value}}',
-          'BLANK_VALUE': ''
+          'EXISTING_TRANSLATION_ID' : 'foo',
+          'ANOTHER_ONE' : 'bar',
+          'TRANSLATION_ID' : 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2' : 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3' : 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER' : 'Hallo da!',
+          'TEXT' : 'this is a text',
+          'TEXT_WITH_VALUE' : 'This is a text with given value: {{value}}',
+          'HOW_ABOUT_THIS' : '{{value}} + {{value}}',
+          'AND_THIS' : '{{value + value}}',
+          'BLANK_VALUE' : ''
         })
         .preferredLanguage('en');
     }));
@@ -44,7 +44,7 @@ describe('pascalprecht.translate', function () {
       expect($translate('WOOP')).toEqual('WOOP');
     });
     it('should return with translation id if translation doesn\'t exist', function () {
-         expect($translate(null)).toEqual(null);
+      expect($translate(null)).toEqual(null);
     });
     it('should return translation if translation id exist', function () {
       expect($translate('TRANSLATION_ID')).toEqual('Lorem Ipsum ');
@@ -56,11 +56,11 @@ describe('pascalprecht.translate', function () {
 
     it('should replace interpolate directives with given values', function () {
       var value = [
-        $translate('TRANSLATION_ID', { value: 'foo'}),
-        $translate('TRANSLATION_ID_2', { value: 'foo'}),
-        $translate('TRANSLATION_ID_3', { value: 'foo'}),
-        $translate('TRANSLATION_ID_3', { value: '3'}),
-        $translate('TRANSLATION_ID_3', { value: 3})
+        $translate('TRANSLATION_ID', {value : 'foo'}),
+        $translate('TRANSLATION_ID_2', {value : 'foo'}),
+        $translate('TRANSLATION_ID_3', {value : 'foo'}),
+        $translate('TRANSLATION_ID_3', {value : '3'}),
+        $translate('TRANSLATION_ID_3', {value : 3})
       ];
 
       expect(value[0]).toEqual('Lorem Ipsum foo');
@@ -90,27 +90,27 @@ describe('pascalprecht.translate', function () {
       expect(value[6]).toEqual('55');
     });
 
-  it('should not throw errors when translation id is not a string', function() {
-    var value = [
-      $translate(4.5),
-      $translate(4),
-      $translate([]),
-      $translate({}),
-      $translate(true),
-      $translate(null),
-      $translate(undefined)
-    ];
+    it('should not throw errors when translation id is not a string', function () {
+      var value = [
+        $translate(4.5),
+        $translate(4),
+        $translate([]),
+        $translate({}),
+        $translate(true),
+        $translate(null),
+        $translate(undefined)
+      ];
 
-    expect(value[0]).toEqual('4.5');
-    expect(value[1]).toEqual('4');
-    /* I don't care what these values are, as long as $translate doesn't throw an error.
-    expect(value[2]).toEqual({});
-    expect(value[3]).toEqual('[object Object]');
-    expect(value[4]).toEqual('true');
-    expect(value[5]).toEqual(null);
-    expect(value[6]).toEqual(undefined);
-    */
-  });
+      expect(value[0]).toEqual('4.5');
+      expect(value[1]).toEqual('4');
+      /* I don't care what these values are, as long as $translate doesn't throw an error.
+       expect(value[2]).toEqual({});
+       expect(value[3]).toEqual('[object Object]');
+       expect(value[4]).toEqual('true');
+       expect(value[5]).toEqual(null);
+       expect(value[6]).toEqual(undefined);
+       */
+    });
 
     if (angular.version.major === 1 && angular.version.minor <= 2) {
       // Until and including AJS 1.2, a filter was bound to a context (current scope). This was removed in AJS 1.3
@@ -121,7 +121,7 @@ describe('pascalprecht.translate', function () {
       });
     } else {
       it('should replace interpolate directive on element with given values', function () {
-        $rootScope.__this = {value: 'bar'};
+        $rootScope.__this = {value : 'bar'};
         var element = $compile(angular.element('<div>{{"TRANSLATION_ID" | translate: __this}}</div>'))($rootScope);
         $rootScope.$digest();
         expect(element.html()).toEqual('Lorem Ipsum bar');
@@ -137,7 +137,7 @@ describe('pascalprecht.translate', function () {
       $provide.factory('customInterpolation', function () {
 
         var translateInterpolator = {},
-            $locale;
+          $locale;
 
         // provide a method to set locale
         translateInterpolator.setLocale = function (locale) {
@@ -155,7 +155,7 @@ describe('pascalprecht.translate', function () {
       });
 
       $translateProvider.translations('en', {
-        'FOO': 'Yesssss'
+        'FOO' : 'Yesssss'
       });
 
       $translateProvider
@@ -180,7 +180,7 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
 
       $translateProvider.translations('en', {
-        'FOO': 'Have foo'
+        'FOO' : 'Have foo'
       });
 
       $translateProvider
@@ -207,10 +207,10 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
         .translations('en', {
-          'HELLO': 'Hello'
+          'HELLO' : 'Hello'
         })
         .translations('de', {
-          'HELLO': 'Hallo'
+          'HELLO' : 'Hallo'
         })
         .preferredLanguage('en');
     }));
@@ -241,10 +241,10 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
         .translations('en', {
-          'HELLO': 'Hello'
+          'HELLO' : 'Hello'
         })
         .translations('de', {
-          'HELLO': 'Hallo'
+          'HELLO' : 'Hallo'
         })
         .preferredLanguage('en')
         .statefulFilter(false);
@@ -290,10 +290,10 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
         .translations('en', {
-          'HELLO': 'Hello'
+          'HELLO' : 'Hello'
         })
         .translations('de', {
-          'HELLO': 'Hallo'
+          'HELLO' : 'Hallo'
         })
         .preferredLanguage('en');
     }));
@@ -323,10 +323,10 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
       $translateProvider
         .translations('en', {
-          'HELLO': 'Hello'
+          'HELLO' : 'Hello'
         })
         .translations('de', {
-          'HELLO': 'Hallo'
+          'HELLO' : 'Hallo'
         })
         .preferredLanguage('en');
     }));

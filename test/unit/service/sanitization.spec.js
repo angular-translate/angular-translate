@@ -29,8 +29,8 @@ describe('pascalprecht.translate', function () {
 
     describe('#sanitize', function () {
       var parameters = {
-          array: [
-            {value: 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>'}
+          array : [
+            {value : 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>'}
           ]
         },
         text = 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>',
@@ -94,8 +94,8 @@ describe('pascalprecht.translate', function () {
 
         it('should $sanitize params', function () {
           expectedParameters = {
-            array: [
-              {value: 'This is <b>only an example with a <span>xss attack</span>!</b>'}
+            array : [
+              {value : 'This is <b>only an example with a <span>xss attack</span>!</b>'}
             ]
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
@@ -114,8 +114,8 @@ describe('pascalprecht.translate', function () {
 
         it('should htmlEscape params', function () {
           expectedParameters = {
-            array: [
-              {value: 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
+            array : [
+              {value : 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
             ]
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
@@ -130,8 +130,8 @@ describe('pascalprecht.translate', function () {
 
           var sanitizedUser;
           var user = {
-            firstName: '<b>Foo</b>',
-            save: angular.noop
+            firstName : '<b>Foo</b>',
+            save : angular.noop
           };
 
           var spyAngularElementReturnValue = jasmine.createSpyObj('angularElement', ['html', 'off', 'text', 'data']);
@@ -140,7 +140,7 @@ describe('pascalprecht.translate', function () {
 
           /* Sanitized user should not have a save property. */
 
-          sanitizedUser = $translateSanitization.sanitize({user: user}, 'params').user;
+          sanitizedUser = $translateSanitization.sanitize({user : user}, 'params').user;
 
           expect('firstName' in sanitizedUser).toEqual(true);
           expect('save' in sanitizedUser).toEqual(false);
@@ -160,8 +160,8 @@ describe('pascalprecht.translate', function () {
 
         it('should htmlEscape params', function () {
           expectedParameters = {
-            array: [
-              {value: 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
+            array : [
+              {value : 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
             ]
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
@@ -180,8 +180,8 @@ describe('pascalprecht.translate', function () {
 
         it('should htmlEscape params', function () {
           expectedParameters = {
-            array: [
-              {value: 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
+            array : [
+              {value : 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
             ]
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);

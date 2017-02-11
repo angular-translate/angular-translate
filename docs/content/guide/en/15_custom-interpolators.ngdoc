@@ -20,7 +20,7 @@ have to be provided by a custom interpolation service:
 
 - `setLocale(langKey)` - sets the currently used language
 - `getInterpolationIdentifier()` - returns an identifier for interpolation
-- `interpolate(string, interpolateParams, sanitizeStrategy)` - interpolates strings against interpolate params
+- `interpolate(string, interpolateParams, context, sanitizeStrategy, translationId)` - interpolates strings against interpolate params
 
 Let's see how it looks like when implementing a custom interpolation service. First,
 we implement the interface:
@@ -38,7 +38,7 @@ app.factory('customInterpolation', function () {
 
     },
 
-    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+    interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
 
     }
   };
@@ -64,7 +64,7 @@ app.factory('customInterpolation', function ($interpolate) {
       return 'custom';
     },
 
-    interpolate: function (string, interpolateParams, sanitizeStrategy) {
+    interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
       return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
     }
   };

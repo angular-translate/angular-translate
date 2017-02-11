@@ -21,11 +21,11 @@ describe('pascalprecht.translate', function () {
       $translationCache = _$translationCache_;
 
       $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({
-        it: 'works'
+        it : 'works'
       });
 
       $httpBackend.when('GET', 'foo/bar.json?language=de_DE').respond({
-        it: 'works too'
+        it : 'works too'
       });
     }));
 
@@ -51,8 +51,8 @@ describe('pascalprecht.translate', function () {
     it('should fetch url when invoking', function () {
       $httpBackend.expectGET('foo/bar.json?lang=de_DE');
       $translateUrlLoader({
-        key: 'de_DE',
-        url: 'foo/bar.json'
+        key : 'de_DE',
+        url : 'foo/bar.json'
       });
       $httpBackend.flush();
     });
@@ -60,20 +60,20 @@ describe('pascalprecht.translate', function () {
     it('should use custom query parameter name when invoking with queryParameter', function () {
       $httpBackend.expectGET('foo/bar.json?language=de_DE');
       $translateUrlLoader({
-        key: 'de_DE',
-        url: 'foo/bar.json',
-        queryParameter: 'language'
+        key : 'de_DE',
+        url : 'foo/bar.json',
+        queryParameter : 'language'
       });
       $httpBackend.flush();
     });
 
-    it('should put a translation table into a cache', function() {
+    it('should put a translation table into a cache', function () {
       $httpBackend.expectGET('foo/bar.json?lang=de_DE');
-        $translateUrlLoader({
-        key: 'de_DE',
-        url: 'foo/bar.json',
-        $http: {
-          cache: $translationCache
+      $translateUrlLoader({
+        key : 'de_DE',
+        url : 'foo/bar.json',
+        $http : {
+          cache : $translationCache
         }
       });
       $httpBackend.flush();
@@ -82,8 +82,8 @@ describe('pascalprecht.translate', function () {
 
     it('should return a promise', function () {
       var promise = $translateUrlLoader({
-        key: 'de_DE',
-        url: 'foo/bar.json'
+        key : 'de_DE',
+        url : 'foo/bar.json'
       });
       expect(promise.then).toBeDefined();
       expect(typeof promise.then).toBe('function');
@@ -105,7 +105,7 @@ describe('pascalprecht.translate', function () {
       $httpBackend = _$httpBackend_;
       $translate = _$translate_;
 
-      $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({it: 'works'});
+      $httpBackend.when('GET', 'foo/bar.json?lang=de_DE').respond({it : 'works'});
     }));
 
     afterEach(function () {
@@ -126,8 +126,8 @@ describe('pascalprecht.translate', function () {
         $httpProvider.useLegacyPromiseExtensions(false);
       }
       $translateProvider.useUrlLoader('foo/bar.json', {
-        $http: {
-          method: 'POST'
+        $http : {
+          method : 'POST'
         }
       });
     }));
@@ -138,7 +138,7 @@ describe('pascalprecht.translate', function () {
       $httpBackend = _$httpBackend_;
       $translate = _$translate_;
 
-      $httpBackend.when('POST', 'foo/bar.json?lang=de_DE').respond({it: 'works'});
+      $httpBackend.when('POST', 'foo/bar.json?lang=de_DE').respond({it : 'works'});
     }));
 
     afterEach(function () {

@@ -21,10 +21,10 @@ describe('pascalprecht.translate', function () {
                 language : 'en_US'
               };
               return ((
-              nav.language ||
-              nav.browserLanguage ||
-              nav.systemLanguage ||
-              nav.userLanguage
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
               ) || '').split('-').join('_');
             });
         }));
@@ -64,10 +64,10 @@ describe('pascalprecht.translate', function () {
                 language : 'en_US'
               };
               return ((
-              nav.language ||
-              nav.browserLanguage ||
-              nav.systemLanguage ||
-              nav.userLanguage
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
               ) || '').split('-').join('_');
             });
         }));
@@ -107,10 +107,10 @@ describe('pascalprecht.translate', function () {
                 language : 'en_us'
               };
               return ((
-              nav.language ||
-              nav.browserLanguage ||
-              nav.systemLanguage ||
-              nav.userLanguage
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
               ) || '').split('-').join('_');
             });
         }));
@@ -149,10 +149,10 @@ describe('pascalprecht.translate', function () {
                 language : 'en_US'
               };
               return ((
-              nav.language ||
-              nav.browserLanguage ||
-              nav.systemLanguage ||
-              nav.userLanguage
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
               ) || '').split('-').join('_');
             });
 
@@ -185,10 +185,10 @@ describe('pascalprecht.translate', function () {
                 language : 'en_US'
               };
               return ((
-              nav.language ||
-              nav.browserLanguage ||
-              nav.systemLanguage ||
-              nav.userLanguage
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
               ) || '').split('-').join('_');
             });
 
@@ -200,7 +200,9 @@ describe('pascalprecht.translate', function () {
       describe('using resolver "default"', function () {
         describe('should resolve to en-US to en_US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-US';
+            };
             $translateProvider.determinePreferredLanguage();
           }));
           it('test', inject(function ($window, $translate) {
@@ -210,7 +212,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en_US to en_US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en_US';
+            };
             $translateProvider.determinePreferredLanguage();
           }));
           it('test', inject(function ($window, $translate) {
@@ -220,7 +224,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en-us to en_us', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-us';
+            };
             $translateProvider.determinePreferredLanguage();
           }));
           it('test', inject(function ($window, $translate) {
@@ -230,7 +236,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en to en using', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en';
+            };
             $translateProvider.determinePreferredLanguage();
           }));
           it('test', inject(function ($window, $translate) {
@@ -242,7 +250,9 @@ describe('pascalprecht.translate', function () {
       describe('using resolver "java"', function () {
         describe('should resolve to en-US to en_US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-US';
+            };
             $translateProvider
               .uniformLanguageTag('java')
               .determinePreferredLanguage();
@@ -254,7 +264,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en_US to en_US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en_US';
+            };
             $translateProvider
               .uniformLanguageTag('java')
               .determinePreferredLanguage();
@@ -266,7 +278,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en-us to en_US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-us';
+            };
             $translateProvider
               .uniformLanguageTag('java')
               .determinePreferredLanguage();
@@ -278,7 +292,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en to en using', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en';
+            };
             $translateProvider
               .uniformLanguageTag('java')
               .determinePreferredLanguage();
@@ -292,7 +308,9 @@ describe('pascalprecht.translate', function () {
       describe('using resolver "bcp47"', function () {
         describe('should resolve to en-US to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-US';
+            };
             $translateProvider
               .uniformLanguageTag('bcp47')
               .determinePreferredLanguage();
@@ -304,7 +322,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en_US to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en_US';
+            };
             $translateProvider
               .uniformLanguageTag('bcp47')
               .determinePreferredLanguage();
@@ -316,7 +336,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en-us to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-us';
+            };
             $translateProvider
               .uniformLanguageTag('bcp47')
               .determinePreferredLanguage();
@@ -328,7 +350,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en to en using', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en';
+            };
             $translateProvider
               .uniformLanguageTag('bcp47')
               .determinePreferredLanguage();
@@ -342,7 +366,9 @@ describe('pascalprecht.translate', function () {
       describe('using resolver "iso639-1"', function () {
         describe('should resolve to en-US to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-US';
+            };
             $translateProvider
               .uniformLanguageTag('iso639-1')
               .determinePreferredLanguage();
@@ -354,7 +380,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en_US to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en_US'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en_US';
+            };
             $translateProvider
               .uniformLanguageTag('iso639-1')
               .determinePreferredLanguage();
@@ -366,7 +394,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en-us to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en-us';
+            };
             $translateProvider
               .uniformLanguageTag('iso639-1')
               .determinePreferredLanguage();
@@ -378,7 +408,9 @@ describe('pascalprecht.translate', function () {
 
         describe('should resolve to en to en using', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
-            pascalprechtTranslateOverrider.getLocale = function () { return 'en'; };
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'en';
+            };
             $translateProvider
               .uniformLanguageTag('iso639-1')
               .determinePreferredLanguage();

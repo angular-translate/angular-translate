@@ -48,12 +48,12 @@ describe('pascalprecht.translate', function () {
     beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
       $translateProvider
         .translations('de_DE', {
-          'EXISTING_TRANSLATION_ID': 'foo',
-          'ANOTHER_ONE': 'bar',
-          'TRANSLATION_ID': 'Lorem Ipsum {{value}}',
-          'TRANSLATION_ID_2': 'Lorem Ipsum {{value}} + {{value}}',
-          'TRANSLATION_ID_3': 'Lorem Ipsum {{value + value}}',
-          'YET_ANOTHER': 'Hallo da!'
+          'EXISTING_TRANSLATION_ID' : 'foo',
+          'ANOTHER_ONE' : 'bar',
+          'TRANSLATION_ID' : 'Lorem Ipsum {{value}}',
+          'TRANSLATION_ID_2' : 'Lorem Ipsum {{value}} + {{value}}',
+          'TRANSLATION_ID_3' : 'Lorem Ipsum {{value + value}}',
+          'YET_ANOTHER' : 'Hallo da!'
         })
         .preferredLanguage('de_DE')
         .useCookieStorage();
