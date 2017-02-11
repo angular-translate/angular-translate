@@ -12,9 +12,33 @@ angular.module('pascalprecht.translate')
  */
   .factory('$translateCookieStorage', $translateCookieStorageFactory);
 
-function $translateCookieStorageFactory($cookieStore) {
+function $translateCookieStorageFactory($injector) {
 
   'use strict';
+
+  // Since AngularJS 1.4, $cookieStore is deprecated
+  var delegate;
+  if (angular.version.major === 1 && angular.version.minor >= 4) {
+    var $cookies = $injector.get('$cookies');
+    delegate = {
+      get : function (key) {
+        return $cookies.get(key);
+      },
+      put : function (key, value) {
+        $cookies.put(key, value);
+      }
+    };
+  } else {
+    var $cookieStore = $injector.get('$cookieStore');
+    delegate = {
+      get : function (key) {
+        return $cookieStore.get(key);
+      },
+      put : function (key, value) {
+        $cookieStore.put(key, value);
+      }
+    };
+  }
 
   var $translateCookieStorage = {
 
@@ -29,8 +53,8 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} name Item name
      * @return {string} Value of item name
      */
-    get: function (name) {
-      return $cookieStore.get(name);
+    get : function (name) {
+      return delegate.get(name);
     },
 
     /**
@@ -46,8 +70,8 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} name Item name
      * @param {string} value Item value
      */
-    set: function (name, value) {
-      $cookieStore.put(name, value);
+    set : function (name, value) {
+      delegate.put(name, value);
     },
 
     /**
@@ -61,8 +85,8 @@ function $translateCookieStorageFactory($cookieStore) {
      * @param {string} name Item name
      * @param {string} value Item value
      */
-    put: function (name, value) {
-      $cookieStore.put(name, value);
+    put : function (name, value) {
+      delegate.put(name, value);
     }
   };
 
