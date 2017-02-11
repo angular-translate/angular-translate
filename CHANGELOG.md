@@ -1,3 +1,28 @@
+<a name="2.14.0"></a>
+# [2.14.0](https://github.com/angular-translate/angular-translate/compare/2.13.1...v2.14.0) (2017-02-11)
+
+
+### Bug Fixes
+
+* **$translate:** reassign language promises in refresh, update translation tables at the appropriate time, and simplify the routine ([351eb8f](https://github.com/angular-translate/angular-translate/commit/351eb8f))
+* **$translatePartialLoader:** prevent duplicate simultaneous HTTP requests ([8b2cea8](https://github.com/angular-translate/angular-translate/commit/8b2cea8))
+* **service:** add explicit promise rejection handler for $translate.use ([f4dc14a](https://github.com/angular-translate/angular-translate/commit/f4dc14a))
+* **service:** avoid sanitize/esape calls on null/undefined param values ([331e0dd](https://github.com/angular-translate/angular-translate/commit/331e0dd))
+* **service:** fix missing promise rejection handlers ([776993b](https://github.com/angular-translate/angular-translate/commit/776993b))
+* **staticFilesLoader:** do not use empty string as $http params ([ac2a038](https://github.com/angular-translate/angular-translate/commit/ac2a038)), closes [#1646](https://github.com/angular-translate/angular-translate/issues/1646)
+* **tests:** rewrite tests for AJS 1.6 compatibility ([7c9d2c9](https://github.com/angular-translate/angular-translate/commit/7c9d2c9))
+* **translate:** handle null translation ([1e57b4f](https://github.com/angular-translate/angular-translate/commit/1e57b4f)), closes [#665](https://github.com/angular-translate/angular-translate/issues/665)
+* **translateCloak:** incorrect element reference, inappropriate decloak at onReady, inappropriate decloak at $translateChangeSuccess ([a4d2795](https://github.com/angular-translate/angular-translate/commit/a4d2795))
+
+
+### Features
+
+* **dependencies:** update to messageformat 1.0.2 ([d4a0468](https://github.com/angular-translate/angular-translate/commit/d4a0468))
+* **service:** add translationId as param of custom interpolation service interface ([5de40de](https://github.com/angular-translate/angular-translate/commit/5de40de))
+* **tests:** add current AngularJS 1.6 in test scopes ([d8abdc5](https://github.com/angular-translate/angular-translate/commit/d8abdc5))
+
+
+
 <a name="2.13.1"></a>
 ## [2.13.1](https://github.com/angular-translate/angular-translate/compare/2.13.0...v2.13.1) (2016-12-06)
 
