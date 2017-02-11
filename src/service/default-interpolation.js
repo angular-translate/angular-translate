@@ -79,7 +79,7 @@ function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
    *
    * @returns {string} interpolated string
    */
-  $translateInterpolator.interpolate = function (value, interpolationParams, context, sanitizeStrategy, translationId) {
+  $translateInterpolator.interpolate = function (value, interpolationParams, context, sanitizeStrategy/*, translationId*/) {
     interpolationParams = interpolationParams || {};
     interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params', sanitizeStrategy, context);
 
