@@ -1,5 +1,5 @@
 #!/bin/bash -e
-_LANGS=( "en" "ru" "de" "uk" "zh-cn" "zh-tw" "fr" "es" )
+_LANGS=( "en" "ru" "de" "uk" "zh-cn" "zh-tw" "fr" "es" "it" )
 
 for _LANG in "${_LANGS[@]}"; do
   echo ""

@@ -1,0 +1,100 @@
+@ngdoc overview
+@name Error Handling
+@description
+
+# Error Handling
+
+Sometimes you have a complex app, where you don't really know how many translations
+you have. You're not sure if there's a missing translation for a specific
+translation ID either. This is where missing translation handlers come in.
+
+## Using log handler extension for missing translations
+
+There is an extension for angular-translate which logs warnings into the console if
+you try to translate a translation ID which doesn't exist. Like all extensions,
+you can install it via Bower like this:
+
+```
+$ bower install angular-translate-handler-log
+```
+
+To use this handler, all you have to do is to call `useMissingTranslationHandlerLog()`
+on `$translateProvider`. angular-translate does the rest for you.
+
+<pre>
+$translateProvider.useMissingTranslationHandlerLog();
+</pre>
+
+Here's a working sample
+
+<doc:example module="myApp">
+  <doc:source>
+    <script>
+      var app = angular.module('myApp', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useMissingTranslationHandlerLog();
+        $translateProvider.translations('en', {
+          HEADLINE: 'I\'m a headline',
+          TEXT: 'I\'m using default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{He} female{She} other{They}} liked this.',
+          BUTTON_LANG_EN: 'English',
+          BUTTON_LANG_DE: 'German'
+        });
+
+        $translateProvider.translations('de', {
+          HEADLINE: 'Ich bin eine Überschrift',
+          TEXT: 'Ich benutze default interpolation {{ val + val }}',
+          PLURAL: '{GENDER, select, male{Er fand} female{Sie fand} other{Sie fanden}} es gut.',
+          BUTTON_LANG_EN: 'Englisch',
+          BUTTON_LANG_DE: 'Deutsch'
+        });
+      }]);
+
+      app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+
+        $scope.changeLanguage = function (langKey) {
+          $translate.use(langKey);
+        };
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p translate="NOT_EXISTING"></p>
+      <p translate="ALSO_NOT_EXISTING"></p>
+
+      <button ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE"></button>
+      <button ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN"></button>
+    </div>
+  </doc:source>
+</doc:example>
+
+Now, take a look at the browser's console and see what have been logged!
+
+## Using Post processing functionality
+
+Since version 2.11, you're able to take advantage of a special post processing feature.
+This enables you to e.g. get valuable debug information in case your translators need further information on
+which key belongs to which translation value or why is the wrong value shown on screen.
+
+To use this feature, you have to enable it by configuring it in the config part of your application module:
+
+<pre>
+ $translateProvider.postProcess(function (translationId, translation, interpolatedTranslation, params, lang) {
+    return '<span style="color: #cccccc">' + translationId + '(' + lang + '):</span> ' +
+      (interpolatedTranslation ? interpolatedTranslation : translation);
+  });
+</pre>
+
+The function contains five parameters:
+
+- translationId
+- translation
+- interpolatedTranslation
+- params
+- lang
+
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by the angular-translate team (http://github.com/angular-translate)</center>

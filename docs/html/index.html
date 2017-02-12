@@ -29,13 +29,22 @@
           TITLE: 'Hello',
           FOO: 'This is a paragraph.',
           BUTTON_LANG_EN: 'English',
-          BUTTON_LANG_DE: 'German'
+          BUTTON_LANG_DE: 'German',
+          BUTTON_LANG_IT: 'Italian'
         });
         $translateProvider.translations('de', {
           TITLE: 'Hallo',
           FOO: 'Dies ist ein Absatz.',
           BUTTON_LANG_EN: 'Englisch',
-          BUTTON_LANG_DE: 'Deutsch'
+          BUTTON_LANG_DE: 'Deutsch',
+          BUTTON_LANG_IT: 'Italienisch'
+        });
+        $translateProvider.translations('it', {
+          TITLE: 'Ciao',
+          FOO: 'Questo è un paragrafo.',
+          BUTTON_LANG_IT: 'Italiano',
+          BUTTON_LANG_EN: 'Inglese',
+          BUTTON_LANG_DE: 'Tedesco'
         });
         $translateProvider.preferredLanguage('en');
         $translateProvider.useSanitizeValueStrategy('escape');
@@ -115,13 +124,22 @@ app.config(function ($translateProvider) {
     TITLE: 'Hello',
     FOO: 'This is a paragraph.',
     BUTTON_LANG_EN: 'English',
-    BUTTON_LANG_DE: 'German'
+    BUTTON_LANG_DE: 'German',
+    BUTTON_LANG_IT: 'Italian'
   });
   $translateProvider.translations('de', {
     TITLE: 'Hallo',
     FOO: 'Dies ist ein Absatz.',
     BUTTON_LANG_EN: 'Englisch',
-    BUTTON_LANG_DE: 'Deutsch'
+    BUTTON_LANG_DE: 'Deutsch',
+    BUTTON_LANG_IT: 'Italienisch'
+  });
+  $translateProvider.translations('it', {
+    TITLE: 'Ciao',
+    FOO: 'Questo è un paragrafo',
+    BUTTON_LANG_IT: 'Italiano',
+    BUTTON_LANG_DE: 'Tedesco',
+    BUTTON_LANG_EN: 'Inglese'
   });
   $translateProvider.preferredLanguage('en');
 });
@@ -140,6 +158,7 @@ app.controller('Ctrl', function ($scope, $translate) {
               <div ng-controller="Ctrl">
                 <button class="btn" ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN" class="ng-scope">English</button>
                 <button class="btn" ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE" class="ng-scope">German</button>
+                <button class="btn" ng-click="changeLanguage('it')" translate="BUTTON_LANG_IT" class="ng-scope">Italian</button>
               </div>
             </div>
           </div>

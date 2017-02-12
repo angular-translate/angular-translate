@@ -1,0 +1,99 @@
+@ngdoc overview
+@name Guide
+@description
+
+# i18n for your Angular apps, made easy
+
+#### The easiest way to bring i18n and l10n to your Angular apps!
+
+<br>
+You want to bring **i18n** and **l10n** to your Angular apps and couldn't find an easy way
+how to do it? angular-translate got you covered. It comes with plenty useful features
+and extensions and gives you ultra high flexibility when it comes to customization.
+These are just a few of the great features:
+
+## Features
+
+- Components (filters/directives) to translate your contents
+- Asynchronous loading of i18n data
+- Pluralization support using [**MessageFormat.js**](https://github.com/SlexAxton/messageformat.js)
+- Expandability through easy to use interfaces
+
+If you like the module and use it in your projects, make it public on
+[ngmodules](http://ngmodules.org/modules/angular-translate) and click that
+"_I use it_" button! angular-translate is easy to install and even easier to use!
+When you read this doc, you'll learn how to use angular-translate and its cool features!
+Let's have a quick start:
+
+
+## Quick Start
+Install module via Bower:
+
+```
+$ bower install angular-translate
+```
+
+Make sure to embed it in your HTML document.
+
+<pre>
+<script src="path/to/angular-translate.js"></script>
+</pre>
+
+Inject <code>angular-translate</code> module as a dependency into your app:
+
+<pre>
+var app = angular.module('myApp', ['pascalprecht.translate']);
+</pre>
+
+Teach you app translations:
+
+<pre>
+app.config(['$translateProvider', function ($translateProvider) {
+  $translateProvider.translations('en', {
+    'TITLE': 'Hello',
+    'FOO': 'This is a paragraph'
+  });
+
+  $translateProvider.translations('de', {
+    'TITLE': 'Hallo',
+    'FOO': 'Dies ist ein Absatz'
+  });
+
+  $translateProvider.preferredLanguage('en');
+}]);
+</pre>
+
+Translate your app:
+
+<pre>
+<h1>{{ 'TITLE' | translate }}</h1>
+<p>{{ 'FOO' | translate }}</p>
+</pre>
+
+This is just a quick example of how angular-translate actually works. Basically
+the whole thing works like "_Provide some i18n data, let angular-translate know of it
+and use its components to interpolate your translations (against some values)._".
+Easy, huh?
+
+## Useful resources
+There are some very useful things on the web that might be interesting for you,
+so make sure to check this list.
+
+- [Tutorial on ng-newsletter.com](http://www.ng-newsletter.com/posts/angular-translate.html)
+- [angular-translate and partial loading](http://technpol.wordpress.com/2013/11/02/adding-translation-using-angular-translate-to-an-angularjs-app/)
+- [Examples and demos](https://github.com/angular-translate/angular-translate/wiki/Demos) - Currently on plnkr.co
+- [Tutorial on angularjs.de](http://angularjs.de/artikel/angularjs-i18n-ng-translate) - German article
+- [angular-translate on GitHub](http://github.com/PascalPrecht/angular-translate) - The GitHub repository
+- [angular-translate on ngmodules.org](http://ngmodules.org/modules/angular-translate)
+- [angular-translate mailinglist](https://groups.google.com/forum/#!forum/angular-translate) - Discuss, ask et al!
+
+## Thank you, community!
+We got a lot of great feedback from the community so far! More and more people
+use this module and they are always thankful for it and the awesome support they
+get. I just want to make sure that you guys know: All this wouldn't have been
+possible without these [great contributors](http://github.com/PascalPrecht/angular-translate/contributors)
+and everybody who comes with new ideas and feature requests! So **THANK YOU**!
+
+<br>
+<hr>
+<center>Made with unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
