@@ -2272,7 +2272,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
      * @methodOf pascalprecht.translate.$translate
      *
      * @description
-     * Returns whether the service is "ready" to translate (i.e. loading 1st language).
+     * Calls the function provided or resolved the returned promise after the service is "ready" to translate (i.e. loading 1st language).
      *
      * See also {@link pascalprecht.translate.$translate#methods_isReady isReady()}.
      *
