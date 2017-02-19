@@ -509,9 +509,12 @@ module.exports = function (grunt) {
     ngdocs: {
       options: {
         dest: 'tmp',
+        template: 'docs/html/index_docs.html',
         navTemplate: 'docs/html/nav.html',
         html5Mode: false,
         title: false,
+        editLink: false,
+        editExample: false,
         image: 'identity/logo/angular-translate-alternative/angular-translate_alternative_small2.png',
         imageLink: 'https://angular-translate.github.io',
         startPage: '/guide',
