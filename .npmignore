@@ -10,6 +10,7 @@
 /.bowerrc
 /.editorconfig
 /.jshintrc
+/.github
 /.travis.yml
 /bower.json
 /CONTRIBUTING.md
