@@ -1,0 +1,95 @@
+@ngdoc overview
+@name Installation
+@description
+
+# Instalação
+
+## Instalando dependências
+
+Estas ferramentas são utilizadas durante do desenvolvimento do `angular-translate`, então você deve 
+considerar instalá-las em sua máquina para garantir que tudo funcione corretamente.
+Por favor instale as seguintes ferramentas:
+
+- [Grunt](http://gruntjs.com)
+- [Karma Testrunner](https://karma-runner.github.io/)
+- [Bower](http://bower.io/)
+
+
+## Instalando via Bower
+
+Você pode instalar o pacote `angular-translate` muito facilmente usando Bower. Depois
+de instalar Bower em seu computador, simplesmente execute:
+
+```
+$ bower install angular-translate
+```
+
+Isto irá instalar um pacote em sua pasta de componentes configuradas. Você pode ver o
+o repositório de pacotes do bower [aqui](https://github.com/angular-translate/bower-angular-translate).
+Como você pode ver, é apenas isso que importa. O código fonte.
+Para desenvolvimento, bem como para uso em produção.
+
+## Instalando with Git
+
+Uma outra forma de obter o código fonte do angular-translate, é clonar o repositório inteiro
+do GitHub.
+
+```
+$ git clone git://github.com/angular-translate/angular-translate.git
+```
+Você tem agora uma cópia completa do repositório incluindo o histórico e tudo
+mais que aconteceu durante o desenvolvimento do angular-translate.
+
+Uma vez que angular-translate tem algumas dependencias quando foi desenvolvido, você pode apenas instalar
+todas elas na primeira vez. Para instalar todas as dependências que precisa, simplesmente execute os seguintes
+comandos no repositório copiado do angular-translate.
+
+```
+$ npm install
+$ bower install
+```
+
+## Executando testes unitários
+
+É claro, `angular-translate` vem com um completo caso de teste o qual apenas espera
+que você o execute. Ele é o **Karma testrunner** que vem junto. Navegue até a
+pasta que você copiou o projeto e execute:
+
+```
+$ karma start karma.unit.conf
+```
+
+Isto irá iniciar um testrunner o qual usa o **Jasmine testing framework** para executar tudo
+que é fornecido nos testes unitários. Se tudo estiver verde, vá em frente. Por outro lado, corrija-o e faça um pull
+request. Obrigado.
+
+Estes são também There **midway tests** que você pode executar. Para fazer isto, inicie o Karma com o arquivo de
+configuração fornecido para os **midway tests**:
+
+```
+$ karma start karma.midway.conf
+```
+
+## Compilação do código source
+
+Quando todos os testes tiverem passado com sucesso você pode então compilar o código de desenvolvimento, bem como
+a versão de produção do código fonte, assim como você recebeu do pacote Bower.
+angular-translate fornece um arquivo `Gruntfile.js` o qual contém tarefas
+configuradas que você pode executar com o comando `grunt`.
+
+Para receber uma compilação do `angular-translate` simplesmente execute:
+
+```
+$ grunt build
+```
+
+Isto irá gerar arquivos prontos para uso em desenvolvimento e produção em um diretório chamado
+`dist`. Os arquivos devem se parecer como `dist/angular-translate.js` e
+`dist/angular-translate.min.js`.
+
+Estes dois arquivos já estão prontos para uso, insira-os em seu documento HTML e
+você estará pronto para a brincadeira!
+
+<br>
+<hr>
+<center>Feito com unicorn &hearts; love by [PascalPrecht](http://github.com/PascalPrecht)</center>
