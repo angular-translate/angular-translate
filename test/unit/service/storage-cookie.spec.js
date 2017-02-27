@@ -66,7 +66,7 @@ describe('pascalprecht.translate', function () {
     });
   });
 
-  describe('$translate#storage', function () {
+  describe('$translate#storage (with ngCookies)', function () {
 
     beforeEach(module('pascalprecht.translate', 'ngCookies', function ($translateProvider) {
       $translateProvider.useStorage('$translateCookieStorage');
@@ -93,4 +93,98 @@ describe('pascalprecht.translate', function () {
       expect($translate.storage().get).toBeDefined();
     });
   });
+
+  if (angular.version.major === 1 && angular.version.minor >= 4) {
+    describe('$translate#storage (with fake $cookies)', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $provide.factory('$cookies', function () {
+          var data = {};
+          return {
+            get : function (key) {
+              return data[key];
+            },
+            put : function (key, value) {
+              data[key] = value;
+            }
+          };
+        });
+        $translateProvider.useStorage('$translateCookieStorage');
+      }));
+
+      var $translate, $translateCookieStorage;
+
+      beforeEach(inject(function (_$translate_, _$translateCookieStorage_) {
+        $translate = _$translate_;
+        $translateCookieStorage = _$translateCookieStorage_;
+      }));
+
+      it('should be defined', function () {
+        expect($translate.storage).toBeDefined();
+      });
+
+      it('should be a function', function () {
+        expect(typeof $translate.storage).toBe('function');
+      });
+
+      it('should return registered storage instance if exists', function () {
+        expect(typeof $translate.storage()).toBe('object');
+        expect($translate.storage().set).toBeDefined(); // deprecated
+        expect($translate.storage().put).toBeDefined();
+        expect($translate.storage().get).toBeDefined();
+      });
+
+      it('should return value again', function () {
+        $translateCookieStorage.put('ABCD', 'EFGH');
+        expect($translateCookieStorage.get('ABCD', 'EFGH')).toBe('EFGH');
+      });
+    });
+  }
+
+  if (angular.version.major === 1 && angular.version.minor < 4) {
+    describe('$translate#storage (with fake $cookieStore)', function () {
+
+      beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+        $provide.factory('$cookieStore', function () {
+          var data = {};
+          return {
+            get : function (key) {
+              return data[key];
+            },
+            put : function (key, value) {
+              data[key] = value;
+            }
+          };
+        });
+        $translateProvider.useStorage('$translateCookieStorage');
+      }));
+
+      var $translate, $translateCookieStorage;
+
+      beforeEach(inject(function (_$translate_, _$translateCookieStorage_) {
+        $translate = _$translate_;
+        $translateCookieStorage = _$translateCookieStorage_;
+      }));
+
+      it('should be defined', function () {
+        expect($translate.storage).toBeDefined();
+      });
+
+      it('should be a function', function () {
+        expect(typeof $translate.storage).toBe('function');
+      });
+
+      it('should return registered storage instance if exists', function () {
+        expect(typeof $translate.storage()).toBe('object');
+        expect($translate.storage().set).toBeDefined(); // deprecated
+        expect($translate.storage().put).toBeDefined();
+        expect($translate.storage().get).toBeDefined();
+      });
+
+      it('should return value again', function () {
+        $translateCookieStorage.put('ABCD', 'EFGH');
+        expect($translateCookieStorage.get('ABCD', 'EFGH')).toBe('EFGH');
+      });
+    });
+  }
 });

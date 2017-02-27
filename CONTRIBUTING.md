@@ -1,29 +1,21 @@
 # Contributing Guide
 
-Contributing to <code>angular-translate</code> is fairly easy. This document shows you how to
+Contributing to `angular-translate` is fairly easy. This document shows you how to
 get the project, run all provided tests and generate a production-ready build.
 
-It also covers provided grunt tasks that help you develop with <code>angular-translate</code>.
+It also covers provided grunt tasks that help you develop with `angular-translate`.
 
 ## Dependencies
 
 To make sure that the following instructions work, please install the following dependencies
 on you machine:
 
-- Node.js
-- npm
+- Node.js (comes with a bundles npm)
 - Git
-
-If you install node through the binary installation file, **npm** will be already there.
-When **npm** is installed, use it to install the needed npm packages:
-
-- bower <code>npm install -g bower</code> (only required when running bower manually)
-- grunt-cli <code>npm install -g grunt-cli</code>
-- karma <code>npm install -g karma</code> (only required when running karma manually)
 
 ## Installation
 
-To get the source of <code>angular-translate</code>, clone the git repository via:
+To get the source of `angular-translate`, clone the git repository via:
 
 ````
 $ git clone https://github.com/angular-translate/angular-translate
@@ -36,55 +28,64 @@ and install all needed dependencies via **npm**:
 $ npm install
 ````
 
-(This will invoke a `bower install` automatically.)
+This commands installs everything which is required for building and testing the project.
 
-<code>angular-translate</code> is now installed and ready to be built.
+## Testing
+Internally `angular-translate` depends on **Grunt**, however we have masked all steps behind 
+simple tasks processed by **npm**.
+
+### Source linting: `npm run lint`
+`npm run lint` performs a lint for all, also part of `test`.
+
+### Unit testing: `npm run test`
+`npm run test` executes (as you might think) the unit tests, which are located
+in `test/unit`. The task uses **karma**, the spectacular test runner, to execute the tests with 
+the **jasmine testing framework**.
+
+#### Testing of different scopes: `npm run test-scopes`
+Because `angular-translate` supports multiple different versions of AngularJS 1.x, we also test the code against these.
+
+`npm run test-scopes` performs a `npm run test` against each registered scope which can be found at `/test_scopes/*`.
+
+#### Testing headless: `npm run test-headless`
+Just like `npm run test`, the command `npm run test-headless` performs the test against a headless PhantomJS. Maybe 
+useful in case of automatic tests.
 
 ## Building
-
-<code>angular-translate</code> comes with a few **grunt tasks** that help you to automate
-the development process. The following grunt tasks are provided:
-
-#### <code>grunt</code>
-
-Running <code>grunt</code> without any parameters will actually execute the registered
-default task. This task is running both a **lint task** and a **test task**. Both tasks
-make sure your JavaScript is written well.
-
-#### <code>grunt test</code>
-
-<code>grunt test</code> executes (as you might think) the unit tests, which are located
-in <code>test/unit</code>. The task uses **karma**, the spectacular test runner, to execute the tests with the **jasmine testing framework**.
-
-#### <code>grunt build</code>
-
-You only have to use this task if you want to generate a production-ready build of
-<code>angular-translate</code>. This task will also **lint**, **test** and **minify** the
+### Standard build
+You will probably being never required using the command `npm run build`, because it will create a production-ready 
+build of `angular-translate`. This task will also **lint**, **test** and **minify** the
 source. After running this task, you'll find the following files in a generated
-<code>dist</code> folder:
+`/dist`folder:
 
 ````
 dist/angular-translate-x.x.x.js
 dist/angular-translate-x.x.x.min.js
 ````
 
-#### <code>grunt watch</code>
+### Compile only
+The command `npm run compile` creates production-ready files at `/dist`, also part of `npm run build`.
 
+````
+dist/angular-translate-x.x.x.js
+dist/angular-translate-x.x.x.min.js
+````
+
+## Developing
+### `grunt watch`
 This task will watch all relevant files. When it notices a change, it'll run the
 **lint** and **test** tasks. Use this task while developing on the source
 to make sure that every time you make a change, you get notified if your code is inconsistent
 or doesn't pass the tests.
 
-#### <code>grunt dev</code>
-
+### `grunt dev`
 This task extends `watch`. In addition, it will lint, test and copy the result into `demo/`.
 After this, just like `watch`, it will run these steps every time a file has changed.
 On top of that, this task supports **live reloading** (on default port).
 
 This task works in harmony with `npm run start-demo`.
 
-#### <code>npm run start-demo</code>
-
+### `npm run start-demo`
 This task provides a simple http server on port `3005`. If you start it on your machine, you
 have access to the project`s demos with real XHR operations.
 

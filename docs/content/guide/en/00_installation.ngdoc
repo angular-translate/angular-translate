@@ -15,6 +15,16 @@ Please install the following tools:
 - [Bower](http://bower.io/)
 
 
+## Installing via NPM
+
+You can install the `angular-translate` package very easily using NPM.
+
+```
+$ npm install --save-dev angular-translate
+```
+
+This will install a package in your local node_modules folder.
+
 ## Installing via Bower
 
 You can install the `angular-translate` package very easily using Bower. After
@@ -29,7 +39,24 @@ bower package repository [here](https://github.com/angular-translate/bower-angul
 As you can see, it's pretty much broken down to things that matter. The raw source.
 For development as well as production use.
 
-## Installing with Git
+## Installing via cdnjs
+
+All angular-translate releases are available at [cdnjs](https://cdnjs.com/libraries/angular-translate).
+
+## Downloading from GitHub
+
+Go to [releases](https://github.com/angular-translate/angular-translate/releases) and download the latest one.
+
+```
+$ bower install angular-translate
+```
+
+This will install a package in your configured components folder. You can watch the
+bower package repository [here](https://github.com/angular-translate/bower-angular-translate).
+As you can see, it's pretty much broken down to things that matter. The raw source.
+For development as well as production use.
+
+## Installing with Git (development purpose)
 
 Another way to get the source of angular-translate, is to clone the whole repository
 from GitHub.
@@ -49,28 +76,22 @@ $ npm install
 $ bower install
 ```
 
-## Running provided unit tests
+### Running provided unit tests
 
 Of course, `angular-translate` comes with a full featured testsuite which just waits
 for you to run it. This is where the **Karma testrunner** comes in. Navigate to the
 folder you cloned the project in and run:
 
 ```
-$ karma start karma.unit.conf
+$ npm test
 ```
 
 This will start a testrunner which uses the **Jasmine testing framework** to execute all
 provided unit tests. If everything's green, go ahead. Otherwise, fix it and send a pull
 request. Thanks.
 
-There are also **midway tests** you can run. To do that, start Karma with the provided
-configuration file for midway tests:
 
-```
-$ karma start karma.midway.conf
-```
-
-## Building from source
+### Building from source
 
 When all tests passed successfully you can then build a development, as well as
 a production version of the code, just like you get from the Bower package.
@@ -80,7 +101,7 @@ tasks you can run with the `grunt` command.
 To get a build of `angular-translate` simply run:
 
 ```
-$ grunt build
+$ npm run build
 ```
 
 This will generate files ready for development and production use in a created
