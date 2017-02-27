@@ -47,7 +47,7 @@ Because `angular-translate` supports multiple different versions of AngularJS 1.
 
 `npm run test-scopes` performs a `npm run test` against each registered scope which can be found at `/test_scopes/*`.
 
-#### Testing headless: `npm run test`
+#### Testing headless: `npm run test-headless`
 Just like `npm run test`, the command `npm run test-headless` performs the test against a headless PhantomJS. Maybe 
 useful in case of automatic tests.
 
