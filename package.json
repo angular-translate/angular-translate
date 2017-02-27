@@ -36,7 +36,7 @@
     "build-site-by-language": "./build_tools/generate_site_by_language.sh",
     "build-site-plato-report": "rm -rf ./site/plato && plato -d plato -l .jshintrc src/*.js src/**/*.js && mv plato site",
     "upload-github-release": "node build_tools/upload-github-release.js",
-    "start-demo": "node server.js"
+    "start-demo": "node build_tools/server.js"
   },
   "author": {
     "name": "Pascal Precht"
