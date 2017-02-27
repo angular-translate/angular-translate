@@ -1,3 +1,14 @@
+<a name="2.15.0"></a>
+# [2.15.0](https://github.com/angular-translate/angular-translate/compare/2.14.0...v2.15.0) (2017-02-27)
+
+
+### Features
+
+* **cookies:** use $cookies (1.4+) or $cookieStore (<1.4) ([51330f5](https://github.com/angular-translate/angular-translate/commit/51330f5))
+* **filter:** ensure no this==undefined will be injected ([5cb94cb](https://github.com/angular-translate/angular-translate/commit/5cb94cb))
+
+
+
 <a name="2.14.0"></a>
 # [2.14.0](https://github.com/angular-translate/angular-translate/compare/2.13.1...v2.14.0) (2017-02-11)
 
