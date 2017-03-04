@@ -43,8 +43,7 @@ function translateCloakDirective($translate) {
           iAttr.$observe('translateCloak', function (translationId) {
             $translate(translationId).then(iRemoveCloak, iApplyCloak);
           });
-        }
-        else {
+        } else {
           $translate.onReady(iRemoveCloak);
         }
       };
