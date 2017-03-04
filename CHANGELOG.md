@@ -1,3 +1,13 @@
+<a name="2.15.1"></a>
+## [2.15.1](https://github.com/angular-translate/angular-translate/compare/2.15.0...v2.15.1) (2017-03-04)
+
+
+### Bug Fixes
+
+* **cloak:** fix missing decloak introduced by optimize [#1694](https://github.com/angular-translate/angular-translate/issues/1694) ([a9ec123](https://github.com/angular-translate/angular-translate/commit/a9ec123)), closes [#1705](https://github.com/angular-translate/angular-translate/issues/1705)
+
+
+
 <a name="2.15.0"></a>
 # [2.15.0](https://github.com/angular-translate/angular-translate/compare/2.14.0...v2.15.0) (2017-02-27)
 
