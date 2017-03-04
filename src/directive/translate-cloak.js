@@ -21,7 +21,7 @@ angular.module('pascalprecht.translate')
  */
 .directive('translateCloak', translateCloakDirective);
 
-function translateCloakDirective($translate) {
+function translateCloakDirective($translate, $rootScope) {
 
   'use strict';
 
@@ -43,8 +43,10 @@ function translateCloakDirective($translate) {
           iAttr.$observe('translateCloak', function (translationId) {
             $translate(translationId).then(iRemoveCloak, iApplyCloak);
           });
-        }
-        else {
+          $rootScope.$on('$translateChangeSuccess', function () {
+            $translate(iAttr.translateCloak).then(iRemoveCloak, iApplyCloak);
+          });
+        } else {
           $translate.onReady(iRemoveCloak);
         }
       };
