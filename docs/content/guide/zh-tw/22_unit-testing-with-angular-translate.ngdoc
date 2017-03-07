@@ -1,0 +1,178 @@
+@ngdoc overview
+@name 單元測試
+@description
+
+# angular-translate 單元測試
+
+AngularJS是建立在可測試性的初衷之上的。這就是為什麼我們喜愛他的原因。這就是為什麼從最初就對angular-translate做單元測試。但是，當用angular-translate 來興建支持國際化的AngularJS 應用程序時，測試您的應用程序有時候會有點棘手。本指南將告訴您用angular-translate 編寫單元測試來測試你的應用程序時如何避開常見問題。
+
+## 問題是什麼？
+
+在我們開發angular-translate這段時間經驗來看，在測試時只涉及到一個問題。想像一下以下情形：您打造的應用程序，不僅採用了Angular-translate，也使用了另外一個異步的裝載器（這是很常見的）。所以我們的應用程序的配置看起來像這樣：
+
+<pre>
+app.config(function ($translateProvider) {
+  $translateProvider
+    .useStaticFilesL​​oader({
+      prefix: 'locale-',
+      suffix: '.json'
+    })
+    .preferredLanguage('en');
+});
+</pre>
+
+在這個配置中，我們使用靜態文件加載器來從遠程端點加載我們的國際化數據。我們還告訴angular-translate，我們的首選語言是`en`。非常直截了當。
+
+比方說，我們有一個控制器，它使用`$translate`服務轉換運行時的語言（這也是*非常*常見的）：
+
+<pre>
+app.controller('LanguageController', function ($scope, $translate) {
+  $scope.switchLanguage = function (locale) {
+    $translate.use(locale);
+  });
+});
+</pre>
+
+好吧，就是這樣。讓我們通過我們的頭腦，想想當我們運行這個程序時會發生什麼。這是一步一步的過程：
+
+- 我們註冊一個異步加載器
+- 我們定義我們的首選語言
+- `$translate`服務在它第一次被注入時被實例化
+- angular-translate 注意到沒有本地可用語言
+- 它會去找是否有一個註冊的異步加載
+- 在首選語言環境下異步加載器被調用
+- 將翻譯數據被加載，並可以使用
+
+重要的是要了解如何angular-translate 是如何處理流程，以知道它可能會導致什麼問題。所以，經過這一步驟，有一件事
+具有顯著的影響。當一個異步加載器註冊時。當沒有翻譯表緩存時，angular-translate
+**隱含** 地去調用註冊的加載器。為什麼單元測試您的應用程序時這會導致一些問題？
+
+要想了解機理，我們要看看我們如何用jasmine來寫正確的單元測試示例。我們先從一個`describe()`塊，並加載我們的應用程序的每個測試示例：
+
+<pre>
+describe('myApp', function () {
+
+  beforeEach(module('myApp'));
+
+});
+</pre>
+
+上面的示例可以確保我們的應用程序模在每個示例裡都被實例化。接下來，我們用類似這樣的mock scope 建立了我們的`LanguageController`：
+
+<pre>
+describe('myApp', function () {
+
+  beforeEach(module('myApp'));
+
+  var LanguageCtrl, scope;
+
+  beforeEach(inject(function ($controller, $rootScope) {
+    scope = $rootScope.$new();
+
+    LanguageCtrl = $controller('LanguageCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('should do something', function () {
+
+  });
+});
+</pre>
+
+當我們運行這個測試中，我們會得到以下錯誤：
+
+```
+Error: Unexpected request: GET locale-en.json
+```
+
+那麼，為什麼我們得到這個錯誤？這裡的問題是，那angular-translate 調用異步含蓄加載。這意味著，當`$translate`服務通過DI實例化，我們雖然什麼也沒做但是有一個XHR發生。
+
+When writing tests and there are XHRs, one has to explicitly say that one expects
+a XHR in a certain spec. This is part of proper testing. In other words,
+when we explicitly say that there's a XHR happening, this error shouldn't occur,
+right?
+
+So let's try to get around this error by injecting the `$httpBackend` service to
+expect XHRs and mock responses:
+
+當編寫測試，並有XHR時，一定要明確地說，人們期望在一定的示例中有一個XHR。這是正確的測試的一部分。換句話說，
+當我們明確地說，有一個XHR發生，應該不會出現這樣的錯誤， 對不對？
+
+所以讓我們嘗試通過注入`$httpBackend`的服務來解決這個錯誤對XHR的預計和模擬響應：
+
+<pre>
+describe('myApp', function () {
+
+  beforeEach(module('myApp'));
+
+  var LanguageCtrl, scope, $httpBackend;
+
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
+    scope = $rootScope.$new();
+    $httpBackend = _$httpBackend_;
+
+    LanguageCtrl = $controller('LanguageCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('should do something', function () {
+    $httpBackend.expectGET('locale-en.json');
+
+    // test code goes here
+  });
+});
+</pre>
+
+事實證明，這也不管用，因為在`expectGET（）`被調用的時候，異步加載程序已經被執行。太遭了，有沒有
+辦法來解決這個問題呢？
+
+## 解決方案
+
+不幸的是，這個問題是由angular-translate 的設計造成的。為了解決這些錯誤，我們所能做的是在我們的測試套件中覆蓋我們的模塊配置，
+，從而使它**不**使用異步加載。當沒有異步加載時，就沒有XHR，因此就沒有錯誤。
+
+那麼，我們如何改寫我們的測試套件中運行時的模塊配置呢？當實例化一個angular模塊，我們可以隨時調用一個內聯函數
+去執行配置功能。因為我們能夠獲得所有的供應商, 這種配置函數可用於覆蓋模塊配置，。
+
+使用`$provide`提供商，我們可以建立一個自定義的加載器工廠，然後使用它，而不是靜態文件加載器。
+
+<pre>
+beforeEach(module('myApp', function ($provide, $translateProvider) {
+
+  $provide.factory('customLoader', function () {
+    // loader logic goes here
+  });
+
+  $translateProvider.useLoader('customLoader');
+
+}));
+</pre>
+
+這個代碼在每個測試示例**前**被執行，所以換句話說，我們只是為了測試示例來覆蓋被使用的裝載機。現在我們要做的，是要建立一個不使用XHR的加載器：
+
+<pre>
+beforeEach(module('myApp', function ($provide, $translateProvider) {
+
+  $provide.factory('customLoader', function ($q) {
+    return function () {
+      var deferred = $q.defer();
+      deferred.resolve({});
+      return deferred.promise;
+    };
+  });
+
+  $translateProvider.useLoader('customLoader');
+
+}));
+</pre>
+
+就是這樣就可以了！另一種辦法是始終用靜態的JSON來為你的應用程序提供最佳的語言：
+
+<pre>
+beforeEach(module('myApp', function ($translateProvider) {
+
+  $translateProvider.translations('en', {});
+}));
+</pre>
