@@ -29,10 +29,21 @@ function runTranslate($translate) {
   fallbackFromIncorrectStorageValue.displayName = 'fallbackFromIncorrectStorageValue';
 
   if (storage) {
-    if (!storage.get(key)) {
+    var value = storage.get(key);
+    if (!value) {
       fallbackFromIncorrectStorageValue();
     } else {
-      $translate.use(storage.get(key))['catch'](fallbackFromIncorrectStorageValue);
+      // check if the value is a promise
+      if (value && (typeof value.then === 'function')) {
+        // if so set the language when the promise is resolved
+        value.then(function(result){
+          $translate.use(result)
+        }, function err() {
+          fallbackFromIncorrectStorageValue();
+        });
+      } else {
+        $translate.use(value)['catch'](fallbackFromIncorrectStorageValue);
+      }
     }
   } else if (angular.isString($translate.preferredLanguage())) {
     $translate.use($translate.preferredLanguage());
