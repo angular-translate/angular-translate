@@ -55,6 +55,9 @@
     }
   ],
   "license": "MIT",
+  "dependencies": {
+    "angular": "^1.4.7"
+  },
   "devDependencies": {
     "adm-zip": "^0.4.7",
     "body-parser": "^1.16.0",
