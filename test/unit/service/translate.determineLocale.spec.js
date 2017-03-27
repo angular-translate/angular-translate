@@ -7,6 +7,20 @@ describe('pascalprecht.translate', function () {
   describe('$translateProvider', function () {
 
     describe('#determinePreferredLanguage()', function () {
+      
+      describe('should pass the locale to the custom func', function () {
+        beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+          pascalprechtTranslateOverrider.getLocale = function () { return 'en-us'; };
+          $translateProvider.determinePreferredLanguage(function(locale) {
+            if (locale === 'en-us') {
+              return 'en_US';
+            }
+          });
+        }));
+        it('test', inject(function ($window, $translate) {
+           expect($translate.use()).toEqual('en_US');
+        }));
+      });
 
       describe('without locale negotiation', function () {
 

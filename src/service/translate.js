@@ -858,7 +858,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    */
   this.determinePreferredLanguage = function (fn) {
 
-    var locale = (fn && angular.isFunction(fn)) ? fn() : getLocale();
+    var locale = (fn && angular.isFunction(fn)) ? fn(getLocale()) : getLocale();
 
     if (!$availableLanguageKeys.length) {
       $preferredLanguage = locale;
