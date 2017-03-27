@@ -152,6 +152,10 @@ function translateDirective($translate, $interpolate, $compile, $parse, $rootSco
           }
         };
 
+         // hack: if there's no translate attribute in iAttr, we grab the innerText
+         if (!iAttr.translate) {
+            iAttr.translate = iElement.text().replace(/^\s+|\s+$/g, '');
+         }
         // Ensures any change of the attribute "translate" containing the id will
         // be re-stored to the scope's "translationId".
         // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
