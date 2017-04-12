@@ -58,6 +58,36 @@ get the project, run all provided tests and generate a production ready build.
 [![Dutch AngularJS Meetup 2013](presentation.png)](https://www.youtube.com/watch?v=9CWifOK_Wi8)
 [![Kod.io 2014](presentation2.png)](https://www.youtube.com/watch?v=C7xqaExvaQ4)
 
+### Getting started
+
+###Installing via Bower
+You can install the angular-translate package very easily using Bower. After installing Bower on your machine, simply run:
+
+`
+$ bower install angular-translate
+`
+
+This will install a package in your configured components folder. You can watch the bower package repository here. As you can see, it's pretty much broken down to things that matter. The raw source. For development as well as production use.
+
+###Installing with Git
+Another way to get the source of angular-translate, is to clone the whole repository from GitHub.
+
+`
+$ git clone git://github.com/PascalPrecht/angular-translate.git
+`
+
+You now have a full clone of the repository including the history and everything else that ever happened during the development of angular-translate. Do with the code what ever the fuck you want.
+
+Since angular-translate has some dependencies when developing it, you can just install all of them at once. To install all needed dependencies, simply run the following commands in the cloned angular-translate repository.
+
+`
+$ npm install
+`
+
+`
+$ bower install
+`
+
 ### Links
 * Website [angular-translate.github.io](https://angular-translate.github.io/)
 * API Reference [angular-translate.github.io/docs/#/api](https://angular-translate.github.io/docs/#/api)
