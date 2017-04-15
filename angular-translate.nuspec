@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>angular-translate</id>
+    <version>1.1.0</version>
+    <authors>Pascal Precht, Michael Lehmann</authors>
+    <owners>Pascal Precht</owners>
+    <!--<licenseUrl>https://github.com/PascalPrecht/angular-translate/blob/master/LICENSE</licenseUrl>-->
+    <projectUrl>http://pascalprecht.github.io/angular-translate</projectUrl>
+    <iconUrl>https://github.com/PascalPrecht/angular-translate/blob/master/identity/logo/angular-translate-globus/angular-translate_globus_small.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>angular-translate is an AngularJS module that makes your life much easier when it comes to i18n and l10n including lazy loading and pluralization.</description>
+    <tags>angular-translate angular angularjs localization</tags>
+    <dependencies>
+      <dependency id="angularjs" version="1.0.8" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="dist/angular-translate.js" target="content\scripts" />
+	<file src="dist/angular-translate.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-handler-log/angular-translate-handler-log.js" target="content\scripts" />
+	<file src="dist/angular-translate-handler-log/angular-translate-handler-log.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js" target="content\scripts" />
+	<file src="dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-partial/angular-translate-loader-partial.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-partial/angular-translate-loader-partial.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-static-files/angular-translate-loader-static-files.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-url/angular-translate-loader-url.js" target="content\scripts" />
+	<file src="dist/angular-translate-loader-url/angular-translate-loader-url.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-cookie/angular-translate-storage-cookie.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-local/angular-translate-storage-local.js" target="content\scripts" />
+	<file src="dist/angular-translate-storage-local/angular-translate-storage-local.min.js" target="content\scripts" />
+  </files>
+</package>

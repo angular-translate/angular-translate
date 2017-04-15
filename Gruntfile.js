@@ -701,7 +701,8 @@ module.exports = function (grunt) {
     'build:loader_static_files',
     'build:loader_url',
     'build:storage_cookie',
-    'build:storage_local'
+    'build:storage_local',
+    'build:nuget'
   ]);
 
   grunt.registerTask('build:core', [
@@ -784,6 +785,28 @@ module.exports = function (grunt) {
     'concat:banner_storage_local',
     'uglify:storage_local'
   ]);
+
+  grunt.registerTask('build:nuget', 'Create a nuget package', function() {
+    var done = this.async;
+                     
+    grunt.util.spawn({
+      cmd: 'mono',
+      args: [
+        'nuget/nuget.exe',
+        'pack',
+        'angular-translate.nuspec',
+        '-OutputDirectory',
+        'dist',
+        '-Version', //override the version with whatever is currently defined in package.json
+        grunt.config.get('pkg').version]
+    }, function(error, result) {
+       if (error) {
+          grunt.log.error(error);
+       } else {
+          grunt.log.write(result);
+       }
+    });
+  });
 
 
   // For development purpose.
