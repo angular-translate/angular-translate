@@ -227,7 +227,7 @@ function $translatePartialLoader() {
 
     if (!hasPart(part)) {
       parts[part] = new Part(part);
-      parts[part].isActive = false;
+      parts[part].isActive = true;
     }
 
     parts[part].tables[lang] = table;

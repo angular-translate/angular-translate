@@ -279,6 +279,19 @@ describe('pascalprecht.translate', function () {
           expect(table.foo).toEqual('Bar');
         });
       });
+
+      it('should be active ', function() {
+        inject(function($translatePartialLoader, $rootScope) {
+          var isActive = $provider.isPartAvailable('part');
+          expect(isActive).toBeDefined();
+          expect(isActive).toEqual(false);
+          $provider.setPart('en', 'part', { foo : 'Foo' });
+          $provider.setPart('en', 'part', { foo : 'Bar' });
+          isActive = $provider.isPartAvailable('part');
+          expect(isActive).toBeDefined();
+          expect(isActive).toEqual(true);
+        });
+      });
     });
 
     describe('$translatePartialLoader#deletePart', function () {
