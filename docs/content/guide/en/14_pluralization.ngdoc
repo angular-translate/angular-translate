@@ -82,7 +82,7 @@ we always do:
 // using `$translate` service
 $translate('LIKE_TEXT', { GENDER: 'male' });
 // using `translate` filter
-{{ 'LIKE_TEXT' | translate:"{ GENDER: 'male' }" }}
+{{ 'LIKE_TEXT' | translate:{ GENDER: 'male' } }}
 // using `translate` directive
 <ANY translate="LIKE_TEXT" translate-values="{ GENDER: 'male' }"></ANY>
 </pre>
