@@ -11,7 +11,7 @@ angular.module('pascalprecht.translate')
  *
  * @returns {function} Handler function
  */
-.factory('$translateMissingTranslationHandlerLog', $translateMissingTranslationHandlerLog);
+.factory('$translateMissingTranslationHandlerLog', ['$log', $translateMissingTranslationHandlerLog]);
 
 function $translateMissingTranslationHandlerLog ($log) {
 
