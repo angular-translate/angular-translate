@@ -203,7 +203,7 @@ translation ID:
 // "He liked this."
 </pre>
 
-Here is a working example (please note: There is also an embedded file for locale 'de'):
+Here is a working example:
 
 <doc:example module="myApp">
   <doc:source>
