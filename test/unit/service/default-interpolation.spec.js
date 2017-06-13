@@ -141,7 +141,7 @@ describe('pascalprecht.translate', function () {
     it('should ignore a date param', inject(function ($translateSanitization) {
       var text = 'Day is: {{day | date:"dd.MM.yyyy"}}';
       var params = {
-        day : new Date('2016-08-21')
+        day : new Date(2016, 7, 21)
       };
       var sanitizedText = 'Day is: 21.08.2016';
 
