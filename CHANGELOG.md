@@ -1,3 +1,15 @@
+<a name="2.15.2"></a>
+## [2.15.2](https://github.com/angular-translate/angular-translate/compare/2.15.1...v2.15.2) (2017-06-22)
+
+
+### Bug Fixes
+
+* Timezone and DST agnostic Unit test ([b3b04bd](https://github.com/angular-translate/angular-translate/commit/b3b04bd))
+* **$translateSanitizationProvider:** fix sanitization of boolean values ([70f4843](https://github.com/angular-translate/angular-translate/commit/70f4843)), closes [#1747](https://github.com/angular-translate/angular-translate/issues/1747)
+* **service:** fixed IE8 "Expected identifier" error ([a30e37a](https://github.com/angular-translate/angular-translate/commit/a30e37a))
+
+
+
 <a name="2.15.1"></a>
 ## [2.15.1](https://github.com/angular-translate/angular-translate/compare/2.15.0...v2.15.1) (2017-03-04)
 
