@@ -39,7 +39,7 @@ module.exports = function (config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: [process.env.TRAVIS ? 'Firefox' : 'Chrome'],
+    browsers: [process.env.TRAVIS ? 'Firefox' : (process.env.NO_HEADLESS ? 'Chrome' : 'ChromeHeadless')],
 
     captureTimeout: 60000,
 

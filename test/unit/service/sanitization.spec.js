@@ -31,7 +31,9 @@ describe('pascalprecht.translate', function () {
       var parameters = {
           array : [
             {value : 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>'}
-          ]
+          ],
+          falsyBoolean: false,
+          truthyBoolean: true
         },
         text = 'This is <b>only an example with a <span onclick="alert(\'XSS\')">xss attack</span>!</b>',
         expectedParameters,
@@ -96,7 +98,9 @@ describe('pascalprecht.translate', function () {
           expectedParameters = {
             array : [
               {value : 'This is <b>only an example with a <span>xss attack</span>!</b>'}
-            ]
+            ],
+            falsyBoolean: false,
+            truthyBoolean: true
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
@@ -116,7 +120,9 @@ describe('pascalprecht.translate', function () {
           expectedParameters = {
             array : [
               {value : 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
-            ]
+            ],
+            falsyBoolean: false,
+            truthyBoolean: true
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
@@ -162,7 +168,9 @@ describe('pascalprecht.translate', function () {
           expectedParameters = {
             array : [
               {value : 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
-            ]
+            ],
+            falsyBoolean: false,
+            truthyBoolean: true
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
@@ -182,7 +190,9 @@ describe('pascalprecht.translate', function () {
           expectedParameters = {
             array : [
               {value : 'This is &lt;b&gt;only an example with a &lt;span onclick="alert(\'XSS\')"&gt;xss attack&lt;/span&gt;!&lt;/b&gt;'}
-            ]
+            ],
+            falsyBoolean: false,
+            truthyBoolean: true
           };
           expect($translateSanitization.sanitize(parameters, 'params')).toEqual(expectedParameters);
         });
