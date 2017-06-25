@@ -1039,11 +1039,11 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    *                                     This can be optionally an array of translation ids which
    *                                     results that the function returns an object where each key
    *                                     is the translation id and the value the translation.
-   * @param {object=} interpolateParams An object hash for dynamic values
-   * @param {string} interpolationId The id of the interpolation to use
-   * @param {string} defaultTranslationText the optional default translation text that is written as
+   * @param {object=} [interpolateParams={}] An object hash for dynamic values
+   * @param {string=} [interpolationId=undefined] The id of the interpolation to use (use default unless set via useInterpolation())
+   * @param {string=} [defaultTranslationText=undefined] the optional default translation text that is written as
    *                                        as default text in case it is not found in any configured language
-   * @param {string} forceLanguage A language to be used instead of the current language
+   * @param {string=} [forceLanguage=false] A language to be used instead of the current language
    * @returns {object} promise
    */
   this.$get = function ($log, $injector, $rootScope, $q) {
@@ -1866,7 +1866,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
        *   $scope.text = $translate("HELLO");
        * });
      *
-     * @param {string} [key] Language key
+     * @param {string=} key Language key
      * @return {object|string} Promise with loaded language data or the language key if a falsy param was given.
      */
     $translate.use = function (key) {
@@ -2119,10 +2119,10 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
      *                                     This can be optionally an array of translation ids which
      *                                     results that the function's promise returns an object where
      *                                     each key is the translation id and the value the translation.
-     * @param {object} interpolateParams Params
-     * @param {string} interpolationId The id of the interpolation to use
-     * @param {string} forceLanguage A language to be used instead of the current language
-     * @param {string} sanitizeStrategy force sanitize strategy for this call instead of using the configured one
+     * @param {object=} [interpolateParams={}] Params
+     * @param {string=} [interpolationId=undefined] The id of the interpolation to use (use default unless set via useInterpolation())
+     * @param {string=} [forceLanguage=false] A language to be used instead of the current language
+     * @param {string=} [sanitizeStrategy=undefined] force sanitize strategy for this call instead of using the configured one (use default unless set)
      *
      * @return {string|object} translation
      */
