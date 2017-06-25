@@ -819,8 +819,8 @@ describe('pascalprecht.translate', function () {
           'HELLO' : "Hallo",
           'ONLY_DE' : "Ich bin deutsch"
         })
-        .preferredLanguage('en')
-        .fallbackLanguage('de');
+        .fallbackLanguage('de')
+        .preferredLanguage('en');
     }));
 
     beforeEach(inject(function (_$compile_, _$rootScope_) {

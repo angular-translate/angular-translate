@@ -65,6 +65,9 @@ fallback languages and searches there. This is a one way ticket, which means the
 iteration starts in this case at `en` and goes on until `fr`. You can register as
 many fallback language as you want.
 
+**Note:** Because the configuration is being applied as soon as possible, you
+should define the (initial) fallback languages before calling `.preferredLanguage()`.
+
 ## Switching fallback language at runtime
 
 Oh yes even **that** is possible! There are some cases where you might want to switch

@@ -66,6 +66,9 @@ the code like this:
 $translateProvider.preferredLanguage('de');
 </pre>
 
+**Note:** Because the configuration is being applied as soon as possible, you
+should define the preferred language after the (initial) fallback languages `.fallbackLanguage()`.
+
 **Note:** It's actually also possible to use `$translateProvider.use()` for that,
 since it's setting the languages as well. However it turns out that this is a bad
 practice when using asynchronous loaders in combination with a storage. In some
@@ -238,8 +241,8 @@ Et voilà! We now have an app with multi language support!
         // add translation tables
         $translateProvider.translations('en', translationsEN);
         $translateProvider.translations('de', translationsDE);
-        $translateProvider.preferredLanguage('en');
         $translateProvider.fallbackLanguage('en');
+        $translateProvider.preferredLanguage('en');
       }]);
 
       app.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {

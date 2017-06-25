@@ -43,8 +43,8 @@ angular.module('app', ['pascalprecht.translate', 'ngCookies'])
   });
 
   // Tell the module what language to use by default
-  $translateProvider.preferredLanguage('en_US');
   $translateProvider.fallbackLanguage('ru_RU');
+  $translateProvider.preferredLanguage('en_US');
 
   // Tell the module to store the language in the cookies
   $translateProvider.useCookieStorage();

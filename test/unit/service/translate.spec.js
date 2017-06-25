@@ -1210,8 +1210,8 @@ describe('pascalprecht.translate', function () {
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', {'TRANSLATION__ID' : 'bazinga', 'NULL' : 'yowza'})
-          .preferredLanguage('de_DE')
-          .fallbackLanguage('en_EN');
+          .fallbackLanguage('en_EN')
+          .preferredLanguage('de_DE');
       }));
 
       var $translate, $q, $rootScope;
@@ -1270,8 +1270,8 @@ describe('pascalprecht.translate', function () {
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', {'FALLBACK' : ''})
-          .preferredLanguage('de_DE')
-          .fallbackLanguage('en_EN');
+          .fallbackLanguage('en_EN')
+          .preferredLanguage('de_DE');
       }));
 
       var $translate, $q, $rootScope;
@@ -1456,8 +1456,8 @@ describe('pascalprecht.translate', function () {
         enableUnhandledRejectionTracing($provide);
         $translateProvider
           .useLoader('customLoader')
-          .preferredLanguage('en_EN')
-          .fallbackLanguage(['de_DE']);
+          .fallbackLanguage(['de_DE'])
+          .preferredLanguage('en_EN');
 
         $provide.factory('customLoader', ['$q', function ($q) {
           return function (options) {
@@ -1850,8 +1850,8 @@ describe('pascalprecht.translate', function () {
           'FOO' : 'Irgendwas',
           'BAR' : 'yupp'
         })
-        .preferredLanguage('en')
-        .fallbackLanguage('de');
+        .fallbackLanguage('de')
+        .preferredLanguage('en');
     }));
 
     var $translate, $rootScope, $q;
@@ -2410,8 +2410,8 @@ describe('pascalprecht.translate', function () {
           'BARE' : 'bare'
         })
         .useSanitizeValueStrategy('escape')
-        .preferredLanguage('de')
-        .fallbackLanguage('en');
+        .fallbackLanguage('en')
+        .preferredLanguage('de');
 
       $provide.factory('customLoader', function ($q, $timeout) {
         return function (options) {
@@ -2487,8 +2487,8 @@ describe('pascalprecht.translate', function () {
         .translations('de', {
           'FOO2' : 'bar2'
         })
-        .preferredLanguage('de')
         .fallbackLanguage('en')
+        .preferredLanguage('de')
         .translationNotFoundIndicator('-+-+');
 
       $provide.factory('customLoader', function ($q, $timeout) {
@@ -2900,8 +2900,8 @@ describe('pascalprecht.translate', function () {
         //.translations('de_DE', translationMock)
           .translations('de_DE', {'ONLY_GERMAN' : 'DE_TRANS', 'BOTH' : 'BOTH_DE'})
           .translations('en_EN', {'TRANSLATION__ID' : 'bazinga', 'BOTH' : 'BOTH_EN'})
-          .preferredLanguage('de_DE')
           .fallbackLanguage('en_EN')
+          .preferredLanguage('de_DE')
           .postProcess(function (translationId, translation, interpolatedTranslation, params, lang) {
             return translationId + ',' + lang + ',' + (interpolatedTranslation ? interpolatedTranslation : translation);
           });
@@ -3086,8 +3086,8 @@ describe('pascalprecht.translate', function () {
           'FOO' : 'foo'
         })
         .useSanitizeValueStrategy('sce')
-        .preferredLanguage('de')
-        .fallbackLanguage('en');
+        .fallbackLanguage('en')
+        .preferredLanguage('de');
     }));
 
     it('should handle TrustedValueHolderType inner-results', inject(function ($translate) {
