@@ -1044,6 +1044,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
    * @param {string=} [defaultTranslationText=undefined] the optional default translation text that is written as
    *                                        as default text in case it is not found in any configured language
    * @param {string=} [forceLanguage=false] A language to be used instead of the current language
+   * @param {string=} [sanitizeStrategy=undefined] force sanitize strategy for this call instead of using the configured one (use default unless set)
    * @returns {object} promise
    */
   this.$get = function ($log, $injector, $rootScope, $q) {
@@ -1056,7 +1057,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       fallbackIndex,
       startFallbackIteration;
 
-    var $translate = function (translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage) {
+    var $translate = function (translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage, sanitizeStrategy) {
       if (!$uses && $preferredLanguage) {
         $uses = $preferredLanguage;
       }
@@ -1085,7 +1086,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
               deferred.resolve([translationId, value]);
             };
             // we don't care whether the promise was resolved or rejected; just store the values
-            $translate(translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage).then(regardless, regardless);
+            $translate(translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage, sanitizeStrategy).then(regardless, regardless);
             return deferred.promise;
           };
           for (var i = 0, c = translationIds.length; i < c; i++) {
@@ -1142,14 +1143,14 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         // no promise to wait for? okay. Then there's no loader registered
         // nor is a one pending for language that comes from storage.
         // We can just translate.
-        determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses).then(deferred.resolve, deferred.reject);
+        determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy).then(deferred.resolve, deferred.reject);
       } else {
         var promiseResolved = function () {
           // $uses may have changed while waiting
           if (!forceLanguage) {
             uses = $uses;
           }
-          determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses).then(deferred.resolve, deferred.reject);
+          determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy).then(deferred.resolve, deferred.reject);
         };
         promiseResolved.displayName = 'promiseResolved';
 
@@ -1563,7 +1564,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         // If using link, rerun $translate with linked translationId and return it
         if (translation.substr(0, 2) === '@:') {
 
-          $translate(translation.substr(2), interpolateParams, interpolationId, defaultTranslationText, uses)
+          $translate(translation.substr(2), interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy)
             .then(deferred.resolve, deferred.reject);
         } else {
           //
