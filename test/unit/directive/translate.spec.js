@@ -559,6 +559,33 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('translate-sanitize-strategy extension', function () {
+
+    var $rootScope, $compile, element;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      $translateProvider.translations('en', {
+        'hacking' : '{{v}}'
+      });
+
+      $translateProvider.preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$rootScope_, _$compile_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+    }));
+
+    it('should use overridden strategy', function () {
+      element = $compile('<p translate="hacking" translate-values="{v: \'<u>test</u>\'}" translate-sanitize-strategy="\'escaped\'"></p>')($rootScope);
+      $rootScope.$digest();
+      // Verify content is escaped.
+      expect(element.text()).toEqual('<u>test</u>'); // possible because text
+      expect(element.html()).toEqual('&lt;u&gt;test&lt;/u&gt;');
+    });
+  });
+
   describe('translate-compile extension (globally disabled)', function () {
 
     var $rootScope, $compile, element, $translate;

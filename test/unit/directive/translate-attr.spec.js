@@ -172,5 +172,42 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('translate-sanitize-strategy', function () {
+      it('should sanitize with default strategy', function () {
+        $rootScope.attributes = {'attr' : 'with_value'};
+        $rootScope.values = {'value' : '<b>test</b>'};
+
+        element = $compile('<div translate-attr="attributes" translate-values="values" />')($rootScope);
+
+        $rootScope.$digest();
+        expect(element.attr('attr')).toEqual('This is <b>test</b>');
+      });
+
+      it('should use overridden strategy', function () {
+        $rootScope.attributes = {'attr' : 'with_value'};
+        $rootScope.values = {'value' : '<b>test</b>'};
+        $rootScope.strategy = 'escaped';
+
+        element = $compile('<div translate-attr="attributes" translate-values="values" translate-sanitize-strategy="strategy" />')($rootScope);
+
+        $rootScope.$digest();
+        expect(element.attr('attr')).toEqual('This is &lt;b&gt;test&lt;/b&gt;');
+      });
+
+      it('should support changed strategy', function () {
+        $rootScope.attributes = {'attr' : 'with_value'};
+        $rootScope.values = {'value' : '<b>test</b>'};
+        $rootScope.strategy = 'escaped';
+
+        element = $compile('<div translate-attr="attributes" translate-values="values" translate-sanitize-strategy="strategy" />')($rootScope);
+
+        $rootScope.$digest();
+        expect(element.attr('attr')).toEqual('This is &lt;b&gt;test&lt;/b&gt;');
+
+        $rootScope.strategy = null;
+        $rootScope.$digest();
+        expect(element.attr('attr')).toEqual('This is <b>test</b>');
+      });
+    });
   });
 });
