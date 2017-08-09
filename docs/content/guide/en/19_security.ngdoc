@@ -20,8 +20,10 @@ At the moment, following strategies are built-in:
 * `escape`: escapes HTML in the translation
 * `sanitizeParameters`: sanitizes HTML in the values of the interpolation parameters using `$sanitize`
 * `escapeParameters`: escapes HTML in the values of the interpolation parameters
+* `sce`: wraps HTML in [$sce.trustAsHtml(value)](https://docs.angularjs.org/api/ng/service/$sce#trustAsHtml)
+* `sceParameters`: wraps HTML in the values of the interpolation parameters in [$sce.trustAsHtml(value)](https://docs.angularjs.org/api/ng/service/$sce#trustAsHtml)
 
-**Currently there is an issue with the sanitize mode, it will double encode UTF-8 characters or special characters. Recommendation: use the 'escape' strategy, until this is resolved. ** 
+**Currently there is an [issue](https://github.com/angular-translate/angular-translate/issues/1101) with the sanitize mode, it will double encode UTF-8 characters or special characters. Recommendation: use the 'escape' strategy, until this is resolved. ** 
 
 Additionally, there are this defaults only valid for version 2:
 * `null`: nothing, unsecure default (will be removed in 3.0)
@@ -151,6 +153,66 @@ as long as no strategy has been chosen explicitly.
         $translateProvider.preferredLanguage('en');
         // Enable escaping of HTML
         $translateProvider.useSanitizeValueStrategy('sanitize');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Sce
+
+<doc:example module="myApp_sce">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: 'Hello {{username}}!',
+      };
+
+      var app = angular.module('myApp_sce', ['pascalprecht.translate', 'ngSanitize']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+        // Wrap HTML in $sce.trustAsHtml(value)
+        $translateProvider.useSanitizeValueStrategy('sce');
+      }]);
+
+      app.controller('Ctrl', ['$scope', function ($scope) {
+
+      }]);
+    </script>
+    <div ng-controller="Ctrl">
+      <p>{{ 'HEADLINE' | translate }}</p>
+      <p translate="PARAGRAPH" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+    </div>
+  </doc:source>
+</doc:example>
+
+### Sce (parameters only)
+
+<doc:example module="myApp_sce_params">
+  <doc:source>
+    <script>
+      var translations = {
+        HEADLINE: 'XSS possible!',
+        PARAGRAPH: '<span style=\'color:green\'>Hello</span> {{username}}!',
+      };
+
+      var app = angular.module('myApp_sce_params', ['pascalprecht.translate']);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', translations);
+        $translateProvider.preferredLanguage('en');
+        // Wrap HTML in parameters in $sce.trustAsHtml(value)
+        $translateProvider.useSanitizeValueStrategy('sceParameters');
       }]);
 
       app.controller('Ctrl', ['$scope', function ($scope) {
