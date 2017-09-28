@@ -161,8 +161,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     }
 
     // Check for an exact match in our list of available keys
-    if (indexOf(avail, locale) > -1) {
-      return preferred;
+    i = indexOf(avail, locale);
+    if (i > -1) {
+      return $availableLanguageKeys[i];
     }
 
     if ($languageKeyAliases) {
