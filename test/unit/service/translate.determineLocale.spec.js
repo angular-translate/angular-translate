@@ -133,6 +133,35 @@ describe('pascalprecht.translate', function () {
         });
       });
 
+      describe('with locale negotiation and lower-case preferred language and canonical form avaliable language', function () {
+
+        beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+          $translateProvider
+            .translations('en_UK', {FOO : 'bar'})
+            .registerAvailableLanguageKeys(['en_UK'])
+            .determinePreferredLanguage(function () {
+              // mocking
+              // Work's like `window.navigator.lang = 'en_uk'`
+              var nav = {
+                language : 'en_uk'
+              };
+              return ((
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
+              ) || '').split('-').join('_');
+            });
+        }));
+
+        it('should respect casing in language map', function () {
+          inject(function ($translate, $q, $rootScope) {
+            var lang = $translate.use();
+            expect(lang).toEqual('en_UK');
+          });
+        });
+      });
+
       describe('with locale negotiation w/o aliases', function () {
 
         var translateProvider;
