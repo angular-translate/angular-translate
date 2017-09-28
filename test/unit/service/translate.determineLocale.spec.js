@@ -197,6 +197,44 @@ describe('pascalprecht.translate', function () {
         });
       });
 
+      describe('with locale negotiation and mix-case navigation language with wildcard language map', function () {
+        beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+          $translateProvider
+            .translations('en_UK', {FOO : 'bar'})
+            .translations('fl_B1', {FOO : 'B1'})
+            .translations('fl_B2', {FOO : 'B2'})
+            .translations('fl_B3', {FOO : 'B3'})
+            .translations('fl_B4', {FOO : 'B4'})
+            .registerAvailableLanguageKeys(['en_UK', 'fl_B1', 'fl_B2', 'fl_B3', 'fl_B4'], {
+              'en_*' : 'en_UK',
+              'eN_*' : 'fl_B1',
+              'En_*' : 'fl_B2',
+              'EN_*' : 'fl_B3',
+              '*'    : 'fl_B4'
+            })
+            .determinePreferredLanguage(function () {
+              // mocking
+              // Work's like `window.navigator.lang = 'en_US'`
+              var nav = {
+                language : 'EN_us'
+              };
+              return ((
+                nav.language ||
+                nav.browserLanguage ||
+                nav.systemLanguage ||
+                nav.userLanguage
+              ) || '').split('-').join('_');
+            });
+        }));
+
+        it('should match first part of wildcard case insensitive', function () {
+          inject(function ($translate, $q, $rootScope) {
+            var lang = $translate.use();
+            expect(lang).toEqual('en_UK');
+          });
+        });
+      });
+
       describe('using resolver "default"', function () {
         describe('should resolve to en-US to en_US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
