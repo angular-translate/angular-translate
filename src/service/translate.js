@@ -146,18 +146,31 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     return this.toString().replace(/^\s+|\s+$/g, '');
   };
 
+  /**
+   * @name lowercase
+   * @private
+   *
+   * @description
+   * Return the lowercase string only if the type is string
+   *
+   * @returns {string} The string all in lowercase
+   */
+  var lowercase = function (string) {
+    return angular.isString(string) ? string.toLowerCase() : string;
+  };
+
   var negotiateLocale = function (preferred) {
     if (!preferred) {
       return;
     }
 
     var avail = [],
-      locale = angular.lowercase(preferred),
+      locale = lowercase(preferred),
       i = 0,
       n = $availableLanguageKeys.length;
 
     for (; i < n; i++) {
-      avail.push(angular.lowercase($availableLanguageKeys[i]));
+      avail.push(lowercase($availableLanguageKeys[i]));
     }
 
     // Check for an exact match in our list of available keys
@@ -172,14 +185,14 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         if ($languageKeyAliases.hasOwnProperty(langKeyAlias)) {
           var hasWildcardKey = false;
           var hasExactKey = Object.prototype.hasOwnProperty.call($languageKeyAliases, langKeyAlias) &&
-            angular.lowercase(langKeyAlias) === angular.lowercase(preferred);
+            lowercase(langKeyAlias) === lowercase(preferred);
 
           if (langKeyAlias.slice(-1) === '*') {
-            hasWildcardKey = angular.lowercase(langKeyAlias.slice(0, -1)) === angular.lowercase(preferred.slice(0, langKeyAlias.length - 1));
+            hasWildcardKey = lowercase(langKeyAlias.slice(0, -1)) === lowercase(preferred.slice(0, langKeyAlias.length - 1));
           }
           if (hasExactKey || hasWildcardKey) {
             alias = $languageKeyAliases[langKeyAlias];
-            if (indexOf(avail, angular.lowercase(alias)) > -1) {
+            if (indexOf(avail, lowercase(alias)) > -1) {
               return alias;
             }
           }
@@ -190,7 +203,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     // Check for a language code without region
     var parts = preferred.split('_');
 
-    if (parts.length > 1 && indexOf(avail, angular.lowercase(parts[0])) > -1) {
+    if (parts.length > 1 && indexOf(avail, lowercase(parts[0])) > -1) {
       return parts[0];
     }
 
