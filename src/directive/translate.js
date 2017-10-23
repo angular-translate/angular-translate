@@ -2,9 +2,9 @@ angular.module('pascalprecht.translate')
 /**
  * @ngdoc directive
  * @name pascalprecht.translate.directive:translate
- * @requires $interpolate, 
- * @requires $compile, 
- * @requires $parse, 
+ * @requires $interpolate,
+ * @requires $compile,
+ * @requires $parse,
  * @requires $rootScope
  * @restrict AE
  *
@@ -112,6 +112,19 @@ function translateDirective($translate, $interpolate, $compile, $parse, $rootSco
     return this.toString().replace(/^\s+|\s+$/g, '');
   };
 
+  /**
+   * @name lowercase
+   * @private
+   *
+   * @description
+   * Return the lowercase string only if the type is string
+   *
+   * @returns {string} The string all in lowercase
+   */
+  var lowercase = function (string) {
+    return angular.isString(string) ? string.toLowerCase() : string;
+  };
+
   return {
     restrict: 'AE',
     scope: true,
@@ -149,7 +162,7 @@ function translateDirective($translate, $interpolate, $compile, $parse, $rootSco
           if (translateValueExist) {
             for (var attr in tAttr) {
               if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
-                var attributeName = angular.lowercase(attr.substr(14, 1)) + attr.substr(15);
+                var attributeName = lowercase(attr.substr(14, 1)) + attr.substr(15);
                 interpolateParams[attributeName] = tAttr[attr];
               }
             }
@@ -250,7 +263,7 @@ function translateDirective($translate, $interpolate, $compile, $parse, $rootSco
         if (translateValueExist) {
           var observeValueAttribute = function (attrName) {
             iAttr.$observe(attrName, function (value) {
-              var attributeName = angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15);
+              var attributeName = lowercase(attrName.substr(14, 1)) + attrName.substr(15);
               scope.interpolateParams[attributeName] = value;
             });
           };
