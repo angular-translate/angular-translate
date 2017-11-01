@@ -1140,6 +1140,80 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('$translate() used with a forceLanguage', function () {
+
+    var fastButRequestedSecond = 'en_US',
+      slowButRequestedFirst = 'ab_CD',
+      expectedTranslation = 'Hello World',
+      notExpectedTranslation = 'foo bar bork bork bork',
+      fastRequestTime = 100,
+      firstLanguageResponded = false,
+      secondLanguageResponded = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      enableUnhandledRejectionTracing($provide);
+
+      $translateProvider.useLoader('customLoader');
+
+      $translateProvider.preferredLanguage(slowButRequestedFirst);
+
+      $provide.service('customLoader', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+          var locale = options.key;
+
+          if (locale === fastButRequestedSecond) {
+            $timeout(function () {
+              secondLanguageResponded = true;
+              // t2
+              deferred.resolve({
+                greeting : expectedTranslation
+              });
+            }, fastRequestTime);
+          }
+
+          if (locale === slowButRequestedFirst) {
+            $timeout(function () {
+              firstLanguageResponded = true;
+              // t3
+              deferred.resolve({
+                greeting : notExpectedTranslation
+              });
+            }, fastRequestTime * 2);
+          }
+
+          return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate;
+    var data = {};
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope) {
+      $translate = _$translate_;
+      $timeout.flush();
+      $rootScope.$digest();
+    }));
+
+    it('should wait for this', inject(function ($rootScope, $q, $timeout) {
+
+      var value;
+
+      $translate('greeting', undefined, undefined, undefined, fastButRequestedSecond).then(function (translation) {
+        console.log('Translation!!!', translation);
+        value = translation;
+      });
+
+      $timeout.flush();
+      $rootScope.$digest();
+
+      $rootScope.$digest();
+      expect(value).toEqual(expectedTranslation);
+    }));
+  });
+
   describe('$translate#storageKey()', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
@@ -1210,8 +1284,8 @@ describe('pascalprecht.translate', function () {
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', {'TRANSLATION__ID' : 'bazinga', 'NULL' : 'yowza'})
-          .preferredLanguage('de_DE')
-          .fallbackLanguage('en_EN');
+          .fallbackLanguage('en_EN')
+          .preferredLanguage('de_DE');
       }));
 
       var $translate, $q, $rootScope;
@@ -1270,8 +1344,8 @@ describe('pascalprecht.translate', function () {
         $translateProvider
           .translations('de_DE', translationMock)
           .translations('en_EN', {'FALLBACK' : ''})
-          .preferredLanguage('de_DE')
-          .fallbackLanguage('en_EN');
+          .fallbackLanguage('en_EN')
+          .preferredLanguage('de_DE');
       }));
 
       var $translate, $q, $rootScope;
@@ -1456,8 +1530,8 @@ describe('pascalprecht.translate', function () {
         enableUnhandledRejectionTracing($provide);
         $translateProvider
           .useLoader('customLoader')
-          .preferredLanguage('en_EN')
-          .fallbackLanguage(['de_DE']);
+          .fallbackLanguage(['de_DE'])
+          .preferredLanguage('en_EN');
 
         $provide.factory('customLoader', ['$q', function ($q) {
           return function (options) {
@@ -1850,8 +1924,8 @@ describe('pascalprecht.translate', function () {
           'FOO' : 'Irgendwas',
           'BAR' : 'yupp'
         })
-        .preferredLanguage('en')
-        .fallbackLanguage('de');
+        .fallbackLanguage('de')
+        .preferredLanguage('en');
     }));
 
     var $translate, $rootScope, $q;
@@ -2410,8 +2484,8 @@ describe('pascalprecht.translate', function () {
           'BARE' : 'bare'
         })
         .useSanitizeValueStrategy('escape')
-        .preferredLanguage('de')
-        .fallbackLanguage('en');
+        .fallbackLanguage('en')
+        .preferredLanguage('de');
 
       $provide.factory('customLoader', function ($q, $timeout) {
         return function (options) {
@@ -2487,8 +2561,8 @@ describe('pascalprecht.translate', function () {
         .translations('de', {
           'FOO2' : 'bar2'
         })
-        .preferredLanguage('de')
         .fallbackLanguage('en')
+        .preferredLanguage('de')
         .translationNotFoundIndicator('-+-+');
 
       $provide.factory('customLoader', function ($q, $timeout) {
@@ -2900,8 +2974,8 @@ describe('pascalprecht.translate', function () {
         //.translations('de_DE', translationMock)
           .translations('de_DE', {'ONLY_GERMAN' : 'DE_TRANS', 'BOTH' : 'BOTH_DE'})
           .translations('en_EN', {'TRANSLATION__ID' : 'bazinga', 'BOTH' : 'BOTH_EN'})
-          .preferredLanguage('de_DE')
           .fallbackLanguage('en_EN')
+          .preferredLanguage('de_DE')
           .postProcess(function (translationId, translation, interpolatedTranslation, params, lang) {
             return translationId + ',' + lang + ',' + (interpolatedTranslation ? interpolatedTranslation : translation);
           });
@@ -3086,8 +3160,8 @@ describe('pascalprecht.translate', function () {
           'FOO' : 'foo'
         })
         .useSanitizeValueStrategy('sce')
-        .preferredLanguage('de')
-        .fallbackLanguage('en');
+        .fallbackLanguage('en')
+        .preferredLanguage('de');
     }));
 
     it('should handle TrustedValueHolderType inner-results', inject(function ($translate) {

@@ -538,6 +538,22 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    it('should parse url template addPart argument', function () {
+      inject(function ($translatePartialLoader, $httpBackend) {
+        $httpBackend.expectGET('/x/locales/part-en.json').respond(200, '{}');
+
+        $translatePartialLoader.addPart('part-x', undefined, '/x/locales/part-{lang}.json');
+        $translatePartialLoader({
+          key : 'en',
+          urlTemplate: '/locales/{part}-{lang}.json'
+        });
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+    });
+
     it('should support function in url template', function () {
       inject(function ($translatePartialLoader, $httpBackend) {
         var getUrlTemplate = jasmine.createSpy('getUrlTemplate')

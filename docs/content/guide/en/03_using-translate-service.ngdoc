@@ -81,9 +81,25 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 }]);
 </pre>
 
-However, the service will always return an object containing translations -- regardless whether
+However, the service will always return a `Promise` containing translations -- regardless whether
 a translation (or even all of them) has failed. When requesting multiple translations
 in one request, it is up to you to deal with the result.
+
+## $translate.instant() or: the non-asynchronous way without promises
+Ideally the service should always be used with `$translate(…)` which returns a promise. This
+variant should be preferred always as possible, because the specific code mostly cannot be
+sure that no loader will intercept the request, no additional waits have to be awared of, and so on.
+
+However, sometimes a instant and synchronous response is required. Best example is the filter:
+The filter in AngularJS is a pure function only and have to return with the result. No promise,
+no callback or something else in the future. Because of that, there exists a synchronous variant
+calling `$translate.instant(…)`. It has a similiar request interface, but will return always the
+result directly without wrapped into a promise.
+
+But that also means that `$translate.instant()` comes with some disadvantages compared with `$translate`:
+
+- no error/missing information: Because the result is only a string, there is no difference between "found" and "not found".
+- no await, non deterministic: Because the result is instant, there is no guarantee the result is correct. Maybe the loader is still loading or processing the translations. The asynchronous `$translate()` would wait instead.
 
 ## angular-translate library version information
 As it may be useful for some "About" information in your application, we provide you a convenience
