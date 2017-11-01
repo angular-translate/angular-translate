@@ -17,11 +17,11 @@
     "node": "*"
   },
   "devEngines": {
-    "node": ">=6.11",
-    "npm": ">=3"
+    "node": ">=8.9",
+    "npm": ">=5"
   },
   "scripts": {
-    "prepublish": "bower install",
+    "prepare": "bower install",
     "check-env": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
     "shipit": "npm run-script -s check-env && bower install && bower update && grunt prepare-release",
     "lint": "grunt lint",
