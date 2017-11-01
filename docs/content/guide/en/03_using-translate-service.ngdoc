@@ -81,7 +81,7 @@ app.controller('Ctrl', ['$scope', '$translate', function ($scope, $translate) {
 }]);
 </pre>
 
-However, the service will always return an object containing translations -- regardless whether
+However, the service will always return a `Promise` containing translations -- regardless whether
 a translation (or even all of them) has failed. When requesting multiple translations
 in one request, it is up to you to deal with the result.
 
