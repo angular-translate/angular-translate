@@ -1140,6 +1140,80 @@ describe('pascalprecht.translate', function () {
     });
   });
 
+  describe('$translate() used with a forceLanguage', function () {
+
+    var fastButRequestedSecond = 'en_US',
+      slowButRequestedFirst = 'ab_CD',
+      expectedTranslation = 'Hello World',
+      notExpectedTranslation = 'foo bar bork bork bork',
+      fastRequestTime = 100,
+      firstLanguageResponded = false,
+      secondLanguageResponded = false;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide) {
+
+      enableUnhandledRejectionTracing($provide);
+
+      $translateProvider.useLoader('customLoader');
+
+      $translateProvider.preferredLanguage(slowButRequestedFirst);
+
+      $provide.service('customLoader', function ($q, $timeout) {
+        return function (options) {
+          var deferred = $q.defer();
+          var locale = options.key;
+
+          if (locale === fastButRequestedSecond) {
+            $timeout(function () {
+              secondLanguageResponded = true;
+              // t2
+              deferred.resolve({
+                greeting : expectedTranslation
+              });
+            }, fastRequestTime);
+          }
+
+          if (locale === slowButRequestedFirst) {
+            $timeout(function () {
+              firstLanguageResponded = true;
+              // t3
+              deferred.resolve({
+                greeting : notExpectedTranslation
+              });
+            }, fastRequestTime * 2);
+          }
+
+          return deferred.promise;
+        };
+      });
+    }));
+
+    var $translate;
+    var data = {};
+
+    beforeEach(inject(function ($timeout, _$translate_, $rootScope) {
+      $translate = _$translate_;
+      $timeout.flush();
+      $rootScope.$digest();
+    }));
+
+    it('should wait for this', inject(function ($rootScope, $q, $timeout) {
+
+      var value;
+
+      $translate('greeting', undefined, undefined, undefined, fastButRequestedSecond).then(function (translation) {
+        console.log('Translation!!!', translation);
+        value = translation;
+      });
+
+      $timeout.flush();
+      $rootScope.$digest();
+
+      $rootScope.$digest();
+      expect(value).toEqual(expectedTranslation);
+    }));
+  });
+
   describe('$translate#storageKey()', function () {
 
     beforeEach(module('pascalprecht.translate', function ($translateProvider) {
