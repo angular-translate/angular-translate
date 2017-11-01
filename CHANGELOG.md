@@ -1,3 +1,23 @@
+<a name="2.16.0"></a>
+# [2.16.0](https://github.com/angular-translate/angular-translate/compare/2.15.2...2.16.0) (2017-11-01)
+
+
+### Bug Fixes
+
+* Stop using Angular.js lowercase internal method ([efc91c3](https://github.com/angular-translate/angular-translate/commit/efc91c3)), closes [#1797](https://github.com/angular-translate/angular-translate/issues/1797)
+* **service:** fix invalid waiting for `forceLanguage` ([0c1a266](https://github.com/angular-translate/angular-translate/commit/0c1a266)), closes [#1770](https://github.com/angular-translate/angular-translate/issues/1770)
+* **service:** ignore case when matching wildcards in available languages map ([7f25843](https://github.com/angular-translate/angular-translate/commit/7f25843))
+* **service:** respect case in available languages ([8fb6f5d](https://github.com/angular-translate/angular-translate/commit/8fb6f5d))
+
+
+### Features
+
+* **directive:** introduce attr translate-sanitize-strategy ([41c7e1f](https://github.com/angular-translate/angular-translate/commit/41c7e1f))
+* **loader-partial:** addPart specific urlTemplate override ([633fbc9](https://github.com/angular-translate/angular-translate/commit/633fbc9))
+* **service:** add sanitizeStrategy to $translate ([4a2c3ab](https://github.com/angular-translate/angular-translate/commit/4a2c3ab))
+
+
+
 <a name="2.15.2"></a>
 ## [2.15.2](https://github.com/angular-translate/angular-translate/compare/2.15.1...v2.15.2) (2017-06-22)
 
