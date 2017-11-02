@@ -1945,6 +1945,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         useLanguage(key);
       }
 
+      deferred.promise.then(function (lang) { return $translate.refresh().then(function () { return lang; }); });
+
       return deferred.promise;
     };
 
