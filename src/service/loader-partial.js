@@ -299,8 +299,8 @@ function $translatePartialLoader() {
    *
    * @throws {TypeError}
    */
-  this.$get = ['$rootScope', '$injector', '$q', '$http',
-    function ($rootScope, $injector, $q, $http) {
+  this.$get = ['$rootScope', '$injector', '$q', '$http', '$log',
+    function ($rootScope, $injector, $q, $http, $log) {
 
       /**
        * @ngdoc event
@@ -344,8 +344,31 @@ function $translatePartialLoader() {
           part.urlTemplate = part.urlTemplate || options.urlTemplate;
         });
 
+        // workaround for #1781
+        var structureHasBeenChangedWhileLoading = false;
+        var dirtyCheckEventCloser = $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
+          structureHasBeenChangedWhileLoading = true;
+        });
+
         return $q.all(loaders)
           .then(function () {
+            dirtyCheckEventCloser();
+            if (structureHasBeenChangedWhileLoading) {
+              if (!options.__retries) {
+                // the part structure has been changed while loading (the origin ones)
+                // this can happen if an addPart/removePart has been invoked right after a $translate.use(lang)
+                // TODO maybe we can optimize this with the actual list of missing parts
+                options.__retries = (options.__retries || 0) + 1;
+                return service(options);
+              } else {
+                // the part structure has been changed again while loading (retried one)
+                // because this could an infinite loop, this will not load another one again
+                $log.warn('The partial loader has detected a multiple structure change (with addPort/removePart) ' +
+                  'while loading translations. You should consider using promises of $translate.use(lang) and ' +
+                  '$translate.refresh(). Also parts should be added/removed right before an explicit refresh ' +
+                  'if possible.');
+              }
+            }
             var table = {};
             prioritizedParts = getPrioritizedParts();
             angular.forEach(prioritizedParts, function (part) {
@@ -353,6 +376,7 @@ function $translatePartialLoader() {
             });
             return table;
           }, function () {
+            dirtyCheckEventCloser();
             return $q.reject(options.key);
           });
       };
