@@ -1,3 +1,18 @@
+<a name="2.17.0"></a>
+# [2.17.0](https://github.com/angular-translate/angular-translate/compare/2.16.0...2.17.0) (2017-12-21)
+
+
+### Bug Fixes
+
+* **partial loader:** add check for added/removed part while refreshing ([3520418](https://github.com/angular-translate/angular-translate/commit/3520418)), closes [#1781](https://github.com/angular-translate/angular-translate/issues/1781)
+
+
+### Features
+
+* **service:** format bcp47 with script and language only correctly ([6c3b63e](https://github.com/angular-translate/angular-translate/commit/6c3b63e))
+
+
+
 <a name="2.16.0"></a>
 # [2.16.0](https://github.com/angular-translate/angular-translate/compare/2.15.2...2.16.0) (2017-11-01)
 
