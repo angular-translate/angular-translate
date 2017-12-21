@@ -373,6 +373,20 @@ describe('pascalprecht.translate', function () {
       });
 
       describe('using resolver "bcp47"', function () {
+        describe('should resolve to EN to en', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'EN';
+            };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('en');
+          }));
+        });
+
         describe('should resolve to en-US to en-US', function () {
           beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
             pascalprechtTranslateOverrider.getLocale = function () {
@@ -426,6 +440,34 @@ describe('pascalprecht.translate', function () {
           }));
           it('test', inject(function ($window, $translate) {
             expect($translate.use()).toEqual('en');
+          }));
+        });
+
+        describe('should resolve script without region', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'sr-latn';
+            };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('sr-Latn');
+          }));
+        });
+
+        describe('should resolve script with region', function () {
+          beforeEach(module('pascalprecht.translate', function ($translateProvider, $provide, pascalprechtTranslateOverrider) {
+            pascalprechtTranslateOverrider.getLocale = function () {
+              return 'sr-latn-rs';
+            };
+            $translateProvider
+              .uniformLanguageTag('bcp47')
+              .determinePreferredLanguage();
+          }));
+          it('test', inject(function ($window, $translate) {
+            expect($translate.use()).toEqual('sr-Latn-RS');
           }));
         });
       });
