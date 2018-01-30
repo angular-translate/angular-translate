@@ -60,7 +60,7 @@ function translateNamespaceDirective() {
     compile: function () {
       return {
         pre: function (scope, iElement, iAttrs) {
-          scope.translateNamespace = getTranslateNamespace(scope);
+          scope.translateNamespace = _getTranslateNamespace(scope);
 
           if (scope.translateNamespace && iAttrs.translateNamespace.charAt(0) === '.') {
             scope.translateNamespace += iAttrs.translateNamespace;
@@ -79,13 +79,13 @@ function translateNamespaceDirective() {
  * @param scope
  * @returns {string}
  */
-function getTranslateNamespace(scope) {
+function _getTranslateNamespace(scope) {
   'use strict';
   if (scope.translateNamespace) {
     return scope.translateNamespace;
   }
   if (scope.$parent) {
-    return getTranslateNamespace(scope.$parent);
+    return _getTranslateNamespace(scope.$parent);
   }
 }
 
