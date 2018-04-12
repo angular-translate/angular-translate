@@ -6,7 +6,7 @@ angular.module('pascalprecht.translate')
  *
  * @description
  * Translates given translation id either through attribute or DOM content.
- * Internally it uses `translate` filter to translate translation id. It possible to
+ * Internally it uses `translate` filter to translate translation id. It is possible to
  * pass an optional `translate-values` object literal as string into translation id.
  *
  * @param {string=} translate namespace name which could be either string or interpolated string.
