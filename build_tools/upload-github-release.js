@@ -29,7 +29,7 @@ const getChangelog = (changelogFilePath, forVersion) => {
 const buildZipArchive = ({lookupDir, archiveFilePath}) => {
   return new Promise((resolve) => {
     let archive = new AdmZip();
-    archive.addLocalFolder(lookupDir, '.');
+    archive.addLocalFolder(lookupDir, 'angular-translate');
     archive.writeZip(archiveFilePath);
     resolve(archiveFilePath);
   });
