@@ -1,3 +1,18 @@
+<a name="2.17.1"></a>
+## [2.17.1](https://github.com/angular-translate/angular-translate/compare/2.17.0...2.17.1) (2018-04-15)
+
+
+### Bug Fixes
+
+* **release:** fix zip artifacts on GitHub won't have `.` ([adb982f](https://github.com/angular-translate/angular-translate/commit/adb982f)), closes [#1840](https://github.com/angular-translate/angular-translate/issues/1840) [#1835](https://github.com/angular-translate/angular-translate/issues/1835)
+
+
+### Features
+
+* support google closure compiler ([fe47ae7](https://github.com/angular-translate/angular-translate/commit/fe47ae7))
+
+
+
 <a name="2.17.0"></a>
 # [2.17.0](https://github.com/angular-translate/angular-translate/compare/2.16.0...2.17.0) (2017-12-21)
 
