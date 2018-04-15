@@ -32,7 +32,7 @@ bower install --save-dev angular-translate
 For more information please visit [chapter "Installation" at our website](https://angular-translate.github.io/docs/#/guide/00_installation).
 
 ## Get started
-Check out out [chapter "Getting started" at out website](https://angular-translate.github.io/docs/#/guide/02_getting-started).
+Check out the [chapter "Getting started" at our website](https://angular-translate.github.io/docs/#/guide/02_getting-started).
 
 ## Get support
 Most of the time, we are getting support questions of invalid configurations. We encourage everyone to have a look at our [documentation website](https://angular-translate.github.io/docs/#/guide). If you think the documentation is not correct (bug) or should be optimized (enhancement) please file an issue.
