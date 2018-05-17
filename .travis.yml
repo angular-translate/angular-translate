@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - "8.9"
+  - "8.11"
 
 addons:
   code_climate:
@@ -24,3 +24,4 @@ env:
   - TEST_SCOPE=angular_1.4.x
   - TEST_SCOPE=angular_1.5.x
   - TEST_SCOPE=angular_1.6.x
+  - TEST_SCOPE=angular_1.7.x
