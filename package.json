@@ -17,7 +17,7 @@
     "node": "*"
   },
   "devEngines": {
-    "node": ">=8.9",
+    "node": ">=8.11",
     "npm": ">=5"
   },
   "scripts": {
