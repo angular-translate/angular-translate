@@ -1,3 +1,13 @@
+<a name="2.18.0"></a>
+# [2.18.0](https://github.com/angular-translate/angular-translate/compare/2.17.1...2.18.0) (2018-05-17)
+
+
+### Features
+
+* add test scope for AngularJS 1.7 ([7a44ddf](https://github.com/angular-translate/angular-translate/commit/7a44ddf))
+
+
+
 <a name="2.17.1"></a>
 ## [2.17.1](https://github.com/angular-translate/angular-translate/compare/2.17.0...2.17.1) (2018-04-15)
 
