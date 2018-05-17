@@ -64,7 +64,7 @@
     "express-session": "^1.15.0",
     "fbjs-scripts": "^0.8.3",
     "grunt": "^1.0.2",
-    "grunt-bower-install-simple": "^1.2.5",
+    "grunt-bower-install-simple": "1.2.4",
     "grunt-bump": "^0.8.0",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
