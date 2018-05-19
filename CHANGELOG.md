@@ -1,3 +1,8 @@
+<a name="2.18.1"></a>
+## [2.18.1](https://github.com/angular-translate/angular-translate/compare/2.18.0...2.18.1) (2018-05-19)
+
+
+
 <a name="2.18.0"></a>
 # [2.18.0](https://github.com/angular-translate/angular-translate/compare/2.17.1...2.18.0) (2018-05-17)
 
