@@ -178,6 +178,9 @@ function $translatePartialLoader() {
    *
    * @param {string} name A name of the part to add
    * @param {int} [priority=0] Sets the load priority of this part.
+   * @param {string|function} urlTemplate Either a string containing an url pattern (with
+   *                                        '{part}' and '{lang}') or a function(part, lang)
+   *                                        returning a string.
    *
    * @returns {object} $translatePartialLoaderProvider, so this method is chainable
    * @throws {TypeError} The method could throw a **TypeError** if you pass the param
