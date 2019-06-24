@@ -12,7 +12,7 @@ next level: **Multi Language Support**.
 
 Of course, it's pretty cool to know how to use the components angular-translate
 provides, but things are getting really interesting when it comes to teaching your
-apps more then just one language (which is actually what this module is for!).
+apps more than just one language (which is actually what this module is for!).
 So let's get started by learning how to add different translation tables at a time!
 
 ## Teaching your app more languages
@@ -53,7 +53,7 @@ doesn't prefer any language until you tell it to do so.
 
 ## Decide which language to use
 
-Since you've now registered more then one translation table, `angular-translate`
+Since you've now registered more than one translation table, `angular-translate`
 has to know which one to use. This is where a new method of `$translateProvider`
 comes in. `preferredLanguage()` tells angular-translate which of the registered
 languages is the one that should be used by default. It expects an argument with
