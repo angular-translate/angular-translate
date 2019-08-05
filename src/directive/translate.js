@@ -181,7 +181,7 @@ function translateDirective($translate, $interpolate, $compile, $parse, $rootSco
           }
 
           if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
-            var iElementText = trim.apply(iElement.text());
+            var iElementText = trim.apply(iElement.text()).replace(/\n/g, ' ');
 
             // Resolve translation id by inner html if required
             var interpolateMatches = iElementText.match(interpolateRegExp);

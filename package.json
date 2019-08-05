@@ -63,7 +63,6 @@
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "fbjs-scripts": "^0.8.3",
-    "fsevents": "^1.2.9",
     "grunt": "^1.0.4",
     "grunt-bower-install-simple": "1.2.4",
     "grunt-bump": "^0.8.0",

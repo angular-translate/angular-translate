@@ -904,4 +904,68 @@ describe('pascalprecht.translate', function () {
       expect(element.html()).toBe('My content');
     });
   });
+
+  describe('handling newlines in interpolation', function () {
+
+    var $compile, $rootScope, element;
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider
+        .translations('en', {
+          'TRANSLATION_ID' : 'foo',
+          'abcfoodef': 'BOGUS?',
+          'foo': 'FOOGUS?'
+        })
+        .preferredLanguage('en');
+    }));
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+    }));
+
+    it('should handle newlines embedded in interpolation expression', function () {
+      $rootScope.translationId = 'TRANSLATION_ID';
+      element = $compile('<div translate>{{\ntranslationId\n}}</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('foo');
+    });
+
+    it('should handle newlines embedded in interpolation expression for translate element', function () {
+      $rootScope.translationId = 'TRANSLATION_ID';
+      element = $compile('<translate>{{\ntranslationId\n}}</translate>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('foo');
+    });
+
+    it('should handle newlines embedded in interpolation expression with surrounding text', function () {
+      $rootScope.translationId = 'TRANSLATION_ID';
+      element = $compile('<div translate>abc{{\ntranslationId\n}}def</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('abcfoodef');
+    });
+
+    it('should handle newlines embedded in and surrounding interpolation expression', function () {
+      $rootScope.translationId = 'TRANSLATION_ID';
+      element = $compile('<div translate>abc\n{{\ntranslationId\n}}\ndef</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('abc foo def');
+    });
+
+    it('should handle newlines embedded in complex interpolation expression', function () {
+      $rootScope.translationId = 'TRANSLATION_ID';
+      $rootScope.var1 = 'TRANSLATION';
+      $rootScope.var2 = 'ID';
+      element = $compile('<div translate>\nabc{{\n   var1 + \n    "_" + var2\n   }}def\n   </div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('abcfoodef');
+    });
+
+    it('should handle newlines embedded in interpolation expression in attribute', function () {
+      $rootScope.translationId = 'TRANSLATION_ID';
+      element = $compile('<div translate="{{\ntranslationId\n}}">...</div>')($rootScope);
+      $rootScope.$digest();
+      expect(element.text()).toBe('foo');
+    });
+  });
 });
