@@ -256,6 +256,10 @@ describe('pascalprecht.translate', function () {
       expect(value).toEqual(translationId);
     });
 
+    it('should throw if id is not a string or array of strings', function () {
+      expect(function () { $translate(undefined); }).toThrowError(TypeError);
+    });
+
     it('should return translation id if translation is null', function () {
       var deferred = $q.defer(),
         promise = deferred.promise,
