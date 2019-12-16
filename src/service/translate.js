@@ -1145,6 +1145,8 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
       // trim off any whitespace
       if (translationId) {
         translationId = trim.apply(translationId);
+      } else {
+        throw new TypeError('translationId must be a not empty string');
       }
 
       var promiseToWaitFor = (function () {
