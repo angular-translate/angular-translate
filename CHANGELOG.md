@@ -1,3 +1,19 @@
+<a name="2.18.2"></a>
+## [2.18.2](https://github.com/angular-translate/angular-translate/compare/2.18.1...2.18.2) (2020-01-04)
+
+
+### Bug Fixes
+
+* **build:** fix build issue ([a14918d](https://github.com/angular-translate/angular-translate/commit/a14918d))
+* Allow line breaks in interpolated expressions. ([70957a3](https://github.com/angular-translate/angular-translate/commit/70957a3)), closes [#1884](https://github.com/angular-translate/angular-translate/issues/1884) [#1824](https://github.com/angular-translate/angular-translate/issues/1824)
+
+
+### Features
+
+* throw TypeError for translationId ([b363e3b](https://github.com/angular-translate/angular-translate/commit/b363e3b))
+
+
+
 <a name="2.18.1"></a>
 ## [2.18.1](https://github.com/angular-translate/angular-translate/compare/2.18.0...2.18.1) (2018-05-19)
 
