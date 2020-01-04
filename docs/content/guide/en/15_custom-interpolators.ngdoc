@@ -50,7 +50,7 @@ logic, so angular-translate can make use of it once our custom interpolation ser
 comes in:
 
 <pre>
-app.factory('customInterpolation', function ($interpolate) {
+app.factory('customInterpolation', function ($interpolate, $translateSanitization) {
 
   var $locale;
 
@@ -65,7 +65,11 @@ app.factory('customInterpolation', function ($interpolate) {
     },
 
     interpolate: function (string, interpolateParams, context, sanitizeStrategy, translationId) {
-      return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
+      string = $translateSanitization.sanitize(string, 'text', sanitizeStrategy);
+      if (interpolateParams) {
+        interpolateParams = $translateSanitization.sanitize(interpolateParams, 'params', sanitizeStrategy);
+      }
+      return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
     }
   };
 });
@@ -79,6 +83,10 @@ Exactly. This is the identifier that is mapped to your service, so angular-trans
 knows which interpolation services to use, when you explicitly override interpolation
 service at runtime. `interpolate()` simply uses Angular's `$interpolate` service.
 In addition it prepends and appends the current locale to the given string.
+
+It is important to remember about [proper sanitazion](#/guide/19_security) before calling Angular's `$interpolate` function. 
+For this purpose you can use `$translateSanitization` service, which utilizes the current sanitation 
+strategy, that is set with `$translateProvider.useSanitizeValueStrategy()` function during config.
 
 ## Using your custom interpolation service
 
@@ -134,7 +142,7 @@ Here' what it looks like:
         };
       }]);
 
-      app.factory('customInterpolation', function ($interpolate) {
+      app.factory('customInterpolation', function ($interpolate, translateSanitization) {
 
         var $locale;
 
@@ -149,7 +157,11 @@ Here' what it looks like:
           },
 
           interpolate: function (string, interpolateParams, sanitizeStrategy) {
-            return $locale + '_' + $interpolate(string)(interpolateParams, sanitizeStrategy) + '_' + $locale;
+            string = $translateSanitization.sanitize(string, 'text', sanitizeStrategy);
+            if (interpolateParams) {
+              interpolateParams = $translateSanitization.sanitize(interpolateParams, 'params', sanitizeStrategy);
+            }
+            return $locale + '_' + $interpolate(string)(interpolateParams) + '_' + $locale;
           }
         };
       });

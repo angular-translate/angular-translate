@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const AdmZip = require('adm-zip');
-const TarGz = require('tar.gz');
+const Tar = require('tar');
 const publishRelease = require('publish-release');
 const inquirer = require('inquirer');
 
@@ -37,16 +37,13 @@ const buildZipArchive = ({lookupDir, archiveFilePath}) => {
 
 // Build archive type .tar.gz
 const buildTarGzArchive = ({lookupDir, archiveFilePath}) => {
-  let gzipOptions = {
-    level : 9,
-    memLevel : 9,
-  };
-  let tarOptions = {
-    fromBase : true
-  };
-  return new TarGz(gzipOptions, tarOptions)
-    .compress(lookupDir, archiveFilePath)
-    .then(() => archiveFilePath);
+  return Tar.c({
+      gzip : true,
+      file : archiveFilePath,
+      cwd : path.normalize(path.join(__dirname, '..')),
+    },
+    [lookupDir])
+    .then(() => archiveFilePath)
 };
 
 // Upload and apply release
@@ -96,7 +93,7 @@ Promise.all([
   getChangelog(changelogFilePath, pkg.version),
   Promise.all([
     buildZipArchive({lookupDir : dirDir, archiveFilePath : `${tmpDir}/${pkg.name}-${pkg.version}.zip`}),
-    buildTarGzArchive({lookupDir : dirDir, archiveFilePath : `${tmpDir}/${pkg.name}-${pkg.version}.tar.gz`}),
+    buildTarGzArchive({lookupDir : 'dist', archiveFilePath : `${tmpDir}/${pkg.name}-${pkg.version}.tar.gz`}),
   ])
 ])
   .then(([changelog, assets]) => {
