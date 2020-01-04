@@ -17,8 +17,8 @@
     "node": "*"
   },
   "devEngines": {
-    "node": ">=10.16",
-    "npm": ">=6.9"
+    "node": ">=12.14",
+    "npm": ">=6.13"
   },
   "scripts": {
     "prepare": "bower install",
