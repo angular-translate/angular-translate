@@ -1,7 +1,11 @@
 sudo: false
 language: node_js
+
 node_js:
   - "10.16"
+
+services:
+  - xvfb
 
 addons:
   code_climate:
@@ -12,7 +16,6 @@ before_install:
 
 before_script:
   - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
 
 after_script:
   - if [ "$TEST_SCOPE" == "" ]; then cat build/coverage/report/lcov.info | codeclimate; fi
