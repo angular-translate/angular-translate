@@ -5,7 +5,7 @@
   "main": "dist/angular-translate.js",
   "repository": {
     "type": "git",
-    "url": "http://github.com/angular-translate/angular-translate"
+    "url": "http://github.com/aquicore/angular-translate"
   },
   "keywords": [
     "angular-translate",
