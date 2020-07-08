@@ -28,3 +28,4 @@ env:
   - TEST_SCOPE=angular_1.5.x
   - TEST_SCOPE=angular_1.6.x
   - TEST_SCOPE=angular_1.7.x
+  - TEST_SCOPE=angular_1.8.x
