@@ -2,7 +2,7 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/angular-translate/angular-translate.svg)](https://greenkeeper.io/)
 
-![Bower](https://img.shields.io/bower/v/angular-translate.svg) [![NPM](https://img.shields.io/npm/v/angular-translate.svg)](https://www.npmjs.com/package/angular-translate) [![cdnjs](https://img.shields.io/cdnjs/v/angular-translate.svg)](https://cdnjs.com/libraries/angular-translate) [![Build Status](https://img.shields.io/travis/angular-translate/angular-translate.svg)](https://travis-ci.org/angular-translate/angular-translate) ![License](https://img.shields.io/npm/l/angular-translate.svg)
+![Bower](https://img.shields.io/bower/v/angular-translate.svg) [![NPM](https://img.shields.io/npm/v/angular-translate.svg)](https://www.npmjs.com/package/angular-translate) [![cdnjs](https://img.shields.io/cdnjs/v/angular-translate.svg)](https://cdnjs.com/libraries/angular-translate) ![CI](https://github.com/angular-translate/angular-translate/workflows/CI/badge.svg?branch=canary) ![License](https://img.shields.io/npm/l/angular-translate.svg)
 
 This is the repository for angular-translate.
 
@@ -13,8 +13,8 @@ For more information about the angular-translate project, please visit our [webs
 ## Status
 | Branch        | Status         |
 | ------------- |:-------------:|
-| master        | [![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=master)](https://travis-ci.org/angular-translate/angular-translate) |
-| canary        |[![Build Status](https://travis-ci.org/angular-translate/angular-translate.svg?branch=canary)](https://travis-ci.org/angular-translate/angular-translate)     |
+| master        | ![CI](https://github.com/angular-translate/angular-translate/workflows/CI/badge.svg?branch=master) |
+| canary        | ![CI](https://github.com/angular-translate/angular-translate/workflows/CI/badge.svg?branch=canary)     |
 
 ## Install
 We strongly *recommend* using a package manager like NPM and Bower, or even variants like Yarn or jspm.
