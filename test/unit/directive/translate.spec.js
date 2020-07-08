@@ -478,13 +478,24 @@ describe('pascalprecht.translate', function () {
       expect(element.children().text()).toEqual('hello my name is Pascal');
     });
 
-    it('should not translate the content if the content is empty and an attribute is being translated', function () {
-      var markup = '<a href="#" translate translate-attr-title="SIMPLE">\n\t<i class="fa fa-home" />\n</a>';
-      element = $compile(markup)($rootScope);
-      $rootScope.$digest();
-      expect(element.attr('title')).toEqual('Hello');
-      expect(element.html().trim()).toEqual('<i class="fa fa-home"></i>');
-    });
+
+    if (angular.version.major === 1 && angular.version.minor <= 7) {
+      it('should not translate the content if the content is empty and an attribute is being translated', function () {
+        var markup = '<a href="#" translate translate-attr-title="SIMPLE">\n\t<i class="fa fa-home" />\n</a>';
+        element = $compile(markup)($rootScope);
+        $rootScope.$digest();
+        expect(element.attr('title')).toEqual('Hello');
+        expect(element.html().trim()).toEqual('<i class="fa fa-home"></i>');
+      });
+    } else {
+      it('should not translate the content if the content is empty and an attribute is being translated', function () {
+        var markup = '<a href="#" translate translate-attr-title="SIMPLE">\n\t<i class="fa fa-home" />\n</a>';
+        element = $compile(markup)($rootScope);
+        $rootScope.$digest();
+        expect(element.attr('title')).toEqual('Hello');
+        expect(element.html().trim()).toEqual('<i class="fa fa-home">\n</i>');
+      });
+    }
 
     it('should translate the content and the attribute if the element content is non empty text and the element has translated attributes', function () {
       var markup = '<a href="#" translate translate-attr-title="SIMPLE">SIMPLE</a>';
