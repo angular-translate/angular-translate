@@ -102,6 +102,6 @@
     "tar": "^4.4.13"
   },
   "dependencies": {
-    "angular": "^1.7.9"
+    "angular": "^1.8.0"
   }
 }
