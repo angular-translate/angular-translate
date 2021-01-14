@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        test-scope:
+          -
+          - angular_1.2.x
+          - angular_1.3.x
+          - angular_1.4.x
+          - angular_1.5.x
+          - angular_1.6.x
+          - angular_1.7.x
+          - angular_1.8.x
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 12
+      - run: npm ci
+      - run: TEST_SCOPE=${{ matrix.test-scope }} npm test
