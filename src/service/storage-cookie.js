@@ -25,7 +25,7 @@ function $translateCookieStorageFactory($injector) {
         return $cookies.get(key);
       },
       put : function (key, value) {
-        $cookies.put(key, value);
+        $cookies.put(key, value, { samesite: 'lax' });
       }
     };
   } else {
