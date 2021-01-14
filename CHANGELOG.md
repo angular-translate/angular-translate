@@ -1,3 +1,13 @@
+<a name="2.18.4"></a>
+## [2.18.4](https://github.com/angular-translate/angular-translate/compare/2.18.3...2.18.4) (2021-01-14)
+
+
+### Features
+
+* **cookie storage:** change samesite cookie policy from None to lax ([c28ce75](https://github.com/angular-translate/angular-translate/commit/c28ce75))
+
+
+
 <a name="2.18.3"></a>
 ## [2.18.3](https://github.com/angular-translate/angular-translate/compare/2.18.2...2.18.3) (2020-07-08)
 
