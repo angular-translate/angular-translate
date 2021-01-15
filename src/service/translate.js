@@ -36,6 +36,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     $notFoundIndicatorRight,
     $postCompilingEnabled = false,
     $forceAsyncReloadEnabled = false,
+    $allowNamespaces = true,
     $nestedObjectDelimeter = '.',
     $isReady = false,
     $keepContent = false,
@@ -312,6 +313,27 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
   /**
    * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#allowNamespaces
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Let's you disable namespaces, if you don't need nested translation
+   * object files. Disabling namespaces can improve performance.
+   *
+   * Default value is `true`. Namespaces are enabled by default.
+   *
+   * @param {boolean} namespacesEnabled - namespaces are enabled or not
+   */
+  this.allowNamespaces = function (namespacesEnabled) {
+    if (namespacesEnabled === undefined) {
+      return $allowNamespaces;
+    }
+    $allowNamespaces = namespacesEnabled;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
    * @name pascalprecht.translate.$translateProvider#nestedObjectDelimeter
    * @methodOf pascalprecht.translate.$translateProvider
    *
@@ -346,6 +368,9 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     }
     if (!result) {
       result = {};
+    }
+    if (!$allowNamespaces) {
+      return data;
     }
     for (key in data) {
       if (!Object.prototype.hasOwnProperty.call(data, key)) {
@@ -1759,6 +1784,20 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
      */
     $translate.cloakClassName = function () {
       return $cloakClassName;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#allowNamespaces
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns if namespaces are enabled
+     *
+     * @return {boolean} allowNamespaces value
+     */
+    $translate.allowNamespaces = function () {
+      return $allowNamespaces;
     };
 
     /**

@@ -198,6 +198,17 @@ describe('pascalprecht.translate', function () {
       });
     });
 
+    describe('$translate#allowNamespaces()', function () {
+
+      it('should be a function', function () {
+        expect(typeof $translate.allowNamespaces).toBe('function');
+      });
+
+      it('should return \'true\' if no value is specified', function () {
+        expect($translate.allowNamespaces()).toEqual(true);
+      });
+    });
+
     describe('$translate#nestedObjectDelimeter()', function () {
 
       it('should be a function', function () {
@@ -469,6 +480,23 @@ describe('pascalprecht.translate', function () {
 
       $rootScope.$digest();
       expect(value.FOO).toEqual('faa');
+    });
+  });
+
+  describe('$translate#allowNamespaces()', function () {
+
+    beforeEach(module('pascalprecht.translate', function ($translateProvider) {
+      $translateProvider.allowNamespaces(false);
+    }));
+
+    var $translate;
+
+    beforeEach(inject(function (_$translate_) {
+      $translate = _$translate_;
+    }));
+
+    it('should return \'false\' if namespaces were disabled', function () {
+      expect($translate.allowNamespaces()).toEqual(false);
     });
   });
 
