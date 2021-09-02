@@ -1,3 +1,13 @@
+<a name="2.19.0"></a>
+# [2.19.0](https://github.com/angular-translate/angular-translate/compare/2.18.4...2.19.0) (2021-09-02)
+
+
+### Features
+
+* **service:** add allowNamespace parameter [#1910](https://github.com/angular-translate/angular-translate/issues/1910) ([443a81f](https://github.com/angular-translate/angular-translate/commit/443a81f))
+
+
+
 <a name="2.18.4"></a>
 ## [2.18.4](https://github.com/angular-translate/angular-translate/compare/2.18.3...2.18.4) (2021-01-14)
 
