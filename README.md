@@ -1,3 +1,10 @@
+> [!CAUTION]
+> This **project has been discontinued** since 2024-01-15 and this project is now archived. As the [AngularJS ecosystem itself has stopped long-term support since January 2022](https://blog.angular.io/discontinued-long-term-support-for-angularjs-cc066b82e65a), you may already be using Angular 2+ and some of the other cool translation tools. Although it is highly recommended that you to migrate away from AJS v1, if you are still actively using AngularJS and cannot migrate yet, you may want to look at [HeroDevs who offer extended support](https://www.herodevs.com/support/services). We are not familiar with them.
+>
+> More information on this decision are archived in the [issue #1921](https://github.com/angular-translate/angular-translate/issues/1921).
+>
+> The project resources will remain read-only for everyone. Feel free to fork.
+
 # [![angular-translate](https://raw.github.com/angular-translate/angular-translate/canary/identity/logo/angular-translate-alternative/angular-translate_alternative_medium2.png)](http://angular-translate.github.io)
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/angular-translate/angular-translate.svg)](https://greenkeeper.io/)
