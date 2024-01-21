@@ -5,6 +5,9 @@
 >
 > The project resources will remain read-only for everyone. Feel free to fork.
 
+<a name="2.19.1"></a>
+## [2.19.1](https://github.com/angular-translate/angular-translate/compare/2.19.0...2.19.1) (2024-01-21)
+
 <a name="2.19.0"></a>
 # [2.19.0](https://github.com/angular-translate/angular-translate/compare/2.18.4...2.19.0) (2021-09-02)
 
